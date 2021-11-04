@@ -160,6 +160,12 @@ jobs:
           remotes::install_cran("rmarkdown")
         shell: Rscript {0}
 
+      - name: Install BiocStyle
+        run: |
+          message(paste('****', Sys.time(), 'installing BiocStyle ****'))
+          BiocManager::install("BiocStyle")
+        shell: Rscript {0}
+
       - name: Install dependencies pass 1
         run: |
           ## Try installing the package dependencies in steps. First the local
