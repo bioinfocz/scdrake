@@ -28,7 +28,7 @@ $(document).ready(function(){
 ```{r, include = FALSE}
 ## -- We will initialize a scdrake project in temporary directory, but the user will do it in home.
 tmp_dir <- tempfile()
-scdrake::init_project(tmp_dir, set_active_project = FALSE, set_wd = FALSE)
+scdrake::init_project(tmp_dir, set_active_project = FALSE, set_wd = FALSE, ask = FALSE)
 ```
 
 ***
@@ -110,9 +110,12 @@ The output is saved in `output/single_sample/pbmc1k`, as specified by `BASE_OUT_
 # Retrieving pipeline results
 
 In `{drake}`'s terminology, a pipeline is called *plan*, and is composed of *targets*. When a target is finished,
-its value (object) is saved to cache (directory `.drake` by default), and you can anytime load it to your R session.
-This is done via two `{drake}`'s functions: `drake::loadd()` loads target's value to the global environment,
-and `drake::readd()` returns target's value (so it can be assigned to variable).
+its value (object) is saved to cache (directory `.drake` by default), and you can anytime load it into your R session.
+This is done via two `{drake}`'s functions:
+
+- `drake::loadd()` loads target's value to the global environment.
+- `drake::readd()` returns target's value (so it can be assigned to variable).
+
 Let's try it and load the filtered `SingleCellExperiment` object:
 
 ```{r, eval = FALSE}
