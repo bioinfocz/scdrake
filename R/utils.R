@@ -10,7 +10,6 @@
 #' get_sys_env("PATH")
 #' get_sys_env("NON_EXISTING")
 #' get_sys_env("NON_EXISTING", default = "default_value")
-#'
 #' @concept misc_utils
 #' @export
 get_sys_env <- function(var,
@@ -48,7 +47,6 @@ get_sys_env <- function(var,
 #' @examples
 #' TRUE %&&% message("printed")
 #' FALSE %&&% message("not printed")
-#'
 #' @concept misc_utils
 #' @export
 `%&&%` <- function(x, y) {
@@ -87,7 +85,6 @@ assert_that_ <- function(..., env = parent.frame(), msg = NULL) {
 #'
 #' @examples
 #' replace_list_nulls(list(a = list(b = 1, c = NULL)))
-#'
 #' @concept misc_utils
 #' @export
 replace_list_nulls <- function(l, replacement = NA, depth = 2L) {
@@ -100,7 +97,6 @@ replace_list_nulls <- function(l, replacement = NA, depth = 2L) {
 #'
 #' @examples
 #' replace_list_nas_with_nulls(list(NA, a = 1, b = NA))
-#'
 #' @concept misc_utils
 #' @export
 replace_list_nas_with_nulls <- function(l) {
@@ -122,7 +118,6 @@ replace_list_nas_with_nulls <- function(l) {
 #' @examples
 #' lists_to_tibble(list(list(a = 1, b = 2), list(b = 3, a = 4, c = 5)))
 #' lists_to_tibble(list(list(a = 1, b = 2), list(b = 3, a = 4, c = 5)), do_bind_rows = FALSE)
-#'
 #' @concept misc_utils
 #' @export
 lists_to_tibble <- function(l, do_replace_list_nulls = TRUE, do_bind_rows = TRUE) {
@@ -146,7 +141,6 @@ lists_to_tibble <- function(l, do_replace_list_nulls = TRUE, do_bind_rows = TRUE
 #'
 #' @examples
 #' list_names_to_values(list(a = list(1), b = list(c = 3)))
-#'
 #' @concept misc_utils
 #' @export
 list_names_to_values <- function(l, key = "name") {
@@ -162,7 +156,6 @@ list_names_to_values <- function(l, key = "name") {
 #'
 #' @examples
 #' add_item_to_list(list(1, a = 2), "b")
-#'
 #' @concept misc_utils
 #' @export
 add_item_to_list <- function(l, key, value = NULL) {
@@ -183,7 +176,6 @@ add_item_to_list <- function(l, key, value = NULL) {
 #'
 #' @examples
 #' save_print(lm(mpg ~ cyl, datasets::mtcars))
-#'
 #' @concept misc_utils
 #' @rdname save_print
 #' @export
@@ -209,7 +201,6 @@ save_object_info <- function(object) {
 #'
 #' @examples
 #' filter_nulls(list(a = 1, b = NULL, c = 3))
-#'
 #' @concept misc_utils
 #' @export
 filter_nulls <- function(l) {
@@ -225,7 +216,6 @@ filter_nulls <- function(l) {
 #'
 #' @examples
 #' with_plan(1 + 1, future::sequential)
-#'
 #' @concept misc_utils
 #' @export
 with_plan <- function(expr, ..., envir = parent.frame()) {
@@ -242,7 +232,6 @@ with_plan <- function(expr, ..., envir = parent.frame()) {
 #'
 #' @examples
 #' na_empty(integer())
-#'
 #' @concept misc_utils
 #' @export
 na_empty <- function(x) {
@@ -280,7 +269,6 @@ na_empty <- function(x) {
 #'
 #' df2 <- lapply_rows(mtcars, return_tibble = FALSE, FUN = fn)
 #' head(df2)
-#'
 #' @concept misc_utils
 #' @export
 lapply_rows <- function(df, as_scdrake_list = TRUE, return_tibble = TRUE, FUN, ...) {
@@ -319,7 +307,6 @@ lapply_rows <- function(df, as_scdrake_list = TRUE, return_tibble = TRUE, FUN, .
 #' check_pkg_installed("utils")
 #' check_pkg_installed("zzz")
 #' check_qs_installed()
-#'
 #' @concept misc_utils
 #' @rdname check_pkg_installed
 #' @export

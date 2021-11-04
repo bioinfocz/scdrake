@@ -140,7 +140,8 @@ scran_normalization <- function(sce, use_quickcluster = TRUE, quickcluster_metho
   if (use_quickcluster) {
     quickcluster_method <- arg_match(quickcluster_method)
     cluster_quickcluster <- scran::quickCluster(
-      sce, method = quickcluster_method, BSPARAM = BSPARAM, BPPARAM = BPPARAM
+      sce,
+      method = quickcluster_method, BSPARAM = BSPARAM, BPPARAM = BPPARAM
     )
     sce$cluster_quickcluster <- factor(cluster_quickcluster)
   } else {
@@ -260,7 +261,8 @@ sce_norm_hvg_fn <- function(sce_norm,
   }
 
   sce_norm <- sce_add_metadata(
-    sce_norm, hvg_metric = hvg_metric, hvg_selection = hvg_selection, hvg_selection_value = hvg_selection_value,
+    sce_norm,
+    hvg_metric = hvg_metric, hvg_selection = hvg_selection, hvg_selection_value = hvg_selection_value,
     hvg_rm_cc_genes = hvg_rm_cc_genes
   )
 

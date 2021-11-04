@@ -154,8 +154,7 @@ contrasts_heatmap_params_fn <- function(contrasts_params, contrasts_test_params)
     dplyr::select(dplyr::all_of(c(
       "id", "name", "source_column", "contrast_name", "target", "reference", "description", "block_column", "groups",
       "test_dirname", "test_label", "test_params_name", "test_type", "top_n_heatmap", "top_n_wt_heatmap"
-    ))
-  )
+    )))
 
   contrasts_test_params <- dplyr::select(contrasts_test_params, .data$name, .data$test_type)
   res <- dplyr::left_join(contrasts_test_params, contrasts_params, by = c("name", "test_type"))
@@ -220,8 +219,8 @@ contrasts_fn <- function(contrasts_raw, contrasts_params) {
 
     cols_to_omit <- c(
       which(colnames(res_target) %in% c(
-        "other.average", "other.detected", "Top", "p.value", "FDR", "lfc_summary", "auc_summary")
-      ),
+        "other.average", "other.detected", "Top", "p.value", "FDR", "lfc_summary", "auc_summary"
+      )),
       stringr::str_which(colnames(res_target), "^lfc_|auc_", negate = FALSE)
     )
 

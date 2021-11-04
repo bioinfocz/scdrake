@@ -175,7 +175,8 @@ cluster_markers_processed_fn <- function(cluster_markers) {
           markers[, stats_columns] <- stats_df[, stats_columns_metric]
 
           return(markers)
-        })
+        }
+      )
     )
 
   return(cluster_markers_processed)

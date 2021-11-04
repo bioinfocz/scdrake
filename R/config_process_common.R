@@ -245,8 +245,8 @@ NULL
     cfg$DRAKE_N_JOBS_PREPROCESS <- 1L
   } else {
     if ((cfg$DRAKE_PARALLELISM == "future" && !check_future_installed()) ||
-        (cfg$DRAKE_PARALLELISM == "clustermq" && !check_clustermq_installed()) ||
-        (cfg$DRAKE_PARALLELISM == "future" && !parallelly::supportsMulticore() && !check_future.callr_installed())) {
+      (cfg$DRAKE_PARALLELISM == "clustermq" && !check_clustermq_installed()) ||
+      (cfg$DRAKE_PARALLELISM == "future" && !parallelly::supportsMulticore() && !check_future.callr_installed())) {
       cfg$DRAKE_PARALLELISM <- "loop"
       cfg$DRAKE_N_JOBS <- 1L
       cfg$DRAKE_N_JOBS_PREPROCESS <- 1L

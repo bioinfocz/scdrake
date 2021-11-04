@@ -134,7 +134,6 @@ create_seu_for_heatmaps <- function(sce_dimred, calc_zscore = TRUE) {
 #'
 #' @examples
 #' cells_per_cluster_table(rep(c(1, 2), each = 5))
-#'
 #' @concept sc_sce
 #' @export
 cells_per_cluster_table <- function(clusters, var_name = "Cluster") {
@@ -164,7 +163,7 @@ cells_per_cluster_table <- function(clusters, var_name = "Cluster") {
 #' @export
 merge_sce_metadata <- function(sce_list, what, as_vector = TRUE, as_named_list = FALSE) {
   res <- purrr::map(sce_list, ~ metadata(.)[[what]]) %>%
-    purrr::modify_if(is_null, ~ NA_character_)
+    purrr::modify_if(is_null, ~NA_character_)
 
   if (as_vector) {
     res <- unlist(res)

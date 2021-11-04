@@ -167,7 +167,8 @@ get_norm_clustering_subplan <- function(cfg, cfg_pipeline, cfg_main) {
 
     ## -- Prepare cell cycle genes.
     cc_genes = cc_genes_fn(
-      sce_final_input_qc, organism = !!cfg_main$ORGANISM, annotation_db_file = !!cfg_main$ANNOTATION_DB_FILE
+      sce_final_input_qc,
+      organism = !!cfg_main$ORGANISM, annotation_db_file = !!cfg_main$ANNOTATION_DB_FILE
     ),
 
     ## -- Calculate cell cycle score.

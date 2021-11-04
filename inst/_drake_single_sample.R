@@ -45,7 +45,7 @@ if (cfg_pipeline$DRAKE_PARALLELISM == "loop" && is_true(cfg_pipeline$WITHIN_TARG
 
 BiocParallel::register(BPPARAM)
 
-##-- Prevent issues with BLAS operations when a massive target parallelism is used.
+## -- Prevent issues with BLAS operations when a massive target parallelism is used.
 if (!is.null(cfg_pipeline$BLAS_N_THREADS)) {
   RhpcBLASctl::blas_set_num_threads(cfg_pipeline$BLAS_N_THREADS)
 }
@@ -55,7 +55,7 @@ if (!is_null(cfg_pipeline$RSTUDIO_PANDOC)) {
   Sys.setenv(RSTUDIO_PANDOC = cfg_pipeline$RSTUDIO_PANDOC)
 }
 
-##-- To fix https://github.com/rstudio/rmarkdown/issues/1632
+## -- To fix https://github.com/rstudio/rmarkdown/issues/1632
 prework <- 'assignInNamespace("clean_tmpfiles", function() {invisible(NULL)}, ns = "rmarkdown")'
 
 drake_cache_object <- drake::new_cache(path = cfg_pipeline$DRAKE_CACHE_DIR)
@@ -66,11 +66,11 @@ if (cfg_pipeline$DRAKE_UNLOCK_CACHE && !is.null(drake_cache_object)) {
 }
 
 options(
-  future.globals.maxSize = 200000 * 1024 ^ 2,
+  future.globals.maxSize = 200000 * 1024^2,
   clustermq.scheduler = cfg_pipeline$DRAKE_CLUSTERMQ_SCHEDULER,
   yaml.eval.expr = TRUE,
   knitr.table.format = "html",
-  ##-- To fix a bug with the latest RSQLite and AnnotationDbi packages.
+  ## -- To fix a bug with the latest RSQLite and AnnotationDbi packages.
   connectionObserver = NULL,
   rstudio_drake_cache = drake_cache_object
 )

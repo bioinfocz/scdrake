@@ -193,7 +193,6 @@ plot_vln <- function(sce,
 #' ) +
 #'   ggplot2::geom_point()
 #' highlight_points(p, "am", "0", alpha_val = 0.25)
-#'
 #' @concept sce_visualization
 #' @export
 highlight_points <- function(p, column_name, levels, alpha_val = 0.1) {

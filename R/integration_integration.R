@@ -55,7 +55,8 @@ sce_int_import_fn <- function(integration_sources, hvg_combination = c("hvg_metr
     common_normalization_type == "scran",
     msg = str_space(
       "Integration is only possible when all single-samples have been normalized by {.code scran}",
-      "({.var NORMALIZATION_TYPE}: {.val scran}).")
+      "({.var NORMALIZATION_TYPE}: {.val scran})."
+    )
   )
 
   if (hvg_combination == "hvg_metric") {
@@ -399,7 +400,8 @@ sce_int_df_fn <- function(sce_int_multibatchnorm, integration_methods_df, BPPARA
 
     int_param <- do.call(int_param_fn, args = c(par$integration_params, integration_params_other))
     sce_int <- batchelor::correctExperiments(
-      sce_int_multibatchnorm, subset.row = par$hvg_int$hvg_ids, correct.all = TRUE, PARAM = int_param
+      sce_int_multibatchnorm,
+      subset.row = par$hvg_int$hvg_ids, correct.all = TRUE, PARAM = int_param
     )
     assayNames(sce_int)[1] <- "integrated"
 
@@ -508,7 +510,8 @@ sce_int_pca_df_fn <- function(pca_params_df, BPPARAM = BiocParallel::SerialParam
         subtitle <- glue("Removed cell-cycle related genes from HVGs.")
       }
       pca_selected_pcs_plot <- make_pca_selected_pcs_plot(
-        pca_percent_var, pca_elbow_pcs, pca_gene_var_pcs, pca_forced_pcs = par$pca_forced_pcs
+        pca_percent_var, pca_elbow_pcs, pca_gene_var_pcs,
+        pca_forced_pcs = par$pca_forced_pcs
       ) +
         ggtitle(label = title, subtitle = subtitle)
 
@@ -547,7 +550,8 @@ sce_int_pca_df_fn <- function(pca_params_df, BPPARAM = BiocParallel::SerialParam
 sce_int_dimred_df_fn <- function(dimred_params_df, BPPARAM = BiocParallel::SerialParam()) {
   sce_int_dimred_df <- lapply_rows(dimred_params_df, FUN = function(par) {
     par$sce_dimred <- sce_compute_dimreds(
-      par$sce_pca, tsne_perp = par$tsne_perp, tsne_max_iter = par$tsne_max_iter, BPPARAM = BPPARAM
+      par$sce_pca,
+      tsne_perp = par$tsne_perp, tsne_max_iter = par$tsne_max_iter, BPPARAM = BPPARAM
     )
     par$sce_pca <- NULL
 

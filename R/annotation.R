@@ -1,4 +1,4 @@
-##-- Common functions related to gene annotation.
+## -- Common functions related to gene annotation.
 
 #' @title Collapse a character vector by `","`.
 #' @description Used as `multiVals` parameter in [AnnotationDbi::mapIds()].

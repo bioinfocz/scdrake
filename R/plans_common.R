@@ -48,13 +48,11 @@ get_cluster_markers_subplan <- function(cfg, cfg_pipeline, cfg_main) {
     sce_dimred_cluster_markers = if (pipeline_type == "single_sample") sce_dimred else sce_int_final_clustering,
     sce_final_cluster_markers = if (pipeline_type == "single_sample") sce_final_norm_clustering else sce_int_final_clustering,
     sce_cluster_markers = if (pipeline_type == "single_sample") sce_rm_doublets else sce_int_final_clustering,
-
     cluster_markers_params = cluster_markers_params_fn(!!cfg$CLUSTER_MARKERS_SOURCES, cell_data),
     cluster_markers_test_params = cluster_markers_test_params_fn(cluster_markers_params),
     cluster_markers_heatmap_params = cluster_markers_heatmap_params_fn(cluster_markers_params),
     cluster_markers_plot_params = cluster_markers_plot_params_fn(cluster_markers_params),
     cluster_markers_dimred_plot_params = cluster_markers_plot_params %>% dplyr::distinct(source_column, plot_dimreds),
-
     cluster_markers_raw = target(
       scran_markers(sce_cluster_markers, params = cluster_markers_test_params, markers_type = "global"),
       dynamic = map(cluster_markers_test_params)

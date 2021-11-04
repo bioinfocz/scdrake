@@ -770,8 +770,8 @@ add_marker_table_links <- function(df,
 #' @concept sc_markers
 #' @export
 markers_for_tables <- function(markers_out, markers_heatmaps_df, markers_plots_top, markers_dimred_plots_files, out_dir,
-                                  ensembl_species = "Homo_sapiens",
-                                  ...) {
+                               ensembl_species = "Homo_sapiens",
+                               ...) {
   markers_heatmaps_df <- markers_heatmaps_df %>%
     dplyr::select(.data$id, .data$description, .data$test_label, heatmap_file = .data$out_file)
 

@@ -358,7 +358,6 @@ get_n_clusters <- function(clustering) {
 #'
 #' @examples
 #' cells_per_cluster_table(rep(1:3, each = 2))
-#'
 #' @concept sc_clustering
 #' @export
 cells_per_cluster_table <- function(clusters, var_name = "Cluster") {

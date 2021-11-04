@@ -194,8 +194,7 @@ update_pipeline_config <- function(dir = getOption("scdrake_pipeline_config_dir"
 #' }
 update_single_sample_configs <- function(dir = getOption("scdrake_single_sample_config_dir"),
                                          verbose = getOption("scdrake_verbose"),
-                                         ...
-                                         ) {
+                                         ...) {
   .copy_bundled_default_configs_dir("config/single_sample", dir, verbose = verbose)
   .update_configs_recursive(dir, verbose = verbose, ...)
   invisible(NULL)
@@ -212,8 +211,7 @@ update_single_sample_configs <- function(dir = getOption("scdrake_single_sample_
 #' @export
 update_integration_configs <- function(dir = getOption("scdrake_integration_config_dir"),
                                        verbose = getOption("scdrake_verbose"),
-                                       ...
-                                       ) {
+                                       ...) {
   .copy_bundled_default_configs_dir("config/integration", dir, verbose = verbose)
   .update_configs_recursive(dir, verbose = verbose, ...)
   invisible(NULL)

@@ -186,7 +186,6 @@ md_header <- function(text, heading, extra = "", do_cat = TRUE) {
 #' create_a_link("google.com", "Google")
 #' # If you want to reference a file relative to HTML saved in "output/report.html"
 #' create_a_link("output/plots/plot.pdf", "Link to plot", href_rel_start = "output")
-#'
 #' @concept misc_html
 #' @export
 create_a_link <- function(href, text, href_rel_start = NULL, target = "_blank", do_cat = FALSE, ...) {

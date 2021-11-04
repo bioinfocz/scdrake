@@ -209,7 +209,7 @@ plot_hvg_fit <- function(sce, y = c("var", "cv2")) {
 
   plot(hvg_fit_metadata$mean, hvg_fit_metadata[[y]], log = "xy", xlab = "Mean", ylab = y)
   graphics::points(hvg_fit_metadata$mean[is_hvg], hvg_fit_metadata[[y]][is_hvg], col = "red")
-  ##-- To avoid R CMD CHECK note "no visible binding for global variable 'x'".
+  ## -- To avoid R CMD CHECK note "no visible binding for global variable 'x'".
   x <- NULL
   graphics::curve(hvg_fit_metadata$trend(x), col = "dodgerblue", add = TRUE, lwd = 2)
   return(invisible(NULL))

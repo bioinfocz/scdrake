@@ -73,21 +73,26 @@ get_scdrake_default_options <- function() {
     scdrake_verbose = get_sys_env("SCDRAKE_VERBOSE", default = TRUE, type = "logical"),
     scdrake_cache_dir = get_sys_env("SCDRAKE_CACHE_DIR", default = ".drake"),
     scdrake_pipeline_config_dir = get_sys_env(
-      "SCDRAKE_PIPELINE_CONFIG_DIR", default = "config"
+      "SCDRAKE_PIPELINE_CONFIG_DIR",
+      default = "config"
     ),
     scdrake_single_sample_config_dir = get_sys_env(
-      "SCDRAKE_SINGLE_SAMPLE_CONFIG_DIR", default = "config/single_sample"
+      "SCDRAKE_SINGLE_SAMPLE_CONFIG_DIR",
+      default = "config/single_sample"
     ),
     scdrake_integration_config_dir = get_sys_env(
-      "SCDRAKE_INTEGRATION_CONFIG_DIR", default = "config/integration"
+      "SCDRAKE_INTEGRATION_CONFIG_DIR",
+      default = "config/integration"
     ),
 
     ## -- Internal options, mostly for unit tests.
     scdrake_test_download_yq = get_sys_env(
-      "SCDRAKE_TEST_DOWNLOAD_YQ", default = FALSE, type = "logical", verbose = FALSE
+      "SCDRAKE_TEST_DOWNLOAD_YQ",
+      default = FALSE, type = "logical", verbose = FALSE
     ),
     scdrake_test_run_pipeline = get_sys_env(
-      "SCDRAKE_TEST_RUN_PIPELINE", default = FALSE, type = "logical", verbose = FALSE
+      "SCDRAKE_TEST_RUN_PIPELINE",
+      default = FALSE, type = "logical", verbose = FALSE
     ),
     scdrake_test_run_pipeline_base_out_dir = get_sys_env(
       "SCDRAKE_TEST_RUN_PIPELINE_BASE_OUT_DIR",
@@ -102,10 +107,12 @@ get_scdrake_default_options <- function() {
       verbose = FALSE
     ),
     scdrake_test_run_pipeline_integration = get_sys_env(
-      "SCDRAKE_TEST_RUN_PIPELINE_INTEGRATION", default = FALSE, type = "logical", verbose = FALSE
+      "SCDRAKE_TEST_RUN_PIPELINE_INTEGRATION",
+      default = FALSE, type = "logical", verbose = FALSE
     ),
     scdrake_test_run_pipeline_keep_files = get_sys_env(
-      "SCDRAKE_TEST_RUN_PIPELINE_KEEP_FILES", default = TRUE, type = "logical", verbose = FALSE
+      "SCDRAKE_TEST_RUN_PIPELINE_KEEP_FILES",
+      default = TRUE, type = "logical", verbose = FALSE
     )
   )
 }
@@ -131,22 +138,22 @@ get_scdrake_options <- function() {
   packageStartupMessage(cli(cli::cli_h1("Welcome to {.pkg scdrake}!")))
 }
 
-##-- We need this to fix R CMD CHECK notes on "no visible binding for global variable" caused by functions generating
-##-- a drake plan.
+## -- We need this to fix R CMD CHECK notes on "no visible binding for global variable" caused by functions generating
+## -- a drake plan.
 globalVariables(c(
-  ##-- drake DSL functions
+  ## -- drake DSL functions
   c("map", "group", "cross"),
 
-  ##-- Common plans.
+  ## -- Common plans.
   codetools::findGlobals(get_common_subplan, merge = FALSE)$variables,
   codetools::findGlobals(get_cluster_markers_subplan, merge = FALSE)$variables,
   codetools::findGlobals(get_contrasts_subplan, merge = FALSE)$variables,
 
-  ##-- Single-sample plans.
+  ## -- Single-sample plans.
   codetools::findGlobals(get_input_qc_subplan, merge = FALSE)$variables,
   codetools::findGlobals(get_norm_clustering_subplan, merge = FALSE)$variables,
 
-  ##-- Integration plans.
+  ## -- Integration plans.
   codetools::findGlobals(get_integration_subplan, merge = FALSE)$variables,
   codetools::findGlobals(get_int_clustering_subplan, merge = FALSE)$variables
 ))

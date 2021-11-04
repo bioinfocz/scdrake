@@ -1,12 +1,13 @@
 project_dir <- fs::file_temp("scdrake_test_project_") %>%
   fs::path_abs() %>%
   as.character()
-withr::defer({
-  fs::dir_delete(project_dir)
-  ## -- This is ugly, but I didn't find an another way to reset here() to original state.
-  if (!is_r_build_check) {
-    withr::with_dir("../..", here::i_am("DESCRIPTION"))
-  }
+withr::defer(
+  {
+    fs::dir_delete(project_dir)
+    ## -- This is ugly, but I didn't find an another way to reset here() to original state.
+    if (!is_r_build_check) {
+      withr::with_dir("../..", here::i_am("DESCRIPTION"))
+    }
   },
   teardown_env()
 )
