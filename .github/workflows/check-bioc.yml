@@ -154,16 +154,12 @@ jobs:
           BiocManager::install(version = "${{ matrix.config.bioc }}", ask = FALSE)
         shell: Rscript {0}
 
-      - name: Install rmarkdown
+      ## SC3 installation is failing in remotes::install_local() below, because dependencies needed for its vignettes
+      ## are not already installed.
+      - name: Install SC3 from GitHub (gorgitko/SC3)
         run: |
-          message(paste('****', Sys.time(), 'installing rmarkdown ****'))
-          remotes::install_cran("rmarkdown")
-        shell: Rscript {0}
-
-      - name: Install BiocStyle
-        run: |
-          message(paste('****', Sys.time(), 'installing BiocStyle ****'))
-          BiocManager::install("BiocStyle")
+          message(paste('****', Sys.time(), 'installing gorgitko/SC3 ****'))
+          remotes::install_github("gorgitko/SC3", dependencies = TRUE, upgrade = TRUE, force = TRUE, build_vignettes = FALSE, repos = BiocManager::repositories())
         shell: Rscript {0}
 
       - name: Install dependencies pass 1
