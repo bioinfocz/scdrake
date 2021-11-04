@@ -1,0 +1,190 @@
+---
+title: "scdrake config"
+description: "How YAML config files are used in `scdrake`"
+date: "`r Sys.Date()`"
+package: scdrake
+output:
+  BiocStyle::html_document:
+    toc: true
+    toc_float: true
+vignette: >
+  %\VignetteIndexEntry{scdrake config}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+***
+
+# Introduction
+
+Configs are stored in YAML files (in `config/` directory by default), which are parsed in R to lists and used to build
+`{drake}` plans. YAML ([quick reference](https://docs.ansible.com/ansible/latest/reference_appendices/YAMLSyntax.html),
+cheatsheets [here](https://lzone.de/cheat-sheet/YAML) and [here](https://learnxinyminutes.com/docs/yaml/))
+is a human-readable format and uses indentation (spaces) for nesting of parameters.
+
+`{scdrake}` is using a concept of default and local configs. Default configs are bundled with the package and copied
+during project initialization, update, and pipeline run (e.g. in `run_single_sample()` or `_drake_single_sample.R`).
+Default and local configs are named `*.default.yaml` and `*.yaml`, respectively.
+
+Config files are separated according to general parameters and each pipeline's main stage
+(quality control, normalization, etc.), but for consistency are always read all at once
+(by default if you run e.g. `run_single_sample()`).
+
+# Updating (merging) configs
+
+It may happen that new parameters are added to default configs. In that case, those new parameters need to be appended
+to local configs, while preserving the current local parameters. Calling this procedure "update" is a little bit misleading,
+as we actually overwrite default config by local one and append new parameters from default config to it.
+"Merging" should be a better word, as we *merge* default config with local one (and the order does matter).
+
+Configs are merged recursively by parameter names. It is necessary to realize that YAML format are nested dictionaries
+(or named lists in the context of R). That is, this YAML
+
+```yaml
+# Default config.
+FOO: 1
+BAR: "baz"
+FOO_LIST: [1, "hello"]
+FOO_NAMED_LIST:
+  FOO_2: 2
+  BAR_2: "zab"
+```
+
+is in R parsed to the list:
+
+```r
+list(FOO = 1L, BAR = "baz", FOO_LIST = list(1L, "hello"), FOO_NAMED_LIST = list(FOO_2 = 2L, BAR_2 = "zab"))
+```
+
+So, for example, given that the YAML above is our default config, we want to merge it with the local config
+
+```yaml
+# Local config.
+BAR: "zab"
+FOO_LIST: [4, 5, 6]
+FOO_NAMED_LIST:
+  FOO_2: 3
+  BAR_3: 5
+```
+
+resulting in
+
+```yaml
+# Updated local config.
+FOO: 1
+BAR: "zab"
+FOO_LIST: [4, 5, 6]
+FOO_NAMED_LIST:
+  FOO_2: 3
+  BAR_2: "zab"
+  BAR_3: 5
+```
+
+- `FOO` is not updated.
+- `BAR` and `FOO_LIST` are overwritten by the local config.
+- `FOO_NAMED_LIST`: `FOO_2` is updated, `BAR_3` is added, but `BAR_2` is still present, although it is not defined
+  in the local config!
+
+and then `FOO_2` will be updated, `BAR_3` will be added, but `BAR_2` will still be present, although it is not defined
+in the local config!
+
+## Merging of nested named lists
+
+To overcome the problem with `FOO_NAMED_LIST`, parameters with such structure are specified as named list wrapped
+by unnamed list:
+
+```yaml
+FOO_NAMED_LIST:
+  - FOO_2: 2
+    BAR_2: "zab"
+```
+
+**Note the beginning `-` creating the unnamed list and indentation of values of the named list.**
+This YAML is parsed in R to
+
+```r
+list(FOO_NAMED_LIST = list(list(FOO_2 = 2L, BAR_2 = "zab")))
+```
+
+If we modify the example of local config above to
+
+```yaml
+FOO_NAMED_LIST:
+  - FOO_2: 3
+    BAR_3: 5
+```
+
+then the whole `FOO_NAMED_LIST` parameter will be replaced during a config merge, and that is the desired behaviour.
+
+## Using structure of a default config
+
+Also, by default, a structure (parameter positions, comments) of local config is preserved during update.
+However, it is possible to use the structure of a default config - see `?update_config` for more details.
+
+# Using R code in parameters
+
+A special type of parameter can be used to evaluate a value as R code:
+
+```yaml
+EXAMPLE: !code 1:3
+```
+
+First, non-code parameters are loaded to a separate environment and then code parameters are evaluated in the
+context of this environment. This means you can use other config parameters as R variables inside code parameters.
+
+By default, in stage configs (e.g. `02_norm_clustering`) you can also use parameters (variables) from `pipeline.yaml`
+and `00_main.yaml` configs:
+
+```yaml
+EXAMPLE: !code glue("{PROJECT_NAME}_{INSTITUTE}")
+```
+
+See `?load_config` for more details.
+
+# The `yq` tool
+
+Internally, the [yq](https://github.com/mikefarah/yq) tool (version 3) is used for merging of YAML files.
+It is a command line utility whose binary needs to be downloaded. This is done automatically during initialization of
+a new project, or you can do it manually through `download_yq()`.
+
+The presence of `yq` binary is checked on `{scdrake}` load or attach.
+`SCDRAKE_YQ_BINARY` environment variable is read - if not set, a value from `Sys.which("yq")` is used (this function
+searches in `PATH` environment variable). Then `scdrake_yq_binary` option is set, and is used as default value
+to config-updating functions (see `?update_config`).
+
+You can also look at `?check_yq` for details on how `PATH` variable is treated in terminal vs. RStudio.
+
+# `scdrake_list`
+
+The base R's extracting operators (`$`, `[`, `[[`) are very benevolent for non-existing elements in `list()`
+for which return `NULL`. This is not a desired behaviour for config variables that must have a value or explicit
+`NULL`. Returning `NULL` when the value was actually not loaded from a config file can lead to unpredictable results.
+
+Thus, for storing config variables, `{scdrake}` is using a modified `list()` called `scdrake_list()`
+which is using strict extracting operators. It behaves like a normal list:
+
+```{r, message = FALSE}
+cfg <- scdrake::scdrake_list(list(var_1 = 1, var_2 = 2))
+cfg$var_1
+cfg[["var_2"]]
+cfg["var_1"]
+cfg[c("var_1", "var_2")]
+```
+
+But extracting non-existing elements throws error:
+
+```{r, error = TRUE}
+cfg$var_3
+cfg[["var_3"]]
+cfg["var_3"]
+```
+
+For `[` and `[[`, this control can be turned off by `check = FALSE` parameter:
+
+```{r}
+cfg[["var_3", check = FALSE]]
+cfg["var_3", check = FALSE]
+```
+
+Also, in this case `[` is more consistent: it returns a valid named list, unlike the normal list, which sets
+`NA_character_` as names of the non-existing elements.

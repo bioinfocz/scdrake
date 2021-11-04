@@ -1,0 +1,186 @@
+---
+title: "Pipeline config"
+description: "Runtime parameters."
+date: "`r Sys.Date()`"
+package: scdrake
+output:
+  BiocStyle::html_document:
+    toc: true
+    toc_float: true
+vignette: >
+  %\VignetteIndexEntry{Pipeline config}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}  
+---
+
+***
+
+Pipeline config is stored in `pipeline.yaml` file. Directory with this file is read from `SCDRAKE_PIPELINE_CONFIG_DIR`
+environment variable upon `{scdrake}` load or attach, and saved as `scdrake_pipeline_config_dir` option.
+This option is used as the default argument value in several `{scdrake}` functions.
+
+Pipeline parameters don't have impact on analysis (except `SEED`, but that should be reproducibly treated by `{drake}`).
+Parameters starting with `DRAKE_` are generally passed to `drake::make()` or `drake::drake_config()`.
+
+# General parameters
+
+`DRAKE_CACHE_DIR: ".drake"`
+
+**Type:** character scalar or `null`
+
+A name of directory to store drake's cache in.
+If `null`, the default directory `".drake"` will be used.
+
+***
+
+`DRAKE_TARGETS: null`
+
+**Type:** character vector or `null`
+
+Array of target names to make. Setting to `null` will make all targets.
+Example for single-sample pipeline / stage `02_norm_clustering` reports:
+
+`DRAKE_TARGETS: ["report_norm_clustering", "report_norm_clustering_simple"]`
+
+***
+
+`DRAKE_KEEP_GOING: False`
+
+**Type:** logical scalar
+
+If `True`, let the pipeline continue even if some target fails.
+
+***
+
+`DRAKE_VERBOSITY: 1`
+
+**Type:** integer scalar (`1` | `2` | `3`)
+
+Verbosity of `{drake}`:
+
+- `0`: print nothing.
+- `1`: print target-by-target messages as `make()` progresses.
+- `2`: show a progress bar to track how many targets are done so far.
+
+***
+
+`DRAKE_LOCK_ENVIR: True`
+
+**Type:** logical scalar
+
+`{drake}` locks R global environment to avoid its unwanted modifications by targets.
+However, in some cases is needed to keep it unlocked.
+
+***
+
+`DRAKE_UNLOCK_CACHE: True`
+
+**Type:** logical scalar
+
+Don't wait for `{drake}` to discover locked cache after pipeline is run and unlock it immediately.
+
+***
+
+`DRAKE_FORMAT: "qs"`
+
+**Type:** character scalar
+
+A file format used to store intermediate results in `DRAKE_CACHE_DIR`.
+See <https://books.ropensci.org/drake/plans.html#special-data-formats-for-targets> for details.
+
+***
+
+`BLAS_N_THREADS: 32`
+
+**Type:** positive integer scalar or `null`
+
+A maximum number of threads for BLAS operations, passed to `RhpcBLASctl::blas_set_num_threads()`.
+Prevents "BLAS : Program is Terminated. Because you tried to allocate too many memory regions" when a massive target
+parallelism is used. Set to `null` if you want to keep BLAS defaults.
+
+***
+
+`RSTUDIO_PANDOC: null`
+
+**Type:** character scalar or `null`
+
+Before pipeline is run by `run_single_sample()`, `run_integration()` or `drake::r_make()`, sets `RSTUDIO_PANDOC`
+environment variable: a path to directory with [pandoc](https://pandoc.org/)'s binary.
+
+This is needed if you are running this pipeline outside of RStudio, or the `pandoc` binary is not available in your `PATH`.
+Set to `null` if any condition above does not apply.
+
+You can also define this variable in `.Renviron` file and set it `null` in pipeline config.
+
+***
+
+`SEED: 100`
+
+**Type:** integer scalar
+
+An initial seed for random number generator.
+
+***
+
+# Parallelism
+
+`DRAKE_PARALLELISM: "loop"`
+
+**Type:** character scalar (`"loop"` | `"future"` | `"clustermq"`)
+
+Type of `{drake}` paralellism:
+
+- `"loop"`: sequential processing.
+- `"future"`: use the `{future}` package as backend.
+- `"clustermq"`: use the `{clustermq}` package as backend. This also requires [ZeroMQ](https://zeromq.org/) to be
+  installed on your system.
+
+See <https://books.ropensci.org/drake/hpc.html> for more details.
+
+***
+
+`DRAKE_CLUSTERMQ_SCHEDULER: "multicore"`
+
+**Type:** character scalar
+
+Which scheduler to use if `DRAKE_PARALLELISM` is `"clustermq"`.
+See <https://mschubert.github.io/clustermq/articles/userguide.html#configuration> for possible values.
+
+***
+
+`DRAKE_N_JOBS: 8`
+
+**Type:** positive integer scalar
+
+A number of parallel jobs for drake.
+
+***
+
+`DRAKE_N_JOBS_PREPROCESS: 4`
+
+**Type:** positive integer scalar
+
+A number of parallel jobs for processing the imports and doing other preprocessing tasks.
+
+***
+
+`WITHIN_TARGET_PARALLELISM: False`
+
+**Type:** logical scalar
+
+Allow or disable within-target parallelism through
+the [BiocParallel](https://bioconductor.org/packages/release/bioc/html/BiocParallel.html) package.
+Only possible when `DRAKE_PARALLELISM` is `"loop"`.
+
+***
+
+`N_CORES: 16`
+
+**Type:** positive integer scalar
+
+A number of cores for within-target parallelism.
+
+# Targets
+
+An informative plan is binded with every other plan, and contains targets with useful runtime information.
+See the Targets section in `vignette("config_main")`.

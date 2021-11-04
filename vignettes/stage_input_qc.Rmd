@@ -1,0 +1,324 @@
+---
+title: "Input and quality control stage"
+description: "01_input_qc stage of the single-sample pipeline."
+date: "`r Sys.Date()`"
+package: scdrake
+output:
+  BiocStyle::html_document:
+    toc: true
+    toc_float: true
+vignette: >
+  %\VignetteIndexEntry{Input and quality control stage}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}  
+---
+
+***
+
+For a general overview of this single-sample pipeline stage see `vignette("pipeline_overview")`.
+
+Config for this stage is stored in `01_input_qc.yaml` file.
+Directory with this file is read from `SCDRAKE_SINGLE_SAMPLE_CONFIG_DIR` environment variable upon `{scdrake}` load or
+attach, and saved as `scdrake_single_sample_config_dir` option. This option is used as the default argument value in
+several `{scdrake}` functions.
+
+# Config parameters
+
+## Removal of empty droplets
+
+See `?DropletUtils::emptyDrops` for more details.
+
+***
+
+`EMPTY_DROPLETS_LOWER: 100`
+
+**Type:** positive integer scalar
+
+A lower bound on the total UMI count at or below which all barcodes are assumed to correspond to empty droplets.
+
+***
+
+`EMPTY_DROPLETS_FDR_THRESHOLD: 0.01`
+
+**Type:** numeric scalar <0; 1>
+
+A threshold for FDR adjusted p-values for null hypothesis that barcode comes from ambient environment.
+In other words, probability that a droplet was empty and contained ambient RNA.
+
+## Cell filtering
+
+Two types of cell filtering are performed: *dataset-sensitive* (using MAD threshold),
+and *custom* (using custom thresholds). See `vignette("pipeline_overview")` for more details.
+
+In both filtering types, violation of only one metric threshold leads to removal of a cell.
+
+***
+
+`SAVE_DATASET_SENSITIVE_FILTERING: True`
+
+**Type:** logical scalar
+
+If `True`, proceed to other stages with dataset filtered by dataset-sensitive filtering (target `sce_qc_filter_genes`),
+otherwise with dataset filtered by custom filtering (target `sce_custom_filter_genes`).
+
+### Dataset-sensitive cell filtering
+
+`MAD_THRESHOLD: 3`
+
+**Type:** positive numeric scalar
+
+A threshold for maximum MAD (median absolute deviation) for QC cell metrics:
+
+- Number of UMI (lower tail).
+- Number of detected genes = non-zero UMI count (lower tail).
+- Percentage of expressed mitochondrial genes = $\frac {UMI_{mitochondrial}} {UMI_{sum}} * 100$ (upper tail).
+
+"Lower tail" means cells having a metric value less than -`MAD_THRESHOLD` MAD will be discarded.
+For "upper tail", it is +`MAD_THRESHOLD` MAD.
+
+Violation of only one metric threshold leads to removal of a cell.
+
+### Custom cell filtering
+
+`MIN_UMI_CF: 1000`
+
+**Type:** positive integer scalar
+
+A threshold for minimum number of UMI per cell, e.g. cells with UMI less than `MIN_UMI_CF` will be removed.
+
+***
+
+`MAX_UMI_CF: 50000`
+
+**Type:** positive integer scalar
+
+A threshold for maximum number of UMI per cell, e.g. cells with UMI greater than `MAX_UMI_CF` will be removed.
+
+***
+
+`MIN_FEATURES: 1000`
+
+**Type:** positive integer scalar
+
+A threshold for minimum number of features (genes) detected per cell,
+e.g. cells with detected features less than `MIN_FEATURES` will be removed.
+
+***
+
+`MAX_MITO_RATIO: 0.2`
+
+**Type:** numeric scalar <0; 1>
+
+A threshold for maximum ratio of expressed mitochondrial genes per cell,
+e.g. cells with mitochondrial genes detected in more than (`MAX_MITO_RATIO` * 100)% of all genes will be removed.
+
+### Gene filtering
+
+Gene filtering thresholds are applied in both types of cell filtering. The filter is computed by the
+`get_gene_filter()` function as following:
+
+```{r, eval = FALSE}
+num_cells <- min_ratio_cells * ncol(sce)
+is_expressed <- rowSums(counts(sce) >= min_umi) >= num_cells
+```
+
+A gene is considered expressed when number of its UMIs across all cells is greater than `min_umi` and
+at the same time it is expressed in at least `min_ratio_cells` ratio of cells.
+
+***
+
+```yaml
+MITO_REGEX: "^MT-"
+RIBO_REGEX: "^RP[SL]"
+```
+
+Regexes used to match and count occurences of mitochondrial and ribosomal features.
+The latter is currently not used for filtering.
+
+***
+
+`MIN_UMI: 1`
+
+**Type:** positive integer scalar
+
+A threshold for minimum number of UMI per cell, e.g. genes with UMI < `MIN_UMI` will be removed.
+
+***
+
+`MIN_RATIO_CELLS: 0.01`
+
+**Type:** numeric scalar <0; 1>
+
+A minimum ratio of cells expressing a gene,
+e.g. genes expressed in less than (`MIN_RATIO_CELLS` * 100)% of cells will be removed.
+
+## Input files
+
+`INPUT_10X_DIR: "/path/to/dir"`
+
+**Type:** character scalar
+
+A path to directory (could be relative to the project root) containing output files from `cellranger count` command,
+that is, `barcodes.tsv`, `features.tsv`, and `matrix.mtx` (can be also gzipped with `.gz` extension).
+Passed to `DropletUtils::read10xCounts()`.
+
+You can download example PBMC data from 10x Genomics using the `download_pbmc1k()` and `download_pbmc1k()` functions.
+
+***
+
+`INPUT_QC_REPORT_RMD_FILE: "Rmd/single_sample/01_input_qc.Rmd"`
+
+**Type:** character scalar
+
+A path to RMarkdown file used for HTML report of this pipeline stage.
+
+## Output files
+
+`INPUT_QC_BASE_OUT_DIR: "01_input_qc"`
+
+**Type:** character scalar
+
+A path to base output directory for this stage. It will be created under `BASE_OUT_DIR` specified in `00_main.yaml` config.
+
+***
+
+`INPUT_QC_REPORT_HTML_FILE: "01_input_qc.html"`
+
+**Type:** character scalar
+
+A name of HTML report file for this stage. Created in `INPUT_QC_BASE_OUT_DIR`. Subdirectories are not allowed.
+
+## HTML output parameters
+
+```yaml
+INPUT_QC_KNITR_MESSAGE: False
+INPUT_QC_KNITR_WARNING: False
+INPUT_QC_KNITR_ECHO: False
+```
+
+**Type:** logical scalar
+
+These are passed to `knitr::opts_chunk()` and used for rendering of stage's HTML report.
+
+# Targets
+
+Here you can find description of the most important targets for this stage.
+However, for a full overview, you have to inspect the [source code](R/plans_single_sample.R) of the
+`get_input_qc_subplan()` function.
+
+## `SingleCellExperiment` objects
+
+`sce_raw`: an untouched SCE object as loaded from `DropletUtils::read10xCounts()`.
+
+***
+
+`sce_valid_cells`: a SCE object with empty droplets removed.
+
+***
+
+`sce_unfiltered`: `sce_valid_cells` with added columns:
+
+- Columns from the `cell_qc` target containing DataFrame with cell QC metrics.
+- `discard_qc`: dataset-sensitive filter.
+- `discard_custom`: custom filter.
+
+***
+
+`sce_qc_filter`, `sce_qc_filter_genes`: a SCE object with cells filtered by dataset-sensitive filtering.
+The latter with filtered genes.
+
+`sce_custom_filter`, `sce_custom_filter_genes`: a SCE object with cells filtered by custom filtering.
+The latter with filtered genes.
+
+***
+
+`sce_selected`: a SCE object selected from either
+`sce_qc_filter_genes` or `sce_custom_filter_genes` - depends on the `SAVE_DATASET_SENSITIVE_FILTERING` parameter.
+
+`sce_final_input_qc`: `sce_selected` with added gene annotation (`gene_annotation` target) to `rowData()`.
+This is the final SCE object which will be used in the next stage `norm_clustering`.
+
+## Cell filters
+
+`cell_qc`: a DataFrame with cell QC metrics.
+
+***
+
+The following list of filters are computed by `scater::isOutlier()` from `cell_qc` columns,
+which are shown for individual filters (e.g. `qc_lib`: `total` column).
+
+`qc_filters`: a list of named lists with logical values for dataset-sensitive cell filtering:
+
+- `qc_lib` (`total`): low number of UMI (lower tail).
+- `qc_nexprs` (`detected`): low number of detected genes = non-zero UMI count (lower tail).
+- `qc_mito` (`subsets_mito_percent`): high percentage of expressed mitochondrial genes expression (upper tail).
+
+`custom_filters`: a list of named lists with logical values for custom cell filtering:
+
+- `low_count` (`total`): low number of UMIs.
+- `high_count` (`total`): high number of UMIs.
+- `low_expression` (`detected`): low number of detected genes.
+- `high_mito` (`subsets_mito_percent`): high percentage of expressed mitochondrial genes.
+
+`qc_filter`, `custom_filter`: a summarized filter (by "or" operation) of `qc_filters` and `custom_filters`, respectively.
+
+## Gene filters
+
+`sce_qc_gene_filter`, `sce_custom_gene_filter`: gene filters (logical vectors) obtained from `get_gene_filter()` for
+SCE objects with cells filtered by dataset-sensitive and custom filter, respectively.
+
+## Plots
+
+`sce_unfiltered_plotlist`: a list of various violin plots for cell QC metrics (`{ggplot2}` objects), generated using
+`sce_unfiltered` target. Cells are colored by `discard_qc` column - blue points pass the dataset-sensitive filter,
+while the orange ones do not.
+
+For example, the following code is used to plot total UMI counts:
+
+```{r, eval = FALSE}
+plot_colData(
+  sce_unfiltered,
+  y = "total",
+  colour_by = "discard_qc",
+  title = "Total count",
+  scale_y = ggplot2::scale_y_log10()
+)
+```
+
+***
+
+`sce_qc_filter_genes_plotlist`, `sce_custom_filter_genes_plotlist`: similar to `sce_unfiltered_plotlist`,
+but in each of them, cells are colored by the other filter. That is, cells in `sce_qc_filter_genes_plotlist` are
+colored by `discard_custom` column, and thus, showing which cells would be discarded in custom-filtered dataset.
+Vice versa for `sce_custom_filter_genes_plotlist`.
+
+## Other targets
+
+`config_input_qc`: a list holding parameters for this stage.
+
+***
+
+`barcode_ranks`: a DataFrame with barcode ranks for
+[knee plot](https://bioconductor.org/books/release/OSCA/droplet-processing.html),
+computed by `DropletUtils::barcodeRanks()` on UMI counts from `sce_raw` target.
+
+`empty_droplets`: a DataFrame of statistics for empty droplets, computed `DropletUtils::emptyDrops()` on UMI counts
+from `sce_raw` target.
+
+***
+
+`sce_history`: a tibble with cell and gene "history", showing their numbers in unfiltered and filtered data.
+
+`sce_history_plot`: a `{ggplot2}` object summarizing information from `sce_history` target.
+
+***
+
+`gene_annotation`: a dataframe with gene annotation, processed such that:
+
+- If a single ENSEMBL ID has multiple symbols, gene descriptions, or ENTREZ IDs, they are collapsed by comma (`,`).
+- ENSEMBL ID is used as a symbol for ENSEMBL IDs with unknown symbols.
+- ENSEMBL ID is appended to symbols having multiple ENSEMBL IDs.
+  - For example, *TBCE* has both ENSG00000285053 and ENSG00000284770 ENSEMBL IDs assigned ->
+    its symbol is changed to TBCE_ENSG00000285053 and TBCE_ENSG00000284770.
+
+`gene_annotation` can be also retrieved from `rowData(sce_final_input_qc)`.

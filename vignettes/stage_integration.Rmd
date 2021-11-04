@@ -1,0 +1,344 @@
+---
+title: "Integration stage"
+description: "01_integration stage of the integration pipeline."
+date: "`r Sys.Date()`"
+package: scdrake
+output:
+  BiocStyle::html_document:
+    toc: true
+    toc_float: true
+vignette: >
+  %\VignetteIndexEntry{Integration stage}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}  
+---
+
+***
+
+For a general overview of this integration pipeline stage see `vignette("pipeline_overview")`.
+
+Config for this stage is stored in `01_integration.yaml` file.
+Directory with this file is read from `SCDRAKE_INTEGRATION_CONFIG_DIR` environment variable upon `{scdrake}` load or
+attach, and saved as `scdrake_integration_config_dir` option. This option is used as the default argument value in
+several `{scdrake}` functions.
+
+***
+
+# Config parameters
+
+## Integration sources
+
+```yaml
+INTEGRATION_SOURCES:
+  - pbmc1k:
+      cache_path: ".drake_pbmc1k"
+      description: "10x Genomics PBMC 1k dataset"
+      hvg_rm_cc_genes: True
+      hvg_cc_genes_var_expl_threshold: 5
+    pbmc3k:
+      cache_path: ".drake_pbmc3k"
+      description: "10x Genomics PBMC 3k dataset"
+      hvg_rm_cc_genes: False
+      hvg_cc_genes_var_expl_threshold: null
+```
+
+**Type:** list of named lists
+
+This parameter specifies datasets to be integrated. Those are read in from single-sample pipeline results
+(the `sc_final_norm_clustering` targets) taken from corresponding `{drake}` caches.
+
+Each name of a nested list specifies the name of single-sample, e.g. `pbmc1k`. Parameters for each single-sample are:
+
+- `cache_path: ".drake_pbmc1k"` (character scalar): a path to `{drake}` cache.
+- `description: "10x Genomics PBMC 1k dataset"` (character scalar): a description of the single-sample, will appear in reports.
+- `hvg_rm_cc_genes: True` (logical scalar): if `True`, cell cycle-related genes will be removed prior to selection of
+  highly variable genes (HVGs). This is the same method of cell cycle correction as in the `02_norm_clustering` stage
+  of the single-sample pipeline (see `vignette("stage_norm_clustering")` for more details).
+- `hvg_cc_genes_var_expl_threshold: 5` (numeric scalar): a threshold on cell cycle variance explained.
+  Genes with var. expl. greater than this threshold will be marked as CC-related.
+
+Currently, there are some limitations of which datasets can be integrated:
+
+- All single-samples must be normalized by `{scran}` method.
+- If the HVG selection in integrated data is based on combined HVG metrics (see the relevant parameters below),
+  all single-samples had to use the same HVG metric (`HVG_METRIC` of `"gene_var"` or `"gene_cv2"`).
+
+## Selection of highly variable genes (HVGs)
+
+This is done prior to integration, and is same for all methods specified in the `INTEGRATION_METHODS` (see below).
+
+If a single-sample has the `hvg_rm_cc_genes` set to `True`, cell cycle-related genes will be removed
+prior to HVG combination and selection.
+
+***
+
+`HVG_COMBINATION_INT: "hvg_metric"`
+
+**Type:** character scalar (`"hvg_metric"` | `"intersection"` | `"union"` | `"all"`)
+
+How to combine HVGs from single-samples:
+
+- `"hvg_metric"`: combine HVG metrics (gene variance or CV2) and then apply HVG selection similar to procedure in
+  the `02_norm_clustering` stage of the single-sample pipeline. Note that in order to combine HVG metrics,
+  all samples had to have `HVG_METRIC` set to either `"gene_var"` (`scran::combineVar()`) or
+  `"gene_cv2"` (`scran::combineCV2()`).
+- Combine HVGs by set operations:
+  - `"intersection"`
+  - `"union"`
+- `"all"`: use all common genes from all samples as HVGs (without duplicates).
+
+***
+
+```yaml
+HVG_SELECTION_INT: "top"
+HVG_SELECTION_VALUE_INT: 3000
+```
+
+**Type:** character scalar, integer scalar
+
+HVG selection strategy. Only relevant when `HVG_COMBINATION_INT` is `"hvg_metric"`,
+i.e. this selection will be applied to combined HVG metrics.
+
+These parameters are similar to `HVG_SELECTION` and `HVG_SELECTION_VALUE` in the `02_norm_clustering` stage
+of the single-sample pipeline (see `vignette("stage_norm_clustering")` for more details).
+
+## Integration methods
+
+```yaml
+INTEGRATION_METHODS:
+  - uncorrected:
+      pca_selection_method: "forced"
+      pca_forced_pcs: 15
+      tsne_perp: 20
+      tsne_max_iter: 1000
+    rescaling:
+      pca_selection_method: "forced"
+      pca_forced_pcs: 15
+      tsne_perp: 20
+      tsne_max_iter: 1000
+      integration_params:
+        log.base: 2
+        pseudo.count: 1
+    regression:
+      pca_selection_method: "corrected"
+      pca_forced_pcs: 15
+      tsne_perp: 20
+      tsne_max_iter: 1000
+      integration_params:
+        d: 50
+    mnn:
+      pca_selection_method: "corrected"
+      pca_forced_pcs: 15
+      tsne_perp: 20
+      tsne_max_iter: 1000
+      integration_params:
+        k: 20
+        prop.k: null
+        cos.norm: True
+        ndist: 3
+        d: 50
+        merge.order: null
+        auto.merge: True
+```
+
+**Type:** list of named lists
+
+Each named list is specifying parameters for one integration method. The ones specified in the `integration_params` list
+are used directly in an integration method, while the others are used prior/after integration.
+The `"uncorrected"` and at least one integration method must be set (by default, all methods are performed).
+Here are descriptions and possible parameters (some of them are used by multiple methods, and thus described only once)
+for each integration method:
+
+- `uncorrected`: correction for inter-batch sequencing depth with `batchelor::multiBatchNorm()`.
+  This method is required, because it is used for differential expression analysis (cluster markers and contrasts).
+  - `pca_selection_method: "forced"` (character scalar: `"forced"` | `"elbow"` | `"technical_noise"`):
+    see the `PCA_SELECTION_METHOD` parameter in `vignette("norm_clustering")`.
+  - `pca_forced_pcs: 15` (integer scalar): force this number of selected PCs (if `pca_selection_method` is `"forced"`).
+  - `tsne_perp: 20` (numeric scalar): t-SNE perplexity.
+  - `tsne_max_iter: 1000` (positive integer scalar): a maximum number of t-SNE iterations.
+
+- `rescaling`: scale counts so that the average count within each batch is the same for each gene
+  (`batchelor::rescaleBatches()`).
+  - `pca_selection_method: "forced"`
+  - `pca_forced_pcs: 15`
+  - `tsne_perp: 20`
+  - `tsne_max_iter: 1000`
+  - `integration_params`: directly passed to `batchelor::RescaleParam()` used for `batchelor::rescaleBatches()`.
+    Default values from this function are used by default.
+    - `log.base: 2` (numeric scalar): a base of the log-transformation.
+    - `pseudo.count: 1` (numeric scalar): a pseudo-count used for the log-transformation.
+
+- `regression`: fit a linear model to each gene regress out uninteresting factors of variation,
+  returning a matrix of residuals (`batchelor::regressBatches()`).
+  - `pca_selection_method: "corrected"`: in this integration method, `batchelor::multiBatchPCA()` is used,
+    and all PCs (50 by default) from this method will be used if `"corrected"` is specified.
+    Otherwise any other PCA selection method can be used.
+  - `pca_forced_pcs: 15`
+  - `tsne_perp: 20`
+  - `tsne_max_iter: 1000`
+  - `integration_params`: directly passed to `batchelor::RegressParam()` used for `batchelor::regressBatches()`.
+    Default values from this function are used by default.
+    - `d: 50` (integer scalar): a number of PCs to compute in `batchelor::multiBatchPCA()`.
+
+- `mnn`: fast mutual nearest neighbors (`batchelor::fastMNN()`).
+  - `pca_selection_method: "corrected"`
+  - `pca_forced_pcs: 15`
+  - `tsne_perp: 20`
+  - `tsne_max_iter: 1000`
+  - `integration_params`: directly passed to `batchelor::FastMnnParam()` used for `batchelor::fastMNN()`.
+    Default values from this function are used by default.
+    - `k: 20` (integer scalar): a number of nearest neighbors to consider when identifying MNNs.
+    - `prop.k: null` (numeric scalar): a proportion of cells in each dataset to use for mutual nearest neighbor
+      searching. If set, the number of nearest neighbors used for the MNN search in each batch is redefined as
+      `max(k, prop.k*N)` where `N` is the number of cells in that batch.
+    - `cos.norm: True` (logical scalar): if `True`, cosine normalization is performed on the input data prior to PCA.
+    - `ndist: 3` (numeric scalar): a threshold beyond which neighbours are to be ignored when computing correction
+      vectors. Each threshold is defined as a multiple of the number of median distances.
+    - `d: 50`
+    - `merge.order: null` (integer vector, list of lists, or `null`): a merge order of single-samples.
+      Alternatively, a list of lists representing a tree structure specifying a hierarchical merge order
+      (not tested, see `batchelor::fastMNN()` for more details).
+    `auto.merge: True` (logical scalar): if `True`, automatically identify the "best" merge order.
+
+## Integration diagnostics
+
+### Fast MNN clustering
+
+Used to obtain basic
+[integration diagnostics](https://bioconductor.org/books/release/OSCA/integrating-datasets.html#correction-diagnostics).
+See `scran::buildSNNGraph()` and `bluster::makeSNNGraph()` for more details.
+
+***
+
+`INTEGRATION_SNN_K: 10`
+
+**Type:** integer scalar
+
+A number of nearest neighbors to consider during graph construction.
+
+***
+
+`INTEGRATION_SNN_TYPE: "rank"`
+
+**Type:** character scalar (`"rank"` | `"number"` | `"jaccard"`)
+
+A type of weighting scheme to use for shared neighbors.
+
+***
+
+`INTEGRATION_SNN_CLUSTERING_METHOD: "walktrap"`
+
+**Type:** character scalar (`"walktrap"` | `"louvain"`)
+
+A type of MNN clustering algorithm. See `igraph::cluster_walktrap()` and `igraph::cluster_louvain()` for more details.
+
+## Input files
+
+`SELECTED_MARKERS_INT_FILE: !code system.file("extdata", "selected_markers.csv", package = "scdrake", mustWork = TRUE)`
+
+**Type:** character scalar or `null`
+
+Similar to the `SELECTED_MARKERS_FILE` parameter in `vignette("norm_clustering")`.
+
+***
+
+`INTEGRATION_REPORT_RMD_FILE: "Rmd/integration/01_integration.Rmd"`
+
+**Type:** character scalar
+
+A path to RMarkdown file used for HTML report of this pipeline stage.
+
+## Output files
+
+`INTEGRATION_BASE_OUT_DIR: "01_integration"`
+
+**Type:** character scalar
+
+A path to base output directory for this stage. It will be created under `BASE_OUT_DIR` specified in `00_main.yaml` config.
+
+***
+
+```yaml
+INTEGRATION_SELECTED_MARKERS_OUT_DIR: "selected_markers"
+INTEGRATION_REPORT_HTML_FILE: "01_integration.html"
+```
+
+**Type:** character scalar
+
+Names of files and directories created under `INTEGRATION_BASE_OUT_DIR`. Subdirectories are not allowed.
+
+## HTML output parameters
+
+```yaml
+INTEGRATION_KNITR_MESSAGE: False
+INTEGRATION_KNITR_WARNING: False
+INTEGRATION_KNITR_ECHO: False
+```
+
+**Type:** logical scalar
+
+These are passed to `knitr::opts_chunk()` and used for rendering of stage's HTML report.
+
+# Targets
+
+Here you can find description of the most important targets for this stage.
+However, for a full overview, you have to inspect the [source code](R/plans_integration.R) of the
+`get_integration_subplan()` function.
+
+## `SingleCellExperiment` objects
+
+`sce_int_import`: list of imported single-sample SCE objects, as defined in the `INTEGRATION_SOURCES` parameter.
+Because `{drake}` cannot watch for changes in a cache, this target is always rerun.
+Also, some constraints are checked (common normalization method and HVG metrics).
+
+***
+
+`sce_int_raw_snn_clustering`: `sce_int_import` with computed fast SNN clustering for each single-sample,
+used for integration diagnostics.
+
+***
+
+`sce_int_processed`: `sce_int_import` subsetted to common colData, and features (rows) and their corresponding
+metadata (`hvg_ids`, `hvg_metric_fit`).
+
+***
+
+`sce_int_multibatchnorm`: `sce_int_processed` with SCE objects normalized for inter-batch sequencing depth
+(`batchelor::multiBatchNorm()`).
+
+***
+
+`sce_int_df`: a tibble with integrated SCE objects. Each row is one method defined in the `INTEGRATION_METHODS`
+parameter and either with or without removed cell cycle-related genes from HVGs.
+See `?sce_int_df_fn` for information about what is added or modified in `metadata()` of each integrated SCE object.
+
+***
+
+`sce_int_pca_df`: `sce_int_df` with computed PCA and selected number of PCs. Also includes PC selection statistics
+and plot.
+
+***
+
+`sce_int_clustering_df`: `sce_int_pca_df` with computed MNN clustering used for integration diagnostics.
+
+***
+
+`sce_int_dimred_df`: `sce_int_pca_df` with computed t-SNE and UMAP dimensionality reductions.
+
+## Highly variable genes (HVGs) selection
+
+`hvg_int`, `hvg_int_with_cc`: lists of HVGs and selection parameters. The latter is not `NULL` when any of the
+single-samples defined in the `INTEGRATION_SOURCES` parameter has `hvg_rm_cc_genes` set to `True`.
+
+***
+
+`hvg_plots_int_df`: a tibble with HVG diagnostic plots.
+
+## Plots
+
+`sce_int_dimred_plots_df`: a tibble with dimensionality reduction plots.
+
+### Selected markers
+
+`selected_markers_plots_int_df`: a tibble with plots of selected markers, similar to `selected_markers_plots`
+in the `02_norm_clustering` stage of the single-sample pipeline.

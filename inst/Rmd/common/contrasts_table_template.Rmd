@@ -1,0 +1,167 @@
+---
+output:
+  html_document:
+    toc: false
+    number_sections: false
+    self_contained: true
+    code_download: true
+    df_print: "paged"
+params:
+  title: "Contrast markers table"
+  other_params: "`r list()`"
+title: "`r params$title`"
+css: "`r here::here('Rmd/common/stylesheet.css')`"
+---
+
+***
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(echo = FALSE, warning = FALSE, message = FALSE)
+DT::datatable(matrix())
+```
+
+```{js}
+$(document).ready(function() {
+  $("a[role='button']").unwrap();
+});
+```
+
+```{css}
+body .main-container {
+  max-width: 1440px !important;
+}
+```
+
+```{r}
+other_params <- scdrake_list(params$other_params)
+```
+
+<details style="display: inline !important;">
+
+<summary style="list-style: none !important;">
+<p class="btn btn-primary" type="button" role="link">Show details</p>
+</summary>
+
+- ID: `r other_params$id`
+- Name: `r other_params$name`
+- Description: `r other_params$description`
+- Source column: `r other_params$source_column`
+- Target level / reference level: `r other_params$target` / `r other_params$reference`
+- Block column: `r other_params$block_column`
+- Test type: `r other_params$test_type`
+- LFC test: |LFC| > `r other_params$lfc_test`
+- Standardized LFC: `r other_params$std_lfc`
+
+</details>
+
+***
+
+# {.tabset}
+
+## Dimred plots {.tabset}
+
+```{r, results = "asis"}
+x <- lapply_rows(other_params$dimred_plots, FUN = function(par) {
+  md_header(str_to_upper(par$plot_dimreds), 3)
+  p <- par$plot
+  highlight_points(p, column_name = "colour_by", levels = c(other_params$target, other_params$reference)) %>% print()
+})
+```
+
+## Marker table
+
+```{r, results = "asis"}
+cat(other_params$heatmap_file_rel, "\n\n")
+
+cat("
+<button class='btn btn-success' type='button' data-toggle='collapse' data-target='#table_info'
+aria-expanded='false' aria-controls='table_info' style='margin-bottom: 0;'>
+  Show table info
+</button>
+")
+
+cat("
+<div class='collapse' id='table_info'>
+<hr />
+<div class='card card-body'>
+
+Genes in the target cell group (cluster) were tested against the reference cell group using the selected test.
+
+Table columns:
+
+<ul>
+<li>
+lfc or auc - effect size of the current contrast, i.e. relative to the reference level.
+The effect size can be either log2 fold-change or area under the curve (for Wilcox test).
+</li>
+<li>pval - p-value for the current contrast</li>
+<li>fdr - p-value for the current contrast adjusted for multiple testing issue (false discovery rate)</li>
+<li>avg_self - average log2 counts in the target level</li>
+<li>avg_other - average log2 counts in the reference level</li>
+<li>pct_self - percentage of cells with detected expression (counts > 0) in the target level</li>
+<li>pct_other - percentage of cells with detected expression (counts > 0) in the reference level</li>
+</ul>
+
+For more details see the documentation of the used methods from scran package:
+<a href='https://rdrr.io/bioc/scran/man/combineMarkers.html' target='_blank'>combineMarkers()</a> and
+<a href='https://rdrr.io/bioc/scran/man/findMarkers.html' target='_blank'>findMarkers()</a>
+
+</div>
+</div>
+")
+```
+
+***
+
+```{r, include = FALSE}
+markers <- other_params$markers
+assert_that(is.data.frame(markers))
+```
+
+```{r}
+if (other_params$test_type == "wilcox") {
+  effect_colname <- "auc"
+} else {
+  effect_colname <- "lfc"
+}
+
+download_title <- other_params$id
+
+table_dt <- DT::datatable(
+  markers,
+  filter = "top",
+  rownames = FALSE,
+  escape = FALSE,
+  width = "100%",
+  class = "display compact",
+  extensions = c("Buttons", "FixedHeader"),
+  options = list(
+    pageLength = 100,
+    order = list(which(colnames(markers) == "fdr") - 1, "asc"),
+    autoWidth = TRUE,
+    dom = "Bipfrtip",
+    fixedHeader = TRUE,
+    lengthMenu = list(list(10, 25, 50, -1), list(10, 25, 50, "All")),
+    buttons =
+      list("copy", "print", list(
+        extend = "collection",
+        text = "Download",
+        buttons = list(
+          list(extend = "excel", title = download_title),
+          list(extend = "pdf", title = download_title),
+          list(extend = "csv", title = download_title)
+        )
+      ))
+  )
+) %>%
+  DT::formatSignif(columns = c("pval", "fdr", "avg_self", "avg_other", effect_colname), digits = 3)
+
+table_dt
+```
+
+# {-}
+
+***
+
+```{r, child = here::here("Rmd/common/_footer.Rmd")}
+```

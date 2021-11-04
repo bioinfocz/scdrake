@@ -1,0 +1,25 @@
+CONTRASTS_SOURCES_DEFAULTS:
+  COMMON_PARAMS:
+    PLOT_DIMREDS: ["umap"]
+    BLOCK_COLUMN: null
+  PARAMS_T:
+    LFC_TEST: 0
+    STD_LFC: False
+    TOP_N_HEATMAP: 3
+    TOP_N_WT_HEATMAP: "fdr"
+    TOP_N_PLOT: 3
+    TOP_N_WT_PLOT: "fdr"
+  PARAMS_WILCOX:
+    LFC_TEST: 0
+    STD_LFC: null
+    TOP_N_HEATMAP: 3
+    TOP_N_WT_HEATMAP: "fdr"
+    TOP_N_PLOT: 3
+    TOP_N_WT_PLOT: "fdr"
+  PARAMS_BINOM:
+    LFC_TEST: 0
+    STD_LFC: null
+    TOP_N_HEATMAP: 3
+    TOP_N_WT_HEATMAP: "fdr"
+    TOP_N_PLOT: 3
+    TOP_N_WT_PLOT: "fdr"

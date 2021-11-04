@@ -1,0 +1,79 @@
+### Integration sources #######################################################
+INTEGRATION_SOURCES:
+  - pbmc1k:
+      cache_path: ".drake_pbmc1k"
+      description: "10x Genomics PBMC 1k dataset"
+      hvg_rm_cc_genes: True
+      hvg_cc_genes_var_expl_threshold: 5
+    pbmc3k:
+      cache_path: ".drake_pbmc3k"
+      description: "10x Genomics PBMC 3k dataset"
+      hvg_rm_cc_genes: False
+      hvg_cc_genes_var_expl_threshold: null
+###############################################################################
+
+### Selection of highly variable genes (HVGs) #################################
+HVG_COMBINATION_INT: "hvg_metric"
+HVG_SELECTION_INT: "top"
+HVG_SELECTION_VALUE_INT: 3000
+###############################################################################
+
+### Integration methods #######################################################
+INTEGRATION_METHODS:
+  - uncorrected:
+      pca_selection_method: "forced"
+      pca_forced_pcs: 15
+      tsne_perp: 20
+      tsne_max_iter: 1000
+    rescaling:
+      pca_selection_method: "forced"
+      pca_forced_pcs: 15
+      tsne_perp: 20
+      tsne_max_iter: 1000
+      integration_params:
+        log.base: 2
+        pseudo.count: 1
+    regression:
+      pca_selection_method: "corrected"
+      pca_forced_pcs: 15
+      tsne_perp: 20
+      tsne_max_iter: 1000
+      integration_params:
+        d: 50
+    mnn:
+      pca_selection_method: "corrected"
+      pca_forced_pcs: 15
+      tsne_perp: 20
+      tsne_max_iter: 1000
+      integration_params:
+        k: 20
+        prop.k: null
+        cos.norm: True
+        ndist: 3
+        d: 50
+        merge.order: null
+        auto.merge: True
+###############################################################################
+
+### Integration diagnostics ###################################################
+INTEGRATION_SNN_K: 10
+INTEGRATION_SNN_TYPE: "rank"
+INTEGRATION_SNN_CLUSTERING_METHOD: "walktrap"
+###############################################################################
+
+### Input files ###############################################################
+SELECTED_MARKERS_INT_FILE: !code system.file("extdata", "selected_markers.csv", package = "scdrake", mustWork = TRUE)
+INTEGRATION_REPORT_RMD_FILE: "Rmd/integration/01_integration.Rmd"
+###############################################################################
+
+### Output files ##############################################################
+INTEGRATION_BASE_OUT_DIR: "01_integration"
+INTEGRATION_SELECTED_MARKERS_OUT_DIR: "selected_markers"
+INTEGRATION_REPORT_HTML_FILE: "01_integration.html"
+###############################################################################
+
+### HTML output parameters ####################################################
+INTEGRATION_KNITR_MESSAGE: False
+INTEGRATION_KNITR_WARNING: False
+INTEGRATION_KNITR_ECHO: False
+###############################################################################

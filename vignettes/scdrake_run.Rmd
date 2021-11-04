@@ -1,0 +1,93 @@
+---
+title: "Running the pipeline, environment variables"
+date: "`r Sys.Date()`"
+package: scdrake
+output:
+  BiocStyle::html_document:
+    toc: true
+    toc_float: true
+vignette: >
+  %\VignetteIndexEntry{Running the pipeline, environment variables}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}  
+---
+
+<script>
+$(document).ready(function(){
+  $('[data-toggle="tooltip"]').tooltip(); 
+});
+</script>
+
+***
+
+This vignette expects you have already initialized a new `{scdrake}` project, as described in `vignette("scdrake")`.
+
+# Environment variables
+
+On `{scdrake}` load or
+<a data-toggle="tooltip" title="(i.e. when you call some function from a package, e.g. `drake::run_single_sample()`)">attach</a>,
+several environment variables are read and corresponding `options()` are set. Those are mainly variables controlling
+paths to config directories. See `?get_scdrake_default_options()` and `?get_scdrake_options()` for more details and
+list of used environment variables.
+
+We can take the `SCDRAKE_SINGLE_SAMPLE_CONFIG_DIR` environment variable as an example:
+
+- If it is set, the `scdrake_single_sample_config_dir` option is set on `{scdrake}` load or attach.
+- It it is not set, a default value `"config/single_sample"` will be used for the option above.
+  You can see that the default value is consistent with the file structure of a newly initialized `{scdrake}` project.
+- Value of the `scdrake_single_sample_config_dir` option is the default one for many `{scdrake}` functions, e.g.
+  `update_single_sample_configs(dir = getOption("scdrake_pipeline_config_dir"), ...)` or
+  `run_single_sample(dir = getOption("scdrake_pipeline_config_dir"), ...)`.
+
+# Running the pipeline in current R session
+
+The pipeline can be run in current R session, however, this is considered a bad practice for reproducibility.
+The most high-level functions are `run_single_sample()` and `run_integration()` - see description in their help pages
+for overview of what they do before pipeline is executed.
+
+Anyway, to replicate what is done inside `run_single_sample()`, you just need this code:
+
+```{r, eval = FALSE}
+update_pipeline_config()
+update_single_sample_configs()
+cfg_pipeline <- load_pipeline_config()
+cfg <- load_single_sample_configs(cfg_pipeline)
+plan <- get_single_sample_plan(cfg, cfg_pipeline)
+create_single_sample_dirs(cfg)
+scdrake_make(plan, cfg_pipeline = cfg_pipeline, cfg_main = cfg_main)
+```
+
+Now you have almost full control over what will be executed in the pipeline:
+
+- You can modify `cfg_pipeline` and `cfg`, as these are lists (but with strict rules, see `?scdrake_list`).
+  However, you should do modifications with caution, as config parameters are processed by internal functions
+  ([config_process_common.R](R/config_process_common.R), [config_process_single_sample.R](R/config_process_single_sample.R),
+  [config_process_integration.R](R/config_process_integration.R)). This may change in the future and these functions
+  will be exposed to package users.
+- You can add more targets to `plan`, e.g.
+
+```{r, eval = FALSE}
+my_plan <- drake::drake_plan(
+  my_target = scater::plotReducedDim(sce_final_norm_clustering, "umap", colour_by = "total")
+)
+plan <- drake::bind_plans(plan, my_plan)
+scdrake_make(plan, cfg_pipeline = cfg_pipeline, cfg_main = cfg_main)
+```
+
+Just keep in mind that the list of targets to be made is taken from `cfg_pipeline$DRAKE_TARGETS`, so unless
+it is set to `null` (= make all targets in plan) in your `pipeline.yaml` config,
+you have to add names of your own targets to be made.
+
+# Running the pipeline reproducibly in a fresh new R session
+
+In `{drake}`, the preferred way to execute pipeline is through `drake::r_make()`, with the `source` parameter set
+to an initial script. In `{scdrake}`, there are two such scripts for the single-sample and integration pipeline:
+`_drake_single_sample.R` and `_drake_integration.R`, respectively. Loading the config files from proper paths in these
+scripts is done via [environment variables](#environment-variables).
+
+```{r, eval = FALSE}
+drake::r_make("_drake_single_sample.R")
+drake::r_make("_drake_integration.R")
+```
+
+All important details are already given in *Running the pipeline reproducibly* section in `vignette("scdrake")`.

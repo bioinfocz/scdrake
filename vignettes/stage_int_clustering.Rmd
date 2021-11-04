@@ -1,0 +1,120 @@
+---
+title: "Post-integration clustering stage"
+description: "02_int_clustering stage of the integration pipeline."
+date: "`r Sys.Date()`"
+package: scdrake
+output:
+  BiocStyle::html_document:
+    toc: true
+    toc_float: true
+vignette: >
+  %\VignetteIndexEntry{Post-integration clustering stage}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}  
+---
+
+***
+
+For a general overview of this integration pipeline stage see `vignette("pipeline_overview")`.
+
+Config for this stage is stored in `02_int_clustering.yaml` file.
+Directory with this file is read from `SCDRAKE_INTEGRATION_CONFIG_DIR` environment variable upon `{scdrake}` load or
+attach, and saved as `scdrake_integration_config_dir` option. This option is used as the default argument value in
+several `{scdrake}` functions.
+
+***
+
+# Config parameters
+
+The following parameters are the same as those in the `02_norm_clustering` stage of the single-sample pipeline
+(see `vignette("stage_norm_clustering")`):
+
+- Clustering parameters.
+- `CELL_GROUPINGS`
+- `INT_CLUSTERING_REPORT_DIMRED_NAMES`, `INT_CLUSTERING_REPORT_CLUSTERING_NAMES`,
+  `INT_CLUSTERING_REPORT_DIMRED_PLOTS_OTHER`
+- `INT_CLUSTERING_KNITR_MESSAGE`, `INT_CLUSTERING_KNITR_WARNING`, `INT_CLUSTERING_KNITR_ECHO`
+
+## Selection of final integration method
+
+`INTEGRATION_FINAL_METHOD: "mnn"`
+
+**Type:** character scalar (`"mnn"` | `"rescaling"` | `"regression"`)
+
+A name of the final integration method that will be used for clustering and downstream steps.
+
+***
+
+`INTEGRATION_FINAL_METHOD_RM_CC: False`
+
+**Type:** logical scalar
+
+Whether to take the result with removed cell cycle-related genes. This will be also applied to the "uncorrected" method
+(which is used for cluster markers and contrasts).
+`True` is only possible when any of the single-samples in the `INTEGRATION_SOURCES` parameter (`01_integration.yaml`)
+has `hvg_rm_cc_genes` set to `True`.
+
+## Input files
+
+`INT_CLUSTERING_REPORT_RMD_FILE: "Rmd/integration/02_int_clustering.Rmd"`
+
+**Type:** character scalar
+
+A path to RMarkdown files used for HTML report of this pipeline stage.
+
+## Output files
+
+`INT_CLUSTERING_BASE_OUT_DIR: "02_int_clustering"`
+
+**Type:** character scalar
+
+A path to base output directory for this stage. It will be created under `BASE_OUT_DIR` specified in `00_main.yaml` config.
+
+***
+
+```yaml
+INT_CLUSTERING_REPORT_HTML_FILE: "02_int_clustering.html"
+```
+
+**Type:** character scalar
+
+Names of files and directories created under `INT_CLUSTERING_BASE_OUT_DIR`. Subdirectories are not allowed.
+
+# Targets
+
+## `SingleCellExperiment` objects
+
+`sce_int_uncorrected`: the selected uncorrected SCE object according to the `INTEGRATION_FINAL_METHOD_RM_CC` parameter.
+
+***
+
+`sce_int_final`: the selected integrated SCE object according to the `INTEGRATION_FINAL_METHOD` and
+`INTEGRATION_FINAL_METHOD_RM_CC` parameters.
+
+***
+
+`sce_int_final_clustering`: similar to `sce_final_norm_clustering` in the `02_norm_clustering` stage of the
+single-sample pipeline.
+
+## Targes similar to `02_norm_clustering`
+
+These targets are basically the same as those in the `02_norm_clustering` pipeline in the single-sample pipeline
+(see `vignette("stage_norm_clustering")`).
+
+## Cell clustering
+
+- `clusters_all`
+- `graph_int_k`, `cluster_int_graph_walktrap`, `cluster_int_graph_walktrap_n`, `cluster_int_graph_walktrap_table`,
+  `cluster_int_graph_louvain`, `cluster_int_graph_louvain_n`, `cluster_int_graph_louvain_table`
+- `kmeans_gaps`, `kmeans_best_k`, `cluster_int_kmeans_kbest`, `cluster_int_kmeans_kbest_table`,
+  `cluster_int_kmeans_kc`, `cluster_int_kmeans_kc_tables`
+- `sce_int_sc3`, `cluster_int_sc3`, `cluster_int_sc3_tables`, `cluster_int_sc3_stability_plots`
+
+## Plots
+
+- `dimred_plots_clustering`, `dimred_plots_other_vars`
+- `selected_markers_plots_int_final`
+
+## Other targets
+
+- `cell_data`

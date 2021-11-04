@@ -1,0 +1,34 @@
+CLUSTER_MARKERS_SOURCES_DEFAULTS:
+  COMMON_PARAMS:
+    PLOT_DIMREDS: ["umap"]
+    BLOCK_COLUMN: null
+  PARAMS_T:
+    LFC_DIRECTION: "up"
+    LFC_TEST: 0
+    PVAL_TYPE: "any"
+    MIN_PROP: null
+    STD_LFC: False
+    TOP_N_HEATMAP: 3
+    TOP_N_WT_HEATMAP: "top"
+    TOP_N_PLOT: 3
+    TOP_N_WT_PLOT: "top"
+  PARAMS_WILCOX:
+    LFC_DIRECTION: "up"
+    LFC_TEST: 0
+    PVAL_TYPE: "any"
+    MIN_PROP: null
+    STD_LFC: null
+    TOP_N_HEATMAP: 3
+    TOP_N_WT_HEATMAP: "top"
+    TOP_N_PLOT: 3
+    TOP_N_WT_PLOT: "top"
+  PARAMS_BINOM:
+    LFC_DIRECTION: "up"
+    LFC_TEST: 0
+    PVAL_TYPE: "any"
+    MIN_PROP: null
+    STD_LFC: null
+    TOP_N_HEATMAP: 3
+    TOP_N_WT_HEATMAP: "top"
+    TOP_N_PLOT: 3
+    TOP_N_WT_PLOT: "top"

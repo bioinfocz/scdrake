@@ -1,0 +1,38 @@
+/* Increase the page width */
+.main-container {
+  max-width: 1366px !important;
+  margin-left: 10px !important;
+}
+
+/* Toggle buttons */
+button[data-toggle="collapse"] {
+  margin-bottom: 1em;
+}
+
+/* Collapsed <div> */
+div.collapse > div.well, div.collapsing > div.well {
+  background-color: white;
+}
+
+/* DT button group */
+div.dataTables_wrapper > div.dt-buttons {
+  display: inline;
+}
+
+summary.config {
+  width: fit-content;
+  border: 1px solid;
+  border-radius: 5px;
+  padding: 5px;
+  background-color: #0089CF;
+  color: white;
+  margin-bottom: 2em;
+}
+
+summary.config:hover {
+  cursor: pointer;
+}
+
+tbody.td {
+  padding: 1px !important;
+}

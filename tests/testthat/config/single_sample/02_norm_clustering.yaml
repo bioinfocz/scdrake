@@ -1,0 +1,103 @@
+### Normalization parameters ##################################################
+NORMALIZATION_TYPE: "scran"
+
+SCRAN_USE_QUICKCLUSTER: True
+SCRAN_QUICKCLUSTER_METHOD: "igraph"
+
+SCT_VARS_TO_REGRESS: null
+SCT_N_HVG: 3000
+###############################################################################
+
+### Highly variable genes (HVGs) selection ####################################
+HVG_METRIC: "gene_var"
+HVG_SELECTION: "top"
+HVG_SELECTION_VALUE: 1000
+
+HVG_RM_CC_GENES: False
+HVG_CC_GENES_VAR_EXPL_THRESHOLD: 5
+###############################################################################
+
+### Doublet detection and filtering ###########################################
+MAX_DOUBLET_SCORE: 3.5
+###############################################################################
+
+### PCA #######################################################################
+PCA_SELECTION_METHOD: "forced"
+PCA_FORCED_PCS: 15
+###############################################################################
+
+### t-SNE #####################################################################
+TSNE_PERP: 20
+TSNE_MAX_ITER: 1000
+###############################################################################
+
+### Graph-based clustering ####################################################
+GRAPH_SNN_N: 10
+GRAPH_SNN_TYPE: "rank"
+###############################################################################
+
+### k-means clustering ########################################################
+KMEANS_K: !code 3:6
+###############################################################################
+
+### SC3 clustering ############################################################
+SC3_K: !code 5:6
+SC3_N_CORES: 8
+SC3_DRY: False
+###############################################################################
+
+### Cell grouping assignment ##################################################
+CELL_GROUPINGS:
+  - cluster_graph_louvain_annotated:
+      source_column: "cluster_graph_louvain"
+      description: "Graph-based clustering (Louvain alg.), annotated clusters"
+      assignments:
+        1: "memory_CD4+"
+        6: "B"
+        7: "memory_CD4+"
+    cluster_kmeans_kc_3_renamed:
+      source_column: "cluster_kmeans_kc_3"
+      description: "k-means clustering (k = 3), renamed clusters"
+      assignments:
+        1: "kc_1"
+        2: "kc_2"
+    cluster_sc3_6_renamed:
+      source_column: "cluster_sc3_6"
+      description: "SC3 clustering (k = 6), renamed clusters"
+      assignments:
+        1: "sc3_1"
+        5: "sc3_5"
+###############################################################################
+
+### Dimensionality reduction plots ############################################
+NORM_CLUSTERING_REPORT_DIMRED_NAMES: ["umap", "pca", "tsne"]
+NORM_CLUSTERING_REPORT_CLUSTERING_NAMES: ["graph", "kmeans", "sc3"]
+
+NORM_CLUSTERING_REPORT_DIMRED_PLOTS_OTHER:
+  - "phase": "Cell cycle phases"
+    "doublet_score": "Doublet score"
+    "total": "Total number of UMI"
+    "detected": "Detected number of genes"
+    "cluster_graph_louvain_annotated": null
+###############################################################################
+
+### Input files ###############################################################
+SELECTED_MARKERS_FILE: !code system.file("extdata", "selected_markers.csv", package = "scdrake", mustWork = TRUE)
+
+NORM_CLUSTERING_REPORT_RMD_FILE: "Rmd/single_sample/02_norm_clustering.Rmd"
+NORM_CLUSTERING_REPORT_SIMPLE_RMD_FILE: "Rmd/single_sample/02_norm_clustering_simple.Rmd"
+###############################################################################
+
+### Output files ##############################################################
+NORM_CLUSTERING_BASE_OUT_DIR: "02_norm_clustering"
+
+NORM_CLUSTERING_SELECTED_MARKERS_OUT_DIR: "selected_markers"
+NORM_CLUSTERING_REPORT_HTML_FILE: "02_norm_clustering.html"
+NORM_CLUSTERING_REPORT_SIMPLE_HTML_FILE: "02_norm_clustering_simple.html"
+###############################################################################
+
+### HTML output parameters ####################################################
+NORM_CLUSTERING_KNITR_MESSAGE: False
+NORM_CLUSTERING_KNITR_WARNING: False
+NORM_CLUSTERING_KNITR_ECHO: False
+###############################################################################

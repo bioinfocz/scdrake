@@ -1,0 +1,9 @@
+# Project: <span style="color: #0089CF">`r config_main$PROJECT_NAME`</span>
+
+- Institute: <span style="color: #F04E26">`r config_main$INSTITUTE`</span>
+- Laboratory: <span style="color: #F04E26">`r config_main$LABORATORY`</span>
+- People: `r config_main$PEOPLE`
+
+`r config_main$PROJECT_DESCRIPTION`
+
+- Organism: `r config_main$ORGANISM`

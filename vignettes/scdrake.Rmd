@@ -1,0 +1,269 @@
+---
+title: "Get started"
+date: "`r Sys.Date()`"
+author:
+  - name: Jiri Novotny
+    affiliation: Institute of Molecular Genetics of the Czech Academy of Sciences
+    email: jiri.novotny@img.cas.cz
+  - name: Jan Kubovciak
+    affiliation: Institute of Molecular Genetics of the Czech Academy of Sciences
+    email: jan.kubovciak@img.cas.cz
+package: scdrake
+output:
+  BiocStyle::html_document:
+    toc: true
+    toc_float: true
+vignette: >
+  %\VignetteIndexEntry{Get started}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}  
+---
+
+<script>
+$(document).ready(function(){
+  $('[data-toggle="tooltip"]').tooltip(); 
+});
+</script>
+
+```{r, include = FALSE}
+## -- We will initialize a scdrake project in temporary directory, but the user will do it in home.
+tmp_dir <- tempfile()
+scdrake::init_project(tmp_dir, set_active_project = FALSE, set_wd = FALSE)
+```
+
+***
+
+# Project initialization
+
+`{scdrake}` is a project-based package, so the first step is to initialize a new project.
+However, this RMarkdown document is not possible to use as usual in RStudio, i.e. to run the code chunks
+(<a data-toggle="tooltip" title="Because during the project initialization we will change the current working directory and set new active RStudio project.">why?</a>).
+Instead, open the rendered version of this document and copy-paste the code to RStudio console -
+there is not much code here to do so `r emoji::emoji("slightly_smiling_face")`
+
+```{r, eval = FALSE, message = FALSE}
+library(scdrake)
+init_project("~/scdrake_example_project")
+```
+
+This will:
+
+- Create a new project directory. Existing directory is automatically detected and you will be asked if it can be
+  overwritten (unless `ask = FALSE`).
+- Switch your current working directory to `~/scdrake_example_project` (can be disabled).
+- Create a new RStudio project (`.RProj`) file and set it as active project (can be disabled).
+- Copy all files, which are bundled with the `{scdrake}` package: YAML configs, Rmd files, R scripts etc.
+- Download (if needed) the [yq tool](https://github.com/mikefarah/yq) used to manipulate YAML files.
+
+> Whenever you will be running the `{scdrake}` pipeline, make sure your working directory is set to the project's root.
+
+Let's inspect files in the project directory:
+
+```{r, eval = FALSE}
+fs::dir_tree(all = TRUE)
+```
+
+```{r, echo = FALSE}
+fs::dir_tree(tmp_dir, all = TRUE)
+```
+
+- `.here`: used by the `{here}` package to locate and memorize the project's root directory.
+  Only used when RStudio project file (`.Rproj`) is not found.
+- `Rmd/`: RMarkdown files used for reporting of pipeline results. You can edit them according to your needs,
+  but keep in mind that they will be overwritten by package-bundle ones if you call `update_project()`.
+- `config/`: config files in YAML format. See `vignette("config"`) for more details.
+- `_drake_integration.R`, `_drake_single_sample.R`: entry points for `{drake}` when pipeline is executed through
+  `drake::r_make()`.
+- `scdrake_example_project.Rproj`: RStudio project file. Created when you call `init_project()` with
+  `use_rstudio = TRUE` (default).
+
+# Running the single-sample pipeline
+
+First we download example datasets from 10x Genomics:
+
+```{r, eval = FALSE}
+download_pbmc1k("example_data/pbmc1k")
+```
+
+The dataset contains data of
+[unfiltered raw feature-barcode matrix](https://support.10xgenomics.com/single-cell-gene-expression/software/pipelines/latest/output/matrices).
+
+We have to modify `config/single_sample/01_input_qc.yaml` to contain a proper path to the data.
+Open this file and set value of `INPUT_10X_DIR` to `"example_data/pbmc1k"`.
+
+Finally, we can run the single-sample pipeline for the PBMC 1k dataset.
+By default, only the final target (`report_input_qc`) of the input and QC stage (`01_input_qc`) will be made,
+that is, a HTML report. This is specified by `DRAKE_TARGETS` parameter in `config/pipeline.yaml`.
+
+> In case you are not using RStudio, you must have directory with `pandoc` binary in your `PATH` or `RSTUDIO_PANDOC`
+> environment variable, or you have to modify the `RSTUDIO_PANDOC` parameter in `config/pipeline.yaml`
+> and supply the directory in which `pandoc` binary is located.
+
+```{r, eval = FALSE}
+run_single_sample()
+```
+
+The output is saved in `output/single_sample/pbmc1k`, as specified by `BASE_OUT_DIR` in
+`config/single_sample/00_main.yaml`. For `01_input_qc` stage, you can find its final report in
+`output/single_sample/pbmc1k/01_input_qc/01_input_qc.html`.
+
+# Retrieving pipeline results
+
+In `{drake}`'s terminology, a pipeline is called *plan*, and is composed of *targets*. When a target is finished,
+its value (object) is saved to cache (directory `.drake` by default), and you can anytime load it to your R session.
+This is done via two `{drake}`'s functions: `drake::loadd()` loads target's value to the global environment,
+and `drake::readd()` returns target's value (so it can be assigned to variable).
+Let's try it and load the filtered `SingleCellExperiment` object:
+
+```{r, eval = FALSE}
+drake::loadd(sce_final_input_qc)
+```
+
+Value of the target `sce_final_input_qc` was loaded as a variable of the same name to your current R session
+(or more precisely, to the global environment). Similarly, we can load this target to variable of our choice:
+
+```{r, eval = FALSE}
+sce <- drake::readd(sce_final_input_qc)
+```
+
+# Running the integration pipeline
+
+The integration pipeline takes as input the `sce_final_norm_clustering` targets from multiple single-sample pipelines.
+This target is located in stage `02_norm_clustering`, but in our example with PBMC 1k dataset, we only run the target
+`report_input_qc`, which is basically the final target of the `01_input_qc` stage. So we need to run the pipeline again,
+specifying this target: open `config/pipeline.yaml` and set `DRAKE_TARGETS` to `["sce_final_norm_clustering"]`.
+
+Also, to speed things up, consider setting `SC3_DRY` in `config/single_sample/02_norm_clustering.yaml` to `TRUE`.
+SC3 is a computationally demanding clustering algorithm, and by setting this parameter the SC3 computation will be skipped,
+and random clusters will be assigned to cells.
+
+Now we can run the pipeline again:
+
+```{r, eval = FALSE}
+run_single_sample()
+```
+
+> Normally, you would put each sample to its own `{scdrake}` project, and also use an another one for the integration pipeline.
+  But to make the examples faster, we will process all of them in the current project directory.
+
+As the integration pipeline requires two and more samples, we need to download an another one - the PBMC 3k dataset:
+
+```{r, eval = FALSE}
+download_pbmc3k("example_data/pbmc3k")
+```
+
+We need to modify our configs:
+
+- `config/single_sample/01_input_qc.yaml`: set `INPUT_10X_DIR` to `"example_data/pbmc3k"`
+- `config/pipeline.yaml`: set `DRAKE_CACHE_DIR` to `".drake_pbmc3k"`. We need to use an another cache directory as
+  we are running the pipeline for both samples in the same project directory.
+
+The config modifications for the second sample are ready, so let's run the pipeline:
+
+```{r, eval = FALSE}
+run_single_sample()
+```
+
+Finally, we modify configs for the integration pipeline:
+
+- `config/integration/01_integration.yaml`: in the `INTEGRATION_SOURCES/pbmc1k` parameter, set
+  `cache_path` to `".drake"`.
+- `config/pipeline.yaml`:
+  - Set `DRAKE_TARGETS` to `["report_integration"]`. To save time, we only run the final target
+    of the `01_integration` stage.
+  - Set `DRAKE_CACHE_DIR` to `".drake_integration"`.
+
+And now we can run the integration pipeline:
+
+```{r, eval = FALSE}
+run_integration()
+```
+
+The output is saved in `output/integration`, as specified by `BASE_OUT_DIR` in
+`config/integration/00_main.yaml`. For `01_integration` stage, you can find its final report in
+`output/integration/01_integration/01_integration.html`.
+
+You can try to load the target `sce_int_dimred_df` containing integrated `SingleCellExperiment` objects with
+computed reduced dimensions. We have to use other than default path to `drake` cache:
+
+```{r, eval = FALSE}
+drake::loadd(sce_int_dimred_df, path = ".drake_integration")
+```
+
+Because we are using the single project directory for both samples and their integration, the config modifications for
+the integration pipeline can look a bit complicated. However, normally, you would:
+
+- Initialize a new `{scdrake}` project for each of your samples.
+- In each project, run pipeline for the `sce_final_norm_clustering` target.
+- Initialize a new `{scdrake}` project for integration, modify the `INTEGRATION_SOURCES` parameter in
+  `config/integration/01_integration.yaml`, and run the integration pipeline.
+
+# Running the pipeline reproducibly
+
+When we called `run_single_sample()` or `run_integration()`, the pipeline was executed in your current R session.
+That is considered a bad practice in the world of reproducibility, as it may bring an unexpected behaviour.
+The proper way is to run pipeline in a fresh new R session. In the `{drake}`, an independent script and `drake::r_make()`
+function are used for this purpose:
+
+```{r, eval = FALSE}
+drake::r_make("_drake_single_sample.R")
+drake::r_make("_drake_integration.R")
+```
+
+This function will source the input R script in which `drake::drake_config()` is the last returned value, and
+execute the pipeline (plan) in a new R session. More details can be found in the `{drake}` book
+[here](https://books.ropensci.org/drake/projects.html#usage).
+
+Of course, you can modify `_drake_single_sample.R` and `_drake_integration.R` to your needs, but, by default,
+loading the config files from proper paths in these scripts is done via environment variables.
+You can read more in `vignette("scdrake_run")`.
+
+# Updating the project files
+
+When a new version of `{scdrake}` is released, you can update your project with
+
+```{r, eval = FALSE}
+update_project()
+```
+
+This will **overwrite** project files by the package-bundled ones:
+
+- RMarkdown documents in `Rmd/`.
+- Initial scripts for `drake::r_make()`: `_drake_single_sample.R` and `_drake_integration.R`.
+- Default YAML configs.
+
+By default, you will be asked if you want to continue, as you might lose your local modifications.
+
+# Going further
+
+Now you know the `{scdrake}` basics:
+
+- How to initialize a new project and which files does it contain.
+- How to modify pipeline parameters stored in YAML config files.
+- How to run the pipeline, including the reproducible way.
+
+But for the full insight into `{scdrake}` you should also read the following vignettes:
+
+- Pipeline overview: `vignette("pipeline_overview")`
+  - Cluster markers: `vignette("cluster_markers")`
+- Running the pipeline, environment variables: `vignette("scdrake_run")`
+- Config files (basic concept): `vignette("scdrake_config")`
+- Targets and config parameters for each stage:
+  - Common:
+    - Pipeline config: `vignette("config_pipeline")`
+    - Main config: `vignette("config_main")`
+    - Cluster markers stage: `vignette("stage_cluster_markers")`
+    - Contrasts stage: `vignette("stage_contrasts")`
+  - Single-sample pipeline:
+    - Reading in data, filtering, quality control (`01_input_qc`): `vignette("stage_input_qc")`
+    - Normalization, HVG selection, clustering (`02_norm_clustering`): `vignette("stage_norm_clustering")`
+  - Integration pipeline:
+    - Reading in data and integration (`01_integration`): `vignette("stage_integration")`
+    - Clustering (`02_int_clustering`): `vignette("stage_int_clustering")`
+- `{drake}` basics: `vignette("drake_basics")`
+  - Or the official `{drake}` book: <https://books.ropensci.org/drake/>
+
+```{r, include = FALSE}
+## -- This is a cleanup after the vignette is built.
+fs::dir_delete(tmp_dir)
+```

@@ -1,0 +1,4 @@
+DRAKE_CACHE_DIR: ".drake_pbmc1k"
+DRAKE_TARGETS: ["sce_final_norm_clustering"]
+DRAKE_PARALLELISM: "clustermq"
+DRAKE_N_JOBS: 24

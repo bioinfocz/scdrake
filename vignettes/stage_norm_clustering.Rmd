@@ -1,0 +1,644 @@
+---
+title: "Normalization and clustering stage"
+description: "02_norm_clustering stage of the single-sample pipeline."
+date: "`r Sys.Date()`"
+package: scdrake
+output:
+  BiocStyle::html_document:
+    toc: true
+    toc_float: true
+vignette: >
+  %\VignetteIndexEntry{Normalization and clustering stage}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}  
+---
+
+***
+
+For a general overview of this single-sample pipeline stage see `vignette("pipeline_overview")`.
+
+Config for this stage is stored in `02_norm_clustering.yaml` file.
+Directory with this file is read from `SCDRAKE_SINGLE_SAMPLE_CONFIG_DIR` environment variable upon `{scdrake}` load or
+attach, and saved as `scdrake_single_sample_config_dir` option. This option is used as the default argument value in
+several `{scdrake}` functions.
+
+***
+
+# Config parameters
+
+## Normalization parameters
+
+`NORMALIZATION_TYPE: "scran"`
+
+**Type:** character scalar (`"scran"` | `"sctransform"`)
+
+A normalization type:
+
+- `"scran"`: normalization by deconvolution.
+- `"sctransform"`: regularized negative binomial regression.
+
+See `vignette("pipeline_overview")` for more details.
+
+### `scran` normalization parameters
+
+These parameters are used when `NORMALIZATION_TYPE` is `"scran"`.
+
+***
+
+`SCRAN_USE_QUICKCLUSTER: True`
+
+**Type:** logical scalar
+
+Whether to cluster cells prior to normalization. See `?scran::quickCluster` for more details.
+
+***
+
+`SCRAN_QUICKCLUSTER_METHOD: "igraph"`
+
+**Type:** character scalar (`"igraph"` | `"hclust"`)
+
+A clustering method: `"igraph"` uses graph-based clustering, while `"hclust"` uses hierarchical clustering.
+See `?scran::quickCluster` for more details.
+
+### `sctransform` normalization parameters
+
+These parameters are used when `NORMALIZATION_TYPE` is `"sctransform"`.
+
+***
+
+`SCT_VARS_TO_REGRESS: null`
+
+**Type:** list of character scalar or `null`
+
+Batch variables to regress out during the `SCTransform` normalization. You can regress out variables such as
+`["percent.mt", "nFeature_RNA", "nCount_RNA"]` or cell cycle using `["S.Score", "G2M.Score"]` or `["CC.Difference"]`.
+
+However, for correction of cell cycle effect, a better method is the removal of cell cycle-related genes during
+selection of highly variable genes (HVGs).
+This can be set by [HVG selection parameters](#highly-variable-genes-(hvgs)-selection), and the approach is explained
+in more details in `vignette("pipeline_overview")`.
+
+***
+
+`SCT_N_HVG: 3000`
+
+**Type:** integer scalar
+
+A number of top HVGs to return from the `SCTransform` normalization.
+
+## Highly variable genes (HVGs) selection
+
+`HVG_METRIC: "gene_var"`
+
+**Type:** character scalar (`"gene_var"` | `"gene_cv2"` | `"sctransform"`)
+
+A metric used to find HVGs. See <http://bioconductor.org/books/release/OSCA/feature-selection.html> for more details.
+
+- `"gene_var"`: variance of the log-counts (`scran::modelGeneVar()`).
+- `"gene_cv2"`: coefficient of variation (`scran::modelGeneCV2()`).
+- `"sctransform"`: use HVGs selected by `SCTransform`.
+  Only relevant when the `NORMALIZATION_TYPE` parameter is `"sctransform"`.
+  You can adjust number of these HVGs by the `SCT_N_HVG` parameter.
+
+***
+
+`HVG_SELECTION: "top"`
+
+**Type:** character scalar (`"top"` | `"significance"` | `"threshold"`)
+
+A HVG selection strategy. Only relevant when the `HVG_METRIC` parameter is `"gene_var"` or `"gene_cv2"`.
+See <http://bioconductor.org/books/release/OSCA/feature-selection.html#hvg-selection> for more details.
+
+- `"top"`: take top X genes according to the metric.
+- `"significance"`: use a FDR threshold.
+- `"threshold"`: use a threshold on minimum value of the metric.
+
+For `"top"` and `"threshold"`, `bio` and `ratio` columns are used for `HVG_METRIC` of `"gene_var"` and `"gene_cv2"`,
+respectively. These columns are present in the DataFrame returned from the underlying method
+(`scran::modelGeneVar()` or `scran::modelGeneCV2()`).
+
+***
+
+`HVG_SELECTION_VALUE: 1000`
+
+**Type:** depends on value of the `HVG_SELECTION` parameter:
+
+- An integer scalar for `HVG_SELECTION: "top"`.
+- A numeric scalar <0; 1> for `HVG_SELECTION: "significance"`.
+- A numeric scalar for `HVG_SELECTION: "threshold"`.
+
+A threshold value for HVG selection. The following parameter combinations are recommended defaults:
+
+- Top 1000 genes by a HVG metric.
+
+```yaml
+HVG_SELECTION: "top"
+HVG_SELECTION_VALUE: 1000
+```
+
+- Genes with a HVG metric significance (FDR) lesser than `0.05`.
+
+```yaml
+HVG_SELECTION: "significance"
+HVG_SELECTION_VALUE: 0.05
+```
+
+- Genes with a HVG metric value greater than `0` or `1`.
+
+```yaml
+HVG_METRIC: "gene_var"
+HVG_SELECTION: "threshold"
+HVG_SELECTION_VALUE: 0
+```
+
+```yaml
+HVG_METRIC: "gene_cv2"
+HVG_SELECTION: "threshold"
+HVG_SELECTION_VALUE: 1
+```
+
+### Removal of cell cycle-related genes prior to HVG selection
+
+`HVG_RM_CC_GENES: False`
+
+**Type:** logical scalar
+
+Whether to apply a correction for cell cycle prior to HVG selection.
+We implement a cell cycle-related genes removal strategy described
+[here](http://bioconductor.org/books/release/OSCA/cell-cycle-assignment.html#removing-cell-cycle-related-genes).
+It is based on the percentage of variance explained by the cell cycle phase in the expression profile for each gene.
+
+Note that when `SCTransform` is used for normalization including cell cycle variables to regress out, than
+the results of this strategy remain unclear.
+
+***
+
+`HVG_CC_GENES_VAR_EXPL_THRESHOLD: 5`
+
+**Type:** positive numeric scalar
+
+A threshold on gene cell cycle variance explained, i.e. genes with var. expl. greater than this threshold will be
+marked as cell cycle-related and removed *prior* to selection of HVGs.
+
+## Doublet detection and filtering
+
+Doublets are droplets in which multiple cells were captured.
+
+***
+
+`MAX_DOUBLET_SCORE: 3.5`
+
+**Type:** positive numeric scalar or `null`
+
+A threshold for doublet score computed by `scDblFinder::computeDoubletDensity()`.
+Cells with doublet score greater than the threshold will be removed.
+If `null`, doublets are not removed, but doublet score is still computed.
+
+## Dimensionality reduction
+
+### PCA
+
+`PCA_SELECTION_METHOD: "forced"`
+
+**Type:** character scalar (`"forced"` | `"elbow"` | `"technical_noise"`)
+
+A method to select first N principal components (PCs):
+
+- `"forced"`: use the number of PCs specified by the `PCA_FORCED_PCS` parameter.
+- `"elbow"`: use the
+  [elbow point method](http://bioconductor.org/books/release/OSCA/dimensionality-reduction.html#using-the-elbow-point).
+- `"technical_noise"`: use the
+  [technical noise](http://bioconductor.org/books/release/OSCA/dimensionality-reduction.html#using-the-technical-noise).
+
+***
+
+`PCA_FORCED_PCS: 15`
+
+**Type:** positive integer scalar
+
+If the `PCA_SELECTION_METHOD` parameter is `"forced"`, use this number of first principal components.
+
+## t-SNE
+
+[t-stochastic neighbor embedding](https://bioconductor.org/books/release/OSCA/dimensionality-reduction.html#t-stochastic-neighbor-embedding)
+
+See `?scater::runTSNE` for the underlying method.
+
+***
+
+`TSNE_PERP: 20`
+
+**Type:** numeric scalar
+
+t-SNE perplexity.
+
+***
+
+`TSNE_MAX_ITER: 1000`
+
+**Type:** positive integer scalar
+
+A maximum number of t-SNE iterations.
+
+## Clustering
+
+### Graph-based clustering
+
+Parameters for [graph-based clustering](https://bioconductor.org/books/release/OSCA/clustering.html#clustering-graph).
+
+***
+
+`GRAPH_SNN_N: 10`
+
+**Type:** positive integer scalar
+
+A number of shared nearest neighbours. Passed as `k` parameter to `bluster::makeSNNGraph()`.
+
+***
+
+`GRAPH_SNN_TYPE: "rank"`
+
+**Type:** character scalar (`"rank"` | `"number"` | `"jaccard"`)
+
+A type of weighting scheme to use for shared neighbors. Passed as `type` parameter to `bluster::makeSNNGraph()`.
+
+### k-means clustering
+
+`KMEANS_K: !code 3:6`
+
+**Type:** integer vector
+
+A vector of numbers clusters for which to compute k-means.
+
+### SC3 clustering
+
+`SC3_K: !code 5:6`
+
+**Type:** integer vector
+
+A vector of numbers clusters for which to compute SC3 clustering.
+
+***
+
+`SC3_N_CORES: 8`
+
+**Type:** integer scalar
+
+A number of CPU cores to use for SC3 computation.
+
+***
+
+`SC3_DRY: False`
+
+**Type:** logical scalar
+
+If `True`, just generate random cluster assignments (for testing purposes).
+
+## Cell grouping assignment
+
+```yaml
+CELL_GROUPINGS:
+  - cluster_graph_louvain_annotated:
+      source_column: "cluster_graph_louvain"
+      description: "Graph-based clustering (Louvain alg.), annotated clusters"
+      assignments:
+        1: "memory_CD4+"
+        6: "B"
+        7: "memory_CD4+"
+    cluster_kmeans_kc_3_renamed:
+      source_column: "cluster_kmeans_kc_3"
+      description: "k-means clustering (k = 3), renamed clusters"
+      assignments:
+        1: "kc_1"
+        2: "kc_2"
+    cluster_sc3_6_renamed:
+      source_column: "cluster_sc3_6"
+      description: "SC3 clustering (k = 6), renamed clusters"
+      assignments:
+        1: "sc3_1"
+        5: "sc3_5"
+```
+
+**Type:** list of named lists or `null`
+
+This parameter specifies new cell groupings based on existing columns (primarily the clustering ones). Each key is a
+name of new cell grouping (column in `colData()` of the `sce_dimred` target) and contains a named list in the form:
+
+- `source_column` (character scalar): a name of existing column in `colData()`.
+- `description` (character scalar, optional): a description of the cell grouping, will appear in plots.
+  If not set, the name of the assignment will be used.
+- `assignments` (named list/vector of character scalars):
+  - `<old level>: "<new level>"`: assignment of an old level to a new level. Different old levels with the same new
+    level will be merged. Order of assignments does not matter, levels are just replaced
+    (under the hood, `dplyr::recode()` is used). Unspecified levels will be kept as they are.
+    You cannot replace existing groupings (columns).
+
+For possible column names for `source_column`, see the `sce_final_norm_clustering` target in the [section](#targets) below.
+
+Let's look at one of the example assignments:
+
+```yaml
+cluster_graph_louvain_annotated:
+  source_column: "cluster_graph_louvain"
+  description: "Graph-based clustering (Louvain alg.), annotated clusters"
+  assignments:
+    1: "memory_CD4+"
+    6: "B"
+    7: "memory_CD4+"
+```
+
+- `cluster_graph_louvain_annotated`: a name of new cell grouping added to `colData()`.
+- `source_column: "cluster_graph_louvain"`: a name of column in `colData()` whose level will be used for the
+  new assignments.
+- `description: "Graph-based clustering ..."`: a description of the new assignment. If it was not set,
+  the name of the assignment (`cluster_graph_louvain_annotated`) would be used instead.
+- `assignments`: assignments of the old levels to new ones. That is, level (cluster) `6` will be renamed to `"B"`,
+  and levels `1` and `7` will be merged to a new level `"memory_CD4+"`.
+  All unspecified levels will be kept as they are.
+
+NOTE: The example cluster renamings serve as an example for 10x PBMC 1k dataset, but initially on your dataset you
+should use `null` and set renamings after you examine the pipeline results.
+
+## Dimensionality reduction plots
+
+`NORM_CLUSTERING_REPORT_DIMRED_NAMES: ["umap", "pca", "tsne"]`
+
+**Type:** character vector (`"umap"` | `"pca"` | `"tsne"`)
+
+A vector of names of dimensionality reduction methods for which plots in the report will be made.
+
+***
+
+`NORM_CLUSTERING_REPORT_CLUSTERING_NAMES: ["graph", "kmeans", "sc3"]`
+
+**Type:** character vector (`"graph"` | `"kmeans"` | `"sc3"`)
+
+A vector of names of clustering methods for which plots in each reduced dimension defined in the
+`NORM_CLUSTERING_REPORT_DIMRED_NAMES` parameter will be made and display in the report.
+
+- `"graph"`: graph-based clustering, two algorithms: Louvain and Walktrap.
+- `"kmeans"`: k-means clustering, two algorithms: best K and numbers of clusters defined in the `KMEANS_K` parameter.
+- `"sc3"`: SC3 clustering: numbers of cluster defined in the `SC3_K` parameter.
+
+***
+
+```yaml
+NORM_CLUSTERING_REPORT_DIMRED_PLOTS_OTHER:
+  - "phase": "Cell cycle phases"
+    "doublet_score": "Doublet score"
+    "total": "Total number of UMI"
+    "detected": "Detected number of genes"
+    "cluster_graph_louvain_annotated": null
+```
+
+**Type:** list of named lists with character scalars
+
+Names of other variables in `colData()` to plot and color by, displayed in the report.
+
+The format is `"<variable_name": "<description>"`, where description will appear in plot title.
+
+Variables defined in the `CELL_GROUPINGS` parameter could have <description> set to `null` -
+their description from `CELL_GROUPINGS` will be used.
+
+## Input files
+
+`SELECTED_MARKERS_FILE: !code system.file("extdata", "selected_markers.csv", package = "scdrake", mustWork = TRUE)`
+
+**Type:** character scalar or `null`
+
+A path to CSV file with groups of markers to make plots for. Set to `null` to skip.
+The plots will be created for each of `NORM_CLUSTERING_REPORT_DIMRED_NAMES`.
+
+The format is following: each row defines gene symbols for a group.
+First column is a name of group and second column are gene symbols delimited by ":". Example:
+
+`Naive_CD4+_T,IL7R:CCR7`
+
+**Do not use a header!**
+
+The default value returns a path to package-bundled CSV file, but normally you should use
+`SELECTED_MARKERS_FILE: "path/to/file.csv"`.
+
+***
+
+```yaml
+NORM_CLUSTERING_REPORT_RMD_FILE: "Rmd/single_sample/02_norm_clustering.Rmd"
+NORM_CLUSTERING_REPORT_SIMPLE_RMD_FILE: "Rmd/single_sample/02_norm_clustering_simple.Rmd"
+```
+
+**Type:** character scalar
+
+Paths to RMarkdown files used for HTML reports of this pipeline stage.
+
+`NORM_CLUSTERING_REPORT_RMD_FILE` is technically more detailed, while `NORM_CLUSTERING_REPORT_SIMPLE_RMD_FILE`
+outputs only the dimensionality reduction plots.
+
+## Output files
+
+`NORM_CLUSTERING_BASE_OUT_DIR: "02_norm_clustering"`
+
+**Type:** character scalar
+
+A path to base output directory for this stage. It will be created under `BASE_OUT_DIR` specified in `00_main.yaml` config.
+
+***
+
+```yaml
+NORM_CLUSTERING_SELECTED_MARKERS_OUT_DIR: "selected_markers"
+NORM_CLUSTERING_REPORT_HTML_FILE: "02_norm_clustering.html"
+NORM_CLUSTERING_REPORT_SIMPLE_HTML_FILE: "02_norm_clustering_simple.html"
+```
+
+**Type:** character scalar
+
+Names of files and directories created under `NORM_CLUSTERING_BASE_OUT_DIR`. Subdirectories are not allowed.
+
+## HTML output parameters
+
+```yaml
+NORM_CLUSTERING_KNITR_MESSAGE: False
+NORM_CLUSTERING_KNITR_WARNING: False
+NORM_CLUSTERING_KNITR_ECHO: False
+```
+
+**Type:** logical scalar
+
+These are passed to `knitr::opts_chunk()` and used for rendering of stage's HTML report.
+
+# Targets
+
+Here you can find description of the most important targets for this stage.
+However, for a full overview, you have to inspect the [source code](R/plans_single_sample.R) of the
+`get_input_norm_clustering_subplan()` function.
+
+## `SingleCellExperiment` objects
+
+`sce_cc`: a SCE object (the `sce_final_input_qc` target from the `input_qc` stage) with added cell cycle information
+to `colData()`: `phase` (`"G1"`, `"G2m"` or `"S"`), `s_score`, `g2m_score`, `cc_difference` (`s_score` - `g2m_score`).
+
+***
+
+`sce_norm`: `sce_cc` with normalized counts in `SingleCellExperiment::logcounts()` assay and `normalization_type` item
+added to `metadata()`.
+
+***
+
+`sce_norm_hvg`: `sce_norm` with added HVG information:
+
+- `metadata()`: `hvg_metric`, `hvg_selection`, `hvg_selection_value`, `hvg_metric_fit`, `hvg_rm_cc_genes`, `hvg_ids`
+- `rowData()`: `is_hvg` (logical)
+
+If the parameter `HVG_RM_CC_GENES` is `True`, `sce_norm_hvg` will also contain a PCA dimensionality reduction
+(named `pca_with_cc`) for whose computation all HVGs were used.
+
+***
+
+`sce_rm_doublets`: `sce_norm_hvg` with removed doublets and added information:
+
+- `metadata()`: `has_filtered_doublets` (`FALSE` if `MAX_DOUBLET_SCORE` parameter is `null`), `max_doublet_score`
+- `colData()`: `doublet_score` (numeric), `is_doublet` (logical)
+
+***
+
+`sce_pca`: `sce_rm_doublets` with calculated PCA (50 PCs). Reduced dimensions can be retrieved by
+`SingleCellExperiment::reducedDim(sce_pca, "pca")`.
+
+***
+
+`sce_pca_selected_pcs`: `sce_pca` with selected number of PCs. Reduced dimensions in `pca` slot are subsetted to
+the selected number of PCs, and `pca_all` slot contains the full matrix of 50 PCs. Information about selection of PCs
+is added to `metadata()`: `pca_selection_method`, `pca_selected_pcs`.
+
+***
+
+`sce_dimred`: `sce_pca_selected_pcs` with calculated t-SNE and UMAP,
+both using the selected number of PCs for calculation.
+
+***
+
+`sce_final_norm_clustering`: a final SCE object of this stage which will be used in the `cluster_markers` and
+`contrasts` stages. This object is derived from `sce_dimred`, but cell clusterings along with `CELL_GROUPINGS` are
+added to `colData()`.
+
+The names of columns containing cell clusterings are:
+
+- Graph-based clustering: `cluster_graph_walktrap`, `cluster_graph_louvain`
+- k-means clustering: `cluster_kmeans_kbest`, `cluster_kmeans_kc_<k>` (all Ks from the `KMEANS_K` parameter)
+- SC3 clustering: `cluster_sc3_<k>` (all Ks from the `SC3_K` parameter)
+
+The names of reduces dimensionality matrices (which can be retrieved by `SingleCellExperiment::reducedDim()`):
+
+- PCA: `"pca"`
+- t-SNE: `"tsne"`
+- UMAP: `"umap"`
+
+Or you can view their names with `SingleCellExperiment::reducedDimNames()`.
+
+## Selection of PCs
+
+`pca_elbow_pcs`, `pca_gene_var_pcs`: a number of selected PCs for elbow point and technical variance methods, respectively.
+
+`pca_selected_pcs_plot`: a `{ggplot2}` object showing cummulative variance explained and the selected
+number of first PCs for each of the methods.
+
+## Cell clustering
+
+`clusters_all`: a named list of integer vectors which wraps all clusterings below.
+
+### Graph-based clustering
+
+`graph_k`: an `{igraph}` object of shared nearest-neighbor graph, returned from `scran::buildSNNGraph()`.
+
+`cluster_graph_walktrap`, `cluster_graph_louvain`: lists with cell clusters returned from `igraph::cluster_walktrap()`
+and `igraph::cluster_louvain()`, respectively. Both functions are using `graph_k` as the input.
+
+`cluster_graph_walktrap_n`, `cluster_graph_louvain_n`: a number of found clusters.
+
+`cluster_graph_walktrap_table`, `cluster_graph_louvain_table`: a dataframe summarizing assignment of cells to clusters.
+
+### k-means
+
+`kmeans_gaps`: a `clusGap` object used to calculate the best K. Returned from `cluster::clusGap()`, to which matrix of
+selected PCs is passed.
+
+`kmeans_best_k`: the best K for k-means, returned from `cluster::maxSE()`.
+
+`cluster_kmeans_kbest`, `cluster_kmeans_kc`: lists with cell clusters returned from `stats::kmeans()`.
+In the former, `kmeans_best_k` is used as the number of clusters. In the latter, Ks from the `KMEANS_K` parameter are used.
+
+`cluster_kmeans_kbest_table`, `cluster_kmeans_kc_tables`: a dataframe (or list of them in the latter) summarizing
+assignment of cells to clusters.
+
+### SC3
+
+`sce_sc3`: a `SingleCellExperiment` object returned from `SC3::sc3()`.
+
+`cluster_sc3`: a list with cell clusters.
+
+`cluster_sc3_tables`: a list of dataframes, each summarizing assignment of cells to clusters for different `SC3_K`.
+
+`cluster_sc3_stability_plots`: a list of `{ggplot2}` objects, each returned from `make_sc3_stability_plots()`
+(where `SC3::sc3_plot_cluster_stability()` is used internally). If the parameter `SC3_DRY` is `True`, the plots
+will be empty and will contain the text "SC3 was run in dry mode.".
+
+## Plots
+
+`hvg_plot`: a `{patchwork}` object with HVG metric statistics (average expression vs. variance).
+
+***
+
+`pca_phase_plots`: a list of one or two `{ggplot2`} objects. The first one is a plot of the first two PCs colored by
+cell cycle phase, where PCA was computed using HVGs. If the parameter `HVG_RM_CC_GENES` is `True`,
+the second plot is the same as the first one, but with PCA computed on all genes. In that case it also means that
+in the first plot, PCA was computed using HVGs with removed cell cycle-related genes.
+
+***
+
+`pca_doublet_plot`, `pca_total_plot`: a `{ggplot2`} plots of the first two PCs colored by doublet score and total
+number of UMIs, respectively.
+
+***
+
+`dimred_plots_clustering`: a tibble holding plots of reduced dimensions colored by a clustering.
+
+***
+
+`dimred_plots_other_vars`: a tibble holding plots of reduced dimensions colored by a specified variable,
+as defined by the `NORM_CLUSTERING_REPORT_DIMRED_NAMES` and `NORM_CLUSTERING_REPORT_DIMRED_PLOTS_OTHER` parameters.
+
+### Selected markers
+
+`selected_markers_plots`: a tibble holding selected marker plots (a `{patchwork}` objects) for each dimemnsional
+reduction specified in the `NORM_CLUSTERING_REPORT_DIMRED_NAMES` parameter. Selected markers are read from CSV file
+defined in the `SELECTED_MARKERS_FILE` parameter.
+
+You can also use the underlying function `selected_markers_dimplot()`:
+
+```{r, eval = FALSE}
+selected_markers_dimplot(
+  sce = sce_final_norm_clustering,
+  dimred = "umap",
+  selected_markers_df = selected_markers_df,
+  assay = "logcounts"
+)
+```
+
+The `selected_markers_df` tibble can be read from the CSV file with
+
+```{r, eval = FALSE}
+selected_markers_df <- readr::read_csv("markers.csv", col_names = c("group", "markers"), col_types = "cc")
+```
+
+## Other targets
+
+`config_norm_clustering`: a list holding parameters for this stage.
+
+***
+
+`cc_genes`: a dataframe of cell cycle genes, based on `Seurat::cc.genes.updated.2019` data. If the `ORGANISM` parameter
+in the `00_main.yaml` config is `"mouse"`, then gene symbols are first converted to sentence-case (`"MKI67"` -> `"Mki67"`).
+
+***
+
+`cell_data`: a DataFrame holding `colData()` of `sce_rm_doublets`, plus clusterings from the `clusters_all` target,
+and the new cell groupings defined in the `CELL_GROUPINGS` parameter.

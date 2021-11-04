@@ -1,0 +1,119 @@
+---
+title: "Main config"
+description: "General parameters used in both single-sample and integration pipelines."
+date: "`r Sys.Date()`"
+package: scdrake
+output:
+  BiocStyle::html_document:
+    toc: true
+    toc_float: true
+vignette: >
+  %\VignetteIndexEntry{Main config}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}  
+---
+
+***
+
+Main config is stored in `00_main.yaml` file. Location of this file is different for the single-sample and integration
+pipelines. As for the [pipeline config](config_pipeline.html), directory with this file is read from environment variables:
+
+- `SCDRAKE_SINGLE_SAMPLE_CONFIG_DIR` for the single-sample pipeline.
+- `SCDRAKE_INTEGRATION_CONFIG_DIR` for the integration pipeline.
+
+and options named in lowercase are set upon `{scdrake}` load or attach.
+
+Parameters in this config are used throughout all other stages. There are parameters such as project name, path
+to CSS file used to style HTML documents, or path to base output directory.
+
+# Project information
+
+`PROJECT_NAME: "PBMC 1k"`
+
+`PROJECT_DESCRIPTION: "1000 of peripheral blood mononuclear cells by 10x Genomics"`
+
+`INSTITUTE: "Example institute"`
+
+`LABORATORY: "Example laboratory"`
+
+`PEOPLE: "Example person 1, Example person 2"`
+
+**Type:** character scalar
+
+These values will appear in stage reports (HTML documents).
+
+# Annotation
+
+`ORGANISM: "human"`
+
+**Type:** character scalar
+
+A name of organism to match in `ANNOTATION_LIST`.
+
+***
+
+```yaml
+ANNOTATION_LIST:
+  human: "org.Hs.eg.db"
+  mouse: "org.Mm.eg.db"
+```
+
+**Type:** named list (dictionary) of character scalars
+
+Mapping of organisms to [OrgDb](http://bioconductor.org/packages/release/BiocViews.html#___OrgDb) annotation packages.
+The annotation package is selected by matching the `ORGANISM` parameter. If the selected package is not installed,
+you will be asked if you want to install it.
+
+In the [OrgDb](http://bioconductor.org/packages/release/BiocViews.html#___OrgDb) list you can find annotations for
+many other species, e.g. rat. The consequent modification of the config is simple:
+
+```yaml
+ORGANISM: "rat"
+ANNOTATION_LIST:
+  rat: "org.Rn.eg.db"
+```
+
+***
+
+`ENSEMBL_SPECIES: "Homo_sapiens"`
+
+**Type:** character scalar
+
+An ENSEMBL organism name used to build links to Ensembl genes website,
+e.g. <https://www.ensembl.org/Homo_sapiens/Gene/Summary?db=core;g=ENSG00000139618;r=13:32315086-32400268>
+
+***
+
+# Input and output files
+
+`CSS_FILE: "Rmd/common/stylesheet.css"`
+
+**Type:** character scalar
+
+A path to CSS file used for HTML reports rendered from RMarkdown files.
+
+***
+
+`BASE_OUT_DIR: "output"`
+
+**Type:** character scalar
+
+A path to base output directory to which each stage's files will be saved (check "Output files" section in stage configs.)
+
+# Targets
+
+An informative plan is binded with every other plan, and contains targets with useful runtime information:
+
+`config_pipeline`, `config_main`: lists holding pipeline (`pipeline.yaml`) and main (`00_main.yaml`) parameters.
+
+`pipeline_type`: a character scalar: `"single_sample"` or `"integration"`. These values are used in some plans
+to work with different targets.
+
+`sessioninfo_pretty`, `sessioninfo_base`: info about loaded packages, R version, etc.
+Returned from `sessioninfo::session_info()` and `utils::sessionInfo()`, respectively.
+
+`biocmanager_version`: Bioconductor version.
+
+`external_libs`: a character vector of external shared libraries (e.g. `zlib`).
+
+`datetime`: date and time of pipeline execution.

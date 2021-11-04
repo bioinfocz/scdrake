@@ -1,0 +1,325 @@
+---
+title: "Cluster markers stage"
+date: "`r Sys.Date()`"
+package: scdrake
+output:
+  BiocStyle::html_document:
+    toc: true
+    toc_float: true
+vignette: >
+  %\VignetteIndexEntry{Cluster markers stage}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}  
+---
+
+***
+
+For a general overview of this stage see `vignette("pipeline_overview")`.
+
+Cluster markers config is stored in `cluster_markers.yaml` file. Location of this file is different for the
+single-sample and integration pipelines. As for the [pipeline config](config_pipeline.html), directory with this file
+is read from environment variables:
+
+- `SCDRAKE_SINGLE_SAMPLE_CONFIG_DIR` for the single-sample pipeline.
+- `SCDRAKE_INTEGRATION_CONFIG_DIR` for the integration pipeline.
+
+and options named in lowercase are set upon `{scdrake}` load or attach. Then the actual directory used depends on
+whether you run `run_single_sample()` or `run_integration()`.
+
+# Config parameters
+
+## Cluster markers
+
+```yaml
+CLUSTER_MARKERS_SOURCES_DEFAULTS:
+  COMMON_PARAMS:
+    PLOT_DIMREDS: ["umap"]
+    BLOCK_COLUMN: null
+  PARAMS_T:
+    LFC_DIRECTION: "up"
+    LFC_TEST: 0
+    PVAL_TYPE: "any"
+    MIN_PROP: null
+    STD_LFC: False
+    TOP_N_HEATMAP: 10
+    TOP_N_WT_HEATMAP: "top"
+    TOP_N_PLOT: 5
+    TOP_N_WT_PLOT: "top"
+  PARAMS_WILCOX:
+    LFC_DIRECTION: "up"
+    LFC_TEST: 0
+    PVAL_TYPE: "any"
+    MIN_PROP: null
+    STD_LFC: null
+    TOP_N_HEATMAP: 10
+    TOP_N_WT_HEATMAP: "top"
+    TOP_N_PLOT: 5
+    TOP_N_WT_PLOT: "top"
+  PARAMS_BINOM:
+    LFC_DIRECTION: "up"
+    LFC_TEST: 0
+    PVAL_TYPE: "any"
+    MIN_PROP: null
+    STD_LFC: null
+    TOP_N_HEATMAP: 10
+    TOP_N_WT_HEATMAP: "top"
+    TOP_N_PLOT: 5
+    TOP_N_WT_PLOT: "top"
+```
+
+**Type:** named list (dictionary) of named lists
+
+Default parameters for computation and reporting of cluster markers. These can be overriden for each of the cluster
+markers source in `CLUSTER_MARKERS_SOURCES` (see below).
+
+- `COMMON_PARAMS`: used for all statistical tests and their results.
+  - `PLOT_DIMREDS` (character vector: `"pca"`, `"tsne"`, `"umap"`): which dimensionality reductions to use for marker plots.
+  - `BLOCK_COLUMN` (character scalar or `null`): which column to use as the blocking factor.
+    Examples: `phase` (cell cycle phase), `batch` (sample of origin - integration pipeline).
+- `PARAMS_T`, `PARAMS_WILCOX`, `PARAMS_BINOM`: parameters for individual test types.
+  - Computation parameters (passed to `scran::findMarkers()`, `scran::pairwiseTTests()`, `scran::pairwiseWilcox()`,
+    or `scran::pairwiseBinom()`):
+    - `LFC_DIRECTION` (character scalar: `"any"` | `"up"` | `"down"`):
+      the direction of log-fold changes to be considered in the alternative hypothesis.
+    - `LFC_TEST` (positive numeric scalar): the log-fold change threshold to be tested against.
+    - `PVAL_TYPE` (character scalar: `"any"` | `"some"` | `"all"`):
+      how p-values are to be combined across pairwise comparisons for a given group/cluster.
+      If `"any"`, `top` column will be present in cluster markers tables.
+      By this parameter you can control the stringency of marker detection - see `vignette("cluster_markers")`
+      for more details.
+    - `MIN_PROP` (numeric scalar: `<0; 1>`, or `null`):
+      the minimum proportion of significant comparisons per gene.
+      Defaults to `0.5` when `PVAL_TYPE` is `"some"`, otherwise defaults to zero.
+    - `STD_LFC` (logical scalar): whether log-fold changes should be standardized by the variance.
+      Only possible when t-test is being used, and it is equivalent to Cohen's $d$.
+      Standardized log-fold changes may be more appealing for visualization as it avoids large fold changes due to
+      large variance. The choice of `STD_LFC` does not affect the calculation of the p-values.
+      Note: for compatibility reasons, `STD_LFC` parameter is set, but not used in `PARAMS_WILCOX` and `PARAMS_BINOM`.
+  - Reporting parameters:
+    - `TOP_N_HEATMAP` (positive integer scalar or `.inf`): for how many top N markers to generate heatmaps.
+      The column used for determination of the top N markers is set by `TOP_N_WT_HEATMAP`.
+      You can also use all markers, either by supplying a huge number, or by using `.inf`, which is translated to R's `Inf`.
+    - `TOP_N_WT_HEATMAP` (character scalar: `"top"` | `"fdr"` | `"lfc"` | `"auc"`): which column from a marker table to
+      use for determination of the top N markers.
+      - `"top"` can be only used when `PVAL_TYPE` is `"some"`.
+      - `"auc"` can be only used inside `PARAMS_WILCOX`.
+    - `TOP_N_PLOT` (positive integer scalar): same as `TOP_N_HEATMAP`, but used for marker plots.
+    - `TOP_N_WT_PLOT` (character scalar: `"top"` | `"fdr"` | `"lfc"` | `"auc"`):
+      same as `TOP_N_WT_HEATMAP`, but used for marker plots.
+
+***
+
+```yaml
+CLUSTER_MARKERS_SOURCES:
+  - markers_cluster_int_kmeans_kc_4:
+      source_column: "cluster_int_kmeans_kc_4"
+      description: "Cluster markers for k-means clustering (k = 4)"
+      common_params:
+        plot_dimreds: ["umap", "pca"]
+      params_t:
+        pval_type: "some"
+        top_n_wt_heatmap: "fdr"
+        top_n_wt_plot: "fdr"
+    markers_cluster_int_kmeans_kc_3_batch_block:
+      source_column: "cluster_int_kmeans_kc_3_renamed"
+      description: "Cluster markers for k-means clustering (k = 3) with blocking on batch"
+      common_params:
+        block_column: "batch"
+```
+
+**Type:** list of named lists
+
+This parameter is used to specify cell groupings ("sources") in which markers are searched for, and test and output parameters.
+You can use any categorical column - results of cell clustering, `phase` (cell cycle), etc., or custom groupings defined
+by `CELL_GROUPINGS` in `02_norm_clustering.yaml` and `02_int_clustering.yaml`.
+See [clustering targets](#clustering) for a list of clustering names.
+
+In each entry you can override parameters in `CLUSTER_MARKERS_SOURCES_DEFAULTS` (by using lowercase names).
+
+Let's examine the first entry:
+
+- `markers_cluster_int_kmeans_kc_4`: name of this comparison. You can use whatever name you want.
+- `source_column: "cluster_int_kmeans_kc_4"` (character scalar):
+  which cell grouping to use for computation of cell markers.
+- `description: "Cluster markers for k-means clustering (k = 4)"` (character scalar):
+  description of this comparison, will appear in reports and plots.
+
+```yaml
+common_params:
+  plot_dimreds: ["umap", "pca"]
+```
+
+- This will override `COMMON_PARAMS` in `CLUSTER_MARKERS_SOURCES_DEFAULTS`.
+
+```yaml
+params_t:
+  pval_type: "some"
+  top_n_wt_heatmap: "fdr"
+  top_n_wt_plot: "fdr"
+```
+
+- This will override `PARAMS_T` in `CLUSTER_MARKERS_SOURCES_DEFAULTS`.
+
+> Watch out for the proper indentation. See the "Merging of nested named lists" section in `vignette("scdrake_config")`.
+
+***
+
+`MAKE_CLUSTER_MARKERS_PLOTS: True`
+
+**Type:** logical scalar
+
+Set to `False` to skip making of marker plots. In that case, for compatibility reasons, empty files will be created.
+
+***
+
+## Input files
+
+```yaml
+CLUSTER_MARKERS_TABLE_TEMPLATE_RMD_FILE: "Rmd/common/cluster_markers_table_template.Rmd"
+CLUSTER_MARKERS_REPORT_RMD_FILE: "Rmd/common/cluster_markers.Rmd"
+```
+
+**Type:** character scalar
+
+Paths to RMarkdown files used for HTML reports of this pipeline stage.
+
+***
+
+## Output files
+
+`CLUSTER_MARKERS_BASE_OUT_DIR: "cluster_markers"`
+
+**Type:** character scalar
+
+A path to base output directory for this stage. It will be created under `BASE_OUT_DIR` specified in `00_main.yaml` config.
+
+***
+
+```yaml
+CLUSTER_MARKERS_REPORT_HTML_FILE: "cluster_markers.html"
+CLUSTER_MARKERS_HEATMAPS_OUT_DIR: "cluster_markers_heatmaps"
+CLUSTER_MARKERS_PLOTS_BASE_OUT_DIR: "cluster_markers_plots"
+CLUSTER_MARKERS_DIMRED_PLOTS_BASE_OUT_DIR: "cluster_markers_dimred_plots"
+CLUSTER_MARKERS_TABLES_OUT_DIR: "cluster_markers_tables"
+```
+
+**Type:** character scalar
+
+Names of files and directories created under `CLUSTER_MARKERS_BASE_OUT_DIR`. Subdirectories are not allowed.
+
+# Targets
+
+Here you can find description of the most important targets for this stage.
+However, for a full overview, you have to inspect the [source code](R/plans_common.R) of the
+`get_cluster_markers_subplan()` function.
+
+## `SingleCellExperiment` objects
+
+`sce_dimred_cluster_markers`, `sce_final_cluster_markers`:
+SCE objects with computed dimensionality reductions. Used for generation of marker plots and heatmaps.
+
+`sce_cluster_markers`: Final SCE object with cell clusterings from the `02_norm_clustering`
+(single-sample pipeline) or `02_int_clustering` stage (integration pipeline). Used to compute cluster markers.
+You can inspect the cell groupings which can be used for marker computation:
+
+```{r, eval = FALSE}
+drake::loadd(sce_final_cluster_markers)
+SingleCellExperiment::colData(sce_final_cluster_markers)
+```
+
+## Tibbles with parameters
+
+Usually, each row of these tibbles is passed to a function.
+
+`cluster_markers_params`: all parameters for computation of cluster markers.
+
+The following tibbles are derived from `cluster_markers_params`:
+`cluster_markers_test_params`, `cluster_markers_heatmap_params`, `cluster_markers_plot_params`,
+`cluster_markers_dimred_plot_params`
+
+## Tibbles with cluster markers test results
+
+`cluster_markers_raw`: this tibble has the same columns as `cluster_markers_test_params`, except the list column
+(`<DataFrame>`) `markers` with test results is added, and each level of `source_column` is expanded to a separate row.
+
+So for example, if a row has `group_level = 1`, its `markers` `DataFrame` contains test results of this level versus
+all other ones.
+
+See `scran::combineMarkers()` for more details on the output format, and `scran_markers()` for a description of
+changes made to the output of the former function.
+
+***
+
+`cluster_markers`: same as `cluster_markers_raw`, but for Wilcox tests, combined LFC is added to `DataFrame`s in
+`markers` column.
+
+***
+
+`cluster_markers_processed`: same as `cluster_markers`, but `markers` `DataFrame`s don't contain nested `DataFrame`s
+(`lfc_*` or `auc_*`) - those are replaced by combined effect sizes. This way you can inspect the effect sizes of
+comparisons with all other levels.
+
+`cluster_markers_out`: holds the same data as `cluster_markers_processed`, but `markers` are coerced to dataframes
+and column names are normalized to snake_case.
+
+***
+
+`cluster_markers_for_tables`: a summarized tibble glued from `cluster_markers_out`, `cluster_markers_heatmaps_df`, and
+`cluster_markers_plots_top`. Marker tables in `markers` column are in publish-ready forms for HTML output,
+e.g. there are `<a>` links to ENSEMBL or PDF files of marker plots.
+
+## Heatmaps
+
+`seu_for_cluster_markers_heatmaps`: a `Seurat` object used to generate heatmaps through `marker_heatmap()`
+(a wrapper around `Seurat::DoHeatmap()`). In `scale.data` slot of the `RNA` assay are UMI counts transformed to z-score.
+
+***
+
+`cluster_markers_heatmaps_df`: a tibble derived from `cluster_markers_heatmaps_df`, but enriched with cluster markers
+test results.
+
+Two heatmaps for each row in `cluster_markers_heatmaps_df` are made: one with log2 UMI counts, and second with the
+same values transformed to z-score.
+
+For storage reasons, heatmap objects are not saved as R objects, but only exported to PDF.
+However, you can obtain a tibble holding these objects with
+
+```{r, eval = FALSE}
+drake::loadd(cluster_markers_heatmaps_df)
+heatmaps_tbl <- marker_heatmaps_wrapper(
+  seu = seu_for_cluster_markers_heatmaps,
+  params = cluster_markers_heatmaps_df,
+  marker_type = "global",
+  save = FALSE,
+  return_type = "tibble"
+)
+```
+
+In `heatmaps_tbl`, two list columns are appended to `cluster_markers_heatmaps_df`:
+
+- `heatmaps`: a named list with heatmap object (`p_heatmap`) and its z-score-transformed version (`p_heatmap_zscore`).
+- `markers_top`: a dataframe with top markers used in the heatmaps (subsetted `cluster_markers_processed$markers`).
+
+For more control you can use the `marker_heatmap()` function (of which is `marker_heatmaps_wrapper()` a wrapper).
+
+## Marker plots
+
+`cluster_markers_plots_top`: a tibble with markers for which plots will be made.
+See `?markers_plots_top` for details.
+
+As for heatmaps, plot objects (`{ggplot2}`, `{patchwork}`) are not saved, but the underlying function can be used:
+
+```{r, eval = FALSE}
+markers_plots_files(sce_dimred_cluster_markers, cluster_markers_plots_top, save = FALSE, return_type = "tibble")
+```
+
+Similarly, the actual plotting function can be used, see `?marker_plot`.
+
+## Dimensionality reduction plots
+
+`cluster_markers_dimred_plots`: a tibble with dimensionality reduction plots for each of `source_column` in
+the `CLUSTER_MARKERS_SOURCES` parameter and `PLOT_DIMREDS` in `COMMON_PARAMS`.
+
+## Other targets
+
+`config_cluster_markers`: a list holding parameters for this stage.

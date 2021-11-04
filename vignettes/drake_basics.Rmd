@@ -1,0 +1,34 @@
+---
+title: "drake basics"
+date: "`r Sys.Date()`"
+package: scdrake
+output:
+  BiocStyle::html_document:
+    toc: true
+    toc_float: true
+vignette: >
+  %\VignetteIndexEntry{drake basics}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}  
+---
+
+***
+
+Here you can find some basic `{drake}` functions.
+
+However, we encourage all users to read [official book](https://books.ropensci.org/drake/) for the `{drake}` package.
+While it is not necessary to know all `{drake}` internals to successfully run the `{scdrake}` pipeline,
+its knowledge is a plus.
+
+- Assign to variable or read target result:
+  `drake::loadd()` and `drake::readd()`
+- Show outdated targets: `drake::outdated()`
+- List the targets that completed in the current or previous call to `drake::make()`: `drake::drake_done()`
+- List the targets that quit in error during `drake::make()`: `drake::drake_failed()`
+- Get diagnostic metadata on a target: `drake::diagnose()`
+- List the dependencies of a target: `drake::deps_target()`
+- Find out why a target is out of date: `drake::deps_profile()`
+
+Some functions are also usable in a reproducible manner similar to `drake::r_make()`,
+i.e. first, `_drake.R`-like file is sourced and a separate new R process is launched.
+Examples: `drake::r_outdated()`, `drake::r_deps_target()`.

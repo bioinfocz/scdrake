@@ -1,0 +1,40 @@
+DRAKE_CACHE_DIR: ".drake"
+
+## -- Single-sample pipeline stage reports:
+## -- Stage 01_input_qc:
+DRAKE_TARGETS: ["report_input_qc"]
+
+## -- Stage 02_norm_clustering:
+# DRAKE_TARGETS: ["report_norm_clustering", "report_norm_clustering_simple"]
+
+## -- Integration pipeline stage reports:
+## -- Stage 01_integration:
+# DRAKE_TARGETS: ["report_integration"]
+## -- Stage 02_int_clustering:
+# DRAKE_TARGETS: ["report_int_clustering"]
+
+## -- Reports for common stages:
+# DRAKE_TARGETS: ["report_cluster_markers"]
+# DRAKE_TARGETS: ["report_contrasts"]
+
+DRAKE_KEEP_GOING: False
+DRAKE_VERBOSITY: 1
+DRAKE_LOCK_ENVIR: True
+DRAKE_UNLOCK_CACHE: True
+DRAKE_FORMAT: "qs"
+
+BLAS_N_THREADS: 32
+RSTUDIO_PANDOC: null
+SEED: 100
+
+### Parallelism ###############################################################
+DRAKE_PARALLELISM: "loop"
+# DRAKE_PARALLELISM: "future"
+# DRAKE_PARALLELISM: "clustermq"
+
+DRAKE_CLUSTERMQ_SCHEDULER: "multicore"
+DRAKE_N_JOBS: 8
+DRAKE_N_JOBS_PREPROCESS: 4
+WITHIN_TARGET_PARALLELISM: False
+N_CORES: 16
+###############################################################################

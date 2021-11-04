@@ -1,0 +1,326 @@
+---
+title: "scdrake | Integration"
+author: "Jiri Novotny, Jan Kubovciak"
+institute: "Laboratory of Genomics and Bioinformatics @ Institute of Molecular Genetics of the ASCR"
+output:
+  html_document:
+    toc: true
+    toc_depth: 4
+    toc_float: true
+    number_sections: false
+    theme: "flatly"
+    self_contained: true
+    code_download: true
+    df_print: "paged"
+params:
+  css_file: !expr here::here("Rmd/common/stylesheet.css")
+  drake_cache_dir: !expr here::here(".drake")
+date: "`r glue('Document generated: {Sys.Date()}')`"
+css: "`r params$css_file`"
+---
+
+```{r, include = FALSE, message = FALSE, warning = FALSE}
+library(drake)
+if (rlang::is_true(getOption("knitr.in.progress"))) {
+  params_ <- scdrake_list(params)
+}
+drake_cache_dir <- params_$drake_cache_dir
+
+loadd(
+  config_main, config_integration, hvg_plots_int_df, single_samples_df,
+  common_features_count, hvg_int_list, gene_annotation, int_diagnostics_df, sce_int_pca_df_for_report,
+  sce_int_dimred_plots_df, selected_markers_plots_int_df, selected_markers_plots_int_files,
+  path = drake_cache_dir
+)
+
+cfg <- config_integration
+selected_markers_plots_int_df$out_file <- selected_markers_plots_int_files
+details_template <- str_line(
+  "\n<details>",
+  "  <summary class='config'>{title}</summary>",
+  "  <hr />",
+  "  {text}",
+  "  <hr />",
+  "</details>\n"
+)
+```
+
+***
+
+```{r, child = here::here("Rmd/common/_header.Rmd")}
+```
+
+***
+
+# Input data overview
+
+This table is showing which data were integrated.
+Before integration, these data were processed by the single-sample pipeline.
+
+```{r}
+single_samples_df
+```
+
+The first step in integration was subsetting the input data to contain only a common set of features ("universe"):
+
+**Common features count: `r common_features_count`**
+
+Then each sample was rescaled to adjust for differences in sequencing depth.
+The `multiBatchNorm()` function recomputes log-normalized expression values after
+adjusting the size factors for systematic differences in coverage between `SingleCellExperiment` objects.
+(Size factors only remove biases between cells within a single batch.)
+This improves the quality of the correction by removing one aspect of the technical differences between batches.
+
+***
+
+# Highly variable genes (HVGs) selection {.tabset}
+
+```{r, results = "asis"}
+hvg_int <- hvg_int_list$hvg_int
+hvg_combination <- hvg_int$hvg_combination
+hvg_int_with_cc <- hvg_int_list$hvg_int_with_cc
+
+if (!is_null(hvg_int_with_cc)) {
+  hvg_rm_cc_genes_ids <- hvg_int$hvg_rm_cc_genes_ids
+  hvg_rm_cc_genes_ann <- gene_annotation[hvg_rm_cc_genes_ids, ]
+  catg0(
+    "These cell cycle related genes (n = {n_cc_genes}) were removed before HVG selection: {gene}\n\n",
+    n_cc_genes = length(hvg_rm_cc_genes_ids),
+    # hvg_rm_cc_genes_ids = str_comma(hvg_rm_cc_genes_ids, space = TRUE)
+    gene = str_comma(glue("{hvg_rm_cc_genes_ann$ENSEMBL} ({hvg_rm_cc_genes_ann$SYMBOL})"), space = TRUE)
+  )
+}
+
+if (hvg_combination == "hvg_metric") {
+  catg0(
+    "**HVG metric (common for all samples)**: '{hvg_int$metric}' -> combined by {hvg_combination_fn}\n\n",
+    hvg_combination_fn = dplyr::if_else(hvg_int$hvg_metric == "gene_var", "combineVar()", "combineCV2()")
+  )
+  hvg_metric <- hvg_int$hvg_metric
+  hvg_selection <- hvg_int$hvg_selection
+  hvg_selection_value <- hvg_int$hvg_selection_value
+  catg0('Based on "{hvg_metric}", HVGs were selected by: ')
+  
+  if (hvg_selection == "top") {
+    catg0("top {hvg_selection_value} HVGs.\n\n")
+  } else if (hvg_selection == "significance") {
+    catg0("FDR < {hvg_selection_value}\n\n")
+  } else if (hvg_selection == "threshold") {
+    catg0("{hvg_metric} > {hvg_selection_value}\n\n")
+  }
+} else {
+  catg0("HVGs were combined by {hvg_combination} of HVGs within individual samples.\n\n")
+}
+
+invisible(lapply_rows(hvg_plots_int_df, FUN = function(par) {
+  if (par$hvg_rm_cc_genes) {
+    md_header("HVGs with removed CC genes", 2)
+  } else {
+    md_header("All HVGs", 2)
+  }
+  
+  catg0("**Found {length(par$hvg_int$hvg_ids)} HVGs.**\n\n")
+  print(par$hvg_plot)
+  return(list())
+}))
+```
+
+#
+
+***
+
+# PCA selection {.tabset}
+
+- Elbow point method: a simple heuristic for choosing PCs involves identifying the elbow point in the percentage of
+  variance explained by successive PCs. This refers to the "elbow" in the curve of a scree plot as shown.
+- Technical variance method: use the technical component estimates to determine the proportion of variance that should be retained.
+  This is implemented in `denoisePCA()`, which takes the estimates returned by `modelGeneVar()`.
+- Forced: use a predefined number of PCs.
+- Corrected: Use the number of PCs calculated during the integration.
+
+```{r, results = "asis"}
+invisible(dplyr::group_by(sce_int_pca_df_for_report, name) %>% dplyr::group_map(function(group, key) {
+  int_method_name <- key$name
+  int_method_description <- get_int_method_description(int_method_name)
+  md_header(int_method_description$header, 2, extra = "{.tabset}")
+  
+  dplyr::group_by(group, hvg_rm_cc_genes) %>%
+    dplyr::group_map(function(group, key) {
+      hvg_rm_cc_genes <- key$hvg_rm_cc_genes
+      
+      if (hvg_rm_cc_genes) {
+        md_header("Removed cell cycle genes from HVGs", 3)
+      } else {
+        md_header("With all HVGs", 3)
+      }
+      
+      print(group$pca_selected_pcs_plot[[1]])
+      catg0("\n\n**{group$pca_selected_pcs} PCs were selected using the '{group$pca_selection_method}' method.**\n\n")
+    }
+  )
+}))
+```
+
+#
+
+***
+
+# Integration dimreds {.tabset}
+
+```{r, results = "asis"}
+invisible(dplyr::group_by(sce_int_dimred_plots_df, name) %>% dplyr::group_map(function(group, key) {
+  int_method_name <- key$name
+
+  int_method_description <- get_int_method_description(int_method_name)
+  md_header(int_method_description$header, 2, extra = "{.tabset}")
+  catg0(details_template, title = "Method details", text = int_method_description$description)
+  
+  by_hvg_rm_cc_genes <- dplyr::group_by(group, hvg_rm_cc_genes)
+  dplyr::group_map(by_hvg_rm_cc_genes, function(group, key) {
+    hvg_rm_cc_genes <- key$hvg_rm_cc_genes
+    
+    if (hvg_rm_cc_genes) {
+      md_header("Removed cell cycle genes from HVGs", 3, extra = "{.tabset}")
+    } else {
+      md_header("With all HVGs", 3, extra = "{.tabset}")
+    }
+    
+    by_dimred <- dplyr::group_by(group, dimred_name)
+    dplyr::group_map(by_dimred, function(group, key) {
+      dimred_name <- key$dimred_name
+      md_header(str_to_upper(dimred_name), 4)
+      
+      by_colour_by <- dplyr::group_by(group, colour_by)
+      dplyr::group_map(by_colour_by, function(group, key) {
+        selected_markers_file <- selected_markers_plots_int_df %>%
+          dplyr::filter(name == int_method_name, hvg_rm_cc_genes == !!hvg_rm_cc_genes, dimred_name == !!dimred_name) %>%
+          dplyr::pull(out_file)
+        create_a_link(
+            href = selected_markers_file,
+            text = "Selected markers PDF",
+            href_rel_start = fs::path_dir(cfg$INTEGRATION_REPORT_HTML_FILE)
+        )
+        print(group$plot[[1]])
+      })
+    })
+  })
+}))
+```
+
+#
+
+***
+
+# Integration diagnostics {.tabset}
+
+```{r, results = "asis"}
+invisible(dplyr::group_by(int_diagnostics_df, name) %>% dplyr::group_map(function(group, key) {
+  int_method_name <- key$name
+  int_method_description <- get_int_method_description(int_method_name)
+  md_header(int_method_description$header, 2, extra = "{.tabset}")
+  
+  dplyr::group_by(group, hvg_rm_cc_genes) %>%
+    dplyr::group_map(function(group, key) {
+      hvg_rm_cc_genes <- key$hvg_rm_cc_genes
+      
+      if (hvg_rm_cc_genes) {
+        md_header("Removed cell cycle genes from HVGs", 3, extra = "{.tabset}")
+      } else {
+        md_header("With all HVGs", 3, extra = "{.tabset}")
+      }
+      
+      md_header("Cells's assignment", 4)
+      cells_per_batch_cluster <- group$cells_per_batch_cluster[[1]]
+      cluster_has_zeros <- apply(dplyr::select(cells_per_batch_cluster, -cluster), 1, FUN = function(row) any(row == 0))
+      cluster_has_zeros <- cells_per_batch_cluster$cluster[cluster_has_zeros]
+      
+      if (!is_empty(cluster_has_zeros)) {
+        catg0(
+          "**WARNING**: The following clusters have zero number of assigned cells in some samples: ",
+          "{str_comma(cluster_has_zeros)}\n\n\n"
+        )
+      }
+      
+      print(
+        kableExtra::kable(group$cells_per_batch_cluster_percentages[[1]], row.names = FALSE) %>%
+          kableExtra::kable_styling(bootstrap_options = c("striped", "hover", "condensed"))
+      ) %>% cat()
+      
+      md_header("Cells's assignment (plots)", 4)
+      print(group$plot_batch_cluster_absolute[[1]])
+      print(group$plot_batch_cluster_ratio[[1]])
+      
+      md_header("Variance in cluster assignment", 4)
+      cat(
+        "The variation in the log-abundances to rank the clusters with the greatest variability",
+        "in their proportional abundances across batches. We can then focus on batch-specific clusters",
+        "that may be indicative of incomplete batch correction. Obviously, though, this diagnostic is",
+        "subject to interpretation as the same outcome can be caused by batch-specific populations;",
+        "some prior knowledge about the biological context is necessary to distinguish between these two possibilities.\n\n",
+        sep = " "
+      )
+      print(
+        kableExtra::kable(group$batch_cluster_var_df[[1]], row.names = FALSE) %>%
+          kableExtra::kable_styling(bootstrap_options = c("striped", "hover", "condensed"))
+      ) %>% cat()
+      
+      md_header("Rand indices", 4)
+      cat(
+        "Rand index is used to evaluate biological heterogeneity preservation by summarizing the agreement between clusterings.",
+        "This provides a simple metric that we can use to assess the preservation of variation by different correction methods.",
+        "Larger rand indices (i.e., closer to 1) are more desirable, though this must be balanced against the ability of each",
+        "method to actually remove the batch effect.\n\n",
+        sep = " "
+      )
+      print(
+        kableExtra::kable(group$rand_indices[[1]], row.names = FALSE) %>%
+          kableExtra::kable_styling(bootstrap_options = c("striped", "hover", "condensed"))
+      ) %>% cat()
+    }
+  )
+}))
+```
+
+# {-}
+
+***
+
+# Integration Rand indices
+
+Rand indices are used to evaluate biological heterogeneity preservation by summarizing the agreement between clusterings.
+This provides a simple metric that we can use to assess the preservation of variation by different correction methods.
+Larger Rand indices (i.e., closer to 1) are more desirable, though this must be balanced against the ability of each
+method to actually remove the batch effect.
+
+```{r}
+int_diagnostics_df$rand_indices %>%
+  dplyr::bind_rows() %>%
+  dplyr::bind_cols(
+    dplyr::select(int_diagnostics_df, name, hvg_rm_cc_genes),
+    .
+  ) %>%
+  dplyr::arrange(hvg_rm_cc_genes, name)
+```
+
+***
+
+<details>
+  <summary class="config">Show input parameters</summary>
+  <hr />
+  <h4>Main config</h4>
+
+```{r}
+print(config_main)
+```
+
+  <hr />
+  <h4>Integration config</h4>
+
+```{r}
+print(config_integration)
+```
+  <hr />
+</details>
+
+```{r, child = here::here("Rmd/common/_footer.Rmd")}
+```

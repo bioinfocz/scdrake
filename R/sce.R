@@ -1,0 +1,270 @@
+## -- Common functions related to SingleCellExperiment objects.
+
+#' @title Get indices of genes whose annotation matches a regex.
+#' @param sce A `SingleCellExperiment` object.
+#' @param regex A character scalar.
+#' @param colname A character scalar: name of column in `rowData(sce)` whose values will be tested by `regex`.
+#' @param ignore_case A logical scalar: if `TRUE`, ignore case in `regex`.
+#' @return An integer vector: indices of `rowData(sce)` matching the `regex`.
+#'
+#' @examples \dontrun{
+#' # Indices of mitochondrial genes.
+#' which_genes_regex(sce, regex = "^MT-", colname = "Symbol", ignore_case = TRUE)
+#' }
+#'
+#' @concept sc_sce
+#' @export
+which_genes_regex <- function(sce, regex, colname = "Symbol", ignore_case = TRUE) {
+  stringr::str_which(rowData(sce)[[colname]], regex(regex, ignore_case = ignore_case))
+}
+
+#' @title Append new columns to `colData` of a `SingleCellExperiment` object.
+#' @param sce A `SingleCellExperiment` object.
+#' @param ... Unnamed arguments: dataframe-like objects.
+#'   Named arguments (names will be used for new columns): vectors.
+#' @return A modified `sce` object with added columns.
+#'
+#' @examples
+#' \dontrun{
+#' df <- data.frame(example = rownames(colnames))
+#' sce <- sce_add_colData(sce, df, new_column = sce$Barcode)
+#' }
+#'
+#' @concept sc_sce
+#' @export
+sce_add_colData <- function(sce, ...) {
+  ## TODO: instead of throwing error just replace by NA or FALSE (for logical) and display warning?
+  assert_that_(
+    all(purrr::map_lgl(list(...), ~ length(.) > 0)),
+    msg = "Some of the new columns are empty."
+  )
+
+  colData(sce) <- cbind(colData(sce), list(...))
+  return(sce)
+}
+
+#' @title Append data to `metadata()` list of a `SingleCellExperiment` object.
+#' @description [utils::modifyList()] is used internally, so existing named items in `metadata()` can be overwritten.
+#' @param sce A `SingleCellExperiment` object.
+#' @param ... Objects to be added to `metadata(sce)`.
+#' @return A modified `sce` object with data appended to its `metadata()`.
+#'
+#' @examples \dontrun{
+#' sce <- sce_add_metadata(sce, a = 1, "some_data", b = list(c = 1))
+#' }
+#'
+#' @concept sc_sce
+#' @export
+sce_add_metadata <- function(sce, ...) {
+  # metadata(sce) <- c(metadata(sce), list(...))
+  metadata(sce) <- utils::modifyList(metadata(sce), list(...), keep.null = TRUE)
+  return(sce)
+}
+
+#' @title Append data to metadata o a `Seurat` object's assay.
+#' @param seu A `Seurat` object.
+#' @param assay A character scalar: name of assay.
+#' @param ... Objects to be added
+#' @return A modified `seu` object with data appended to its `assay` metadata.
+#'
+#' @concept sc_sce
+#' @export
+seu_add_metadata <- function(seu, assay = "RNA", ...) {
+  seu@assays[[assay]]@misc <- c(seu@assays[[assay]]@misc, list(...))
+  return(seu)
+}
+
+#' @title Convert a `SingleCellExperiment` to `Seurat` object.
+#' @description  A wrapper around [Seurat::as.Seurat()].
+#' @param sce A `SingleCellExperiment` object.
+#' @param sce_assay A character scalar: name of assay in `sce` (e.g. `counts` or `logcounts`).
+#'   Use `NULL` to convert all assays (default).
+#' @param seurat_assay A character scalar: name of assay in the new `Seurat` object.
+#' @param add_rowData A logical scalar: if `TRUE`, add `rowData(sce)` to `meta.features` slot of assay of the new
+#'   `Seurat` object.
+#' @param ... Passed to [Seurat::as.Seurat()].
+#' @return A `Seurat` object.
+#'
+#' @concept sc_sce
+#' @export
+as_seurat <- function(sce, sce_assay = NULL, seurat_assay = "RNA", add_rowData = TRUE, ...) {
+  seu <- Seurat::as.Seurat(sce, assay = sce_assay, ...) %>%
+    SeuratObject::RenameAssays(originalexp = seurat_assay)
+
+  if (add_rowData) {
+    assert_that(are_equal(rownames(seu@assays[[seurat_assay]]), rownames(rowData(sce))))
+    seu@assays[[seurat_assay]]@meta.features <- cbind(
+      seu@assays[[seurat_assay]]@meta.features,
+      rowData(sce) %>% as.data.frame()
+    )
+  }
+
+  return(seu)
+}
+
+#' @title Create a `Seurat` object used for heatmap generation.
+#' @param sce_dimred A `SingleCellExperiment` object with calculated dimreds.
+#' @param calc_zscore A logical scalar: if `TRUE`, calculate z-scores of UMI counts in `assays$RNA@scale.data` slot.
+#' @return A `Seurat` object.
+#'
+#' @concept sc_sce
+#' @export
+create_seu_for_heatmaps <- function(sce_dimred, calc_zscore = TRUE) {
+  if ("integrated" %in% assayNames(sce_dimred)) {
+    data <- "integrated"
+    assay(sce_dimred, data) <- as.matrix(assay(sce_dimred, data))
+    reducedDim(sce_dimred, "corrected") <- NULL
+  } else {
+    data <- "logcounts"
+  }
+
+  seu <- as_seurat(sce_dimred, data = data)
+
+  if (calc_zscore) {
+    seu@assays$RNA@scale.data <- t(scale(t(seu@assays$RNA@data)))
+  }
+
+  return(seu)
+}
+
+#' @title Make a dataframe of cells per cluster (counts and percentages).
+#' @param clusters A vector.
+#' @param var_name A character scalar: name of column in the returned dataframe.
+#' @return A dataframe.
+#'
+#' @examples
+#' cells_per_cluster_table(rep(c(1, 2), each = 5))
+#'
+#' @concept sc_sce
+#' @export
+cells_per_cluster_table <- function(clusters, var_name = "Cluster") {
+  if (is(clusters, "data.frame")) {
+    clusters <- clusters[, 1]
+  }
+
+  res <- janitor::tabyl(clusters) %>%
+    janitor::adorn_pct_formatting(rounding = "half up", digits = 0) %>%
+    as.data.frame()
+
+  if (!is_null(var_name)) {
+    colnames(res)[1] <- var_name
+  }
+
+  return(res)
+}
+
+#' @title Merge `metadata()` of multiple `SingleCellExperiment` object.
+#' @param sce_list A list of `SingleCellExperiment` objects.
+#' @param what A character scalar: name of item to merge.
+#' @param as_vector A logical scalar: if `TRUE`, return vector of merged values.
+#' @param as_named_list A logical scalar: if `TRUE`, return a named list with name equal to `what`.
+#' @return A vector or list.
+#'
+#' @concept sc_sce
+#' @export
+merge_sce_metadata <- function(sce_list, what, as_vector = TRUE, as_named_list = FALSE) {
+  res <- purrr::map(sce_list, ~ metadata(.)[[what]]) %>%
+    purrr::modify_if(is_null, ~ NA_character_)
+
+  if (as_vector) {
+    res <- unlist(res)
+  } else {
+    names(res) <- names(sce_list)
+  }
+
+  if (as_named_list) {
+    return(list(res) %>% set_names(what))
+  } else {
+    return(res)
+  }
+}
+
+#' @title Create new cell groups based on existing ones.
+#' @description This is basically a recoding of levels. A new column (cell group) will be based on levels in the
+#' existing column.
+#' @param df A dataframe.
+#' @param cell_groupings A named list of named lists. Names of outer list will be used for new columns in `df`.
+#'   The nested lists must have the following values:
+#'   - `source_column`: a name of column in `df` to use.
+#'   - `assignments`: a named list with values in the form `old_level = new_level`.
+#'   See the `CELL_GROUPINGS` parameter in `02_norm_clustering.yaml` or `02_int_clustering.yaml` config.
+#' @param do_cbind A logical scalar: if `TRUE`, bind column-wise `df` and dataframe with new cell groupings.
+#' @return A dataframe.
+#'
+#' @concept sc_sce
+#' @rdname cell_data
+#' @export
+make_cell_groupings <- function(df, cell_groupings, do_cbind = FALSE) {
+  assert_that(!is_null(cell_groupings))
+
+  new_groups <- lapply(names(cell_groupings), FUN = function(group_name) {
+    if (group_name %in% colnames(df)) {
+      cli_alert_warning("Attempt to create a new cell group ({.val {group_name}}), which is already present.")
+      return(NULL)
+    }
+
+    source_column <- cell_groupings[[group_name]][["source_column"]]
+    assignments <- cell_groupings[[group_name]][["assignments"]]
+
+    if (!source_column %in% colnames(df)) {
+      cli_alert_warning("{.field source_column} {.val {source_column}} not found, skipping.")
+      return(NULL)
+    }
+
+    old_group <- df[[source_column]]
+    old_group <- old_group %>%
+      as.character() %>%
+      factor(levels = levels(old_group))
+    new_group <- dplyr::recode(old_group, !!!assignments)
+  }) %>%
+    set_names(names(cell_groupings)) %>%
+    purrr::discard(is_null)
+
+  if (do_cbind) {
+    return(cbind(df, as.data.frame(new_groups)))
+  } else {
+    return(as.data.frame(new_groups))
+  }
+}
+
+#' @param col_data A dataframe.
+#' @param clusters_all A named list.
+#'
+#' @concept sc_sce
+#' @rdname cell_data
+#' @export
+cell_data_fn <- function(col_data, clusters_all, cell_groupings) {
+  col_data <- dplyr::bind_cols(col_data, tibble::as_tibble(clusters_all))
+  col_data <- S4Vectors::DataFrame(col_data)
+
+  if (!is_null(cell_groupings)) {
+    cell_groupings <- lapply(cell_groupings, FUN = function(grp) {
+      grp$description <- if (is_null(grp$description)) "" else grp$description
+      return(grp)
+    })
+    new_cell_groupings <- make_cell_groupings(col_data, cell_groupings = cell_groupings, do_cbind = FALSE)
+    col_data <- cbind(col_data, new_cell_groupings)
+    metadata(col_data)$cell_groupings <- cell_groupings
+  }
+
+  return(col_data)
+}
+
+#' @title Add columns to `colData()` of a `SingleCellExperiment` object.
+#' @description Only columns unique to `cell_data` will be added.
+#' @param sce_dimred A `SingleCellExperiment` object.
+#' @param cell_data A dataframe.
+#' @return A modified `sce_dimred` with added `colData()` columns from `cell_data`.
+#'
+#' @concept sc_sce
+#' @export
+sce_add_cell_data <- function(sce_dimred, cell_data) {
+  colData(sce_dimred) <- cbind(
+    colData(sce_dimred),
+    cell_data[, setdiff(colnames(cell_data), colnames(colData(sce_dimred)))]
+  )
+
+  metadata(sce_dimred)$cell_groupings <- metadata(cell_data)$cell_groupings
+
+  return(sce_dimred)
+}

@@ -1,0 +1,181 @@
+---
+title: "scdrake | 02 - Clustering of integrated data"
+author: "Jiri Novotny, Jan Kubovciak"
+institute: "Laboratory of Genomics and Bioinformatics @ Institute of Molecular Genetics of the ASCR"
+output:
+  html_document:
+    toc: true
+    toc_depth: 4
+    toc_float: true
+    number_sections: false
+    theme: "flatly"
+    self_contained: true
+    code_download: true
+    df_print: "paged"
+params:
+  css_file: !expr here::here("Rmd/common/stylesheet.css")
+  drake_cache_dir: !expr here::here(".drake")
+date: "`r glue('Document generated: {Sys.Date()}')`"
+css: "`r params$css_file`"
+---
+
+```{r, include = FALSE, message = FALSE, warning = FALSE}
+library(drake)
+if (rlang::is_true(getOption("knitr.in.progress"))) {
+  params_ <- scdrake_list(params)
+}
+drake_cache_dir <- params_$drake_cache_dir
+
+loadd(
+  config_main, config_int_clustering,
+  cluster_int_kmeans_kc_tables, cluster_int_sc3_tables, cluster_int_sc3_stability_plots,
+  dimred_plots_clustering, dimred_plots_other_vars, selected_markers_plots_int_final,
+  path = drake_cache_dir
+)
+
+cfg <- config_int_clustering
+```
+
+***
+
+```{r, child = here::here("Rmd/common/_header.Rmd")}
+```
+
+***
+
+# Input data overview
+
+Just to review data from the preceding pipeline step (`01 - integration`).
+
+```{r, results = "asis"}
+catg0("The chosen integration method was '{cfg$INTEGRATION_FINAL_METHOD}'.")
+if (cfg$INTEGRATION_FINAL_METHOD_RM_CC) {
+  cat(" Cell cycle related genes were removed prior to HVG selection.\n\n")
+}
+```
+
+```{r}
+cat(readd(sce_int_final_info, path = drake_cache_dir)$str)
+```
+
+***
+
+# Clustering {.tabset}
+
+## Graph-based
+
+Graph-based clustering is commonly used for scRNA-seq, and often shows a good performance.
+
+First, we will use `scran` to generate the shared nearest neighbor graph,
+which will then be subjected to community detection using algorithms implemented in the `igraph` package.
+
+Once the SNN graph is generated, we can use any of the community detection algorithms in `igraph` to find the clusters.
+Here, we illustrate two of these methods; the walktrap algorithm (*Pons and Latapy 2005*) and the Louvain method (*Blondel et al. 2008*).
+We can visualise similarity of both assignments with heatmap and PCA.
+
+```{r}
+pheatmap::pheatmap(table(readd(cluster_int_graph_walktrap, path = drake_cache_dir)[[1]], readd(cluster_int_graph_louvain, path = drake_cache_dir)[[1]]))
+```
+
+**Walktrap algorithm: found `r readd(cluster_int_graph_walktrap_n, path = drake_cache_dir)` clusters.**
+
+```{r, results = "asis"}
+cells_per_cluster_table_collapsed_html(readd(cluster_int_graph_walktrap_table, path = drake_cache_dir))
+```
+
+**Louvain algorithm: found `r readd(cluster_int_graph_louvain_n, path = drake_cache_dir)` clusters.**
+
+```{r, results = "asis"}
+cells_per_cluster_table_collapsed_html(readd(cluster_int_graph_louvain_table, path = drake_cache_dir))
+```
+
+## k-means
+
+k-means is a generic clustering algorithm that has been used in many application areas.
+In R, it can be applied via the `kmeans()` function.
+Typically, it is applied to a reduced dimension representation of the expression data
+(most often PCA, because of the interpretability of the low-dimensional distances).
+We need to define the number of clusters in advance.
+
+### Best K
+
+Determining the number of clusters from the gap statistics and their standard deviations.
+
+```{r}
+readd(kmeans_gaps_plot, path = drake_cache_dir)
+```
+
+**The best K selected: `r readd(kmeans_best_k, path = drake_cache_dir)`**
+
+```{r, results = "asis"}
+cells_per_cluster_table_collapsed_html(readd(cluster_int_kmeans_kbest_table, path = drake_cache_dir))
+```
+
+### Custom K {.tabset}
+
+- **Custom K (`KMEANS_K`): `r str_comma(cfg$KMEANS_K)`**
+
+```{r, results = "asis"}
+for (k in cfg$KMEANS_K) {
+  cluster_col <- glue("cluster_int_kmeans_kc_{k}")
+  md_header(glue("k = {k}"), 4)
+  cells_per_cluster_table_collapsed_html(cluster_int_kmeans_kc_tables[[cluster_col]])
+}
+```
+
+## SC3 {.tabset}
+
+Single-Cell Consensus Clustering (`SC3`) is a tool for unsupervised clustering of scRNA-seq data.
+SC3 achieves high accuracy and robustness by consistently integrating different clustering solutions through a consensus approach.
+
+*Cluster stability index* shows how stable each cluster is accross the selected range of `k`s.
+The stability index varies between 0 and 1, where 1 means that the same cluster appears in every solution for different `k`.
+
+```{r, results = "asis"}
+for (k in cfg$SC3_K) {
+  cluster_col <- glue("cluster_int_sc3_{k}")
+  md_header(glue("k = {k}"), 3)
+  cells_per_cluster_table_collapsed_html(cluster_int_sc3_tables[[cluster_col]])
+  print(cluster_int_sc3_stability_plots[[cluster_col]])
+}
+```
+
+#
+
+***
+
+```{r, results = "asis"}
+generate_dimred_plots_section(
+  dimred_names = cfg$INT_CLUSTERING_REPORT_DIMRED_NAMES,
+  clustering_names = cfg$INT_CLUSTERING_REPORT_CLUSTERING_NAMES,
+  selected_markers = selected_markers_plots_int_final,
+  dimred_plots_clustering = dimred_plots_clustering,
+  dimred_plots_other_vars = dimred_plots_other_vars,
+  selected_markers_files_rel_start = fs::path_dir(cfg$INT_CLUSTERING_REPORT_HTML_FILE)
+)
+```
+
+#
+
+***
+
+<details>
+  <summary class="config">Show input parameters</summary>
+  <hr />
+  <h4>Main config</h4>
+
+```{r}
+print(config_main)
+```
+
+  <hr />
+  <h4>Clustering config</h4>
+
+```{r}
+print(cfg)
+```
+  <hr />
+</details>
+
+```{r, child = here::here("Rmd/common/_footer.Rmd")}
+```

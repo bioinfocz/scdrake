@@ -1,0 +1,67 @@
+### Contrasts #################################################################
+CONTRASTS_SOURCES_DEFAULTS:
+  COMMON_PARAMS:
+    PLOT_DIMREDS: ["umap"]
+    BLOCK_COLUMN: null
+  PARAMS_T:
+    LFC_TEST: 0
+    STD_LFC: False
+    TOP_N_HEATMAP: 10
+    TOP_N_WT_HEATMAP: "fdr"
+    TOP_N_PLOT: 5
+    TOP_N_WT_PLOT: "fdr"
+  PARAMS_WILCOX:
+    LFC_TEST: 0
+    STD_LFC: null
+    TOP_N_HEATMAP: 10
+    TOP_N_WT_HEATMAP: "fdr"
+    TOP_N_PLOT: 5
+    TOP_N_WT_PLOT: "fdr"
+  PARAMS_BINOM:
+    LFC_TEST: 0
+    STD_LFC: null
+    TOP_N_HEATMAP: 10
+    TOP_N_WT_HEATMAP: "fdr"
+    TOP_N_PLOT: 5
+    TOP_N_WT_PLOT: "fdr"
+
+CONTRASTS_SOURCES:
+  - dea_cluster_int_louvain_annotated:
+      source_column: "cluster_int_graph_louvain_annotated"
+      description: "DEA of some groups in graph-based clustering clustering (Louvain alg.)"
+      common_params:
+        plot_dimreds: ["umap", "pca"]
+      params_t:
+        lfc_test: 1
+      contrasts:
+        - target: "memory_CD4+"
+          reference: "B"
+        - target: "3"
+          reference: "4"
+          name: "cl3_vs_cl4"
+    dea_cluster_int_kmeans_kc_3_batch_block:
+      source_column: "cluster_int_kmeans_kc_3_renamed"
+      description: "DEA of all groups in k-means clustering (k = 3) with blocking on batch"
+      common_params:
+        block_column: "batch"
+      params_wilcox:
+        top_n_heatmap: 20
+      contrasts: "all"
+
+MAKE_CONTRASTS_PLOTS: True
+###############################################################################
+
+### Input files ###############################################################
+CONTRASTS_TABLE_TEMPLATE_RMD_FILE: "Rmd/common/contrasts_table_template.Rmd"
+CONTRASTS_REPORT_RMD_FILE: "Rmd/common/contrasts.Rmd"
+###############################################################################
+
+### Output files ##############################################################
+CONTRASTS_BASE_OUT_DIR: "contrasts"
+
+CONTRASTS_REPORT_HTML_FILE: "contrasts.html"
+CONTRASTS_HEATMAPS_OUT_DIR: "contrasts_heatmaps"
+CONTRASTS_PLOTS_BASE_OUT_DIR: "contrasts_plots"
+CONTRASTS_DIMRED_PLOTS_BASE_OUT_DIR: "contrasts_dimred_plots"
+CONTRASTS_TABLES_OUT_DIR: "contrasts_tables"
+###############################################################################

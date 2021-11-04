@@ -1,0 +1,116 @@
+Package: scdrake
+Type: Package
+Title: A Pipeline For 10x Chromium Single-Cell RNA-seq Data Analysis
+Version: 1.0
+Date: 2021-07-30
+Authors@R:
+    c(
+      person(
+        given = "Jiri",
+        family = "Novotny",
+        role = c("aut", "cre"),
+        email = "jiri.novotny@img.cas.cz",
+        comment = c(ORCID = "0000-0003-1338-638X")
+      ),
+      person(
+        given = "Jan",
+        family = "Kubovciak",
+        role = c("aut"),
+        email = "jan.kubovciak@img.cas.cz"
+      )
+    )
+Description:
+    This pipeline is implemented in the drake Make-like toolkit and
+    provides the following steps: input quality control, filtering of cells/genes,
+    normalization, clustering, cluster markers, differential expression analysis
+    (constrasts -> cluster vs. cluster), integration of multiple samples.
+    All main parts are accompanied by rich graphical outputs and HTML reports
+    (RMarkdown).
+License: MIT + file LICENSE
+URL: https://github.com/bioinfocz/scdrake, https://bioinfocz.github.io/scdrake
+BugReports: https://github.com/bioinfocz/scdrake/issues
+Encoding: UTF-8
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.1.2
+VignetteBuilder: knitr
+biocViews:
+    Transcription,
+    DifferentialExpression,
+    SingleCell,
+    Normalization,
+    QualityControl,
+    Clustering
+Imports:
+    AnnotationDbi,
+    assertthat,
+    batchelor,
+    BiocGenerics,
+    BiocManager,
+    BiocParallel,
+    BiocSingular,
+    bluster,
+    cli,
+    cluster,
+    cowplot,
+    datasets,
+    dplyr,
+    drake,
+    DropletUtils,
+    DT,
+    fs,
+    ggplot2,
+    glmGamPoi,
+    glue,
+    here,
+    htmltools,
+    knitr,
+    igraph,
+    janitor,
+    kableExtra,
+    magrittr,
+    MatrixGenerics,
+    methods,
+    parallelly,
+    patchwork,
+    PCAtools,
+    purrr,
+    readr,
+    RhpcBLASctl,
+    rlang,
+    rmarkdown,
+    S4Vectors,
+    scales,
+    scater,
+    scDblFinder,
+    scran,
+    sessioninfo,
+    SC3,
+    Seurat,
+    SeuratObject,
+    SingleCellExperiment,
+    stringi,
+    stringr,
+    SummarizedExperiment,
+    tibble,
+    tidyr,
+    usethis,
+    utils,
+    withr,
+    yaml
+Remotes:
+    gorgitko/SC3
+Suggests:
+    BiocStyle,
+    clustermq,
+    codetools,
+    covr,
+    emoji,
+    future,
+    future.callr,
+    org.Hs.eg.db,
+    pkgdown,
+    preferably,
+    qs,
+    testthat (>= 3.0.0)
+Config/testthat/edition: 3
+Config/testthat/start-first: project

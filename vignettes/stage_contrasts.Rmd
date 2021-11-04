@@ -1,0 +1,137 @@
+---
+title: "Contrasts stage"
+date: "`r Sys.Date()`"
+package: scdrake
+output:
+  BiocStyle::html_document:
+    toc: true
+    toc_float: true
+vignette: >
+  %\VignetteIndexEntry{Contrasts stage}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}  
+---
+
+***
+
+For a general overview of this stage see `vignette("pipeline_overview")`.
+
+Cluster markers config is stored in `contrasts.yaml` file. Location of this file is different for the
+single-sample and integration pipelines. As for the [pipeline config](config_pipeline.html), directory with this file
+is read from environment variables:
+
+- `SCDRAKE_SINGLE_SAMPLE_CONFIG_DIR` for the single-sample pipeline.
+- `SCDRAKE_INTEGRATION_CONFIG_DIR` for the integration pipeline.
+
+and options named in lowercase are set upon `{scdrake}` load or attach. Then the actual directory used depends on
+whether you run `run_single_sample()` or `run_integration()`.
+
+# Config parameters
+
+Parameters for this stage are almost identical to those for `cluster_markers` stage
+(see `vignette("stage_cluster_markers")`). You just need to replace `CLUSTER_MARKERS` with
+`CONTRASTS` `r emoji::emoji("slightly_smiling_face")`
+
+The different parameters are below.
+
+***
+
+```yaml
+CONTRASTS_SOURCES:
+  - dea_cluster_louvain_annotated:
+      source_column: "cluster_graph_louvain_annotated"
+      description: "DEA of some groups in graph-based clustering clustering (Louvain alg.)"
+      common_params:
+        plot_dimreds: ["umap", "pca"]
+      params_t:
+        lfc_test: 1
+      contrasts:
+        - target: "memory_CD4+"
+          reference: "B"
+        - target: "3"
+          reference: "4"
+          name: "cl3_vs_cl4"
+    dea_cluster_kmeans_kc_3_cc_block:
+      source_column: "cluster_kmeans_kc_3_renamed"
+      description: "DEA of all groups in k-means clustering (k = 3) with blocking on cell cycle phase"
+      common_params:
+        block_column: "phase"
+      params_wilcox:
+        top_n_heatmap: 20
+      contrasts: "all"
+```
+
+**Type:** list of named lists
+
+This parameter is similar to `CLUSTER_MARKERS_SOURCES`, but an additional parameter `contrasts` is used.
+It is used to specify which levels in `source_column` will be compared (differential expression).
+
+- If list of lists, the following character scalar items can/must be set:
+  - `target` (required): target level of `source_column`.
+  - `reference` (required): reference level of `source_column`.
+  - `name` (optional): unique contrast name. If not specified, will be created as `{target}_vs_{reference}`.
+- If `"all"`, all combinations of levels in `source_column` will be compared.
+  For example, if `source_column` is `"cluster_kmeans_kc_3"` (k-means with `k = 3`),
+  it contains three levels, and the following comparisons (contrasts) will be made:
+  `1_vs_2`, `1_vs_3`, and `2_vs_3`.
+
+***
+
+`CONTRASTS_SOURCES_DEFAULTS`
+
+Same as `CLUSTER_MARKERS_SOURCES_DEFAULTS`, but the following parameters for statistical tests cannot be used,
+and hardcoded values are used for them internally:
+
+- `LFC_DIRECTION` (`"any"`)
+- `PVAL_TYPE` (`"any"`)
+- `MIN_PROP` (`null`)
+
+# Targets
+
+Here you can find description of the most important targets for this stage.
+However, for a full overview, you have to inspect the [source code](R/plans_common.R) of the
+`get_contrasts_subplan()` function.
+
+As in the config for this stage, all target names are similar to those in the stage `cluster_markers`
+after replacing `cluster_markers` with `contrasts` (with few exceptions, see below).
+Please, refer to `vignette("stage_cluster_markers")`.
+
+## `SingleCellExperiment` objects (SCE)
+
+`sce_dimred_contrasts`, `sce_final_contrasts`, `sce_contrasts`
+
+## Tibbles with parameters
+
+`contrasts_params`, `contrasts_test_params`, `contrasts_heatmap_params`, `contrasts_plot_params`,
+`contrasts_dimred_plot_params`
+
+## Tibbles with cluster markers (contrasts) test results
+
+`contrasts_raw`: a tibble, same as `cluster_markers_raw`. Used to extract results for contrasts of interest.
+
+***
+
+`contrasts`: a tibble with extracted results (in `markers` column) for contrasts of interest.
+Contrasts are identified by columns `target`, `reference`, or `contrast_name`, and their cell grouping of origin by
+`source_column`. The `name` column comes from list names in `CONTRASTS_SOURCES`.
+
+`contrasts_out`: same as `contrasts`, but `markers` are coerced to dataframes and column names are normalized to snake_case.
+
+`contrasts_for_tables`: same as `contrasts_out`, but `markers` dataframes are prepared for HTML output.
+See `cluster_markers_for_tables` in `vignette("cluster_markers")`.
+
+## Heatmaps
+
+`seu_for_contrasts_heatmaps`, `contrasts_heatmaps_df`
+
+## Marker plots
+
+`contrasts_plots_top`
+
+## Dimensionality reduction plots
+
+`contrasts_dimred_plots`
+
+## Other targets
+
+`config_contrasts`: a list holding parameters for this stage.
