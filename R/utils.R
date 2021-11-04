@@ -373,3 +373,27 @@ set_rstudio_drake_cache <- function(dir) {
 .confirm_menu <- function(choices = c("Yes.", "No"), title = "Do you want to continue?") {
   utils::menu(choices, title = title)
 }
+
+## -- https://conjugateprior.org/2015/06/identifying-the-os-from-r/
+.get_os <- function() {
+  sysinf <- Sys.info()
+
+  if (!is_null(sysinf)) {
+    os <- sysinf["sysname"]
+    if (os == "unix") {
+      os <- "linux"
+    }
+  } else {
+    os <- .Platform$OS.type
+
+    if (stringr::str_detect(R.version$os, "^darwin")) {
+      os <- "darwin"
+    }
+
+    if (stringr::str_detect(R.version$os, "linux-gnu")) {
+      os <- "linux"
+    }
+  }
+
+  return(stringr::str_to_lower(os))
+}

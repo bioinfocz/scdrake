@@ -3,7 +3,7 @@
 #'
 #' @param url An URL from which binary will be downloaded.
 #' If `NULL`, it will be created from `os`, `arch`, and `yq_version`.
-#' @param os A character scalar specifying the current OS (`"unix"` or `"windows"`).
+#' @param os A character scalar specifying the current OS (`"linux"`, `"windows"`, or `"darwin"` for macOS).
 #' If `NULL`, it will be determined from `.Platform$OS.type`.
 #' @param arch A character scalar specifying the current CPU architecture (`32` or `64`).
 #' If `NULL`, it will be determined from `.Machine$sizeof.pointer` (`4 -> 32`, `8 -> 64`).
@@ -12,8 +12,11 @@
 #' @param set_as_default If `TRUE`, set `options(scdrake_yq_binary = destfile)`.
 #' @param do_check If `TRUE`, functionality of the downloaded (or present) `yq` binary will be checked.
 #' @param ask A logical scalar: if `TRUE`, ask before `yq` binary is downloaded.
+#' @param dry A logical scalar: if `TRUE`, do not download the `yq` binary and just return its URL.
 #' @param overwrite If `TRUE`, overwrite the existing `yq` binary if exists.
 #' @inheritParams verbose
+#' @return A character scalar: URL to `yq` binary.
+#' If `!overwrite && fs::file_exists(destfile)`, then `NULL` invisibly.
 #'
 #' @concept yq_tool
 #' @export
@@ -26,6 +29,7 @@ download_yq <- function(url = NULL,
                         do_check = TRUE,
                         ask = TRUE,
                         overwrite = FALSE,
+                        dry = FALSE,
                         verbose = getOption("scdrake_verbose")) {
   if (!overwrite && fs::file_exists(destfile)) {
     cli_alert_info("{.file {destfile}} exists and {.code overwrite = FALSE} -> skipping the download")
@@ -36,9 +40,9 @@ download_yq <- function(url = NULL,
   }
 
   if (is_null(url)) {
-    os <- os %||% .Platform$OS.type
+    os <- os %||% .get_os()
 
-    valid_os <- c("unix", "windows")
+    valid_os <- c("linux", "windows", "darwin")
     assert_that_(
       os %in% valid_os,
       msg = "Unsupported os: '{os}'. The valid ones are {str_comma(valid_os)}"
@@ -58,48 +62,60 @@ download_yq <- function(url = NULL,
         !is_na(arch),
         msg = "Cannot determine the arch based on the pointer size ({.code .Machine$sizeof.pointer}): {.val {pointer_size}}"
       )
-    } else {
-      assert_that_(
-        arch %in% valid_arch,
-        msg = "Unsupported arch: {.val {arch}}. The valid ones are {.val {str_comma(valid_arch)}}"
-      )
     }
 
-    os <- dplyr::if_else(os == "unix", "linux", os)
-    arch <- dplyr::if_else(arch == 32L, "386", "amd64")
-    url <- glue("https://github.com/mikefarah/yq/releases/download/{yq_version}/yq_{os}_{arch}")
-    cli_alert_info(
-      "{.code yq} v{yq_version} binary for OS {.val {os}} and arch {.val arch}} is going to be downloaded as {.file {destfile}}"
+    assert_that_(
+      arch %in% valid_arch,
+      msg = "Unsupported CPU architecture: {.val {arch}}. The valid ones are {.val {str_comma(valid_arch)}}"
     )
+
+    if (os == "darwin") {
+      assert_that_(arch != "386", msg = "the yq tool is not available for {.val darwin} OS with {.val 386} architecture.")
+    }
+
+    arch <- dplyr::if_else(arch == 32L, "386", "amd64")
+    url <- glue(
+      "https://github.com/mikefarah/yq/releases/download/{yq_version}/yq_{os}_{arch}{exe}",
+      exe = dplyr::if_else(os == "windows", ".exe", "")
+    )
+
+    cli_alert_info(str_space(
+      "{.code yq} v{yq_version} binary for OS {.val {os}} and arch {.val {arch}} is going to be downloaded as {.file {destfile}}",
+      "from {.url {url}}"
+    ))
   } else {
     cli_alert_info("{.code yq} binary from {.url {url}} is going to be downloaded as {.file {destfile}}")
   }
 
-  cli_alert_info("Also, directory {.file {fs::path_dir(destfile)}} will be created if it does not exist.")
+  url <- as.character(url)
 
-  if (ask) {
-    continue <- .confirm_menu()
-    if (continue != 1L) {
-      cli_abort("Interrupting the download.")
+  if (!dry) {
+    cli_alert_info("Also, directory {.file {fs::path_dir(destfile)}} will be created if it does not exist.")
+
+    if (ask) {
+      continue <- .confirm_menu()
+      if (continue != 1L) {
+        cli_abort("Interrupting the download.")
+      }
+    }
+
+    fs::dir_create(fs::path_dir(destfile), recurse = TRUE)
+    utils::download.file(url, destfile)
+    fs::file_chmod(destfile, "+x")
+
+    if (set_as_default) {
+      options(scdrake_yq_binary = destfile)
+    }
+
+    if (do_check) {
+      check_yq(yq_binary = destfile, repair_executable = FALSE, verbose = TRUE)
     }
   }
 
-  fs::dir_create(fs::path_dir(destfile), recurse = TRUE)
-  utils::download.file(url, destfile)
-  fs::file_chmod(destfile, "+x")
-
-  if (set_as_default) {
-    options(scdrake_yq_binary = destfile)
-  }
-
-  if (do_check) {
-    check_yq(yq_binary = destfile, repair_executable = FALSE, verbose = TRUE)
-  }
-
-  invisible(NULL)
+  return(url)
 }
 
-#' @title Check the availability and version of the yq tool.
+#' @title Check the availability and version of the `yq` tool.
 #' @param yq_binary A character scalar: path to the `yq` tool's binary.
 #' @param repair_executable A logical scalar: if `TRUE`, make the binary executable.
 #' @inheritParams verbose
