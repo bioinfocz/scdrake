@@ -73,6 +73,12 @@ jobs:
           mkdir /__w/_temp/Library
           echo ".libPaths('/__w/_temp/Library')" > ~/.Rprofile
 
+      - name: Append to PATH
+        shell: bash
+        run: |
+          mkdir -p "${HOME}/.local/bin"
+          echo "${HOME}/.local/bin" >> ${GITHUB_PATH}
+
       ## Most of these steps are the same as the ones in
       ## https://github.com/r-lib/actions/blob/master/examples/check-standard.yaml
       ## If they update their steps, we will also need to update ours.
@@ -143,6 +149,19 @@ jobs:
           ## Edit below if you have any Windows system dependencies
         shell: Rscript {0}
 
+      - name: Download the yq tool
+        shell: bash
+        run: |
+          extension=""
+          if [[ ${{ matrix.config.os == "ubuntu-latest" }} ]]; then
+            url="https://github.com/mikefarah/yq/releases/download/3.4.1/yq_linux_amd64"
+          elif [[ ${{ matrix.config.os == "macOS-latest" }} ]]
+            url="https://github.com/mikefarah/yq/releases/download/3.4.1/yq_darwin_amd64"
+          else
+            url="https://github.com/mikefarah/yq/releases/download/3.4.1/yq_windows_amd64.exe"
+            extension=".exe"
+          wget -o "${HOME}/.local/bin/yq${extension}" ${url}
+
       - name: Install BiocManager
         run: |
           message(paste('****', Sys.time(), 'installing BiocManager ****'))
@@ -154,15 +173,14 @@ jobs:
           BiocManager::install(version = "${{ matrix.config.bioc }}", ask = FALSE)
         shell: Rscript {0}
 
-      ## SC3 installation is failing in remotes::install_local() below, because dependencies needed for its vignettes
-      ## are not already installed.
+      ## SC3 installation is failing below, because dependencies needed for its vignettes are not already installed.
       - name: Install SC3 from GitHub (gorgitko/SC3)
         run: |
           message(paste('****', Sys.time(), 'installing gorgitko/SC3 ****'))
           remotes::install_github("gorgitko/SC3", dependencies = TRUE, upgrade = TRUE, force = TRUE, build_vignettes = FALSE, repos = BiocManager::repositories())
         shell: Rscript {0}
 
-      - name: Install dependencies pass 1
+      - name: Install scdrake dependencies pass 1
         run: |
           ## Try installing the package dependencies in steps. First the local
           ## dependencies, then any remaining dependencies to avoid the
@@ -172,28 +190,38 @@ jobs:
           ## Ideally, all dependencies should get installed in the first pass.
 
           ## Pass #1 at installing dependencies
-          message(paste('****', Sys.time(), 'pass number 1 at installing dependencies: local dependencies ****'))
-          remotes::install_local(dependencies = TRUE, repos = BiocManager::repositories(), build_vignettes = TRUE, upgrade = TRUE, force = TRUE)
+          # message(paste('****', Sys.time(), 'pass number 1 at installing dependencies: local dependencies ****'))
+          # remotes::install_local(dependencies = TRUE, repos = BiocManager::repositories(), build_vignettes = TRUE, upgrade = TRUE, force = TRUE)
+          message(paste('****', Sys.time(), 'pass number 1 at installing scdrake dependencies ****'))
+          remotes::install_deps(dependencies = TRUE, repos = BiocManager::repositories(), build_vignettes = FALSE, upgrade = TRUE)
         continue-on-error: true
         shell: Rscript {0}
 
-      - name: Install dependencies pass 2
+      - name: Install scdrake dependencies pass 2
         run: |
           ## Pass #2 at installing dependencies
-          message(paste('****', Sys.time(), 'pass number 2 at installing dependencies: any remaining dependencies ****'))
-          remotes::install_local(dependencies = TRUE, repos = BiocManager::repositories(), build_vignettes = TRUE, upgrade = TRUE, force = TRUE)
+          # message(paste('****', Sys.time(), 'pass number 2 at installing dependencies: any remaining dependencies ****'))
+          # remotes::install_local(dependencies = TRUE, repos = BiocManager::repositories(), build_vignettes = TRUE, upgrade = TRUE, force = TRUE)
+          message(paste('****', Sys.time(), 'pass number 2 at installing scdrake dependencies: any remaining dependencies ****'))
+          remotes::install_deps(dependencies = TRUE, repos = BiocManager::repositories(), build_vignettes = FALSE, upgrade = TRUE)
+        shell: Rscript {0}
 
-          ## For running the checks
-          # message(paste('****', Sys.time(), 'installing rcmdcheck and BiocCheck ****'))
-          message(paste('****', Sys.time(), 'installing rcmdcheck ****'))
+      - name: Install package checking tools
+        run: |
+          message(paste('****', Sys.time(), 'installing rcmdcheck and BiocCheck ****'))
           remotes::install_cran("rcmdcheck")
-          # BiocManager::install("BiocCheck")
+          BiocManager::install("BiocCheck")
+        shell: Rscript {0}
+
+      - name: Install scdrake
+        run: |
+          message(paste('****', Sys.time(), 'installing scdrake ****'))
+          remotes::install_local(dependencies = TRUE, repos = BiocManager::repositories(), build_vignettes = TRUE, upgrade = TRUE)
         shell: Rscript {0}
 
       - name: Install BiocGenerics
         if:  env.has_RUnit == 'true'
         run: |
-          ## Install BiocGenerics
           BiocManager::install("BiocGenerics")
         shell: Rscript {0}
 
