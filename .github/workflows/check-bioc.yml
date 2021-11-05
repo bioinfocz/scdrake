@@ -197,11 +197,9 @@ jobs:
           else
             echo "The yq tool is available in shell: '${yq_version}'"
             echo "Trying the availability from within R:"
-            yq_check_r=$(Rscript --verbose -e "if (Sys.which('yq') == '') quit(status = 1)")
-            if [ $? -ne 0 ]; then
-              echo "ERROR: The yq tool is not available from within R:"
-              echo ${yq_check}
-              echo
+            yq_check_r=$(Rscript --verbose -e "if (Sys.which('yq') == '') cat('error')")
+            if [[ "$yq_check_r" == "error" ]]; then
+              echo "ERROR: The yq tool is not available from within R."
               echo "R env:"
               Rscript --verbose -e "Sys.getenv()"
               exit 1
@@ -216,7 +214,7 @@ jobs:
 
       - name: Set BiocVersion
         run: |
-          ## SC3 is installed from GitHub, but if run install() without the pkgs argument, the BioConductor
+          ## SC3 is installed from GitHub, but if install() is run without the pkgs argument, the BioConductor
           ## version will be installed instead.
           installed <- rownames(installed.packages())
           installed <- installed[installed != "SC3"]
