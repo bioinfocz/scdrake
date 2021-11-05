@@ -197,11 +197,13 @@ jobs:
           else
             echo "The yq tool is available in shell: '${yq_version}'"
             echo "Trying the availability from within R:"
-            Rscript --verbose -e "if (Sys.which('yq') == '') quit(status = 1)"
+            yq_check_r=$(Rscript --verbose -e "if (Sys.which('yq') == '') quit(status = 1)")
             if [ $? -ne 0 ]; then
-              echo "ERROR: The yq tool is not available from within R."
+              echo "ERROR: The yq tool is not available from within R:"
+              echo ${yq_check}
+              echo
               echo "R env:"
-              Rscript --verbose -e 'Sys.getenv()'
+              Rscript --verbose -e "Sys.getenv()"
               exit 1
             fi
           fi
