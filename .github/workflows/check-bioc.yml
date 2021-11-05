@@ -62,6 +62,7 @@ jobs:
       TZ: UTC
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
+      YQ_VERSION: '3.4.1'
 
     steps:
 
@@ -149,19 +150,50 @@ jobs:
           ## Edit below if you have any Windows system dependencies
         shell: Rscript {0}
 
-      - name: Download the yq tool
+      - name: Prepare paths to yq tool's binary
         shell: bash
         run: |
           extension=""
+          base_url="https://github.com/mikefarah/yq/releases/download/${{ env.YQ_VERSION }}"
           if [[ ${{ matrix.config.os }} == "ubuntu-latest" ]]; then
-            url="https://github.com/mikefarah/yq/releases/download/3.4.1/yq_linux_amd64"
+            YQ_URL="${base_url}/yq_linux_amd64"
           elif [[ ${{ matrix.config.os }} == "macOS-latest" ]]; then
-            url="https://github.com/mikefarah/yq/releases/download/3.4.1/yq_darwin_amd64"
+            YQ_URL="${base_url}/yq_darwin_amd64"
           else
-            url="https://github.com/mikefarah/yq/releases/download/3.4.1/yq_windows_amd64.exe"
+            YQ_URL="${base_url}/yq_windows_amd64.exe"
             extension=".exe"
           fi
-          wget -o "${HOME}/.local/bin/yq${extension}" ${url}
+          YQ_PATH="${HOME}/.local/bin/yq${extension}"
+          echo "YQ_URL: ${YQ_URL}
+          echo "YQ_PATH: ${YQ_PATH}
+          echo "YQ_URL=${YQ_URL}" >> $GITHUB_ENV
+          echo "YQ_PATH=${YQ_PATH}" >> $GITHUB_ENV
+
+      - name: Cache the yq tool
+        id: cache-yq
+        uses: actions/cache@v2
+        with:
+          path: ${{ env.YQ_PATH }}
+          key: ${{ env.cache-version }}-${{ runner.os }}-yq_${{ env.YQ_VERSION }}
+          restore-keys: ${{ env.cache-version }}-${{ runner.os }}-yq
+
+      - name: Download the yq tool
+        if: steps.cache-yq.outputs.cache-hit != 'true'
+        shell: bash
+        run: |
+          curl ${{ env.YQ_URL }} --output ${{ env.YQ_PATH }}
+
+      - name: Test the yq tool
+        shell: bash
+        run: |
+          yq_version=$(yq -V)
+          if [ $? -ne 0 ]; then
+            echo "The yq tool is not available: '${yq_version}'"
+            exit 1
+          else
+            echo "The yq tool is available: '${yq_version}'"
+            Rscript --verbose -e "Sys.which('yq')"
+          fi
 
       - name: Install BiocManager
         run: |
