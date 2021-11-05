@@ -189,11 +189,18 @@ jobs:
           chmod +x ${{ env.YQ_PATH }}
           yq_version=$(yq -V)
           if [ $? -ne 0 ]; then
-            echo "The yq tool is not available: '${yq_version}'"
+            echo "ERROR: The yq tool is not available in shell: '${yq_version}'"
             exit 1
           else
-            echo "The yq tool is available: '${yq_version}'"
-            Rscript --verbose -e "Sys.which('yq')"
+            echo "The yq tool is available in shell: '${yq_version}'"
+            echo "Trying the availability from within R:"
+            Rscript --verbose -e 'if (Sys.which("yq") == "") quit(status = 1)'
+            if [ $? -ne 0 ]; then
+              echo "ERROR: The yq tool is not available from within R."
+              echo "R env:"
+              Rscript --verbose -e 'Sys.getenv()'
+              exit 1
+            fi
           fi
 
       - name: Install BiocManager
@@ -211,7 +218,7 @@ jobs:
       - name: Install SC3 from GitHub (gorgitko/SC3)
         run: |
           message(paste('****', Sys.time(), 'installing gorgitko/SC3 ****'))
-          remotes::install_github("gorgitko/SC3", dependencies = TRUE, upgrade = TRUE, force = TRUE, build_vignettes = FALSE, repos = BiocManager::repositories())
+          remotes::install_github("gorgitko/SC3", dependencies = TRUE, build_vignettes = FALSE, repos = BiocManager::repositories())
         shell: Rscript {0}
 
       - name: Install scdrake dependencies pass 1
@@ -250,7 +257,7 @@ jobs:
       - name: Install scdrake
         run: |
           message(paste('****', Sys.time(), 'installing scdrake ****'))
-          remotes::install_local(dependencies = TRUE, repos = BiocManager::repositories(), build_vignettes = TRUE, upgrade = TRUE)
+          remotes::install_local(dependencies = TRUE, repos = BiocManager::repositories(), build_vignettes = TRUE, upgrade = TRUE, force = TRUE)
         shell: Rscript {0}
 
       - name: Install BiocGenerics
