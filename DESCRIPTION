@@ -51,6 +51,7 @@ Imports:
     bluster,
     cli,
     cluster,
+    codetools,
     cowplot,
     datasets,
     dplyr,
@@ -101,8 +102,6 @@ Remotes:
     gorgitko/SC3
 Suggests:
     BiocStyle,
-    clustermq,
-    codetools,
     covr,
     emoji,
     future,
