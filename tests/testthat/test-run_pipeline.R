@@ -28,7 +28,6 @@ if (!fs::dir_exists(pbmc3k_data_dir) || is_empty(fs::dir_ls(pbmc3k_data_dir))) {
 }
 
 withr::local_options(list(
-  scdrake_yq_binary = yq_binary,
   scdrake_verbose = FALSE,
   scdrake_pipeline_config_dir = "config",
   scdrake_single_sample_config_dir = "config/single_sample",
@@ -36,7 +35,6 @@ withr::local_options(list(
 ))
 
 withr::local_envvar(
-  PATH = glue("{fs::path_dir(yq_binary)}:{get_sys_env('PATH', verbose = FALSE)}"),
   SCDRAKE_PIPELINE_CONFIG_DIR = "config",
   SCDRAKE_SINGLE_SAMPLE_CONFIG_DIR = "config/single_sample",
   SCDRAKE_INTEGRATION_CONFIG_DIR = "config/integration",
@@ -48,7 +46,7 @@ withr::local_dir(project_dir)
 if (!is_r_build_check) {
   withr::defer(withr::with_dir("../..", here::i_am("DESCRIPTION")), teardown_env())
 }
-init_project(project_dir, use_rstudio = FALSE, ask = FALSE, destfile = yq_binary)
+init_project(project_dir, use_rstudio = FALSE, ask = FALSE)
 here::i_am(".here")
 
 test_that("the full single-sample pipeline for PBMC 1k dataset finishes", {

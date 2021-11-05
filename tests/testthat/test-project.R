@@ -13,7 +13,6 @@ withr::defer(
 )
 
 withr::local_options(list(
-  scdrake_yq_binary = yq_binary,
   scdrake_verbose = FALSE,
   scdrake_pipeline_config_dir = "config",
   scdrake_single_sample_config_dir = "config/single_sample",
@@ -21,13 +20,11 @@ withr::local_options(list(
 ))
 
 test_that("project initialization and update works", {
-  init_project(project_dir, use_rstudio = FALSE, ask = FALSE, destfile = yq_binary)
+  init_project(project_dir, use_rstudio = FALSE, ask = FALSE)
 
   expect_equal(getwd() %>% fs::path_file() %>% as.character(), fs::path_file(project_dir) %>% as.character())
-  # expect_snapshot(list.files(project_dir, recursive = TRUE), cran = TRUE)
   expect_snapshot(list.files(recursive = TRUE), cran = TRUE)
 
   update_project(project_dir, ask = FALSE)
-  # expect_snapshot(list.files(project_dir, recursive = TRUE), cran = TRUE)
   expect_snapshot(list.files(recursive = TRUE), cran = TRUE)
 })
