@@ -39,7 +39,7 @@ env:
   run_pkgdown: 'true'
   has_RUnit: 'false'
   cache-version: 'cache-v1'
-  run_docker: 'true'
+  run_docker: 'false'
 
 jobs:
   build-check:
@@ -106,7 +106,8 @@ jobs:
 
       - name: Cache R packages
         if: "!contains(github.event.head_commit.message, '/nocache') && runner.os != 'Linux'"
-        uses: actions/cache@v2
+        # uses: actions/cache@v2
+        uses: pat-s/always-upload-cache@master
         with:
           path: ${{ env.R_LIBS_USER }}
           key: ${{ env.cache-version }}-${{ runner.os }}-biocversion-RELEASE_3_13-r-4.1-${{ hashFiles('.github/depends.Rds') }}
@@ -114,7 +115,8 @@ jobs:
 
       - name: Cache R packages on Linux
         if: "!contains(github.event.head_commit.message, '/nocache') && runner.os == 'Linux' "
-        uses: actions/cache@v2
+        # uses: actions/cache@v2
+        uses: pat-s/always-upload-cache@master
         with:
           path: /home/runner/work/_temp/Library
           key: ${{ env.cache-version }}-${{ runner.os }}-biocversion-RELEASE_3_13-r-4.1-${{ hashFiles('.github/depends.Rds') }}
@@ -171,7 +173,8 @@ jobs:
 
       - name: Cache the yq tool
         id: cache-yq
-        uses: actions/cache@v2
+        # uses: actions/cache@v2
+        uses: pat-s/always-upload-cache@master
         with:
           path: ${{ env.YQ_PATH }}
           key: ${{ env.cache-version }}-${{ runner.os }}-yq_${{ env.YQ_VERSION }}
@@ -194,7 +197,7 @@ jobs:
           else
             echo "The yq tool is available in shell: '${yq_version}'"
             echo "Trying the availability from within R:"
-            Rscript --verbose -e 'if (Sys.which("yq") == "") quit(status = 1)'
+            Rscript --verbose -e "if (Sys.which('yq') == '') quit(status = 1)"
             if [ $? -ne 0 ]; then
               echo "ERROR: The yq tool is not available from within R."
               echo "R env:"
