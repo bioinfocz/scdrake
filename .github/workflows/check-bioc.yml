@@ -171,25 +171,25 @@ jobs:
           echo "YQ_URL=${YQ_URL}" >> $GITHUB_ENV
           echo "YQ_PATH=${YQ_PATH}" >> $GITHUB_ENV
 
-      - name: Cache the yq tool
-        id: cache-yq
-        # uses: actions/cache@v2
-        uses: pat-s/always-upload-cache@main
-        with:
-          path: ${{ env.YQ_PATH }}
-          key: ${{ env.cache-version }}-${{ runner.os }}-yq_${{ env.YQ_VERSION }}
-          restore-keys: ${{ env.cache-version }}-${{ runner.os }}-yq
+      # - name: Cache the yq tool
+      #   id: cache-yq
+      #   # uses: actions/cache@v2
+      #   uses: pat-s/always-upload-cache@main
+      #   with:
+      #     path: ${{ env.YQ_PATH }}
+      #     key: ${{ env.cache-version }}-${{ runner.os }}-yq_${{ env.YQ_VERSION }}
+      #     restore-keys: ${{ env.cache-version }}-${{ runner.os }}-yq
 
       - name: Download the yq tool
-        if: steps.cache-yq.outputs.cache-hit != 'true'
+        # if: steps.cache-yq.outputs.cache-hit != 'true'
         shell: bash
         run: |
           curl -L ${{ env.YQ_URL }} --output ${{ env.YQ_PATH }}
+          chmod +x ${{ env.YQ_PATH }}
 
       - name: Test the yq tool
         shell: bash
         run: |
-          chmod +x ${{ env.YQ_PATH }}
           yq_version=$(yq -V)
           if [ $? -ne 0 ]; then
             echo "ERROR: The yq tool is not available in shell: '${yq_version}'"
@@ -216,7 +216,11 @@ jobs:
 
       - name: Set BiocVersion
         run: |
-          BiocManager::install(version = "${{ matrix.config.bioc }}", ask = FALSE)
+          ## SC3 is installed from GitHub, but if run install() without the pkgs argument, the BioConductor
+          ## version will be installed instead.
+          installed <- rownames(installed.packages())
+          installed <- installed[installed != "SC3"]
+          BiocManager::install(pkgs = installed, version = "${{ matrix.config.bioc }}", ask = FALSE)
         shell: Rscript {0}
 
       ## SC3 installation is failing below, because dependencies needed for its vignettes are not already installed.
