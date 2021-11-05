@@ -154,7 +154,7 @@ jobs:
         shell: bash
         run: |
           extension=""
-          base_url="https://github.com/mikefarah/yq/releases/download/${{ env.YQ_VERSION }}"
+          base_url="http://github.com/mikefarah/yq/releases/download/${{ env.YQ_VERSION }}"
           if [[ ${{ matrix.config.os }} == "ubuntu-latest" ]]; then
             YQ_URL="${base_url}/yq_linux_amd64"
           elif [[ ${{ matrix.config.os }} == "macOS-latest" ]]; then
@@ -181,11 +181,12 @@ jobs:
         if: steps.cache-yq.outputs.cache-hit != 'true'
         shell: bash
         run: |
-          curl ${{ env.YQ_URL }} --output ${{ env.YQ_PATH }}
+          curl -L ${{ env.YQ_URL }} --output ${{ env.YQ_PATH }}
 
       - name: Test the yq tool
         shell: bash
         run: |
+          chmod +x ${{ env.YQ_PATH }}
           yq_version=$(yq -V)
           if [ $? -ne 0 ]; then
             echo "The yq tool is not available: '${yq_version}'"
