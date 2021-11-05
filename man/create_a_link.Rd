@@ -51,6 +51,5 @@ to \code{../plots/plot.pdf}.
 create_a_link("google.com", "Google")
 # If you want to reference a file relative to HTML saved in "output/report.html"
 create_a_link("output/plots/plot.pdf", "Link to plot", href_rel_start = "output")
-
 }
 \concept{misc_html}

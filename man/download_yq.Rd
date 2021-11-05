@@ -14,6 +14,7 @@ download_yq(
   do_check = TRUE,
   ask = TRUE,
   overwrite = FALSE,
+  dry = FALSE,
   verbose = getOption("scdrake_verbose")
 )
 }
@@ -21,7 +22,7 @@ download_yq(
 \item{url}{An URL from which binary will be downloaded.
 If \code{NULL}, it will be created from \code{os}, \code{arch}, and \code{yq_version}.}
 
-\item{os}{A character scalar specifying the current OS (\code{"unix"} or \code{"windows"}).
+\item{os}{A character scalar specifying the current OS (\code{"linux"}, \code{"windows"}, or \code{"darwin"} for macOS).
 If \code{NULL}, it will be determined from \code{.Platform$OS.type}.}
 
 \item{arch}{A character scalar specifying the current CPU architecture (\code{32} or \code{64}).
@@ -39,8 +40,14 @@ If \code{NULL}, it will be determined from \code{.Machine$sizeof.pointer} (\code
 
 \item{overwrite}{If \code{TRUE}, overwrite the existing \code{yq} binary if exists.}
 
+\item{dry}{A logical scalar: if \code{TRUE}, do not download the \code{yq} binary and just return its URL.}
+
 \item{verbose}{A logical scalar: if \code{TRUE}, be verbose.
 The default value is obtained from \code{getOption("scdrake_verbose")}.}
+}
+\value{
+A character scalar: URL to \code{yq} binary.
+If \code{!overwrite && fs::file_exists(destfile)}, then \code{NULL} invisibly.
 }
 \description{
 This function has side-effects by default, see the \code{set_as_default} argument.

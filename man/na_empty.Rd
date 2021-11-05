@@ -17,6 +17,5 @@ Return \code{NA} if an object is empty.
 }
 \examples{
 na_empty(integer())
-
 }
 \concept{misc_utils}

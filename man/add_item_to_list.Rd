@@ -21,6 +21,5 @@ Add named item (including \code{NULL}) to a list.
 }
 \examples{
 add_item_to_list(list(1, a = 2), "b")
-
 }
 \concept{misc_utils}

@@ -17,6 +17,5 @@ Return list with removed \code{NULL} elements.
 }
 \examples{
 filter_nulls(list(a = 1, b = NULL, c = 3))
-
 }
 \concept{misc_utils}

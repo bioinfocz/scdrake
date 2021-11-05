@@ -21,6 +21,5 @@ Useful for verbosity (\code{verbose \%&&\% message("Hello world!")}).
 \examples{
 TRUE \%&&\% message("printed")
 FALSE \%&&\% message("not printed")
-
 }
 \concept{misc_utils}

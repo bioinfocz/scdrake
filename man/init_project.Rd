@@ -46,9 +46,9 @@ This function will:
 \item Copy config, RMarkdown, and \verb{_drake_*.R} files.
 \item Create an empty \code{.here} file. This ensures that the \href{https://here.r-lib.org/}{here} package will be able to find
 the project's root directory in case an RStudio project is not initialized.
-\item (Optional) Initialize an RStudio project and set it as the active project.
 \item Check whether the \code{yq} tool is available in \code{PATH} environment variable.
 \item (Optional) Download the example data using \code{\link[=download_pbmc1k]{download_pbmc1k()}} and \code{\link[=download_pbmc3k]{download_pbmc3k()}}.
+\item (Optional) Initialize an RStudio project and set it as the active project.
 }
 }
 \examples{

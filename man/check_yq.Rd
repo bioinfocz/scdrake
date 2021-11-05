@@ -2,7 +2,7 @@
 % Please edit documentation in R/yq.R
 \name{check_yq}
 \alias{check_yq}
-\title{Check the availability and version of the yq tool.}
+\title{Check the availability and version of the \code{yq} tool.}
 \usage{
 check_yq(
   yq_binary = getOption("scdrake_yq_binary"),
@@ -22,7 +22,7 @@ The default value is obtained from \code{getOption("scdrake_verbose")}.}
 \code{TRUE} if checks pass.
 }
 \description{
-Check the availability and version of the yq tool.
+Check the availability and version of the \code{yq} tool.
 }
 \details{
 When R is run from the command line, the \code{PATH} environment variable is inherited from the current shell

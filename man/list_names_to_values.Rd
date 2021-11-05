@@ -19,6 +19,5 @@ Append names of a list of lists as values in each sublist.
 }
 \examples{
 list_names_to_values(list(a = list(1), b = list(c = 3)))
-
 }
 \concept{misc_utils}

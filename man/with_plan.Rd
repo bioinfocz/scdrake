@@ -21,6 +21,5 @@ https://github.com/HenrikBengtsson/future/issues/263
 }
 \examples{
 with_plan(1 + 1, future::sequential)
-
 }
 \concept{misc_utils}

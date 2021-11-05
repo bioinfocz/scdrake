@@ -32,6 +32,5 @@ Read an environment variable and if needed, assign a default value.
 get_sys_env("PATH")
 get_sys_env("NON_EXISTING")
 get_sys_env("NON_EXISTING", default = "default_value")
-
 }
 \concept{misc_utils}

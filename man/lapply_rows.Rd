@@ -41,6 +41,5 @@ head(df)
 
 df2 <- lapply_rows(mtcars, return_tibble = FALSE, FUN = fn)
 head(df2)
-
 }
 \concept{misc_utils}

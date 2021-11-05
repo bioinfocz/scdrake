@@ -33,6 +33,5 @@ Check if a package is installed and display an informative message.
 check_pkg_installed("utils")
 check_pkg_installed("zzz")
 check_qs_installed()
-
 }
 \concept{misc_utils}

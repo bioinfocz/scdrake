@@ -17,6 +17,5 @@ Replace \code{NA}s in a list by \code{NULL}s.
 }
 \examples{
 replace_list_nas_with_nulls(list(NA, a = 1, b = NA))
-
 }
 \concept{misc_utils}

@@ -23,9 +23,7 @@ A dataframe.
 }
 \examples{
 cells_per_cluster_table(rep(1:3, each = 2))
-
 cells_per_cluster_table(rep(c(1, 2), each = 5))
-
 }
 \concept{sc_clustering}
 \concept{sc_sce}

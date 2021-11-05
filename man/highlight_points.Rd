@@ -28,6 +28,5 @@ p <- ggplot2::ggplot(
 ) +
   ggplot2::geom_point()
 highlight_points(p, "am", "0", alpha_val = 0.25)
-
 }
 \concept{sce_visualization}

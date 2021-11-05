@@ -105,7 +105,7 @@ A stage for normalization, dimensionality reduction, and cell clustering.
   - Based on the selected one from the first two metrics above, HVGs are selected either by:
     - Top N genes based on a metric (e.g. top 1000 genes with the highest variance).
     - Significance (FDR) threshold.
-    - Threshold on a metric values.
+    - Threshold on a metric value.
   - Prior to HVG selection, cell cycle-related genes can be removed.
     We are using a method based on the percentage of variance explained by the cell cycle phase
     in the expression profile for each gene

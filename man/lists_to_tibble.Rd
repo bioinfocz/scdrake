@@ -22,6 +22,5 @@ Convert list of lists to tibble.
 \examples{
 lists_to_tibble(list(list(a = 1, b = 2), list(b = 3, a = 4, c = 5)))
 lists_to_tibble(list(list(a = 1, b = 2), list(b = 3, a = 4, c = 5)), do_bind_rows = FALSE)
-
 }
 \concept{misc_utils}

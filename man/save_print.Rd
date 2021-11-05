@@ -23,6 +23,5 @@ Capture output from \code{print()} of an object.
 }
 \examples{
 save_print(lm(mpg ~ cyl, datasets::mtcars))
-
 }
 \concept{misc_utils}

@@ -21,6 +21,5 @@ Replace \code{NULL} items in a defined depth of a list.
 }
 \examples{
 replace_list_nulls(list(a = list(b = 1, c = NULL)))
-
 }
 \concept{misc_utils}
