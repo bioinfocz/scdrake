@@ -15,7 +15,10 @@
 #' @param dry A logical scalar: if `TRUE`, do not download the `yq` binary and just return its URL.
 #' @param overwrite If `TRUE`, overwrite the existing `yq` binary if exists.
 #' @inheritParams verbose
-#' @return A character scalar: URL to `yq` binary.
+#' @return A character scalar of length two: `destfile` and URL to `yq` binary.
+#' Note that on Windows platform, if `destfile` doesn't contain the `.exe` extension,
+#' it will be automatically added.
+#'
 #' If `!overwrite && fs::file_exists(destfile)`, then `NULL` invisibly.
 #'
 #' @concept yq_tool
@@ -24,7 +27,7 @@ download_yq <- function(url = NULL,
                         os = NULL,
                         arch = NULL,
                         yq_version = "3.4.1",
-                        destfile = fs::path(fs::path_home(), ".local/bin/yq"),
+                        destfile = get_yq_default_path(),
                         set_as_default = TRUE,
                         do_check = TRUE,
                         ask = TRUE,
@@ -36,12 +39,22 @@ download_yq <- function(url = NULL,
     if (do_check) {
       check_yq(yq_binary = destfile, repair_executable = TRUE, verbose = TRUE)
     }
+
+    if (set_as_default) {
+      options(scdrake_yq_binary = destfile)
+    }
+
     return(invisible(NULL))
   }
 
-  if (is_null(url)) {
-    os <- os %||% .get_os()
+  os <- os %||% .get_os()
 
+  if (os == "windows" && fs::path_ext(destfile) != "exe") {
+    cli::cli_alert_warning("Extension of {.var destfile} is not {.val .exe}, setting.")
+    fs::path_ext(destfile) <- "exe"
+  }
+
+  if (is_null(url)) {
     valid_os <- c("linux", "windows", "darwin")
     assert_that_(
       os %in% valid_os,
@@ -100,8 +113,8 @@ download_yq <- function(url = NULL,
     }
 
     fs::dir_create(fs::path_dir(destfile), recurse = TRUE)
-    utils::download.file(url, destfile)
-    fs::file_chmod(destfile, "+x")
+    utils::download.file(url, destfile, mode = "wb")
+    .set_perm(destfile)
 
     if (set_as_default) {
       options(scdrake_yq_binary = destfile)
@@ -112,7 +125,29 @@ download_yq <- function(url = NULL,
     }
   }
 
-  return(url)
+  return(c(destfile, url))
+}
+
+#' @title Return a default download path for the `yq` tool's binary.
+#' @description The difference between platforms is that on Windows the `.exe` extension is added.
+#' @return A character scalar.
+#'
+#' @export
+get_yq_default_path <- function() {
+  if (.get_os() == "windows") {
+    fs::path(fs::path_home(), ".local/bin/yq.exe")
+  } else {
+    fs::path(fs::path_home(), ".local/bin/yq")
+  }
+}
+
+.set_perm <- function(file) {
+  if (.get_os() == "windows") {
+    fs::file_chmod(file, "rwx")
+  } else {
+    fs::file_chmod(file, "+x")
+  }
+  return(invisible(NULL))
 }
 
 #' @title Check the availability and version of the `yq` tool.
@@ -158,7 +193,6 @@ check_yq <- function(yq_binary = getOption("scdrake_yq_binary"),
   yq_link <- "You can download the latest v3.4.1 version here: https://github.com/mikefarah/yq/releases/tag/3.4.1"
   yq_binary <- fs::path_expand(yq_binary)
   yq_exists <- fs::file_exists(yq_binary)
-
   assert_that_(
     yq_exists,
     msg = err_message
@@ -166,7 +200,7 @@ check_yq <- function(yq_binary = getOption("scdrake_yq_binary"),
 
   if (!fs::file_access(yq_binary, mode = "execute")) {
     if (repair_executable) {
-      fs::file_chmod(yq_binary, "+x")
+      .set_perm(yq_binary)
     } else {
       cli_abort(str_space(
         "The yq tool's binary is not executable.",

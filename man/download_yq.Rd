@@ -9,7 +9,7 @@ download_yq(
   os = NULL,
   arch = NULL,
   yq_version = "3.4.1",
-  destfile = fs::path(fs::path_home(), ".local/bin/yq"),
+  destfile = get_yq_default_path(),
   set_as_default = TRUE,
   do_check = TRUE,
   ask = TRUE,
@@ -46,7 +46,10 @@ If \code{NULL}, it will be determined from \code{.Machine$sizeof.pointer} (\code
 The default value is obtained from \code{getOption("scdrake_verbose")}.}
 }
 \value{
-A character scalar: URL to \code{yq} binary.
+A character scalar of length two: \code{destfile} and URL to \code{yq} binary.
+Note that on Windows platform, if \code{destfile} doesn't contain the \code{.exe} extension,
+it will be automatically added.
+
 If \code{!overwrite && fs::file_exists(destfile)}, then \code{NULL} invisibly.
 }
 \description{
