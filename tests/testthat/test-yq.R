@@ -8,10 +8,10 @@ test_that("yq tool's binary is successfully downloaded or reused", {
   skip_on_cran()
 
   tmpfile <- fs::file_temp()
-  expect_invisible(download_yq(destfile = tmpfile, set_as_default = FALSE))
+  expect_type(download_yq(destfile = tmpfile, set_as_default = FALSE, ask = FALSE, overwrite = TRUE), "character")
   expect_true(fs::file_exists(tmpfile))
   expect_invisible(check_yq(yq_binary = tmpfile))
-  expect_invisible(download_yq(destfile = tmpfile, set_as_default = FALSE))
+  expect_null(download_yq(destfile = tmpfile, set_as_default = FALSE, ask = FALSE))
 })
 
 test_that("yq merge shell command works", {

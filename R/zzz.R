@@ -88,7 +88,7 @@ get_scdrake_default_options <- function() {
     ## -- Internal options, mostly for unit tests.
     scdrake_test_download_yq = get_sys_env(
       "SCDRAKE_TEST_DOWNLOAD_YQ",
-      default = FALSE, type = "logical", verbose = FALSE
+      default = TRUE, type = "logical", verbose = FALSE
     ),
     scdrake_test_run_pipeline = get_sys_env(
       "SCDRAKE_TEST_RUN_PIPELINE",
