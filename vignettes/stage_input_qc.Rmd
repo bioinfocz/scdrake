@@ -73,8 +73,8 @@ A threshold for maximum MAD (median absolute deviation) for QC cell metrics:
 - Number of detected genes = non-zero UMI count (lower tail).
 - Percentage of expressed mitochondrial genes = $\frac {UMI_{mitochondrial}} {UMI_{sum}} * 100$ (upper tail).
 
-"Lower tail" means cells having a metric value less than -`MAD_THRESHOLD` MAD will be discarded.
-For "upper tail", it is +`MAD_THRESHOLD` MAD.
+"Lower tail" means cells having a metric value less than `-MAD_THRESHOLD` MAD will be discarded.
+For "upper tail", it is `+MAD_THRESHOLD` MAD.
 
 Violation of only one metric threshold leads to removal of a cell.
 
@@ -84,7 +84,7 @@ Violation of only one metric threshold leads to removal of a cell.
 
 **Type:** positive integer scalar
 
-A threshold for minimum number of UMI per cell, e.g. cells with UMI less than `MIN_UMI_CF` will be removed.
+A threshold for minimum number of UMI per cell, i.e. cells with UMI less than `MIN_UMI_CF` will be removed.
 
 ***
 
@@ -92,7 +92,7 @@ A threshold for minimum number of UMI per cell, e.g. cells with UMI less than `M
 
 **Type:** positive integer scalar
 
-A threshold for maximum number of UMI per cell, e.g. cells with UMI greater than `MAX_UMI_CF` will be removed.
+A threshold for maximum number of UMI per cell, i.e. cells with UMI greater than `MAX_UMI_CF` will be removed.
 
 ***
 
@@ -101,7 +101,7 @@ A threshold for maximum number of UMI per cell, e.g. cells with UMI greater than
 **Type:** positive integer scalar
 
 A threshold for minimum number of features (genes) detected per cell,
-e.g. cells with detected features less than `MIN_FEATURES` will be removed.
+i.e. cells with detected features less than `MIN_FEATURES` will be removed.
 
 ***
 
@@ -110,7 +110,7 @@ e.g. cells with detected features less than `MIN_FEATURES` will be removed.
 **Type:** numeric scalar <0; 1>
 
 A threshold for maximum ratio of expressed mitochondrial genes per cell,
-e.g. cells with mitochondrial genes detected in more than (`MAX_MITO_RATIO` * 100)% of all genes will be removed.
+i.e. cells with mitochondrial genes detected in more than (`MAX_MITO_RATIO` * 100)% of all genes will be removed.
 
 ### Gene filtering
 
@@ -132,8 +132,10 @@ MITO_REGEX: "^MT-"
 RIBO_REGEX: "^RP[SL]"
 ```
 
+**Type:** character scalar
+
 Regexes used to match and count occurences of mitochondrial and ribosomal features.
-The latter is currently not used for filtering.
+The latter is currently not used for cell filtering.
 
 ***
 
@@ -141,7 +143,7 @@ The latter is currently not used for filtering.
 
 **Type:** positive integer scalar
 
-A threshold for minimum number of UMI per cell, e.g. genes with UMI < `MIN_UMI` will be removed.
+A threshold for minimum number of UMI per cell, i.e. genes with UMI < `MIN_UMI` will be removed.
 
 ***
 
@@ -150,7 +152,7 @@ A threshold for minimum number of UMI per cell, e.g. genes with UMI < `MIN_UMI` 
 **Type:** numeric scalar <0; 1>
 
 A minimum ratio of cells expressing a gene,
-e.g. genes expressed in less than (`MIN_RATIO_CELLS` * 100)% of cells will be removed.
+i.e. genes expressed in less than (`MIN_RATIO_CELLS` * 100)% of cells will be removed.
 
 ## Input files
 

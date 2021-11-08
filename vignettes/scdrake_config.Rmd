@@ -1,5 +1,5 @@
 ---
-title: "scdrake config"
+title: "scdrake configs: a general overview"
 description: "How YAML config files are used in `scdrake`"
 date: "`r Sys.Date()`"
 package: scdrake
@@ -8,7 +8,7 @@ output:
     toc: true
     toc_float: true
 vignette: >
-  %\VignetteIndexEntry{scdrake config}
+  %\VignetteIndexEntry{scdrake configs: a general overview}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -24,11 +24,13 @@ is a human-readable format and uses indentation (spaces) for nesting of paramete
 
 `{scdrake}` is using a concept of default and local configs. Default configs are bundled with the package and copied
 during project initialization, update, and pipeline run (e.g. in `run_single_sample()` or `_drake_single_sample.R`).
+Local configs are, as their name suggests, purposed to make modifications to default configs
+(see the section below for how it is actually done).
 Default and local configs are named `*.default.yaml` and `*.yaml`, respectively.
 
 Config files are separated according to general parameters and each pipeline's main stage
 (quality control, normalization, etc.), but for consistency are always read all at once
-(by default if you run e.g. `run_single_sample()`).
+(by default if you run e.g. `run_single_sample()` or `drake::r_make("_drake_single_sample.R")`).
 
 # Updating (merging) configs
 
@@ -85,13 +87,10 @@ FOO_NAMED_LIST:
 - `FOO_NAMED_LIST`: `FOO_2` is updated, `BAR_3` is added, but `BAR_2` is still present, although it is not defined
   in the local config!
 
-and then `FOO_2` will be updated, `BAR_3` will be added, but `BAR_2` will still be present, although it is not defined
-in the local config!
-
 ## Merging of nested named lists
 
-To overcome the problem with `FOO_NAMED_LIST`, parameters with such structure are specified as named list wrapped
-by unnamed list:
+To overcome the problem with `FOO_NAMED_LIST`, parameters with such structure are specified as a named list wrapped
+by an unnamed list:
 
 ```yaml
 FOO_NAMED_LIST:

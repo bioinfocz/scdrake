@@ -61,9 +61,10 @@ Now you have almost full control over what will be executed in the pipeline:
 
 - You can modify `cfg_pipeline` and `cfg`, as these are lists (but with strict rules, see `?scdrake_list`).
   However, you should do modifications with caution, as config parameters are processed by internal functions
-  ([config_process_common.R](R/config_process_common.R), [config_process_single_sample.R](R/config_process_single_sample.R),
-  [config_process_integration.R](R/config_process_integration.R)). This may change in the future and these functions
-  will be exposed to package users.
+  ([config_process_common.R](https://github.com/bioinfocz/scdrake/tree/main/R/config_process_common.R),
+  [config_process_single_sample.R](https://github.com/bioinfocz/scdrake/tree/main/R/config_process_single_sample.R),
+  [config_process_integration.R](https://github.com/bioinfocz/scdrake/tree/main/R/config_process_integration.R)).
+  This might change in the future and these functions will be exposed to package users.
 - You can add more targets to `plan`, e.g.
 
 ```{r, eval = FALSE}
@@ -76,7 +77,12 @@ scdrake_make(plan, cfg_pipeline = cfg_pipeline, cfg_main = cfg_main)
 
 Just keep in mind that the list of targets to be made is taken from `cfg_pipeline$DRAKE_TARGETS`, so unless
 it is set to `null` (= make all targets in plan) in your `pipeline.yaml` config,
-you have to add names of your own targets to be made.
+you have to add names of your own targets to be made, i.e.
+
+```{r, eval = FALSE}
+cfg_pipeline$DRAKE_TARGETS <- c(cfg_pipeline$DRAKE_TARGETS, "my_target")
+scdrake_make(plan, cfg_pipeline = cfg_pipeline, cfg_main = cfg_main)
+```
 
 # Running the pipeline reproducibly in a fresh new R session
 

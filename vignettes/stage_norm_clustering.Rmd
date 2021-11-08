@@ -75,7 +75,7 @@ Batch variables to regress out during the `SCTransform` normalization. You can r
 
 However, for correction of cell cycle effect, a better method is the removal of cell cycle-related genes during
 selection of highly variable genes (HVGs).
-This can be set by [HVG selection parameters](#highly-variable-genes-(hvgs)-selection), and the approach is explained
+This can be set by [HVG selection parameters](#highly-variable-genes-hvgs-selection), and the approach is explained
 in more details in `vignette("pipeline_overview")`.
 
 ***

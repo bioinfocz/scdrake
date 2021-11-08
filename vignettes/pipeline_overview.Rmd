@@ -211,7 +211,7 @@ A stage for calculation, visualization and reporting of cell cluster markers ("g
 
 - [Calculation of cluster markers](https://bioconductor.org/books/release/OSCA/marker-detection.html):
   any categorical grouping of cells can be used, including those manually defined based on the existing groups
-  (from e.g. clustering), as described in the single-sample pipeline / stage `02_norm_clustering`.
+  (from e.g. clustering), as described in the `vignette("stage_norm_clustering")`.
   More details about marker computation can be found in `vignette("cluster_markers")`.
 - Generation of heatmaps and plots. To reduce the size of heatmaps and number of plots, you can control a number of top
   N markers taken by a chosen metric (FDR, LFC, etc.). Only these top N markers will be displayed in heatmaps, and plots
