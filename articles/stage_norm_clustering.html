@@ -99,7 +99,7 @@
     <li class="divider">
     <li class="dropdown-header">Configs</li>
     <li>
-      <a href="../articles/scdrake_config.html">scdrake config</a>
+      <a href="../articles/scdrake_config.html">scdrake configs: a general overview</a>
     </li>
     <li>
       <a href="../articles/config_pipeline.html">Pipeline config</a>
@@ -169,7 +169,7 @@
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Normalization and clustering stage</h1>
             
-            <h4 class="date">2021-11-04</h4>
+            <h4 class="date">2021-11-08</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/bioinfocz/scdrake/blob/mastervignettes/stage_norm_clustering.Rmd"><code>vignettes/stage_norm_clustering.Rmd</code></a></small>
       <div class="hidden name"><code>stage_norm_clustering.Rmd</code></div>
@@ -219,7 +219,7 @@
 <p><code>SCT_VARS_TO_REGRESS: null</code></p>
 <p><strong>Type:</strong> list of character scalar or <code>null</code></p>
 <p>Batch variables to regress out during the <code>SCTransform</code> normalization. You can regress out variables such as <code>["percent.mt", "nFeature_RNA", "nCount_RNA"]</code> or cell cycle using <code>["S.Score", "G2M.Score"]</code> or <code>["CC.Difference"]</code>.</p>
-<p>However, for correction of cell cycle effect, a better method is the removal of cell cycle-related genes during selection of highly variable genes (HVGs). This can be set by <a href="#highly-variable-genes-(hvgs)-selection">HVG selection parameters</a>, and the approach is explained in more details in <code><a href="../articles/pipeline_overview.html">vignette("pipeline_overview")</a></code>.</p>
+<p>However, for correction of cell cycle effect, a better method is the removal of cell cycle-related genes during selection of highly variable genes (HVGs). This can be set by <a href="#highly-variable-genes-hvgs-selection">HVG selection parameters</a>, and the approach is explained in more details in <code><a href="../articles/pipeline_overview.html">vignette("pipeline_overview")</a></code>.</p>
 <hr>
 <p><code>SCT_N_HVG: 3000</code></p>
 <p><strong>Type:</strong> integer scalar</p>
@@ -538,7 +538,7 @@
 <code>colData()</code>: <code>doublet_score</code> (numeric), <code>is_doublet</code> (logical)</li>
 </ul>
 <hr>
-<p><code>sce_pca</code>: <code>sce_rm_doublets</code> with calculated PCA (50 PCs). Reduced dimensions can be retrieved by <code><a href="https://rdrr.io/pkg/SingleCellExperiment/man/reducedDims.html">SingleCellExperiment::reducedDim(sce_pca, "pca")</a></code>.</p>
+<p><code>sce_pca</code>: <code>sce_rm_doublets</code> with calculated PCA (50 PCs). Reduced dimensions can be retrieved by <code>SingleCellExperiment::reducedDim(sce_pca, "pca")</code>.</p>
 <hr>
 <p><code>sce_pca_selected_pcs</code>: <code>sce_pca</code> with selected number of PCs. Reduced dimensions in <code>pca</code> slot are subsetted to the selected number of PCs, and <code>pca_all</code> slot contains the full matrix of 50 PCs. Information about selection of PCs is added to <code>metadata()</code>: <code>pca_selection_method</code>, <code>pca_selected_pcs</code>.</p>
 <hr>

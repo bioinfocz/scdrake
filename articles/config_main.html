@@ -99,7 +99,7 @@
     <li class="divider">
     <li class="dropdown-header">Configs</li>
     <li>
-      <a href="../articles/scdrake_config.html">scdrake config</a>
+      <a href="../articles/scdrake_config.html">scdrake configs: a general overview</a>
     </li>
     <li>
       <a href="../articles/config_pipeline.html">Pipeline config</a>
@@ -169,7 +169,7 @@
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Main config</h1>
             
-            <h4 class="date">2021-11-04</h4>
+            <h4 class="date">2021-11-08</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/bioinfocz/scdrake/blob/mastervignettes/config_main.Rmd"><code>vignettes/config_main.Rmd</code></a></small>
       <div class="hidden name"><code>config_main.Rmd</code></div>
@@ -238,7 +238,7 @@
 <p>An informative plan is binded with every other plan, and contains targets with useful runtime information:</p>
 <p><code>config_pipeline</code>, <code>config_main</code>: lists holding pipeline (<code>pipeline.yaml</code>) and main (<code>00_main.yaml</code>) parameters.</p>
 <p><code>pipeline_type</code>: a character scalar: <code>"single_sample"</code> or <code>"integration"</code>. These values are used in some plans to work with different targets.</p>
-<p><code>sessioninfo_pretty</code>, <code>sessioninfo_base</code>: info about loaded packages, R version, etc. Returned from <code><a href="https://rdrr.io/pkg/sessioninfo/man/session_info.html">sessioninfo::session_info()</a></code> and <code><a href="https://rdrr.io/r/utils/sessionInfo.html">utils::sessionInfo()</a></code>, respectively.</p>
+<p><code>sessioninfo_pretty</code>, <code>sessioninfo_base</code>: info about loaded packages, R version, etc. Returned from <code><a href="https://r-lib.github.io/sessioninfo/reference/session_info.html">sessioninfo::session_info()</a></code> and <code><a href="https://rdrr.io/r/utils/sessionInfo.html">utils::sessionInfo()</a></code>, respectively.</p>
 <p><code>biocmanager_version</code>: Bioconductor version.</p>
 <p><code>external_libs</code>: a character vector of external shared libraries (e.g. <code>zlib</code>).</p>
 <p><code>datetime</code>: date and time of pipeline execution.</p>

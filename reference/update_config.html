@@ -164,7 +164,7 @@ update_configs() will run all update_*_config()." />
     <li class="divider"></li>
     <li class="dropdown-header">Configs</li>
     <li>
-      <a href="../articles/scdrake_config.html">scdrake config</a>
+      <a href="../articles/scdrake_config.html">scdrake configs: a general overview</a>
     </li>
     <li>
       <a href="../articles/config_pipeline.html">Pipeline config</a>
@@ -307,7 +307,7 @@ See description for more details.</p></td>
     <tr>
       <th>verbose</th>
       <td><p>A logical scalar: if <code>TRUE</code>, be verbose.
-The default value is obtained from <code><a href='https://rdrr.io/r/base/options.html'>getOption("scdrake_verbose")</a></code>.</p></td>
+The default value is obtained from <code>getOption("scdrake_verbose")</code>.</p></td>
     </tr>
     <tr>
       <th>dir</th>
@@ -378,23 +378,23 @@ cannot ovewrite comments, and thus we need to use this schema to preserve local 
     <div class='dont-index'><p><code><a href='download_yq.html'>download_yq()</a></code>, <code><a href='check_yq.html'>check_yq()</a></code>, <code><a href='yq_merge_cmd.html'>yq_merge_cmd()</a></code>, <code><a href='../articles/scdrake_config.html'>vignette("scdrake_config")</a></code></p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='co'># If a scdrake project is in the current working directory.</span>
-<span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span>
-<span class='fu'>update_config</span><span class='op'>(</span><span class='st'>"config/pipeline.default.yaml"</span><span class='op'>)</span>
-<span class='op'>}</span>
-
-<span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span>
-<span class='fu'>update_pipeline_config</span><span class='op'>(</span><span class='st'>"config"</span><span class='op'>)</span>
-<span class='op'>}</span>
-
-<span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span>
-<span class='fu'>update_single_sample_configs</span><span class='op'>(</span><span class='st'>"config/single_sample"</span><span class='op'>)</span>
-<span class='op'>}</span>
-<span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span>
-<span class='fu'>update_integration_configs</span><span class='op'>(</span><span class='st'>"config/integration"</span><span class='op'>)</span>
-<span class='op'>}</span>
-
-</div></pre>
+    <pre class="examples"><span class='r-in'><span class='co'># If a scdrake project is in the current working directory.</span></span>
+<span class='r-in'><span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span></span>
+<span class='r-in'><span class='fu'>update_config</span><span class='op'>(</span><span class='st'>"config/pipeline.default.yaml"</span><span class='op'>)</span></span>
+<span class='r-in'><span class='op'>}</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span></span>
+<span class='r-in'><span class='fu'>update_pipeline_config</span><span class='op'>(</span><span class='st'>"config"</span><span class='op'>)</span></span>
+<span class='r-in'><span class='op'>}</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span></span>
+<span class='r-in'><span class='fu'>update_single_sample_configs</span><span class='op'>(</span><span class='st'>"config/single_sample"</span><span class='op'>)</span></span>
+<span class='r-in'><span class='op'>}</span></span>
+<span class='r-in'><span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span></span>
+<span class='r-in'><span class='fu'>update_integration_configs</span><span class='op'>(</span><span class='st'>"config/integration"</span><span class='op'>)</span></span>
+<span class='r-in'><span class='op'>}</span></span>
+<span class='r-in'></span>
+</pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

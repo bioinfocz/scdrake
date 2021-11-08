@@ -157,7 +157,7 @@
     <li class="divider"></li>
     <li class="dropdown-header">Configs</li>
     <li>
-      <a href="../articles/scdrake_config.html">scdrake config</a>
+      <a href="../articles/scdrake_config.html">scdrake configs: a general overview</a>
     </li>
     <li>
       <a href="../articles/config_pipeline.html">Pipeline config</a>
@@ -361,16 +361,16 @@ used to load targets inside the Rmd files. Example: <code>params_ &lt;- list(dra
 because <code>generate_stage_report()</code> also sets some temporary options and passes a proper <code>params</code> parameter.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span>
-<span class='fu'>generate_stage_report</span><span class='op'>(</span>
-  rmd_file <span class='op'>=</span> <span class='fu'>here</span><span class='op'>(</span><span class='st'>"Rmd/single_sample/01_input_qc.Rmd"</span><span class='op'>)</span>,
-  out_html_file_name <span class='op'>=</span> <span class='st'>"01_input_qc.html"</span>,
-  output_dir <span class='op'>=</span> <span class='fu'>here</span><span class='op'>(</span><span class='st'>"my_output"</span><span class='op'>)</span>,
-  drake_cache_dir <span class='op'>=</span> <span class='fu'>here</span><span class='op'>(</span><span class='st'>".drake_cache"</span><span class='op'>)</span>
-<span class='op'>)</span>
-<span class='op'>}</span>
-
-</div></pre>
+    <pre class="examples"><span class='r-in'><span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span></span>
+<span class='r-in'><span class='fu'>generate_stage_report</span><span class='op'>(</span></span>
+<span class='r-in'>  rmd_file <span class='op'>=</span> <span class='fu'>here</span><span class='op'>(</span><span class='st'>"Rmd/single_sample/01_input_qc.Rmd"</span><span class='op'>)</span>,</span>
+<span class='r-in'>  out_html_file_name <span class='op'>=</span> <span class='st'>"01_input_qc.html"</span>,</span>
+<span class='r-in'>  output_dir <span class='op'>=</span> <span class='fu'>here</span><span class='op'>(</span><span class='st'>"my_output"</span><span class='op'>)</span>,</span>
+<span class='r-in'>  drake_cache_dir <span class='op'>=</span> <span class='fu'>here</span><span class='op'>(</span><span class='st'>".drake_cache"</span><span class='op'>)</span></span>
+<span class='r-in'><span class='op'>)</span></span>
+<span class='r-in'><span class='op'>}</span></span>
+<span class='r-in'></span>
+</pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

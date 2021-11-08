@@ -99,7 +99,7 @@
     <li class="divider">
     <li class="dropdown-header">Configs</li>
     <li>
-      <a href="../articles/scdrake_config.html">scdrake config</a>
+      <a href="../articles/scdrake_config.html">scdrake configs: a general overview</a>
     </li>
     <li>
       <a href="../articles/config_pipeline.html">Pipeline config</a>
@@ -177,7 +177,7 @@
       Institute of Molecular Genetics of the Czech Academy of Sciences<br><a class="author_email" href="mailto:#"></a><a href="mailto:jan.kubovciak@img.cas.cz" class="email">jan.kubovciak@img.cas.cz</a>
       </address>
                   
-            <h4 class="date">2021-11-04</h4>
+            <h4 class="date">2021-11-08</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/bioinfocz/scdrake/blob/mastervignettes/scdrake.Rmd"><code>vignettes/scdrake.Rmd</code></a></small>
       <div class="hidden name"><code>scdrake.Rmd</code></div>
@@ -212,7 +212,7 @@ $(document).ready(function(){
 <p>Let’s inspect files in the project directory:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu">fs</span><span class="fu">::</span><span class="fu"><a href="http://fs.r-lib.org/reference/dir_tree.html">dir_tree</a></span><span class="op">(</span>all <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></code></pre></div>
-<pre><code>## /tmp/RtmpMGHtp9/file152ec2d9cd0d9
+<pre><code>## /tmp/RtmpiFbrq3/file10294bb7500d
 ## ├── .here
 ## ├── Rmd
 ## │   ├── common
@@ -257,7 +257,7 @@ $(document).ready(function(){
 ## │       ├── cluster_markers.yaml
 ## │       ├── contrasts.default.yaml
 ## │       └── contrasts.yaml
-## ├── file152ec2d9cd0d9.Rproj
+## ├── file10294bb7500d.Rproj
 ## └── renv.lock</code></pre>
 <ul>
 <li>
@@ -291,7 +291,14 @@ $(document).ready(function(){
 <div id="retrieving-pipeline-results" class="section level1">
 <h1 class="hasAnchor">
 <a href="#retrieving-pipeline-results" class="anchor"></a>Retrieving pipeline results</h1>
-<p>In <a href="https://docs.ropensci.org/drake">drake</a>’s terminology, a pipeline is called <em>plan</em>, and is composed of <em>targets</em>. When a target is finished, its value (object) is saved to cache (directory <code>.drake</code> by default), and you can anytime load it to your R session. This is done via two <a href="https://docs.ropensci.org/drake">drake</a>’s functions: <code><a href="https://docs.ropensci.org/drake/reference/readd.html">drake::loadd()</a></code> loads target’s value to the global environment, and <code><a href="https://docs.ropensci.org/drake/reference/readd.html">drake::readd()</a></code> returns target’s value (so it can be assigned to variable). Let’s try it and load the filtered <code>SingleCellExperiment</code> object:</p>
+<p>In <a href="https://docs.ropensci.org/drake">drake</a>’s terminology, a pipeline is called <em>plan</em>, and is composed of <em>targets</em>. When a target is finished, its value (object) is saved to cache (directory <code>.drake</code> by default), and you can anytime load it into your R session. This is done via two <a href="https://docs.ropensci.org/drake">drake</a>’s functions:</p>
+<ul>
+<li>
+<code><a href="https://docs.ropensci.org/drake/reference/readd.html">drake::loadd()</a></code> loads target’s value to the global environment.</li>
+<li>
+<code><a href="https://docs.ropensci.org/drake/reference/readd.html">drake::readd()</a></code> returns target’s value (so it can be assigned to variable).</li>
+</ul>
+<p>Let’s try it and load the filtered <code>SingleCellExperiment</code> object:</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu">drake</span><span class="fu">::</span><span class="fu"><a href="https://docs.ropensci.org/drake/reference/readd.html">loadd</a></span><span class="op">(</span><span class="va">sce_final_input_qc</span><span class="op">)</span></code></pre></div>
 <p>Value of the target <code>sce_final_input_qc</code> was loaded as a variable of the same name to your current R session (or more precisely, to the global environment). Similarly, we can load this target to variable of our choice:</p>

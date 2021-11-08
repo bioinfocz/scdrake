@@ -174,7 +174,7 @@ option used in load_single_sample_configs(dir = getOption(&quot;scdrake_single_s
     <li class="divider"></li>
     <li class="dropdown-header">Configs</li>
     <li>
-      <a href="../articles/scdrake_config.html">scdrake config</a>
+      <a href="../articles/scdrake_config.html">scdrake configs: a general overview</a>
     </li>
     <li>
       <a href="../articles/config_pipeline.html">Pipeline config</a>
@@ -266,7 +266,7 @@ The current <code>_drake.R</code>-like files copied when a new <code>scdrake</co
 <p>Internally, <code>_drake_single_sample.R</code> and <code>_drake_integration.R</code> do almost the same as code in <code>scdrake_make()</code>,
 except there is no need for isolation of side effects. Also, by default, it relies on environment variables,
 such as paths to config directories, e.g. <code>SCDRAKE_SINGLE_SAMPLE_CONFIG_DIR</code> whose value is used as the default for
-option used in <code><a href='load_config.html'>load_single_sample_configs(dir = getOption("scdrake_single_sample_config_dir"))</a></code>.</p>
+option used in <code>load_single_sample_configs(dir = getOption("scdrake_single_sample_config_dir"))</code>.</p>
     </div>
 
     <pre class="usage"><span class='fu'>scdrake_make</span><span class='op'>(</span>
@@ -306,7 +306,7 @@ obtained from <code>00_main.yaml</code> file located in single-sample or integra
     <tr>
       <th>verbose</th>
       <td><p>A logical scalar: if <code>TRUE</code>, be verbose.
-The default value is obtained from <code><a href='https://rdrr.io/r/base/options.html'>getOption("scdrake_verbose")</a></code>.</p></td>
+The default value is obtained from <code>getOption("scdrake_verbose")</code>.</p></td>
     </tr>
     <tr>
       <th>memory_strategy, caching, prework, log_build_times, log_worker, ...</th>

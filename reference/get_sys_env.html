@@ -157,7 +157,7 @@
     <li class="divider"></li>
     <li class="dropdown-header">Configs</li>
     <li>
-      <a href="../articles/scdrake_config.html">scdrake config</a>
+      <a href="../articles/scdrake_config.html">scdrake configs: a general overview</a>
     </li>
     <li>
       <a href="../articles/config_pipeline.html">Pipeline config</a>
@@ -260,7 +260,7 @@
     <tr>
       <th>verbose</th>
       <td><p>A logical scalar: if <code>TRUE</code>, be verbose.
-The default value is obtained from <code><a href='https://rdrr.io/r/base/options.html'>getOption("scdrake_verbose")</a></code>.</p></td>
+The default value is obtained from <code>getOption("scdrake_verbose")</code>.</p></td>
     </tr>
     </table>
 
@@ -270,11 +270,16 @@ The default value is obtained from <code><a href='https://rdrr.io/r/base/options
 <code>default = NULL</code> and the variable is unset.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'>get_sys_env</span><span class='op'>(</span><span class='st'>"PATH"</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; <span class='message'><span style='color: #00BBBB;'>ℹ</span> Using environment variable <span style='color: #262626; background-color: #DADADA;'>`PATH`</span> with value <span style='color: #0000BB;'>"/home/novotnyj/miniconda3/bin:/bin:/sbin:/bin:/sbin:/usr/bin:/usr/sbin:/usr/bin:/usr/sbin:/usr/local/bin:/usr/local/sbin:/opt/bin:/usr/lib/llvm/12/bin:/usr/lib/llvm/11/bin:/home/novotnyj/bin:/home/novotnyj.local/bin:/home/novotnyj/bin:/home/novotnyj.local/bin:/opt/rstudio-server/bin/postback:/home/novotnyj/bin:/home/novotnyj.local/bin"</span> (character)</span></div><div class='output co'>#&gt; [1] "/home/novotnyj/miniconda3/bin:/bin:/sbin:/bin:/sbin:/usr/bin:/usr/sbin:/usr/bin:/usr/sbin:/usr/local/bin:/usr/local/sbin:/opt/bin:/usr/lib/llvm/12/bin:/usr/lib/llvm/11/bin:/home/novotnyj/bin:/home/novotnyj.local/bin:/home/novotnyj/bin:/home/novotnyj.local/bin:/opt/rstudio-server/bin/postback:/home/novotnyj/bin:/home/novotnyj.local/bin"</div><div class='input'><span class='fu'>get_sys_env</span><span class='op'>(</span><span class='st'>"NON_EXISTING"</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; <span class='message'><span style='color: #00BBBB;'>ℹ</span> Using environment variable <span style='color: #262626; background-color: #DADADA;'>`NON_EXISTING`</span> with value <span style='color: #0000BB;'>""</span> (character)</span></div><div class='output co'>#&gt; [1] ""</div><div class='input'><span class='fu'>get_sys_env</span><span class='op'>(</span><span class='st'>"NON_EXISTING"</span>, default <span class='op'>=</span> <span class='st'>"default_value"</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; <span class='message'><span style='color: #BBBB00;'>!</span> Environment variable <span style='color: #262626; background-color: #DADADA;'>`NON_EXISTING`</span> is not set -&gt; using a default value <span style='color: #0000BB;'>"default_value"</span> (character)</span></div><div class='output co'>#&gt; [1] "default_value"</div><div class='input'>
-</div></pre>
+    <pre class="examples"><span class='r-in'><span class='fu'>get_sys_env</span><span class='op'>(</span><span class='st'>"PATH"</span><span class='op'>)</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> <span style='color: #00BBBB;'>ℹ</span> Using environment variable <span style='color: #262626; background-color: #DADADA;'>`PATH`</span> with value <span style='color: #0000BB;'>"/github/home/.local/bin:/usr/lib/rstudio-server/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"</span> (character)</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] "/github/home/.local/bin:/usr/lib/rstudio-server/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"</span>
+<span class='r-in'><span class='fu'>get_sys_env</span><span class='op'>(</span><span class='st'>"NON_EXISTING"</span><span class='op'>)</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> <span style='color: #00BBBB;'>ℹ</span> Using environment variable <span style='color: #262626; background-color: #DADADA;'>`NON_EXISTING`</span> with value <span style='color: #0000BB;'>""</span> (character)</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] ""</span>
+<span class='r-in'><span class='fu'>get_sys_env</span><span class='op'>(</span><span class='st'>"NON_EXISTING"</span>, default <span class='op'>=</span> <span class='st'>"default_value"</span><span class='op'>)</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> <span style='color: #BBBB00;'>!</span> Environment variable <span style='color: #262626; background-color: #DADADA;'>`NON_EXISTING`</span> is not set -&gt; using a default value <span style='color: #0000BB;'>"default_value"</span> (character)</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] "default_value"</span>
+</pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

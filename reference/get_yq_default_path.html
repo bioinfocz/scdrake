@@ -22,7 +22,7 @@
   }
 </script>
 
-<title>Compute cell cluster markers. — scran_markers • scdrake</title>
+<title>Return a default download path for the yq tool's binary. — get_yq_default_path • scdrake</title>
 
 
 <!-- jquery -->
@@ -66,12 +66,8 @@
 
 
 
-<meta property="og:title" content="Compute cell cluster markers. — scran_markers" />
-<meta property="og:description" content="This is a wrapper around scran::findMarkers(). Depending on test type, stats.* columns
-in returned DataFrame are replaced by either lfc_* or auc_*.
-DataFrames with results are appended to the params tibble, but because scran::findMarkers() returns
-DataFrame for each level of a factor, those are unnested in the returned tibble.
-That means for each row of params you will get result (row) for each tested level." />
+<meta property="og:title" content="Return a default download path for the yq tool's binary. — get_yq_default_path" />
+<meta property="og:description" content="The difference between platforms is that on Windows the .exe extension is added." />
 
 
 
@@ -230,47 +226,21 @@ That means for each row of params you will get result (row) for each tested leve
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Compute cell cluster markers.</h1>
-    <small class="dont-index">Source: <a href='https://github.com/bioinfocz/scdrake/blob/masterR/markers.R'><code>R/markers.R</code></a></small>
-    <div class="hidden name"><code>scran_markers.Rd</code></div>
+    <h1>Return a default download path for the <code>yq</code> tool's binary.</h1>
+    <small class="dont-index">Source: <a href='https://github.com/bioinfocz/scdrake/blob/masterR/yq.R'><code>R/yq.R</code></a></small>
+    <div class="hidden name"><code>get_yq_default_path.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>This is a wrapper around <code><a href='https://rdrr.io/pkg/scran/man/findMarkers.html'>scran::findMarkers()</a></code>. Depending on test type, <code>stats.*</code> columns
-in returned <code>DataFrame</code> are replaced by either <code>lfc_*</code> or <code>auc_*</code>.
-<code>DataFrame</code>s with results are appended to the <code>params</code> tibble, but because <code><a href='https://rdrr.io/pkg/scran/man/findMarkers.html'>scran::findMarkers()</a></code> returns
-<code>DataFrame</code> for each level of a factor, those are unnested in the returned tibble.
-That means for each row of <code>params</code> you will get result (row) for each tested level.</p>
+    <p>The difference between platforms is that on Windows the <code>.exe</code> extension is added.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>scran_markers</span><span class='op'>(</span><span class='va'>sce</span>, <span class='va'>params</span>, markers_type <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"global"</span>, <span class='st'>"contrast"</span><span class='op'>)</span><span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>get_yq_default_path</span><span class='op'>(</span><span class='op'>)</span></pre>
 
-    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
-    <table class="ref-arguments">
-    <colgroup><col class="name" /><col class="desc" /></colgroup>
-    <tr>
-      <th>sce</th>
-      <td><p>A <code>SingleCellExperiment</code> object with normalized log-expression values and the following <code>rowData()</code>
-columns: <code>"ENSEMBL"</code>, <code>"ENTREZID"</code>, <code>"SYMBOL"</code>, <code>"GENENAME"</code>.</p></td>
-    </tr>
-    <tr>
-      <th>params</th>
-      <td><p>A tibble. See <code>cluster_markers_test_params</code> or <code>contrasts_test_params</code> target for details.</p></td>
-    </tr>
-    <tr>
-      <th>markers_type</th>
-      <td><p>A character scalar: type of markers to get. For <code>"contrast"</code>, the following parameters are
-always used in <code><a href='https://rdrr.io/pkg/scran/man/findMarkers.html'>scran::findMarkers()</a></code>:</p><ul>
-<li><p><code>direction = "any"</code></p></li>
-<li><p><code>pval.type = "any"</code></p></li>
-<li><p><code>min.prop = NULL</code></p></li>
-</ul></td>
-    </tr>
-    </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>A tibble.</p>
+    <p>A character scalar.</p>
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

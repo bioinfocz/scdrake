@@ -99,7 +99,7 @@
     <li class="divider">
     <li class="dropdown-header">Configs</li>
     <li>
-      <a href="../articles/scdrake_config.html">scdrake config</a>
+      <a href="../articles/scdrake_config.html">scdrake configs: a general overview</a>
     </li>
     <li>
       <a href="../articles/config_pipeline.html">Pipeline config</a>
@@ -169,7 +169,7 @@
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Integration stage</h1>
             
-            <h4 class="date">2021-11-04</h4>
+            <h4 class="date">2021-11-08</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/bioinfocz/scdrake/blob/mastervignettes/stage_integration.Rmd"><code>vignettes/stage_integration.Rmd</code></a></small>
       <div class="hidden name"><code>stage_integration.Rmd</code></div>
@@ -347,7 +347,7 @@
 <li>
 <code>k: 20</code> (integer scalar): a number of nearest neighbors to consider when identifying MNNs.</li>
 <li>
-<code>prop.k: null</code> (numeric scalar): a proportion of cells in each dataset to use for mutual nearest neighbor searching. If set, the number of nearest neighbors used for the MNN search in each batch is redefined as <code><a href="https://rdrr.io/r/base/Extremes.html">max(k, prop.k*N)</a></code> where <code>N</code> is the number of cells in that batch.</li>
+<code>prop.k: null</code> (numeric scalar): a proportion of cells in each dataset to use for mutual nearest neighbor searching. If set, the number of nearest neighbors used for the MNN search in each batch is redefined as <code>max(k, prop.k*N)</code> where <code>N</code> is the number of cells in that batch.</li>
 <li>
 <code>cos.norm: True</code> (logical scalar): if <code>True</code>, cosine normalization is performed on the input data prior to PCA.</li>
 <li>

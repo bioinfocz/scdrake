@@ -173,7 +173,7 @@ However, this does not work for numeric subscripts." />
     <li class="divider"></li>
     <li class="dropdown-header">Configs</li>
     <li>
-      <a href="../articles/scdrake_config.html">scdrake config</a>
+      <a href="../articles/scdrake_config.html">scdrake configs: a general overview</a>
     </li>
     <li>
       <a href="../articles/config_pipeline.html">Pipeline config</a>
@@ -249,10 +249,10 @@ However, this does not work for numeric subscripts." />
 
     <div class="ref-description">
     <p>It behaves like a normal list, but, by default, it has more strict rules for non-existing elements:
-<code><a href='https://rdrr.io/r/base/Extract.html'>$</a></code>, <code><a href='https://rdrr.io/r/base/Extract.html'>[</a></code>, and <code><a href='https://rdrr.io/r/base/Extract.html'>[[</a></code> operators are overloaded for this class.
+<code>$</code>, <code>[</code>, and <code>[[</code> operators are overloaded for this class.
 They try to extract element(s) from a <code>scdrake_list</code> object, but throw an error when the element(s) does not exist.
-This behaviour can be avoided for <code><a href='https://rdrr.io/r/base/Extract.html'>[</a></code> and <code><a href='https://rdrr.io/r/base/Extract.html'>[[</a></code> by using the <code>check = FALSE</code> parameter, e.g. <code>l[name, check = FALSE]</code>.
-Also, in that case and for <code><a href='https://rdrr.io/r/base/Extract.html'>[</a></code>, a <code>scdrake_list</code> with non-existing names and <code>NULL</code> values is returned instead of putting
+This behaviour can be avoided for <code>[</code> and <code>[[</code> by using the <code>check = FALSE</code> parameter, e.g. <code>l[name, check = FALSE]</code>.
+Also, in that case and for <code>[</code>, a <code>scdrake_list</code> with non-existing names and <code>NULL</code> values is returned instead of putting
 <code>NA_character_</code> for them, which is the default behaviour for a base list, e.g.<div class="sourceCode r"></p><pre>&gt; list(a = 2)["b"]
 $&lt;NA&gt;
 NULL
@@ -308,31 +308,35 @@ $(x, name)
     <p>An object of class <code>scdrake_list</code>.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='va'>cfg</span> <span class='op'>&lt;-</span> <span class='fu'>scdrake_list</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>var_1 <span class='op'>=</span> <span class='fl'>1</span>, var_2 <span class='op'>=</span> <span class='fl'>2</span><span class='op'>)</span><span class='op'>)</span>
-<span class='co'># The standard list behavior.</span>
-<span class='va'>cfg</span><span class='op'>$</span><span class='va'>var_1</span>
-</div><div class='output co'>#&gt; [1] 1</div><div class='input'><span class='va'>cfg</span><span class='op'>[[</span><span class='st'>"var_2"</span><span class='op'>]</span><span class='op'>]</span>
-</div><div class='output co'>#&gt; [1] 2</div><div class='input'><span class='va'>cfg</span><span class='op'>[</span><span class='st'>"var_1"</span><span class='op'>]</span>
-</div><div class='output co'>#&gt; $var_1
-#&gt; [1] 1
-#&gt; 
-#&gt; attr(,"class")
-#&gt; [1] "scdrake_list"</div><div class='input'><span class='va'>cfg</span><span class='op'>[</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"var_1"</span>, <span class='st'>"var_2"</span><span class='op'>)</span><span class='op'>]</span>
-</div><div class='output co'>#&gt; $var_1
-#&gt; [1] 1
-#&gt; 
-#&gt; $var_2
-#&gt; [1] 2
-#&gt; 
-#&gt; attr(,"class")
-#&gt; [1] "scdrake_list"</div><div class='input'><span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span>
-<span class='co'># Strict rules for non-existing elements - throws an error.</span>
-<span class='va'>cfg</span><span class='op'>$</span><span class='va'>var_3</span>
-<span class='va'>cfg</span><span class='op'>[[</span><span class='st'>"var_3"</span><span class='op'>]</span><span class='op'>]</span>
-<span class='va'>cfg</span><span class='op'>[</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"var_1"</span>, <span class='st'>"var_3"</span><span class='op'>)</span><span class='op'>]</span>
-<span class='op'>}</span>
-
-</div></pre>
+    <pre class="examples"><span class='r-in'><span class='va'>cfg</span> <span class='op'>&lt;-</span> <span class='fu'>scdrake_list</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>var_1 <span class='op'>=</span> <span class='fl'>1</span>, var_2 <span class='op'>=</span> <span class='fl'>2</span><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-in'><span class='co'># The standard list behavior.</span></span>
+<span class='r-in'><span class='va'>cfg</span><span class='op'>$</span><span class='va'>var_1</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] 1</span>
+<span class='r-in'><span class='va'>cfg</span><span class='op'>[[</span><span class='st'>"var_2"</span><span class='op'>]</span><span class='op'>]</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] 2</span>
+<span class='r-in'><span class='va'>cfg</span><span class='op'>[</span><span class='st'>"var_1"</span><span class='op'>]</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> $var_1</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] 1</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> attr(,"class")</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] "scdrake_list"</span>
+<span class='r-in'><span class='va'>cfg</span><span class='op'>[</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"var_1"</span>, <span class='st'>"var_2"</span><span class='op'>)</span><span class='op'>]</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> $var_1</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] 1</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> $var_2</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] 2</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> attr(,"class")</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] "scdrake_list"</span>
+<span class='r-in'><span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span></span>
+<span class='r-in'><span class='co'># Strict rules for non-existing elements - throws an error.</span></span>
+<span class='r-in'><span class='va'>cfg</span><span class='op'>$</span><span class='va'>var_3</span></span>
+<span class='r-in'><span class='va'>cfg</span><span class='op'>[[</span><span class='st'>"var_3"</span><span class='op'>]</span><span class='op'>]</span></span>
+<span class='r-in'><span class='va'>cfg</span><span class='op'>[</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"var_1"</span>, <span class='st'>"var_3"</span><span class='op'>)</span><span class='op'>]</span></span>
+<span class='r-in'><span class='op'>}</span></span>
+<span class='r-in'></span>
+</pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

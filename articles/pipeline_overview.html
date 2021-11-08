@@ -99,7 +99,7 @@
     <li class="divider">
     <li class="dropdown-header">Configs</li>
     <li>
-      <a href="../articles/scdrake_config.html">scdrake config</a>
+      <a href="../articles/scdrake_config.html">scdrake configs: a general overview</a>
     </li>
     <li>
       <a href="../articles/config_pipeline.html">Pipeline config</a>
@@ -169,7 +169,7 @@
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Pipeline overview</h1>
             
-            <h4 class="date">2021-11-04</h4>
+            <h4 class="date">2021-11-08</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/bioinfocz/scdrake/blob/mastervignettes/pipeline_overview.Rmd"><code>vignettes/pipeline_overview.Rmd</code></a></small>
       <div class="hidden name"><code>pipeline_overview.Rmd</code></div>
@@ -263,7 +263,7 @@
 <ul>
 <li>Top N genes based on a metric (e.g. top 1000 genes with the highest variance).</li>
 <li>Significance (FDR) threshold.</li>
-<li>Threshold on a metric values.</li>
+<li>Threshold on a metric value.</li>
 </ul>
 </li>
 <li>Prior to HVG selection, cell cycle-related genes can be removed. We are using a method based on the percentage of variance explained by the cell cycle phase in the expression profile for each gene (<a href="https://bioconductor.org/books/release/OSCA/cell-cycle-assignment.html#removing-cell-cycle-related-genes">details</a>).</li>
@@ -382,7 +382,7 @@
 <p><a href="https://onco.img.cas.cz/novotnyj/scdrake/integration/cluster_markers/cluster_markers.html">📜 Example report for integrated data</a></p>
 <ul>
 <li>
-<a href="https://bioconductor.org/books/release/OSCA/marker-detection.html">Calculation of cluster markers</a>: any categorical grouping of cells can be used, including those manually defined based on the existing groups (from e.g. clustering), as described in the single-sample pipeline / stage <code>02_norm_clustering</code>. More details about marker computation can be found in <code><a href="../articles/cluster_markers.html">vignette("cluster_markers")</a></code>.</li>
+<a href="https://bioconductor.org/books/release/OSCA/marker-detection.html">Calculation of cluster markers</a>: any categorical grouping of cells can be used, including those manually defined based on the existing groups (from e.g. clustering), as described in the <code><a href="../articles/stage_norm_clustering.html">vignette("stage_norm_clustering")</a></code>. More details about marker computation can be found in <code><a href="../articles/cluster_markers.html">vignette("cluster_markers")</a></code>.</li>
 <li>Generation of heatmaps and plots. To reduce the size of heatmaps and number of plots, you can control a number of top N markers taken by a chosen metric (FDR, LFC, etc.). Only these top N markers will be displayed in heatmaps, and plots made for them. This can be specified for each cell grouping and test type.
 <ul>
 <li>Marker plots are composed of:

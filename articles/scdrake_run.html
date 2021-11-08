@@ -99,7 +99,7 @@
     <li class="divider">
     <li class="dropdown-header">Configs</li>
     <li>
-      <a href="../articles/scdrake_config.html">scdrake config</a>
+      <a href="../articles/scdrake_config.html">scdrake configs: a general overview</a>
     </li>
     <li>
       <a href="../articles/config_pipeline.html">Pipeline config</a>
@@ -169,7 +169,7 @@
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Running the pipeline, environment variables</h1>
             
-            <h4 class="date">2021-11-04</h4>
+            <h4 class="date">2021-11-08</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/bioinfocz/scdrake/blob/mastervignettes/scdrake_run.Rmd"><code>vignettes/scdrake_run.Rmd</code></a></small>
       <div class="hidden name"><code>scdrake_run.Rmd</code></div>
@@ -192,7 +192,7 @@ $(document).ready(function(){
 <ul>
 <li>If it is set, the <code>scdrake_single_sample_config_dir</code> option is set on <a href="https://github.com/bioinfocz/scdrake">scdrake</a> load or attach.</li>
 <li>It it is not set, a default value <code>"config/single_sample"</code> will be used for the option above. You can see that the default value is consistent with the file structure of a newly initialized <a href="https://github.com/bioinfocz/scdrake">scdrake</a> project.</li>
-<li>Value of the <code>scdrake_single_sample_config_dir</code> option is the default one for many <a href="https://github.com/bioinfocz/scdrake">scdrake</a> functions, e.g. <code><a href="../reference/update_config.html">update_single_sample_configs(dir = getOption("scdrake_pipeline_config_dir"), ...)</a></code> or <code><a href="../reference/run_single_sample.html">run_single_sample(dir = getOption("scdrake_pipeline_config_dir"), ...)</a></code>.</li>
+<li>Value of the <code>scdrake_single_sample_config_dir</code> option is the default one for many <a href="https://github.com/bioinfocz/scdrake">scdrake</a> functions, e.g. <code>update_single_sample_configs(dir = getOption("scdrake_pipeline_config_dir"), ...)</code> or <code>run_single_sample(dir = getOption("scdrake_pipeline_config_dir"), ...)</code>.</li>
 </ul>
 </div>
 <div id="running-the-pipeline-in-current-r-session" class="section level1">
@@ -210,7 +210,7 @@ $(document).ready(function(){
 <span class="fu"><a href="../reference/scdrake_make.html">scdrake_make</a></span><span class="op">(</span><span class="va">plan</span>, cfg_pipeline <span class="op">=</span> <span class="va">cfg_pipeline</span>, cfg_main <span class="op">=</span> <span class="va">cfg_main</span><span class="op">)</span></code></pre></div>
 <p>Now you have almost full control over what will be executed in the pipeline:</p>
 <ul>
-<li>You can modify <code>cfg_pipeline</code> and <code>cfg</code>, as these are lists (but with strict rules, see <code><a href="../reference/scdrake_list.html">?scdrake_list</a></code>). However, you should do modifications with caution, as config parameters are processed by internal functions (<a href="R/config_process_common.R">config_process_common.R</a>, <a href="R/config_process_single_sample.R">config_process_single_sample.R</a>, <a href="R/config_process_integration.R">config_process_integration.R</a>). This may change in the future and these functions will be exposed to package users.</li>
+<li>You can modify <code>cfg_pipeline</code> and <code>cfg</code>, as these are lists (but with strict rules, see <code><a href="../reference/scdrake_list.html">?scdrake_list</a></code>). However, you should do modifications with caution, as config parameters are processed by internal functions (<a href="https://github.com/bioinfocz/scdrake/tree/main/R/config_process_common.R">config_process_common.R</a>, <a href="https://github.com/bioinfocz/scdrake/tree/main/R/config_process_single_sample.R">config_process_single_sample.R</a>, <a href="https://github.com/bioinfocz/scdrake/tree/main/R/config_process_integration.R">config_process_integration.R</a>). This might change in the future and these functions will be exposed to package users.</li>
 <li>You can add more targets to <code>plan</code>, e.g.</li>
 </ul>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
@@ -219,13 +219,16 @@ $(document).ready(function(){
 <span class="op">)</span>
 <span class="va">plan</span> <span class="op">&lt;-</span> <span class="fu">drake</span><span class="fu">::</span><span class="fu"><a href="https://docs.ropensci.org/drake/reference/bind_plans.html">bind_plans</a></span><span class="op">(</span><span class="va">plan</span>, <span class="va">my_plan</span><span class="op">)</span>
 <span class="fu"><a href="../reference/scdrake_make.html">scdrake_make</a></span><span class="op">(</span><span class="va">plan</span>, cfg_pipeline <span class="op">=</span> <span class="va">cfg_pipeline</span>, cfg_main <span class="op">=</span> <span class="va">cfg_main</span><span class="op">)</span></code></pre></div>
-<p>Just keep in mind that the list of targets to be made is taken from <code>cfg_pipeline$DRAKE_TARGETS</code>, so unless it is set to <code>null</code> (= make all targets in plan) in your <code>pipeline.yaml</code> config, you have to add names of your own targets to be made.</p>
+<p>Just keep in mind that the list of targets to be made is taken from <code>cfg_pipeline$DRAKE_TARGETS</code>, so unless it is set to <code>null</code> (= make all targets in plan) in your <code>pipeline.yaml</code> config, you have to add names of your own targets to be made, i.e.</p>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">cfg_pipeline</span><span class="op">$</span><span class="va">DRAKE_TARGETS</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="va">cfg_pipeline</span><span class="op">$</span><span class="va">DRAKE_TARGETS</span>, <span class="st">"my_target"</span><span class="op">)</span>
+<span class="fu"><a href="../reference/scdrake_make.html">scdrake_make</a></span><span class="op">(</span><span class="va">plan</span>, cfg_pipeline <span class="op">=</span> <span class="va">cfg_pipeline</span>, cfg_main <span class="op">=</span> <span class="va">cfg_main</span><span class="op">)</span></code></pre></div>
 </div>
 <div id="running-the-pipeline-reproducibly-in-a-fresh-new-r-session" class="section level1">
 <h1 class="hasAnchor">
 <a href="#running-the-pipeline-reproducibly-in-a-fresh-new-r-session" class="anchor"></a>Running the pipeline reproducibly in a fresh new R session</h1>
 <p>In <a href="https://docs.ropensci.org/drake">drake</a>, the preferred way to execute pipeline is through <code><a href="https://docs.ropensci.org/drake/reference/r_make.html">drake::r_make()</a></code>, with the <code>source</code> parameter set to an initial script. In <a href="https://github.com/bioinfocz/scdrake">scdrake</a>, there are two such scripts for the single-sample and integration pipeline: <code>_drake_single_sample.R</code> and <code>_drake_integration.R</code>, respectively. Loading the config files from proper paths in these scripts is done via <a href="#environment-variables">environment variables</a>.</p>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu">drake</span><span class="fu">::</span><span class="fu"><a href="https://docs.ropensci.org/drake/reference/r_make.html">r_make</a></span><span class="op">(</span><span class="st">"_drake_single_sample.R"</span><span class="op">)</span>
 <span class="fu">drake</span><span class="fu">::</span><span class="fu"><a href="https://docs.ropensci.org/drake/reference/r_make.html">r_make</a></span><span class="op">(</span><span class="st">"_drake_integration.R"</span><span class="op">)</span></code></pre></div>
 <p>All important details are already given in <em>Running the pipeline reproducibly</em> section in <code><a href="../articles/scdrake.html">vignette("scdrake")</a></code>.</p>

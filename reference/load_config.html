@@ -159,7 +159,7 @@ load a specific config group (pipeline, single-sample, integration) and return a
     <li class="divider"></li>
     <li class="dropdown-header">Configs</li>
     <li>
-      <a href="../articles/scdrake_config.html">scdrake config</a>
+      <a href="../articles/scdrake_config.html">scdrake configs: a general overview</a>
     </li>
     <li>
       <a href="../articles/config_pipeline.html">Pipeline config</a>
@@ -284,7 +284,7 @@ load a specific config group (pipeline, single-sample, integration) and return a
     <tr>
       <th>verbose</th>
       <td><p>A logical scalar: if <code>TRUE</code>, be verbose.
-The default value is obtained from <code><a href='https://rdrr.io/r/base/options.html'>getOption("scdrake_verbose")</a></code>.</p></td>
+The default value is obtained from <code>getOption("scdrake_verbose")</code>.</p></td>
     </tr>
     <tr>
       <th>dir</th>
@@ -353,31 +353,31 @@ VAR_6: !code VAR_2 + 10
 You have to keep an eye on the proper indentation :)</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='co'># If a scdrake project is in the current working directory.</span>
-<span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span>
-<span class='va'>cfg_1</span> <span class='op'>&lt;-</span> <span class='fu'>load_config</span><span class='op'>(</span><span class='st'>"config/pipeline.yaml"</span><span class='op'>)</span>
-<span class='va'>cfg_2</span> <span class='op'>&lt;-</span> <span class='fu'>load_config</span><span class='op'>(</span>
-  <span class='st'>"config/single_sample/00_main.yaml"</span>,
-  other_variables <span class='op'>=</span> <span class='va'>cfg_1</span>
-<span class='op'>)</span>
-<span class='op'>}</span>
-
-<span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span>
-<span class='va'>pipeline_config</span> <span class='op'>&lt;-</span> <span class='fu'>load_pipeline_config</span><span class='op'>(</span><span class='op'>)</span>
-<span class='va'>pipeline_config_other</span> <span class='op'>&lt;-</span> <span class='fu'>load_pipeline_config</span><span class='op'>(</span><span class='st'>"some/other/dir/config.yaml"</span><span class='op'>)</span>
-<span class='op'>}</span>
-
-<span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span>
-<span class='va'>single_sample_config</span> <span class='op'>&lt;-</span> <span class='fu'>load_single_sample_configs</span><span class='op'>(</span><span class='op'>)</span>
-<span class='va'>single_sample_config_other</span> <span class='op'>&lt;-</span> <span class='fu'>load_single_sample_configs</span><span class='op'>(</span><span class='st'>"some/other/dir"</span><span class='op'>)</span>
-<span class='op'>}</span>
-
-<span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span>
-<span class='va'>integration_config</span> <span class='op'>&lt;-</span> <span class='fu'>load_integration_configs</span><span class='op'>(</span><span class='op'>)</span>
-<span class='va'>single_sample_config_other</span> <span class='op'>&lt;-</span> <span class='fu'>load_integration_configs</span><span class='op'>(</span><span class='st'>"some/other/dir"</span><span class='op'>)</span>
-<span class='op'>}</span>
-
-</div></pre>
+    <pre class="examples"><span class='r-in'><span class='co'># If a scdrake project is in the current working directory.</span></span>
+<span class='r-in'><span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span></span>
+<span class='r-in'><span class='va'>cfg_1</span> <span class='op'>&lt;-</span> <span class='fu'>load_config</span><span class='op'>(</span><span class='st'>"config/pipeline.yaml"</span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>cfg_2</span> <span class='op'>&lt;-</span> <span class='fu'>load_config</span><span class='op'>(</span></span>
+<span class='r-in'>  <span class='st'>"config/single_sample/00_main.yaml"</span>,</span>
+<span class='r-in'>  other_variables <span class='op'>=</span> <span class='va'>cfg_1</span></span>
+<span class='r-in'><span class='op'>)</span></span>
+<span class='r-in'><span class='op'>}</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span></span>
+<span class='r-in'><span class='va'>pipeline_config</span> <span class='op'>&lt;-</span> <span class='fu'>load_pipeline_config</span><span class='op'>(</span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>pipeline_config_other</span> <span class='op'>&lt;-</span> <span class='fu'>load_pipeline_config</span><span class='op'>(</span><span class='st'>"some/other/dir/config.yaml"</span><span class='op'>)</span></span>
+<span class='r-in'><span class='op'>}</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span></span>
+<span class='r-in'><span class='va'>single_sample_config</span> <span class='op'>&lt;-</span> <span class='fu'>load_single_sample_configs</span><span class='op'>(</span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>single_sample_config_other</span> <span class='op'>&lt;-</span> <span class='fu'>load_single_sample_configs</span><span class='op'>(</span><span class='st'>"some/other/dir"</span><span class='op'>)</span></span>
+<span class='r-in'><span class='op'>}</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span></span>
+<span class='r-in'><span class='va'>integration_config</span> <span class='op'>&lt;-</span> <span class='fu'>load_integration_configs</span><span class='op'>(</span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>single_sample_config_other</span> <span class='op'>&lt;-</span> <span class='fu'>load_integration_configs</span><span class='op'>(</span><span class='st'>"some/other/dir"</span><span class='op'>)</span></span>
+<span class='r-in'><span class='op'>}</span></span>
+<span class='r-in'></span>
+</pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

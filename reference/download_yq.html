@@ -157,7 +157,7 @@
     <li class="divider"></li>
     <li class="dropdown-header">Configs</li>
     <li>
-      <a href="../articles/scdrake_config.html">scdrake config</a>
+      <a href="../articles/scdrake_config.html">scdrake configs: a general overview</a>
     </li>
     <li>
       <a href="../articles/config_pipeline.html">Pipeline config</a>
@@ -240,11 +240,12 @@
   os <span class='op'>=</span> <span class='cn'>NULL</span>,
   arch <span class='op'>=</span> <span class='cn'>NULL</span>,
   yq_version <span class='op'>=</span> <span class='st'>"3.4.1"</span>,
-  destfile <span class='op'>=</span> <span class='fu'>fs</span><span class='fu'>::</span><span class='fu'><a href='http://fs.r-lib.org/reference/path.html'>path</a></span><span class='op'>(</span><span class='fu'>fs</span><span class='fu'>::</span><span class='fu'><a href='http://fs.r-lib.org/reference/path_expand.html'>path_home</a></span><span class='op'>(</span><span class='op'>)</span>, <span class='st'>".local/bin/yq"</span><span class='op'>)</span>,
+  destfile <span class='op'>=</span> <span class='fu'><a href='get_yq_default_path.html'>get_yq_default_path</a></span><span class='op'>(</span><span class='op'>)</span>,
   set_as_default <span class='op'>=</span> <span class='cn'>TRUE</span>,
   do_check <span class='op'>=</span> <span class='cn'>TRUE</span>,
   ask <span class='op'>=</span> <span class='cn'>TRUE</span>,
   overwrite <span class='op'>=</span> <span class='cn'>FALSE</span>,
+  dry <span class='op'>=</span> <span class='cn'>FALSE</span>,
   verbose <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/options.html'>getOption</a></span><span class='op'>(</span><span class='st'>"scdrake_verbose"</span><span class='op'>)</span>
 <span class='op'>)</span></pre>
 
@@ -258,7 +259,7 @@ If <code>NULL</code>, it will be created from <code>os</code>, <code>arch</code>
     </tr>
     <tr>
       <th>os</th>
-      <td><p>A character scalar specifying the current OS (<code>"unix"</code> or <code>"windows"</code>).
+      <td><p>A character scalar specifying the current OS (<code>"linux"</code>, <code>"windows"</code>, or <code>"darwin"</code> for macOS).
 If <code>NULL</code>, it will be determined from <code>.Platform$OS.type</code>.</p></td>
     </tr>
     <tr>
@@ -276,7 +277,7 @@ If <code>NULL</code>, it will be determined from <code>.Machine$sizeof.pointer</
     </tr>
     <tr>
       <th>set_as_default</th>
-      <td><p>If <code>TRUE</code>, set <code><a href='https://rdrr.io/r/base/options.html'>options(scdrake_yq_binary = destfile)</a></code>.</p></td>
+      <td><p>If <code>TRUE</code>, set <code>options(scdrake_yq_binary = destfile)</code>.</p></td>
     </tr>
     <tr>
       <th>do_check</th>
@@ -291,12 +292,22 @@ If <code>NULL</code>, it will be determined from <code>.Machine$sizeof.pointer</
       <td><p>If <code>TRUE</code>, overwrite the existing <code>yq</code> binary if exists.</p></td>
     </tr>
     <tr>
+      <th>dry</th>
+      <td><p>A logical scalar: if <code>TRUE</code>, do not download the <code>yq</code> binary and just return its URL.</p></td>
+    </tr>
+    <tr>
       <th>verbose</th>
       <td><p>A logical scalar: if <code>TRUE</code>, be verbose.
-The default value is obtained from <code><a href='https://rdrr.io/r/base/options.html'>getOption("scdrake_verbose")</a></code>.</p></td>
+The default value is obtained from <code>getOption("scdrake_verbose")</code>.</p></td>
     </tr>
     </table>
 
+    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
+
+    <p>A character scalar of length two: <code>destfile</code> and URL to <code>yq</code> binary.
+Note that on Windows platform, if <code>destfile</code> doesn't contain the <code>.exe</code> extension,
+it will be automatically added.</p>
+<p>If <code>!overwrite &amp;&amp; fs::file_exists(destfile)</code>, then <code>NULL</code> invisibly.</p>
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

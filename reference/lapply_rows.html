@@ -159,7 +159,7 @@ The named list can also contain elements of a length other than one, which are t
     <li class="divider"></li>
     <li class="dropdown-header">Configs</li>
     <li>
-      <a href="../articles/scdrake_config.html">scdrake config</a>
+      <a href="../articles/scdrake_config.html">scdrake configs: a general overview</a>
     </li>
     <li>
       <a href="../articles/config_pipeline.html">Pipeline config</a>
@@ -272,51 +272,52 @@ Otherwise results are coerced to <code>data.frame</code> and original rownames a
     <p><code>tibble</code> or <code>data.frame</code> according to the <code>return_tibble</code> parameter.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://magrittr.tidyverse.org'>magrittr</a></span><span class='op'>)</span>
-
-<span class='va'>fn</span> <span class='op'>&lt;-</span> <span class='kw'>function</span><span class='op'>(</span><span class='va'>row_list</span><span class='op'>)</span> <span class='op'>{</span>
-  <span class='va'>row_list</span><span class='op'>$</span><span class='va'>cyl_2</span> <span class='op'>&lt;-</span> <span class='va'>row_list</span><span class='op'>$</span><span class='va'>cyl</span><span class='op'>**</span><span class='fl'>2</span>
-  <span class='va'>row_list</span><span class='op'>$</span><span class='va'>colors</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"red"</span>, <span class='st'>"green"</span>, <span class='st'>"blue"</span><span class='op'>)</span>
-  <span class='va'>row_list</span><span class='op'>$</span><span class='va'>sublist</span> <span class='op'>&lt;-</span> <span class='va'>mtcars</span><span class='op'>[</span><span class='fl'>1</span><span class='op'>:</span><span class='fl'>5</span>, <span class='fl'>1</span><span class='op'>:</span><span class='fl'>5</span><span class='op'>]</span>
-  <span class='kw'><a href='https://rdrr.io/r/base/function.html'>return</a></span><span class='op'>(</span><span class='va'>row_list</span><span class='op'>)</span>
-<span class='op'>}</span>
-
-<span class='va'>df</span> <span class='op'>&lt;-</span> <span class='fu'>lapply_rows</span><span class='op'>(</span><span class='va'>mtcars</span>, FUN <span class='op'>=</span> <span class='va'>fn</span><span class='op'>)</span>
-<span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='op'>(</span><span class='va'>df</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; <span style='color: #949494;'># A tibble: 6 × 14</span>
-#&gt;     mpg   cyl  disp    hp  drat    wt  qsec    vs    am  gear  carb cyl_2 colors
-#&gt;   <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span> <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span> <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span> <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span> <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span> <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span> <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span> <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span> <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span> <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span> <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span> <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span> <span style='color: #949494; font-style: italic;'>&lt;list&gt;</span>
-#&gt; <span style='color: #BCBCBC;'>1</span>  21       6   160   110  3.9   2.62  16.5     0     1     4     4    36 <span style='color: #949494;'>&lt;chr </span>…
-#&gt; <span style='color: #BCBCBC;'>2</span>  21       6   160   110  3.9   2.88  17.0     0     1     4     4    36 <span style='color: #949494;'>&lt;chr </span>…
-#&gt; <span style='color: #BCBCBC;'>3</span>  22.8     4   108    93  3.85  2.32  18.6     1     1     4     1    16 <span style='color: #949494;'>&lt;chr </span>…
-#&gt; <span style='color: #BCBCBC;'>4</span>  21.4     6   258   110  3.08  3.22  19.4     1     0     3     1    36 <span style='color: #949494;'>&lt;chr </span>…
-#&gt; <span style='color: #BCBCBC;'>5</span>  18.7     8   360   175  3.15  3.44  17.0     0     0     3     2    64 <span style='color: #949494;'>&lt;chr </span>…
-#&gt; <span style='color: #BCBCBC;'>6</span>  18.1     6   225   105  2.76  3.46  20.2     1     0     3     1    36 <span style='color: #949494;'>&lt;chr </span>…
-#&gt; <span style='color: #949494;'># … with 1 more variable: sublist &lt;list&gt;</span></div><div class='input'>
-<span class='va'>df2</span> <span class='op'>&lt;-</span> <span class='fu'>lapply_rows</span><span class='op'>(</span><span class='va'>mtcars</span>, return_tibble <span class='op'>=</span> <span class='cn'>FALSE</span>, FUN <span class='op'>=</span> <span class='va'>fn</span><span class='op'>)</span>
-<span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='op'>(</span><span class='va'>df2</span><span class='op'>)</span>
-</div><div class='output co'>#&gt;                    mpg cyl disp  hp drat    wt  qsec vs am gear carb cyl_2
-#&gt; Mazda RX4         21.0   6  160 110 3.90 2.620 16.46  0  1    4    4    36
-#&gt; Mazda RX4 Wag     21.0   6  160 110 3.90 2.875 17.02  0  1    4    4    36
-#&gt; Datsun 710        22.8   4  108  93 3.85 2.320 18.61  1  1    4    1    16
-#&gt; Hornet 4 Drive    21.4   6  258 110 3.08 3.215 19.44  1  0    3    1    36
-#&gt; Hornet Sportabout 18.7   8  360 175 3.15 3.440 17.02  0  0    3    2    64
-#&gt; Valiant           18.1   6  225 105 2.76 3.460 20.22  1  0    3    1    36
-#&gt;                             colors
-#&gt; Mazda RX4         red, green, blue
-#&gt; Mazda RX4 Wag     red, green, blue
-#&gt; Datsun 710        red, green, blue
-#&gt; Hornet 4 Drive    red, green, blue
-#&gt; Hornet Sportabout red, green, blue
-#&gt; Valiant           red, green, blue
-#&gt;                                                                                                                                                                                        sublist
-#&gt; Mazda RX4         21.00, 21.00, 22.80, 21.40, 18.70, 6.00, 6.00, 4.00, 6.00, 8.00, 160.00, 160.00, 108.00, 258.00, 360.00, 110.00, 110.00, 93.00, 110.00, 175.00, 3.90, 3.90, 3.85, 3.08, 3.15
-#&gt; Mazda RX4 Wag     21.00, 21.00, 22.80, 21.40, 18.70, 6.00, 6.00, 4.00, 6.00, 8.00, 160.00, 160.00, 108.00, 258.00, 360.00, 110.00, 110.00, 93.00, 110.00, 175.00, 3.90, 3.90, 3.85, 3.08, 3.15
-#&gt; Datsun 710        21.00, 21.00, 22.80, 21.40, 18.70, 6.00, 6.00, 4.00, 6.00, 8.00, 160.00, 160.00, 108.00, 258.00, 360.00, 110.00, 110.00, 93.00, 110.00, 175.00, 3.90, 3.90, 3.85, 3.08, 3.15
-#&gt; Hornet 4 Drive    21.00, 21.00, 22.80, 21.40, 18.70, 6.00, 6.00, 4.00, 6.00, 8.00, 160.00, 160.00, 108.00, 258.00, 360.00, 110.00, 110.00, 93.00, 110.00, 175.00, 3.90, 3.90, 3.85, 3.08, 3.15
-#&gt; Hornet Sportabout 21.00, 21.00, 22.80, 21.40, 18.70, 6.00, 6.00, 4.00, 6.00, 8.00, 160.00, 160.00, 108.00, 258.00, 360.00, 110.00, 110.00, 93.00, 110.00, 175.00, 3.90, 3.90, 3.85, 3.08, 3.15
-#&gt; Valiant           21.00, 21.00, 22.80, 21.40, 18.70, 6.00, 6.00, 4.00, 6.00, 8.00, 160.00, 160.00, 108.00, 258.00, 360.00, 110.00, 110.00, 93.00, 110.00, 175.00, 3.90, 3.90, 3.85, 3.08, 3.15</div><div class='input'>
-</div></pre>
+    <pre class="examples"><span class='r-in'><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://magrittr.tidyverse.org'>magrittr</a></span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='va'>fn</span> <span class='op'>&lt;-</span> <span class='kw'>function</span><span class='op'>(</span><span class='va'>row_list</span><span class='op'>)</span> <span class='op'>{</span></span>
+<span class='r-in'>  <span class='va'>row_list</span><span class='op'>$</span><span class='va'>cyl_2</span> <span class='op'>&lt;-</span> <span class='va'>row_list</span><span class='op'>$</span><span class='va'>cyl</span><span class='op'>**</span><span class='fl'>2</span></span>
+<span class='r-in'>  <span class='va'>row_list</span><span class='op'>$</span><span class='va'>colors</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"red"</span>, <span class='st'>"green"</span>, <span class='st'>"blue"</span><span class='op'>)</span></span>
+<span class='r-in'>  <span class='va'>row_list</span><span class='op'>$</span><span class='va'>sublist</span> <span class='op'>&lt;-</span> <span class='va'>mtcars</span><span class='op'>[</span><span class='fl'>1</span><span class='op'>:</span><span class='fl'>5</span>, <span class='fl'>1</span><span class='op'>:</span><span class='fl'>5</span><span class='op'>]</span></span>
+<span class='r-in'>  <span class='kw'><a href='https://rdrr.io/r/base/function.html'>return</a></span><span class='op'>(</span><span class='va'>row_list</span><span class='op'>)</span></span>
+<span class='r-in'><span class='op'>}</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='va'>df</span> <span class='op'>&lt;-</span> <span class='fu'>lapply_rows</span><span class='op'>(</span><span class='va'>mtcars</span>, FUN <span class='op'>=</span> <span class='va'>fn</span><span class='op'>)</span></span>
+<span class='r-in'><span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='op'>(</span><span class='va'>df</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #949494;'># A tibble: 6 × 14</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>     mpg   cyl  disp    hp  drat    wt  qsec    vs    am  gear  carb cyl_2 colors</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span> <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span> <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span> <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span> <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span> <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span> <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span> <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span> <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span> <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span> <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span> <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span> <span style='color: #949494; font-style: italic;'>&lt;list&gt;</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'>1</span>  21       6   160   110  3.9   2.62  16.5     0     1     4     4    36 <span style='color: #949494;'>&lt;chr </span>…</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'>2</span>  21       6   160   110  3.9   2.88  17.0     0     1     4     4    36 <span style='color: #949494;'>&lt;chr </span>…</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'>3</span>  22.8     4   108    93  3.85  2.32  18.6     1     1     4     1    16 <span style='color: #949494;'>&lt;chr </span>…</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'>4</span>  21.4     6   258   110  3.08  3.22  19.4     1     0     3     1    36 <span style='color: #949494;'>&lt;chr </span>…</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'>5</span>  18.7     8   360   175  3.15  3.44  17.0     0     0     3     2    64 <span style='color: #949494;'>&lt;chr </span>…</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'>6</span>  18.1     6   225   105  2.76  3.46  20.2     1     0     3     1    36 <span style='color: #949494;'>&lt;chr </span>…</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #949494;'># … with 1 more variable: sublist &lt;list&gt;</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='va'>df2</span> <span class='op'>&lt;-</span> <span class='fu'>lapply_rows</span><span class='op'>(</span><span class='va'>mtcars</span>, return_tibble <span class='op'>=</span> <span class='cn'>FALSE</span>, FUN <span class='op'>=</span> <span class='va'>fn</span><span class='op'>)</span></span>
+<span class='r-in'><span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='op'>(</span><span class='va'>df2</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>                    mpg cyl disp  hp drat    wt  qsec vs am gear carb cyl_2</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Mazda RX4         21.0   6  160 110 3.90 2.620 16.46  0  1    4    4    36</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Mazda RX4 Wag     21.0   6  160 110 3.90 2.875 17.02  0  1    4    4    36</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Datsun 710        22.8   4  108  93 3.85 2.320 18.61  1  1    4    1    16</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Hornet 4 Drive    21.4   6  258 110 3.08 3.215 19.44  1  0    3    1    36</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Hornet Sportabout 18.7   8  360 175 3.15 3.440 17.02  0  0    3    2    64</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Valiant           18.1   6  225 105 2.76 3.460 20.22  1  0    3    1    36</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>                             colors</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Mazda RX4         red, green, blue</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Mazda RX4 Wag     red, green, blue</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Datsun 710        red, green, blue</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Hornet 4 Drive    red, green, blue</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Hornet Sportabout red, green, blue</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Valiant           red, green, blue</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>                                                                                                                                                                                        sublist</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Mazda RX4         21.00, 21.00, 22.80, 21.40, 18.70, 6.00, 6.00, 4.00, 6.00, 8.00, 160.00, 160.00, 108.00, 258.00, 360.00, 110.00, 110.00, 93.00, 110.00, 175.00, 3.90, 3.90, 3.85, 3.08, 3.15</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Mazda RX4 Wag     21.00, 21.00, 22.80, 21.40, 18.70, 6.00, 6.00, 4.00, 6.00, 8.00, 160.00, 160.00, 108.00, 258.00, 360.00, 110.00, 110.00, 93.00, 110.00, 175.00, 3.90, 3.90, 3.85, 3.08, 3.15</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Datsun 710        21.00, 21.00, 22.80, 21.40, 18.70, 6.00, 6.00, 4.00, 6.00, 8.00, 160.00, 160.00, 108.00, 258.00, 360.00, 110.00, 110.00, 93.00, 110.00, 175.00, 3.90, 3.90, 3.85, 3.08, 3.15</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Hornet 4 Drive    21.00, 21.00, 22.80, 21.40, 18.70, 6.00, 6.00, 4.00, 6.00, 8.00, 160.00, 160.00, 108.00, 258.00, 360.00, 110.00, 110.00, 93.00, 110.00, 175.00, 3.90, 3.90, 3.85, 3.08, 3.15</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Hornet Sportabout 21.00, 21.00, 22.80, 21.40, 18.70, 6.00, 6.00, 4.00, 6.00, 8.00, 160.00, 160.00, 108.00, 258.00, 360.00, 110.00, 110.00, 93.00, 110.00, 175.00, 3.90, 3.90, 3.85, 3.08, 3.15</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Valiant           21.00, 21.00, 22.80, 21.40, 18.70, 6.00, 6.00, 4.00, 6.00, 8.00, 160.00, 160.00, 108.00, 258.00, 360.00, 110.00, 110.00, 93.00, 110.00, 175.00, 3.90, 3.90, 3.85, 3.08, 3.15</span>
+</pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

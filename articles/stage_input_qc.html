@@ -99,7 +99,7 @@
     <li class="divider">
     <li class="dropdown-header">Configs</li>
     <li>
-      <a href="../articles/scdrake_config.html">scdrake config</a>
+      <a href="../articles/scdrake_config.html">scdrake configs: a general overview</a>
     </li>
     <li>
       <a href="../articles/config_pipeline.html">Pipeline config</a>
@@ -169,7 +169,7 @@
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Input and quality control stage</h1>
             
-            <h4 class="date">2021-11-04</h4>
+            <h4 class="date">2021-11-08</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/bioinfocz/scdrake/blob/mastervignettes/stage_input_qc.Rmd"><code>vignettes/stage_input_qc.Rmd</code></a></small>
       <div class="hidden name"><code>stage_input_qc.Rmd</code></div>
@@ -217,7 +217,7 @@
 <li>Number of detected genes = non-zero UMI count (lower tail).</li>
 <li>Percentage of expressed mitochondrial genes = <span class="math inline">\(\frac {UMI_{mitochondrial}} {UMI_{sum}} * 100\)</span> (upper tail).</li>
 </ul>
-<p>“Lower tail” means cells having a metric value less than -<code>MAD_THRESHOLD</code> MAD will be discarded. For “upper tail”, it is +<code>MAD_THRESHOLD</code> MAD.</p>
+<p>“Lower tail” means cells having a metric value less than <code>-MAD_THRESHOLD</code> MAD will be discarded. For “upper tail”, it is <code>+MAD_THRESHOLD</code> MAD.</p>
 <p>Violation of only one metric threshold leads to removal of a cell.</p>
 </div>
 <div id="custom-cell-filtering" class="section level3">
@@ -225,19 +225,19 @@
 <a href="#custom-cell-filtering" class="anchor"></a>Custom cell filtering</h3>
 <p><code>MIN_UMI_CF: 1000</code></p>
 <p><strong>Type:</strong> positive integer scalar</p>
-<p>A threshold for minimum number of UMI per cell, e.g. cells with UMI less than <code>MIN_UMI_CF</code> will be removed.</p>
+<p>A threshold for minimum number of UMI per cell, i.e. cells with UMI less than <code>MIN_UMI_CF</code> will be removed.</p>
 <hr>
 <p><code>MAX_UMI_CF: 50000</code></p>
 <p><strong>Type:</strong> positive integer scalar</p>
-<p>A threshold for maximum number of UMI per cell, e.g. cells with UMI greater than <code>MAX_UMI_CF</code> will be removed.</p>
+<p>A threshold for maximum number of UMI per cell, i.e. cells with UMI greater than <code>MAX_UMI_CF</code> will be removed.</p>
 <hr>
 <p><code>MIN_FEATURES: 1000</code></p>
 <p><strong>Type:</strong> positive integer scalar</p>
-<p>A threshold for minimum number of features (genes) detected per cell, e.g. cells with detected features less than <code>MIN_FEATURES</code> will be removed.</p>
+<p>A threshold for minimum number of features (genes) detected per cell, i.e. cells with detected features less than <code>MIN_FEATURES</code> will be removed.</p>
 <hr>
 <p><code>MAX_MITO_RATIO: 0.2</code></p>
 <p><strong>Type:</strong> numeric scalar &lt;0; 1&gt;</p>
-<p>A threshold for maximum ratio of expressed mitochondrial genes per cell, e.g. cells with mitochondrial genes detected in more than (<code>MAX_MITO_RATIO</code> * 100)% of all genes will be removed.</p>
+<p>A threshold for maximum ratio of expressed mitochondrial genes per cell, i.e. cells with mitochondrial genes detected in more than (<code>MAX_MITO_RATIO</code> * 100)% of all genes will be removed.</p>
 </div>
 <div id="gene-filtering" class="section level3">
 <h3 class="hasAnchor">
@@ -250,15 +250,16 @@
 <hr>
 <div class="sourceCode" id="cb2"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">MITO_REGEX</span><span class="kw">:</span><span class="at"> </span><span class="st">"^MT-"</span></span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="fu">RIBO_REGEX</span><span class="kw">:</span><span class="at"> </span><span class="st">"^RP[SL]"</span></span></code></pre></div>
-<p>Regexes used to match and count occurences of mitochondrial and ribosomal features. The latter is currently not used for filtering.</p>
+<p><strong>Type:</strong> character scalar</p>
+<p>Regexes used to match and count occurences of mitochondrial and ribosomal features. The latter is currently not used for cell filtering.</p>
 <hr>
 <p><code>MIN_UMI: 1</code></p>
 <p><strong>Type:</strong> positive integer scalar</p>
-<p>A threshold for minimum number of UMI per cell, e.g. genes with UMI &lt; <code>MIN_UMI</code> will be removed.</p>
+<p>A threshold for minimum number of UMI per cell, i.e. genes with UMI &lt; <code>MIN_UMI</code> will be removed.</p>
 <hr>
 <p><code>MIN_RATIO_CELLS: 0.01</code></p>
 <p><strong>Type:</strong> numeric scalar &lt;0; 1&gt;</p>
-<p>A minimum ratio of cells expressing a gene, e.g. genes expressed in less than (<code>MIN_RATIO_CELLS</code> * 100)% of cells will be removed.</p>
+<p>A minimum ratio of cells expressing a gene, i.e. genes expressed in less than (<code>MIN_RATIO_CELLS</code> * 100)% of cells will be removed.</p>
 </div>
 </div>
 <div id="input-files" class="section level2">

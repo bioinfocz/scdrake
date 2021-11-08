@@ -18,7 +18,7 @@
       "<link id=\"css\" rel=\"stylesheet\" href=\"https://bootswatch.com/3/flatly/bootstrap.css\" onload=\"document.documentElement.style.display = ''\">"
     );
   }
-</script><title>scdrake config • scdrake</title>
+</script><title>scdrake configs: a general overview • scdrake</title>
 <!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script><!-- Bootstrap --><script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script><!-- Flatly Theme - Light  --><link id="css-light" rel="stylesheet" href="https://bootswatch.com/3/flatly/bootstrap.css" media="(prefers-color-scheme: light), (prefers-color-scheme: no-preference)">
 <!-- Darkly Theme - Dark --><link id="css-dark" rel="stylesheet" href="https://bootswatch.com/3/darkly/bootstrap.css" media="(prefers-color-scheme: dark)">
 <!-- preferably CSS --><link rel="stylesheet" href="../preferably.css">
@@ -28,7 +28,7 @@
 <script src="../bootstrap-toc.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
 <!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- pkgdown --><link href="../pkgdown.css" rel="stylesheet">
-<script src="../pkgdown.js"></script><meta property="og:title" content="scdrake config">
+<script src="../pkgdown.js"></script><meta property="og:title" content="scdrake configs: a general overview">
 <meta property="og:description" content="How YAML config files are used in `scdrake`">
 <!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
@@ -99,7 +99,7 @@
     <li class="divider">
     <li class="dropdown-header">Configs</li>
     <li>
-      <a href="../articles/scdrake_config.html">scdrake config</a>
+      <a href="../articles/scdrake_config.html">scdrake configs: a general overview</a>
     </li>
     <li>
       <a href="../articles/config_pipeline.html">Pipeline config</a>
@@ -167,9 +167,9 @@
       </header><script src="scdrake_config_files/header-attrs-2.11/header-attrs.js"></script><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
-      <h1 data-toc-skip>scdrake config</h1>
+      <h1 data-toc-skip>scdrake configs: a general overview</h1>
             
-            <h4 class="date">2021-11-04</h4>
+            <h4 class="date">2021-11-08</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/bioinfocz/scdrake/blob/mastervignettes/scdrake_config.Rmd"><code>vignettes/scdrake_config.Rmd</code></a></small>
       <div class="hidden name"><code>scdrake_config.Rmd</code></div>
@@ -183,8 +183,8 @@
 <h1 class="hasAnchor">
 <a href="#introduction" class="anchor"></a>Introduction</h1>
 <p>Configs are stored in YAML files (in <code>config/</code> directory by default), which are parsed in R to lists and used to build <a href="https://docs.ropensci.org/drake">drake</a> plans. YAML (<a href="https://docs.ansible.com/ansible/latest/reference_appendices/YAMLSyntax.html">quick reference</a>, cheatsheets <a href="https://lzone.de/cheat-sheet/YAML">here</a> and <a href="https://learnxinyminutes.com/docs/yaml/">here</a>) is a human-readable format and uses indentation (spaces) for nesting of parameters.</p>
-<p><a href="https://github.com/bioinfocz/scdrake">scdrake</a> is using a concept of default and local configs. Default configs are bundled with the package and copied during project initialization, update, and pipeline run (e.g. in <code><a href="../reference/run_single_sample.html">run_single_sample()</a></code> or <code>_drake_single_sample.R</code>). Default and local configs are named <code>*.default.yaml</code> and <code>*.yaml</code>, respectively.</p>
-<p>Config files are separated according to general parameters and each pipeline’s main stage (quality control, normalization, etc.), but for consistency are always read all at once (by default if you run e.g. <code><a href="../reference/run_single_sample.html">run_single_sample()</a></code>).</p>
+<p><a href="https://github.com/bioinfocz/scdrake">scdrake</a> is using a concept of default and local configs. Default configs are bundled with the package and copied during project initialization, update, and pipeline run (e.g. in <code><a href="../reference/run_single_sample.html">run_single_sample()</a></code> or <code>_drake_single_sample.R</code>). Local configs are, as their name suggests, purposed to make modifications to default configs (see the section below for how it is actually done). Default and local configs are named <code>*.default.yaml</code> and <code>*.yaml</code>, respectively.</p>
+<p>Config files are separated according to general parameters and each pipeline’s main stage (quality control, normalization, etc.), but for consistency are always read all at once (by default if you run e.g. <code><a href="../reference/run_single_sample.html">run_single_sample()</a></code> or <code>drake::r_make("_drake_single_sample.R")</code>).</p>
 </div>
 <div id="updating-merging-configs" class="section level1">
 <h1 class="hasAnchor">
@@ -225,15 +225,14 @@
 <li>
 <code>FOO_NAMED_LIST</code>: <code>FOO_2</code> is updated, <code>BAR_3</code> is added, but <code>BAR_2</code> is still present, although it is not defined in the local config!</li>
 </ul>
-<p>and then <code>FOO_2</code> will be updated, <code>BAR_3</code> will be added, but <code>BAR_2</code> will still be present, although it is not defined in the local config!</p>
 <div id="merging-of-nested-named-lists" class="section level2">
 <h2 class="hasAnchor">
 <a href="#merging-of-nested-named-lists" class="anchor"></a>Merging of nested named lists</h2>
-<p>To overcome the problem with <code>FOO_NAMED_LIST</code>, parameters with such structure are specified as named list wrapped by unnamed list:</p>
+<p>To overcome the problem with <code>FOO_NAMED_LIST</code>, parameters with such structure are specified as a named list wrapped by an unnamed list:</p>
 <div class="sourceCode" id="cb5"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">FOO_NAMED_LIST</span><span class="kw">:</span></span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="kw">-</span><span class="at"> </span><span class="fu">FOO_2</span><span class="kw">:</span><span class="at"> </span><span class="dv">2</span></span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">BAR_2</span><span class="kw">:</span><span class="at"> </span><span class="st">"zab"</span></span></code></pre></div>
-<p><strong>Note the beginning <code><a href="https://rdrr.io/r/base/Arithmetic.html">-</a></code> creating the unnamed list and indentation of values of the named list.</strong> This YAML is parsed in R to</p>
+<p><strong>Note the beginning <code>-</code> creating the unnamed list and indentation of values of the named list.</strong> This YAML is parsed in R to</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>FOO_NAMED_LIST <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>FOO_2 <span class="op">=</span> <span class="fl">2L</span>, BAR_2 <span class="op">=</span> <span class="st">"zab"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 <p>If we modify the example of local config above to</p>
@@ -262,14 +261,14 @@
 <h1 class="hasAnchor">
 <a href="#the-yq-tool" class="anchor"></a>The <code>yq</code> tool</h1>
 <p>Internally, the <a href="https://github.com/mikefarah/yq">yq</a> tool (version 3) is used for merging of YAML files. It is a command line utility whose binary needs to be downloaded. This is done automatically during initialization of a new project, or you can do it manually through <code><a href="../reference/download_yq.html">download_yq()</a></code>.</p>
-<p>The presence of <code>yq</code> binary is checked on <a href="https://github.com/bioinfocz/scdrake">scdrake</a> load or attach. <code>SCDRAKE_YQ_BINARY</code> environment variable is read - if not set, a value from <code><a href="https://rdrr.io/r/base/Sys.which.html">Sys.which("yq")</a></code> is used (this function searches in <code>PATH</code> environment variable). Then <code>scdrake_yq_binary</code> option is set, and is used as default value to config-updating functions (see <code><a href="../reference/update_config.html">?update_config</a></code>).</p>
+<p>The presence of <code>yq</code> binary is checked on <a href="https://github.com/bioinfocz/scdrake">scdrake</a> load or attach. <code>SCDRAKE_YQ_BINARY</code> environment variable is read - if not set, a value from <code>Sys.which("yq")</code> is used (this function searches in <code>PATH</code> environment variable). Then <code>scdrake_yq_binary</code> option is set, and is used as default value to config-updating functions (see <code><a href="../reference/update_config.html">?update_config</a></code>).</p>
 <p>You can also look at <code><a href="../reference/check_yq.html">?check_yq</a></code> for details on how <code>PATH</code> variable is treated in terminal vs. RStudio.</p>
 </div>
 <div id="scdrake_list" class="section level1">
 <h1 class="hasAnchor">
 <a href="#scdrake_list" class="anchor"></a><code>scdrake_list</code>
 </h1>
-<p>The base R’s extracting operators (<code><a href="https://rdrr.io/r/base/Extract.html">$</a></code>, <code><a href="https://rdrr.io/r/base/Extract.html">[</a></code>, <code><a href="https://rdrr.io/r/base/Extract.html">[[</a></code>) are very benevolent for non-existing elements in <code><a href="https://rdrr.io/r/base/list.html">list()</a></code> for which return <code>NULL</code>. This is not a desired behaviour for config variables that must have a value or explicit <code>NULL</code>. Returning <code>NULL</code> when the value was actually not loaded from a config file can lead to unpredictable results.</p>
+<p>The base R’s extracting operators (<code>$</code>, <code>[</code>, <code>[[</code>) are very benevolent for non-existing elements in <code><a href="https://rdrr.io/r/base/list.html">list()</a></code> for which return <code>NULL</code>. This is not a desired behaviour for config variables that must have a value or explicit <code>NULL</code>. Returning <code>NULL</code> when the value was actually not loaded from a config file can lead to unpredictable results.</p>
 <p>Thus, for storing config variables, <a href="https://github.com/bioinfocz/scdrake">scdrake</a> is using a modified <code><a href="https://rdrr.io/r/base/list.html">list()</a></code> called <code><a href="../reference/scdrake_list.html">scdrake_list()</a></code> which is using strict extracting operators. It behaves like a normal list:</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">cfg</span> <span class="op">&lt;-</span> <span class="fu">scdrake</span><span class="fu">::</span><span class="fu"><a href="../reference/scdrake_list.html">scdrake_list</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>var_1 <span class="op">=</span> <span class="fl">1</span>, var_2 <span class="op">=</span> <span class="fl">2</span><span class="op">)</span><span class="op">)</span>
@@ -305,7 +304,7 @@
 <div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">cfg</span><span class="op">[</span><span class="st">"var_3"</span><span class="op">]</span></code></pre></div>
 <pre><code>## Error: Variable var_3 not found in `cfg`</code></pre>
-<p>For <code><a href="https://rdrr.io/r/base/Extract.html">[</a></code> and <code><a href="https://rdrr.io/r/base/Extract.html">[[</a></code>, this control can be turned off by <code>check = FALSE</code> parameter:</p>
+<p>For <code>[</code> and <code>[[</code>, this control can be turned off by <code>check = FALSE</code> parameter:</p>
 <div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">cfg</span><span class="op">[[</span><span class="st">"var_3"</span>, check <span class="op">=</span> <span class="cn">FALSE</span><span class="op">]</span><span class="op">]</span></code></pre></div>
 <pre><code>## NULL</code></pre>
@@ -316,7 +315,7 @@
 ## 
 ## attr(,"class")
 ## [1] "scdrake_list"</code></pre>
-<p>Also, in this case <code><a href="https://rdrr.io/r/base/Extract.html">[</a></code> is more consistent: it returns a valid named list, unlike the normal list, which sets <code>NA_character_</code> as names of the non-existing elements.</p>
+<p>Also, in this case <code>[</code> is more consistent: it returns a valid named list, unlike the normal list, which sets <code>NA_character_</code> as names of the non-existing elements.</p>
 </div>
   </div>
 
