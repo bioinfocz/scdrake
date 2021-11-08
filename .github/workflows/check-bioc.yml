@@ -74,8 +74,8 @@ jobs:
           mkdir /__w/_temp/Library
           echo ".libPaths('/__w/_temp/Library')" > ~/.Rprofile
 
-      - name: Append yq binary directory to PATH (Linux)
-        if: runner.os == 'Linux'
+      - name: Append yq binary directory to PATH (Linux + macOS)
+        if: matrix.config.os != 'windows-latest'
         run: |
           mkdir -p "${HOME}/.local/bin"
           echo "${HOME}/.local/bin" >> ${GITHUB_PATH}
@@ -218,13 +218,20 @@ jobs:
           remotes::install_cran("BiocManager")
         shell: Rscript {0}
 
-      - name: Set BiocVersion
+      - name: Set BiocVersion (Linux + macOS)
+        if: matrix.config.os != 'windows-latest'
         run: |
           ## SC3 is installed from GitHub, but if install() is run without the pkgs argument, the BioConductor
           ## version will be installed instead.
           installed <- rownames(installed.packages())
           installed <- installed[installed != "SC3"]
-          BiocManager::install(pkgs = installed, version = "${{ matrix.config.bioc }}", ask = FALSE)
+          BiocManager::install(pkgs = installed, version = "${{ matrix.config.bioc }}", ask = FALSE, update = TRUE)
+        shell: Rscript {0}
+
+      - name: Set BiocVersion (Windows)
+        if: matrix.config.os == 'windows-latest'
+        run: |
+          BiocManager::install(version = "${{ matrix.config.bioc }}", ask = FALSE, update = TRUE)
         shell: Rscript {0}
 
       ## SC3 installation is failing below, because dependencies needed for its vignettes are not already installed.
