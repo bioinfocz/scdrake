@@ -86,6 +86,16 @@ jobs:
           mkdir "${HOME}/.local/bin" -ea 0
           echo "${HOME}/.local/bin" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
 
+      - name: Set type of R packages
+        shell: bash
+        run: |
+          if [[ ${{ matrix.config.os }} == "windows-latest" ]]; then
+            R_PACKAGES_TYPE="binary"
+          else
+            R_PACKAGES_TYPE="source"
+          fi
+          echo "R_PACKAGES_TYPE=${R_PACKAGES_TYPE}" >> $GITHUB_ENV
+
       ## Most of these steps are the same as the ones in
       ## https://github.com/r-lib/actions/blob/master/examples/check-standard.yaml
       ## If they update their steps, we will also need to update ours.
@@ -218,7 +228,7 @@ jobs:
           remotes::install_cran("BiocManager")
         shell: Rscript {0}
 
-      - name: Set BiocVersion (Linux + macOS)
+      - name: Install Bioconductor (Linux + macOS)
         if: matrix.config.os != 'windows-latest'
         run: |
           ## SC3 is installed from GitHub, but if install() is run without the pkgs argument, the BioConductor
@@ -228,17 +238,20 @@ jobs:
           BiocManager::install(pkgs = installed, version = "${{ matrix.config.bioc }}", ask = FALSE, update = TRUE)
         shell: Rscript {0}
 
-      - name: Set BiocVersion (Windows)
+      - name: Install Bioconductor (Windows)
         if: matrix.config.os == 'windows-latest'
         run: |
-          BiocManager::install(version = "${{ matrix.config.bioc }}", ask = FALSE, update = TRUE)
+          BiocManager::install(version = "${{ matrix.config.bioc }}", ask = FALSE, update = TRUE, type = "binary")
         shell: Rscript {0}
 
-      ## SC3 installation is failing below, because dependencies needed for its vignettes are not already installed.
+      ## SC3 installation is failing downstream, because dependencies needed for its vignettes are not already installed.
       - name: Install SC3 from GitHub (gorgitko/SC3)
         run: |
           message(paste('****', Sys.time(), 'installing gorgitko/SC3 ****'))
-          remotes::install_github("gorgitko/SC3", dependencies = TRUE, build_vignettes = FALSE, repos = BiocManager::repositories())
+          remotes::install_github(
+            "gorgitko/SC3", dependencies = TRUE, build_vignettes = FALSE, repos = BiocManager::repositories(),
+            type = "${{ env.R_PACKAGES_TYPE }}"
+          )
         shell: Rscript {0}
 
       - name: Install scdrake dependencies pass 1
@@ -254,7 +267,10 @@ jobs:
           # message(paste('****', Sys.time(), 'pass number 1 at installing dependencies: local dependencies ****'))
           # remotes::install_local(dependencies = TRUE, repos = BiocManager::repositories(), build_vignettes = TRUE, upgrade = TRUE, force = TRUE)
           message(paste('****', Sys.time(), 'pass number 1 at installing scdrake dependencies ****'))
-          remotes::install_deps(dependencies = TRUE, repos = BiocManager::repositories(), build_vignettes = FALSE, upgrade = TRUE)
+          remotes::install_deps(
+            dependencies = TRUE, repos = BiocManager::repositories(), build_vignettes = FALSE, upgrade = TRUE,
+            type = "${{ env.R_PACKAGES_TYPE }}"
+          )
         continue-on-error: true
         shell: Rscript {0}
 
@@ -264,7 +280,10 @@ jobs:
           # message(paste('****', Sys.time(), 'pass number 2 at installing dependencies: any remaining dependencies ****'))
           # remotes::install_local(dependencies = TRUE, repos = BiocManager::repositories(), build_vignettes = TRUE, upgrade = TRUE, force = TRUE)
           message(paste('****', Sys.time(), 'pass number 2 at installing scdrake dependencies: any remaining dependencies ****'))
-          remotes::install_deps(dependencies = TRUE, repos = BiocManager::repositories(), build_vignettes = FALSE, upgrade = TRUE)
+          remotes::install_deps(
+            dependencies = TRUE, repos = BiocManager::repositories(), build_vignettes = FALSE, upgrade = TRUE,
+            type = "${{ env.R_PACKAGES_TYPE }}"
+          )
         shell: Rscript {0}
 
       - name: Install package checking tools
@@ -277,7 +296,10 @@ jobs:
       - name: Install scdrake
         run: |
           message(paste('****', Sys.time(), 'installing scdrake ****'))
-          remotes::install_local(dependencies = TRUE, repos = BiocManager::repositories(), build_vignettes = TRUE, upgrade = TRUE, force = TRUE)
+          remotes::install_local(
+            dependencies = TRUE, repos = BiocManager::repositories(), build_vignettes = TRUE, upgrade = TRUE, force = TRUE,
+            type = "${{ env.R_PACKAGES_TYPE }}"
+          )
         shell: Rscript {0}
 
       - name: Install BiocGenerics
