@@ -254,7 +254,7 @@ jobs:
           )
         shell: Rscript {0}
 
-      - name: Install scdrake dependencies pass 1
+      - name: Install scdrake dependencies (pass 1)
         run: |
           ## Try installing the package dependencies in steps. First the local
           ## dependencies, then any remaining dependencies to avoid the
@@ -274,7 +274,7 @@ jobs:
         continue-on-error: true
         shell: Rscript {0}
 
-      - name: Install scdrake dependencies pass 2
+      - name: Install scdrake dependencies (pass 2)
         run: |
           ## Pass #2 at installing dependencies
           # message(paste('****', Sys.time(), 'pass number 2 at installing dependencies: any remaining dependencies ****'))
@@ -366,21 +366,23 @@ jobs:
           covr::codecov()
         shell: Rscript {0}
 
-      - name: Install package
-        if: github.ref == 'refs/heads/gh-pages' && env.run_pkgdown == 'true' && runner.os == 'Linux'
-        run: R CMD INSTALL .
+      - name: Install pkgdown
+        if: env.run_pkgdown == 'true' && runner.os == 'Linux'
+        run: |
+          BiocManager::install("pkgdown")
+        shell: Rscript {0}
 
-      - name: Deploy package
-        if: github.ref == 'refs/heads/gh-pages' && env.run_pkgdown == 'true' && runner.os == 'Linux'
+      ## Note that you need to run pkgdown::deploy_to_branch(new_process = FALSE)
+      ## at least one locally before this will work. This creates the gh-pages
+      ## branch (erasing anything you haven't version controlled!) and
+      ## makes the git history recognizable by pkgdown.
+      - name: Deploy pkgdown docs to gh-pages
+        if: env.run_pkgdown == 'true' && runner.os == 'Linux'
+        shell: bash
         run: |
           git config --local user.email "actions@github.com"
           git config --local user.name "GitHub Actions"
           Rscript -e "pkgdown::deploy_to_branch(new_process = FALSE)"
-        shell: bash {0}
-        ## Note that you need to run pkgdown::deploy_to_branch(new_process = FALSE)
-        ## at least one locally before this will work. This creates the gh-pages
-        ## branch (erasing anything you haven't version controlled!) and
-        ## makes the git history recognizable by pkgdown.
 
       - name: Upload check results
         if: failure()
