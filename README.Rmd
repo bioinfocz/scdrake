@@ -16,7 +16,7 @@ library(BiocStyle)
 # scdrake
 
 [![Lifecycle: experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
-[![Codecov test coverage](https://codecov.io/gh/gorgitko/bioinfocz/branch/main/graph/badge.svg)](https://codecov.io/gh/bioinfocz/scdrake?branch=main)
+[![Codecov test coverage](https://codecov.io/gh/bioinfocz/scdrake/branch/main/graph/badge.svg)](https://codecov.io/gh/bioinfocz/scdrake?branch=main)
 
 `{scdrake}` is a scalable and reproducible pipeline for downstream processing of 10x Genomics single-cell RNA-seq data.
 It is built on top of the `{drake}` package, a [Make](https://www.gnu.org/software/make/)-like pipeline
@@ -54,9 +54,13 @@ if (!requireNamespace("BiocManager", quietly = TRUE)) {
 BiocManager::install("bioinfocz/scdrake")
 ```
 
+### Parallelization
+
 To fully utilize the parallelization, you should consider installing [ZeroMQ](https://zeromq.org/) and
-`{clustermq}` R package, which is used by `{drake}`. However, it is also possible to use the
-`{future}` package, which doesn't require any additional system dependencies.
+`{clustermq}` R package (probably only usable on Linux), which is used by `{drake}`.
+However, it is also possible to use the `{future}` package, which doesn't require any additional system dependencies.
+
+More reading about this topic can be found at <https://books.ropensci.org/drake/hpc.html>.
 
 ### Using `renv`
 
