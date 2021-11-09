@@ -22,7 +22,11 @@
 
 on:
   push:
+    paths:
+      - '!README.Rmd'
   pull_request:
+    paths:
+      - '!README.Rmd'
 
 name: R-CMD-check-bioc
 
