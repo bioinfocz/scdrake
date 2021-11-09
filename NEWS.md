@@ -7,6 +7,7 @@
 - Fixed issues with `yq` tool's binary download on Windows.
 - Modified `.confirm_menu()` for non-interactive usage.
 - Activate an RStudio project on the end of `init_project()` function.
+- Fixed links to source code on GH.
 
 # scdrake 1.0.0
 

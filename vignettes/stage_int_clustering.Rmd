@@ -101,6 +101,10 @@ single-sample pipeline.
 These targets are basically the same as those in the `02_norm_clustering` pipeline in the single-sample pipeline
 (see `vignette("stage_norm_clustering")`).
 
+However, for a full overview, you have to inspect the
+[source code](https://github.com/bioinfocz/scdrake/blob/main/R/plans_integration.R) of the
+`get_int_clustering_subplan()` function.
+
 ## Cell clustering
 
 - `clusters_all`

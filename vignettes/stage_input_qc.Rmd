@@ -205,7 +205,8 @@ These are passed to `knitr::opts_chunk()` and used for rendering of stage's HTML
 # Targets
 
 Here you can find description of the most important targets for this stage.
-However, for a full overview, you have to inspect the [source code](R/plans_single_sample.R) of the
+However, for a full overview, you have to inspect the
+[source code](https://github.com/bioinfocz/scdrake/blob/main/R/plans_single_sample.R) of the
 `get_input_qc_subplan()` function.
 
 ## `SingleCellExperiment` objects
