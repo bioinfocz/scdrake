@@ -22,11 +22,11 @@
 
 on:
   push:
-    paths:
-      - '!README.Rmd'
+    paths-ignore:
+      - 'README.Rmd'
   pull_request:
-    paths:
-      - '!README.Rmd'
+    paths-ignore:
+      - 'README.Rmd'
 
 name: R-CMD-check-bioc
 
@@ -47,11 +47,6 @@ env:
 
 jobs:
   build-check:
-    runs-on: ${{ matrix.config.os }}
-    name: ${{ matrix.config.os }} (${{ matrix.config.r }})
-    container: ${{ matrix.config.cont }}
-    ## Environment variables unique to this job.
-
     strategy:
       fail-fast: false
       matrix:
@@ -59,6 +54,10 @@ jobs:
           - { os: ubuntu-latest, r: '4.1', bioc: '3.13', cont: "bioconductor/bioconductor_docker:RELEASE_3_13", rspm: "https://packagemanager.rstudio.com/cran/__linux__/focal/latest" }
           - { os: macOS-latest, r: '4.1', bioc: '3.13'}
           - { os: windows-latest, r: '4.1', bioc: '3.13'}
+    runs-on: ${{ matrix.config.os }}
+    name: ${{ matrix.config.os }} (${{ matrix.config.r }})
+    container: ${{ matrix.config.cont }}
+
     env:
       R_REMOTES_NO_ERRORS_FROM_WARNINGS: true
       RSPM: ${{ matrix.config.rspm }}
@@ -69,7 +68,6 @@ jobs:
       YQ_VERSION: '3.4.1'
 
     steps:
-
       ## Set the R library to the directory matching the
       ## R packages cache step further below when running on Docker (Linux).
       - name: Set R Library home on Linux
@@ -384,8 +382,8 @@ jobs:
         if: env.run_pkgdown == 'true' && runner.os == 'Linux'
         shell: bash
         run: |
-          git config --local user.email "actions@github.com"
-          git config --local user.name "GitHub Actions"
+          git config --local user.name "$GITHUB_ACTOR"
+          git config --local user.email "$GITHUB_ACTOR@users.noreply.github.com"
           Rscript -e "pkgdown::deploy_to_branch(new_process = FALSE)"
 
       - name: Upload check results
