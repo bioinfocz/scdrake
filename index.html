@@ -203,7 +203,12 @@
 <span class="op">}</span>
 
 <span class="fu">BiocManager</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/BiocManager/man/install.html">install</a></span><span class="op">(</span><span class="st">"bioinfocz/scdrake"</span><span class="op">)</span></code></pre></div>
-<p>To fully utilize the parallelization, you should consider installing <a href="https://zeromq.org/">ZeroMQ</a> and <a href="https://mschubert.github.io/clustermq/">clustermq</a> R package, which is used by <a href="https://docs.ropensci.org/drake">drake</a>. However, it is also possible to use the <a href="https://future.futureverse.org">future</a> package, which doesn’t require any additional system dependencies.</p>
+<div id="parallelization" class="section level3">
+<h3 class="hasAnchor">
+<a href="#parallelization" class="anchor"></a>Parallelization</h3>
+<p>To fully utilize the parallelization, you should consider installing <a href="https://zeromq.org/">ZeroMQ</a> and <a href="https://mschubert.github.io/clustermq/">clustermq</a> R package (probably only usable on Linux), which is used by <a href="https://docs.ropensci.org/drake">drake</a>. However, it is also possible to use the <a href="https://future.futureverse.org">future</a> package, which doesn’t require any additional system dependencies.</p>
+<p>More reading about this topic can be found at <a href="https://books.ropensci.org/drake/hpc.html" class="uri">https://books.ropensci.org/drake/hpc.html</a>.</p>
+</div>
 <div id="using-renv" class="section level3">
 <h3 class="hasAnchor">
 <a href="#using-renv" class="anchor"></a>Using <code>renv</code>
@@ -280,23 +285,7 @@
 <a href="#citation" class="anchor"></a>Citation</h2>
 <p>Below is the citation output from using <code>citation("scdrake")</code> in R. Please run this yourself to check for any updates on how to cite <strong>scdrake</strong>.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/print.html">print</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/utils/citation.html">citation</a></span><span class="op">(</span><span class="st">"scdrake"</span><span class="op">)</span>, bibtex <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; To cite package 'scdrake' in publications use:</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt;   Jiri Novotny and Jan Kubovciak (2021). scdrake: A Pipeline For 10x</span>
-<span class="co">#&gt;   Chromium Single-Cell RNA-seq Data Analysis.</span>
-<span class="co">#&gt;   https://github.com/bioinfocz/scdrake,</span>
-<span class="co">#&gt;   https://bioinfocz.github.io/scdrake.</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; A BibTeX entry for LaTeX users is</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt;   @Manual{,</span>
-<span class="co">#&gt;     title = {scdrake: A Pipeline For 10x Chromium Single-Cell RNA-seq Data Analysis},</span>
-<span class="co">#&gt;     author = {Jiri Novotny and Jan Kubovciak},</span>
-<span class="co">#&gt;     year = {2021},</span>
-<span class="co">#&gt;     note = {https://github.com/bioinfocz/scdrake, https://bioinfocz.github.io/scdrake},</span>
-<span class="co">#&gt;   }</span></code></pre></div>
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/print.html">print</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/utils/citation.html">citation</a></span><span class="op">(</span><span class="st">"scdrake"</span><span class="op">)</span>, bibtex <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></code></pre></div>
 <p>Please note that the <a href="https://github.com/bioinfocz/scdrake">scdrake</a> was only made possible thanks to many other R and bioinformatics software authors, which are cited either in the vignettes and/or the paper(s) describing this package.</p>
 </div>
 <div id="help-and-support" class="section level2">
@@ -307,7 +296,7 @@
 <div id="contribution" class="section level2">
 <h2 class="hasAnchor">
 <a href="#contribution" class="anchor"></a>Contribution</h2>
-<p>If you want to contribute to <a href="https://github.com/bioinfocz/scdrake">scdrake</a>, read the <a href="CONTRIBUTING.html">contribution guide</a>, please. All pull requests are welcome! <span class="emoji" data-emoji="slightly_smiling_face">🙂</span></p>
+<p>If you want to contribute to <a href="https://github.com/bioinfocz/scdrake">scdrake</a>, read the <a href="CONTRIBUTING.html">contribution guide</a>, please. All pull requests are welcome! :slightly_smiling_face:</p>
 </div>
 <div id="code-of-conduct" class="section level2">
 <h2 class="hasAnchor">
@@ -366,7 +355,7 @@
 <h2>Dev status</h2>
 <ul class="list-unstyled">
 <li><a href="https://lifecycle.r-lib.org/articles/stages.html#experimental"><img src="https://img.shields.io/badge/lifecycle-experimental-orange.svg" alt="Lifecycle: experimental"></a></li>
-<li><a href="https://codecov.io/gh/bioinfocz/scdrake?branch=main"><img src="https://codecov.io/gh/gorgitko/bioinfocz/branch/main/graph/badge.svg" alt="Codecov test coverage"></a></li>
+<li><a href="https://github.com/bioinfocz/scdrake/actions/workflows/check-bioc.yml"><img src="https://github.com/bioinfocz/scdrake/actions/workflows/check-bioc.yml/badge.svg?branch=main" alt="R-CMD-check-bioc"></a></li>
 </ul>
 </div>
 </div>
