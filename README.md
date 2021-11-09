@@ -4,7 +4,7 @@
 [![Lifecycle:
 experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
 [![Codecov test
-coverage](https://codecov.io/gh/gorgitko/bioinfocz/branch/main/graph/badge.svg)](https://codecov.io/gh/bioinfocz/scdrake?branch=main)
+coverage](https://codecov.io/gh/bioinfocz/scdrake/branch/main/graph/badge.svg)](https://codecov.io/gh/bioinfocz/scdrake?branch=main)
 
 `{scdrake}` is a scalable and reproducible pipeline for downstream
 processing of 10x Genomics single-cell RNA-seq data. It is built on top
@@ -14,24 +14,25 @@ language](https://www.r-project.org/).
 
 The main features of the `{scdrake}` pipeline are:
 
--   Import of [Cell
+  - Import of [Cell
     Ranger](https://support.10xgenomics.com/single-cell-gene-expression/software/pipelines/latest/what-is-cell-ranger)
     output, quality filtering of cells and genes.
--   Normalization, clustering, and dimensionality reduction.
--   Integration of multiple datasets.
--   Computation of cluster markers and differentially expressed genes
+  - Normalization, clustering, and dimensionality reduction.
+  - Integration of multiple datasets.
+  - Computation of cluster markers and differentially expressed genes
     between clusters (denoted as “contrasts”).
--   Rich graphical and HTML outputs.
--   Thanks to `{drake}`, the pipeline is highly scalable and
+  - Rich graphical and HTML outputs.
+  - Thanks to `{drake}`, the pipeline is highly scalable and
     reproducible.
-    -   Want to change some parameter? No problem! Only parts of the
+      - Want to change some parameter? No problem\! Only parts of the
         pipeline which changed will rerun, while up-to-date ones will be
         skipped.
-    -   Want to reuse the intermediate results for your own analyses? No
-        problem! The pipeline has smartly defined checkpoints which can
+      - Want to reuse the intermediate results for your own analyses? No
+        problem\! The pipeline has smartly defined checkpoints which can
         be loaded from a `{drake}` cache.
-    -   Want to extend the pipeline? No problem! The pipeline definition
-        is just an R object which can be arbitrarily extended.
+      - Want to extend the pipeline? No problem\! The pipeline
+        definition is just an R object which can be arbitrarily
+        extended.
 
 `{scdrake}` is aimed at both non-technical and bioinformatic public:
 both will benefit from reports and visualizations, and the latter also
@@ -52,10 +53,16 @@ if (!requireNamespace("BiocManager", quietly = TRUE)) {
 BiocManager::install("bioinfocz/scdrake")
 ```
 
+### Parallelization
+
 To fully utilize the parallelization, you should consider installing
-[ZeroMQ](https://zeromq.org/) and `{clustermq}` R package, which is used
-by `{drake}`. However, it is also possible to use the `{future}`
-package, which doesn’t require any additional system dependencies.
+[ZeroMQ](https://zeromq.org/) and `{clustermq}` R package (probably only
+usable on Linux), which is used by `{drake}`. However, it is also
+possible to use the `{future}` package, which doesn’t require any
+additional system dependencies.
+
+More reading about this topic can be found at
+<https://books.ropensci.org/drake/hpc.html>.
 
 ### Using `renv`
 
@@ -80,30 +87,30 @@ directory to multiple `{scdrake}` projects.
 
 See <https://bioinfocz.github.io/scdrake> for a documentation website.
 
--   Get started: `vignette("scdrake")`
--   Pipeline overview: `vignette("pipeline_overview")`
-    -   Cluster markers: `vignette("cluster_markers")`
--   Running the pipeline, environment variables:
+  - Get started: `vignette("scdrake")`
+  - Pipeline overview: `vignette("pipeline_overview")`
+      - Cluster markers: `vignette("cluster_markers")`
+  - Running the pipeline, environment variables:
     `vignette("scdrake_run")`
--   Config files (basic concept): `vignette("scdrake_config")`
--   Targets and config parameters for each stage:
-    -   Common:
-        -   Pipeline config: `vignette("config_pipeline")`
-        -   Main config: `vignette("config_main")`
-        -   Cluster markers stage: `vignette("stage_cluster_markers")`
-        -   Contrasts stage: `vignette("stage_contrasts")`
-    -   Single-sample pipeline:
-        -   Reading in data, filtering, quality control (`01_input_qc`):
+  - Config files (basic concept): `vignette("scdrake_config")`
+  - Targets and config parameters for each stage:
+      - Common:
+          - Pipeline config: `vignette("config_pipeline")`
+          - Main config: `vignette("config_main")`
+          - Cluster markers stage: `vignette("stage_cluster_markers")`
+          - Contrasts stage: `vignette("stage_contrasts")`
+      - Single-sample pipeline:
+          - Reading in data, filtering, quality control (`01_input_qc`):
             `vignette("stage_input_qc")`
-        -   Normalization, HVG selection, clustering
+          - Normalization, HVG selection, clustering
             (`02_norm_clustering`): `vignette("stage_norm_clustering")`
-    -   Integration pipeline:
-        -   Reading in data and integration (`01_integration`):
+      - Integration pipeline:
+          - Reading in data and integration (`01_integration`):
             `vignette("stage_integration")`
-        -   Clustering (`02_int_clustering`):
+          - Clustering (`02_int_clustering`):
             `vignette("stage_int_clustering")`
--   `{drake}` basics: `vignette("drake_basics")`
-    -   Or the official `{drake}` book:
+  - `{drake}` basics: `vignette("drake_basics")`
+      - Or the official `{drake}` book:
         <https://books.ropensci.org/drake/>
 
 We encourage all users to read
@@ -125,22 +132,6 @@ Please run this yourself to check for any updates on how to cite
 
 ``` r
 print(citation("scdrake"), bibtex = TRUE)
-#> 
-#> To cite package 'scdrake' in publications use:
-#> 
-#>   Jiri Novotny and Jan Kubovciak (2021). scdrake: A Pipeline For 10x
-#>   Chromium Single-Cell RNA-seq Data Analysis.
-#>   https://github.com/bioinfocz/scdrake,
-#>   https://bioinfocz.github.io/scdrake.
-#> 
-#> A BibTeX entry for LaTeX users is
-#> 
-#>   @Manual{,
-#>     title = {scdrake: A Pipeline For 10x Chromium Single-Cell RNA-seq Data Analysis},
-#>     author = {Jiri Novotny and Jan Kubovciak},
-#>     year = {2021},
-#>     note = {https://github.com/bioinfocz/scdrake, https://bioinfocz.github.io/scdrake},
-#>   }
 ```
 
 Please note that the `{scdrake}` was only made possible thanks to many
@@ -157,8 +148,8 @@ to answer your questions, integrate new ideas, or resolve any problems
 ## Contribution
 
 If you want to contribute to `{scdrake}`, read the [contribution
-guide](.github/CONTRIBUTING.md), please. All pull requests are welcome!
-:slightly_smiling_face:
+guide](.github/CONTRIBUTING.md), please. All pull requests are welcome\!
+:slightly\_smiling\_face:
 
 ## Code of Conduct
 
@@ -169,18 +160,18 @@ contributing to this project, you agree to abide by its terms.
 
 ## Development tools
 
--   Continuous code testing is possible thanks to [GitHub
+  - Continuous code testing is possible thanks to [GitHub
     actions](https://www.tidyverse.org/blog/2020/04/usethis-1-6-0/)
     through `{usethis}`, `{remotes}`, and `{rcmdcheck}`. Customized to
     use [Bioconductor’s docker
     containers](https://www.bioconductor.org/help/docker/) and
     `{BiocCheck}`.
--   Code coverage assessment is possible thanks to
+  - Code coverage assessment is possible thanks to
     [codecov](https://codecov.io/gh) and `{covr}`.
--   The [documentation website](http://bioinfocz.github.io/scdrake) is
+  - The [documentation website](http://bioinfocz.github.io/scdrake) is
     automatically updated thanks to `{pkgdown}`.
--   The code is styled automatically thanks to `{styler}`.
--   The documentation is formatted thanks to `{devtools}` and
+  - The code is styled automatically thanks to `{styler}`.
+  - The documentation is formatted thanks to `{devtools}` and
     `{roxygen2}`.
 
 This package was developed using `{biocthis}`.
