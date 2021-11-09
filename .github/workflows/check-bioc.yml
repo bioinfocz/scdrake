@@ -24,9 +24,11 @@ on:
   push:
     paths-ignore:
       - 'README.Rmd'
+      - 'README.md'
   pull_request:
     paths-ignore:
       - 'README.Rmd'
+      - 'README.md'
 
 name: R-CMD-check-bioc
 
