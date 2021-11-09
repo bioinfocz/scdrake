@@ -46,9 +46,9 @@ copy_integration_drake_file <- function(dir, ask = TRUE, verbose = getOption("sc
 #' - Copy config, RMarkdown, and `_drake_*.R` files.
 #' - Create an empty `.here` file. This ensures that the [here](https://here.r-lib.org/) package will be able to find
 #'   the project's root directory in case an RStudio project is not initialized.
-#' - (Optional) Initialize an RStudio project and set it as the active project.
 #' - Check whether the `yq` tool is available in `PATH` environment variable.
 #' - (Optional) Download the example data using [download_pbmc1k()] and [download_pbmc3k()].
+#' - (Optional) Initialize an RStudio project and set it as the active project.
 #'
 #' @examples
 #' \dontrun{
@@ -119,10 +119,7 @@ init_project <- function(dir = NULL,
   }
 
   if (use_rstudio) {
-    usethis::create_project(dir, rstudio = TRUE, open = set_active_project)
-    if (set_active_project && !set_wd) {
-      here::i_am(".here")
-    }
+    usethis::create_project(dir, rstudio = TRUE, open = FALSE)
     fs::dir_delete(fs::path(dir, "R"))
     fs::file_delete(fs::path(dir, ".gitignore"))
   }
@@ -145,6 +142,11 @@ init_project <- function(dir = NULL,
   }
 
   verbose %&&% cli::cli_h1("Done!")
+
+  if (use_rstudio && set_active_project) {
+    usethis::proj_activate(dir)
+  }
+
   invisible(NULL)
 }
 

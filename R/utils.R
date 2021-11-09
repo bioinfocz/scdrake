@@ -370,8 +370,12 @@ set_rstudio_drake_cache <- function(dir) {
   invisible(NULL)
 }
 
-.confirm_menu <- function(choices = c("Yes.", "No"), title = "Do you want to continue?") {
-  utils::menu(choices, title = title)
+.confirm_menu <- function(choices = c("Yes.", "No"), title = "Do you want to continue?", .choice = 1L) {
+  if (interactive()) {
+    utils::menu(choices, title = title)
+  } else {
+    return(.choice)
+  }
 }
 
 ## -- https://conjugateprior.org/2015/06/identifying-the-os-from-r/

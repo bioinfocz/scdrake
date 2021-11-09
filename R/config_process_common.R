@@ -282,9 +282,9 @@ NULL
       "in {.file 00_main.yaml} config is not installed."
     ))
     continue <- .confirm_menu(title = "Do you want to install this package?")
-    if (continue != 1L) {
+    if (continue == 1L) {
       cli_alert_info('Calling {.code BiocManager::install("{ANNOTATION_PKG}")}')
-      BiocManager::install(ANNOTATION_PKG)
+      BiocManager::install(ANNOTATION_PKG, update = FALSE)
     }
   }
 

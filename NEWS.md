@@ -5,6 +5,8 @@
   - Fixed URL to Windows version (`.exe` extension).
   - Better OS resolution implemented in `.get_os()`.
 - Fixed issues with `yq` tool's binary download on Windows.
+- Modified `.confirm_menu()` for non-interactive usage.
+- Activate an RStudio project on the end of `init_project()` function.
 
 # scdrake 1.0.0
 
