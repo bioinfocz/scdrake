@@ -1,5 +1,7 @@
 # scdrake (development version)
 
+# scdrake 1.0.1
+
 - Fixed `download_yq()`:
   - `download_yq()` now supports the masOS (`darwin`).
   - Fixed URL to Windows version (`.exe` extension).
