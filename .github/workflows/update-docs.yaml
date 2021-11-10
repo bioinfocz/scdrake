@@ -44,10 +44,8 @@ jobs:
 
       - name: Query dependencies
         run: |
-          pkgs <- as.data.frame(utils::available.packages()[, c("Package", "Version", "MD5sum")])
-          pkgs <- pkgs[pkgs$Package %in% c("rmarkdown", "pkgdown"), ]
-          print(pkgs)
-          saveRDS(pkgs, ".github/update-docs-depends.Rds", version = 2)
+          install.packages("remotes")
+          saveRDS(remotes::package_deps(c("rmarkdown", "pkgdown"), dependencies = TRUE), ".github/update-docs-depends.Rds", version = 2)
         shell: Rscript {0}
 
       - name: Cache R packages
@@ -60,8 +58,7 @@ jobs:
 
       - name: Install R packages
         run: |
-          install.packages("remotes")
-          remotes::install_cran(c("rmarkdown", "pkgdown"), upgrade = "always", dependencies = FALSE)
+          remotes::install_cran(c("rmarkdown", "pkgdown"))
         shell: Rscript {0}
 
       - name: Render README
