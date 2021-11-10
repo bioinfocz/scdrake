@@ -42,6 +42,10 @@ jobs:
       - uses: r-lib/actions/setup-r@v1
       - uses: r-lib/actions/setup-pandoc@v1
 
+      - name: Install shared libs
+        run: |
+          sudo apt install build-essential libcurl4-openssl-dev libxml2-dev libssl-dev libharfbuzz-dev libfribidi-dev
+
       - name: Query dependencies
         run: |
           install.packages("remotes")
