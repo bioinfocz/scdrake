@@ -202,9 +202,9 @@ $(document).ready(function(){
 <ul>
 <li>Create a new project directory. Existing directory is automatically detected and you will be asked if it can be overwritten (unless <code>ask = FALSE</code>).</li>
 <li>Switch your current working directory to <code>~/scdrake_example_project</code> (can be disabled).</li>
-<li>Create a new RStudio project (<code>.RProj</code>) file and set it as active project (can be disabled).</li>
 <li>Copy all files, which are bundled with the <a href="https://github.com/bioinfocz/scdrake">scdrake</a> package: YAML configs, Rmd files, R scripts etc.</li>
 <li>Download (if needed) the <a href="https://github.com/mikefarah/yq">yq tool</a> used to manipulate YAML files.</li>
+<li>Create a new RStudio project (<code>.RProj</code>) file and set it as active project (can be disabled).</li>
 </ul>
 <blockquote>
 <p>Whenever you will be running the <a href="https://github.com/bioinfocz/scdrake">scdrake</a> pipeline, make sure your working directory is set to the project’s root.</p>
@@ -212,7 +212,7 @@ $(document).ready(function(){
 <p>Let’s inspect files in the project directory:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu">fs</span><span class="fu">::</span><span class="fu"><a href="http://fs.r-lib.org/reference/dir_tree.html">dir_tree</a></span><span class="op">(</span>all <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></code></pre></div>
-<pre><code>## /tmp/RtmpDZhlew/file10ce771abb31
+<pre><code>## /tmp/RtmpdtmEnK/file10407fe7496f
 ## ├── .here
 ## ├── Rmd
 ## │   ├── common
@@ -257,7 +257,7 @@ $(document).ready(function(){
 ## │       ├── cluster_markers.yaml
 ## │       ├── contrasts.default.yaml
 ## │       └── contrasts.yaml
-## ├── file10ce771abb31.Rproj
+## ├── file10407fe7496f.Rproj
 ## └── renv.lock</code></pre>
 <ul>
 <li>
@@ -265,7 +265,7 @@ $(document).ready(function(){
 <li>
 <code>Rmd/</code>: RMarkdown files used for reporting of pipeline results. You can edit them according to your needs, but keep in mind that they will be overwritten by package-bundle ones if you call <code><a href="../reference/update_project.html">update_project()</a></code>.</li>
 <li>
-<code>config/</code>: config files in YAML format. See <code>vignette("config"</code>) for more details.</li>
+<code>config/</code>: config files in YAML format. See <code><a href="../articles/scdrake_config.html">vignette("scdrake_config")</a></code> for more details.</li>
 <li>
 <code>_drake_integration.R</code>, <code>_drake_single_sample.R</code>: entry points for <a href="https://docs.ropensci.org/drake">drake</a> when pipeline is executed through <code><a href="https://docs.ropensci.org/drake/reference/r_make.html">drake::r_make()</a></code>.</li>
 <li>
