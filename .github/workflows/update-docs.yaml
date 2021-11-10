@@ -42,6 +42,11 @@ jobs:
       - uses: r-lib/actions/setup-r@v1
       - uses: r-lib/actions/setup-pandoc@v1
 
+      - name: Set R Library home
+        run: |
+          mkdir /__w/_temp/Library
+          echo ".libPaths('/__w/_temp/Library')" > ~/.Rprofile
+
       - name: Query dependencies
         run: |
           install.packages("remotes")
