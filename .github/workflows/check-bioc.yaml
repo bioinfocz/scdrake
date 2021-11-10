@@ -20,6 +20,7 @@
 ## * GHA: GitHub Action
 ## * OS: operating system
 
+name: R-CMD-check-bioc
 on:
   push:
     branches: ['main']
@@ -45,8 +46,8 @@ on:
       - 'DESCRIPTION'
       - 'NAMESPACE'
       - '.github/workflows/check-bioc.yaml'
-
-name: R-CMD-check-bioc
+concurrency:
+  group: main
 
 ## These environment variables control whether to run GHA code later on that is
 ## specific to testthat, covr, and pkgdown.

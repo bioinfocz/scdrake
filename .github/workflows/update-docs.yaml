@@ -3,6 +3,7 @@
 ## Docs in gh-pages branch are updated except articles and reference
 ## (those are triggered by changes in man/ and vignettes/, and treated by check-bioc.yaml workflow)
 
+name: update-docs
 on:
   push:
     paths:
@@ -22,8 +23,8 @@ on:
       - 'LICENSE'
       - 'NAMESPACE'
       - '.github/**.md'
-
-name: update-docs
+concurrency:
+  group: main
 
 jobs:
   render:
