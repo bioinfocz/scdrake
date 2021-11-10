@@ -44,7 +44,7 @@ jobs:
 
       - name: Query dependencies
         run: |
-          pkgs <- utils::available.packages()[, c("Package", "Version", "MD5sum")]
+          pkgs <- as.data.frame(utils::available.packages()[, c("Package", "Version", "MD5sum")])
           pkgs <- pkgs[pkgs$Package %in% c("rmarkdown", "pkgdown"), ]
           print(pkgs)
           saveRDS(pkgs, ".github/update-docs-depends.Rds", version = 2)
