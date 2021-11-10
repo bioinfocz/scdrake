@@ -23,7 +23,7 @@ cheatsheets [here](https://lzone.de/cheat-sheet/YAML) and [here](https://learnxi
 is a human-readable format and uses indentation (spaces) for nesting of parameters.
 
 `{scdrake}` is using a concept of default and local configs. Default configs are bundled with the package and copied
-during project initialization, update, and pipeline run (e.g. in `run_single_sample()` or `_drake_single_sample.R`).
+during project initialization, update, and pipeline run (e.g. in `run_single_sample()` or in `_drake_single_sample.R`).
 Local configs are, as their name suggests, purposed to make modifications to default configs
 (see the section below for how it is actually done).
 Default and local configs are named `*.default.yaml` and `*.yaml`, respectively.
@@ -122,16 +122,21 @@ However, it is possible to use the structure of a default config - see `?update_
 
 # Using R code in parameters
 
-A special type of parameter can be used to evaluate a value as R code:
+A special type of parameter starting with `!code` can be used to evaluate a value as R code:
 
 ```yaml
 EXAMPLE: !code 1:3
 ```
 
 First, non-code parameters are loaded to a separate environment and then code parameters are evaluated in the
-context of this environment. This means you can use other config parameters as R variables inside code parameters.
+context of this environment. This means you can use other config parameters as R variables inside code parameters:
 
-By default, in stage configs (e.g. `02_norm_clustering`) you can also use parameters (variables) from `pipeline.yaml`
+```yaml
+FOO: 1
+BAR: !code FOO + 1
+```
+
+In addition, in stage configs (e.g. `02_norm_clustering`) you can also use parameters (variables) from `pipeline.yaml`
 and `00_main.yaml` configs:
 
 ```yaml
@@ -146,10 +151,9 @@ Internally, the [yq](https://github.com/mikefarah/yq) tool (version 3) is used f
 It is a command line utility whose binary needs to be downloaded. This is done automatically during initialization of
 a new project, or you can do it manually through `download_yq()`.
 
-The presence of `yq` binary is checked on `{scdrake}` load or attach.
-`SCDRAKE_YQ_BINARY` environment variable is read - if not set, a value from `Sys.which("yq")` is used (this function
-searches in `PATH` environment variable). Then `scdrake_yq_binary` option is set, and is used as default value
-to config-updating functions (see `?update_config`).
+On `{scdrake}` load or attach, `SCDRAKE_YQ_BINARY` environment variable is read - if not set,
+a value from `Sys.which("yq")` is used (this function searches in `PATH` environment variable).
+Then `scdrake_yq_binary` option is set, and is used as default value to config-updating functions (see `?update_config`).
 
 You can also look at `?check_yq` for details on how `PATH` variable is treated in terminal vs. RStudio.
 

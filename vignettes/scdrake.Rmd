@@ -51,9 +51,9 @@ This will:
 - Create a new project directory. Existing directory is automatically detected and you will be asked if it can be
   overwritten (unless `ask = FALSE`).
 - Switch your current working directory to `~/scdrake_example_project` (can be disabled).
-- Create a new RStudio project (`.RProj`) file and set it as active project (can be disabled).
 - Copy all files, which are bundled with the `{scdrake}` package: YAML configs, Rmd files, R scripts etc.
 - Download (if needed) the [yq tool](https://github.com/mikefarah/yq) used to manipulate YAML files.
+- Create a new RStudio project (`.RProj`) file and set it as active project (can be disabled).
 
 > Whenever you will be running the `{scdrake}` pipeline, make sure your working directory is set to the project's root.
 
@@ -71,7 +71,7 @@ fs::dir_tree(tmp_dir, all = TRUE)
   Only used when RStudio project file (`.Rproj`) is not found.
 - `Rmd/`: RMarkdown files used for reporting of pipeline results. You can edit them according to your needs,
   but keep in mind that they will be overwritten by package-bundle ones if you call `update_project()`.
-- `config/`: config files in YAML format. See `vignette("config"`) for more details.
+- `config/`: config files in YAML format. See `vignette("scdrake_config")` for more details.
 - `_drake_integration.R`, `_drake_single_sample.R`: entry points for `{drake}` when pipeline is executed through
   `drake::r_make()`.
 - `scdrake_example_project.Rproj`: RStudio project file. Created when you call `init_project()` with
