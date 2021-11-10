@@ -44,7 +44,7 @@ and the latter also from the possibility to utilize all benefits of `{drake}` fo
 `{scdrake}` is currently not released on [CRAN](http://cran.r-project.org/),
 however, you can install its latest stable version from GitHub using the following code:
 
-```{r "install", eval = FALSE}
+```{r, eval = FALSE}
 if (!requireNamespace("BiocManager", quietly = TRUE)) {
   install.packages("BiocManager")
 }
@@ -54,7 +54,7 @@ BiocManager::install("bioinfocz/scdrake@v1.0.1")
 
 For development version use
 
-```{r "install", eval = FALSE}
+```{r, eval = FALSE}
 if (!requireNamespace("BiocManager", quietly = TRUE)) {
   install.packages("BiocManager")
 }
