@@ -22,13 +22,29 @@
 
 on:
   push:
-    paths-ignore:
-      - 'README.Rmd'
-      - 'README.md'
+    branches: ['main']
+    paths:
+      - 'R/**'
+      - 'inst/**'
+      - 'man/**'
+      - 'tests/**'
+      - 'vignettes/**'
+      - '.Rbuildignore'
+      - 'DESCRIPTION'
+      - 'NAMESPACE'
+      - '.github/workflows/check-bioc.yaml'
   pull_request:
-    paths-ignore:
-      - 'README.Rmd'
-      - 'README.md'
+    branches: ['main']
+    paths:
+      - 'R/**'
+      - 'inst/**'
+      - 'man/**'
+      - 'tests/**'
+      - 'vignettes/**'
+      - '.Rbuildignore'
+      - 'DESCRIPTION'
+      - 'NAMESPACE'
+      - '.github/workflows/check-bioc.yaml'
 
 name: R-CMD-check-bioc
 
