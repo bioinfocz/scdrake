@@ -1,0 +1,73 @@
+## Adapted from https://github.com/r-lib/actions/blob/master/.github/workflows/render-readme.yaml
+## README.Rmd is re-rendered to README.md
+## Docs in gh-pages branch are updated except articles and reference
+## (those are triggered by changes in man/ and vignettes/, and treated by check-bioc.yaml workflow)
+
+on:
+  push:
+    paths:
+      - '_pkgdown.yml'
+      - 'README.Rmd'
+      - '*.md'
+      - 'DESCRIPTION'
+      - 'LICENSE'
+      - 'NAMESPACE'
+      - '.github/**.md'
+  pull_request:
+    paths:
+      - '_pkgdown.yml'
+      - 'README.Rmd'
+      - '*.md'
+      - 'DESCRIPTION'
+      - 'LICENSE'
+      - 'NAMESPACE'
+      - '.github/**.md'
+
+name: update-docs
+
+jobs:
+  render:
+    name: update-docs
+    runs-on: ubuntu-latest
+    env:
+      GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
+    steps:
+      - uses: actions/checkout@v2
+      - uses: r-lib/actions/setup-r@v1
+      - uses: r-lib/actions/setup-pandoc@v1
+      - uses: r-lib/actions/setup-r-dependencies@v1
+        with:
+          cache-version: 1
+          extra-packages: |
+            rmarkdown
+            pkgdown
+
+      - name: Render README
+        run: Rscript -e 'rmarkdown::render("README.Rmd")'
+
+      - name: Run pkgdown
+        run: |
+          pkgdown::build_home()
+          pkgdown::build_news()
+        shell: Rscript {0}
+
+      - name: Commit to gh-pages
+        run: |
+          git config --local user.name "$GITHUB_ACTOR"
+          git config --local user.email "$GITHUB_ACTOR@users.noreply.github.com"
+          git remote set-branches --add origin gh-pages
+          git fetch origin gh-pages
+          git worktree add --track -B gh-pages /tmp/gh-pages origin/gh-pages
+          cd /tmp/gh-pages
+          git add -A .
+          commit_message=$(Rscript -e "cat(pkgdown:::construct_commit_message('.'))")
+          git commit --allow-empty -m $commit_message || echo "No changes to commit"
+          git remote -v
+          git push --force origin HEAD:gh-pages || echo "No commits to push"
+
+      - name: Commit README.md
+        run: |
+          git config --local user.name "$GITHUB_ACTOR"
+          git config --local user.email "$GITHUB_ACTOR@users.noreply.github.com"
+          git commit README.md -m 'Re-build README.Rmd' || echo "No changes to commit"
+          git push origin || echo "No commits to push"
