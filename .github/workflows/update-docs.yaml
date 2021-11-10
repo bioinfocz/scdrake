@@ -58,7 +58,8 @@ jobs:
 
       - name: Install R packages
         run: |
-          remotes::install_cran(c("rmarkdown", "pkgdown"))
+          remotes::install_cran("rmarkdown")
+          remotes::install_cran("pkgdown")
         shell: Rscript {0}
 
       - name: Render README
