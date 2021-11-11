@@ -80,12 +80,12 @@ jobs:
         run: |
           git config --local user.name "$GITHUB_ACTOR"
           git config --local user.email "$GITHUB_ACTOR@users.noreply.github.com"
+          commit_message=$(Rscript -e "cat(pkgdown:::construct_commit_message('.'))")
           git remote set-branches --add origin gh-pages
           git fetch origin gh-pages
           git worktree add --track -B gh-pages /tmp/gh-pages origin/gh-pages
           cd /tmp/gh-pages
           git add -A .
-          commit_message=$(Rscript -e "cat(pkgdown:::construct_commit_message('.'))")
           git commit --allow-empty -m $commit_message || echo "No changes to commit"
           git remote -v
           git push --force origin HEAD:gh-pages || echo "No commits to push"
