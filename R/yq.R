@@ -132,6 +132,7 @@ download_yq <- function(url = NULL,
 #' @description The difference between platforms is that on Windows the `.exe` extension is added.
 #' @return A character scalar.
 #'
+#' @concept yq_tool
 #' @export
 get_yq_default_path <- function() {
   if (.get_os() == "windows") {

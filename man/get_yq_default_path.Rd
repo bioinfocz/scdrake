@@ -12,3 +12,4 @@ A character scalar.
 \description{
 The difference between platforms is that on Windows the \code{.exe} extension is added.
 }
+\concept{yq_tool}
