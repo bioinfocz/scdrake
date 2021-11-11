@@ -84,7 +84,7 @@ jobs:
         run: |
           invisible(pkgdown:::git("status"))
           dest_dir <- fs::dir_create(fs::file_temp())
-          pkg <- as_pkgdown(".", override = list(destination = dest_dir))
+          pkg <- pkgdown::as_pkgdown(".", override = list(destination = dest_dir))
           branch <- "gh-pages"
           remote <- "origin"
           commit_message <- pkgdown:::construct_commit_message(".")
