@@ -83,11 +83,11 @@ jobs:
       - name: Run pkgdown and push to gh-pages branch
         run: |
           invisible(pkgdown:::git("status"))
-          pkg <- "."
           dest_dir <- fs::dir_create(fs::file_temp())
+          pkg <- as_pkgdown(".", override = list(destination = dest_dir))
           branch <- "gh-pages"
           remote <- "origin"
-          commit_message <- pkgdown:::construct_commit_message(pkg)
+          commit_message <- pkgdown:::construct_commit_message(".")
           pkgdown:::git("remote", "set-branches", remote, branch)
           pkgdown:::git("fetch", remote, branch)
           pkgdown:::github_worktree_add(dest_dir, remote, branch)
