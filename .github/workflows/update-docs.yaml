@@ -39,6 +39,8 @@ jobs:
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
     steps:
       - uses: actions/checkout@v2
+      - run: git config --global user.name "$GITHUB_ACTOR"
+      - run: git config --global user.email "$GITHUB_ACTOR@users.noreply.github.com"
       - uses: r-lib/actions/setup-r@v1
       - uses: r-lib/actions/setup-pandoc@v1
 
@@ -70,29 +72,24 @@ jobs:
       - name: Render README
         run: Rscript -e 'rmarkdown::render("README.Rmd")'
 
-      - name: Run pkgdown
-        run: |
-          pkgdown::build_home()
-          pkgdown::build_news()
-        shell: Rscript {0}
-
-      - name: Commit to gh-pages branch
-        run: |
-          git config --local user.name "$GITHUB_ACTOR"
-          git config --local user.email "$GITHUB_ACTOR@users.noreply.github.com"
-          commit_message=$(Rscript -e "cat(pkgdown:::construct_commit_message('.'))")
-          git remote set-branches --add origin gh-pages
-          git fetch origin gh-pages
-          git worktree add --track -B gh-pages /tmp/gh-pages origin/gh-pages
-          cd /tmp/gh-pages
-          git add -A .
-          git commit --allow-empty -m $commit_message || echo "No changes to commit"
-          git remote -v
-          git push --force origin HEAD:gh-pages || echo "No commits to push"
-
       - name: Commit README.md to main branch
         run: |
-          git config --local user.name "$GITHUB_ACTOR"
-          git config --local user.email "$GITHUB_ACTOR@users.noreply.github.com"
           git commit README.md -m 'Re-build README.Rmd' || echo "No changes to commit"
           git push origin || echo "No commits to push"
+
+      ## Adapted from https://rdrr.io/cran/pkgdown/src/R/deploy-site.R#sym-deploy_to_branch
+      - name: Run pkgdown and push to gh-pages branch
+        run: |
+          pkg <- "."
+          dest_dir <- fs::dir_create(fs::file_temp())
+          branch <- "gh-pages"
+          remote <- "origin"
+          commit_message <- pkgdown:::construct_commit_message(pkg)
+          pkgdown:::git("remote", "set-branches", remote, branch)
+          pkgdown:::git("fetch", remote, branch)
+          pkgdown:::github_worktree_add(dest_dir, remote, branch)
+          pkgdown::build_home(pkg)
+          pkgdown::build_news(pkg)
+          pkgdown:::build_github_pages(pkg)
+          pkgdown:::github_push(dest_dir, commit_message, remote, branch)
+        shell: Rscript {0}
