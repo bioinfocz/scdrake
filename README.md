@@ -3,7 +3,7 @@
 
 [![Lifecycle:
 experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
-[![R-CMD-check-bioc](https://github.com/bioinfocz/scdrake/actions/workflows/check-bioc.yml/badge.svg?branch=main)](https://github.com/bioinfocz/scdrake/actions/workflows/check-bioc.yml)
+[![R-CMD-check-bioc](https://github.com/bioinfocz/scdrake/actions/workflows/check-bioc.yml/badge.svg?branch=main)](https://github.com/bioinfocz/scdrake/actions/workflows/check-bioc.yaml)
 
 `{scdrake}` is a scalable and reproducible pipeline for downstream
 processing of 10x Genomics single-cell RNA-seq data. It is built on top
@@ -168,7 +168,15 @@ Code of
 Conduct](https://bioinfocz.github.io/scdrake/CODE_OF_CONDUCT.html). By
 contributing to this project, you agree to abide by its terms.
 
-## Development tools
+## Acknowledgements
+
+### Funding
+
+This work was supported by [ELIXIR CZ](https://www.elixir-czech.cz/)
+research infrastructure project (MEYS Grant No: LM2018131) including
+access to computing and storage facilities.
+
+### Development tools
 
   - Continuous code testing is possible thanks to [GitHub
     actions](https://www.tidyverse.org/blog/2020/04/usethis-1-6-0/)
