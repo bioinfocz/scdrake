@@ -29,7 +29,7 @@ concurrency:
   group: main
 
 env:
-  cache-version: 'cache-v2'
+  cache-version: 'cache-v3'
 
 jobs:
   render:
@@ -51,7 +51,9 @@ jobs:
       - name: Query dependencies
         run: |
           install.packages("remotes")
-          saveRDS(remotes::package_deps(c("rmarkdown", "pkgdown"), dependencies = TRUE), ".github/update-docs-depends.Rds", version = 2)
+          deps <- remotes::package_deps(c("rmarkdown", "pkgdown"), dependencies = TRUE)
+          print(deps)
+          saveRDS(deps, ".github/update-docs-depends.Rds", version = 2)
         shell: Rscript {0}
 
       - name: Cache R packages
@@ -80,6 +82,7 @@ jobs:
       ## Adapted from https://rdrr.io/cran/pkgdown/src/R/deploy-site.R#sym-deploy_to_branch
       - name: Run pkgdown and push to gh-pages branch
         run: |
+          invisible(pkgdown:::git("status"))
           pkg <- "."
           dest_dir <- fs::dir_create(fs::file_temp())
           branch <- "gh-pages"
@@ -88,8 +91,11 @@ jobs:
           pkgdown:::git("remote", "set-branches", remote, branch)
           pkgdown:::git("fetch", remote, branch)
           pkgdown:::github_worktree_add(dest_dir, remote, branch)
-          pkgdown::build_home(pkg)
+          pkgdown::build_home(pkg, quiet = FALSE)
           pkgdown::build_news(pkg)
           pkgdown:::build_github_pages(pkg)
+          invisible(withr::with_dir(dest_dir, pkgdown:::git("status")))
           pkgdown:::github_push(dest_dir, commit_message, remote, branch)
+          invisible(withr::with_dir(dest_dir, pkgdown:::git("status")))
+          invisible(withr::with_dir(dest_dir, pkgdown:::git("log")))
         shell: Rscript {0}
