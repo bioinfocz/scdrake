@@ -176,7 +176,7 @@
 <div class="page-header"><h1 class="hasAnchor">
 <a href="#scdrake" class="anchor"></a>scdrake</h1></div>
 
-<p><code>{scdrake}</code> is a scalable and reproducible pipeline for downstream processing of 10x Genomics single-cell RNA-seq data. It is built on top of the <a href="https://docs.ropensci.org/drake">drake</a> package, a <a href="https://www.gnu.org/software/make/">Make</a>-like pipeline toolkit for <a href="https://www.r-project.org/">R language</a>.</p>
+<p><code>{scdrake}</code> is a scalable and reproducible pipeline for downstream processing of 10x Genomics single-cell RNA-seq data. It is built on top of the <a href="https://docs.ropensci.org/drake">drake</a> package, a <a href="https://www.gnu.org/software/make">Make</a>-like pipeline toolkit for <a href="https://www.r-project.org">R language</a>.</p>
 <p>The main features of the <code>{scdrake}</code> pipeline are:</p>
 <ul>
 <li>Import of <a href="https://support.10xgenomics.com/single-cell-gene-expression/software/pipelines/latest/what-is-cell-ranger">Cell Ranger</a> output, quality filtering of cells and genes.</li>
@@ -193,10 +193,11 @@
 </li>
 </ul>
 <p><code>{scdrake}</code> is aimed at both non-technical and bioinformatic public: both will benefit from reports and visualizations, and the latter also from the possibility to utilize all benefits of <a href="https://docs.ropensci.org/drake">drake</a> for custom analyses.</p>
+<p>Huge thanks go to the authors of the <a href="https://bioconductor.org/books/release/OSCA">Orchestrating Single-Cell Analysis with Bioconductor</a> book on whose methods and recommendations is <code>{scdrake}</code> largely based.</p>
 <div id="installation-instructions" class="section level2">
 <h2 class="hasAnchor">
 <a href="#installation-instructions" class="anchor"></a>Installation instructions</h2>
-<p><code>{scdrake}</code> is currently not released on <a href="http://cran.r-project.org/">CRAN</a>, however, you can install its latest stable version from GitHub using the following code:</p>
+<p><code>{scdrake}</code> is currently not released on <a href="https://cran.r-project.org">CRAN</a>, however, you can install its latest stable version from GitHub using the following code:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="kw">if</span> <span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/ns-load.html">requireNamespace</a></span><span class="op">(</span><span class="st">"BiocManager"</span>, quietly <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span>
   <span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span><span class="op">(</span><span class="st">"BiocManager"</span><span class="op">)</span>
@@ -213,7 +214,7 @@
 <div id="parallelization" class="section level3">
 <h3 class="hasAnchor">
 <a href="#parallelization" class="anchor"></a>Parallelization</h3>
-<p>To fully utilize the parallelization, you should consider installing <a href="https://zeromq.org/">ZeroMQ</a> and <a href="https://mschubert.github.io/clustermq/">clustermq</a> R package (probably only usable on Linux), which is used by <a href="https://docs.ropensci.org/drake">drake</a>. However, it is also possible to use the <a href="https://future.futureverse.org">future</a> package, which doesn’t require any additional system dependencies.</p>
+<p>To fully utilize the parallelization, you should consider installing <a href="https://zeromq.org">ZeroMQ</a> and <a href="https://mschubert.github.io/clustermq/">clustermq</a> R package (probably only usable on Linux), which is used by <a href="https://docs.ropensci.org/drake">drake</a>. However, it is also possible to use the <a href="https://future.futureverse.org">future</a> package, which doesn’t require any additional system dependencies.</p>
 <p>More reading about this topic can be found at <a href="https://books.ropensci.org/drake/hpc.html" class="uri">https://books.ropensci.org/drake/hpc.html</a>.</p>
 </div>
 <div id="using-renv" class="section level3">
@@ -284,7 +285,7 @@
 </ul>
 </li>
 </ul>
-<p>We encourage all users to read <a href="https://books.ropensci.org/drake/">basics</a> of the <a href="https://docs.ropensci.org/drake">drake</a> package. While it is not necessary to know all <a href="https://docs.ropensci.org/drake">drake</a> internals to successfully run the <code>{scdrake}</code> pipeline, its knowledge is a plus. You can read the minimum basics in <code><a href="articles/drake_basics.html">vignette("drake_basics")</a></code>.</p>
+<p>We encourage all users to read <a href="https://books.ropensci.org/drake">basics</a> of the <a href="https://docs.ropensci.org/drake">drake</a> package. While it is not necessary to know all <a href="https://docs.ropensci.org/drake">drake</a> internals to successfully run the <code>{scdrake}</code> pipeline, its knowledge is a plus. You can read the minimum basics in <code><a href="articles/drake_basics.html">vignette("drake_basics")</a></code>.</p>
 <p>Also, the prior knowledge of Bioconductor and its classes (especially the <a href="https://bioconductor.org/packages/release/bioc/html/SingleCellExperiment.html">SingleCellExperiment</a>) is considerable.</p>
 </div>
 <div id="citation" class="section level2">
@@ -293,12 +294,26 @@
 <p>Below is the citation output from using <code>citation("scdrake")</code> in R. Please run this yourself to check for any updates on how to cite <strong>scdrake</strong>.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/print.html">print</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/utils/citation.html">citation</a></span><span class="op">(</span><span class="st">"scdrake"</span><span class="op">)</span>, bibtex <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1"></a>To cite package ‘scdrake’ <span class="cf">in</span> publications use<span class="op">:</span></span>
+<span id="cb5-2"><a href="#cb5-2"></a></span>
+<span id="cb5-3"><a href="#cb5-3"></a><span class="st">  </span>Jiri Novotny and Jan <span class="kw">Kubovciak</span> (<span class="dv">2021</span>). scdrake<span class="op">:</span><span class="st"> </span>A Pipeline For 10x Chromium Single<span class="op">-</span>Cell RNA<span class="op">-</span>seq Data Analysis.</span>
+<span id="cb5-4"><a href="#cb5-4"></a>  https<span class="op">:</span><span class="er">//</span>github.com<span class="op">/</span>bioinfocz<span class="op">/</span>scdrake, https<span class="op">:</span><span class="er">//</span>bioinfocz.github.io<span class="op">/</span>scdrake.</span>
+<span id="cb5-5"><a href="#cb5-5"></a></span>
+<span id="cb5-6"><a href="#cb5-6"></a>A BibTeX entry <span class="cf">for</span> LaTeX users is</span>
+<span id="cb5-7"><a href="#cb5-7"></a></span>
+<span id="cb5-8"><a href="#cb5-8"></a>  <span class="op">@</span>Manual{,</span>
+<span id="cb5-9"><a href="#cb5-9"></a>    title =<span class="st"> </span>{scdrake<span class="op">:</span><span class="st"> </span>A Pipeline For 10x Chromium Single<span class="op">-</span>Cell RNA<span class="op">-</span>seq Data Analysis},</span>
+<span id="cb5-10"><a href="#cb5-10"></a>    author =<span class="st"> </span>{Jiri Novotny and Jan Kubovciak},</span>
+<span id="cb5-11"><a href="#cb5-11"></a>    year =<span class="st"> </span>{<span class="dv">2021</span>},</span>
+<span id="cb5-12"><a href="#cb5-12"></a>    note =<span class="st"> </span>{https<span class="op">:</span><span class="er">//</span>github.com<span class="op">/</span>bioinfocz<span class="op">/</span>scdrake, https<span class="op">:</span><span class="er">//</span>bioinfocz.github.io<span class="op">/</span>scdrake},</span>
+<span id="cb5-13"><a href="#cb5-13"></a>  }</span></code></pre></div>
 <p>Please note that the <code>{scdrake}</code> was only made possible thanks to many other R and bioinformatics software authors, which are cited either in the vignettes and/or the paper(s) describing this package.</p>
 </div>
 <div id="help-and-support" class="section level2">
 <h2 class="hasAnchor">
 <a href="#help-and-support" class="anchor"></a>Help and support</h2>
 <p>In case of any problems or suggestions, please, open a new <a href="https://github.com/bioinfocz/scdrake/issues">issue</a>. We will be happy to answer your questions, integrate new ideas, or resolve any problems <span class="emoji" data-emoji="blush">😊</span></p>
+<p>You can also use <a href="https://github.com/bioinfocz/scdrake/discussions">GitHub Discussions</a>, mainly for topics <strong>not</strong> related to development (bugs, feature requests etc.), but if you need e.g. a general help.</p>
 </div>
 <div id="contribution" class="section level2">
 <h2 class="hasAnchor">
@@ -316,15 +331,29 @@
 <div id="funding" class="section level3">
 <h3 class="hasAnchor">
 <a href="#funding" class="anchor"></a>Funding</h3>
-<p>This work was supported by <a href="https://www.elixir-czech.cz/">ELIXIR CZ</a> research infrastructure project (MEYS Grant No: LM2018131) including access to computing and storage facilities.</p>
+<p>This work was supported by <a href="https://www.elixir-czech.cz">ELIXIR CZ</a> research infrastructure project (MEYS Grant No: LM2018131) including access to computing and storage facilities.</p>
+</div>
+<div id="software-and-methods-used-by-scdrake" class="section level3">
+<h3 class="hasAnchor">
+<a href="#software-and-methods-used-by-scdrake" class="anchor"></a>Software and methods used by <code>{scdrake}</code>
+</h3>
+<p>Many things are used by <code>{scdrake}</code>, but these are really worth mentioning:</p>
+<ul>
+<li>The <a href="https://www.bioconductor.org">Bioconductor</a> ecosystem.</li>
+<li>
+<a href="https://bioconductor.org/books/release/OSCA">Orchestrating Single-Cell Analysis with Bioconductor</a> book.</li>
+<li>The <a href="https://bioconductor.org/packages/release/bioc/html/scran.html">scran</a>, <a href="https://bioconductor.org/packages/release/bioc/html/scater.html">scater</a>, and other great packages from <a href="https://orcid.org/0000-0002-3564-4813">Aaron Lun</a> et al.</li>
+<li>The <a href="https://github.com/ropensci/drake">drake</a> package.</li>
+<li>The <a href="https://github.com/rstudio/rmarkdown">rmarkdown</a> package, and other ones from the <a href="https://www.tidyverse.org">tidyverse</a> ecosystem.</li>
+</ul>
 </div>
 <div id="development-tools" class="section level3">
 <h3 class="hasAnchor">
 <a href="#development-tools" class="anchor"></a>Development tools</h3>
 <ul>
-<li>Continuous code testing is possible thanks to <a href="https://www.tidyverse.org/blog/2020/04/usethis-1-6-0/">GitHub actions</a> through <a href="https://usethis.r-lib.org">usethis</a>, <a href="https://remotes.r-lib.org">remotes</a>, and <a href="https://r-lib.github.io/rcmdcheck/">rcmdcheck</a>. Customized to use <a href="https://www.bioconductor.org/help/docker/">Bioconductor’s docker containers</a> and <code>{BiocCheck}</code>.</li>
+<li>Continuous code testing is possible thanks to <a href="https://github.com/features/actions">GitHub actions</a> through <a href="https://usethis.r-lib.org">usethis</a>, <a href="https://remotes.r-lib.org">remotes</a>, and <a href="https://r-lib.github.io/rcmdcheck/">rcmdcheck</a>. Customized to use <a href="https://www.bioconductor.org/help/docker">Bioconductor’s docker containers</a> and <del><code>{BiocCheck}</code></del> (in the future, probably).</li>
 <li>Code coverage assessment is possible thanks to <a href="https://codecov.io/gh">codecov</a> and <a href="https://covr.r-lib.org">covr</a>.</li>
-<li>The <a href="http://bioinfocz.github.io/scdrake">documentation website</a> is automatically updated thanks to <a href="https://pkgdown.r-lib.org">pkgdown</a>.</li>
+<li>The <a href="https://bioinfocz.github.io/scdrake">documentation website</a> is generated by <a href="https://pkgdown.r-lib.org">pkgdown</a>.</li>
 <li>The code is styled automatically thanks to <a href="https://github.com/r-lib/styler">styler</a>.</li>
 <li>The documentation is formatted thanks to <a href="https://devtools.r-lib.org/">devtools</a> and <a href="https://roxygen2.r-lib.org/">roxygen2</a>.</li>
 </ul>
