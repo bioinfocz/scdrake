@@ -64,6 +64,7 @@ jobs:
         run: |
           remotes::install_cran("rmarkdown")
           remotes::install_cran("pkgdown")
+          remotes::install_cran("preferably")
         shell: Rscript {0}
 
       - name: Render README
