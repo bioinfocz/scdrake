@@ -41,8 +41,18 @@ analyses.
 ## Installation instructions
 
 `{scdrake}` is currently not released on
-[CRAN](http://cran.r-project.org/), however, you can install it from
-GitHub using the following code:
+[CRAN](http://cran.r-project.org/), however, you can install its latest
+stable version from GitHub using the following code:
+
+``` r
+if (!requireNamespace("BiocManager", quietly = TRUE)) {
+  install.packages("BiocManager")
+}
+
+BiocManager::install("bioinfocz/scdrake@v1.0.1")
+```
+
+For development version use
 
 ``` r
 if (!requireNamespace("BiocManager", quietly = TRUE)) {
@@ -101,8 +111,9 @@ See <https://bioinfocz.github.io/scdrake> for a documentation website.
       - Single-sample pipeline:
           - Reading in data, filtering, quality control (`01_input_qc`):
             `vignette("stage_input_qc")`
-          - Normalization, HVG selection, clustering
-            (`02_norm_clustering`): `vignette("stage_norm_clustering")`
+          - Normalization, HVG selection, dimensionality reduction,
+            clustering (`02_norm_clustering`):
+            `vignette("stage_norm_clustering")`
       - Integration pipeline:
           - Reading in data and integration (`01_integration`):
             `vignette("stage_integration")`
