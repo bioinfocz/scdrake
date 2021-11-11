@@ -8,8 +8,8 @@ experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](h
 `{scdrake}` is a scalable and reproducible pipeline for downstream
 processing of 10x Genomics single-cell RNA-seq data. It is built on top
 of the `{drake}` package, a
-[Make](https://www.gnu.org/software/make/)-like pipeline toolkit for [R
-language](https://www.r-project.org/).
+[Make](https://www.gnu.org/software/make)-like pipeline toolkit for [R
+language](https://www.r-project.org).
 
 The main features of the `{scdrake}` pipeline are:
 
@@ -38,10 +38,14 @@ both will benefit from reports and visualizations, and the latter also
 from the possibility to utilize all benefits of `{drake}` for custom
 analyses.
 
+Huge thanks go to the authors of the [Orchestrating Single-Cell Analysis
+with Bioconductor](https://bioconductor.org/books/release/OSCA) book on
+whose methods and recommendations is `{scdrake}` largely based.
+
 ## Installation instructions
 
 `{scdrake}` is currently not released on
-[CRAN](http://cran.r-project.org/), however, you can install its latest
+[CRAN](https://cran.r-project.org), however, you can install its latest
 stable version from GitHub using the following code:
 
 ``` r
@@ -65,7 +69,7 @@ BiocManager::install("bioinfocz/scdrake")
 ### Parallelization
 
 To fully utilize the parallelization, you should consider installing
-[ZeroMQ](https://zeromq.org/) and `{clustermq}` R package (probably only
+[ZeroMQ](https://zeromq.org) and `{clustermq}` R package (probably only
 usable on Linux), which is used by `{drake}`. However, it is also
 possible to use the `{future}` package, which doesn’t require any
 additional system dependencies.
@@ -124,7 +128,7 @@ See <https://bioinfocz.github.io/scdrake> for a documentation website.
         <https://books.ropensci.org/drake/>
 
 We encourage all users to read
-[basics](https://books.ropensci.org/drake/) of the `{drake}` package.
+[basics](https://books.ropensci.org/drake) of the `{drake}` package.
 While it is not necessary to know all `{drake}` internals to
 successfully run the `{scdrake}` pipeline, its knowledge is a plus. You
 can read the minimum basics in `vignette("drake_basics")`.
@@ -144,6 +148,20 @@ Please run this yourself to check for any updates on how to cite
 print(citation("scdrake"), bibtex = TRUE)
 ```
 
+    To cite package ‘scdrake’ in publications use:
+    
+      Jiri Novotny and Jan Kubovciak (2021). scdrake: A Pipeline For 10x Chromium Single-Cell RNA-seq Data Analysis.
+      https://github.com/bioinfocz/scdrake, https://bioinfocz.github.io/scdrake.
+    
+    A BibTeX entry for LaTeX users is
+    
+      @Manual{,
+        title = {scdrake: A Pipeline For 10x Chromium Single-Cell RNA-seq Data Analysis},
+        author = {Jiri Novotny and Jan Kubovciak},
+        year = {2021},
+        note = {https://github.com/bioinfocz/scdrake, https://bioinfocz.github.io/scdrake},
+      }
+
 Please note that the `{scdrake}` was only made possible thanks to many
 other R and bioinformatics software authors, which are cited either in
 the vignettes and/or the paper(s) describing this package.
@@ -154,6 +172,11 @@ In case of any problems or suggestions, please, open a new
 [issue](https://github.com/bioinfocz/scdrake/issues). We will be happy
 to answer your questions, integrate new ideas, or resolve any problems
 :blush:
+
+You can also use [GitHub
+Discussions](https://github.com/bioinfocz/scdrake/discussions), mainly
+for topics **not** related to development (bugs, feature requests etc.),
+but if you need e.g. a general help.
 
 ## Contribution
 
@@ -172,22 +195,39 @@ contributing to this project, you agree to abide by its terms.
 
 ### Funding
 
-This work was supported by [ELIXIR CZ](https://www.elixir-czech.cz/)
+This work was supported by [ELIXIR CZ](https://www.elixir-czech.cz)
 research infrastructure project (MEYS Grant No: LM2018131) including
 access to computing and storage facilities.
+
+### Software and methods used by `{scdrake}`
+
+Many things are used by `{scdrake}`, but these are really worth
+mentioning:
+
+  - The [Bioconductor](https://www.bioconductor.org) ecosystem.
+  - [Orchestrating Single-Cell Analysis with
+    Bioconductor](https://bioconductor.org/books/release/OSCA) book.
+  - The
+    [scran](https://bioconductor.org/packages/release/bioc/html/scran.html),
+    [scater](https://bioconductor.org/packages/release/bioc/html/scater.html),
+    and other great packages from [Aaron
+    Lun](https://orcid.org/0000-0002-3564-4813) et al.
+  - The [drake](https://github.com/ropensci/drake) package.
+  - The [rmarkdown](https://github.com/rstudio/rmarkdown) package, and
+    other ones from the [tidyverse](https://www.tidyverse.org)
+    ecosystem.
 
 ### Development tools
 
   - Continuous code testing is possible thanks to [GitHub
-    actions](https://www.tidyverse.org/blog/2020/04/usethis-1-6-0/)
-    through `{usethis}`, `{remotes}`, and `{rcmdcheck}`. Customized to
-    use [Bioconductor’s docker
-    containers](https://www.bioconductor.org/help/docker/) and
-    `{BiocCheck}`.
+    actions](https://github.com/features/actions) through `{usethis}`,
+    `{remotes}`, and `{rcmdcheck}`. Customized to use [Bioconductor’s
+    docker containers](https://www.bioconductor.org/help/docker) and
+    ~~`{BiocCheck}`~~ (in the future, probably).
   - Code coverage assessment is possible thanks to
     [codecov](https://codecov.io/gh) and `{covr}`.
-  - The [documentation website](http://bioinfocz.github.io/scdrake) is
-    automatically updated thanks to `{pkgdown}`.
+  - The [documentation website](https://bioinfocz.github.io/scdrake) is
+    generated by `{pkgdown}`.
   - The code is styled automatically thanks to `{styler}`.
   - The documentation is formatted thanks to `{devtools}` and
     `{roxygen2}`.
