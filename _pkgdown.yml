@@ -3,6 +3,9 @@ template:
   params:
     ganalytics: "281550496"
     toggle: manual
+    docsearch:
+      api_key: "937cedcd467c204b19fc155c5f35019b"
+      index_name: "scdrake"
 url: https://bioinfocz.github.io/scdrake
 repo:
   branch: main
