@@ -1,1 +1,3 @@
-INPUT_10X_DIR: "data/pbmc1k"
+INPUT_DATA:
+  type: "cellranger"
+  path: "data/pbmc1k"

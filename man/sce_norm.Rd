@@ -6,7 +6,7 @@
 \alias{sctransform_normalization}
 \title{Normalize counts either by \code{scran} or \code{sctransform}.}
 \usage{
-sce_norm_fn(sce_cc, norm_type = c("scran", "sctransform"), ...)
+sce_norm_fn(sce_cc, norm_type = c("scran", "sctransform", "none"), ...)
 
 scran_normalization(
   sce,

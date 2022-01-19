@@ -89,7 +89,7 @@ The dataset contains data of
 [unfiltered raw feature-barcode matrix](https://support.10xgenomics.com/single-cell-gene-expression/software/pipelines/latest/output/matrices).
 
 We have to modify `config/single_sample/01_input_qc.yaml` to contain a proper path to the data.
-Open this file and set value of `INPUT_10X_DIR` to `"example_data/pbmc1k"`.
+Open this file and set value of `path` inside `INPUT_DATA` to `"example_data/pbmc1k"`.
 
 Finally, we can run the single-sample pipeline for the PBMC 1k dataset.
 By default, only the final target (`report_input_qc`) of the input and QC stage (`01_input_qc`) will be made,
@@ -157,7 +157,7 @@ download_pbmc3k("example_data/pbmc3k")
 
 We need to modify our configs:
 
-- `config/single_sample/01_input_qc.yaml`: set `INPUT_10X_DIR` to `"example_data/pbmc3k"`
+- `config/single_sample/01_input_qc.yaml`: set `path` inside `INPUT_DATA` to `"example_data/pbmc3k"`
 - `config/pipeline.yaml`: set `DRAKE_CACHE_DIR` to `".drake_pbmc3k"`. We need to use an another cache directory as
   we are running the pipeline for both samples in the same project directory.
 

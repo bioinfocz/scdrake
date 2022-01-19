@@ -34,6 +34,7 @@ loadd(
 
 cfg <- config_input_qc
 
+input_type <- cfg$INPUT_DATA$type
 filtering_type <- ifelse(cfg$SAVE_DATASET_SENSITIVE_FILTERING, "dataset-sensitive", "custom")
 ```
 
@@ -44,10 +45,21 @@ filtering_type <- ifelse(cfg$SAVE_DATASET_SENSITIVE_FILTERING, "dataset-sensitiv
 
 ***
 
-# 10x Genomics Cell Ranger data input
+```{r, results = "asis"}
+if (input_type == "cellranger") {
+  md_header("Input data: 10x Genomics Cell Ranger data", 1)
+  cat("The feature-barcode matrix was imported from Cell Ranger output (the official quantification tool from 10x Genomics).")
+} else if (input_type == "table") {
+  md_header("Input data: delimited text (table)", 1)
+  cat("The feature-barcode matrix was imported from delimited file.")
+} else if (input_type == "sce") {
+  md_header("Input data: `SingleCellExperiment` object", 1)
+  cat("The object holding experimental data (feature-barcode matrix, gene annotation etc.) was imported from Rds file.")
+}
+```
 
-The Cell Ranger pipeline from 10x Genomics will process the raw sequencing data and produce a matrix of UMI counts.
-Each row of this matrix corresponds to a gene, while each column corresponds to a cell barcode.
+Each row of feature-barcode matrix corresponds to a gene, while each column corresponds to a cell barcode.
+Summary of imported data:
 
 ```{r}
 cat(readd(sce_raw_info, path = drake_cache_dir)$str)
@@ -55,7 +67,7 @@ cat(readd(sce_raw_info, path = drake_cache_dir)$str)
 
 ***
 
-# Empty droplet removing
+# Empty droplets
 
 Empty droplets often contain RNA from the ambient solution, resulting in non-zero counts after debarcoding.
 It is desired to discard such droplets.
@@ -79,32 +91,13 @@ legend("bottomleft", lty = 2, col = c("dodgerblue", "forestgreen"), legend = c("
 ```
 
 The knee and inflection points on the curve mark the transition between two components of the total UMI count distribution.
-This is assumed to represent the difference between empty droplets with little RNA and cell-containing droplets with much more RNA
+This is assumed to represent the difference between empty droplets with little RNA and cell-containing droplets with much more RNA.
 
-## Detecting empty droplets
-
-`emptyDrops()` computes Monte Carlo p-values based on a Dirichlet-multinomial model of sampling molecules into droplets. 
-`emptyDrops()` assumes that libraries with total UMI counts below a certain threshold (`r cfg$EMPTY_DROPLETS_LOWER` by default)
-correspond to empty droplets.
-These are used to estimate the ambient expression profile against which the remaining libraries are tested.
-Under this definition, these low-count libraries cannot be cell-containing droplets and are excluded from the hypothesis testing.
-
-**Number of non-empty cells: `r sce_valid_cells_info$dim[2]`**
-
-Droplets detected as cells should show up with large negative log-probabilities or very large total UMI counts (based on the knee point).
-
-```{r}
-is_cell <- empty_droplets$FDR <= cfg$EMPTY_DROPLETS_FDR_THRESHOLD
-plot(empty_droplets$Total, -empty_droplets$LogProb, col = ifelse(is_cell, "red", "black"), xlab = "Total UMI count", ylab = "-Log Probability")
+```{r, results = "asis", eval = !cfg$EMPTY_DROPLETS_ENABLED}
+cat("Removal of empty droplets was disabled. You can enable it by setting `EMPTY_DROPLETS_ENABLED` parameter to `TRUE`.")
 ```
 
-## Removing empty droplets
-
-Remove barcodes representing empty droplets from the dataset.
-Filtered dataset summary:
-
-```{r}
-cat(sce_valid_cells_info$str)
+```{r, child = here::here("Rmd/single_sample/01_input_qc_empty_droplets.Rmd"), eval = cfg$EMPTY_DROPLETS_ENABLED}
 ```
 
 ***

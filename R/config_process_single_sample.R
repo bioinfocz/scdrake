@@ -1,6 +1,16 @@
 #' @rdname process_config
 .process_input_qc_config <- function(cfg, other_variables) {
-  cfg <- .hereize_paths(cfg, c("INPUT_10X_DIR", "INPUT_QC_REPORT_RMD_FILE"))
+  assert_that_(
+    !is_null(cfg$INPUT_DATA$type), cfg$INPUT_DATA$type %in% c("cellranger", "table", "sce"),
+    msg = "{.var input_data$type} must be {.field 'cellranger'}, {.field 'table'}, or {.field 'sce'}"
+  )
+
+  assert_that_(
+    !is_null(cfg$INPUT_DATA$path),
+    msg = "{.field INPUT_DATA$type} is not set, data cannot be loaded later."
+  )
+  cfg$INPUT_DATA$path <- here(cfg$INPUT_DATA$path)
+  cfg <- .hereize_paths(cfg, "INPUT_QC_REPORT_RMD_FILE")
   cfg <- .paths_to_base_dir(cfg, other_variables$BASE_OUT_DIR, "INPUT_QC_BASE_OUT_DIR")
   cfg <- .paths_to_base_dir(cfg, cfg$INPUT_QC_BASE_OUT_DIR, "INPUT_QC_REPORT_HTML_FILE")
 

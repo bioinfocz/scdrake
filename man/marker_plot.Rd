@@ -27,7 +27,7 @@ marker_plot(
 
 \item{group}{\itemize{
 \item A character scalar: name of column in \code{colData(sce)} by which are cells separated (e.g. clustering).
-\item A character vector or factor: assignment of cells to groups (clusters). Must have the same length as is the number
+\item A character vector or factor: assignment of cells to groups (clusters). Must have the same length as the number
 of cells (columns) in \code{sce}.
 }}
 
@@ -43,7 +43,7 @@ of cells (columns) in \code{sce}.
 A \code{patchwork} object.
 }
 \description{
-A marker plot is composed from:
+A marker plot is composed of:
 \itemize{
 \item Two plots of a dimred: one colored by a clustering, and second colored by expression of a marker (feature plot).
 \item A plot of summarized marker expression: proportion of cells expressing a marker, colored by average expression.

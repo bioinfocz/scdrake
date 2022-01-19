@@ -24,9 +24,64 @@ several `{scdrake}` functions.
 
 # Config parameters
 
+## Input files
+
+```yaml
+INPUT_DATA:
+  type: "cellranger"
+  path: "/path/to/dir"
+  delimiter: ","
+```
+
+**Type:** list of named character scalars
+
+This parameter is specifying input data type and path. There are three possible types of input data:
+
+- `type: "cellranger"`: an output from
+  [cellranger](https://support.10xgenomics.com/single-cell-gene-expression/software/pipelines/latest/what-is-cell-ranger),
+  that is, files of a raw feature-barcode matrix - `barcodes.tsv`, `features.tsv`, and `matrix.mtx`
+  (can be also gzipped having a `.gz` extension). Internally, BC matrix is imported via `DropletUtils::read10xCounts()`.
+  - You can download example PBMC data from 10x Genomics using the `download_pbmc1k()` and `download_pbmc1k()` functions.
+- `type: "table"`: a delimited file (table) representing a feature-barcode matrix, with an additional column named
+  `ENSEMBL` containing Ensembl IDs of features (rows).
+- `type: "sce"`: a saved `SingleCellExperiment` in Rds format (i.e. saved by the `saveRDS()` function).
+  The object must contain feature-barcode matrix with raw UMI counts in the `counts` slot of `assays`
+  (such that this BC matrix can be retrieved by `counts(sce)`). 
+  - Additionaly, you can include whatever you want in `colData()` and use it later (e.g. cell grouping/clusters
+    to compute markers or to include batch effect during that).
+
+- `path: "path/to/dir"`: a path to input file (can be relative to project root directory).
+  For `type: "cellranger"`, this is a path to directory containing the `barcodes.tsv`, `features.tsv`, and `matrix.mtx`
+  files (can be also gzipped having a `.gz` extension).
+
+- `delimiter: ","`: used when `type: "table"`. Specifies the field delimiter in table.
+
+***
+
+`INPUT_QC_REPORT_RMD_FILE: "Rmd/single_sample/01_input_qc.Rmd"`
+
+**Type:** character scalar
+
+A path to RMarkdown file used for HTML report of this pipeline stage.
+
+***
+
 ## Removal of empty droplets
 
 See `?DropletUtils::emptyDrops` for more details.
+
+***
+
+`EMPTY_DROPLETS_ENABLED: True`
+
+**Type:** logical scalar
+
+If `False`, skip calculation and removal of empty droplets.
+
+You might consider turning off this procedure if the input is not a raw feature-barcode matrix from `cellranger`,
+but an already processed dataset (table or `SingleCellExperiment` object).
+Otherwise `DropletUtils::emptyDrops()` will fail as there are not enough empty droplets having the total UMI count
+< `EMPTY_DROPLETS_LOWER` (100 by default).
 
 ***
 
@@ -78,6 +133,9 @@ For "upper tail", it is `+MAD_THRESHOLD` MAD.
 
 Violation of only one metric threshold leads to removal of a cell.
 
+To disable the dataset-sensitive filtering, set `MAD_THRESHOLD: .inf`.
+That will force passing of each cell as every QC metric will be always lower than positive infinity MAD.
+
 ### Custom cell filtering
 
 `MIN_UMI_CF: 1000`
@@ -86,6 +144,8 @@ Violation of only one metric threshold leads to removal of a cell.
 
 A threshold for minimum number of UMI per cell, i.e. cells with UMI less than `MIN_UMI_CF` will be removed.
 
+To disable this filter, set `MIN_UMI_CF: -.inf`
+
 ***
 
 `MAX_UMI_CF: 50000`
@@ -93,6 +153,8 @@ A threshold for minimum number of UMI per cell, i.e. cells with UMI less than `M
 **Type:** positive integer scalar
 
 A threshold for maximum number of UMI per cell, i.e. cells with UMI greater than `MAX_UMI_CF` will be removed.
+
+To disable this filter, set `MAX_UMI_CF: .inf`
 
 ***
 
@@ -103,6 +165,8 @@ A threshold for maximum number of UMI per cell, i.e. cells with UMI greater than
 A threshold for minimum number of features (genes) detected per cell,
 i.e. cells with detected features less than `MIN_FEATURES` will be removed.
 
+To disable this filter, set `MIN_FEATURES: -.inf`
+
 ***
 
 `MAX_MITO_RATIO: 0.2`
@@ -112,10 +176,12 @@ i.e. cells with detected features less than `MIN_FEATURES` will be removed.
 A threshold for maximum ratio of expressed mitochondrial genes per cell,
 i.e. cells with mitochondrial genes detected in more than (`MAX_MITO_RATIO` * 100)% of all genes will be removed.
 
+To disable this filter, set `MAX_MITO_RATIO: .inf`
+
 ### Gene filtering
 
-Gene filtering thresholds are applied in both types of cell filtering. The filter is computed by the
-`get_gene_filter()` function as following:
+Gene filtering thresholds are applied in both types of cell filtering (after it is performed).
+The filter is computed by the `get_gene_filter()` function as following:
 
 ```{r, eval = FALSE}
 num_cells <- min_ratio_cells * ncol(sce)
@@ -124,6 +190,13 @@ is_expressed <- rowSums(counts(sce) >= min_umi) >= num_cells
 
 A gene is considered expressed when number of its UMIs across all cells is greater than `min_umi` and
 at the same time it is expressed in at least `min_ratio_cells` ratio of cells.
+
+To disable the gene filtering, set
+
+```yaml
+MIN_UMI: 0
+MIN_RATIO_CELLS: 0
+```
 
 ***
 
@@ -135,13 +208,13 @@ RIBO_REGEX: "^RP[SL]"
 **Type:** character scalar
 
 Regexes used to match and count occurences of mitochondrial and ribosomal features.
-The latter is currently not used for cell filtering.
+The latter is currently not used for gene filtering.
 
 ***
 
 `MIN_UMI: 1`
 
-**Type:** positive integer scalar
+**Type:** zero or positive integer scalar
 
 A threshold for minimum number of UMI per cell, i.e. genes with UMI < `MIN_UMI` will be removed.
 
@@ -154,25 +227,7 @@ A threshold for minimum number of UMI per cell, i.e. genes with UMI < `MIN_UMI` 
 A minimum ratio of cells expressing a gene,
 i.e. genes expressed in less than (`MIN_RATIO_CELLS` * 100)% of cells will be removed.
 
-## Input files
-
-`INPUT_10X_DIR: "/path/to/dir"`
-
-**Type:** character scalar
-
-A path to directory (could be relative to the project root) containing output files from `cellranger count` command,
-that is, `barcodes.tsv`, `features.tsv`, and `matrix.mtx` (can be also gzipped with `.gz` extension).
-Passed to `DropletUtils::read10xCounts()`.
-
-You can download example PBMC data from 10x Genomics using the `download_pbmc1k()` and `download_pbmc1k()` functions.
-
 ***
-
-`INPUT_QC_REPORT_RMD_FILE: "Rmd/single_sample/01_input_qc.Rmd"`
-
-**Type:** character scalar
-
-A path to RMarkdown file used for HTML report of this pipeline stage.
 
 ## Output files
 
@@ -249,6 +304,7 @@ This is the final SCE object which will be used in the next stage `norm_clusteri
 
 The following list of filters are computed by `scater::isOutlier()` from `cell_qc` columns,
 which are shown for individual filters (e.g. `qc_lib`: `total` column).
+In those, `FALSE` refers to cells **not passing** a filter.
 
 `qc_filters`: a list of named lists with logical values for dataset-sensitive cell filtering:
 
@@ -269,6 +325,7 @@ which are shown for individual filters (e.g. `qc_lib`: `total` column).
 
 `sce_qc_gene_filter`, `sce_custom_gene_filter`: gene filters (logical vectors) obtained from `get_gene_filter()` for
 SCE objects with cells filtered by dataset-sensitive and custom filter, respectively.
+In those, `FALSE` refers to genes **not passing** the filter.
 
 ## Plots
 

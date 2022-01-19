@@ -2,7 +2,7 @@
 % Please edit documentation in R/single_sample_input_qc.R
 \name{get_gene_filter}
 \alias{get_gene_filter}
-\title{Get a logical filter for ratio of cells expressing a gene and minimum number of UMI per gene.}
+\title{Get a logical filter for genes not passing a ratio of cells expressing a gene and a minimum number of UMI per gene.}
 \usage{
 get_gene_filter(sce, min_ratio_cells, min_umi)
 }
@@ -14,7 +14,9 @@ get_gene_filter(sce, min_ratio_cells, min_umi)
 \item{min_umi}{A numeric scalar: minimum number of UMI per gene across all cells.}
 }
 \value{
-A logical vector.
+A logical vector of length \code{nrow(sce)}: \code{TRUE} for genes \strong{not passing} the filter, \code{FALSE} otherwise.
+This is for consistency with cell filters, e.g. the \code{qc_filter} target, where \code{TRUE} means the same as here,
+i.e. a cell is not passing the filter.
 }
 \description{
 A gene is considered expressed when number of its UMIs across all cells is greater than \code{min_umi} and

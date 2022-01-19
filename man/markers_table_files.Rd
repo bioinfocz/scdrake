@@ -7,7 +7,8 @@
 markers_table_files(
   markers_for_tables,
   rmd_template,
-  marker_type = c("global", "contrast")
+  marker_type = c("global", "contrast"),
+  drake_cache_dir = ".drake"
 )
 }
 \arguments{
@@ -17,6 +18,8 @@ See \code{cluster_markers_for_tables} or \code{contrasts_for_tables} target for 
 \item{rmd_template}{A character scalar: path to RMarkdown file.}
 
 \item{marker_type}{A character scalar.}
+
+\item{drake_cache_dir}{A character scalar: path to \code{drake} cache directory.}
 }
 \value{
 A character vector: \code{markers_for_tables$out_file}.

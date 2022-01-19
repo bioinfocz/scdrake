@@ -35,8 +35,8 @@ sce_int_import_fn <- function(integration_sources, hvg_combination = c("hvg_metr
         single_sample_name = single_sample$name,
         single_sample_description = single_sample$description,
         hvg_rm_cc_genes = single_sample$hvg_rm_cc_genes
-      ) %>%
-      sce_add_colData(batch = factor(single_sample$name))
+      )
+    sce <- sce_add_colData(sce, df = data.frame(batch = rep(single_sample$name, ncol(sce)) %>% factor()))
 
     ## -- Make unique sce colnames (barcodes).
     colnames(sce) <- str_c(colnames(sce), "-", single_sample$name)

@@ -3,10 +3,32 @@
   utils::download.file(url, destfile = tmp_file_dest)
   tmp_dir <- fs::file_temp()
   utils::untar(tmp_file_dest, exdir = tmp_dir)
-  files <- fs::dir_ls(tmp_dir, recurse = TRUE, type = "file")
+  files <- fs::dir_ls(
+    tmp_dir,
+    recurse = TRUE, type = "file",
+    regexp = "(barcodes\\.tsv|features\\.tsv|matrix\\.mtx)(\\.gz)?"
+  )
   fs::dir_create(out_dir)
   fs::file_move(files, out_dir)
   return(fs::dir_ls(out_dir, glob = "*"))
+}
+
+.show_postdownload_info <- function(dataset, url, files, out_dir) {
+  cli({
+    cli_alert_success("Downloaded {dataset} raw feature barcode matrix files from {.url {url}}:")
+    cli_ul(files)
+    cli_alert_info(
+      "Now you can use {.file {out_dir}} in the {.field INPUT_DATA} parameter in {.file 01_input_qc.yaml} config:"
+    )
+    cli_code(
+      "INPUT_DATA:",
+      '  type: "cellranger"',
+      glue('  path: "{out_dir}"')
+    )
+    cli_alert_info(
+      "All credits for the dataset go to 10x Genomics. Visit {.url https://www.10xgenomics.com/resources/datasets} for more information."
+    )
+  })
 }
 
 #' @title Download PBMC example data from 10x Genomics.
@@ -42,16 +64,7 @@ download_pbmc1k <- function(out_dir, ask = TRUE, verbose = getOption("scdrake_ve
     }
   }
   files <- .download_raw_feature_bc_matrix(url, out_dir)
-  verbose %&&% cli({
-    cli_alert_success("Downloaded PBMC 1k raw feature barcode matrix files from {.url {url}}:")
-    cli_ul(files)
-    cli_alert_info(
-      "Now you can use {.file {out_dir}} as the value of {.field INPUT_10X_DIR} parameter in {.file 01_input_qc.yaml} config."
-    )
-    cli_alert_info(
-      "All credits for the dataset go to 10x Genomics. Visit {.url https://www.10xgenomics.com/resources/datasets} for more information."
-    )
-  })
+  verbose %&&% .show_postdownload_info("PBMC 1k", url, files, out_dir)
 
   invisible(files)
 }
@@ -67,16 +80,7 @@ download_pbmc3k <- function(out_dir, ask = TRUE, verbose = getOption("scdrake_ve
     }
   }
   files <- .download_raw_feature_bc_matrix(url, out_dir)
-  verbose %&&% cli({
-    cli_alert_success("Downloaded PBMC 3k raw feature barcode matrix files from {.url {url}}:")
-    cli_ul(files)
-    cli_alert_info(
-      "Now you can use {.file {out_dir}} as the value of {.field INPUT_10X_DIR} parameter in {.file 01_input_qc.yaml} config."
-    )
-    cli_alert_info(
-      "All credits for the dataset go to 10x Genomics. Visit {.url https://www.10xgenomics.com/resources/datasets} for more information."
-    )
-  })
+  verbose %&&% .show_postdownload_info("PBMC 3k", url, files, out_dir)
 
   invisible(files)
 }

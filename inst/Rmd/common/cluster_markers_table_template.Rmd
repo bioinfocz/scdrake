@@ -8,6 +8,7 @@ output:
     df_print: "paged"
 params:
   title: "Cluster markers table"
+  drake_cache_dir: !expr here::here(".drake")
   other_params: "`r list()`"
 title: "`r params$title`"
 css: "`r here::here('Rmd/common/stylesheet.css')`"

@@ -20,26 +20,36 @@ which_genes_regex <- function(sce, regex, colname = "Symbol", ignore_case = TRUE
 
 #' @title Append new columns to `colData` of a `SingleCellExperiment` object.
 #' @param sce A `SingleCellExperiment` object.
-#' @param ... Unnamed arguments: dataframe-like objects.
-#'   Named arguments (names will be used for new columns): vectors.
+#' @param df A dataframe which will be binded column-wise to `colData(sce)`.
+#' @param replace A logical scalar: if `TRUE` and columns to be added already exist, they will be first removed
+#'   from `colData(sce)`.
 #' @return A modified `sce` object with added columns.
 #'
 #' @examples
 #' \dontrun{
 #' df <- data.frame(example = rownames(colnames))
-#' sce <- sce_add_colData(sce, df, new_column = sce$Barcode)
+#' sce <- sce_add_colData(sce, df = df)
 #' }
 #'
 #' @concept sc_sce
 #' @export
-sce_add_colData <- function(sce, ...) {
-  ## TODO: instead of throwing error just replace by NA or FALSE (for logical) and display warning?
+sce_add_colData <- function(sce, df, replace = TRUE) {
   assert_that_(
-    all(purrr::map_lgl(list(...), ~ length(.) > 0)),
-    msg = "Some of the new columns are empty."
+    !is_empty(df),
+    msg = "{.var df} cannot be empty."
   )
 
-  colData(sce) <- cbind(colData(sce), list(...))
+  assert_that_(
+    nrow(df) == ncol(sce),
+    msg = "Number of rows in {.var df} must be same as number of columns in {.var sce}."
+  )
+
+  if (replace) {
+    existing_columns <- intersect(colnames(colData(sce)), colnames(df))
+    colData(sce) <- colData(sce)[, !colnames(colData(sce)) %in% existing_columns]
+  }
+
+  colData(sce) <- cbind(colData(sce), df)
   return(sce)
 }
 
@@ -198,8 +208,7 @@ make_cell_groupings <- function(df, cell_groupings, do_cbind = FALSE) {
 
   new_groups <- lapply(names(cell_groupings), FUN = function(group_name) {
     if (group_name %in% colnames(df)) {
-      cli_alert_warning("Attempt to create a new cell group ({.val {group_name}}), which is already present.")
-      return(NULL)
+      cli_alert_warning("A new cell grouping ({.val {group_name}}) is already present and will replace the existing one.")
     }
 
     source_column <- cell_groupings[[group_name]][["source_column"]]
@@ -233,8 +242,10 @@ make_cell_groupings <- function(df, cell_groupings, do_cbind = FALSE) {
 #' @rdname cell_data
 #' @export
 cell_data_fn <- function(col_data, clusters_all, cell_groupings) {
-  col_data <- dplyr::bind_cols(col_data, tibble::as_tibble(clusters_all))
-  col_data <- S4Vectors::DataFrame(col_data)
+  existing_columns <- intersect(colnames(col_data), names(clusters_all))
+  col_data <- col_data[, !colnames(col_data) %in% existing_columns] %>%
+    dplyr::bind_cols(tibble::as_tibble(clusters_all)) %>%
+    S4Vectors::DataFrame()
 
   if (!is_null(cell_groupings)) {
     cell_groupings <- lapply(cell_groupings, FUN = function(grp) {
@@ -242,6 +253,8 @@ cell_data_fn <- function(col_data, clusters_all, cell_groupings) {
       return(grp)
     })
     new_cell_groupings <- make_cell_groupings(col_data, cell_groupings = cell_groupings, do_cbind = FALSE)
+    existing_columns <- intersect(colnames(col_data), colnames(new_cell_groupings))
+    col_data <- col_data[, !colnames(col_data) %in% existing_columns]
     col_data <- cbind(col_data, new_cell_groupings)
     metadata(col_data)$cell_groupings <- cell_groupings
   }

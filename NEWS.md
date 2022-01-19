@@ -1,5 +1,17 @@
 # scdrake (development version)
 
+# scdrake 1.1.0
+
+- The single-sample pipeline now supports another two inputs:
+  - A delimited text file (table) representing a feature-barcode matrix.
+  - A `SingleCellExperiment` object saved as a Rds file.
+- Input type is controlled by a new `INPUT_DATA` parameter (replaces `INPUT_10X_DIR`) in `01_input_qc.yaml` config.
+  Details can be found in `vignette("stage_input_qc")`.
+- Removal of empty droplets can be now disabled (`EMPTY_DROPLETS_ENABLED` parameter).
+- It is now possible to turn off normalization (`NORMALIZATION_TYPE: "none"`) as the input can be an already normalized
+  `SingleCellExperiment` object (meaning it went through the `{scdrake}` pipeline before).
+- Minor updates and bug fixes, updated documentation.
+
 # scdrake 1.0.1
 
 - Fixed `download_yq()`:

@@ -4,13 +4,15 @@
 \alias{sce_add_colData}
 \title{Append new columns to \code{colData} of a \code{SingleCellExperiment} object.}
 \usage{
-sce_add_colData(sce, ...)
+sce_add_colData(sce, df, replace = TRUE)
 }
 \arguments{
 \item{sce}{A \code{SingleCellExperiment} object.}
 
-\item{...}{Unnamed arguments: dataframe-like objects.
-Named arguments (names will be used for new columns): vectors.}
+\item{df}{A dataframe which will be binded column-wise to \code{colData(sce)}.}
+
+\item{replace}{A logical scalar: if \code{TRUE} and columns to be added already exist, they will be first removed
+from \code{colData(sce)}.}
 }
 \value{
 A modified \code{sce} object with added columns.
@@ -21,7 +23,7 @@ Append new columns to \code{colData} of a \code{SingleCellExperiment} object.
 \examples{
 \dontrun{
 df <- data.frame(example = rownames(colnames))
-sce <- sce_add_colData(sce, df, new_column = sce$Barcode)
+sce <- sce_add_colData(sce, df = df)
 }
 
 }

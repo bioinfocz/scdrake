@@ -40,7 +40,7 @@ sce <- readd(sce_final_norm_clustering, path = drake_cache_dir)
 sce_metadata <- metadata(sce)
 sce_colData <- colData(sce)
 sce_rowData <- rowData(sce)
-normalization_method <- sce_metadata$normalization_type
+normalization_type_sce <- sce_metadata$normalization_type
 hvg_metric <- sce_metadata$hvg_metric
 hvg_selection <- sce_metadata$hvg_selection
 hvg_selection_value <- sce_metadata$hvg_selection_value
@@ -75,10 +75,14 @@ These marker sets should be anticorrelated in their expression levels, and cells
 
 # Normalization
 
-Normalization method: "`r cfg$NORMALIZATION_TYPE`"
+Normalization method: "`r normalization_type_sce`"
 
 ```{r, results = "asis"}
-if (normalization_method == "scran") {
+if (cfg$NORMALIZATION_TYPE == "none") {
+  cat("(Normalization was performed in a previous pipeline run.)\n\n")
+}
+
+if (normalization_type_sce == "scran") {
   cat("**`scran`: normalization by deconvolution**\n\n")
   cat(
     "Cell-specific biases are normalized using the `computeSumFactors()` method,",
@@ -87,7 +91,7 @@ if (normalization_method == "scran") {
     "The assumption is that most genes are not differentially expressed (DE) between cells,",
     "such that any differences in expression across the majority of genes represents some technical bias that should be removed."
   )
-} else if (normalization_method == "sctransform") {
+} else if (normalization_type_sce == "sctransform") {
   cat("**`sctransform`: regularized negative binomial regression to normalize UMI count data.**\n\n")
 }
 ```
@@ -129,7 +133,7 @@ if (!is_null(sce_metadata$hvg_rm_cc_genes) && sce_metadata$hvg_rm_cc_genes) {
 }
 
 if (hvg_metric %in% c("gene_var", "gene_cv2")) {
-  catg0('Based on "{hvg_metric}", HVGs were selected by: ')
+  catg0('\n\nBased on "{hvg_metric}", HVGs were selected by: ')
   
   if (hvg_selection == "top") {
     catg0("top {hvg_selection_value} HVGs.\n\n")
@@ -164,19 +168,19 @@ Considering every possible triplet of clusters, the method uses the number of DE
 and the proporion of cells in the cluster to mark clusters as possible doublets.
 
 ```{r, results = "asis"}
-if (cfg$NORMALIZATION_TYPE == "scran" && cfg$SCRAN_USE_QUICKCLUSTER) {
-  cat("Prior to normalization, quick clustering was performed. We can use these cluster to look at doublet score within them:\n\n")
+if (normalization_type_sce == "scran" && "cluster_quickcluster" %in% colnames(sce_colData)) {
+  cat("Prior to normalization, quick clustering was performed. We can use those clusters to look at doublet score within them:\n\n")
   boxplot(doublet_score ~ cluster_quickcluster, data = sce_colData)
 }
 ```
 
 ```{r, results = "asis"}
-if (sce_metadata$has_filtered_doublets) {
+if (rlang::is_true(sce_metadata$has_filtered_doublets)) {
   n_doublets <- sum(sce_colData$is_doublet)
   doublets_pct <- (n_doublets / ncol(sce)) * 100
-  catn(glue("Discarded {n_doublets} cells ({doublets_pct} % of all cells) with doublet score above {sce_metadata$max_doublet_score}"))
+  catn(glue("**Discarded {n_doublets} cells ({doublets_pct} % of all cells) with doublet score above {sce_metadata$max_doublet_score}**"))
 } else {
-  catn(glue("Cells were not filtered by doublet score."))
+  catn(glue("**Cells were not filtered by doublet score.**"))
 }
 ```
 

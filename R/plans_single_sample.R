@@ -21,15 +21,18 @@ get_input_qc_subplan <- function(cfg, cfg_pipeline, cfg_main) {
     config_input_qc = !!cfg,
 
     ## -- Read raw Cell Ranger files.
-    sce_raw = DropletUtils::read10xCounts(file_in(!!cfg$INPUT_10X_DIR)),
+    sce_raw = sce_raw_fn(!!cfg$INPUT_DATA),
     sce_raw_info = save_object_info(sce_raw),
 
     ## -- Calculate barcode ranks (for knee plot).
     barcode_ranks = counts(sce_raw) %>% DropletUtils::barcodeRanks(),
 
     ## -- Mark empty droplets.
-    empty_droplets = DropletUtils::emptyDrops(
-      m = counts(sce_raw), lower = !!cfg$EMPTY_DROPLETS_LOWER, BPPARAM = ignore(BiocParallel::bpparam())
+    empty_droplets = empty_droplets_fn(
+      sce_raw,
+      empty_droplets_lower = !!cfg$EMPTY_DROPLETS_LOWER,
+      empty_droplets_enabled = !!cfg$EMPTY_DROPLETS_ENABLED,
+      BPPARAM = ignore(BiocParallel::bpparam())
     ),
 
     ## -- Remove empty droplets from sce.
@@ -54,7 +57,7 @@ get_input_qc_subplan <- function(cfg, cfg_pipeline, cfg_main) {
       qc_nexprs = scater::isOutlier(cell_qc$detected, nmads = !!cfg$MAD_THRESHOLD, log = TRUE, type = "lower"),
       qc_mito = scater::isOutlier(cell_qc$subsets_mito_percent, nmads = !!cfg$MAD_THRESHOLD, type = "higher")
       # qc_ribo = isOutlier(cell_qc$subsets_ribo_percent, nmads = !!cfg$MAD_THRESHOLD, type = "higher")
-    ),
+    ) %>% purrr::map(tidyr::replace_na, replace = FALSE),
     ## -- Join filters by OR operator.
     qc_filter = Reduce("|", qc_filters),
 
@@ -65,11 +68,14 @@ get_input_qc_subplan <- function(cfg, cfg_pipeline, cfg_main) {
       low_expression = cell_qc$detected <= !!cfg$MIN_FEATURES,
       high_mito = cell_qc$subsets_mito_percent >= !!cfg$MAX_MITO_RATIO * 100
       # low_ribo = cell_qc$subsets_ribo_percent <= !!cfg$MIN_RIBO_RATIO * 100
-    ),
+    ) %>% purrr::map(tidyr::replace_na, replace = FALSE),
     custom_filter = Reduce("|", custom_filters),
 
     ## -- Add filters to sce and create Seurat object.
-    sce_unfiltered = sce_add_colData(sce_valid_cells, cell_qc, discard_qc = qc_filter, discard_custom = custom_filter),
+    sce_unfiltered = sce_add_colData(
+      sce_valid_cells,
+      df = data.frame(cell_qc, discard_qc = qc_filter, discard_custom = custom_filter)
+    ),
     sce_unfiltered_info = save_object_info(sce_unfiltered),
     sce_unfiltered_plotlist = list(
       plot_colData(sce_unfiltered, y = "total", colour_by = "discard_qc", title = "Total UMI count", scale_y = ggplot2::scale_y_log10()),
@@ -85,14 +91,14 @@ get_input_qc_subplan <- function(cfg, cfg_pipeline, cfg_main) {
     sce_qc_filter = sce_unfiltered[, !sce_unfiltered$discard_qc],
     sce_qc_filter_rowSums = counts(sce_qc_filter) %>% rowSums(),
     sce_qc_gene_filter = get_gene_filter(sce_qc_filter, min_ratio_cells = !!cfg$MIN_RATIO_CELLS, min_umi = !!cfg$MIN_UMI),
-    sce_qc_filter_genes = sce_qc_filter[sce_qc_gene_filter, ],
+    sce_qc_filter_genes = sce_qc_filter[!sce_qc_gene_filter, ],
     sce_qc_filter_genes_info = save_object_info(sce_qc_filter_genes),
 
     ## -- sce filtered by custom filters
     sce_custom_filter = sce_unfiltered[, !sce_unfiltered$discard_custom],
     sce_custom_filter_rowSums = counts(sce_custom_filter) %>% rowSums(),
     sce_custom_gene_filter = get_gene_filter(sce_custom_filter, min_ratio_cells = !!cfg$MIN_RATIO_CELLS, min_umi = !!cfg$MIN_UMI),
-    sce_custom_filter_genes = sce_custom_filter[sce_custom_gene_filter, ],
+    sce_custom_filter_genes = sce_custom_filter[!sce_custom_gene_filter, ],
     sce_custom_filter_genes_info = save_object_info(sce_custom_filter_genes),
 
     ## -- Create a history of cell and gene filtering.
@@ -177,6 +183,8 @@ get_norm_clustering_subplan <- function(cfg, cfg_pipeline, cfg_main) {
     ## -- Normalization will be dispatched according to NORMALIZATION_TYPE:
     ## -- "scran": scran_normalization()
     ## -- "sctransform": sctransform_normalization()
+    ## -- "none": skip normalization. This is assuming you have performed the normalization before and in the
+    ## --         01_input_qc you are importing a SingleCellExperiment object.
     sce_norm = sce_norm_fn(
       sce_cc,
       norm_type = !!cfg$NORMALIZATION_TYPE,

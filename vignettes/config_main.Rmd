@@ -28,15 +28,13 @@ to CSS file used to style HTML documents, or path to base output directory.
 
 # Project information
 
-`PROJECT_NAME: "PBMC 1k"`
-
-`PROJECT_DESCRIPTION: "1000 of peripheral blood mononuclear cells by 10x Genomics"`
-
-`INSTITUTE: "Example institute"`
-
-`LABORATORY: "Example laboratory"`
-
-`PEOPLE: "Example person 1, Example person 2"`
+```yaml
+PROJECT_NAME: "PBMC 1k"
+PROJECT_DESCRIPTION: "1000 of peripheral blood mononuclear cells by 10x Genomics"
+INSTITUTE: "Example institute"
+LABORATORY: "Example laboratory"
+PEOPLE: "Example person 1, Example person 2"
+```
 
 **Type:** character scalar
 

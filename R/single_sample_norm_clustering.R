@@ -88,7 +88,7 @@ sce_cc_fn <- function(sce_final_input_qc, cc_genes, data = NULL) {
 
   sce_final_input_qc <- sce_add_colData(
     sce_final_input_qc,
-    seu_cc@meta.data[, c("phase", "s_score", "g2m_score", "cc_difference")]
+    df = seu_cc@meta.data[, c("phase", "s_score", "g2m_score", "cc_difference")]
   )
 
   assert_that(are_equal(rownames(seu_cc@meta.data), colnames(sce_final_input_qc)))
@@ -111,7 +111,7 @@ sce_cc_fn <- function(sce_final_input_qc, cc_genes, data = NULL) {
 #' @concept single_sample_norm_clustering_fn
 #' @rdname sce_norm
 #' @export
-sce_norm_fn <- function(sce_cc, norm_type = c("scran", "sctransform"), ...) {
+sce_norm_fn <- function(sce_cc, norm_type = c("scran", "sctransform", "none"), ...) {
   norm_type <- arg_match(norm_type)
   cli_alert_info("Normalization type: {.val {norm_type}}")
 
@@ -119,6 +119,8 @@ sce_norm_fn <- function(sce_cc, norm_type = c("scran", "sctransform"), ...) {
     scran_normalization(sce_cc, ...)
   } else if (norm_type == "sctransform") {
     sctransform_normalization(sce_cc, ...)
+  } else {
+    return(sce_cc)
   }
 }
 

@@ -447,7 +447,7 @@ markers_plots_top <- function(markers_processed, markers_plot_params, out_dir, m
 }
 
 #' @title Make a marker plot.
-#' @description A marker plot is composed from:
+#' @description A marker plot is composed of:
 #' - Two plots of a dimred: one colored by a clustering, and second colored by expression of a marker (feature plot).
 #' - A plot of summarized marker expression: proportion of cells expressing a marker, colored by average expression.
 #' - A violin plot: expression of a marker in each cluster.
@@ -456,7 +456,7 @@ markers_plots_top <- function(markers_processed, markers_plot_params, out_dir, m
 #' @param gene_ensembl_id A character scalar. ENSEMBL ID of a marker.
 #' @param group
 #' - A character scalar: name of column in `colData(sce)` by which are cells separated (e.g. clustering).
-#' - A character vector or factor: assignment of cells to groups (clusters). Must have the same length as is the number
+#' - A character vector or factor: assignment of cells to groups (clusters). Must have the same length as the number
 #'   of cells (columns) in `sce`.
 #' @param cluster_plot_title,cluster_plot_subtitle,cluster_plot_legend_title,cluster_plot_label
 #'   A character scalar. Applied to the dimred plot which is colored by `group`.
@@ -486,7 +486,7 @@ marker_plot <- function(sce,
     assert_that_(group %in% colnames(colData(sce)), msg = "Column {.val {group}} not found in {.code colnames(colData(sce))}")
     group_name <- group
   } else {
-    sce <- sce_add_colData(sce, group = group)
+    sce <- sce_add_colData(sce, df = data.frame(group = group))
     group_name <- "group"
   }
 
@@ -812,11 +812,15 @@ markers_for_tables <- function(markers_out, markers_heatmaps_df, markers_plots_t
 #'   See `cluster_markers_for_tables` or `contrasts_for_tables` target for details.
 #' @param rmd_template A character scalar: path to RMarkdown file.
 #' @param marker_type A character scalar.
+#' @param drake_cache_dir A character scalar: path to `drake` cache directory.
 #' @return A character vector: `markers_for_tables$out_file`.
 #'
 #' @concept sc_markers
 #' @export
-markers_table_files <- function(markers_for_tables, rmd_template, marker_type = c("global", "contrast")) {
+markers_table_files <- function(markers_for_tables,
+                                rmd_template,
+                                marker_type = c("global", "contrast"),
+                                drake_cache_dir = ".drake") {
   marker_type <- arg_match(marker_type)
 
   markers_for_tables <- lapply_rows(markers_for_tables, FUN = function(par) {
@@ -867,6 +871,7 @@ markers_table_files <- function(markers_for_tables, rmd_template, marker_type = 
       output_file = fs::path_file(par$out_file),
       params = list(
         title = title,
+        drake_cache_dir = drake_cache_dir,
         other_params = par
       ),
       intermediates_dir = intermediates_dir,

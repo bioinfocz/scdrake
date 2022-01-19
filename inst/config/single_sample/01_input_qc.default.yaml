@@ -1,4 +1,14 @@
+### Input files ###############################################################
+INPUT_DATA:
+  type: "cellranger"
+  path: "/path/to/dir"
+  delimiter: ","
+
+INPUT_QC_REPORT_RMD_FILE: "Rmd/single_sample/01_input_qc.Rmd"
+###############################################################################
+
 ### Removal of empty droplets #################################################
+EMPTY_DROPLETS_ENABLED: True
 EMPTY_DROPLETS_LOWER: 100
 EMPTY_DROPLETS_FDR_THRESHOLD: 0.01
 ###############################################################################
@@ -24,12 +34,6 @@ RIBO_REGEX: "^RP[SL]"
 
 MIN_UMI: 1
 MIN_RATIO_CELLS: 0.01
-###############################################################################
-
-### Input files ###############################################################
-INPUT_10X_DIR: "/path/to/dir"
-
-INPUT_QC_REPORT_RMD_FILE: "Rmd/single_sample/01_input_qc.Rmd"
 ###############################################################################
 
 ### Output files ##############################################################

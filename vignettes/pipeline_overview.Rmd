@@ -38,14 +38,26 @@ Visit <https://www.10xgenomics.com/resources/datasets> for more information.
 
 # Single-sample pipeline
 
-This is a pipeline for processing a single-sample prepared by 10x Genomics scRNA-seq technology and with data processed
-by [cellranger](https://support.10xgenomics.com/single-cell-gene-expression/software/pipelines/latest/what-is-cell-ranger),
-an official quantification tool from 10x Genomics.
+This is a pipeline for processing a single-sample, where input is either:
+
+- An output from [cellranger](https://support.10xgenomics.com/single-cell-gene-expression/software/pipelines/latest/what-is-cell-ranger),
+  that is, three files of a raw feature-barcode matrix* (`barcodes.tsv`, `features.tsv`, and `matrix.mtx`)
+  These files can be also gzipped having a `.gz` extension.
+- A delimited file (table) representing a feature-barcode matrix, with an additional column named `ENSEMBL` containing
+  Ensembl IDs of features.
+- A saved `SingleCellExperiment` in Rds format (i.e. saved by the `saveRDS()` function).
+
+Input specification is controlled via the `INPUT_DATA` parameter in `01_input_qc` config, and more details can be
+found in `vignette("stage_input_qc")`.
+
+* Feature-barcode matrix is similar to count matrix in bulk RNA-seq where columns are samples, rows are genes or
+transcripts (features), and values are numbers of reads or UMIs overlapping the features.
+In scRNA-seq, columns are individual cells; the rest is same.
 
 ## Stage `01_input_qc`
 
-An initial stage to read in output from `cellranger`
-([unfiltered raw feature-barcode matrix](https://support.10xgenomics.com/single-cell-gene-expression/software/pipelines/latest/output/matrices)).
+An initial stage to read in scRNA-seq data, remove empty droplets (optionally), and perform quality control,
+and cell and gene filtering.
 
 More information about scRNA-seq quality control can be found
 [here](https://bioconductor.org/books/release/OSCA/quality-control.html#choice-of-qc-metrics).
@@ -54,20 +66,20 @@ More information about scRNA-seq quality control can be found
 
 [`r emoji::emoji("scroll")` Example report](https://onco.img.cas.cz/novotnyj/scdrake/single_sample/pbmc1k/01_input_qc/01_input_qc.html)
 
-- Reading in raw BC matrix (`DropletUtils::read10xCounts()`).
+- Reading in feature-barcode matrix.
 - Removal of [empty droplets](https://bioconductor.org/books/release/OSCA/droplet-processing.html)
-  (`DropletUtils::emptyDrops()`).
+  (`DropletUtils::emptyDrops()`) (optional).
 - Calculation of per-cell QC metrics (`scater::perCellQCMetrics()`):
   - Number of UMI.
   - Number of detected genes (non-zero UMI count).
   - Percentage of expressed mitochondrial genes ($\frac {UMI_{mitochondrial}} {UMI_{sum}} * 100$).
-- Two methods for cell filtering:
+- Two methods for cell filtering (optional):
   - Dataset-sensitive filtering, based on the median absolute deviation (MAD) from the median value of
      each QC metric across all cells. For "number of UMI" metric, only a lower tail is used.
   - Custom filtering, based on fixed thresholds. For "number of UMI" metric, both upper and lower bounds are used.
   - In both filtering types, violation of only one metric threshold leads to removal of a cell.
     More technically, metric filters are reduced by **or** operator.
-- Gene filtering based on minimum number of UMI per cell and minimum ratio of cells expressing a gene.
+- Gene filtering (optional) based on minimum number of UMI per cell and minimum ratio of cells expressing a gene.
   - A gene is considered expressed when number of its UMI across all cells is greater than X and
     at the same time it is expressed in at least Y ratio of cells.
 - Plots of QC metrics with visualization of differences between dataset-sensitive and custom filtering.

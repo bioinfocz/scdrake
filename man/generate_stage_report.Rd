@@ -63,6 +63,7 @@ This is a list of Rmd files currently bundled with the \code{scdrake} package:\i
 ## │   └── 02_int_clustering.Rmd
 ## └── single_sample
 ##     ├── 01_input_qc.Rmd
+##     ├── 01_input_qc_empty_droplets.Rmd
 ##     ├── 02_norm_clustering.Rmd
 ##     └── 02_norm_clustering_simple.Rmd
 }

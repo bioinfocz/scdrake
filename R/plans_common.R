@@ -110,7 +110,12 @@ get_cluster_markers_subplan <- function(cfg, cfg_pipeline, cfg_main) {
     ),
     cluster_markers_table_template_file = file_in(!!cfg$CLUSTER_MARKERS_TABLE_TEMPLATE_RMD_FILE),
     cluster_markers_table_files = target(
-      markers_table_files(cluster_markers_for_tables, cluster_markers_table_template_file, marker_type = "global"),
+      markers_table_files(
+        cluster_markers_for_tables,
+        cluster_markers_table_template_file,
+        marker_type = "global",
+        drake_cache_dir = !!cfg_pipeline$DRAKE_CACHE_DIR
+      ),
       format = "file",
       dynamic = map(cluster_markers_for_tables)
     ),
@@ -197,7 +202,12 @@ get_contrasts_subplan <- function(cfg, cfg_pipeline, cfg_main) {
     ),
     contrasts_table_template_file = file_in(!!cfg$CONTRASTS_TABLE_TEMPLATE_RMD_FILE),
     contrasts_table_files = target(
-      markers_table_files(contrasts_for_tables, contrasts_table_template_file, marker_type = "contrast"),
+      markers_table_files(
+        contrasts_for_tables,
+        contrasts_table_template_file,
+        marker_type = "contrast",
+        drake_cache_dir = !!cfg_pipeline$DRAKE_CACHE_DIR
+      ),
       format = "file",
       dynamic = map(contrasts_for_tables)
     ),

@@ -30,14 +30,22 @@ several `{scdrake}` functions.
 
 `NORMALIZATION_TYPE: "scran"`
 
-**Type:** character scalar (`"scran"` | `"sctransform"`)
+**Type:** character scalar (`"scran"` | `"sctransform"` | `"none"`)
 
 A normalization type:
 
 - `"scran"`: normalization by deconvolution.
 - `"sctransform"`: regularized negative binomial regression.
+- `"none"`: skip normalization. This should be used only in case you are importing a `SingleCellExperiment`
+  object in the `01_input_qc` stage and this object was normalized before within this pipeline,
+  i.e. you are importing a modified `sce_norm` target or one of its downstream, dependent `SingleCellExperiment` targets.
+  - For example, you can take `sce_final_norm_clustering`, subset cells to e.g. three clusters, save the result to Rds
+    file, and run the pipeline again while importing this file in the `01_input_qc` stage.
+    Note that in that case you should disable empty droplets removal, and cell and gene filtering,
+    as data are already of high quality. Overall, this is an example of reclustering, which is otherwise hard to
+    achieve within the pipeline.
 
-See `vignette("pipeline_overview")` for more details.
+See `vignette("pipeline_overview")` for more details about normalization methods.
 
 ### `scran` normalization parameters
 
