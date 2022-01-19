@@ -2,22 +2,29 @@
 # scdrake
 
 ![License](https://img.shields.io/github/license/bioinfocz/scdrake)
+[![NEWS:
+updates](https://img.shields.io/badge/NEWS-updates-informational)](NEWS.md)
+[![Documentation and
+vignettes](https://img.shields.io/badge/Documentation%20&%20vignettes-bioinfocz.github.io/scdrake-informational)](https://bioinfocz.github.io/scdrake)
 [![Lifecycle:
 experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
 [![R-CMD-check-bioc](https://github.com/bioinfocz/scdrake/actions/workflows/check-bioc.yaml/badge.svg?branch=main)](https://github.com/bioinfocz/scdrake/actions/workflows/check-bioc.yaml)
 
-`{scdrake}` is a scalable and reproducible pipeline for downstream
-processing of 10x Genomics single-cell RNA-seq data. It is built on top
-of the `{drake}` package, a
+`{scdrake}` is a scalable and reproducible pipeline for secondary
+analysis of droplet-based single-cell RNA-seq data. `{scdrake}` is an R
+package built on top of the `{drake}` package, a
 [Make](https://www.gnu.org/software/make)-like pipeline toolkit for [R
 language](https://www.r-project.org).
 
 The main features of the `{scdrake}` pipeline are:
 
-  - Import of [Cell
+  - Import of scRNA-seq data: [10x Genomics Cell
     Ranger](https://support.10xgenomics.com/single-cell-gene-expression/software/pipelines/latest/what-is-cell-ranger)
-    output, quality filtering of cells and genes.
-  - Normalization, clustering, and dimensionality reduction.
+    output, delimited table, or `SingleCellExperiment` object.
+  - Quality control and filtering of cells and genes, removal of empty
+    droplets.
+  - Higly variable genes detection, cell cycle scoring, normalization,
+    clustering, and dimensionality reduction.
   - Integration of multiple datasets.
   - Computation of cluster markers and differentially expressed genes
     between clusters (denoted as “contrasts”).
@@ -73,7 +80,7 @@ To fully utilize the parallelization, you should consider installing
 [ZeroMQ](https://zeromq.org) and `{clustermq}` R package (probably only
 usable on Linux), which is used by `{drake}`. However, it is also
 possible to use the `{future}` package, which doesn’t require any
-additional system dependencies.
+additional system dependencies, but it’s a bit slower.
 
 More reading about this topic can be found at
 <https://books.ropensci.org/drake/hpc.html>.
@@ -99,7 +106,8 @@ directory to multiple `{scdrake}` projects.
 
 ## Vignettes and other readings
 
-See <https://bioinfocz.github.io/scdrake> for a documentation website.
+See <https://bioinfocz.github.io/scdrake> for a documentation website,
+where links to vignettes below become real :-)
 
   - Get started: `vignette("scdrake")`
   - Pipeline overview: `vignette("pipeline_overview")`
@@ -206,8 +214,8 @@ Many things are used by `{scdrake}`, but these are really worth
 mentioning:
 
   - The [Bioconductor](https://www.bioconductor.org) ecosystem.
-  - [Orchestrating Single-Cell Analysis with
-    Bioconductor](https://bioconductor.org/books/release/OSCA) book.
+  - The [*Orchestrating Single-Cell Analysis with
+    Bioconductor*](https://bioconductor.org/books/release/OSCA) book.
   - The
     [scran](https://bioconductor.org/packages/release/bioc/html/scran.html),
     [scater](https://bioconductor.org/packages/release/bioc/html/scater.html),
