@@ -252,14 +252,20 @@ jobs:
           remotes::install_cran("BiocManager")
         shell: Rscript {0}
 
-      - name: Install Bioconductor (Linux + macOS)
-        if: matrix.config.os != 'windows-latest'
+      - name: Install Bioconductor (Linux)
+        if: matrix.config.os == 'ubuntu-latest'
         run: |
           ## SC3 is installed from GitHub, but if install() is run without the pkgs argument, the BioConductor
           ## version will be installed instead.
           installed <- rownames(installed.packages())
           installed <- installed[installed != "SC3"]
           BiocManager::install(pkgs = installed, version = "${{ matrix.config.bioc }}", ask = FALSE, update = TRUE)
+        shell: Rscript {0}
+
+      - name: Install Bioconductor (macOS)
+        if: matrix.config.os == 'macOS-latest'
+        run: |
+          BiocManager::install(version = "${{ matrix.config.bioc }}", ask = FALSE, update = TRUE)
         shell: Rscript {0}
 
       - name: Install Bioconductor (Windows)
@@ -271,7 +277,7 @@ jobs:
       - name: Install SC3 dependencies not available as binaries on Windows
         if: matrix.config.os == 'windows-latest'
         run: |
-          BiocManager::install(c("GenomeInfoDbData", "org.Hs.eg.db") ask = FALSE, update = TRUE, type = "source")
+          BiocManager::install(c("GenomeInfoDbData", "org.Hs.eg.db"), ask = FALSE, update = TRUE, type = "source")
         shell: Rscript {0}
 
       ## SC3 installation is failing downstream, because dependencies needed for its vignettes are not already installed.
