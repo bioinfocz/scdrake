@@ -130,6 +130,7 @@ update_config <- function(default_file,
 #' @param ... Passed to `update_config()`.
 #'
 #' @name update_config_group
+#' @concept internal
 NULL
 
 #' @inheritParams update_config_group
@@ -164,6 +165,8 @@ update_pipeline_config <- function(dir = getOption("scdrake_pipeline_config_dir"
 #' \dontrun{
 #' .update_configs_recursive("config/single_sample")
 #' }
+#'
+#' @concept internal
 .update_configs_recursive <- function(dir, ...) {
   assert_that_(fs::dir_exists(dir), msg = "The requested config directory {.file {dir}} was not found.")
   default_files <- fs::dir_ls(dir, glob = "*.default.yaml")

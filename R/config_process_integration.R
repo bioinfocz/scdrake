@@ -3,6 +3,8 @@
 #' @param method_names A character vector: valid names of integration methods.
 #' @param params A character vector: names of valid parameters for each integration method.
 #' @return Invisibly `TRUE` if all checks are valid.
+#'
+#' @concept internal
 .check_integration_methods <- function(integration_methods,
                                        method_names = c("uncorrected", "rescaling", "regression", "mnn"),
                                        params = c("pca_selection_method", "pca_forced_pcs", "tsne_perp", "tsne_max_iter")) {
@@ -49,6 +51,7 @@
 }
 
 #' @rdname process_config
+#' @concept internal
 .process_integration_config <- function(cfg, other_variables) {
   INTEGRATION_SOURCES <- .get_dict_param(cfg$INTEGRATION_SOURCES, not_empty = FALSE, empty_to_null = TRUE)
   .check_duplicated_list_names(INTEGRATION_SOURCES, "integration")
@@ -70,6 +73,7 @@
 }
 
 #' @rdname process_config
+#' @concept internal
 .process_int_clustering_config <- function(cfg, other_variables) {
   cfg$CELL_GROUPINGS <- .get_dict_param(cfg$CELL_GROUPINGS, not_empty = FALSE, empty_to_null = FALSE)
   INT_CLUSTERING_REPORT_DIMRED_PLOTS_OTHER <- .get_dict_param(

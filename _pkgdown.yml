@@ -151,3 +151,7 @@ reference:
   - subtitle: Utils
   - contents:
     - has_concept("misc_utils")
+
+  - title: internal
+  - contents:
+    - has_concept("internal")

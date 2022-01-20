@@ -143,6 +143,8 @@ load_pipeline_config <- function(dir = getOption("scdrake_pipeline_config_dir"),
 #' @param process A logical scalar: if `TRUE`, apply a processing function on its associated config list.
 #' @param ... Currently not used.
 #' @return A named list of lists of loaded YAML configs.
+#'
+#' @concept internal
 .load_configs <- function(dir, cfg_defs, other_variables = NULL, process = TRUE, ...) {
   lapply(cfg_defs, function(cfg_def) {
     cfg <- load_config(fs::path(dir, cfg_def[[1]]), other_variables = other_variables)
@@ -160,6 +162,8 @@ load_pipeline_config <- function(dir = getOption("scdrake_pipeline_config_dir"),
 #' @inheritParams .load_configs
 #' @param ... Passed to [load_pipeline_config()], [load_config()], and [.load_configs()].
 #' @return A named `scdrake_list` of `scdrake_list`s for each entry in `cfg_defs` list.
+#'
+#' @concept internal
 .load_config_group <- function(dir, cfg_defs, cfg_pipeline = NULL, process = TRUE, ...) {
   if (is_null(cfg_pipeline)) {
     cfg_pipeline <- load_pipeline_config(dir = getOption("scdrake_pipeline_config_dir"), process = process, ...)

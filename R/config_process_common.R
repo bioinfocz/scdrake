@@ -15,8 +15,9 @@
 #' @param not_empty A logical scalar: if `TRUE`, throw error when `param` is `NULL` or empty list.
 #' @param empty_to_null A logical scalar: if `TRUE` and `param` is empty list, return `NULL`.
 #' @param name A passed `param` symbol, used for error messages.
-#'
 #' @return A named list, or `NULL` if `empty_to_null` is `TRUE` and the conditions are met.
+#'
+#' @concept internal
 .get_dict_param <- function(param, not_empty = FALSE, empty_to_null = TRUE, name = deparse(substitute(param))) {
   if (not_empty) {
     assert_that_(!is_empty(param), msg = "Parameter {.var {name}} cannot be NULL.")
@@ -68,6 +69,8 @@
 #' @param check_test_params A logical scalar: if `TRUE`, check also `params_*` for each test type.
 #' @param marker_type A character scalar: `"global"` for cluster markers, `"contrast"` for contrasts.
 #' @return `TRUE` invisibly if all checks are valid.
+#'
+#' @concept internal
 .check_marker_sources <- function(marker_sources, check_test_params = FALSE, marker_type = c("global", "contrast")) {
   marker_type <- arg_match(marker_type)
   stage <- dplyr::if_else(marker_type == "global", "cluster_markers", "contrasts")
@@ -116,6 +119,7 @@
 #' @return A named list (of named lists).
 #'
 #' @rdname prepare_marker_source_params
+#' @concept internal
 .prepare_marker_source_params <- function(marker_source, marker_source_name, marker_default_params) {
   test_descriptions <- list(
     params_t = list(test_label = "t-test", test_dirname = "t_test"),
@@ -179,6 +183,8 @@
 #' @param cfg A named list.
 #' @param paths A character vector: names of items in `cfg` with paths to modify.
 #' @return A modified `cfg`.
+#'
+#' @concept internal
 .hereize_paths <- function(cfg, paths) {
   for (path in paths) {
     cfg[[path]] <- here(get(path, cfg))
@@ -193,6 +199,8 @@
 #' @param base_out_dir A character scalar: path to base directory.
 #' @param paths A character vector: names of items in `cfg` with paths to modify.
 #' @return A modified `cfg`.
+#'
+#' @concept internal
 .paths_to_base_dir <- function(cfg, base_out_dir, paths) {
   for (path in paths) {
     cfg[[path]] <- fs::path(base_out_dir, get(path, cfg)) %>% as.character()
@@ -215,6 +223,7 @@
 #'
 #' @name process_config
 #' @rdname process_config
+#' @concept internal
 NULL
 
 #' @rdname process_config
