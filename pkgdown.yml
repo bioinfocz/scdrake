@@ -1,6 +1,6 @@
 pandoc: 2.14.1
-pkgdown: 2.0.2
-pkgdown_sha: ~
+pkgdown: 2.0.2.9000
+pkgdown_sha: 25a1ab2d04c2b8251214b5189fa6735896468cd7
 articles:
   cluster_markers: cluster_markers.html
   config_main: config_main.html
@@ -16,7 +16,7 @@ articles:
   stage_int_clustering: stage_int_clustering.html
   stage_integration: stage_integration.html
   stage_norm_clustering: stage_norm_clustering.html
-last_built: 2022-01-20T09:27Z
+last_built: 2022-01-20T09:40Z
 urls:
   reference: https://bioinfocz.github.io/scdrake/reference
   article: https://bioinfocz.github.io/scdrake/articles
