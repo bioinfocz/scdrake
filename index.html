@@ -185,6 +185,7 @@
 <div class="page-header"><h1 id="scdrake">scdrake<a class="anchor" aria-label="anchor" href="#scdrake"></a>
 </h1></div>
 
+<p><img src="https://img.shields.io/github/license/bioinfocz/scdrake" alt="License"><a href="https://lifecycle.r-lib.org/articles/stages.html#experimental" class="external-link"><img src="https://img.shields.io/badge/lifecycle-experimental-orange.svg" alt="Lifecycle: experimental"></a> <a href="https://github.com/bioinfocz/scdrake/actions/workflows/check-bioc.yaml" class="external-link"><img src="https://github.com/bioinfocz/scdrake/actions/workflows/check-bioc.yaml/badge.svg?branch=main" alt="R-CMD-check-bioc"></a></p>
 <p><code>{scdrake}</code> is a scalable and reproducible pipeline for secondary analysis of droplet-based single-cell RNA-seq data. <code>{scdrake}</code> is an R package built on top of the <a href="https://docs.ropensci.org/drake" class="external-link">drake</a> package, a <a href="https://www.gnu.org/software/make" class="external-link">Make</a>-like pipeline toolkit for <a href="https://www.r-project.org" class="external-link">R language</a>.</p>
 <p>The main features of the <code>{scdrake}</code> pipeline are:</p>
 <ul>
@@ -193,7 +194,11 @@
 <li>Higly variable genes detection, cell cycle scoring, normalization, clustering, and dimensionality reduction.</li>
 <li>Integration of multiple datasets.</li>
 <li>Computation of cluster markers and differentially expressed genes between clusters (denoted as “contrasts”).</li>
-<li>Rich graphical and HTML outputs.</li>
+<li>Rich graphical and HTML outputs.
+<ul>
+<li>You can find links to example outputs <a href="https://bioinfocz.github.io/scdrake/articles/pipeline_overview.html">here</a>.</li>
+</ul>
+</li>
 <li>Thanks to <a href="https://docs.ropensci.org/drake" class="external-link">drake</a>, the pipeline is highly scalable and reproducible.
 <ul>
 <li>Want to change some parameter? No problem! Only parts of the pipeline which changed will rerun, while up-to-date ones will be skipped.</li>
@@ -211,6 +216,7 @@
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="kw">if</span> <span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/ns-load.html" class="external-link">requireNamespace</a></span><span class="op">(</span><span class="st">"BiocManager"</span>, quietly <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span>
   <span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"BiocManager"</span><span class="op">)</span>
+  <span class="fu">BiocManager</span><span class="fu">::</span><span class="fu">install</span><span class="op">(</span>version <span class="op">=</span> <span class="st">"3.14"</span><span class="op">)</span>
 <span class="op">}</span>
 
 <span class="fu">BiocManager</span><span class="fu">::</span><span class="fu">install</span><span class="op">(</span><span class="st">"bioinfocz/scdrake@v1.0.1"</span><span class="op">)</span></code></pre></div>
@@ -218,6 +224,7 @@
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="kw">if</span> <span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/ns-load.html" class="external-link">requireNamespace</a></span><span class="op">(</span><span class="st">"BiocManager"</span>, quietly <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span>
   <span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"BiocManager"</span><span class="op">)</span>
+  <span class="fu">BiocManager</span><span class="fu">::</span><span class="fu">install</span><span class="op">(</span>version <span class="op">=</span> <span class="st">"3.14"</span><span class="op">)</span>
 <span class="op">}</span>
 
 <span class="fu">BiocManager</span><span class="fu">::</span><span class="fu">install</span><span class="op">(</span><span class="st">"bioinfocz/scdrake"</span><span class="op">)</span></code></pre></div>
@@ -418,8 +425,7 @@
 <ul class="list-unstyled">
 <li><a href="NEWS.html"><img src="https://img.shields.io/badge/NEWS-updates-informational" alt="NEWS: updates"></a></li>
 <li><a href="https://bioinfocz.github.io/scdrake"><img src="https://img.shields.io/badge/Documentation%20&amp;%20vignettes-bioinfocz.github.io/scdrake-informational" alt="Documentation and vignettes"></a></li>
-<li><a href="https://lifecycle.r-lib.org/articles/stages.html#experimental" class="external-link"><img src="https://img.shields.io/badge/lifecycle-experimental-orange.svg" alt="Lifecycle: experimental"></a></li>
-<li><a href="https://github.com/bioinfocz/scdrake/actions/workflows/check-bioc.yaml" class="external-link"><img src="https://github.com/bioinfocz/scdrake/actions/workflows/check-bioc.yaml/badge.svg?branch=main" alt="R-CMD-check-bioc"></a></li>
+<li><a href="https://bioinfocz.github.io/scdrake/articles/pipeline_overview.html"><img src="https://img.shields.io/badge/Overview%20&amp;%20outputs-vignette(%22pipeline_overview%22)-informational" alt="Overview and outputs"></a></li>
 </ul>
 </div>
 
