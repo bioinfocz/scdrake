@@ -190,16 +190,20 @@ invisible(dplyr::group_by(sce_int_dimred_plots_df, name) %>% dplyr::group_map(fu
       dimred_name <- key$dimred_name
       md_header(str_to_upper(dimred_name), 4)
       
+      selected_markers_file <- selected_markers_plots_int_df %>%
+        dplyr::filter(name == int_method_name, hvg_rm_cc_genes == !!hvg_rm_cc_genes, dimred_name == !!dimred_name) %>%
+        dplyr::pull(out_file)
+      cat("\n\n")
+      create_a_link(
+          href = selected_markers_file,
+          text = "Selected markers PDF",
+          href_rel_start = fs::path_dir(cfg$INTEGRATION_REPORT_HTML_FILE),
+          do_cat = TRUE
+      )
+      cat("\n\n")
+      
       by_colour_by <- dplyr::group_by(group, colour_by)
       dplyr::group_map(by_colour_by, function(group, key) {
-        selected_markers_file <- selected_markers_plots_int_df %>%
-          dplyr::filter(name == int_method_name, hvg_rm_cc_genes == !!hvg_rm_cc_genes, dimred_name == !!dimred_name) %>%
-          dplyr::pull(out_file)
-        create_a_link(
-            href = selected_markers_file,
-            text = "Selected markers PDF",
-            href_rel_start = fs::path_dir(cfg$INTEGRATION_REPORT_HTML_FILE)
-        )
         print(group$plot[[1]])
       })
     })
