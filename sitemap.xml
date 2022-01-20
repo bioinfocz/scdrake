@@ -1,7 +1,73 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
+    <loc>https://bioinfocz.github.io/scdrake/404.html</loc>
+  </url>
+  <url>
+    <loc>https://bioinfocz.github.io/scdrake/CODE_OF_CONDUCT.html</loc>
+  </url>
+  <url>
+    <loc>https://bioinfocz.github.io/scdrake/CONTRIBUTING.html</loc>
+  </url>
+  <url>
+    <loc>https://bioinfocz.github.io/scdrake/LICENSE-text.html</loc>
+  </url>
+  <url>
+    <loc>https://bioinfocz.github.io/scdrake/TODO.html</loc>
+  </url>
+  <url>
+    <loc>https://bioinfocz.github.io/scdrake/articles/cluster_markers.html</loc>
+  </url>
+  <url>
+    <loc>https://bioinfocz.github.io/scdrake/articles/config_main.html</loc>
+  </url>
+  <url>
+    <loc>https://bioinfocz.github.io/scdrake/articles/config_pipeline.html</loc>
+  </url>
+  <url>
+    <loc>https://bioinfocz.github.io/scdrake/articles/drake_basics.html</loc>
+  </url>
+  <url>
+    <loc>https://bioinfocz.github.io/scdrake/articles/index.html</loc>
+  </url>
+  <url>
+    <loc>https://bioinfocz.github.io/scdrake/articles/pipeline_overview.html</loc>
+  </url>
+  <url>
+    <loc>https://bioinfocz.github.io/scdrake/articles/scdrake.html</loc>
+  </url>
+  <url>
+    <loc>https://bioinfocz.github.io/scdrake/articles/scdrake_config.html</loc>
+  </url>
+  <url>
+    <loc>https://bioinfocz.github.io/scdrake/articles/scdrake_run.html</loc>
+  </url>
+  <url>
+    <loc>https://bioinfocz.github.io/scdrake/articles/stage_cluster_markers.html</loc>
+  </url>
+  <url>
+    <loc>https://bioinfocz.github.io/scdrake/articles/stage_contrasts.html</loc>
+  </url>
+  <url>
+    <loc>https://bioinfocz.github.io/scdrake/articles/stage_input_qc.html</loc>
+  </url>
+  <url>
+    <loc>https://bioinfocz.github.io/scdrake/articles/stage_int_clustering.html</loc>
+  </url>
+  <url>
+    <loc>https://bioinfocz.github.io/scdrake/articles/stage_integration.html</loc>
+  </url>
+  <url>
+    <loc>https://bioinfocz.github.io/scdrake/articles/stage_norm_clustering.html</loc>
+  </url>
+  <url>
+    <loc>https://bioinfocz.github.io/scdrake/authors.html</loc>
+  </url>
+  <url>
     <loc>https://bioinfocz.github.io/scdrake/index.html</loc>
+  </url>
+  <url>
+    <loc>https://bioinfocz.github.io/scdrake/news/index.html</loc>
   </url>
   <url>
     <loc>https://bioinfocz.github.io/scdrake/reference/add_item_to_list.html</loc>
@@ -130,6 +196,9 @@
     <loc>https://bioinfocz.github.io/scdrake/reference/download_yq.html</loc>
   </url>
   <url>
+    <loc>https://bioinfocz.github.io/scdrake/reference/empty_droplets_fn.html</loc>
+  </url>
+  <url>
     <loc>https://bioinfocz.github.io/scdrake/reference/filter_markers.html</loc>
   </url>
   <url>
@@ -188,6 +257,9 @@
   </url>
   <url>
     <loc>https://bioinfocz.github.io/scdrake/reference/hvg_plot_int_fn.html</loc>
+  </url>
+  <url>
+    <loc>https://bioinfocz.github.io/scdrake/reference/index.html</loc>
   </url>
   <url>
     <loc>https://bioinfocz.github.io/scdrake/reference/init_project.html</loc>
@@ -379,6 +451,9 @@
     <loc>https://bioinfocz.github.io/scdrake/reference/sce_norm_hvg_fn.html</loc>
   </url>
   <url>
+    <loc>https://bioinfocz.github.io/scdrake/reference/sce_raw_fn.html</loc>
+  </url>
+  <url>
     <loc>https://bioinfocz.github.io/scdrake/reference/sce_remove_cc_genes.html</loc>
   </url>
   <url>
@@ -437,47 +512,5 @@
   </url>
   <url>
     <loc>https://bioinfocz.github.io/scdrake/reference/yq_merge_cmd.html</loc>
-  </url>
-  <url>
-    <loc>https://bioinfocz.github.io/scdrake/articles/cluster_markers.html</loc>
-  </url>
-  <url>
-    <loc>https://bioinfocz.github.io/scdrake/articles/config_main.html</loc>
-  </url>
-  <url>
-    <loc>https://bioinfocz.github.io/scdrake/articles/config_pipeline.html</loc>
-  </url>
-  <url>
-    <loc>https://bioinfocz.github.io/scdrake/articles/drake_basics.html</loc>
-  </url>
-  <url>
-    <loc>https://bioinfocz.github.io/scdrake/articles/pipeline_overview.html</loc>
-  </url>
-  <url>
-    <loc>https://bioinfocz.github.io/scdrake/articles/scdrake.html</loc>
-  </url>
-  <url>
-    <loc>https://bioinfocz.github.io/scdrake/articles/scdrake_config.html</loc>
-  </url>
-  <url>
-    <loc>https://bioinfocz.github.io/scdrake/articles/scdrake_run.html</loc>
-  </url>
-  <url>
-    <loc>https://bioinfocz.github.io/scdrake/articles/stage_cluster_markers.html</loc>
-  </url>
-  <url>
-    <loc>https://bioinfocz.github.io/scdrake/articles/stage_contrasts.html</loc>
-  </url>
-  <url>
-    <loc>https://bioinfocz.github.io/scdrake/articles/stage_input_qc.html</loc>
-  </url>
-  <url>
-    <loc>https://bioinfocz.github.io/scdrake/articles/stage_int_clustering.html</loc>
-  </url>
-  <url>
-    <loc>https://bioinfocz.github.io/scdrake/articles/stage_integration.html</loc>
-  </url>
-  <url>
-    <loc>https://bioinfocz.github.io/scdrake/articles/stage_norm_clustering.html</loc>
   </url>
 </urlset>

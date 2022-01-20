@@ -19,16 +19,13 @@
     );
   }
 </script><title>Integration stage • scdrake</title>
-<!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script><!-- Bootstrap --><script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script><!-- Flatly Theme - Light  --><link id="css-light" rel="stylesheet" href="https://bootswatch.com/3/flatly/bootstrap.css" media="(prefers-color-scheme: light), (prefers-color-scheme: no-preference)">
-<!-- Darkly Theme - Dark --><link id="css-dark" rel="stylesheet" href="https://bootswatch.com/3/darkly/bootstrap.css" media="(prefers-color-scheme: dark)">
-<!-- preferably CSS --><link rel="stylesheet" href="../preferably.css">
-<link id="css-code-light" rel="stylesheet" href="../code-color-scheme-light.css" media="(prefers-color-scheme: light), (prefers-color-scheme: no-preference)">
-<link id="css-code-dark" rel="stylesheet" href="../code-color-scheme-dark.css" media="(prefers-color-scheme: dark)">
-<script src="../darkswitch.js"></script><!-- bootstrap-toc --><link rel="stylesheet" href="../bootstrap-toc.css">
+<!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script><!-- Bootstrap --><script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script><!-- bootstrap-toc --><link rel="stylesheet" href="../bootstrap-toc.css">
 <script src="../bootstrap-toc.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
 <!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- pkgdown --><link href="../pkgdown.css" rel="stylesheet">
-<script src="../pkgdown.js"></script><meta property="og:title" content="Integration stage">
+<script src="../pkgdown.js"></script><!-- docsearch --><script src="../docsearch.js"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/docsearch.js/2.6.3/docsearch.min.css" integrity="sha256-QOSRU/ra9ActyXkIBbiIB144aDBdtvXBcNc3OTNuX/Q=" crossorigin="anonymous">
+<link href="../docsearch.css" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/jquery.mark.min.js" integrity="sha256-4HLtjeVgH0eIB3aZ9mLYF6E8oU5chNdjU6p6rrXpl9U=" crossorigin="anonymous"></script><meta property="og:title" content="Integration stage">
 <meta property="og:description" content="01_integration stage of the integration pipeline.">
 <!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
@@ -39,9 +36,16 @@
   gtag('js', new Date());
 
   gtag('config', '281550496');
-</script>
+</script><!-- Flatly Theme - Light  --><link id="css-light" rel="stylesheet" href="https://bootswatch.com/3/flatly/bootstrap.css" media="(prefers-color-scheme: light), (prefers-color-scheme: no-preference)">
+<!-- Darkly Theme - Dark --><link id="css-dark" rel="stylesheet" href="https://bootswatch.com/3/darkly/bootstrap.css" media="(prefers-color-scheme: dark)">
+<!-- preferably CSS --><link rel="stylesheet" href="../preferably.css">
+<link id="css-code-light" rel="stylesheet" href="../code-color-scheme-light.css" media="(prefers-color-scheme: light), (prefers-color-scheme: no-preference)">
+<link id="css-code-dark" rel="stylesheet" href="../code-color-scheme-dark.css" media="(prefers-color-scheme: dark)">
+<script src="../darkswitch.js"></script>
 </head>
 <body data-spy="scroll" data-target="#toc">
+    
+
     <div class="container template-article">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -54,18 +58,12 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">scdrake</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.1.0</span>
       </span>
     </div>
 
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
-<li>
-  <a href="../index.html">
-    <span class="fas fa-home fa-lg"></span>
-     
-  </a>
-</li>
 <li>
   <a href="../articles/scdrake.html">Get started</a>
 </li>
@@ -83,7 +81,8 @@
   </a>
   <ul class="dropdown-menu" role="menu">
 <li class="divider">
-    <li class="dropdown-header">General information</li>
+    </li>
+<li class="dropdown-header">General information</li>
     <li>
       <a href="../articles/pipeline_overview.html">Pipeline overview</a>
     </li>
@@ -97,7 +96,8 @@
       <a href="../articles/drake_basics.html">drake basics</a>
     </li>
     <li class="divider">
-    <li class="dropdown-header">Configs</li>
+    </li>
+<li class="dropdown-header">Configs</li>
     <li>
       <a href="../articles/scdrake_config.html">scdrake configs: a general overview</a>
     </li>
@@ -108,7 +108,8 @@
       <a href="../articles/config_main.html">Main config</a>
     </li>
     <li class="divider">
-    <li class="dropdown-header">Single-sample pipeline stages</li>
+    </li>
+<li class="dropdown-header">Single-sample pipeline stages</li>
     <li>
       <a href="../articles/stage_input_qc.html">Input and quality control stage</a>
     </li>
@@ -116,7 +117,8 @@
       <a href="../articles/stage_norm_clustering.html">Normalization and clustering stage</a>
     </li>
     <li class="divider">
-    <li class="dropdown-header">Integration pipeline stages</li>
+    </li>
+<li class="dropdown-header">Integration pipeline stages</li>
     <li>
       <a href="../articles/stage_integration.html">Integration stage</a>
     </li>
@@ -124,7 +126,8 @@
       <a href="../articles/stage_int_clustering.html">Post-integration clustering stage</a>
     </li>
     <li class="divider">
-    <li class="dropdown-header">Common stages</li>
+    </li>
+<li class="dropdown-header">Common stages</li>
     <li>
       <a href="../articles/stage_cluster_markers.html">Cluster markers stage</a>
     </li>
@@ -145,7 +148,7 @@
         </li>
         
         <li>
-  <a href="https://github.com/bioinfocz/scdrake">
+  <a href="https://github.com/bioinfocz/scdrake" class="external-link">
     <span class="fab fa-github fa-lg"></span>
      
   </a>
@@ -155,7 +158,13 @@
 
 
       </ul>
+<form class="navbar-form navbar-right hidden-xs hidden-sm" role="search">
+        <div class="form-group">
+          <input type="search" class="form-control" name="search-input" id="search-input" placeholder="Search..." aria-label="Search for..." autocomplete="off">
 </div>
+      </form>
+      
+    </div>
 <!--/.nav-collapse -->
   </div>
 <!--/.container -->
@@ -164,14 +173,14 @@
 
       
 
-      </header><script src="stage_integration_files/header-attrs-2.11/header-attrs.js"></script><div class="row">
+      </header><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Integration stage</h1>
             
-            <h4 class="date">2021-11-11</h4>
+            <h4 data-toc-skip class="date">2022-01-20</h4>
       
-      <small class="dont-index">Source: <a href="https://github.com/bioinfocz/scdrake/blob/mastervignettes/stage_integration.Rmd"><code>vignettes/stage_integration.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/bioinfocz/scdrake/blob/mastervignettes/stage_integration.Rmd" class="external-link"><code>vignettes/stage_integration.Rmd</code></a></small>
       <div class="hidden name"><code>stage_integration.Rmd</code></div>
 
     </div>
@@ -180,14 +189,14 @@
     
 <hr>
 <p>For a general overview of this integration pipeline stage see <code><a href="../articles/pipeline_overview.html">vignette("pipeline_overview")</a></code>.</p>
-<p>Config for this stage is stored in <code>01_integration.yaml</code> file. Directory with this file is read from <code>SCDRAKE_INTEGRATION_CONFIG_DIR</code> environment variable upon <a href="https://github.com/bioinfocz/scdrake">scdrake</a> load or attach, and saved as <code>scdrake_integration_config_dir</code> option. This option is used as the default argument value in several <a href="https://github.com/bioinfocz/scdrake">scdrake</a> functions.</p>
+<p>Config for this stage is stored in <code>01_integration.yaml</code> file. Directory with this file is read from <code>SCDRAKE_INTEGRATION_CONFIG_DIR</code> environment variable upon <a href="https://github.com/bioinfocz/scdrake" class="external-link">scdrake</a> load or attach, and saved as <code>scdrake_integration_config_dir</code> option. This option is used as the default argument value in several <a href="https://github.com/bioinfocz/scdrake" class="external-link">scdrake</a> functions.</p>
 <hr>
-<div id="config-parameters" class="section level1">
-<h1 class="hasAnchor">
-<a href="#config-parameters" class="anchor"></a>Config parameters</h1>
-<div id="integration-sources" class="section level2">
-<h2 class="hasAnchor">
-<a href="#integration-sources" class="anchor"></a>Integration sources</h2>
+<div class="section level2">
+<h2 id="config-parameters">Config parameters<a class="anchor" aria-label="anchor" href="#config-parameters"></a>
+</h2>
+<div class="section level3">
+<h3 id="integration-sources">Integration sources<a class="anchor" aria-label="anchor" href="#integration-sources"></a>
+</h3>
 <div class="sourceCode" id="cb1"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">INTEGRATION_SOURCES</span><span class="kw">:</span></span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="kw">-</span><span class="at"> </span><span class="fu">pbmc1k</span><span class="kw">:</span></span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">cache_path</span><span class="kw">:</span><span class="at"> </span><span class="st">".drake_pbmc1k"</span></span>
@@ -200,11 +209,11 @@
 <span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">hvg_rm_cc_genes</span><span class="kw">:</span><span class="at"> </span><span class="ch">False</span></span>
 <span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">hvg_cc_genes_var_expl_threshold</span><span class="kw">:</span><span class="at"> </span><span class="ch">null</span></span></code></pre></div>
 <p><strong>Type:</strong> list of named lists</p>
-<p>This parameter specifies datasets to be integrated. Those are read in from single-sample pipeline results (the <code>sc_final_norm_clustering</code> targets) taken from corresponding <a href="https://docs.ropensci.org/drake">drake</a> caches.</p>
+<p>This parameter specifies datasets to be integrated. Those are read in from single-sample pipeline results (the <code>sc_final_norm_clustering</code> targets) taken from corresponding <a href="https://docs.ropensci.org/drake" class="external-link">drake</a> caches.</p>
 <p>Each name of a nested list specifies the name of single-sample, e.g. <code>pbmc1k</code>. Parameters for each single-sample are:</p>
 <ul>
 <li>
-<code>cache_path: ".drake_pbmc1k"</code> (character scalar): a path to <a href="https://docs.ropensci.org/drake">drake</a> cache.</li>
+<code>cache_path: ".drake_pbmc1k"</code> (character scalar): a path to <a href="https://docs.ropensci.org/drake" class="external-link">drake</a> cache.</li>
 <li>
 <code>description: "10x Genomics PBMC 1k dataset"</code> (character scalar): a description of the single-sample, will appear in reports.</li>
 <li>
@@ -218,9 +227,9 @@
 <li>If the HVG selection in integrated data is based on combined HVG metrics (see the relevant parameters below), all single-samples had to use the same HVG metric (<code>HVG_METRIC</code> of <code>"gene_var"</code> or <code>"gene_cv2"</code>).</li>
 </ul>
 </div>
-<div id="selection-of-highly-variable-genes-hvgs" class="section level2">
-<h2 class="hasAnchor">
-<a href="#selection-of-highly-variable-genes-hvgs" class="anchor"></a>Selection of highly variable genes (HVGs)</h2>
+<div class="section level3">
+<h3 id="selection-of-highly-variable-genes-hvgs">Selection of highly variable genes (HVGs)<a class="anchor" aria-label="anchor" href="#selection-of-highly-variable-genes-hvgs"></a>
+</h3>
 <p>This is done prior to integration, and is same for all methods specified in the <code>INTEGRATION_METHODS</code> (see below).</p>
 <p>If a single-sample has the <code>hvg_rm_cc_genes</code> set to <code>True</code>, cell cycle-related genes will be removed prior to HVG combination and selection.</p>
 <hr>
@@ -229,7 +238,7 @@
 <p>How to combine HVGs from single-samples:</p>
 <ul>
 <li>
-<code>"hvg_metric"</code>: combine HVG metrics (gene variance or CV2) and then apply HVG selection similar to procedure in the <code>02_norm_clustering</code> stage of the single-sample pipeline. Note that in order to combine HVG metrics, all samples had to have <code>HVG_METRIC</code> set to either <code>"gene_var"</code> (<code><a href="https://rdrr.io/pkg/scran/man/combineVar.html">scran::combineVar()</a></code>) or <code>"gene_cv2"</code> (<code><a href="https://rdrr.io/pkg/scran/man/combineVar.html">scran::combineCV2()</a></code>).</li>
+<code>"hvg_metric"</code>: combine HVG metrics (gene variance or CV2) and then apply HVG selection similar to procedure in the <code>02_norm_clustering</code> stage of the single-sample pipeline. Note that in order to combine HVG metrics, all samples had to have <code>HVG_METRIC</code> set to either <code>"gene_var"</code> (<code><a href="https://rdrr.io/pkg/scran/man/combineVar.html" class="external-link">scran::combineVar()</a></code>) or <code>"gene_cv2"</code> (<code><a href="https://rdrr.io/pkg/scran/man/combineVar.html" class="external-link">scran::combineCV2()</a></code>).</li>
 <li>Combine HVGs by set operations:
 <ul>
 <li><code>"intersection"</code></li>
@@ -246,9 +255,9 @@
 <p>HVG selection strategy. Only relevant when <code>HVG_COMBINATION_INT</code> is <code>"hvg_metric"</code>, i.e. this selection will be applied to combined HVG metrics.</p>
 <p>These parameters are similar to <code>HVG_SELECTION</code> and <code>HVG_SELECTION_VALUE</code> in the <code>02_norm_clustering</code> stage of the single-sample pipeline (see <code><a href="../articles/stage_norm_clustering.html">vignette("stage_norm_clustering")</a></code> for more details).</p>
 </div>
-<div id="integration-methods" class="section level2">
-<h2 class="hasAnchor">
-<a href="#integration-methods" class="anchor"></a>Integration methods</h2>
+<div class="section level3">
+<h3 id="integration-methods">Integration methods<a class="anchor" aria-label="anchor" href="#integration-methods"></a>
+</h3>
 <div class="sourceCode" id="cb3"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">INTEGRATION_METHODS</span><span class="kw">:</span></span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="kw">-</span><span class="at"> </span><span class="fu">uncorrected</span><span class="kw">:</span></span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">pca_selection_method</span><span class="kw">:</span><span class="at"> </span><span class="st">"forced"</span></span>
@@ -287,7 +296,7 @@
 <p>Each named list is specifying parameters for one integration method. The ones specified in the <code>integration_params</code> list are used directly in an integration method, while the others are used prior/after integration. The <code>"uncorrected"</code> and at least one integration method must be set (by default, all methods are performed). Here are descriptions and possible parameters (some of them are used by multiple methods, and thus described only once) for each integration method:</p>
 <ul>
 <li>
-<code>uncorrected</code>: correction for inter-batch sequencing depth with <code><a href="https://rdrr.io/pkg/batchelor/man/multiBatchNorm.html">batchelor::multiBatchNorm()</a></code>. This method is required, because it is used for differential expression analysis (cluster markers and contrasts).
+<code>uncorrected</code>: correction for inter-batch sequencing depth with <code><a href="https://rdrr.io/pkg/batchelor/man/multiBatchNorm.html" class="external-link">batchelor::multiBatchNorm()</a></code>. This method is required, because it is used for differential expression analysis (cluster markers and contrasts).
 <ul>
 <li>
 <code>pca_selection_method: "forced"</code> (character scalar: <code>"forced"</code> | <code>"elbow"</code> | <code>"technical_noise"</code>): see the <code>PCA_SELECTION_METHOD</code> parameter in <code>vignette("norm_clustering")</code>.</li>
@@ -300,14 +309,14 @@
 </ul>
 </li>
 <li>
-<code>rescaling</code>: scale counts so that the average count within each batch is the same for each gene (<code><a href="https://rdrr.io/pkg/batchelor/man/rescaleBatches.html">batchelor::rescaleBatches()</a></code>).
+<code>rescaling</code>: scale counts so that the average count within each batch is the same for each gene (<code><a href="https://rdrr.io/pkg/batchelor/man/rescaleBatches.html" class="external-link">batchelor::rescaleBatches()</a></code>).
 <ul>
 <li><code>pca_selection_method: "forced"</code></li>
 <li><code>pca_forced_pcs: 15</code></li>
 <li><code>tsne_perp: 20</code></li>
 <li><code>tsne_max_iter: 1000</code></li>
 <li>
-<code>integration_params</code>: directly passed to <code><a href="https://rdrr.io/pkg/batchelor/man/BatchelorParam.html">batchelor::RescaleParam()</a></code> used for <code><a href="https://rdrr.io/pkg/batchelor/man/rescaleBatches.html">batchelor::rescaleBatches()</a></code>. Default values from this function are used by default.
+<code>integration_params</code>: directly passed to <code><a href="https://rdrr.io/pkg/batchelor/man/BatchelorParam.html" class="external-link">batchelor::RescaleParam()</a></code> used for <code><a href="https://rdrr.io/pkg/batchelor/man/rescaleBatches.html" class="external-link">batchelor::rescaleBatches()</a></code>. Default values from this function are used by default.
 <ul>
 <li>
 <code>log.base: 2</code> (numeric scalar): a base of the log-transformation.</li>
@@ -318,31 +327,31 @@
 </ul>
 </li>
 <li>
-<code>regression</code>: fit a linear model to each gene regress out uninteresting factors of variation, returning a matrix of residuals (<code><a href="https://rdrr.io/pkg/batchelor/man/regressBatches.html">batchelor::regressBatches()</a></code>).
+<code>regression</code>: fit a linear model to each gene regress out uninteresting factors of variation, returning a matrix of residuals (<code><a href="https://rdrr.io/pkg/batchelor/man/regressBatches.html" class="external-link">batchelor::regressBatches()</a></code>).
 <ul>
 <li>
-<code>pca_selection_method: "corrected"</code>: in this integration method, <code><a href="https://rdrr.io/pkg/batchelor/man/multiBatchPCA.html">batchelor::multiBatchPCA()</a></code> is used, and all PCs (50 by default) from this method will be used if <code>"corrected"</code> is specified. Otherwise any other PCA selection method can be used.</li>
+<code>pca_selection_method: "corrected"</code>: in this integration method, <code><a href="https://rdrr.io/pkg/batchelor/man/multiBatchPCA.html" class="external-link">batchelor::multiBatchPCA()</a></code> is used, and all PCs (50 by default) from this method will be used if <code>"corrected"</code> is specified. Otherwise any other PCA selection method can be used.</li>
 <li><code>pca_forced_pcs: 15</code></li>
 <li><code>tsne_perp: 20</code></li>
 <li><code>tsne_max_iter: 1000</code></li>
 <li>
-<code>integration_params</code>: directly passed to <code><a href="https://rdrr.io/pkg/batchelor/man/BatchelorParam.html">batchelor::RegressParam()</a></code> used for <code><a href="https://rdrr.io/pkg/batchelor/man/regressBatches.html">batchelor::regressBatches()</a></code>. Default values from this function are used by default.
+<code>integration_params</code>: directly passed to <code><a href="https://rdrr.io/pkg/batchelor/man/BatchelorParam.html" class="external-link">batchelor::RegressParam()</a></code> used for <code><a href="https://rdrr.io/pkg/batchelor/man/regressBatches.html" class="external-link">batchelor::regressBatches()</a></code>. Default values from this function are used by default.
 <ul>
 <li>
-<code>d: 50</code> (integer scalar): a number of PCs to compute in <code><a href="https://rdrr.io/pkg/batchelor/man/multiBatchPCA.html">batchelor::multiBatchPCA()</a></code>.</li>
+<code>d: 50</code> (integer scalar): a number of PCs to compute in <code><a href="https://rdrr.io/pkg/batchelor/man/multiBatchPCA.html" class="external-link">batchelor::multiBatchPCA()</a></code>.</li>
 </ul>
 </li>
 </ul>
 </li>
 <li>
-<code>mnn</code>: fast mutual nearest neighbors (<code><a href="https://rdrr.io/pkg/batchelor/man/fastMNN.html">batchelor::fastMNN()</a></code>).
+<code>mnn</code>: fast mutual nearest neighbors (<code><a href="https://rdrr.io/pkg/batchelor/man/fastMNN.html" class="external-link">batchelor::fastMNN()</a></code>).
 <ul>
 <li><code>pca_selection_method: "corrected"</code></li>
 <li><code>pca_forced_pcs: 15</code></li>
 <li><code>tsne_perp: 20</code></li>
 <li><code>tsne_max_iter: 1000</code></li>
 <li>
-<code>integration_params</code>: directly passed to <code><a href="https://rdrr.io/pkg/batchelor/man/BatchelorParam.html">batchelor::FastMnnParam()</a></code> used for <code><a href="https://rdrr.io/pkg/batchelor/man/fastMNN.html">batchelor::fastMNN()</a></code>. Default values from this function are used by default.
+<code>integration_params</code>: directly passed to <code><a href="https://rdrr.io/pkg/batchelor/man/BatchelorParam.html" class="external-link">batchelor::FastMnnParam()</a></code> used for <code><a href="https://rdrr.io/pkg/batchelor/man/fastMNN.html" class="external-link">batchelor::fastMNN()</a></code>. Default values from this function are used by default.
 <ul>
 <li>
 <code>k: 20</code> (integer scalar): a number of nearest neighbors to consider when identifying MNNs.</li>
@@ -354,20 +363,20 @@
 <code>ndist: 3</code> (numeric scalar): a threshold beyond which neighbours are to be ignored when computing correction vectors. Each threshold is defined as a multiple of the number of median distances.</li>
 <li><code>d: 50</code></li>
 <li>
-<code>merge.order: null</code> (integer vector, list of lists, or <code>null</code>): a merge order of single-samples. Alternatively, a list of lists representing a tree structure specifying a hierarchical merge order (not tested, see <code><a href="https://rdrr.io/pkg/batchelor/man/fastMNN.html">batchelor::fastMNN()</a></code> for more details). <code>auto.merge: True</code> (logical scalar): if <code>True</code>, automatically identify the “best” merge order.</li>
+<code>merge.order: null</code> (integer vector, list of lists, or <code>null</code>): a merge order of single-samples. Alternatively, a list of lists representing a tree structure specifying a hierarchical merge order (not tested, see <code><a href="https://rdrr.io/pkg/batchelor/man/fastMNN.html" class="external-link">batchelor::fastMNN()</a></code> for more details). <code>auto.merge: True</code> (logical scalar): if <code>True</code>, automatically identify the “best” merge order.</li>
 </ul>
 </li>
 </ul>
 </li>
 </ul>
 </div>
-<div id="integration-diagnostics" class="section level2">
-<h2 class="hasAnchor">
-<a href="#integration-diagnostics" class="anchor"></a>Integration diagnostics</h2>
-<div id="fast-mnn-clustering" class="section level3">
-<h3 class="hasAnchor">
-<a href="#fast-mnn-clustering" class="anchor"></a>Fast MNN clustering</h3>
-<p>Used to obtain basic <a href="https://bioconductor.org/books/release/OSCA/integrating-datasets.html#correction-diagnostics">integration diagnostics</a>. See <code><a href="https://rdrr.io/pkg/scran/man/buildSNNGraph.html">scran::buildSNNGraph()</a></code> and <code><a href="https://rdrr.io/pkg/bluster/man/makeSNNGraph.html">bluster::makeSNNGraph()</a></code> for more details.</p>
+<div class="section level3">
+<h3 id="integration-diagnostics">Integration diagnostics<a class="anchor" aria-label="anchor" href="#integration-diagnostics"></a>
+</h3>
+<div class="section level4">
+<h4 id="fast-mnn-clustering">Fast MNN clustering<a class="anchor" aria-label="anchor" href="#fast-mnn-clustering"></a>
+</h4>
+<p>Used to obtain basic <a href="https://bioconductor.org/books/release/OSCA/integrating-datasets.html#correction-diagnostics" class="external-link">integration diagnostics</a>. See <code><a href="https://rdrr.io/pkg/scran/man/buildSNNGraph.html" class="external-link">scran::buildSNNGraph()</a></code> and <code><a href="https://rdrr.io/pkg/bluster/man/makeSNNGraph.html" class="external-link">bluster::makeSNNGraph()</a></code> for more details.</p>
 <hr>
 <p><code>INTEGRATION_SNN_K: 10</code></p>
 <p><strong>Type:</strong> integer scalar</p>
@@ -379,12 +388,12 @@
 <hr>
 <p><code>INTEGRATION_SNN_CLUSTERING_METHOD: "walktrap"</code></p>
 <p><strong>Type:</strong> character scalar (<code>"walktrap"</code> | <code>"louvain"</code>)</p>
-<p>A type of MNN clustering algorithm. See <code><a href="https://rdrr.io/pkg/igraph/man/cluster_walktrap.html">igraph::cluster_walktrap()</a></code> and <code><a href="https://rdrr.io/pkg/igraph/man/cluster_louvain.html">igraph::cluster_louvain()</a></code> for more details.</p>
+<p>A type of MNN clustering algorithm. See <code><a href="https://rdrr.io/pkg/igraph/man/cluster_walktrap.html" class="external-link">igraph::cluster_walktrap()</a></code> and <code><a href="https://rdrr.io/pkg/igraph/man/cluster_louvain.html" class="external-link">igraph::cluster_louvain()</a></code> for more details.</p>
 </div>
 </div>
-<div id="input-files" class="section level2">
-<h2 class="hasAnchor">
-<a href="#input-files" class="anchor"></a>Input files</h2>
+<div class="section level3">
+<h3 id="input-files">Input files<a class="anchor" aria-label="anchor" href="#input-files"></a>
+</h3>
 <p><code>SELECTED_MARKERS_INT_FILE: !code system.file("extdata", "selected_markers.csv", package = "scdrake", mustWork = TRUE)</code></p>
 <p><strong>Type:</strong> character scalar or <code>null</code></p>
 <p>Similar to the <code>SELECTED_MARKERS_FILE</code> parameter in <code>vignette("norm_clustering")</code>.</p>
@@ -393,9 +402,9 @@
 <p><strong>Type:</strong> character scalar</p>
 <p>A path to RMarkdown file used for HTML report of this pipeline stage.</p>
 </div>
-<div id="output-files" class="section level2">
-<h2 class="hasAnchor">
-<a href="#output-files" class="anchor"></a>Output files</h2>
+<div class="section level3">
+<h3 id="output-files">Output files<a class="anchor" aria-label="anchor" href="#output-files"></a>
+</h3>
 <p><code>INTEGRATION_BASE_OUT_DIR: "01_integration"</code></p>
 <p><strong>Type:</strong> character scalar</p>
 <p>A path to base output directory for this stage. It will be created under <code>BASE_OUT_DIR</code> specified in <code>00_main.yaml</code> config.</p>
@@ -405,30 +414,31 @@
 <p><strong>Type:</strong> character scalar</p>
 <p>Names of files and directories created under <code>INTEGRATION_BASE_OUT_DIR</code>. Subdirectories are not allowed.</p>
 </div>
-<div id="html-output-parameters" class="section level2">
-<h2 class="hasAnchor">
-<a href="#html-output-parameters" class="anchor"></a>HTML output parameters</h2>
+<div class="section level3">
+<h3 id="html-output-parameters">HTML output parameters<a class="anchor" aria-label="anchor" href="#html-output-parameters"></a>
+</h3>
 <div class="sourceCode" id="cb5"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">INTEGRATION_KNITR_MESSAGE</span><span class="kw">:</span><span class="at"> </span><span class="ch">False</span></span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="fu">INTEGRATION_KNITR_WARNING</span><span class="kw">:</span><span class="at"> </span><span class="ch">False</span></span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="fu">INTEGRATION_KNITR_ECHO</span><span class="kw">:</span><span class="at"> </span><span class="ch">False</span></span></code></pre></div>
 <p><strong>Type:</strong> logical scalar</p>
-<p>These are passed to <code><a href="https://rdrr.io/pkg/knitr/man/opts_chunk.html">knitr::opts_chunk()</a></code> and used for rendering of stage’s HTML report.</p>
+<p>These are passed to <code><a href="https://rdrr.io/pkg/knitr/man/opts_chunk.html" class="external-link">knitr::opts_chunk()</a></code> and used for rendering of stage’s HTML report.</p>
 </div>
 </div>
-<div id="targets" class="section level1">
-<h1 class="hasAnchor">
-<a href="#targets" class="anchor"></a>Targets</h1>
-<p>Here you can find description of the most important targets for this stage. However, for a full overview, you have to inspect the <a href="https://github.com/bioinfocz/scdrake/blob/main/R/plans_integration.R">source code</a> of the <code><a href="../reference/get_subplan_integration.html">get_integration_subplan()</a></code> function.</p>
-<div id="singlecellexperiment-objects" class="section level2">
-<h2 class="hasAnchor">
-<a href="#singlecellexperiment-objects" class="anchor"></a><code>SingleCellExperiment</code> objects</h2>
-<p><code>sce_int_import</code>: list of imported single-sample SCE objects, as defined in the <code>INTEGRATION_SOURCES</code> parameter. Because <a href="https://docs.ropensci.org/drake">drake</a> cannot watch for changes in a cache, this target is always rerun. Also, some constraints are checked (common normalization method and HVG metrics).</p>
+<div class="section level2">
+<h2 id="targets">Targets<a class="anchor" aria-label="anchor" href="#targets"></a>
+</h2>
+<p>Here you can find description of the most important targets for this stage. However, for a full overview, you have to inspect the <a href="https://github.com/bioinfocz/scdrake/blob/main/R/plans_integration.R" class="external-link">source code</a> of the <code><a href="../reference/get_subplan_integration.html">get_integration_subplan()</a></code> function.</p>
+<div class="section level3">
+<h3 id="singlecellexperiment-objects">
+<code>SingleCellExperiment</code> objects<a class="anchor" aria-label="anchor" href="#singlecellexperiment-objects"></a>
+</h3>
+<p><code>sce_int_import</code>: list of imported single-sample SCE objects, as defined in the <code>INTEGRATION_SOURCES</code> parameter. Because <a href="https://docs.ropensci.org/drake" class="external-link">drake</a> cannot watch for changes in a cache, this target is always rerun. Also, some constraints are checked (common normalization method and HVG metrics).</p>
 <hr>
 <p><code>sce_int_raw_snn_clustering</code>: <code>sce_int_import</code> with computed fast SNN clustering for each single-sample, used for integration diagnostics.</p>
 <hr>
 <p><code>sce_int_processed</code>: <code>sce_int_import</code> subsetted to common colData, and features (rows) and their corresponding metadata (<code>hvg_ids</code>, <code>hvg_metric_fit</code>).</p>
 <hr>
-<p><code>sce_int_multibatchnorm</code>: <code>sce_int_processed</code> with SCE objects normalized for inter-batch sequencing depth (<code><a href="https://rdrr.io/pkg/batchelor/man/multiBatchNorm.html">batchelor::multiBatchNorm()</a></code>).</p>
+<p><code>sce_int_multibatchnorm</code>: <code>sce_int_processed</code> with SCE objects normalized for inter-batch sequencing depth (<code><a href="https://rdrr.io/pkg/batchelor/man/multiBatchNorm.html" class="external-link">batchelor::multiBatchNorm()</a></code>).</p>
 <hr>
 <p><code>sce_int_df</code>: a tibble with integrated SCE objects. Each row is one method defined in the <code>INTEGRATION_METHODS</code> parameter and either with or without removed cell cycle-related genes from HVGs. See <code><a href="../reference/sce_int_df_fn.html">?sce_int_df_fn</a></code> for information about what is added or modified in <code>metadata()</code> of each integrated SCE object.</p>
 <hr>
@@ -438,20 +448,20 @@
 <hr>
 <p><code>sce_int_dimred_df</code>: <code>sce_int_pca_df</code> with computed t-SNE and UMAP dimensionality reductions.</p>
 </div>
-<div id="highly-variable-genes-hvgs-selection" class="section level2">
-<h2 class="hasAnchor">
-<a href="#highly-variable-genes-hvgs-selection" class="anchor"></a>Highly variable genes (HVGs) selection</h2>
+<div class="section level3">
+<h3 id="highly-variable-genes-hvgs-selection">Highly variable genes (HVGs) selection<a class="anchor" aria-label="anchor" href="#highly-variable-genes-hvgs-selection"></a>
+</h3>
 <p><code>hvg_int</code>, <code>hvg_int_with_cc</code>: lists of HVGs and selection parameters. The latter is not <code>NULL</code> when any of the single-samples defined in the <code>INTEGRATION_SOURCES</code> parameter has <code>hvg_rm_cc_genes</code> set to <code>True</code>.</p>
 <hr>
 <p><code>hvg_plots_int_df</code>: a tibble with HVG diagnostic plots.</p>
 </div>
-<div id="plots" class="section level2">
-<h2 class="hasAnchor">
-<a href="#plots" class="anchor"></a>Plots</h2>
+<div class="section level3">
+<h3 id="plots">Plots<a class="anchor" aria-label="anchor" href="#plots"></a>
+</h3>
 <p><code>sce_int_dimred_plots_df</code>: a tibble with dimensionality reduction plots.</p>
-<div id="selected-markers" class="section level3">
-<h3 class="hasAnchor">
-<a href="#selected-markers" class="anchor"></a>Selected markers</h3>
+<div class="section level4">
+<h4 id="selected-markers">Selected markers<a class="anchor" aria-label="anchor" href="#selected-markers"></a>
+</h4>
 <p><code>selected_markers_plots_int_df</code>: a tibble with plots of selected markers, similar to <code>selected_markers_plots</code> in the <code>02_norm_clustering</code> stage of the single-sample pipeline.</p>
 </div>
 </div>
@@ -469,18 +479,34 @@
 
 
       <footer><div class="copyright">
-  <p>Developed by Jiri Novotny, Jan Kubovciak.</p>
+  <p></p>
+<p>Developed by Jiri Novotny, Jan Kubovciak.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Made with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1, using <a href="https://preferably.amirmasoudabdol.name/?source=footer">preferably</a> template.</p>
+  <p></p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.</p>
+  <p class="preferably">Using <a href="https://preferably.amirmasoudabdol.name/?source=footer" class="external-link">preferably</a> template.</p>
 </div>
 
       </footer>
 </div>
 
   
-
-
-  </body>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/docsearch.js/2.6.1/docsearch.min.js" integrity="sha256-GKvGqXDznoRYHCwKXGnuchvKSwmx9SRMrZOTh2g4Sb0=" crossorigin="anonymous"></script><script>
+  docsearch({
+    
+    
+    apiKey: '937cedcd467c204b19fc155c5f35019b',
+    indexName: 'scdrake',
+    inputSelector: 'input#search-input.form-control',
+    transformData: function(hits) {
+      return hits.map(function (hit) {
+        hit.url = updateHitURL(hit);
+        return hit;
+      });
+    }
+  });
+</script>
+</body>
 </html>

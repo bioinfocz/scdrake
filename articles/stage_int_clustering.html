@@ -19,16 +19,13 @@
     );
   }
 </script><title>Post-integration clustering stage • scdrake</title>
-<!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script><!-- Bootstrap --><script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script><!-- Flatly Theme - Light  --><link id="css-light" rel="stylesheet" href="https://bootswatch.com/3/flatly/bootstrap.css" media="(prefers-color-scheme: light), (prefers-color-scheme: no-preference)">
-<!-- Darkly Theme - Dark --><link id="css-dark" rel="stylesheet" href="https://bootswatch.com/3/darkly/bootstrap.css" media="(prefers-color-scheme: dark)">
-<!-- preferably CSS --><link rel="stylesheet" href="../preferably.css">
-<link id="css-code-light" rel="stylesheet" href="../code-color-scheme-light.css" media="(prefers-color-scheme: light), (prefers-color-scheme: no-preference)">
-<link id="css-code-dark" rel="stylesheet" href="../code-color-scheme-dark.css" media="(prefers-color-scheme: dark)">
-<script src="../darkswitch.js"></script><!-- bootstrap-toc --><link rel="stylesheet" href="../bootstrap-toc.css">
+<!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script><!-- Bootstrap --><script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script><!-- bootstrap-toc --><link rel="stylesheet" href="../bootstrap-toc.css">
 <script src="../bootstrap-toc.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
 <!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- pkgdown --><link href="../pkgdown.css" rel="stylesheet">
-<script src="../pkgdown.js"></script><meta property="og:title" content="Post-integration clustering stage">
+<script src="../pkgdown.js"></script><!-- docsearch --><script src="../docsearch.js"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/docsearch.js/2.6.3/docsearch.min.css" integrity="sha256-QOSRU/ra9ActyXkIBbiIB144aDBdtvXBcNc3OTNuX/Q=" crossorigin="anonymous">
+<link href="../docsearch.css" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/jquery.mark.min.js" integrity="sha256-4HLtjeVgH0eIB3aZ9mLYF6E8oU5chNdjU6p6rrXpl9U=" crossorigin="anonymous"></script><meta property="og:title" content="Post-integration clustering stage">
 <meta property="og:description" content="02_int_clustering stage of the integration pipeline.">
 <!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
@@ -39,9 +36,16 @@
   gtag('js', new Date());
 
   gtag('config', '281550496');
-</script>
+</script><!-- Flatly Theme - Light  --><link id="css-light" rel="stylesheet" href="https://bootswatch.com/3/flatly/bootstrap.css" media="(prefers-color-scheme: light), (prefers-color-scheme: no-preference)">
+<!-- Darkly Theme - Dark --><link id="css-dark" rel="stylesheet" href="https://bootswatch.com/3/darkly/bootstrap.css" media="(prefers-color-scheme: dark)">
+<!-- preferably CSS --><link rel="stylesheet" href="../preferably.css">
+<link id="css-code-light" rel="stylesheet" href="../code-color-scheme-light.css" media="(prefers-color-scheme: light), (prefers-color-scheme: no-preference)">
+<link id="css-code-dark" rel="stylesheet" href="../code-color-scheme-dark.css" media="(prefers-color-scheme: dark)">
+<script src="../darkswitch.js"></script>
 </head>
 <body data-spy="scroll" data-target="#toc">
+    
+
     <div class="container template-article">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -54,18 +58,12 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">scdrake</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.1.0</span>
       </span>
     </div>
 
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
-<li>
-  <a href="../index.html">
-    <span class="fas fa-home fa-lg"></span>
-     
-  </a>
-</li>
 <li>
   <a href="../articles/scdrake.html">Get started</a>
 </li>
@@ -83,7 +81,8 @@
   </a>
   <ul class="dropdown-menu" role="menu">
 <li class="divider">
-    <li class="dropdown-header">General information</li>
+    </li>
+<li class="dropdown-header">General information</li>
     <li>
       <a href="../articles/pipeline_overview.html">Pipeline overview</a>
     </li>
@@ -97,7 +96,8 @@
       <a href="../articles/drake_basics.html">drake basics</a>
     </li>
     <li class="divider">
-    <li class="dropdown-header">Configs</li>
+    </li>
+<li class="dropdown-header">Configs</li>
     <li>
       <a href="../articles/scdrake_config.html">scdrake configs: a general overview</a>
     </li>
@@ -108,7 +108,8 @@
       <a href="../articles/config_main.html">Main config</a>
     </li>
     <li class="divider">
-    <li class="dropdown-header">Single-sample pipeline stages</li>
+    </li>
+<li class="dropdown-header">Single-sample pipeline stages</li>
     <li>
       <a href="../articles/stage_input_qc.html">Input and quality control stage</a>
     </li>
@@ -116,7 +117,8 @@
       <a href="../articles/stage_norm_clustering.html">Normalization and clustering stage</a>
     </li>
     <li class="divider">
-    <li class="dropdown-header">Integration pipeline stages</li>
+    </li>
+<li class="dropdown-header">Integration pipeline stages</li>
     <li>
       <a href="../articles/stage_integration.html">Integration stage</a>
     </li>
@@ -124,7 +126,8 @@
       <a href="../articles/stage_int_clustering.html">Post-integration clustering stage</a>
     </li>
     <li class="divider">
-    <li class="dropdown-header">Common stages</li>
+    </li>
+<li class="dropdown-header">Common stages</li>
     <li>
       <a href="../articles/stage_cluster_markers.html">Cluster markers stage</a>
     </li>
@@ -145,7 +148,7 @@
         </li>
         
         <li>
-  <a href="https://github.com/bioinfocz/scdrake">
+  <a href="https://github.com/bioinfocz/scdrake" class="external-link">
     <span class="fab fa-github fa-lg"></span>
      
   </a>
@@ -155,7 +158,13 @@
 
 
       </ul>
+<form class="navbar-form navbar-right hidden-xs hidden-sm" role="search">
+        <div class="form-group">
+          <input type="search" class="form-control" name="search-input" id="search-input" placeholder="Search..." aria-label="Search for..." autocomplete="off">
 </div>
+      </form>
+      
+    </div>
 <!--/.nav-collapse -->
   </div>
 <!--/.container -->
@@ -164,14 +173,14 @@
 
       
 
-      </header><script src="stage_int_clustering_files/header-attrs-2.11/header-attrs.js"></script><div class="row">
+      </header><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Post-integration clustering stage</h1>
             
-            <h4 class="date">2021-11-11</h4>
+            <h4 data-toc-skip class="date">2022-01-20</h4>
       
-      <small class="dont-index">Source: <a href="https://github.com/bioinfocz/scdrake/blob/mastervignettes/stage_int_clustering.Rmd"><code>vignettes/stage_int_clustering.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/bioinfocz/scdrake/blob/mastervignettes/stage_int_clustering.Rmd" class="external-link"><code>vignettes/stage_int_clustering.Rmd</code></a></small>
       <div class="hidden name"><code>stage_int_clustering.Rmd</code></div>
 
     </div>
@@ -180,11 +189,11 @@
     
 <hr>
 <p>For a general overview of this integration pipeline stage see <code><a href="../articles/pipeline_overview.html">vignette("pipeline_overview")</a></code>.</p>
-<p>Config for this stage is stored in <code>02_int_clustering.yaml</code> file. Directory with this file is read from <code>SCDRAKE_INTEGRATION_CONFIG_DIR</code> environment variable upon <a href="https://github.com/bioinfocz/scdrake">scdrake</a> load or attach, and saved as <code>scdrake_integration_config_dir</code> option. This option is used as the default argument value in several <a href="https://github.com/bioinfocz/scdrake">scdrake</a> functions.</p>
+<p>Config for this stage is stored in <code>02_int_clustering.yaml</code> file. Directory with this file is read from <code>SCDRAKE_INTEGRATION_CONFIG_DIR</code> environment variable upon <a href="https://github.com/bioinfocz/scdrake" class="external-link">scdrake</a> load or attach, and saved as <code>scdrake_integration_config_dir</code> option. This option is used as the default argument value in several <a href="https://github.com/bioinfocz/scdrake" class="external-link">scdrake</a> functions.</p>
 <hr>
-<div id="config-parameters" class="section level1">
-<h1 class="hasAnchor">
-<a href="#config-parameters" class="anchor"></a>Config parameters</h1>
+<div class="section level2">
+<h2 id="config-parameters">Config parameters<a class="anchor" aria-label="anchor" href="#config-parameters"></a>
+</h2>
 <p>The following parameters are the same as those in the <code>02_norm_clustering</code> stage of the single-sample pipeline (see <code><a href="../articles/stage_norm_clustering.html">vignette("stage_norm_clustering")</a></code>):</p>
 <ul>
 <li>Clustering parameters.</li>
@@ -196,9 +205,9 @@
 <code>INT_CLUSTERING_KNITR_MESSAGE</code>, <code>INT_CLUSTERING_KNITR_WARNING</code>, <code>INT_CLUSTERING_KNITR_ECHO</code>
 </li>
 </ul>
-<div id="selection-of-final-integration-method" class="section level2">
-<h2 class="hasAnchor">
-<a href="#selection-of-final-integration-method" class="anchor"></a>Selection of final integration method</h2>
+<div class="section level3">
+<h3 id="selection-of-final-integration-method">Selection of final integration method<a class="anchor" aria-label="anchor" href="#selection-of-final-integration-method"></a>
+</h3>
 <p><code>INTEGRATION_FINAL_METHOD: "mnn"</code></p>
 <p><strong>Type:</strong> character scalar (<code>"mnn"</code> | <code>"rescaling"</code> | <code>"regression"</code>)</p>
 <p>A name of the final integration method that will be used for clustering and downstream steps.</p>
@@ -207,16 +216,16 @@
 <p><strong>Type:</strong> logical scalar</p>
 <p>Whether to take the result with removed cell cycle-related genes. This will be also applied to the “uncorrected” method (which is used for cluster markers and contrasts). <code>True</code> is only possible when any of the single-samples in the <code>INTEGRATION_SOURCES</code> parameter (<code>01_integration.yaml</code>) has <code>hvg_rm_cc_genes</code> set to <code>True</code>.</p>
 </div>
-<div id="input-files" class="section level2">
-<h2 class="hasAnchor">
-<a href="#input-files" class="anchor"></a>Input files</h2>
+<div class="section level3">
+<h3 id="input-files">Input files<a class="anchor" aria-label="anchor" href="#input-files"></a>
+</h3>
 <p><code>INT_CLUSTERING_REPORT_RMD_FILE: "Rmd/integration/02_int_clustering.Rmd"</code></p>
 <p><strong>Type:</strong> character scalar</p>
 <p>A path to RMarkdown files used for HTML report of this pipeline stage.</p>
 </div>
-<div id="output-files" class="section level2">
-<h2 class="hasAnchor">
-<a href="#output-files" class="anchor"></a>Output files</h2>
+<div class="section level3">
+<h3 id="output-files">Output files<a class="anchor" aria-label="anchor" href="#output-files"></a>
+</h3>
 <p><code>INT_CLUSTERING_BASE_OUT_DIR: "02_int_clustering"</code></p>
 <p><strong>Type:</strong> character scalar</p>
 <p>A path to base output directory for this stage. It will be created under <code>BASE_OUT_DIR</code> specified in <code>00_main.yaml</code> config.</p>
@@ -226,28 +235,28 @@
 <p>Names of files and directories created under <code>INT_CLUSTERING_BASE_OUT_DIR</code>. Subdirectories are not allowed.</p>
 </div>
 </div>
-<div id="targets" class="section level1">
-<h1 class="hasAnchor">
-<a href="#targets" class="anchor"></a>Targets</h1>
-<div id="singlecellexperiment-objects" class="section level2">
-<h2 class="hasAnchor">
-<a href="#singlecellexperiment-objects" class="anchor"></a><code>SingleCellExperiment</code> objects</h2>
+<div class="section level2">
+<h2 id="targets">Targets<a class="anchor" aria-label="anchor" href="#targets"></a>
+</h2>
+<div class="section level3">
+<h3 id="singlecellexperiment-objects">
+<code>SingleCellExperiment</code> objects<a class="anchor" aria-label="anchor" href="#singlecellexperiment-objects"></a>
+</h3>
 <p><code>sce_int_uncorrected</code>: the selected uncorrected SCE object according to the <code>INTEGRATION_FINAL_METHOD_RM_CC</code> parameter.</p>
 <hr>
 <p><code>sce_int_final</code>: the selected integrated SCE object according to the <code>INTEGRATION_FINAL_METHOD</code> and <code>INTEGRATION_FINAL_METHOD_RM_CC</code> parameters.</p>
 <hr>
 <p><code>sce_int_final_clustering</code>: similar to <code>sce_final_norm_clustering</code> in the <code>02_norm_clustering</code> stage of the single-sample pipeline.</p>
 </div>
-<div id="targes-similar-to-02_norm_clustering" class="section level2">
-<h2 class="hasAnchor">
-<a href="#targes-similar-to-02_norm_clustering" class="anchor"></a>Targes similar to <code>02_norm_clustering</code>
-</h2>
+<div class="section level3">
+<h3 id="targes-similar-to-02_norm_clustering">Targes similar to <code>02_norm_clustering</code><a class="anchor" aria-label="anchor" href="#targes-similar-to-02_norm_clustering"></a>
+</h3>
 <p>These targets are basically the same as those in the <code>02_norm_clustering</code> pipeline in the single-sample pipeline (see <code><a href="../articles/stage_norm_clustering.html">vignette("stage_norm_clustering")</a></code>).</p>
-<p>However, for a full overview, you have to inspect the <a href="https://github.com/bioinfocz/scdrake/blob/main/R/plans_integration.R">source code</a> of the <code><a href="../reference/get_subplan_integration.html">get_int_clustering_subplan()</a></code> function.</p>
+<p>However, for a full overview, you have to inspect the <a href="https://github.com/bioinfocz/scdrake/blob/main/R/plans_integration.R" class="external-link">source code</a> of the <code><a href="../reference/get_subplan_integration.html">get_int_clustering_subplan()</a></code> function.</p>
 </div>
-<div id="cell-clustering" class="section level2">
-<h2 class="hasAnchor">
-<a href="#cell-clustering" class="anchor"></a>Cell clustering</h2>
+<div class="section level3">
+<h3 id="cell-clustering">Cell clustering<a class="anchor" aria-label="anchor" href="#cell-clustering"></a>
+</h3>
 <ul>
 <li><code>clusters_all</code></li>
 <li>
@@ -261,9 +270,9 @@
 </li>
 </ul>
 </div>
-<div id="plots" class="section level2">
-<h2 class="hasAnchor">
-<a href="#plots" class="anchor"></a>Plots</h2>
+<div class="section level3">
+<h3 id="plots">Plots<a class="anchor" aria-label="anchor" href="#plots"></a>
+</h3>
 <ul>
 <li>
 <code>dimred_plots_clustering</code>, <code>dimred_plots_other_vars</code>
@@ -271,9 +280,9 @@
 <li><code>selected_markers_plots_int_final</code></li>
 </ul>
 </div>
-<div id="other-targets" class="section level2">
-<h2 class="hasAnchor">
-<a href="#other-targets" class="anchor"></a>Other targets</h2>
+<div class="section level3">
+<h3 id="other-targets">Other targets<a class="anchor" aria-label="anchor" href="#other-targets"></a>
+</h3>
 <ul>
 <li><code>cell_data</code></li>
 </ul>
@@ -292,18 +301,34 @@
 
 
       <footer><div class="copyright">
-  <p>Developed by Jiri Novotny, Jan Kubovciak.</p>
+  <p></p>
+<p>Developed by Jiri Novotny, Jan Kubovciak.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Made with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1, using <a href="https://preferably.amirmasoudabdol.name/?source=footer">preferably</a> template.</p>
+  <p></p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.</p>
+  <p class="preferably">Using <a href="https://preferably.amirmasoudabdol.name/?source=footer" class="external-link">preferably</a> template.</p>
 </div>
 
       </footer>
 </div>
 
   
-
-
-  </body>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/docsearch.js/2.6.1/docsearch.min.js" integrity="sha256-GKvGqXDznoRYHCwKXGnuchvKSwmx9SRMrZOTh2g4Sb0=" crossorigin="anonymous"></script><script>
+  docsearch({
+    
+    
+    apiKey: '937cedcd467c204b19fc155c5f35019b',
+    indexName: 'scdrake',
+    inputSelector: 'input#search-input.form-control',
+    transformData: function(hits) {
+      return hits.map(function (hit) {
+        hit.url = updateHitURL(hit);
+        return hit;
+      });
+    }
+  });
+</script>
+</body>
 </html>
