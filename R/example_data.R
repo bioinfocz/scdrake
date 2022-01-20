@@ -3,14 +3,11 @@
   utils::download.file(url, destfile = tmp_file_dest)
   tmp_dir <- fs::file_temp()
   utils::untar(tmp_file_dest, exdir = tmp_dir)
-  files <- fs::dir_ls(
-    tmp_dir,
-    recurse = TRUE, type = "file",
-    regexp = "(barcodes\\.tsv|features\\.tsv|matrix\\.mtx)(\\.gz)?"
-  )
+  files <- fs::dir_ls(tmp_dir, recurse = TRUE, type = "file")
+  filenames <- fs::path_file(files)
   fs::dir_create(out_dir)
   fs::file_move(files, out_dir)
-  return(fs::dir_ls(out_dir, glob = "*"))
+  return(fs::dir_ls(out_dir, regexp = glue("({str_c(filenames, collapse = '|')})")))
 }
 
 .show_postdownload_info <- function(dataset, url, files, out_dir) {
