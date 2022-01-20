@@ -71,8 +71,8 @@ jobs:
       matrix:
         config:
           - { os: ubuntu-latest, r: '4.1', bioc: '3.14', cont: "bioconductor/bioconductor_docker:RELEASE_3_14", rspm: "https://packagemanager.rstudio.com/cran/__linux__/focal/latest" }
-          - { os: macOS-latest, r: '4.1', bioc: '3.14'}
-          - { os: windows-latest, r: '4.1', bioc: '3.14'}
+          - { os: macOS-latest, r: '4.1', bioc: '3.13'}
+          - { os: windows-latest, r: '4.1', bioc: '3.13'}
     runs-on: ${{ matrix.config.os }}
     name: ${{ matrix.config.os }} (${{ matrix.config.r }})
     container: ${{ matrix.config.cont }}
@@ -182,6 +182,9 @@ jobs:
 
           ## For installing usethis's dependency gert
           brew install libgit2
+
+          ## For clustermq
+          brew install zeromq
 
       - name: Install Windows system dependencies
         if: runner.os == 'Windows'
