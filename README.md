@@ -1,11 +1,14 @@
 
 # scdrake
 
-![License](https://img.shields.io/github/license/bioinfocz/scdrake)
 [![NEWS:
 updates](https://img.shields.io/badge/NEWS-updates-informational)](NEWS.md)
 [![Documentation and
 vignettes](https://img.shields.io/badge/Documentation%20&%20vignettes-bioinfocz.github.io/scdrake-informational)](https://bioinfocz.github.io/scdrake)
+[![Overview and
+outputs](https://img.shields.io/badge/Overview%20&%20outputs-vignette\(%22pipeline_overview%22\)-informational)](https://bioinfocz.github.io/scdrake/articles/pipeline_overview.html)
+
+![License](https://img.shields.io/github/license/bioinfocz/scdrake)
 [![Lifecycle:
 experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
 [![R-CMD-check-bioc](https://github.com/bioinfocz/scdrake/actions/workflows/check-bioc.yaml/badge.svg?branch=main)](https://github.com/bioinfocz/scdrake/actions/workflows/check-bioc.yaml)
@@ -29,6 +32,8 @@ The main features of the `{scdrake}` pipeline are:
   - Computation of cluster markers and differentially expressed genes
     between clusters (denoted as “contrasts”).
   - Rich graphical and HTML outputs.
+      - You can find links to example outputs
+        [here](https://bioinfocz.github.io/scdrake/articles/pipeline_overview.html).
   - Thanks to `{drake}`, the pipeline is highly scalable and
     reproducible.
       - Want to change some parameter? No problem\! Only parts of the
@@ -59,6 +64,7 @@ stable version from GitHub using the following code:
 ``` r
 if (!requireNamespace("BiocManager", quietly = TRUE)) {
   install.packages("BiocManager")
+  BiocManager::install(version = "3.14")
 }
 
 BiocManager::install("bioinfocz/scdrake@v1.0.1")
@@ -69,6 +75,7 @@ For development version use
 ``` r
 if (!requireNamespace("BiocManager", quietly = TRUE)) {
   install.packages("BiocManager")
+  BiocManager::install(version = "3.14")
 }
 
 BiocManager::install("bioinfocz/scdrake")
