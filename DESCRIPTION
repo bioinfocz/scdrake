@@ -103,6 +103,7 @@ Remotes:
     gorgitko/SC3
 Suggests:
     BiocStyle,
+    clustermq,
     covr,
     emoji,
     future,
