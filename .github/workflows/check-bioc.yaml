@@ -274,11 +274,11 @@ jobs:
           BiocManager::install(version = "${{ matrix.config.bioc }}", ask = FALSE, update = TRUE, type = "binary")
         shell: Rscript {0}
 
-      - name: Install SC3 dependencies not available as binaries on Windows
-        if: matrix.config.os == 'windows-latest'
-        run: |
-          BiocManager::install(c("GenomeInfoDbData", "org.Hs.eg.db"), ask = FALSE, update = TRUE, type = "source")
-        shell: Rscript {0}
+      # - name: Install SC3 dependencies not available as binaries on Windows
+      #   if: matrix.config.os == 'windows-latest'
+      #   run: |
+      #     BiocManager::install(c("GenomeInfoDbData", "org.Hs.eg.db"), ask = FALSE, update = TRUE, type = "source")
+      #   shell: Rscript {0}
 
       ## SC3 installation is failing downstream, because dependencies needed for its vignettes are not already installed.
       - name: Install SC3 from GitHub (gorgitko/SC3)
