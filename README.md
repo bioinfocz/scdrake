@@ -7,7 +7,6 @@ updates](https://img.shields.io/badge/NEWS-updates-informational)](NEWS.md)
 vignettes](https://img.shields.io/badge/Documentation%20&%20vignettes-bioinfocz.github.io/scdrake-informational)](https://bioinfocz.github.io/scdrake)
 [![Overview and
 outputs](https://img.shields.io/badge/Overview%20&%20outputs-vignette\(%22pipeline_overview%22\)-informational)](https://bioinfocz.github.io/scdrake/articles/pipeline_overview.html)
-
 ![License](https://img.shields.io/github/license/bioinfocz/scdrake)
 [![Lifecycle:
 experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
