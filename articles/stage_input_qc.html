@@ -178,7 +178,7 @@
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Input and quality control stage</h1>
             
-            <h4 data-toc-skip class="date">2022-01-21</h4>
+            <h4 data-toc-skip class="date">2022-01-26</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/bioinfocz/scdrake/blob/mastervignettes/stage_input_qc.Rmd" class="external-link"><code>vignettes/stage_input_qc.Rmd</code></a></small>
       <div class="hidden name"><code>stage_input_qc.Rmd</code></div>
@@ -419,7 +419,7 @@
 </h3>
 <p><code>config_input_qc</code>: a list holding parameters for this stage.</p>
 <hr>
-<p><code>barcode_ranks</code>: a DataFrame with barcode ranks for <a href="https://bioconductor.org/books/release/OSCA/droplet-processing.html" class="external-link">knee plot</a>, computed by <code><a href="https://rdrr.io/pkg/DropletUtils/man/barcodeRanks.html" class="external-link">DropletUtils::barcodeRanks()</a></code> on UMI counts from <code>sce_raw</code> target.</p>
+<p><code>barcode_ranks</code>: a DataFrame with barcode ranks for <a href="https://bioconductor.org/books/release/OSCA.advanced/droplet-processing.html" class="external-link">knee plot</a>, computed by <code><a href="https://rdrr.io/pkg/DropletUtils/man/barcodeRanks.html" class="external-link">DropletUtils::barcodeRanks()</a></code> on UMI counts from <code>sce_raw</code> target.</p>
 <p><code>empty_droplets</code>: a DataFrame of statistics for empty droplets, computed <code><a href="https://rdrr.io/pkg/DropletUtils/man/emptyDrops.html" class="external-link">DropletUtils::emptyDrops()</a></code> on UMI counts from <code>sce_raw</code> target.</p>
 <hr>
 <p><code>sce_history</code>: a tibble with cell and gene “history”, showing their numbers in unfiltered and filtered data.</p>

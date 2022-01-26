@@ -178,7 +178,7 @@
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Normalization and clustering stage</h1>
             
-            <h4 data-toc-skip class="date">2022-01-21</h4>
+            <h4 data-toc-skip class="date">2022-01-26</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/bioinfocz/scdrake/blob/mastervignettes/stage_norm_clustering.Rmd" class="external-link"><code>vignettes/stage_norm_clustering.Rmd</code></a></small>
       <div class="hidden name"><code>stage_norm_clustering.Rmd</code></div>
@@ -248,7 +248,7 @@
 </h3>
 <p><code>HVG_METRIC: "gene_var"</code></p>
 <p><strong>Type:</strong> character scalar (<code>"gene_var"</code> | <code>"gene_cv2"</code> | <code>"sctransform"</code>)</p>
-<p>A metric used to find HVGs. See <a href="http://bioconductor.org/books/release/OSCA/feature-selection.html" class="external-link uri">http://bioconductor.org/books/release/OSCA/feature-selection.html</a> for more details.</p>
+<p>A metric used to find HVGs. See <a href="https://bioconductor.org/books/release/OSCA.basic/feature-selection.html" class="external-link uri">https://bioconductor.org/books/release/OSCA.basic/feature-selection.html</a> for more details.</p>
 <ul>
 <li>
 <code>"gene_var"</code>: variance of the log-counts (<code><a href="https://rdrr.io/pkg/scran/man/modelGeneVar.html" class="external-link">scran::modelGeneVar()</a></code>).</li>
@@ -260,22 +260,22 @@
 <hr>
 <p><code>HVG_SELECTION: "top"</code></p>
 <p><strong>Type:</strong> character scalar (<code>"top"</code> | <code>"significance"</code> | <code>"threshold"</code>)</p>
-<p>A HVG selection strategy. Only relevant when the <code>HVG_METRIC</code> parameter is <code>"gene_var"</code> or <code>"gene_cv2"</code>. See <a href="http://bioconductor.org/books/release/OSCA/feature-selection.html#hvg-selection" class="external-link uri">http://bioconductor.org/books/release/OSCA/feature-selection.html#hvg-selection</a> for more details.</p>
+<p>A HVG selection strategy. Only relevant when the <code>HVG_METRIC</code> parameter is <code>"gene_var"</code> or <code>"gene_cv2"</code>.</p>
 <ul>
 <li>
-<code>"top"</code>: take top X genes according to the metric.</li>
+<code>"top"</code>: take top X genes according to the metric (<a href="https://bioconductor.org/books/release/OSCA.basic/feature-selection.html#hvg-selection" class="external-link">details</a>).</li>
 <li>
-<code>"significance"</code>: use a FDR threshold.</li>
+<code>"significance"</code>: use a FDR threshold (<a href="https://bioconductor.org/books/release/OSCA.advanced/more-hvgs.html#more-hvg-selection-strategies" class="external-link">details</a>).</li>
 <li>
-<code>"threshold"</code>: use a threshold on minimum value of the metric.</li>
+<code>"threshold"</code>: use a threshold on minimum value of the metric (<a href="https://bioconductor.org/books/release/OSCA.advanced/more-hvgs.html#more-hvg-selection-strategies" class="external-link">details</a>).</li>
 </ul>
 <p>For <code>"top"</code> and <code>"threshold"</code>, <code>bio</code> and <code>ratio</code> columns are used for <code>HVG_METRIC</code> of <code>"gene_var"</code> and <code>"gene_cv2"</code>, respectively. These columns are present in the DataFrame returned from the underlying method (<code><a href="https://rdrr.io/pkg/scran/man/modelGeneVar.html" class="external-link">scran::modelGeneVar()</a></code> or <code><a href="https://rdrr.io/pkg/scran/man/modelGeneCV2.html" class="external-link">scran::modelGeneCV2()</a></code>).</p>
 <hr>
 <p><code>HVG_SELECTION_VALUE: 1000</code></p>
 <p><strong>Type:</strong> depends on value of the <code>HVG_SELECTION</code> parameter:</p>
 <ul>
-<li>An integer scalar for <code>HVG_SELECTION: "top"</code>.</li>
-<li>A numeric scalar &lt;0; 1&gt; for <code>HVG_SELECTION: "significance"</code>.</li>
+<li>A positive integer scalar for <code>HVG_SELECTION: "top"</code>.</li>
+<li>A numeric scalar <span class="math inline">\(&lt;0; 1&gt;\)</span> for <code>HVG_SELECTION: "significance"</code>.</li>
 <li>A numeric scalar for <code>HVG_SELECTION: "threshold"</code>.</li>
 </ul>
 <p>A threshold value for HVG selection. The following parameter combinations are recommended defaults:</p>
@@ -303,7 +303,7 @@
 </h4>
 <p><code>HVG_RM_CC_GENES: False</code></p>
 <p><strong>Type:</strong> logical scalar</p>
-<p>Whether to apply a correction for cell cycle prior to HVG selection. We implement a cell cycle-related genes removal strategy described <a href="http://bioconductor.org/books/release/OSCA/cell-cycle-assignment.html#removing-cell-cycle-related-genes" class="external-link">here</a>. It is based on the percentage of variance explained by the cell cycle phase in the expression profile for each gene.</p>
+<p>Whether to apply a correction for cell cycle prior to HVG selection. We implement a cell cycle-related genes removal strategy described [here]<a href="https://bioconductor.org/books/release/OSCA.advanced/cell-cycle-assignment.html#removing-cell-cycle-related-genes" class="external-link uri">https://bioconductor.org/books/release/OSCA.advanced/cell-cycle-assignment.html#removing-cell-cycle-related-genes</a>). It is based on the percentage of variance explained by the cell cycle phase in the expression profile for each gene.</p>
 <p>Note that when <code>SCTransform</code> is used for normalization including cell cycle variables to regress out, than the results of this strategy remain unclear.</p>
 <hr>
 <p><code>HVG_CC_GENES_VAR_EXPL_THRESHOLD: 5</code></p>
@@ -333,9 +333,9 @@
 <li>
 <code>"forced"</code>: use the number of PCs specified by the <code>PCA_FORCED_PCS</code> parameter.</li>
 <li>
-<code>"elbow"</code>: use the <a href="http://bioconductor.org/books/release/OSCA/dimensionality-reduction.html#using-the-elbow-point" class="external-link">elbow point method</a>.</li>
+<code>"elbow"</code>: use the <a href="https://bioconductor.org/books/release/OSCA.advanced/dimensionality-reduction-redux.html#using-the-elbow-point" class="external-link">elbow point method</a>.</li>
 <li>
-<code>"technical_noise"</code>: use the <a href="http://bioconductor.org/books/release/OSCA/dimensionality-reduction.html#using-the-technical-noise" class="external-link">technical noise</a>.</li>
+<code>"technical_noise"</code>: use the <a href="https://bioconductor.org/books/release/OSCA.advanced/dimensionality-reduction-redux.html#using-the-technical-noise" class="external-link">technical noise</a>.</li>
 </ul>
 <hr>
 <p><code>PCA_FORCED_PCS: 15</code></p>
@@ -346,7 +346,7 @@
 <div class="section level3">
 <h3 id="t-sne">t-SNE<a class="anchor" aria-label="anchor" href="#t-sne"></a>
 </h3>
-<p><a href="https://bioconductor.org/books/release/OSCA/dimensionality-reduction.html#t-stochastic-neighbor-embedding" class="external-link">t-stochastic neighbor embedding</a></p>
+<p><a href="https://bioconductor.org/books/release/OSCA.basic/dimensionality-reduction.html#t-stochastic-neighbor-embedding" class="external-link">t-stochastic neighbor embedding</a></p>
 <p>See <code><a href="https://rdrr.io/pkg/scater/man/runTSNE.html" class="external-link">?scater::runTSNE</a></code> for the underlying method.</p>
 <hr>
 <p><code>TSNE_PERP: 20</code></p>
@@ -363,7 +363,7 @@
 <div class="section level4">
 <h4 id="graph-based-clustering">Graph-based clustering<a class="anchor" aria-label="anchor" href="#graph-based-clustering"></a>
 </h4>
-<p>Parameters for <a href="https://bioconductor.org/books/release/OSCA/clustering.html#clustering-graph" class="external-link">graph-based clustering</a>.</p>
+<p>Parameters for <a href="https://bioconductor.org/books/release/OSCA.basic/clustering.html#clustering-graph" class="external-link">graph-based clustering</a>.</p>
 <hr>
 <p><code>GRAPH_SNN_N: 10</code></p>
 <p><strong>Type:</strong> positive integer scalar</p>

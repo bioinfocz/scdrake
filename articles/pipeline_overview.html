@@ -178,7 +178,7 @@
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Pipeline overview</h1>
             
-            <h4 data-toc-skip class="date">2022-01-21</h4>
+            <h4 data-toc-skip class="date">2022-01-26</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/bioinfocz/scdrake/blob/mastervignettes/pipeline_overview.Rmd" class="external-link"><code>vignettes/pipeline_overview.Rmd</code></a></small>
       <div class="hidden name"><code>pipeline_overview.Rmd</code></div>
@@ -216,12 +216,12 @@
 <h3 id="stage-01_input_qc">Stage <code>01_input_qc</code><a class="anchor" aria-label="anchor" href="#stage-01_input_qc"></a>
 </h3>
 <p>An initial stage to read in scRNA-seq data, remove empty droplets (optionally), and perform quality control, and cell and gene filtering.</p>
-<p>More information about scRNA-seq quality control can be found <a href="https://bioconductor.org/books/release/OSCA/quality-control.html#choice-of-qc-metrics" class="external-link">here</a>.</p>
+<p>More information about scRNA-seq quality control can be found <a href="https://bioconductor.org/books/release/OSCA.basic/quality-control.html#common-choices-of-qc-metrics" class="external-link">here</a>.</p>
 <p>⚙️ Config and targets: <code><a href="../articles/stage_input_qc.html">vignette("stage_input_qc")</a></code></p>
 <p><a href="https://onco.img.cas.cz/novotnyj/scdrake/single_sample/pbmc1k/01_input_qc/01_input_qc.html" class="external-link">📜 Example report</a></p>
 <ul>
 <li>Reading in feature-barcode matrix.</li>
-<li>Removal of <a href="https://bioconductor.org/books/release/OSCA/droplet-processing.html" class="external-link">empty droplets</a> (<code><a href="https://rdrr.io/pkg/DropletUtils/man/emptyDrops.html" class="external-link">DropletUtils::emptyDrops()</a></code>) (optional).</li>
+<li>Removal of <a href="https://bioconductor.org/books/release/OSCA.advanced/droplet-processing.html" class="external-link">empty droplets</a> (<code><a href="https://rdrr.io/pkg/DropletUtils/man/emptyDrops.html" class="external-link">DropletUtils::emptyDrops()</a></code>) (optional).</li>
 <li>Calculation of per-cell QC metrics (<code><a href="https://rdrr.io/pkg/scuttle/man/perCellQCMetrics.html" class="external-link">scater::perCellQCMetrics()</a></code>):
 <ul>
 <li>Number of UMI.</li>
@@ -254,24 +254,24 @@
 <p><a href="https://onco.img.cas.cz/novotnyj/scdrake/single_sample/pbmc1k/02_norm_clustering/02_norm_clustering.html" class="external-link">📜 Example report</a></p>
 <p><a href="https://onco.img.cas.cz/novotnyj/scdrake/single_sample/pbmc1k/02_norm_clustering/02_norm_clustering_simple.html" class="external-link">📜 Example simplified report</a></p>
 <ul>
-<li>Calculation of cell cycle score and assignment of cells to phases (G1, G2M, S). List of cell cycle genes in <code><a href="https://satijalab.org/seurat/reference/cc.genes.updated.2019.html" class="external-link">Seurat::cc.genes.updated.2019</a></code> and <code><a href="https://satijalab.org/seurat/reference/CellCycleScoring.html" class="external-link">Seurat::CellCycleScoring()</a></code> for calculation is used.</li>
+<li>Calculation of cell cycle score and assignment of cells to phases (G1, G2M, S) using the list of cell cycle genes in <code><a href="https://satijalab.org/seurat/reference/cc.genes.updated.2019.html" class="external-link">Seurat::cc.genes.updated.2019</a></code> and <code><a href="https://satijalab.org/seurat/reference/CellCycleScoring.html" class="external-link">Seurat::CellCycleScoring()</a></code> function.</li>
 <li>
-<a href="https://bioconductor.org/books/release/OSCA/normalization.html" class="external-link">Normalization</a> of UMI counts by either:
+<a href="https://bioconductor.org/books/release/OSCA.basic/normalization.html" class="external-link">Normalization</a> of UMI counts by either:
 <ul>
 <li>
-<a href="https://bioconductor.org/books/release/OSCA/normalization.html#normalization-by-deconvolution" class="external-link">Normalization by deconvolution</a> implemented in the <a href="https://bioconductor.org/packages/release/bioc/html/scran.html" class="external-link">scran</a> package.</li>
+<a href="https://bioconductor.org/books/release/OSCA.basic/normalization.html#normalization-by-deconvolution" class="external-link">Normalization by deconvolution</a> implemented in the <a href="https://bioconductor.org/packages/release/bioc/html/scran.html" class="external-link">scran</a> package.</li>
 <li>Regularized negative binomial regression to normalize UMI count data implemented in the <a href="https://github.com/ChristophH/sctransform" class="external-link">sctransform</a> package and wrapped by the <a href="https://satijalab.org/seurat/" class="external-link">Seurat</a> package. This method also allows to regress out confounding variables such as cell cycle score or percentage of mitochondrial genes expression. Note that for cell cycle score, a better method seems to be removal of CC-related genes prior to detection of highly variable genes (HVGs, see below). <code>sctransform</code> also returns a specified number of HVGs.</li>
 </ul>
 </li>
-<li>Selection of <a href="https://bioconductor.org/books/release/OSCA/feature-selection.html" class="external-link">highly variable genes</a> (HVGs):
+<li>Selection of <a href="https://bioconductor.org/books/release/OSCA.basic/feature-selection.html" class="external-link">highly variable genes</a> (HVGs):
 <ul>
 <li>HVGs are used downstream for dimensionality reduction and clustering.</li>
 <li>Three metrics for HVGs are available:
 <ul>
 <li>
-<a href="https://bioconductor.org/books/release/OSCA/feature-selection.html#variance-of-the-log-counts" class="external-link">Gene variance</a>.</li>
+<a href="https://bioconductor.org/books/release/OSCA.basic/feature-selection.html#quantifying-per-gene-variation" class="external-link">Gene variance</a>.</li>
 <li>
-<a href="https://bioconductor.org/books/release/OSCA/feature-selection.html#coefficient-of-variation" class="external-link">Coefficient of variation</a> (CV2).</li>
+<a href="http://bioconductor.org/books/release/OSCA.advanced/more-hvgs.html#using-the-coefficient-of-variation" class="external-link">Coefficient of variation</a> (CV2).</li>
 <li>HVGs obtained from the <code>sctransform</code> normalization.</li>
 </ul>
 </li>
@@ -282,25 +282,25 @@
 <li>Threshold on a metric value.</li>
 </ul>
 </li>
-<li>Prior to HVG selection, cell cycle-related genes can be removed. We are using a method based on the percentage of variance explained by the cell cycle phase in the expression profile for each gene (<a href="https://bioconductor.org/books/release/OSCA/cell-cycle-assignment.html#removing-cell-cycle-related-genes" class="external-link">details</a>).</li>
+<li>Prior to HVG selection, cell cycle-related genes can be removed. We are using a method based on the percentage of variance explained by the cell cycle phase in the expression profile for each gene (<a href="https://bioconductor.org/books/release/OSCA.advanced/cell-cycle-assignment.html#removing-cell-cycle-related-genes" class="external-link">details</a>).</li>
 </ul>
 </li>
-<li>Removal of <a href="https://bioconductor.org/books/release/OSCA/doublet-detection.html" class="external-link">cell doublets</a> (<code><a href="https://rdrr.io/pkg/scDblFinder/man/computeDoubletDensity.html" class="external-link">scDblFinder::computeDoubletDensity()</a></code>).</li>
+<li>Removal of <a href="https://bioconductor.org/books/release/OSCA.advanced/doublet-detection.html" class="external-link">cell doublets</a> (<code><a href="https://rdrr.io/pkg/scDblFinder/man/computeDoubletDensity.html" class="external-link">scDblFinder::computeDoubletDensity()</a></code>).</li>
 <li>
-<a href="https://bioconductor.org/books/release/OSCA/dimensionality-reduction.html#principal-components-analysis" class="external-link">Calculation of PCA</a> and <a href="https://bioconductor.org/books/release/OSCA/dimensionality-reduction.html#choosing-the-number-of-pcs" class="external-link">selection of number of principal components</a> (PCs) which will be used downstream. There are three methods to select a proper number of PCs:
+<a href="https://bioconductor.org/books/release/OSCA.basic/dimensionality-reduction.html#principal-components-analysis" class="external-link">Calculation of PCA</a> and <a href="https://bioconductor.org/books/release/OSCA.basic/dimensionality-reduction.html#choosing-the-number-of-pcs" class="external-link">selection of number of principal components</a> (PCs) which will be used downstream. There are three methods to select a proper number of PCs:
 <ul>
-<li>Using the <a href="http://bioconductor.org/books/release/OSCA/dimensionality-reduction.html#using-the-elbow-point" class="external-link">elbow point</a>.</li>
-<li>Using the <a href="http://bioconductor.org/books/release/OSCA/dimensionality-reduction.html#using-the-technical-noise" class="external-link">technical noise</a>.</li>
+<li>Using the <a href="http://bioconductor.org/books/release/OSCA.advanced/dimensionality-reduction-redux.html#more-choices-for-the-number-of-pcs" class="external-link">elbow point</a>.</li>
+<li>Using the <a href="http://bioconductor.org/books/release/OSCA.advanced/dimensionality-reduction-redux.html#using-the-technical-noise" class="external-link">technical noise</a>.</li>
 <li>Using the fixed number of PCs.</li>
 </ul>
 </li>
 <li>
-<a href="https://bioconductor.org/books/release/OSCA/clustering.html" class="external-link">Cell clustering</a> using several algorithms:
+<a href="https://bioconductor.org/books/release/OSCA.basic/clustering.html" class="external-link">Cell clustering</a> using several algorithms:
 <ul>
 <li>
-<a href="https://bioconductor.org/books/release/OSCA/clustering.html#clustering-graph" class="external-link">Graph-based clustering</a> (mutual nearest neighbors) using Louvain and Walktrap algorithms.</li>
+<a href="https://bioconductor.org/books/release/OSCA.basic/clustering.html#clustering-graph" class="external-link">Graph-based clustering</a> (mutual nearest neighbors) using Louvain and Walktrap algorithms.</li>
 <li>
-<a href="https://bioconductor.org/books/release/OSCA/clustering.html#k-means-clustering" class="external-link">K-means clustering</a> using both custom numbers of K and best K selection.</li>
+<a href="https://bioconductor.org/books/release/OSCA.basic/clustering.html#vector-quantization-with-k-means" class="external-link">K-means clustering</a> using both custom numbers of K and best K selection.</li>
 <li>
 <a href="https://bioconductor.org/packages/release/bioc/html/SC3.html" class="external-link">Single-Cell Consensus Clustering</a> (SC3) with custom numbers of clusters.</li>
 </ul>
@@ -318,11 +318,11 @@
 </ul>
 </li>
 <li>
-<a href="https://bioconductor.org/books/release/OSCA/dimensionality-reduction.html#dimensionality-reduction-for-visualization" class="external-link">Dimensionality reduction</a>:
+<a href="https://bioconductor.org/books/release/OSCA.basic/dimensionality-reduction.html#non-linear-methods-for-visualization" class="external-link">Dimensionality reduction</a>:
 <ul>
 <li>PCA</li>
-<li><a href="https://bioconductor.org/books/release/OSCA/dimensionality-reduction.html#t-stochastic-neighbor-embedding" class="external-link">t-SNE</a></li>
-<li><a href="https://bioconductor.org/books/release/OSCA/dimensionality-reduction.html#uniform-manifold-approximation-and-projection" class="external-link">UMAP</a></li>
+<li><a href="https://bioconductor.org/books/release/OSCA.basic/dimensionality-reduction.html#t-stochastic-neighbor-embedding" class="external-link">t-SNE</a></li>
+<li><a href="https://bioconductor.org/books/release/OSCA.basic/dimensionality-reduction.html#uniform-manifold-approximation-and-projection" class="external-link">UMAP</a></li>
 </ul>
 </li>
 <li>Expression plots of selected groups of genes (markers) in reduced dimensions.</li>
@@ -338,7 +338,7 @@
 <h3 id="stage-01_integration">Stage <code>01_integration</code><a class="anchor" aria-label="anchor" href="#stage-01_integration"></a>
 </h3>
 <p>A stage for reading in single-sample data, integration using several methods, and computing reduced dimensions. Note that currently only samples which were <strong>all</strong> normalized by <code>scran</code> method can be integrated.</p>
-<p>More information can be found in this <a href="https://bioconductor.org/books/release/OSCA/integrating-datasets.html" class="external-link">OSCA chapter</a>.</p>
+<p>More information can be found in this <a href="http://bioconductor.org/books/release/OSCA.multisample" class="external-link">OSCA chapter</a>.</p>
 <p>⚙️ Config and targets: <code><a href="../articles/stage_integration.html">vignette("stage_integration")</a></code></p>
 <p><a href="https://onco.img.cas.cz/novotnyj/scdrake/integration/01_integration/01_integration.html" class="external-link">📜 Example report</a></p>
 <ul>
@@ -395,7 +395,7 @@
 <p><a href="https://onco.img.cas.cz/novotnyj/scdrake/integration/cluster_markers/cluster_markers.html" class="external-link">📜 Example report for integrated data</a></p>
 <ul>
 <li>
-<a href="https://bioconductor.org/books/release/OSCA/marker-detection.html" class="external-link">Calculation of cluster markers</a>: any categorical grouping of cells can be used, including those manually defined based on the existing groups (from e.g. clustering), as described in the <code><a href="../articles/stage_norm_clustering.html">vignette("stage_norm_clustering")</a></code>. More details about marker computation can be found in <code><a href="../articles/cluster_markers.html">vignette("cluster_markers")</a></code>.</li>
+<a href="https://bioconductor.org/books/release/OSCA.basic/marker-detection.html" class="external-link">Calculation of cluster markers</a>: any categorical grouping of cells can be used, including those manually defined based on the existing groups (from e.g. clustering), as described in the <code><a href="../articles/stage_norm_clustering.html">vignette("stage_norm_clustering")</a></code>. More details about marker computation can be found in <code><a href="../articles/cluster_markers.html">vignette("cluster_markers")</a></code>.</li>
 <li>Generation of heatmaps and plots. To reduce the size of heatmaps and number of plots, you can control a number of top N markers taken by a chosen metric (FDR, LFC, etc.). Only these top N markers will be displayed in heatmaps, and plots made for them. This can be specified for each cell grouping and test type.
 <ul>
 <li>Marker plots are composed of:
