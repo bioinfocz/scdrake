@@ -60,14 +60,14 @@ An initial stage to read in scRNA-seq data, remove empty droplets (optionally), 
 and cell and gene filtering.
 
 More information about scRNA-seq quality control can be found
-[here](https://bioconductor.org/books/release/OSCA/quality-control.html#choice-of-qc-metrics).
+[here](https://bioconductor.org/books/release/OSCA.basic/quality-control.html#common-choices-of-qc-metrics).
 
 `r emoji::emoji("gear")` Config and targets: `vignette("stage_input_qc")`
 
 [`r emoji::emoji("scroll")` Example report](https://onco.img.cas.cz/novotnyj/scdrake/single_sample/pbmc1k/01_input_qc/01_input_qc.html)
 
 - Reading in feature-barcode matrix.
-- Removal of [empty droplets](https://bioconductor.org/books/release/OSCA/droplet-processing.html)
+- Removal of [empty droplets](https://bioconductor.org/books/release/OSCA.advanced/droplet-processing.html)
   (`DropletUtils::emptyDrops()`) (optional).
 - Calculation of per-cell QC metrics (`scater::perCellQCMetrics()`):
   - Number of UMI.
@@ -96,10 +96,10 @@ A stage for normalization, dimensionality reduction, and cell clustering.
 
 [`r emoji::emoji("scroll")` Example simplified report](https://onco.img.cas.cz/novotnyj/scdrake/single_sample/pbmc1k/02_norm_clustering/02_norm_clustering_simple.html)
 
-- Calculation of cell cycle score and assignment of cells to phases (G1, G2M, S).
-  List of cell cycle genes in `Seurat::cc.genes.updated.2019` and `Seurat::CellCycleScoring()` for calculation is used.
-- [Normalization](https://bioconductor.org/books/release/OSCA/normalization.html) of UMI counts by either:
-  - [Normalization by deconvolution](https://bioconductor.org/books/release/OSCA/normalization.html#normalization-by-deconvolution)
+- Calculation of cell cycle score and assignment of cells to phases (G1, G2M, S) using the list of cell cycle genes in
+  `Seurat::cc.genes.updated.2019` and `Seurat::CellCycleScoring()` function.
+- [Normalization](https://bioconductor.org/books/release/OSCA.basic/normalization.html) of UMI counts by either:
+  - [Normalization by deconvolution](https://bioconductor.org/books/release/OSCA.basic/normalization.html#normalization-by-deconvolution)
     implemented in the [scran](https://bioconductor.org/packages/release/bioc/html/scran.html) package.
   - Regularized negative binomial regression to normalize UMI count data implemented in the
     [sctransform](https://github.com/ChristophH/sctransform) package and wrapped by the
@@ -107,11 +107,11 @@ A stage for normalization, dimensionality reduction, and cell clustering.
     such as cell cycle score or percentage of mitochondrial genes expression. Note that for cell cycle score,
     a better method seems to be removal of CC-related genes prior to detection of highly variable genes (HVGs, see below).
     `sctransform` also returns a specified number of HVGs.
-- Selection of [highly variable genes](https://bioconductor.org/books/release/OSCA/feature-selection.html) (HVGs):
+- Selection of [highly variable genes](https://bioconductor.org/books/release/OSCA.basic/feature-selection.html) (HVGs):
   - HVGs are used downstream for dimensionality reduction and clustering.
   - Three metrics for HVGs are available:
-    - [Gene variance](https://bioconductor.org/books/release/OSCA/feature-selection.html#variance-of-the-log-counts).
-    - [Coefficient of variation](https://bioconductor.org/books/release/OSCA/feature-selection.html#coefficient-of-variation)
+    - [Gene variance](https://bioconductor.org/books/release/OSCA.basic/feature-selection.html#quantifying-per-gene-variation).
+    - [Coefficient of variation](http://bioconductor.org/books/release/OSCA.advanced/more-hvgs.html#using-the-coefficient-of-variation)
       (CV2).
     - HVGs obtained from the `sctransform` normalization.
   - Based on the selected one from the first two metrics above, HVGs are selected either by:
@@ -121,19 +121,19 @@ A stage for normalization, dimensionality reduction, and cell clustering.
   - Prior to HVG selection, cell cycle-related genes can be removed.
     We are using a method based on the percentage of variance explained by the cell cycle phase
     in the expression profile for each gene
-    ([details](https://bioconductor.org/books/release/OSCA/cell-cycle-assignment.html#removing-cell-cycle-related-genes)).
-- Removal of [cell doublets](https://bioconductor.org/books/release/OSCA/doublet-detection.html)
+    ([details](https://bioconductor.org/books/release/OSCA.advanced/cell-cycle-assignment.html#removing-cell-cycle-related-genes)).
+- Removal of [cell doublets](https://bioconductor.org/books/release/OSCA.advanced/doublet-detection.html)
   (`scDblFinder::computeDoubletDensity()`).
-- [Calculation of PCA](https://bioconductor.org/books/release/OSCA/dimensionality-reduction.html#principal-components-analysis)
-  and [selection of number of principal components](https://bioconductor.org/books/release/OSCA/dimensionality-reduction.html#choosing-the-number-of-pcs)
+- [Calculation of PCA](https://bioconductor.org/books/release/OSCA.basic/dimensionality-reduction.html#principal-components-analysis)
+  and [selection of number of principal components](https://bioconductor.org/books/release/OSCA.basic/dimensionality-reduction.html#choosing-the-number-of-pcs)
   (PCs) which will be used downstream. There are three methods to select a proper number of PCs:
-  - Using the [elbow point](http://bioconductor.org/books/release/OSCA/dimensionality-reduction.html#using-the-elbow-point).
-  - Using the [technical noise](http://bioconductor.org/books/release/OSCA/dimensionality-reduction.html#using-the-technical-noise).
+  - Using the [elbow point](http://bioconductor.org/books/release/OSCA.advanced/dimensionality-reduction-redux.html#more-choices-for-the-number-of-pcs).
+  - Using the [technical noise](http://bioconductor.org/books/release/OSCA.advanced/dimensionality-reduction-redux.html#using-the-technical-noise).
   - Using the fixed number of PCs.
-- [Cell clustering](https://bioconductor.org/books/release/OSCA/clustering.html) using several algorithms:
-  - [Graph-based clustering](https://bioconductor.org/books/release/OSCA/clustering.html#clustering-graph)
+- [Cell clustering](https://bioconductor.org/books/release/OSCA.basic/clustering.html) using several algorithms:
+  - [Graph-based clustering](https://bioconductor.org/books/release/OSCA.basic/clustering.html#clustering-graph)
     (mutual nearest neighbors) using Louvain and Walktrap algorithms.
-  - [K-means clustering](https://bioconductor.org/books/release/OSCA/clustering.html#k-means-clustering)
+  - [K-means clustering](https://bioconductor.org/books/release/OSCA.basic/clustering.html#vector-quantization-with-k-means)
     using both custom numbers of K and best K selection.
   - [Single-Cell Consensus Clustering](https://bioconductor.org/packages/release/bioc/html/SC3.html) (SC3) with
     custom numbers of clusters.
@@ -145,10 +145,10 @@ A stage for normalization, dimensionality reduction, and cell clustering.
     - Cluster 2 -> B cells
     - Cluster 3 -> T cells
   - Now you can use this new cell grouping for e.g. plotting of reduced dimensions or calculation of cluster markers.
-- [Dimensionality reduction](https://bioconductor.org/books/release/OSCA/dimensionality-reduction.html#dimensionality-reduction-for-visualization):
+- [Dimensionality reduction](https://bioconductor.org/books/release/OSCA.basic/dimensionality-reduction.html#non-linear-methods-for-visualization):
   - PCA
-  - [t-SNE](https://bioconductor.org/books/release/OSCA/dimensionality-reduction.html#t-stochastic-neighbor-embedding)
-  - [UMAP](https://bioconductor.org/books/release/OSCA/dimensionality-reduction.html#uniform-manifold-approximation-and-projection)
+  - [t-SNE](https://bioconductor.org/books/release/OSCA.basic/dimensionality-reduction.html#t-stochastic-neighbor-embedding)
+  - [UMAP](https://bioconductor.org/books/release/OSCA.basic/dimensionality-reduction.html#uniform-manifold-approximation-and-projection)
 - Expression plots of selected groups of genes (markers) in reduced dimensions.
 - A simplified report for non-technical audience which contains only dimred plots and selected markers.
 
@@ -162,7 +162,7 @@ Just for clarification, an individual sample is also denoted as *batch*.
 A stage for reading in single-sample data, integration using several methods, and computing reduced dimensions.
 Note that currently only samples which were **all** normalized by `scran` method can be integrated.
 
-More information can be found in this [OSCA chapter](https://bioconductor.org/books/release/OSCA/integrating-datasets.html).
+More information can be found in this [OSCA chapter](http://bioconductor.org/books/release/OSCA.multisample).
 
 `r emoji::emoji("gear")` Config and targets: `vignette("stage_integration")`
 
@@ -221,7 +221,7 @@ A stage for calculation, visualization and reporting of cell cluster markers ("g
 
 [`r emoji::emoji("scroll")` Example report for integrated data](https://onco.img.cas.cz/novotnyj/scdrake/integration/cluster_markers/cluster_markers.html)
 
-- [Calculation of cluster markers](https://bioconductor.org/books/release/OSCA/marker-detection.html):
+- [Calculation of cluster markers](https://bioconductor.org/books/release/OSCA.basic/marker-detection.html):
   any categorical grouping of cells can be used, including those manually defined based on the existing groups
   (from e.g. clustering), as described in the `vignette("stage_norm_clustering")`.
   More details about marker computation can be found in `vignette("cluster_markers")`.

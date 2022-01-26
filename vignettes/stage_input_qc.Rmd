@@ -359,7 +359,7 @@ Vice versa for `sce_custom_filter_genes_plotlist`.
 ***
 
 `barcode_ranks`: a DataFrame with barcode ranks for
-[knee plot](https://bioconductor.org/books/release/OSCA/droplet-processing.html),
+[knee plot](https://bioconductor.org/books/release/OSCA.advanced/droplet-processing.html),
 computed by `DropletUtils::barcodeRanks()` on UMI counts from `sce_raw` target.
 
 `empty_droplets`: a DataFrame of statistics for empty droplets, computed `DropletUtils::emptyDrops()` on UMI counts

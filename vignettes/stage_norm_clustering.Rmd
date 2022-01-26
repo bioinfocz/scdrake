@@ -100,7 +100,7 @@ A number of top HVGs to return from the `SCTransform` normalization.
 
 **Type:** character scalar (`"gene_var"` | `"gene_cv2"` | `"sctransform"`)
 
-A metric used to find HVGs. See <http://bioconductor.org/books/release/OSCA/feature-selection.html> for more details.
+A metric used to find HVGs. See <https://bioconductor.org/books/release/OSCA.basic/feature-selection.html> for more details.
 
 - `"gene_var"`: variance of the log-counts (`scran::modelGeneVar()`).
 - `"gene_cv2"`: coefficient of variation (`scran::modelGeneCV2()`).
@@ -115,11 +115,13 @@ A metric used to find HVGs. See <http://bioconductor.org/books/release/OSCA/feat
 **Type:** character scalar (`"top"` | `"significance"` | `"threshold"`)
 
 A HVG selection strategy. Only relevant when the `HVG_METRIC` parameter is `"gene_var"` or `"gene_cv2"`.
-See <http://bioconductor.org/books/release/OSCA/feature-selection.html#hvg-selection> for more details.
 
-- `"top"`: take top X genes according to the metric.
-- `"significance"`: use a FDR threshold.
-- `"threshold"`: use a threshold on minimum value of the metric.
+- `"top"`: take top X genes according to the metric
+  ([details](https://bioconductor.org/books/release/OSCA.basic/feature-selection.html#hvg-selection)).
+- `"significance"`: use a FDR threshold
+  ([details](https://bioconductor.org/books/release/OSCA.advanced/more-hvgs.html#more-hvg-selection-strategies)).
+- `"threshold"`: use a threshold on minimum value of the metric
+  ([details](https://bioconductor.org/books/release/OSCA.advanced/more-hvgs.html#more-hvg-selection-strategies)).
 
 For `"top"` and `"threshold"`, `bio` and `ratio` columns are used for `HVG_METRIC` of `"gene_var"` and `"gene_cv2"`,
 respectively. These columns are present in the DataFrame returned from the underlying method
@@ -131,8 +133,8 @@ respectively. These columns are present in the DataFrame returned from the under
 
 **Type:** depends on value of the `HVG_SELECTION` parameter:
 
-- An integer scalar for `HVG_SELECTION: "top"`.
-- A numeric scalar <0; 1> for `HVG_SELECTION: "significance"`.
+- A positive integer scalar for `HVG_SELECTION: "top"`.
+- A numeric scalar $<0; 1>$ for `HVG_SELECTION: "significance"`.
 - A numeric scalar for `HVG_SELECTION: "threshold"`.
 
 A threshold value for HVG selection. The following parameter combinations are recommended defaults:
@@ -173,7 +175,7 @@ HVG_SELECTION_VALUE: 1
 
 Whether to apply a correction for cell cycle prior to HVG selection.
 We implement a cell cycle-related genes removal strategy described
-[here](http://bioconductor.org/books/release/OSCA/cell-cycle-assignment.html#removing-cell-cycle-related-genes).
+[here]https://bioconductor.org/books/release/OSCA.advanced/cell-cycle-assignment.html#removing-cell-cycle-related-genes).
 It is based on the percentage of variance explained by the cell cycle phase in the expression profile for each gene.
 
 Note that when `SCTransform` is used for normalization including cell cycle variables to regress out, than
@@ -214,9 +216,9 @@ A method to select first N principal components (PCs):
 
 - `"forced"`: use the number of PCs specified by the `PCA_FORCED_PCS` parameter.
 - `"elbow"`: use the
-  [elbow point method](http://bioconductor.org/books/release/OSCA/dimensionality-reduction.html#using-the-elbow-point).
+  [elbow point method](https://bioconductor.org/books/release/OSCA.advanced/dimensionality-reduction-redux.html#using-the-elbow-point).
 - `"technical_noise"`: use the
-  [technical noise](http://bioconductor.org/books/release/OSCA/dimensionality-reduction.html#using-the-technical-noise).
+  [technical noise](https://bioconductor.org/books/release/OSCA.advanced/dimensionality-reduction-redux.html#using-the-technical-noise).
 
 ***
 
@@ -228,7 +230,7 @@ If the `PCA_SELECTION_METHOD` parameter is `"forced"`, use this number of first 
 
 ## t-SNE
 
-[t-stochastic neighbor embedding](https://bioconductor.org/books/release/OSCA/dimensionality-reduction.html#t-stochastic-neighbor-embedding)
+[t-stochastic neighbor embedding](https://bioconductor.org/books/release/OSCA.basic/dimensionality-reduction.html#t-stochastic-neighbor-embedding)
 
 See `?scater::runTSNE` for the underlying method.
 
@@ -252,7 +254,7 @@ A maximum number of t-SNE iterations.
 
 ### Graph-based clustering
 
-Parameters for [graph-based clustering](https://bioconductor.org/books/release/OSCA/clustering.html#clustering-graph).
+Parameters for [graph-based clustering](https://bioconductor.org/books/release/OSCA.basic/clustering.html#clustering-graph).
 
 ***
 

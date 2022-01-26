@@ -37,7 +37,7 @@ sce_calc_pca <- function(sce,
 
 #' @title Get a number of PCs corresponding to biological variation.
 #' @description This strategy is further described in
-#' [OSCA](https://bioconductor.org/books/release/OSCA/dimensionality-reduction.html#using-the-technical-noise).
+#' [OSCA](https://bioconductor.org/books/release/OSCA.advanced/dimensionality-reduction-redux.html#using-the-technical-noise).
 #' @param sce_pca A `SingleCellExperiment` object with calculated PCA.
 #' @inheritParams bsparam_
 #' @inheritParams bpparam_
@@ -200,7 +200,7 @@ sce_compute_dimreds <- function(sce_pca_selected_pcs, tsne_perp, tsne_max_iter, 
 
 #' @title Make a plot of k-means gaps.
 #' @description
-#' For more details see [this](https://bioconductor.org/books/release/OSCA/clustering.html#base-implementation)
+#' For more details see [this](https://bioconductor.org/books/3.12/OSCA/clustering.html#base-implementation)
 #' chapter in OSCA.
 #' @param kmeans_gaps An output from [cluster::clusGap()].
 #' @param best_k A numeric scalar: best k for k-means calculated by [cluster::maxSE()].

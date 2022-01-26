@@ -205,7 +205,7 @@ for each integration method:
 ### Fast MNN clustering
 
 Used to obtain basic
-[integration diagnostics](https://bioconductor.org/books/release/OSCA/integrating-datasets.html#correction-diagnostics).
+[integration diagnostics](http://bioconductor.org/books/release/OSCA.multisample/correction-diagnostics.html).
 See `scran::buildSNNGraph()` and `bluster::makeSNNGraph()` for more details.
 
 ***

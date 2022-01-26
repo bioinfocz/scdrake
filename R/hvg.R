@@ -11,8 +11,9 @@
 #'   `SCT_N_HVG` parameter in `02_norm_clustering.yaml`.
 #'   For the other metric types, see the `hvg_selection` and `hvg_selection_value` parameters.
 #' @param hvg_selection A character scalar: method to use for selection of HVGs.
-#'   This is only relevant when `hvg_metric` is "gene_var" or "gene_cv2".
-#'   See <http://bioconductor.org/books/release/OSCA/feature-selection.html#hvg-selection> for more details.
+#'   This is only relevant when `hvg_metric` is `"gene_var"` or `"gene_cv2"`.
+#'   See <https://bioconductor.org/books/release/OSCA.basic/feature-selection.html#hvg-selection> and
+#'   <https://bioconductor.org/books/release/OSCA.advanced/more-hvgs.html#more-hvg-selection-strategies> for more details.
 #'
 #' - `"top"`: Take top X genes according to a metric.
 #'   `"bio"` and `"ratio"` columns are used for `hvg_metric` `"gene_var"` and `"gene_cv2"`, respectively.

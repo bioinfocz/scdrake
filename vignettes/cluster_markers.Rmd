@@ -15,7 +15,7 @@ vignette: >
 
 ***
 
-Taken from [OSCA](https://bioconductor.org/books/release/OSCA/marker-detection.html), slightly modified:
+Taken from [OSCA](https://bioconductor.org/books/release/OSCA.basic/marker-detection.html), slightly modified:
 
 > To interpret our clustering results, we identify the genes that drive separation between clusters.
 > These marker genes allow us to assign biological meaning to each cluster based on their functional annotation.
@@ -41,7 +41,7 @@ For each cell grouping and gene, three distinct, adjustable statistical tests ar
   test the null hypothesis that the proportion of cells expressing a gene is the same between groups.
 
 These tests are performed in a
-[pairwise fashion](https://bioconductor.org/books/release/OSCA/marker-detection.html#pairwise-tests-between-clusters)
+[pairwise fashion](https://bioconductor.org/books/release/OSCA.basic/marker-detection.html#scoring-markers-by-pairwise-comparisons)
 within each grouping, i.e. each level of the grouping is tested against each other.
 
 Example: three pairwise tests of each type are computed for k-means clustering with $k = 3$:
@@ -59,16 +59,16 @@ are calculated for the cell grouping from its all pairwise tests (`scran::combin
 A more or less stringent approach can be used to narrow down the number of cluster markers,
 based on results from individual pairwise tests. This will also affect the combined p-value and FDR:
 
-- [Looking for any differences](https://bioconductor.org/books/release/OSCA/marker-detection.html#looking-for-any-differences):
+- [Looking for any differences](https://bioconductor.org/books/3.12/OSCA/marker-detection.html#looking-for-any-differences):
   for each level (cluster) of a grouping, take top markers by p-value from each pairwise test. This will be shown
   as `Top` column in marker table. Example: the set of all genes with `Top` values of 1 contains the gene with
   the lowest p-value from each comparison.
-- [Finding cluster-specific markers](https://bioconductor.org/books/release/OSCA/marker-detection.html#finding-cluster-specific-markers):
+- [Finding cluster-specific markers](https://bioconductor.org/books/3.12/OSCA/marker-detection.html#finding-cluster-specific-markers):
   a more stringent approach only considering genes that are differentially expressed in all pairwise comparisons
   involving the cluster of interest. For this purpose is used an intersection-union test where the combined
   p-value for each gene is the maximum of the p-values from all pairwise comparisons.
   A gene will only achieve a low combined p-value if it is strongly DE in all comparisons to other clusters.
-- [Balancing stringency and generality](https://bioconductor.org/books/release/OSCA/marker-detection.html#balancing-stringency-and-generality):
+- [Balancing stringency and generality](https://bioconductor.org/books/3.12/OSCA/marker-detection.html#balancing-stringency-and-generality):
   the Holm-Bonferroni correction is applied on pairwise p-values and the middle-most value is taken as the combined
   p-value. This effectively tests the global null hypothesis that at least 50% of the individual pairwise comparisons
   exhibit no differential expression.
@@ -78,7 +78,7 @@ See `vignette("stage_cluster_markers")` for details.
 
 # Handling blocking factors
 
-[Blocking factors](https://bioconductor.org/books/release/OSCA/marker-detection.html#marker-batch)
+[Blocking factors](https://bioconductor.org/books/3.12/OSCA/marker-detection.html#marker-batch)
 (e.g. batch effect, sex differences, cell cycle phases) can be handled by further nesting.
 For that, each pairwise test is performed separately in each level of the blocking factor.
 Then, p-values from individual levels' tests are combined, and the final combined p-values are obtained by
