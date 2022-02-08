@@ -237,15 +237,21 @@ make_cell_groupings <- function(df, cell_groupings, do_cbind = FALSE) {
 
 #' @param col_data A dataframe.
 #' @param clusters_all A named list.
+#' @param cell_annotation_labels A named list.
 #'
 #' @concept sc_sce
 #' @rdname cell_data
 #' @export
-cell_data_fn <- function(col_data, clusters_all, cell_groupings) {
-  existing_columns <- intersect(colnames(col_data), names(clusters_all))
+cell_data_fn <- function(col_data, clusters_all, cell_annotation_labels, cell_groupings) {
+  existing_columns <- intersect(colnames(col_data), c(names(clusters_all), names(cell_annotation_labels)))
   col_data <- col_data[, !colnames(col_data) %in% existing_columns] %>%
-    dplyr::bind_cols(tibble::as_tibble(clusters_all)) %>%
-    S4Vectors::DataFrame()
+    dplyr::bind_cols(tibble::as_tibble(clusters_all))
+
+  if (!is_null(cell_annotation_labels)) {
+    col_data <- dplyr::bind_cols(col_data, tibble::as_tibble(cell_annotation_labels))
+  }
+
+  col_data <- S4Vectors::DataFrame(col_data)
 
   if (!is_null(cell_groupings)) {
     cell_groupings <- lapply(cell_groupings, FUN = function(grp) {

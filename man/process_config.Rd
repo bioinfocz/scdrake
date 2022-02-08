@@ -7,6 +7,7 @@
 \alias{.process_main_config}
 \alias{.process_cluster_markers_config}
 \alias{.process_contrasts_config}
+\alias{.prepare_cell_annotation_sources_params}
 \alias{.process_integration_config}
 \alias{.process_int_clustering_config}
 \alias{.process_input_qc_config}
@@ -21,6 +22,11 @@
 
 .process_contrasts_config(cfg, other_variables)
 
+.prepare_cell_annotation_sources_params(
+  cell_annotation_sources,
+  cell_annotation_default_params
+)
+
 .process_integration_config(cfg, other_variables)
 
 .process_int_clustering_config(cfg, other_variables)
@@ -34,6 +40,10 @@
 
 \item{other_variables}{A list of variables in whose environment the \code{yaml_file} will be evaluated,
 see details in \code{\link[=load_config]{load_config()}}.}
+
+\item{cell_annotation_sources}{A named list.}
+
+\item{cell_annotation_default_params}{A named list with default parameters.}
 }
 \value{
 A modified \code{cfg}.
@@ -47,3 +57,4 @@ These functions are responsible for checking and processing of config parameters
 \item Checking and processing of \code{CLUSTER_MARKERS_SOURCES}, \code{CONTRASTS_SOURCES}, and \code{INTEGRATION_SOURCES} parameters.
 }
 }
+\concept{internal}

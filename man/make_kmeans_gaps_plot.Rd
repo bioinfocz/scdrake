@@ -15,7 +15,7 @@ make_kmeans_gaps_plot(kmeans_gaps, best_k)
 A \code{ggplot} object.
 }
 \description{
-For more details see \href{https://bioconductor.org/books/release/OSCA/clustering.html#base-implementation}{this}
+For more details see \href{https://bioconductor.org/books/3.12/OSCA/clustering.html#base-implementation}{this}
 chapter in OSCA.
 }
 \concept{sc_clustering}

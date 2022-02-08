@@ -9,20 +9,18 @@
 \usage{
 scdrake_list(l = NULL)
 
-\method{$}{scdrake_list}(x, name)
+\method{$}{scdrake_list}(x, i)
 
-\method{[}{scdrake_list}(x, names_, check = TRUE)
+\method{[}{scdrake_list}(x, i, check = TRUE)
 
-\method{[[}{scdrake_list}(x, name, check = TRUE)
+\method{[[}{scdrake_list}(x, i, check = TRUE)
 }
 \arguments{
 \item{l}{A list.}
 
 \item{x}{An object of class \code{scdrake_list}.}
 
-\item{name}{A character scalar or vector: name / names of element(s) to extract.}
-
-\item{names_}{A character scalar or vector: name / names of element(s) to extract.}
+\item{i}{A character scalar or vector: name / names of element(s) to extract.}
 
 \item{check}{A logical scalar: if \code{TRUE}, throw an error when non-existing names or subscripts are present.}
 }

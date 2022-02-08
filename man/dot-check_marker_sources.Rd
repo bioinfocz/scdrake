@@ -23,3 +23,4 @@
 \description{
 Check for correct structure of \code{CLUSTER_MARKERS_SOURCES} or \code{CONTRASTS_SOURCES}.
 }
+\concept{internal}

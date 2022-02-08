@@ -53,5 +53,5 @@ scdrake_list <- function(l = NULL) {
     assert_that_(is_list(l), msg = "{.var l} must be a list")
   }
 
-  structure(l, class = "scdrake_list")
+  structure(l, class = c("scdrake_list", "list"))
 }

@@ -24,7 +24,8 @@ is read from environment variables:
 - `SCDRAKE_INTEGRATION_CONFIG_DIR` for the integration pipeline.
 
 and options named in lowercase are set upon `{scdrake}` load or attach. Then the actual directory used depends on
-whether you run `run_single_sample()` or `run_integration()`.
+whether you run `run_single_sample()` or `run_integration()`, or `scdrake_r_make()` with `_drake_single_sample.R` or
+`_drake_integration.R`.
 
 # Config parameters
 
@@ -149,7 +150,7 @@ common_params:
   plot_dimreds: ["umap", "pca"]
 ```
 
-- This will override `COMMON_PARAMS` in `CLUSTER_MARKERS_SOURCES_DEFAULTS`.
+- This will override corresponding parameters in `COMMON_PARAMS` in `CLUSTER_MARKERS_SOURCES_DEFAULTS`.
 
 ```yaml
 params_t:
@@ -158,13 +159,15 @@ params_t:
   top_n_wt_plot: "fdr"
 ```
 
-- This will override `PARAMS_T` in `CLUSTER_MARKERS_SOURCES_DEFAULTS`.
+- This will override corresponding parameters `PARAMS_T` in `CLUSTER_MARKERS_SOURCES_DEFAULTS`.
 
 > Watch out for the proper indentation. See the "Merging of nested named lists" section in `vignette("scdrake_config")`.
 
 ***
 
-`MAKE_CLUSTER_MARKERS_PLOTS: True`
+```yaml
+MAKE_CLUSTER_MARKERS_PLOTS: True
+```
 
 **Type:** logical scalar
 
@@ -187,7 +190,9 @@ Paths to RMarkdown files used for HTML reports of this pipeline stage.
 
 ## Output files
 
-`CLUSTER_MARKERS_BASE_OUT_DIR: "cluster_markers"`
+```yaml
+CLUSTER_MARKERS_BASE_OUT_DIR: "cluster_markers"
+```
 
 **Type:** character scalar
 

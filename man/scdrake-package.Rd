@@ -4,9 +4,9 @@
 \name{scdrake-package}
 \alias{scdrake}
 \alias{scdrake-package}
-\title{scdrake: A Pipeline For 10x Chromium Single-Cell RNA-seq Data Analysis}
+\title{scdrake: A pipeline for droplet-based single-cell RNA-seq data secondary analysis implemented in the drake Make-like toolkit for R language}
 \description{
-This pipeline is implemented in the drake Make-like toolkit and provides the following steps: input quality control, filtering of cells/genes, normalization, clustering, cluster markers, differential expression analysis (constrasts -> cluster vs. cluster), integration of multiple samples. All main parts are accompanied by rich graphical outputs and HTML reports (RMarkdown).
+This pipeline is implemented in the drake Make-like toolkit (https://github.com/ropensci/drake) and provides the following steps of scRNA-seq secondary analysis: input quality control, filtering of cells/genes, normalization, clustering, cell type annotation, cluster markers, differential expression analysis (constrasts -> cluster vs. cluster), integration of multiple samples. All main parts are accompanied by rich graphical outputs and HTML reports (RMarkdown). Thanks to the drake package, the pipeline is highly reproducible, scalable and efficient, provides easy access to all intermediate results, and can be arbitrarily extended as pipeline definitions are abstracted as R objects.
 }
 \section{Package options}{
  See \code{\link[=get_scdrake_default_options]{get_scdrake_default_options()}}.

@@ -423,15 +423,29 @@ dimred_plots_clustering_fn <- function(sce_final_norm_clustering, dimred_plots_c
 #' @param dimred_names A character vector: names of dimreds.
 #' @param dimred_plots_other A named list: see `NORM_CLUSTERING_REPORT_DIMRED_PLOTS_OTHER` parameter in
 #'   `02_norm_clustering.yaml` or `02_int_clustering.yaml` config.
+#' @param cell_annotation_params A `tibble`.
 #' @return A tibble. *Output target*: `dimred_plots_other_vars_params`
 #'
 #' @concept sce_visualization
 #' @export
-dimred_plot_other_vars_params_fn <- function(dimred_names, dimred_plots_other) {
+dimred_plot_other_vars_params_fn <- function(dimred_names, dimred_plots_other, cell_annotation_params) {
   dimred_plots_other <- replace_list_nulls(dimred_plots_other)
   params <- lists_to_tibble(dimred_plots_other) %>%
     dplyr::rename(source_column = name) %>%
-    tidyr::crossing(dimred_name = dimred_names)
+    tidyr::crossing(dimred_name = dimred_names) %>%
+    dplyr::mutate(type = "other_vars")
+
+  if (!identical(cell_annotation_params, list(NA))) {
+    params_cell_annotation <- tibble::tibble(
+      source_column = glue("{cell_annotation_params$name}_labels") %>% as.character(),
+      label = cell_annotation_params$description
+    ) %>%
+      dplyr::mutate(type = "cell_annotation") %>%
+      tidyr::crossing(dimred_name = unique(params$dimred_name))
+    params <- dplyr::bind_rows(params, params_cell_annotation)
+  }
+
+  params$label <- stringr::str_wrap(params$label, width = 60)
 
   return(params)
 }
@@ -444,7 +458,7 @@ dimred_plot_other_vars_params_fn <- function(dimred_names, dimred_plots_other) {
 #'
 #' @concept sce_visualization
 #' @export
-dimred_plot_other_vars_fn <- function(sce_dimred, dimred_plots_other_vars_params) {
+dimred_plots_other_vars_fn <- function(sce_dimred, dimred_plots_other_vars_params) {
   res <- lapply_rows(dimred_plots_other_vars_params, FUN = function(par) {
     assert_that_(
       par$source_column %in% colnames(colData(sce_dimred)),
@@ -460,6 +474,13 @@ dimred_plot_other_vars_fn <- function(sce_dimred, dimred_plots_other_vars_params
       par$label <- label$description
     }
 
+    show_cluster_labels <- NULL
+    show_cluster_labels <- if (
+      is.factor(sce_dimred[[par$source_column]]) || is.character(sce_dimred[[par$source_column]])
+    ) {
+      par$source_column
+    }
+
     p <- plotReducedDim_mod(
       sce_dimred,
       dimred = par$dimred_name,
@@ -467,7 +488,7 @@ dimred_plot_other_vars_fn <- function(sce_dimred, dimred_plots_other_vars_params
       title = glue("{par$label} | {str_to_upper(par$dimred_name)}"),
       use_default_ggplot_palette = TRUE,
       legend_title = par$source_column,
-      text_by = if (is.factor(sce_dimred[[par$source_column]])) par$source_column else NULL
+      text_by = show_cluster_labels
     )
 
     par$plot <- p

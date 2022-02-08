@@ -14,6 +14,47 @@ SC3_N_CORES: 32
 SC3_DRY: False
 ###############################################################################
 
+### Cell type annotation ######################################################
+CELL_ANNOTATION_SOURCES:
+  - human_primary_cell_atlas_main:
+      reference_type: "celldex"
+      reference: "HumanPrimaryCellAtlasData"
+      description: >
+        Microarray datasets derived from human primary cells (Mabbott et al. 2013).
+        Most of the labels refer to blood subpopulations but cell types from other tissues are also available.
+      label_column: "label.main"
+      label_subsets: []
+      train_params:
+        de_method: "wilcox"
+        de_n: 30
+    monaco_immune_main:
+      reference_type: "celldex"
+      reference: "MonacoImmuneData"
+      description: "This is the human immune reference that best covers all of the bases for a typical PBMC sample."
+      label_column: "label.main"
+      label_subsets: []
+      train_params:
+        genes: "sd"
+
+CELL_ANNOTATION_SOURCES_DEFAULTS:
+  TRAIN_PARAMS:
+    GENES: "de"
+    SD_THRESH: 1
+    DE_METHOD: "classic"
+    DE_N: null
+    ASSAY_TYPE: "logcounts"
+  CLASSIFY_PARAMS:
+    QUANTILE: 0.8
+    TUNE_THRESH: 0.05
+    ASSAY_TYPE: "logcounts"
+  PRUNE_SCORE_PARAMS:
+    N_MADS: 3
+    MIN_DIFF_MED: -.inf
+    MIN_DIFF_NEXT: 0
+  DIAGNOSTICS_PARAMS:
+    HEATMAP_N_TOP_MARKERS: 20
+###############################################################################
+
 ### Group assignment ##########################################################
 CELL_GROUPINGS:
   - cluster_int_graph_louvain_annotated:
@@ -56,6 +97,7 @@ INT_CLUSTERING_REPORT_RMD_FILE: "Rmd/integration/02_int_clustering.Rmd"
 
 ### Output files ##############################################################
 INT_CLUSTERING_BASE_OUT_DIR: "02_int_clustering"
+INT_CLUSTERING_CELL_ANNOTATION_OUT_DIR: "cell_annotation"
 INT_CLUSTERING_REPORT_HTML_FILE: "02_int_clustering.html"
 ###############################################################################
 

@@ -7,7 +7,7 @@
 \usage{
 make_cell_groupings(df, cell_groupings, do_cbind = FALSE)
 
-cell_data_fn(col_data, clusters_all, cell_groupings)
+cell_data_fn(col_data, clusters_all, cell_annotation_labels, cell_groupings)
 }
 \arguments{
 \item{df}{A dataframe.}
@@ -25,6 +25,8 @@ See the \code{CELL_GROUPINGS} parameter in \verb{02_norm_clustering.yaml} or \ve
 \item{col_data}{A dataframe.}
 
 \item{clusters_all}{A named list.}
+
+\item{cell_annotation_labels}{A named list.}
 }
 \value{
 A dataframe.

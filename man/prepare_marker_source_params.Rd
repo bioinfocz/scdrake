@@ -29,3 +29,4 @@ A named list (of named lists).
 \description{
 Prepare a \code{tibble} with parameters for cluster marker tests.
 }
+\concept{internal}

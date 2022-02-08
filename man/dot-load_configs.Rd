@@ -25,3 +25,4 @@ A named list of lists of loaded YAML configs.
 \description{
 Load a list of YAML config files.
 }
+\concept{internal}

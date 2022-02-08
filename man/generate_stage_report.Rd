@@ -57,6 +57,7 @@ This is a list of Rmd files currently bundled with the \code{scdrake} package:\i
 ## │   ├── cluster_markers_table_template.Rmd
 ## │   ├── contrasts.Rmd
 ## │   ├── contrasts_table_template.Rmd
+## │   ├── dimred_plots.Rmd
 ## │   └── stylesheet.css
 ## ├── integration
 ## │   ├── 01_integration.Rmd

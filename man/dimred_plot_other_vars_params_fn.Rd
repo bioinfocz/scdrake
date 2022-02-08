@@ -4,13 +4,19 @@
 \alias{dimred_plot_other_vars_params_fn}
 \title{Make a tibble with parameters for dimred plots of selected variables.}
 \usage{
-dimred_plot_other_vars_params_fn(dimred_names, dimred_plots_other)
+dimred_plot_other_vars_params_fn(
+  dimred_names,
+  dimred_plots_other,
+  cell_annotation_params
+)
 }
 \arguments{
 \item{dimred_names}{A character vector: names of dimreds.}
 
 \item{dimred_plots_other}{A named list: see \code{NORM_CLUSTERING_REPORT_DIMRED_PLOTS_OTHER} parameter in
 \verb{02_norm_clustering.yaml} or \verb{02_int_clustering.yaml} config.}
+
+\item{cell_annotation_params}{A \code{tibble}.}
 }
 \value{
 A tibble. \emph{Output target}: \code{dimred_plots_other_vars_params}

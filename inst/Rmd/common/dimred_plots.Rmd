@@ -1,0 +1,31 @@
+```{r, results = "asis"}
+generate_dimred_plots_section(
+  dimred_names = dp_dimred_names,
+  dimred_plots_other_vars = dplyr::filter(dimred_plots_other_vars, type == "other_vars"),
+  dimred_plots_clustering = dimred_plots_clustering,
+  clustering_names = dp_clustering_names,
+  selected_markers = dp_selected_markers,
+  selected_markers_files_rel_start = dp_selected_markers_files_rel_start,
+  main_header = "Dimensionality reduction"
+)
+```
+
+#
+
+***
+
+```{r, results = "asis"}
+if (!is_null(cell_annotation_diagnostic_plots)) {
+  generate_dimred_plots_section(
+    dimred_names = dp_dimred_names,
+    dimred_plots_other_vars = dplyr::filter(dimred_plots_other_vars, type == "cell_annotation"),
+    dimred_plots_clustering = NULL,
+    clustering_names = NULL,
+    selected_markers = NULL,
+    cell_annotation_diagnostic_plots = cell_annotation_diagnostic_plots,
+    cell_annotation_diagnostic_plots_rel_start = dp_cell_annotation_diagnostic_plots_rel_start,
+    main_header = "Cell type annotation"
+  )
+  cat("\n\n#\n\n***")
+}
+```

@@ -31,3 +31,4 @@ Before the patches are applied, their local versions are updated from the defaul
 \details{
 \code{pipeline_config_dir} directory will be used if \code{pipeline.default.yaml} file is present in \code{patches_dir}.
 }
+\concept{internal}

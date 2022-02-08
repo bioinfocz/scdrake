@@ -58,7 +58,9 @@ This parameter is specifying input data type and path. There are three possible 
 
 ***
 
-`INPUT_QC_REPORT_RMD_FILE: "Rmd/single_sample/01_input_qc.Rmd"`
+```yaml
+INPUT_QC_REPORT_RMD_FILE: "Rmd/single_sample/01_input_qc.Rmd"
+```
 
 **Type:** character scalar
 
@@ -72,7 +74,9 @@ See `?DropletUtils::emptyDrops` for more details.
 
 ***
 
-`EMPTY_DROPLETS_ENABLED: True`
+```yaml
+EMPTY_DROPLETS_ENABLED: True
+```
 
 **Type:** logical scalar
 
@@ -85,7 +89,9 @@ Otherwise `DropletUtils::emptyDrops()` will fail as there are not enough empty d
 
 ***
 
-`EMPTY_DROPLETS_LOWER: 100`
+```yaml
+EMPTY_DROPLETS_LOWER: 100
+```
 
 **Type:** positive integer scalar
 
@@ -93,7 +99,9 @@ A lower bound on the total UMI count at or below which all barcodes are assumed 
 
 ***
 
-`EMPTY_DROPLETS_FDR_THRESHOLD: 0.01`
+```yaml
+EMPTY_DROPLETS_FDR_THRESHOLD: 0.01
+```
 
 **Type:** numeric scalar <0; 1>
 
@@ -109,7 +117,9 @@ In both filtering types, violation of only one metric threshold leads to removal
 
 ***
 
-`SAVE_DATASET_SENSITIVE_FILTERING: True`
+```yaml
+SAVE_DATASET_SENSITIVE_FILTERING: True
+```
 
 **Type:** logical scalar
 
@@ -118,7 +128,9 @@ otherwise with dataset filtered by custom filtering (target `sce_custom_filter_g
 
 ### Dataset-sensitive cell filtering
 
-`MAD_THRESHOLD: 3`
+```yaml
+MAD_THRESHOLD: 3
+```
 
 **Type:** positive numeric scalar
 
@@ -138,7 +150,9 @@ That will force passing of each cell as every QC metric will be always lower tha
 
 ### Custom cell filtering
 
-`MIN_UMI_CF: 1000`
+```yaml
+MIN_UMI_CF: 1000
+```
 
 **Type:** positive integer scalar
 
@@ -148,7 +162,9 @@ To disable this filter, set `MIN_UMI_CF: -.inf`
 
 ***
 
-`MAX_UMI_CF: 50000`
+```yaml
+MAX_UMI_CF: 50000
+```
 
 **Type:** positive integer scalar
 
@@ -158,7 +174,9 @@ To disable this filter, set `MAX_UMI_CF: .inf`
 
 ***
 
-`MIN_FEATURES: 1000`
+```yaml
+MIN_FEATURES: 1000
+```
 
 **Type:** positive integer scalar
 
@@ -169,7 +187,9 @@ To disable this filter, set `MIN_FEATURES: -.inf`
 
 ***
 
-`MAX_MITO_RATIO: 0.2`
+```yaml
+MAX_MITO_RATIO: 0.2
+```
 
 **Type:** numeric scalar <0; 1>
 
@@ -212,7 +232,9 @@ The latter is currently not used for gene filtering.
 
 ***
 
-`MIN_UMI: 1`
+```yaml
+MIN_UMI: 1
+```
 
 **Type:** zero or positive integer scalar
 
@@ -220,7 +242,9 @@ A threshold for minimum number of UMI per cell, i.e. genes with UMI < `MIN_UMI` 
 
 ***
 
-`MIN_RATIO_CELLS: 0.01`
+```yaml
+MIN_RATIO_CELLS: 0.01
+```
 
 **Type:** numeric scalar <0; 1>
 
@@ -231,7 +255,9 @@ i.e. genes expressed in less than (`MIN_RATIO_CELLS` * 100)% of cells will be re
 
 ## Output files
 
-`INPUT_QC_BASE_OUT_DIR: "01_input_qc"`
+```yaml
+INPUT_QC_BASE_OUT_DIR: "01_input_qc"
+```
 
 **Type:** character scalar
 
@@ -239,7 +265,9 @@ A path to base output directory for this stage. It will be created under `BASE_O
 
 ***
 
-`INPUT_QC_REPORT_HTML_FILE: "01_input_qc.html"`
+```yaml
+INPUT_QC_REPORT_HTML_FILE: "01_input_qc.html"
+```
 
 **Type:** character scalar
 

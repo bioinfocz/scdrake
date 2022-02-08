@@ -19,3 +19,4 @@ A modified \code{cfg}.
 \description{
 Construct paths relative to base directory.
 }
+\concept{internal}

@@ -25,8 +25,9 @@ If \code{sctransform} is used, HVGs are selected by the underlying method, and n
 For the other metric types, see the \code{hvg_selection} and \code{hvg_selection_value} parameters.}
 
 \item{hvg_selection}{A character scalar: method to use for selection of HVGs.
-This is only relevant when \code{hvg_metric} is "gene_var" or "gene_cv2".
-See \url{http://bioconductor.org/books/release/OSCA/feature-selection.html#hvg-selection} for more details.
+This is only relevant when \code{hvg_metric} is \code{"gene_var"} or \code{"gene_cv2"}.
+See \url{https://bioconductor.org/books/release/OSCA.basic/feature-selection.html#hvg-selection} and
+\url{https://bioconductor.org/books/release/OSCA.advanced/more-hvgs.html#more-hvg-selection-strategies} for more details.
 \itemize{
 \item \code{"top"}: Take top X genes according to a metric.
 \code{"bio"} and \code{"ratio"} columns are used for \code{hvg_metric} \code{"gene_var"} and \code{"gene_cv2"}, respectively.

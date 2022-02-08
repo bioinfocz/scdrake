@@ -27,8 +27,7 @@ This vignette expects you have already initialized a new `{scdrake}` project, as
 On `{scdrake}` load or
 <a data-toggle="tooltip" title="(i.e. when you call some function from a package, e.g. `drake::run_single_sample()`)">attach</a>,
 several environment variables are read and corresponding `options()` are set. Those are mainly variables controlling
-paths to config directories. See `?get_scdrake_default_options()` and `?get_scdrake_options()` for more details and
-list of used environment variables.
+paths to config directories. See `?scdrake_options` for more details and list of used environment variables.
 
 We can take the `SCDRAKE_SINGLE_SAMPLE_CONFIG_DIR` environment variable as an example:
 
@@ -45,7 +44,8 @@ The pipeline can be run in current R session, however, this is considered a bad 
 The most high-level functions are `run_single_sample()` and `run_integration()` - see description in their help pages
 for overview of what they do before pipeline is executed.
 
-Anyway, to replicate what is done inside `run_single_sample()`, you just need this code:
+Anyway, to replicate what is done inside `run_single_sample()`, you just need this code (assuming you have created
+a `{scdrake}` project and your current working directory is in its root):
 
 ```{r, eval = FALSE}
 update_pipeline_config()

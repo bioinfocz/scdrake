@@ -23,3 +23,4 @@ Invisibly \code{TRUE} if all checks are valid.
 \description{
 Check for valid \code{INTEGRATION_SOURCES} parameter.
 }
+\concept{internal}

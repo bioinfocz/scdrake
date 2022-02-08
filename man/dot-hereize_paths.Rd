@@ -17,3 +17,4 @@ A modified \code{cfg}.
 \description{
 Using the \code{here} package, contruct paths relative to project's root directory.
 }
+\concept{internal}

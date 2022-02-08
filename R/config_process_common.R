@@ -145,8 +145,8 @@
   marker_source$common_params <- common_params
 
   params_per_test <- lapply(test_names, FUN = function(test_name) {
-    params <- marker_source[[test_name]]
-    default_params <- marker_default_params[[test_name]]
+    params <- scdrake_list(marker_source[[test_name]])
+    default_params <- scdrake_list(marker_default_params[[test_name]])
 
     params <- c(params, test_descriptions[[test_name]][c("test_label", "test_dirname")])
 
@@ -160,7 +160,7 @@
       params[not_set_params_names] <- default_params[not_set_params_names]
     }
 
-    params <- params[c(names(default_params), c("test_label", "test_dirname"))]
+    params <- params[c(names(default_params), c("test_label", "test_dirname"))] %>% scdrake_list()
 
     return(params)
   }) %>% set_names(test_names)
@@ -188,7 +188,7 @@
 .hereize_paths <- function(cfg, paths) {
   for (path in paths) {
     cfg[[path]] <- here(get(path, cfg))
-    assert_that(!is_null(cfg[[path]]), !is_empty(cfg[[path]]))
+    assert_that_(!is_null(cfg[[path]]), !is_empty(cfg[[path]]), msg = "{.field {path}} must not be {.var NULL} or empty.")
   }
 
   return(cfg)
@@ -204,7 +204,7 @@
 .paths_to_base_dir <- function(cfg, base_out_dir, paths) {
   for (path in paths) {
     cfg[[path]] <- fs::path(base_out_dir, get(path, cfg)) %>% as.character()
-    assert_that_(!is_null(cfg[[path]]), !is_empty(cfg[[path]]))
+    assert_that_(!is_null(cfg[[path]]), !is_empty(cfg[[path]]), msg = "{.field {path}} must not be {.var NULL} or empty.")
   }
 
   return(cfg)
@@ -393,4 +393,77 @@ NULL
   ))
 
   return(cfg)
+}
+
+#' @param cell_annotation_sources A named list.
+#' @param cell_annotation_default_params A named list with default parameters.
+#'
+#' @rdname process_config
+.prepare_cell_annotation_sources_params <- function(cell_annotation_sources, cell_annotation_default_params) {
+  cell_annotation_sources <- .get_dict_param(cell_annotation_sources, not_empty = FALSE, empty_to_null = TRUE)
+  .check_duplicated_list_names(cell_annotation_sources, "norm_clustering", "CELL_ANNOTATION_SOURCES")
+
+  if (is_empty(cell_annotation_sources)) {
+    return(list())
+  }
+
+  assert_that_(
+    all(names(cell_annotation_default_params) %in% c("TRAIN_PARAMS", "CLASSIFY_PARAMS", "PRUNE_SCORE_PARAMS", "DIAGNOSTICS_PARAMS")),
+    msg = str_space(
+      "Error in norm_clustering config parameter {.field CELL_ANNOTATION_SOURCES_DEFAULTS}:",
+      "Names must be {.val {c('TRAIN_PARAMS', 'CLASSIFY_PARAMS', 'PRUNE_SCORE_PARAMS', 'DIAGNOSTICS_PARAMS')}}"
+    )
+  )
+
+  cell_annotation_default_params <- set_names(
+    cell_annotation_default_params,
+    names(cell_annotation_default_params) %>% stringr::str_to_lower()
+  )
+  cell_annotation_default_params <- purrr::map(
+    cell_annotation_default_params,
+    ~ set_names(., names(.) %>% stringr::str_to_lower())
+  )
+
+  lapply(names(cell_annotation_sources), function(cell_annotation_source_name) {
+    cell_annotation_source <- scdrake_list(cell_annotation_sources[[cell_annotation_source_name]])
+    cell_annotation_source$name <- cell_annotation_source_name
+    label_subsets <- as.character(cell_annotation_source$label_subsets)
+
+    if (is_empty(label_subsets)) {
+      label_subsets <- NA
+    } else {
+      assert_that_(
+        length(label_subsets) > 1,
+        msg = "{.var CELL_ANNOTATION_SOURCES$label_subsets} must contain zero or two and more elements."
+      )
+      label_subsets <- list(label_subsets)
+    }
+
+    cell_annotation_source$label_subsets <- label_subsets
+
+    param_list_names <- c("train_params", "classify_params", "prune_score_params", "diagnostics_params")
+    param_lists <- lapply(param_list_names, function(param_list_name) {
+      default_params <- scdrake_list(cell_annotation_default_params[[param_list_name]])
+
+      if (param_list_name %in% names(cell_annotation_source)) {
+        params <- cell_annotation_source[[param_list_name]]
+      } else {
+        return(default_params)
+      }
+
+      not_set_params_names <- setdiff(names(default_params), names(params))
+
+      if (!is_empty(not_set_params_names)) {
+        params[not_set_params_names] <- default_params[not_set_params_names]
+      }
+
+      params <- params[names(default_params)] %>% scdrake_list()
+
+      return(params)
+    }) %>% set_names(param_list_names)
+
+    cell_annotation_source[param_list_names] <- param_lists
+
+    return(cell_annotation_source)
+  }) %>% set_names(names(cell_annotation_sources))
 }

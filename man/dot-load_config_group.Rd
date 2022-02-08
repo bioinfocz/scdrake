@@ -27,3 +27,4 @@ A named \code{scdrake_list} of \code{scdrake_list}s for each entry in \code{cfg_
 \description{
 Load a group of YAML config files.
 }
+\concept{internal}

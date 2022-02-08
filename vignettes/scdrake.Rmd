@@ -70,34 +70,39 @@ fs::dir_tree(tmp_dir, all = TRUE)
 - `.here`: used by the `{here}` package to locate and memorize the project's root directory.
   Only used when RStudio project file (`.Rproj`) is not found.
 - `Rmd/`: RMarkdown files used for reporting of pipeline results. You can edit them according to your needs,
-  but keep in mind that they will be overwritten by package-bundle ones if you call `update_project()`.
+  but keep in mind that they will be overwritten by package-bundled ones whenever you call `update_project()`.
 - `config/`: config files in YAML format. See `vignette("scdrake_config")` for more details.
 - `_drake_integration.R`, `_drake_single_sample.R`: entry points for `{drake}` when pipeline is executed through
   `drake::r_make()`.
 - `scdrake_example_project.Rproj`: RStudio project file. Created when you call `init_project()` with
   `use_rstudio = TRUE` (default).
 
+***
+
 # Running the single-sample pipeline
 
-First we download example datasets from 10x Genomics:
+First we download an example dataset from 10x Genomics:
 
 ```{r, eval = FALSE}
 download_pbmc1k("example_data/pbmc1k")
 ```
 
 The dataset contains data of
-[unfiltered raw feature-barcode matrix](https://support.10xgenomics.com/single-cell-gene-expression/software/pipelines/latest/output/matrices).
+[unfiltered raw feature-barcode matrix](https://support.10xgenomics.com/single-cell-gene-expression/software/pipelines/latest/output/matrices)
+of 1000 Human Peripheral Blood Mononuclear Cell.
 
-We have to modify `config/single_sample/01_input_qc.yaml` to contain a proper path to the data.
+Because our example data are from human samples, we need to install the matching annotation database:
+
+```{r, eval = FALSE}
+BiocManager::install("org.Hs.eg.db")
+```
+
+Now we have to modify `config/single_sample/01_input_qc.yaml` to contain a proper path to the data.
 Open this file and set value of `path` inside `INPUT_DATA` to `"example_data/pbmc1k"`.
 
 Finally, we can run the single-sample pipeline for the PBMC 1k dataset.
 By default, only the final target (`report_input_qc`) of the input and QC stage (`01_input_qc`) will be made,
 that is, a HTML report. This is specified by `DRAKE_TARGETS` parameter in `config/pipeline.yaml`.
-
-> In case you are not using RStudio, you must have directory with `pandoc` binary in your `PATH` or `RSTUDIO_PANDOC`
-> environment variable, or you have to modify the `RSTUDIO_PANDOC` parameter in `config/pipeline.yaml`
-> and supply the directory in which `pandoc` binary is located.
 
 ```{r, eval = FALSE}
 run_single_sample()
@@ -107,10 +112,17 @@ The output is saved in `output/single_sample/pbmc1k`, as specified by `BASE_OUT_
 `config/single_sample/00_main.yaml`. For `01_input_qc` stage, you can find its final report in
 `output/single_sample/pbmc1k/01_input_qc/01_input_qc.html`.
 
+<details>
+  <summary>Note about `pandoc` and RStudio</summary>
+In case you are not using RStudio, you must have directory with `pandoc` binary in your `PATH` or `RSTUDIO_PANDOC`
+environment variable, or you have to modify the `RSTUDIO_PANDOC` parameter in `config/pipeline.yaml`
+and supply the directory in which `pandoc` binary is located.
+</details>
+
 # Retrieving pipeline results
 
 In `{drake}`'s terminology, a pipeline is called *plan*, and is composed of *targets*. When a target is finished,
-its value (object) is saved to cache (directory `.drake` by default), and you can anytime load it into your R session.
+its value (object) is saved to cache (the directory `.drake` by default), and you can anytime load it into your R session.
 This is done via two `{drake}`'s functions:
 
 - `drake::loadd()` loads target's value to the global environment.
@@ -128,6 +140,8 @@ Value of the target `sce_final_input_qc` was loaded as a variable of the same na
 ```{r, eval = FALSE}
 sce <- drake::readd(sce_final_input_qc)
 ```
+
+***
 
 # Running the integration pipeline
 
@@ -186,8 +200,8 @@ The output is saved in `output/integration`, as specified by `BASE_OUT_DIR` in
 `config/integration/00_main.yaml`. For `01_integration` stage, you can find its final report in
 `output/integration/01_integration/01_integration.html`.
 
-You can try to load the target `sce_int_dimred_df` containing integrated `SingleCellExperiment` objects with
-computed reduced dimensions. We have to use other than default path to `drake` cache:
+You can try to load the target `sce_int_dimred_df` (tibble object) containing integrated `SingleCellExperiment` objects with
+computed reduced dimensions. But we have to use other than default path to `{drake}`'s cache:
 
 ```{r, eval = FALSE}
 drake::loadd(sce_int_dimred_df, path = ".drake_integration")
@@ -220,6 +234,9 @@ execute the pipeline (plan) in a new R session. More details can be found in the
 Of course, you can modify `_drake_single_sample.R` and `_drake_integration.R` to your needs, but, by default,
 loading the config files from proper paths in these scripts is done via environment variables.
 You can read more in `vignette("scdrake_run")`.
+
+NOTE: `scdrake_r_make()` runs `drake::r_make()` internally, but in addition returns `TRUE` when
+pipeline successfully finishes.
 
 # Updating the project files
 

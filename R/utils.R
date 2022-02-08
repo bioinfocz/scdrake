@@ -282,13 +282,15 @@ lapply_rows <- function(df, as_scdrake_list = TRUE, return_tibble = TRUE, FUN, .
 
   res <- lapply(to_iter, FUN = FUN, ...) %>%
     purrr::map_depth(2, function(x) {
-      if (length(x) != 1) {
+      if (length(x) != 1 || is(x, "scdrake_list")) {
         return(list(x))
       } else {
         return(x)
       }
-    }) %>%
-    dplyr::bind_rows()
+    }) %>% unclass()
+
+  assert_that_(typeof(res) == "list", msg = "{.var FUN} must return a list.")
+  res <- dplyr::bind_rows(res)
 
   if (!return_tibble) {
     res <- as.data.frame(res)
@@ -400,4 +402,37 @@ set_rstudio_drake_cache <- function(dir) {
   }
 
   return(stringr::str_to_lower(os))
+}
+
+
+#' @title Save a list of plots to multipage PDF.
+#' @param plots A list of plots.
+#' @param output_file A character scalar: path to output PDF file.
+#'   If file's directory doesn't exist, it will be created recursively.
+#' @param width,height A numeric scalar: default width and height of graphics region in inches. Defaults to 7.
+#' @param make_thumbnail A logical scalar: if `TRUE`, a PNG file will be created from the first plot in `plots`.
+#' @return A character scalar (`output_file`) or vector of length two (`c(output_file, thumbnail_file)`) if
+#' `make_thumbnail` is `TRUE`.
+#'
+#' @concept misc_utils
+#' @export
+save_pdf <- function(plots, output_file, width = NULL, height = NULL, make_thumbnail = FALSE) {
+  fs::dir_create(fs::path_dir(output_file), recurse = TRUE)
+
+  grDevices::pdf(output_file, width = width, height = height, useDingbats = FALSE)
+  for (p in plots) {
+    print(p)
+  }
+  grDevices::dev.off()
+
+  if (make_thumbnail) {
+    thumbnail_file <- fs::path_ext_set(output_file, "png")
+    grDevices::png(thumbnail_file)
+    print(plots[[1]])
+    grDevices::dev.off()
+
+    return(c(output_file, thumbnail_file))
+  } else {
+    return(output_file)
+  }
 }

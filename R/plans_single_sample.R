@@ -52,23 +52,25 @@ get_input_qc_subplan <- function(cfg, cfg_pipeline, cfg_main) {
     ),
 
     ## -- Dataset-sensitive filters.
-    qc_filters = list(
+    qc_filters_raw = list(
       qc_lib = scater::isOutlier(cell_qc$total, log = TRUE, nmads = !!cfg$MAD_THRESHOLD, type = "lower"),
       qc_nexprs = scater::isOutlier(cell_qc$detected, nmads = !!cfg$MAD_THRESHOLD, log = TRUE, type = "lower"),
       qc_mito = scater::isOutlier(cell_qc$subsets_mito_percent, nmads = !!cfg$MAD_THRESHOLD, type = "higher")
       # qc_ribo = isOutlier(cell_qc$subsets_ribo_percent, nmads = !!cfg$MAD_THRESHOLD, type = "higher")
-    ) %>% purrr::map(tidyr::replace_na, replace = FALSE),
+    ),
+    qc_filters = purrr::map(qc_filters_raw, ~ as.logical(.) %>% tidyr::replace_na(replace = FALSE)),
     ## -- Join filters by OR operator.
     qc_filter = Reduce("|", qc_filters),
 
     ## -- Custom filters.
-    custom_filters = list(
+    custom_filters_raw = list(
       low_count = cell_qc$total <= !!cfg$MIN_UMI_CF,
       high_count = cell_qc$total >= !!cfg$MAX_UMI_CF,
       low_expression = cell_qc$detected <= !!cfg$MIN_FEATURES,
       high_mito = cell_qc$subsets_mito_percent >= !!cfg$MAX_MITO_RATIO * 100
       # low_ribo = cell_qc$subsets_ribo_percent <= !!cfg$MIN_RIBO_RATIO * 100
-    ) %>% purrr::map(tidyr::replace_na, replace = FALSE),
+    ),
+    custom_filters = purrr::map(custom_filters_raw, ~ as.logical(.) %>% tidyr::replace_na(replace = FALSE)),
     custom_filter = Reduce("|", custom_filters),
 
     ## -- Add filters to sce and create Seurat object.
@@ -167,7 +169,7 @@ get_input_qc_subplan <- function(cfg, cfg_pipeline, cfg_main) {
 #' @rdname get_subplan_single_sample
 #' @export
 get_norm_clustering_subplan <- function(cfg, cfg_pipeline, cfg_main) {
-  drake::drake_plan(
+  plan <- drake::drake_plan(
     ## -- Save config.
     config_norm_clustering = !!cfg,
 
@@ -313,9 +315,37 @@ get_norm_clustering_subplan <- function(cfg, cfg_pipeline, cfg_main) {
       BPPARAM = ignore(BiocParallel::bpparam())
     ),
 
+    ## -- Cell annotation.
+    cell_annotation_params = cell_annotation_params_fn(
+      !!cfg$CELL_ANNOTATION_SOURCES
+      # biomart_dataset = !!cfg_main$BIOMART_DATASET
+    ),
+    cell_annotation = target(
+      cell_annotation_fn(cell_annotation_params, sce_rm_doublets, BPPARAM = ignore(BiocParallel::bpparam())),
+      dynamic = map(cell_annotation_params)
+    ),
+    cell_annotation_labels = cell_annotation_labels_fn(cell_annotation),
+
     ## -- Save colData. No new column is added between sce_rm_doublets and sce_dimred and so we can use
     ## -- this colData in cluster markers/contrasts stages without unnecessary dependencies.
-    cell_data = cell_data_fn(colData(sce_rm_doublets) %>% as.data.frame(), clusters_all, !!cfg$CELL_GROUPINGS),
+    cell_data = cell_data_fn(
+      col_data = colData(sce_rm_doublets) %>% as.data.frame(),
+      clusters_all = clusters_all,
+      cell_annotation_labels = cell_annotation_labels,
+      cell_groupings = !!cfg$CELL_GROUPINGS
+    ),
+
+    cell_annotation_diagnostic_plots = cell_annotation_diagnostic_plots_fn(
+      cell_annotation = cell_annotation,
+      cell_data = cell_data,
+      sce = sce_rm_doublets,
+      base_out_dir = !!cfg$NORM_CLUSTERING_CELL_ANNOTATION_OUT_DIR
+    ),
+    cell_annotation_diagnostic_plots_files = target(
+      cell_annotation_diagnostic_plots_files_fn(cell_annotation_diagnostic_plots),
+      dynamic = map(cell_annotation_diagnostic_plots),
+      format = "file"
+    ),
 
     ## -- Final SCE object.
     sce_final_norm_clustering = sce_add_cell_data(sce_dimred, cell_data),
@@ -335,38 +365,16 @@ get_norm_clustering_subplan <- function(cfg, cfg_pipeline, cfg_main) {
       dynamic = map(dimred_plots_clustering_params)
     ),
     dimred_plots_other_vars_params = dimred_plot_other_vars_params_fn(
-      !!cfg$NORM_CLUSTERING_REPORT_DIMRED_NAMES,
-      !!cfg$NORM_CLUSTERING_REPORT_DIMRED_PLOTS_OTHER
+      dimred_names = !!cfg$NORM_CLUSTERING_REPORT_DIMRED_NAMES,
+      dimred_plots_other = !!cfg$NORM_CLUSTERING_REPORT_DIMRED_PLOTS_OTHER,
+      cell_annotation_params = cell_annotation_params
     ),
     dimred_plots_other_vars = target(
-      dimred_plot_other_vars_fn(
+      dimred_plots_other_vars_fn(
         sce_final_norm_clustering,
         dimred_plots_other_vars_params = dimred_plots_other_vars_params
       ),
       dynamic = map(dimred_plots_other_vars_params)
-    ),
-
-    ## -- Selected markers plots.
-    selected_markers_df = target(
-      readr::read_csv(file_in(!!cfg$SELECTED_MARKERS_FILE), col_names = c("group", "markers"), col_types = "cc") %>%
-        tidyr::crossing(dimred_name = !!cfg$NORM_CLUSTERING_REPORT_DIMRED_NAMES),
-      trigger = trigger(condition = !is_null(!!cfg$SELECTED_MARKERS_FILE), mode = "blacklist")
-    ),
-    selected_markers_plots_by = selected_markers_df$dimred_name,
-    selected_markers_plots = target(
-      selected_markers_plots_fn(
-        sce_final_norm_clustering,
-        selected_markers_df = selected_markers_df
-      ),
-      dynamic = group(selected_markers_df, .by = selected_markers_plots_by)
-    ),
-    selected_markers_plots_files = target(
-      save_selected_markers_plots_files(
-        selected_markers_plots,
-        selected_markers_out_dir = !!cfg$NORM_CLUSTERING_SELECTED_MARKERS_OUT_DIR
-      ),
-      format = "file",
-      dynamic = map(selected_markers_plots)
     ),
 
     ## -- HTML report
@@ -403,4 +411,39 @@ get_norm_clustering_subplan <- function(cfg, cfg_pipeline, cfg_main) {
       format = "file"
     )
   )
+
+  ## -- Selected markers plots.
+  if (!is_null(cfg$SELECTED_MARKERS_FILE)) {
+    plan_selected_markers <- drake::drake_plan(
+      selected_markers_df = target(
+        readr::read_csv(file_in(!!cfg$SELECTED_MARKERS_FILE), col_names = c("group", "markers"), col_types = "cc") %>%
+          tidyr::crossing(dimred_name = !!cfg$NORM_CLUSTERING_REPORT_DIMRED_NAMES)
+      ),
+      selected_markers_plots_by = selected_markers_df$dimred_name,
+      selected_markers_plots = target(
+        selected_markers_plots_fn(
+          sce_final_norm_clustering,
+          selected_markers_df = selected_markers_df
+        ),
+        dynamic = group(selected_markers_df, .by = selected_markers_plots_by)
+      ),
+      selected_markers_plots_files = target(
+        save_selected_markers_plots_files(
+          selected_markers_plots,
+          selected_markers_out_dir = !!cfg$NORM_CLUSTERING_SELECTED_MARKERS_OUT_DIR
+        ),
+        format = "file",
+        dynamic = map(selected_markers_plots)
+      )
+    )
+  } else {
+    plan_selected_markers <- drake::drake_plan(
+      selected_markers_df = NULL,
+      selected_markers_plots_by = NULL,
+      selected_markers_plots = NULL,
+      selected_markers_plots_files = NULL
+    )
+  }
+
+  return(drake::bind_plans(plan, plan_selected_markers))
 }

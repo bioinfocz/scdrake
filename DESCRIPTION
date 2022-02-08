@@ -1,7 +1,7 @@
 Package: scdrake
 Type: Package
 Title: A pipeline for droplet-based single-cell RNA-seq data secondary analysis implemented in the drake Make-like toolkit for R language
-Version: 1.1.0
+Version: 1.2.0
 Date: 2021-07-30
 Authors@R:
     c(
@@ -22,12 +22,12 @@ Authors@R:
 Description:
     This pipeline is implemented in the drake Make-like toolkit (https://github.com/ropensci/drake) and
     provides the following steps of scRNA-seq secondary analysis: input quality control, filtering of cells/genes,
-    normalization, clustering, cluster markers, differential expression analysis
+    normalization, clustering, cell type annotation, cluster markers, differential expression analysis
     (constrasts -> cluster vs. cluster), integration of multiple samples.
     All main parts are accompanied by rich graphical outputs and HTML reports
     (RMarkdown). Thanks to the drake package, the pipeline is highly reproducible, scalable and efficient, provides easy
     access to all intermediate results, and can be arbitrarily extended as pipeline definitions are abstracted as
-    modifiable R objects.
+    R objects.
 License: MIT + file LICENSE
 URL: https://github.com/bioinfocz/scdrake, https://bioinfocz.github.io/scdrake
 BugReports: https://github.com/bioinfocz/scdrake/issues
@@ -62,6 +62,7 @@ Imports:
     DT,
     fs,
     ggplot2,
+    ggplotify,
     glmGamPoi,
     glue,
     here,
@@ -92,6 +93,7 @@ Imports:
     Seurat,
     SeuratObject,
     SingleCellExperiment,
+    SingleR,
     stringi,
     stringr,
     SummarizedExperiment,
@@ -102,7 +104,8 @@ Imports:
     withr,
     yaml
 Remotes:
-    gorgitko/SC3
+    gorgitko/SC3,
+    LTLA/SingleR
 Suggests:
     BiocStyle,
     covr,

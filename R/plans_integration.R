@@ -18,7 +18,7 @@ NULL
 #' @rdname get_subplan_integration
 #' @export
 get_integration_subplan <- function(cfg, cfg_pipeline, cfg_main) {
-  drake::drake_plan(
+  plan <- drake::drake_plan(
     ## -- Save config.
     config_integration = !!cfg,
 
@@ -126,28 +126,6 @@ get_integration_subplan <- function(cfg, cfg_pipeline, cfg_main) {
       dynamic = map(dimred_plots_params_df)
     ),
 
-    ## -- Plots of selected markers for all dimreds.
-    selected_markers_int_df = target(
-      selected_markers_int_df_fn(file_in(!!cfg$SELECTED_MARKERS_INT_FILE), sce_int_dimred_df),
-      trigger = trigger(condition = !is_null(!!cfg$SELECTED_MARKERS_INT_FILE), mode = "blacklist")
-    ),
-    selected_markers_plots_int_by = selected_markers_int_df$int_rmcc_dimred,
-    selected_markers_plots_int_df = target(
-      selected_markers_plots_int_df_fn(
-        selected_markers_int_df,
-        sce_int_dimred_df
-      ),
-      dynamic = group(selected_markers_int_df, .by = selected_markers_plots_int_by)
-    ),
-    selected_markers_plots_int_files = target(
-      save_selected_markers_plots_files(
-        selected_markers_plots_int_df,
-        selected_markers_out_dir = !!cfg$INTEGRATION_SELECTED_MARKERS_OUT_DIR, integration = TRUE
-      ),
-      format = "file",
-      dynamic = map(selected_markers_plots_int_df)
-    ),
-
     ## -- HTML report
     report_integration = target(
       generate_stage_report(
@@ -166,6 +144,38 @@ get_integration_subplan <- function(cfg, cfg_pipeline, cfg_main) {
       format = "file"
     )
   )
+
+  ## -- Selected markers plots.
+  if (!is_null(cfg$SELECTED_MARKERS_INT_FILE)) {
+    plan_selected_markers <- drake::drake_plan(
+      selected_markers_int_df = selected_markers_int_df_fn(file_in(!!cfg$SELECTED_MARKERS_INT_FILE), sce_int_dimred_df),
+      selected_markers_plots_int_by = selected_markers_int_df$int_rmcc_dimred,
+      selected_markers_plots_int_df = target(
+        selected_markers_plots_int_df_fn(
+          selected_markers_int_df,
+          sce_int_dimred_df
+        ),
+        dynamic = group(selected_markers_int_df, .by = selected_markers_plots_int_by)
+      ),
+      selected_markers_plots_int_files = target(
+        save_selected_markers_plots_files(
+          selected_markers_plots_int_df,
+          selected_markers_out_dir = !!cfg$INTEGRATION_SELECTED_MARKERS_OUT_DIR, integration = TRUE
+        ),
+        format = "file",
+        dynamic = map(selected_markers_plots_int_df)
+      )
+    )
+  } else {
+    plan_selected_markers <- drake::drake_plan(
+      selected_markers_int_df = NULL,
+      selected_markers_plots_int_by = NULL,
+      selected_markers_plots_int_df = NULL,
+      selected_markers_plots_int_files = NULL
+    )
+  }
+
+  return(drake::bind_plans(plan, plan_selected_markers))
 }
 
 #' @description A plan for 02_int_clustering stage.
@@ -238,7 +248,37 @@ get_int_clustering_subplan <- function(cfg, cfg_pipeline, cfg_main) {
       cluster_int_kmeans_kbest, cluster_int_kmeans_kc,
       cluster_int_sc3
     ),
-    cell_data = cell_data_fn(colData(sce_int_final) %>% as.data.frame(), clusters_all, !!cfg$CELL_GROUPINGS),
+
+    ## -- Cell annotation.
+    cell_annotation_params = cell_annotation_params_fn(
+      !!cfg$CELL_ANNOTATION_SOURCES
+      # biomart_dataset = !!cfg_main$BIOMART_DATASET
+    ),
+    cell_annotation = target(
+      cell_annotation_fn(cell_annotation_params, sce_int_final, BPPARAM = ignore(BiocParallel::bpparam())),
+      dynamic = map(cell_annotation_params)
+    ),
+    cell_annotation_labels = cell_annotation_labels_fn(cell_annotation),
+
+    cell_data = cell_data_fn(
+      col_data = colData(sce_int_final) %>% as.data.frame(),
+      clusters_all = clusters_all,
+      cell_annotation_labels = cell_annotation_labels,
+      cell_groupings = !!cfg$CELL_GROUPINGS
+    ),
+
+    cell_annotation_diagnostic_plots = cell_annotation_diagnostic_plots_fn(
+      cell_annotation = cell_annotation,
+      cell_data = cell_data,
+      sce = sce_int_final,
+      base_out_dir = !!cfg$INT_CLUSTERING_CELL_ANNOTATION_OUT_DIR
+    ),
+    cell_annotation_diagnostic_plots_files = target(
+      cell_annotation_diagnostic_plots_files_fn(cell_annotation_diagnostic_plots),
+      dynamic = map(cell_annotation_diagnostic_plots),
+      format = "file"
+    ),
+
     sce_int_final_clustering = sce_add_cell_data(sce_int_final, cell_data),
 
     ## -- Dimred plots.
@@ -257,10 +297,12 @@ get_int_clustering_subplan <- function(cfg, cfg_pipeline, cfg_main) {
       dynamic = map(dimred_plots_clustering_params)
     ),
     dimred_plots_other_vars_params = dimred_plot_other_vars_params_fn(
-      !!cfg$INT_CLUSTERING_REPORT_DIMRED_NAMES, !!cfg$INT_CLUSTERING_REPORT_DIMRED_PLOTS_OTHER
+      dimred_names = !!cfg$INT_CLUSTERING_REPORT_DIMRED_NAMES,
+      dimred_plots_other = !!cfg$INT_CLUSTERING_REPORT_DIMRED_PLOTS_OTHER,
+      cell_annotation_params = cell_annotation_params
     ),
     dimred_plots_other_vars = target(
-      dimred_plot_other_vars_fn(
+      dimred_plots_other_vars_fn(
         sce_int_final_clustering,
         dimred_plots_other_vars_params = dimred_plots_other_vars_params
       ),

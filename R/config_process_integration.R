@@ -63,7 +63,12 @@
   .check_integration_methods(INTEGRATION_METHODS)
   cfg$INTEGRATION_METHODS <- scdrake_list(INTEGRATION_METHODS)
 
-  cfg <- .hereize_paths(cfg, c("SELECTED_MARKERS_INT_FILE", "INTEGRATION_REPORT_RMD_FILE"))
+  input_files <- c("INTEGRATION_REPORT_RMD_FILE")
+  if (!is_null(cfg$SELECTED_MARKERS_INT_FILE)) {
+    input_files <- c("SELECTED_MARKERS_INT_FILE", input_files)
+  }
+
+  cfg <- .hereize_paths(cfg, input_files)
   cfg <- .paths_to_base_dir(cfg, other_variables$BASE_OUT_DIR, "INTEGRATION_BASE_OUT_DIR")
   cfg <- .paths_to_base_dir(
     cfg, cfg$INTEGRATION_BASE_OUT_DIR, c("INTEGRATION_SELECTED_MARKERS_OUT_DIR", "INTEGRATION_REPORT_HTML_FILE")
@@ -91,9 +96,18 @@
 
   cfg$INT_CLUSTERING_REPORT_DIMRED_PLOTS_OTHER <- INT_CLUSTERING_REPORT_DIMRED_PLOTS_OTHER
 
+  cfg$CELL_ANNOTATION_SOURCES <- .prepare_cell_annotation_sources_params(
+    cfg$CELL_ANNOTATION_SOURCES,
+    cfg$CELL_ANNOTATION_SOURCES_DEFAULTS
+  )
+
   cfg <- .hereize_paths(cfg, "INT_CLUSTERING_REPORT_RMD_FILE")
   cfg <- .paths_to_base_dir(cfg, other_variables$BASE_OUT_DIR, "INT_CLUSTERING_BASE_OUT_DIR")
-  cfg <- .paths_to_base_dir(cfg, cfg$INT_CLUSTERING_BASE_OUT_DIR, "INT_CLUSTERING_REPORT_HTML_FILE")
+  cfg <- .paths_to_base_dir(
+    cfg,
+    cfg$INT_CLUSTERING_BASE_OUT_DIR,
+    c("INT_CLUSTERING_CELL_ANNOTATION_OUT_DIR", "INT_CLUSTERING_REPORT_HTML_FILE")
+  )
 
   return(cfg)
 }

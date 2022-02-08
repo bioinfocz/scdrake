@@ -1,5 +1,13 @@
 # scdrake (development version)
 
+# scdrake 1.2.0
+
+- Added cell type annotation via `{SingleR}` (<https://github.com/LTLA/SingleR>).
+  - See the new config parameters [here](https://bioinfocz.github.io/scdrake/articles/stage_norm_clustering.html#cell-type-annotation)
+    and targets [here](https://bioinfocz.github.io/scdrake/articles/stage_norm_clustering.html#cell-type-annotation-1).
+- Code and documentation refactoring, minor bug fixes.
+- Updated `renv.lock`.
+
 # scdrake 1.1.0
 
 - The single-sample pipeline now supports another two inputs:

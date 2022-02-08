@@ -20,3 +20,4 @@
 \description{
 Update a group of configs, i.e. pipeline, single-sample, or integration.
 }
+\concept{internal}

@@ -91,7 +91,7 @@ run_single_sample <- function(pipeline_config_dir = getOption("scdrake_pipeline_
   if (.dry) {
     return(TRUE)
   } else {
-    scdrake_make(plan, cfg_pipeline = cfg_pipeline, cfg_main = cfg$cfg_main, verbose = verbose, ...)
+    scdrake_make(plan, cfg_pipeline = cfg_pipeline, cfg_main = cfg$main, verbose = verbose, ...)
   }
 }
 
@@ -118,6 +118,6 @@ run_integration <- function(pipeline_config_dir = getOption("scdrake_pipeline_co
   if (.dry) {
     return(TRUE)
   } else {
-    scdrake_make(plan, cfg_pipeline = cfg_pipeline, cfg_main = cfg$cfg_main, verbose = verbose, ...)
+    scdrake_make(plan, cfg_pipeline = cfg_pipeline, cfg_main = cfg$main, verbose = verbose, ...)
   }
 }

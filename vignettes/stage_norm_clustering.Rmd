@@ -28,7 +28,9 @@ several `{scdrake}` functions.
 
 ## Normalization parameters
 
-`NORMALIZATION_TYPE: "scran"`
+```yaml
+NORMALIZATION_TYPE: "scran"
+```
 
 **Type:** character scalar (`"scran"` | `"sctransform"` | `"none"`)
 
@@ -53,7 +55,9 @@ These parameters are used when `NORMALIZATION_TYPE` is `"scran"`.
 
 ***
 
-`SCRAN_USE_QUICKCLUSTER: True`
+```yaml
+SCRAN_USE_QUICKCLUSTER: True
+```
 
 **Type:** logical scalar
 
@@ -61,7 +65,9 @@ Whether to cluster cells prior to normalization. See `?scran::quickCluster` for 
 
 ***
 
-`SCRAN_QUICKCLUSTER_METHOD: "igraph"`
+```yaml
+SCRAN_QUICKCLUSTER_METHOD: "igraph"
+```
 
 **Type:** character scalar (`"igraph"` | `"hclust"`)
 
@@ -74,7 +80,9 @@ These parameters are used when `NORMALIZATION_TYPE` is `"sctransform"`.
 
 ***
 
-`SCT_VARS_TO_REGRESS: null`
+```yaml
+SCT_VARS_TO_REGRESS: null
+```
 
 **Type:** list of character scalar or `null`
 
@@ -88,7 +96,9 @@ in more details in `vignette("pipeline_overview")`.
 
 ***
 
-`SCT_N_HVG: 3000`
+```yaml
+SCT_N_HVG: 3000
+```
 
 **Type:** integer scalar
 
@@ -96,7 +106,9 @@ A number of top HVGs to return from the `SCTransform` normalization.
 
 ## Highly variable genes (HVGs) selection
 
-`HVG_METRIC: "gene_var"`
+```yaml
+HVG_METRIC: "gene_var"
+```
 
 **Type:** character scalar (`"gene_var"` | `"gene_cv2"` | `"sctransform"`)
 
@@ -110,7 +122,9 @@ A metric used to find HVGs. See <https://bioconductor.org/books/release/OSCA.bas
 
 ***
 
-`HVG_SELECTION: "top"`
+```yaml
+HVG_SELECTION: "top"
+```
 
 **Type:** character scalar (`"top"` | `"significance"` | `"threshold"`)
 
@@ -129,7 +143,9 @@ respectively. These columns are present in the DataFrame returned from the under
 
 ***
 
-`HVG_SELECTION_VALUE: 1000`
+```yaml
+HVG_SELECTION_VALUE: 1000
+```
 
 **Type:** depends on value of the `HVG_SELECTION` parameter:
 
@@ -169,7 +185,9 @@ HVG_SELECTION_VALUE: 1
 
 ### Removal of cell cycle-related genes prior to HVG selection
 
-`HVG_RM_CC_GENES: False`
+```yaml
+HVG_RM_CC_GENES: False
+```
 
 **Type:** logical scalar
 
@@ -183,7 +201,9 @@ the results of this strategy remain unclear.
 
 ***
 
-`HVG_CC_GENES_VAR_EXPL_THRESHOLD: 5`
+```yaml
+HVG_CC_GENES_VAR_EXPL_THRESHOLD: 5
+```
 
 **Type:** positive numeric scalar
 
@@ -196,7 +216,9 @@ Doublets are droplets in which multiple cells were captured.
 
 ***
 
-`MAX_DOUBLET_SCORE: 3.5`
+```yaml
+MAX_DOUBLET_SCORE: 3.5
+```
 
 **Type:** positive numeric scalar or `null`
 
@@ -208,7 +230,9 @@ If `null`, doublets are not removed, but doublet score is still computed.
 
 ### PCA
 
-`PCA_SELECTION_METHOD: "forced"`
+```yaml
+PCA_SELECTION_METHOD: "forced"
+```
 
 **Type:** character scalar (`"forced"` | `"elbow"` | `"technical_noise"`)
 
@@ -222,7 +246,9 @@ A method to select first N principal components (PCs):
 
 ***
 
-`PCA_FORCED_PCS: 15`
+```yaml
+PCA_FORCED_PCS: 15
+```
 
 **Type:** positive integer scalar
 
@@ -236,7 +262,9 @@ See `?scater::runTSNE` for the underlying method.
 
 ***
 
-`TSNE_PERP: 20`
+```yaml
+TSNE_PERP: 20
+```
 
 **Type:** numeric scalar
 
@@ -244,7 +272,9 @@ t-SNE perplexity.
 
 ***
 
-`TSNE_MAX_ITER: 1000`
+```yaml
+TSNE_MAX_ITER: 1000
+```
 
 **Type:** positive integer scalar
 
@@ -258,7 +288,9 @@ Parameters for [graph-based clustering](https://bioconductor.org/books/release/O
 
 ***
 
-`GRAPH_SNN_N: 10`
+```yaml
+GRAPH_SNN_N: 10
+```
 
 **Type:** positive integer scalar
 
@@ -266,7 +298,9 @@ A number of shared nearest neighbours. Passed as `k` parameter to `bluster::make
 
 ***
 
-`GRAPH_SNN_TYPE: "rank"`
+```yaml
+GRAPH_SNN_TYPE: "rank"
+```
 
 **Type:** character scalar (`"rank"` | `"number"` | `"jaccard"`)
 
@@ -274,7 +308,9 @@ A type of weighting scheme to use for shared neighbors. Passed as `type` paramet
 
 ### k-means clustering
 
-`KMEANS_K: !code 3:6`
+```yaml
+KMEANS_K: !code 3:6
+```
 
 **Type:** integer vector
 
@@ -282,7 +318,9 @@ A vector of numbers clusters for which to compute k-means.
 
 ### SC3 clustering
 
-`SC3_K: !code 5:6`
+```yaml
+SC3_K: !code 5:6
+```
 
 **Type:** integer vector
 
@@ -290,7 +328,9 @@ A vector of numbers clusters for which to compute SC3 clustering.
 
 ***
 
-`SC3_N_CORES: 8`
+```yaml
+SC3_N_CORES: 8
+```
 
 **Type:** integer scalar
 
@@ -298,11 +338,131 @@ A number of CPU cores to use for SC3 computation.
 
 ***
 
-`SC3_DRY: False`
+```yaml
+SC3_DRY: False
+```
 
 **Type:** logical scalar
 
 If `True`, just generate random cluster assignments (for testing purposes).
+
+## Cell type annotation
+
+```yaml
+CELL_ANNOTATION_SOURCES_DEFAULTS:
+  TRAIN_PARAMS:
+    GENES: "de"
+    SD_THRESH: 1
+    DE_METHOD: "classic"
+    DE_N: null
+    ASSAY_TYPE: "logcounts"
+  CLASSIFY_PARAMS:
+    QUANTILE: 0.8
+    TUNE_THRESH: 0.05
+    ASSAY_TYPE: "logcounts"
+  PRUNE_SCORE_PARAMS:
+    N_MADS: 3
+    MIN_DIFF_MED: -.inf
+    MIN_DIFF_NEXT: 0
+  DIAGNOSTICS_PARAMS:
+    HEATMAP_N_TOP_MARKERS: 20
+```
+
+**Type:** named list (dictionary) of named lists
+
+Default parameters for computation and reporting of cell type annotation. These can be overriden for each of the cell
+annotation reference source in `CELL_ANNOTATION_SOURCES` (see below).
+
+- `TRAIN_PARAMS`: used for training, passed to `SingleR::trainSingleR()`.
+  - `GENES: "de"` (character scalar: `"de"` | `"sd"` | `"all"`):
+    feature selection mode, see Details in `?SingleR::trainSingleR()`.
+  - `SD_THRESH: 1` (numeric scalar): the minimum threshold on the standard deviation per gene.
+    Only used when `GENES: "sd"`.
+  - `DE_METHOD: "classic"` (character scalar: `"classic"` | `"wilcox"` | `"t"`): how DE genes should be detected
+    between pairs of labels. Defaults to `"classic"`, which sorts genes by the log-fold changes and takes the top `DE_N`.
+    Setting to `"wilcox"` or `"t"` will use Wilcoxon ranked sum test or Welch t-test between labels, respectively,
+    and take the top `DE_N` upregulated genes per comparison.
+  - `DE_N: null` (`null` or integer scalar): the number of DE genes to use when `GENES: "de"`. If `DE_METHOD: "classic"`, defaults to
+    $500 * (2/3) ^ log2(N)$ where $N$ is the number of unique labels. Otherwise, `null` defaults to `10`.
+  - `ASSAY_TYPE: "logcounts"` (character scalar or integer): the assay of the reference dataset containing the relevant
+    expression matrix.
+- `CLASSIFY_PARAMS`: used for classification, passed to `SingleR::classifySingleR()`.
+  - `QUANTILE: 0.8` (numeric scalar): the quantile of the correlation distribution to use to compute the score for each label.
+  - `TUNE_THRESH: 0.05` (numeric scalar): the maximum difference from the maximum correlation to use in fine-tuning.
+  - `ASSAY_TYPE: "logcounts"` (character scalar or integer): the assay of the test dataset containing the relevant
+    expression matrix.
+- `PRUNE_SCORE_PARAMS`: used for label pruning after classification, passed to `SingleR::pruneScores()`.
+  - `N_MADS: 3` (numeric scalar): the number of MADs to use for defining low outliers in the per-label distribution
+    of delta values (i.e., difference from median).
+  - `MIN_DIFF_MED: -.inf` (numeric scalar): the minimum acceptable delta for each cell.
+  - `MIN_DIFF_NEXT: 0` (numeric scalar): the minimum difference between the best score and the next best score in fine-tuning.
+- `DIAGNOSTICS_PARAMS`: parameters for post-classification diagnostics.
+  - `HEATMAP_N_TOP_MARKERS: 20` (integer scalar): how many top markers to put into heatmaps after classification.
+    Markers are computed after classification using the predicted cell labels.
+
+***
+
+```yaml
+CELL_ANNOTATION_SOURCES:
+  - human_primary_cell_atlas_main:
+      reference_type: "celldex"
+      reference: "HumanPrimaryCellAtlasData"
+      description: >
+        Microarray datasets derived from human primary cells (Mabbott et al. 2013).
+        Most of the labels refer to blood subpopulations but cell types from other tissues are also available.
+      label_column: "label.main"
+      label_subsets: []
+      train_params:
+        de_method: "wilcox"
+        de_n: 30
+    monaco_immune_fine:
+      reference_type: "celldex"
+      reference: "MonacoImmuneData"
+      description: "This is the human immune reference that best covers all of the bases for a typical PBMC sample."
+      label_column: "label.fine"
+      label_subsets: []
+      train_params:
+        genes: "sd"
+```
+
+**Type:** list of named lists
+
+Specifies reference dataset(s) to be used for cell type annotation. The method used in `{SingleR}` for training and
+classification is described [here](http://bioconductor.org/books/release/SingleRBook/introduction.html#method-description).
+
+The names of named lists are used to name the reference datasets, e.g. as the prefixes in names of `colData()` columns
+containing per-cell labels.
+More info about the structure of related targets is given in the [Targets](#cell-type-annotation-1) section.
+
+Each reference dataset must have the following parameters:
+
+- `reference_type: "celldex"` (character scalar: `"celldex"` | `"file"`): type of the reference dataset.
+- `reference: "HumanPrimaryCellAtlasData"` (character scalar):
+  - If `reference_type: "celldex"`: a name of function to call in the `{celldex}` package. This function must return a
+    `SummarizedExperiment` object. See `{celldex}`'s
+    [vignette](https://bioconductor.org/packages/release/data/experiment/vignettes/celldex/inst/doc/userguide.html)
+    for the overview of available datasets.
+  - If `reference_type: "file"`: a path to Rds file with saved `SingleCellExperiment` or `SummarizedExperiment` object.
+    The assay type specified `TRAIN_PARAMS/assay_type` must be present in `assayNames()` of the object.
+    The `label_column` must be present in `colData()` of the object.
+- `description: "..."` (character scalar): a description of the reference dataset, will appear in some plots.
+- `label_column: "label.main"` (character scalar): specifies which column from `colData()` of the reference dataset
+  will be used for training. For datasets from the `{celldex}` package, those are `label.main`,
+  `label.fine` (more granular labels), or `label.ont` (cell ontology IDs).
+- `label_subsets: []` (character vector): labels to subset the reference dataset prior to training,
+  e.g. `["T cells", "B cells", "Progenitors"]`.
+
+In each entry you can override default parameters in `CELL_ANNOTATION_SOURCES_DEFAULTS` (by using lowercase names), e.g.
+
+```yaml
+train_params:
+  de_method: "wilcox"
+  de_n: 30
+```
+
+will override corresponding parameters in `TRAIN_PARAMS` in `CELL_ANNOTATION_SOURCES_DEFAULTS`.
+
+***
 
 ## Cell grouping assignment
 
@@ -371,7 +531,9 @@ should use `null` and set renamings after you examine the pipeline results.
 
 ## Dimensionality reduction plots
 
-`NORM_CLUSTERING_REPORT_DIMRED_NAMES: ["umap", "pca", "tsne"]`
+```yaml
+NORM_CLUSTERING_REPORT_DIMRED_NAMES: ["umap", "pca", "tsne"]
+```
 
 **Type:** character vector (`"umap"` | `"pca"` | `"tsne"`)
 
@@ -379,7 +541,9 @@ A vector of names of dimensionality reduction methods for which plots in the rep
 
 ***
 
-`NORM_CLUSTERING_REPORT_CLUSTERING_NAMES: ["graph", "kmeans", "sc3"]`
+```yaml
+NORM_CLUSTERING_REPORT_CLUSTERING_NAMES: ["graph", "kmeans", "sc3"]
+```
 
 **Type:** character vector (`"graph"` | `"kmeans"` | `"sc3"`)
 
@@ -412,7 +576,9 @@ their description from `CELL_GROUPINGS` will be used.
 
 ## Input files
 
-`SELECTED_MARKERS_FILE: !code system.file("extdata", "selected_markers.csv", package = "scdrake", mustWork = TRUE)`
+```yaml
+SELECTED_MARKERS_FILE: !code system.file("extdata", "selected_markers.csv", package = "scdrake", mustWork = TRUE)
+```
 
 **Type:** character scalar or `null`
 
@@ -441,11 +607,13 @@ NORM_CLUSTERING_REPORT_SIMPLE_RMD_FILE: "Rmd/single_sample/02_norm_clustering_si
 Paths to RMarkdown files used for HTML reports of this pipeline stage.
 
 `NORM_CLUSTERING_REPORT_RMD_FILE` is technically more detailed, while `NORM_CLUSTERING_REPORT_SIMPLE_RMD_FILE`
-outputs only the dimensionality reduction plots.
+outputs only the dimensionality reduction plots along with cell annotation.
 
 ## Output files
 
-`NORM_CLUSTERING_BASE_OUT_DIR: "02_norm_clustering"`
+```yaml
+NORM_CLUSTERING_BASE_OUT_DIR: "02_norm_clustering"
+```
 
 **Type:** character scalar
 
@@ -455,6 +623,7 @@ A path to base output directory for this stage. It will be created under `BASE_O
 
 ```yaml
 NORM_CLUSTERING_SELECTED_MARKERS_OUT_DIR: "selected_markers"
+NORM_CLUSTERING_CELL_ANNOTATION_OUT_DIR: "cell_annotation"
 NORM_CLUSTERING_REPORT_HTML_FILE: "02_norm_clustering.html"
 NORM_CLUSTERING_REPORT_SIMPLE_HTML_FILE: "02_norm_clustering_simple.html"
 ```
@@ -592,6 +761,51 @@ assignment of cells to clusters.
 (where `SC3::sc3_plot_cluster_stability()` is used internally). If the parameter `SC3_DRY` is `True`, the plots
 will be empty and will contain the text "SC3 was run in dry mode.".
 
+***
+
+## Cell type annotation
+
+`cell_annotation_params`: a tibble with parameters parsed from `CELL_ANNOTATION_SOURCES`.
+
+`cell_annotation`: `cell_annotation_params` with added `cell_annotation` list column holding outputs (`DataFrame`s)
+from `SingleR::SingleR()`. The structure of those `DataFrame`s is described in `?SingleR::classifySingleR()`.
+
+***
+
+`cell_annotation_labels`: a named list of character vectors with per-cell label assignments.
+Later added to the `cell_data` target and in turn, to `colData()` of the `sce_final_norm_clustering` and
+`sce_int_final_clustering` (in integration pipeline) targets/objects.
+
+By default, there are three vectors with labels for each reference dataset named as:
+
+- `<reference_name>_labels_raw`: "raw" labels. Taken from `first.labels` column of `SingleR::SingleR()` output.
+- `<reference_name>_labels`: fine-tuned labels. Taken from `labels` column of `SingleR::SingleR()` output.
+- `<reference_name>_labels_pruned`: fine-tuned and pruned labels (contains `NA`s for low quality labels).
+  Taken from `pruned.labels` column of `SingleR::SingleR()` output.
+
+Note that you can use names of `cell_annotation_labels`'s items in the `CELL_GROUPINGS` and
+`NORM_CLUSTERING_REPORT_DIMRED_PLOTS_OTHER` parameters, and also use them in `cluster_markers`
+(`CLUSTER_MARKERS_SOURCES`) and `contrasts` (`CONTRASTS_SOURCES`) stages.
+
+***
+
+`cell_annotation_diagnostic_plots`: `cell_annotation` with added list columns holding diagnostic plots,
+i.e. for each reference dataset:
+
+- `score_heatmaps`: heatmaps of per-cell label scores created for each clustering (as column annotation)
+  ([details](http://bioconductor.org/books/release/SingleRBook/annotation-diagnostics.html#based-on-the-scores-within-cells)).
+- `marker_heatmaps`: `NULL` if `cell_annotation$train_params$de` is not `"de"`, otherwise heatmap for each label
+  containing top upregulated markers from pairwise t-tests
+  ([details](http://bioconductor.org/books/release/SingleRBook/annotation-diagnostics.html#based-on-marker-gene-expression)).
+  Number of top markers is specified in `cell_annotation$diagnostics_params$heatmap_n_top_markers`.
+- `delta_distribution_plot`: violin plots (in one figure / object) of per-cell deltas for each label.
+  Deltas are differences between the score for the assigned label and the median across all labels for each cell
+  ([details](http://bioconductor.org/books/release/SingleRBook/annotation-diagnostics.html#based-on-the-deltas-across-cells)).
+
+`cell_annotation_diagnostic_plots_files`: paths to PDF files of diagnostic plots in `cell_annotation_diagnostic_plots`
+(`score_heatmaps_out_file`, `delta_distribution_plot_out_file`, `marker_heatmaps_out_file`).
+That means when you make this target, those files will be created.
+
 ## Plots
 
 `hvg_plot`: a `{patchwork}` object with HVG metric statistics (average expression vs. variance).
@@ -619,7 +833,7 @@ as defined by the `NORM_CLUSTERING_REPORT_DIMRED_NAMES` and `NORM_CLUSTERING_REP
 
 ### Selected markers
 
-`selected_markers_plots`: a tibble holding selected marker plots (a `{patchwork}` objects) for each dimemnsional
+`selected_markers_plots`: a tibble holding selected marker plots (`{patchwork}` objects) for each dimensional
 reduction specified in the `NORM_CLUSTERING_REPORT_DIMRED_NAMES` parameter. Selected markers are read from CSV file
 defined in the `SELECTED_MARKERS_FILE` parameter.
 
@@ -651,5 +865,6 @@ in the `00_main.yaml` config is `"mouse"`, then gene symbols are first converted
 
 ***
 
-`cell_data`: a DataFrame holding `colData()` of `sce_rm_doublets`, plus clusterings from the `clusters_all` target,
-and the new cell groupings defined in the `CELL_GROUPINGS` parameter.
+`cell_data`: a DataFrame holding `colData()` of `sce_rm_doublets`, clusterings from the `clusters_all` target,
+cell annotation labels from the `cell_annotation_labels` target, and the new cell groupings defined in
+the `CELL_GROUPINGS` parameter.

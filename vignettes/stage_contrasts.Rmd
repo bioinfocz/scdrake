@@ -24,7 +24,8 @@ is read from environment variables:
 - `SCDRAKE_INTEGRATION_CONFIG_DIR` for the integration pipeline.
 
 and options named in lowercase are set upon `{scdrake}` load or attach. Then the actual directory used depends on
-whether you run `run_single_sample()` or `run_integration()`.
+whether you run `run_single_sample()` or `run_integration()`, or `scdrake_r_make()` with `_drake_single_sample.R` or
+`_drake_integration.R`.
 
 # Config parameters
 

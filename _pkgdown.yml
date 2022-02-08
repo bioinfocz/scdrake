@@ -118,6 +118,9 @@ reference:
   - subtitle: Annotation
   - contents:
     - has_concept("sc_annotation")
+  - subtitle: Cell type annotation
+  - contents:
+    - has_concept("sc_cell_annotation")
   - subtitle: Cluster markers
   - contents:
     - has_concept("sc_cluster_markers")

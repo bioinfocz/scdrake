@@ -72,7 +72,9 @@ prior to HVG combination and selection.
 
 ***
 
-`HVG_COMBINATION_INT: "hvg_metric"`
+```yaml
+HVG_COMBINATION_INT: "hvg_metric"
+```
 
 **Type:** character scalar (`"hvg_metric"` | `"intersection"` | `"union"` | `"all"`)
 
@@ -210,7 +212,9 @@ See `scran::buildSNNGraph()` and `bluster::makeSNNGraph()` for more details.
 
 ***
 
-`INTEGRATION_SNN_K: 10`
+```yaml
+INTEGRATION_SNN_K: 10
+```
 
 **Type:** integer scalar
 
@@ -218,7 +222,9 @@ A number of nearest neighbors to consider during graph construction.
 
 ***
 
-`INTEGRATION_SNN_TYPE: "rank"`
+```yaml
+INTEGRATION_SNN_TYPE: "rank"
+```
 
 **Type:** character scalar (`"rank"` | `"number"` | `"jaccard"`)
 
@@ -226,7 +232,9 @@ A type of weighting scheme to use for shared neighbors.
 
 ***
 
-`INTEGRATION_SNN_CLUSTERING_METHOD: "walktrap"`
+```yaml
+INTEGRATION_SNN_CLUSTERING_METHOD: "walktrap"
+```
 
 **Type:** character scalar (`"walktrap"` | `"louvain"`)
 
@@ -234,7 +242,9 @@ A type of MNN clustering algorithm. See `igraph::cluster_walktrap()` and `igraph
 
 ## Input files
 
-`SELECTED_MARKERS_INT_FILE: !code system.file("extdata", "selected_markers.csv", package = "scdrake", mustWork = TRUE)`
+```yaml
+SELECTED_MARKERS_INT_FILE: !code system.file("extdata", "selected_markers.csv", package = "scdrake", mustWork = TRUE)
+```
 
 **Type:** character scalar or `null`
 
@@ -242,7 +252,9 @@ Similar to the `SELECTED_MARKERS_FILE` parameter in `vignette("norm_clustering")
 
 ***
 
-`INTEGRATION_REPORT_RMD_FILE: "Rmd/integration/01_integration.Rmd"`
+```yaml
+INTEGRATION_REPORT_RMD_FILE: "Rmd/integration/01_integration.Rmd"
+```
 
 **Type:** character scalar
 
@@ -250,7 +262,9 @@ A path to RMarkdown file used for HTML report of this pipeline stage.
 
 ## Output files
 
-`INTEGRATION_BASE_OUT_DIR: "01_integration"`
+```yaml
+INTEGRATION_BASE_OUT_DIR: "01_integration"
+```
 
 **Type:** character scalar
 

@@ -241,11 +241,13 @@ cells_per_cluster_table_collapsed_html <- function(df,
 
 #' @title Generate a section with dimred plots used in some RMarkdown files.
 #' @param dimred_names A character vector: names of dimreds to output.
-#' @param clustering_names A character vector: names of clusterings to output.
-#' @param selected_markers A `tibble`.
-#' @param dimred_plots_clustering A `tibble`.
 #' @param dimred_plots_other_vars A `tibble`.
-#' @param selected_markers_files_rel_start A character scalar: relative start of path to selected markers PDF.
+#' @param dimred_plots_clustering A `tibble` or `NULL`.
+#' @param clustering_names A character vector or `NULL`: names of clusterings to output.
+#' @param selected_markers A `tibble` or `NULL`.
+#' @param cell_annotation_diagnostic_plots A `tibble` or `NULL`.
+#' @param selected_markers_files_rel_start,cell_annotation_diagnostic_plots_rel_start
+#'   A character scalar: relative start of path to selected markers or cell annotation diagnostic plots PDFs.
 #'   See the *Relative links* section in [create_a_link()].
 #' @param main_header A character scalar: text of the main header.
 #' @param main_header_level A numeric scalar: level of the main header.
@@ -253,42 +255,90 @@ cells_per_cluster_table_collapsed_html <- function(df,
 #'
 #' @concept misc_html
 #' @export
-generate_dimred_plots_section <- function(dimred_names, clustering_names,
-                                          selected_markers, dimred_plots_clustering, dimred_plots_other_vars,
+generate_dimred_plots_section <- function(dimred_names,
+                                          dimred_plots_other_vars,
+                                          dimred_plots_clustering = NULL,
+                                          clustering_names = NULL,
+                                          selected_markers = NULL,
+                                          cell_annotation_diagnostic_plots = NULL,
                                           selected_markers_files_rel_start = ".",
-                                          main_header = "Dimensionality reduction", main_header_level = 1) {
-  md_header("Dimensionality reduction", main_header_level, extra = "{.tabset}")
+                                          cell_annotation_diagnostic_plots_rel_start = ".",
+                                          main_header = "Dimensionality reduction",
+                                          main_header_level = 1) {
+  md_header(main_header, main_header_level, extra = "{.tabset}")
   dimred_header_level <- main_header_level + 1
   dimred_subheader_level <- main_header_level + 2
 
+  if (!is_null(cell_annotation_diagnostic_plots)) {
+    cell_annotation_diagnostic_plots <- cell_annotation_diagnostic_plots %>%
+      dplyr::mutate(source_column = glue("{name}_labels")) %>%
+      dplyr::select(source_column, dplyr::ends_with("_out_file"))
+
+    dimred_plots_other_vars <- dimred_plots_other_vars %>%
+      dplyr::left_join(cell_annotation_diagnostic_plots, by = "source_column")
+  }
+
   invisible(lapply(dimred_names, FUN = function(dimred_name) {
     md_header(glue("{str_to_upper(dimred_name)}"), dimred_header_level, extra = "{.tabset}")
-    selected_markers_filtered <- dplyr::filter(selected_markers, dimred_name == !!dimred_name)
-    selected_markers_plots_files <- selected_markers_filtered$selected_markers_plots_files
+    if (!is_null(selected_markers)) {
+      selected_markers_filtered <- dplyr::filter(selected_markers, dimred_name == !!dimred_name)
+      selected_markers_plots_files <- selected_markers_filtered$selected_markers_plots_files
 
-    if (!is_null(selected_markers_plots_files)) {
-      cat("\n\n")
-      create_a_link(
-        selected_markers_plots_files,
-        "**Selected markers PDF**",
-        href_rel_start = selected_markers_files_rel_start,
-        do_cat = TRUE
-      )
-      cat("\n\n")
+      if (!is_null(selected_markers_plots_files)) {
+        cat("\n\n")
+        create_a_link(
+          selected_markers_plots_files,
+          "**Selected markers PDF**",
+          href_rel_start = selected_markers_files_rel_start,
+          do_cat = TRUE
+        )
+        cat("\n\n")
+      }
     }
 
-    lapply(clustering_names, FUN = function(clustering_name) {
-      md_header(clustering_name, dimred_subheader_level)
-      plots <- dplyr::filter(
-        dimred_plots_clustering, dimred_name == !!dimred_name, clustering_name == !!clustering_name
-      )$plot_list
-      print(patchwork::wrap_plots(plots[[1]], ncol = 2, labels = "AUTO") + patchwork::plot_annotation(tag_levels = "A"))
-    })
+    if (!is_null(dimred_plots_clustering) && !is_null(clustering_names)) {
+      lapply(clustering_names, FUN = function(clustering_name) {
+        md_header(clustering_name, dimred_subheader_level)
+        plots <- dplyr::filter(
+          dimred_plots_clustering, dimred_name == !!dimred_name, clustering_name == !!clustering_name
+        )$plot_list
+        print(patchwork::wrap_plots(plots[[1]], ncol = 2, labels = "AUTO") + patchwork::plot_annotation(tag_levels = "A"))
+      })
+    }
 
     dimred_plots_other_filtered <- dplyr::filter(dimred_plots_other_vars, dimred_name == !!dimred_name)
 
     lapply(purrr::transpose(dimred_plots_other_filtered), FUN = function(row) {
       md_header(row$source_column, dimred_subheader_level)
+      if (!is_null(cell_annotation_diagnostic_plots)) {
+        cat("\n\n")
+        create_a_link(
+          row$score_heatmaps_out_file,
+          "Score heatmaps PDF",
+          href_rel_start = cell_annotation_diagnostic_plots_rel_start,
+          do_cat = TRUE
+        )
+
+        cat(" | ")
+
+        if (!is_null(row$marker_heatmaps) && !is_na(row$marker_heatmaps)) {
+          create_a_link(
+            row$marker_heatmaps_out_file,
+            "Marker heatmaps PDF",
+            href_rel_start = cell_annotation_diagnostic_plots_rel_start,
+            do_cat = TRUE
+          )
+          cat(" | ")
+        }
+
+        create_a_link(
+          row$delta_distribution_plot_out_file,
+          "Delta distribution PDF",
+          href_rel_start = cell_annotation_diagnostic_plots_rel_start,
+          do_cat = TRUE
+        )
+        cat("\n\n")
+      }
       print(row$plot)
     })
   }))

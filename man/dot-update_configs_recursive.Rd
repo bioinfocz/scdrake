@@ -18,4 +18,6 @@ Recursively update local configs using a file glob \verb{*.default.yaml}.
 \dontrun{
 .update_configs_recursive("config/single_sample")
 }
+
 }
+\concept{internal}
