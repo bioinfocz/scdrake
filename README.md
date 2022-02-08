@@ -27,6 +27,7 @@ The main features of the `{scdrake}` pipeline are:
     droplets.
   - Higly variable genes detection, cell cycle scoring, normalization,
     clustering, and dimensionality reduction.
+  - Cell type annotation.
   - Integration of multiple datasets.
   - Computation of cluster markers and differentially expressed genes
     between clusters (denoted as “contrasts”).
@@ -54,6 +55,8 @@ Huge thanks go to the authors of the [Orchestrating Single-Cell Analysis
 with Bioconductor](https://bioconductor.org/books/release/OSCA) book on
 whose methods and recommendations is `{scdrake}` largely based.
 
+-----
+
 ## Installation instructions
 
 `{scdrake}` is currently not released on
@@ -66,7 +69,7 @@ if (!requireNamespace("BiocManager", quietly = TRUE)) {
   BiocManager::install(version = "3.14")
 }
 
-BiocManager::install("bioinfocz/scdrake@v1.0.1")
+BiocManager::install("bioinfocz/scdrake@v1.2.0")
 ```
 
 For development version use
@@ -91,6 +94,16 @@ additional system dependencies, but it’s a bit slower.
 More reading about this topic can be found at
 <https://books.ropensci.org/drake/hpc.html>.
 
+### Alternative storage format
+
+`{drake}` supports several types of storage formats for cached objects,
+but `{qs}` is recommended and used by `{scdrake}` by default due to its
+performance. You can install `{qs}` with
+
+``` r
+BiocManager::install("qs")
+```
+
 ### Using `renv`
 
 Because `{scdrake}` uses a lot of packages, we also encourage users to
@@ -109,6 +122,14 @@ package) holding all dependencies and their versions.
 
 To save time and space, you can also symlink the `renv/library`
 directory to multiple `{scdrake}` projects.
+
+Alternatively, just install `{scdrake}` from within the activated renv
+and all dependencies will be installed to the private library. But keep
+in mind in that case dependencies will be installed from package’s
+`DESCRIPTION` file in which package versions are not specified, and thus
+the latest (and possibly untested) package versions will be installed.
+
+-----
 
 ## Vignettes and other readings
 
@@ -152,6 +173,8 @@ Also, the prior knowledge of Bioconductor and its classes (especially
 the
 [SingleCellExperiment](https://bioconductor.org/packages/release/bioc/html/SingleCellExperiment.html))
 is considerable.
+
+-----
 
 ## Citation
 
