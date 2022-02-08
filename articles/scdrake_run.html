@@ -58,7 +58,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">scdrake</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.1.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.2.0</span>
       </span>
     </div>
 
@@ -178,7 +178,7 @@
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Running the pipeline, environment variables</h1>
             
-            <h4 data-toc-skip class="date">2022-01-26</h4>
+            <h4 data-toc-skip class="date">2022-02-08</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/bioinfocz/scdrake/blob/mastervignettes/scdrake_run.Rmd" class="external-link"><code>vignettes/scdrake_run.Rmd</code></a></small>
       <div class="hidden name"><code>scdrake_run.Rmd</code></div>
@@ -196,7 +196,7 @@ $(document).ready(function(){
 <div class="section level2">
 <h2 id="environment-variables">Environment variables<a class="anchor" aria-label="anchor" href="#environment-variables"></a>
 </h2>
-<p>On <a href="https://github.com/bioinfocz/scdrake" class="external-link">scdrake</a> load or <a data-toggle="tooltip" title="(i.e. when you call some function from a package, e.g. `drake::run_single_sample()`)">attach</a>, several environment variables are read and corresponding <code><a href="https://rdrr.io/r/base/options.html" class="external-link">options()</a></code> are set. Those are mainly variables controlling paths to config directories. See <code>?get_scdrake_default_options()</code> and <code>?get_scdrake_options()</code> for more details and list of used environment variables.</p>
+<p>On <a href="https://github.com/bioinfocz/scdrake" class="external-link">scdrake</a> load or <a data-toggle="tooltip" title="(i.e. when you call some function from a package, e.g. `drake::run_single_sample()`)">attach</a>, several environment variables are read and corresponding <code><a href="https://rdrr.io/r/base/options.html" class="external-link">options()</a></code> are set. Those are mainly variables controlling paths to config directories. See <code>?scdrake_options</code> for more details and list of used environment variables.</p>
 <p>We can take the <code>SCDRAKE_SINGLE_SAMPLE_CONFIG_DIR</code> environment variable as an example:</p>
 <ul>
 <li>If it is set, the <code>scdrake_single_sample_config_dir</code> option is set on <a href="https://github.com/bioinfocz/scdrake" class="external-link">scdrake</a> load or attach.</li>
@@ -208,7 +208,7 @@ $(document).ready(function(){
 <h2 id="running-the-pipeline-in-current-r-session">Running the pipeline in current R session<a class="anchor" aria-label="anchor" href="#running-the-pipeline-in-current-r-session"></a>
 </h2>
 <p>The pipeline can be run in current R session, however, this is considered a bad practice for reproducibility. The most high-level functions are <code><a href="../reference/run_pipeline.html">run_single_sample()</a></code> and <code><a href="../reference/run_pipeline.html">run_integration()</a></code> - see description in their help pages for overview of what they do before pipeline is executed.</p>
-<p>Anyway, to replicate what is done inside <code><a href="../reference/run_pipeline.html">run_single_sample()</a></code>, you just need this code:</p>
+<p>Anyway, to replicate what is done inside <code><a href="../reference/run_pipeline.html">run_single_sample()</a></code>, you just need this code (assuming you have created a <a href="https://github.com/bioinfocz/scdrake" class="external-link">scdrake</a> project and your current working directory is in its root):</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/update_config.html">update_pipeline_config</a></span><span class="op">(</span><span class="op">)</span>
 <span class="fu"><a href="../reference/update_config.html">update_single_sample_configs</a></span><span class="op">(</span><span class="op">)</span>

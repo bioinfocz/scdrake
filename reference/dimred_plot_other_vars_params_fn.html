@@ -35,7 +35,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">scdrake</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.1.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.2.0</span>
       </span>
     </div>
 
@@ -148,7 +148,11 @@
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">dimred_plot_other_vars_params_fn</span><span class="op">(</span><span class="va">dimred_names</span>, <span class="va">dimred_plots_other</span><span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">dimred_plot_other_vars_params_fn</span><span class="op">(</span>
+  <span class="va">dimred_names</span>,
+  <span class="va">dimred_plots_other</span>,
+  <span class="va">cell_annotation_params</span>
+<span class="op">)</span></code></pre></div>
     </div>
 
     <div id="arguments">
@@ -158,6 +162,8 @@
 <dt>dimred_plots_other</dt>
 <dd><p>A named list: see <code>NORM_CLUSTERING_REPORT_DIMRED_PLOTS_OTHER</code> parameter in
 <code>02_norm_clustering.yaml</code> or <code>02_int_clustering.yaml</code> config.</p></dd>
+<dt>cell_annotation_params</dt>
+<dd><p>A <code>tibble</code>.</p></dd>
 </dl></div>
     <div id="value">
     <h2>Value</h2>

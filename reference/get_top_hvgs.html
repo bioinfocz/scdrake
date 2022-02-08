@@ -36,7 +36,7 @@ See the corresponding section there."><!-- mathjax --><script src="https://cdnjs
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">scdrake</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.1.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.2.0</span>
       </span>
     </div>
 
@@ -174,8 +174,9 @@ If <code>sctransform</code> is used, HVGs are selected by the underlying method,
 For the other metric types, see the <code>hvg_selection</code> and <code>hvg_selection_value</code> parameters.</p></dd>
 <dt>hvg_selection</dt>
 <dd><p>A character scalar: method to use for selection of HVGs.
-This is only relevant when <code>hvg_metric</code> is "gene_var" or "gene_cv2".
-See <a href="http://bioconductor.org/books/release/OSCA/feature-selection.html#hvg-selection" class="external-link">http://bioconductor.org/books/release/OSCA/feature-selection.html#hvg-selection</a> for more details.</p><ul><li><p><code>"top"</code>: Take top X genes according to a metric.
+This is only relevant when <code>hvg_metric</code> is <code>"gene_var"</code> or <code>"gene_cv2"</code>.
+See <a href="https://bioconductor.org/books/release/OSCA.basic/feature-selection.html#hvg-selection" class="external-link">https://bioconductor.org/books/release/OSCA.basic/feature-selection.html#hvg-selection</a> and
+<a href="https://bioconductor.org/books/release/OSCA.advanced/more-hvgs.html#more-hvg-selection-strategies" class="external-link">https://bioconductor.org/books/release/OSCA.advanced/more-hvgs.html#more-hvg-selection-strategies</a> for more details.</p><ul><li><p><code>"top"</code>: Take top X genes according to a metric.
 <code>"bio"</code> and <code>"ratio"</code> columns are used for <code>hvg_metric</code> <code>"gene_var"</code> and <code>"gene_cv2"</code>, respectively.</p></li>
 <li><p><code>"significance"</code>: Use FDR threshold.</p></li>
 <li><p><code>"threshold"</code>: Use threshold on the minimum value of a metric.

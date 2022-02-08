@@ -58,7 +58,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">scdrake</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.1.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.2.0</span>
       </span>
     </div>
 
@@ -178,7 +178,7 @@
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Pipeline overview</h1>
             
-            <h4 data-toc-skip class="date">2022-01-26</h4>
+            <h4 data-toc-skip class="date">2022-02-08</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/bioinfocz/scdrake/blob/mastervignettes/pipeline_overview.Rmd" class="external-link"><code>vignettes/pipeline_overview.Rmd</code></a></small>
       <div class="hidden name"><code>pipeline_overview.Rmd</code></div>
@@ -305,6 +305,13 @@
 <a href="https://bioconductor.org/packages/release/bioc/html/SC3.html" class="external-link">Single-Cell Consensus Clustering</a> (SC3) with custom numbers of clusters.</li>
 </ul>
 </li>
+<li>Cell type annotation using <a href="https://github.com/LTLA/SingleR" class="external-link">SingleR</a>. More details are given in the accompanying <a href="http://bioconductor.org/books/release/SingleRBook/" class="external-link">book</a> and the underlying method is described <a href="http://bioconductor.org/books/release/SingleRBook/introduction.html#method-description" class="external-link">here</a>.
+<ul>
+<li>Reference datasets can be taken from the <a href="https://github.com/LTLA/celldex" class="external-link">celldex</a> package or an arbitrary <code>SingleCellExperiment</code> / <code>SummarizedExperiment</code> object can be loaded from a file.</li>
+<li>
+<a href="https://github.com/bioinfocz/scdrake" class="external-link">scdrake</a> is using a more recent version of the original <a href="https://github.com/LTLA/SingleR" class="external-link">SingleR</a> located <a href="https://github.com/LTLA/SingleR" class="external-link">here</a>.</li>
+</ul>
+</li>
 <li>Assignment of cells to predefined groupings based on existing data. That means you can reuse an assignment of cells from e.g. clustering, and rename or merge its levels (cluster numbers).
 <ul>
 <li>Example: you identify a biological meaning of clusters computed by k-means with <span class="math inline">\(k = 3\)</span>. You can use this information, and rename and merge the clusters, such that:
@@ -377,7 +384,7 @@
 <div class="section level3">
 <h3 id="stage-02_int_clustering">Stage <code>02_int_clustering</code><a class="anchor" aria-label="anchor" href="#stage-02_int_clustering"></a>
 </h3>
-<p>This stage basically reproduces the clustering steps in the <code>02_norm_clustering</code> stage of the single-sample pipeline. The only difference is <strong>user selection of a final integration method, which will be used downstream.</strong> HVGs, reduced dimensions, and selected markers are already computed in the previous stage (<code>01_integration</code>).</p>
+<p>This stage basically reproduces the clustering and cell type annotation steps in the <code>02_norm_clustering</code> stage of the single-sample pipeline. The only difference is <strong>user selection of a final integration method, which will be used downstream.</strong> HVGs, reduced dimensions, and selected markers are already computed in the previous stage (<code>01_integration</code>).</p>
 <p>⚙️ Config and targets: <code><a href="../articles/stage_int_clustering.html">vignette("stage_int_clustering")</a></code></p>
 <p><a href="https://onco.img.cas.cz/novotnyj/scdrake/integration/02_int_clustering/02_int_clustering.html" class="external-link">📜 Example report</a></p>
 </div>

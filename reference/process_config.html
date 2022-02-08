@@ -41,7 +41,7 @@ Checking and processing of CLUSTER_MARKERS_SOURCES, CONTRASTS_SOURCES, and INTEG
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">scdrake</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.1.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.2.0</span>
       </span>
     </div>
 
@@ -165,6 +165,11 @@ Checking and processing of CLUSTER_MARKERS_SOURCES, CONTRASTS_SOURCES, and INTEG
 
 <span class="fu">.process_contrasts_config</span><span class="op">(</span><span class="va">cfg</span>, <span class="va">other_variables</span><span class="op">)</span>
 
+<span class="fu">.prepare_cell_annotation_sources_params</span><span class="op">(</span>
+  <span class="va">cell_annotation_sources</span>,
+  <span class="va">cell_annotation_default_params</span>
+<span class="op">)</span>
+
 <span class="fu">.process_integration_config</span><span class="op">(</span><span class="va">cfg</span>, <span class="va">other_variables</span><span class="op">)</span>
 
 <span class="fu">.process_int_clustering_config</span><span class="op">(</span><span class="va">cfg</span>, <span class="va">other_variables</span><span class="op">)</span>
@@ -181,6 +186,10 @@ Checking and processing of CLUSTER_MARKERS_SOURCES, CONTRASTS_SOURCES, and INTEG
 <dt>other_variables</dt>
 <dd><p>A list of variables in whose environment the <code>yaml_file</code> will be evaluated,
 see details in <code><a href="load_config.html">load_config()</a></code>.</p></dd>
+<dt>cell_annotation_sources</dt>
+<dd><p>A named list.</p></dd>
+<dt>cell_annotation_default_params</dt>
+<dd><p>A named list with default parameters.</p></dd>
 </dl></div>
     <div id="value">
     <h2>Value</h2>

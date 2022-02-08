@@ -51,7 +51,7 @@ However, this does not work for numeric subscripts.'><!-- mathjax --><script src
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">scdrake</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.1.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.2.0</span>
       </span>
     </div>
 
@@ -183,13 +183,13 @@ attr(,"class")
     <div class="sourceCode"><pre><code>scdrake_list(l = NULL)
 
 # S3 method for scdrake_list
-$(x, name)
+$(x, i)
 
 # S3 method for scdrake_list
-[(x, names_, check = TRUE)
+[(x, i, check = TRUE)
 
 # S3 method for scdrake_list
-[[(x, name, check = TRUE)</code></pre></div>
+[[(x, i, check = TRUE)</code></pre></div>
     </div>
 
     <div id="arguments">
@@ -198,9 +198,7 @@ $(x, name)
 <dd><p>A list.</p></dd>
 <dt>x</dt>
 <dd><p>An object of class <code>scdrake_list</code>.</p></dd>
-<dt>name</dt>
-<dd><p>A character scalar or vector: name / names of element(s) to extract.</p></dd>
-<dt>names_</dt>
+<dt>i</dt>
 <dd><p>A character scalar or vector: name / names of element(s) to extract.</p></dd>
 <dt>check</dt>
 <dd><p>A logical scalar: if <code>TRUE</code>, throw an error when non-existing names or subscripts are present.</p></dd>
@@ -223,7 +221,7 @@ $(x, name)
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] 1</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> attr(,"class")</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "scdrake_list"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "scdrake_list" "list"        </span>
 <span class="r-in"><span class="va">cfg</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"var_1"</span>, <span class="st">"var_2"</span><span class="op">)</span><span class="op">]</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $var_1</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] 1</span>
@@ -232,7 +230,7 @@ $(x, name)
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] 2</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> attr(,"class")</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "scdrake_list"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "scdrake_list" "list"        </span>
 <span class="r-in"><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span>
 <span class="r-in"><span class="co"># Strict rules for non-existing elements - throws an error.</span></span>
 <span class="r-in"><span class="va">cfg</span><span class="op">$</span><span class="va">var_3</span></span>

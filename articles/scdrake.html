@@ -58,7 +58,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">scdrake</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.1.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.2.0</span>
       </span>
     </div>
 
@@ -186,7 +186,7 @@
       Institute of Molecular Genetics of the Czech Academy of Sciences<br><a class="author_email" href="mailto:#"></a><a href="mailto:jan.kubovciak@img.cas.cz" class="email">jan.kubovciak@img.cas.cz</a>
       </address>
                   
-            <h4 data-toc-skip class="date">2022-01-26</h4>
+            <h4 data-toc-skip class="date">2022-02-08</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/bioinfocz/scdrake/blob/mastervignettes/scdrake.Rmd" class="external-link"><code>vignettes/scdrake.Rmd</code></a></small>
       <div class="hidden name"><code>scdrake.Rmd</code></div>
@@ -221,7 +221,7 @@ $(document).ready(function(){
 <p>Let’s inspect files in the project directory:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu">fs</span><span class="fu">::</span><span class="fu"><a href="https://fs.r-lib.org/reference/dir_tree.html" class="external-link">dir_tree</a></span><span class="op">(</span>all <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></code></pre></div>
-<pre><code><span class="co">## <span style="color: #0000BB; font-weight: bold;">/tmp/RtmpnWmtyt/file1a276e28856</span></span>
+<pre><code><span class="co">## <span style="color: #0000BB; font-weight: bold;">/tmp/RtmpcnNmZU/file8ae628a631c5</span></span>
 <span class="co">## ├── .here</span>
 <span class="co">## ├── <span style="color: #0000BB; font-weight: bold;">Rmd</span></span>
 <span class="co">## │   ├── <span style="color: #0000BB; font-weight: bold;">common</span></span>
@@ -231,6 +231,7 @@ $(document).ready(function(){
 <span class="co">## │   │   ├── <span style="color: #00BB00;">cluster_markers_table_template.Rmd</span></span>
 <span class="co">## │   │   ├── <span style="color: #00BB00;">contrasts.Rmd</span></span>
 <span class="co">## │   │   ├── <span style="color: #00BB00;">contrasts_table_template.Rmd</span></span>
+<span class="co">## │   │   ├── <span style="color: #00BB00;">dimred_plots.Rmd</span></span>
 <span class="co">## │   │   └── stylesheet.css</span>
 <span class="co">## │   ├── <span style="color: #0000BB; font-weight: bold;">integration</span></span>
 <span class="co">## │   │   ├── <span style="color: #00BB00;">01_integration.Rmd</span></span>
@@ -267,13 +268,13 @@ $(document).ready(function(){
 <span class="co">## │       ├── cluster_markers.yaml</span>
 <span class="co">## │       ├── contrasts.default.yaml</span>
 <span class="co">## │       └── contrasts.yaml</span>
-<span class="co">## ├── file1a276e28856.Rproj</span>
+<span class="co">## ├── file8ae628a631c5.Rproj</span>
 <span class="co">## └── renv.lock</span></code></pre>
 <ul>
 <li>
 <code>.here</code>: used by the <a href="https://here.r-lib.org/" class="external-link">here</a> package to locate and memorize the project’s root directory. Only used when RStudio project file (<code>.Rproj</code>) is not found.</li>
 <li>
-<code>Rmd/</code>: RMarkdown files used for reporting of pipeline results. You can edit them according to your needs, but keep in mind that they will be overwritten by package-bundle ones if you call <code><a href="../reference/update_project.html">update_project()</a></code>.</li>
+<code>Rmd/</code>: RMarkdown files used for reporting of pipeline results. You can edit them according to your needs, but keep in mind that they will be overwritten by package-bundled ones whenever you call <code><a href="../reference/update_project.html">update_project()</a></code>.</li>
 <li>
 <code>config/</code>: config files in YAML format. See <code><a href="../articles/scdrake_config.html">vignette("scdrake_config")</a></code> for more details.</li>
 <li>
@@ -281,27 +282,33 @@ $(document).ready(function(){
 <li>
 <code>scdrake_example_project.Rproj</code>: RStudio project file. Created when you call <code><a href="../reference/init_project.html">init_project()</a></code> with <code>use_rstudio = TRUE</code> (default).</li>
 </ul>
+<hr>
 </div>
 <div class="section level2">
 <h2 id="running-the-single-sample-pipeline">Running the single-sample pipeline<a class="anchor" aria-label="anchor" href="#running-the-single-sample-pipeline"></a>
 </h2>
-<p>First we download example datasets from 10x Genomics:</p>
+<p>First we download an example dataset from 10x Genomics:</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/download_example_data.html">download_pbmc1k</a></span><span class="op">(</span><span class="st">"example_data/pbmc1k"</span><span class="op">)</span></code></pre></div>
-<p>The dataset contains data of <a href="https://support.10xgenomics.com/single-cell-gene-expression/software/pipelines/latest/output/matrices" class="external-link">unfiltered raw feature-barcode matrix</a>.</p>
-<p>We have to modify <code>config/single_sample/01_input_qc.yaml</code> to contain a proper path to the data. Open this file and set value of <code>path</code> inside <code>INPUT_DATA</code> to <code>"example_data/pbmc1k"</code>.</p>
-<p>Finally, we can run the single-sample pipeline for the PBMC 1k dataset. By default, only the final target (<code>report_input_qc</code>) of the input and QC stage (<code>01_input_qc</code>) will be made, that is, a HTML report. This is specified by <code>DRAKE_TARGETS</code> parameter in <code>config/pipeline.yaml</code>.</p>
-<blockquote>
-<p>In case you are not using RStudio, you must have directory with <code>pandoc</code> binary in your <code>PATH</code> or <code>RSTUDIO_PANDOC</code> environment variable, or you have to modify the <code>RSTUDIO_PANDOC</code> parameter in <code>config/pipeline.yaml</code> and supply the directory in which <code>pandoc</code> binary is located.</p>
-</blockquote>
+<p>The dataset contains data of <a href="https://support.10xgenomics.com/single-cell-gene-expression/software/pipelines/latest/output/matrices" class="external-link">unfiltered raw feature-barcode matrix</a> of 1000 Human Peripheral Blood Mononuclear Cell.</p>
+<p>Because our example data are from human samples, we need to install the matching annotation database:</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu">BiocManager</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/BiocManager/man/install.html" class="external-link">install</a></span><span class="op">(</span><span class="st">"org.Hs.eg.db"</span><span class="op">)</span></code></pre></div>
+<p>Now we have to modify <code>config/single_sample/01_input_qc.yaml</code> to contain a proper path to the data. Open this file and set value of <code>path</code> inside <code>INPUT_DATA</code> to <code>"example_data/pbmc1k"</code>.</p>
+<p>Finally, we can run the single-sample pipeline for the PBMC 1k dataset. By default, only the final target (<code>report_input_qc</code>) of the input and QC stage (<code>01_input_qc</code>) will be made, that is, a HTML report. This is specified by <code>DRAKE_TARGETS</code> parameter in <code>config/pipeline.yaml</code>.</p>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/run_pipeline.html">run_single_sample</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
 <p>The output is saved in <code>output/single_sample/pbmc1k</code>, as specified by <code>BASE_OUT_DIR</code> in <code>config/single_sample/00_main.yaml</code>. For <code>01_input_qc</code> stage, you can find its final report in <code>output/single_sample/pbmc1k/01_input_qc/01_input_qc.html</code>.</p>
+<details><summary>
+Note about <code>pandoc</code> and RStudio
+</summary>
+In case you are not using RStudio, you must have directory with <code>pandoc</code> binary in your <code>PATH</code> or <code>RSTUDIO_PANDOC</code> environment variable, or you have to modify the <code>RSTUDIO_PANDOC</code> parameter in <code>config/pipeline.yaml</code> and supply the directory in which <code>pandoc</code> binary is located.
+</details>
 </div>
 <div class="section level2">
 <h2 id="retrieving-pipeline-results">Retrieving pipeline results<a class="anchor" aria-label="anchor" href="#retrieving-pipeline-results"></a>
 </h2>
-<p>In <a href="https://docs.ropensci.org/drake" class="external-link">drake</a>’s terminology, a pipeline is called <em>plan</em>, and is composed of <em>targets</em>. When a target is finished, its value (object) is saved to cache (directory <code>.drake</code> by default), and you can anytime load it into your R session. This is done via two <a href="https://docs.ropensci.org/drake" class="external-link">drake</a>’s functions:</p>
+<p>In <a href="https://docs.ropensci.org/drake" class="external-link">drake</a>’s terminology, a pipeline is called <em>plan</em>, and is composed of <em>targets</em>. When a target is finished, its value (object) is saved to cache (the directory <code>.drake</code> by default), and you can anytime load it into your R session. This is done via two <a href="https://docs.ropensci.org/drake" class="external-link">drake</a>’s functions:</p>
 <ul>
 <li>
 <code><a href="https://docs.ropensci.org/drake/reference/readd.html" class="external-link">drake::loadd()</a></code> loads target’s value to the global environment.</li>
@@ -309,11 +316,12 @@ $(document).ready(function(){
 <code><a href="https://docs.ropensci.org/drake/reference/readd.html" class="external-link">drake::readd()</a></code> returns target’s value (so it can be assigned to variable).</li>
 </ul>
 <p>Let’s try it and load the filtered <code>SingleCellExperiment</code> object:</p>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu">drake</span><span class="fu">::</span><span class="fu"><a href="https://docs.ropensci.org/drake/reference/readd.html" class="external-link">loadd</a></span><span class="op">(</span><span class="va">sce_final_input_qc</span><span class="op">)</span></code></pre></div>
 <p>Value of the target <code>sce_final_input_qc</code> was loaded as a variable of the same name to your current R session (or more precisely, to the global environment). Similarly, we can load this target to variable of our choice:</p>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">sce</span> <span class="op">&lt;-</span> <span class="fu">drake</span><span class="fu">::</span><span class="fu"><a href="https://docs.ropensci.org/drake/reference/readd.html" class="external-link">readd</a></span><span class="op">(</span><span class="va">sce_final_input_qc</span><span class="op">)</span></code></pre></div>
+<hr>
 </div>
 <div class="section level2">
 <h2 id="running-the-integration-pipeline">Running the integration pipeline<a class="anchor" aria-label="anchor" href="#running-the-integration-pipeline"></a>
@@ -321,13 +329,13 @@ $(document).ready(function(){
 <p>The integration pipeline takes as input the <code>sce_final_norm_clustering</code> targets from multiple single-sample pipelines. This target is located in stage <code>02_norm_clustering</code>, but in our example with PBMC 1k dataset, we only run the target <code>report_input_qc</code>, which is basically the final target of the <code>01_input_qc</code> stage. So we need to run the pipeline again, specifying this target: open <code>config/pipeline.yaml</code> and set <code>DRAKE_TARGETS</code> to <code>["sce_final_norm_clustering"]</code>.</p>
 <p>Also, to speed things up, consider setting <code>SC3_DRY</code> in <code>config/single_sample/02_norm_clustering.yaml</code> to <code>TRUE</code>. SC3 is a computationally demanding clustering algorithm, and by setting this parameter the SC3 computation will be skipped, and random clusters will be assigned to cells.</p>
 <p>Now we can run the pipeline again:</p>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/run_pipeline.html">run_single_sample</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
 <blockquote>
 <p>Normally, you would put each sample to its own <a href="https://github.com/bioinfocz/scdrake" class="external-link">scdrake</a> project, and also use an another one for the integration pipeline. But to make the examples faster, we will process all of them in the current project directory.</p>
 </blockquote>
 <p>As the integration pipeline requires two and more samples, we need to download an another one - the PBMC 3k dataset:</p>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/download_example_data.html">download_pbmc3k</a></span><span class="op">(</span><span class="st">"example_data/pbmc3k"</span><span class="op">)</span></code></pre></div>
 <p>We need to modify our configs:</p>
 <ul>
@@ -338,7 +346,7 @@ $(document).ready(function(){
 <code>config/pipeline.yaml</code>: set <code>DRAKE_CACHE_DIR</code> to <code>".drake_pbmc3k"</code>. We need to use an another cache directory as we are running the pipeline for both samples in the same project directory.</li>
 </ul>
 <p>The config modifications for the second sample are ready, so let’s run the pipeline:</p>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/run_pipeline.html">run_single_sample</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
 <p>Finally, we modify configs for the integration pipeline:</p>
 <ul>
@@ -353,11 +361,11 @@ $(document).ready(function(){
 </li>
 </ul>
 <p>And now we can run the integration pipeline:</p>
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/run_pipeline.html">run_integration</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
 <p>The output is saved in <code>output/integration</code>, as specified by <code>BASE_OUT_DIR</code> in <code>config/integration/00_main.yaml</code>. For <code>01_integration</code> stage, you can find its final report in <code>output/integration/01_integration/01_integration.html</code>.</p>
-<p>You can try to load the target <code>sce_int_dimred_df</code> containing integrated <code>SingleCellExperiment</code> objects with computed reduced dimensions. We have to use other than default path to <code>drake</code> cache:</p>
-<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<p>You can try to load the target <code>sce_int_dimred_df</code> (tibble object) containing integrated <code>SingleCellExperiment</code> objects with computed reduced dimensions. But we have to use other than default path to <a href="https://docs.ropensci.org/drake" class="external-link">drake</a>’s cache:</p>
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu">drake</span><span class="fu">::</span><span class="fu"><a href="https://docs.ropensci.org/drake/reference/readd.html" class="external-link">loadd</a></span><span class="op">(</span><span class="va">sce_int_dimred_df</span>, path <span class="op">=</span> <span class="st">".drake_integration"</span><span class="op">)</span></code></pre></div>
 <p>Because we are using the single project directory for both samples and their integration, the config modifications for the integration pipeline can look a bit complicated. However, normally, you would:</p>
 <ul>
@@ -370,17 +378,18 @@ $(document).ready(function(){
 <h2 id="running-the-pipeline-reproducibly">Running the pipeline reproducibly<a class="anchor" aria-label="anchor" href="#running-the-pipeline-reproducibly"></a>
 </h2>
 <p>When we called <code><a href="../reference/run_pipeline.html">run_single_sample()</a></code> or <code><a href="../reference/run_pipeline.html">run_integration()</a></code>, the pipeline was executed in your current R session. That is considered a bad practice in the world of reproducibility, as it may bring an unexpected behaviour. The proper way is to run pipeline in a fresh new R session. In the <a href="https://docs.ropensci.org/drake" class="external-link">drake</a>, an independent script and <code><a href="https://docs.ropensci.org/drake/reference/r_make.html" class="external-link">drake::r_make()</a></code> function are used for this purpose:</p>
-<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu">drake</span><span class="fu">::</span><span class="fu"><a href="https://docs.ropensci.org/drake/reference/r_make.html" class="external-link">r_make</a></span><span class="op">(</span><span class="st">"_drake_single_sample.R"</span><span class="op">)</span>
 <span class="fu">drake</span><span class="fu">::</span><span class="fu"><a href="https://docs.ropensci.org/drake/reference/r_make.html" class="external-link">r_make</a></span><span class="op">(</span><span class="st">"_drake_integration.R"</span><span class="op">)</span></code></pre></div>
 <p>This function will source the input R script in which <code><a href="https://docs.ropensci.org/drake/reference/drake_config.html" class="external-link">drake::drake_config()</a></code> is the last returned value, and execute the pipeline (plan) in a new R session. More details can be found in the <a href="https://docs.ropensci.org/drake" class="external-link">drake</a> book <a href="https://books.ropensci.org/drake/projects.html#usage" class="external-link">here</a>.</p>
 <p>Of course, you can modify <code>_drake_single_sample.R</code> and <code>_drake_integration.R</code> to your needs, but, by default, loading the config files from proper paths in these scripts is done via environment variables. You can read more in <code><a href="../articles/scdrake_run.html">vignette("scdrake_run")</a></code>.</p>
+<p>NOTE: <code><a href="../reference/scdrake_make.html">scdrake_r_make()</a></code> runs <code><a href="https://docs.ropensci.org/drake/reference/r_make.html" class="external-link">drake::r_make()</a></code> internally, but in addition returns <code>TRUE</code> when pipeline successfully finishes.</p>
 </div>
 <div class="section level2">
 <h2 id="updating-the-project-files">Updating the project files<a class="anchor" aria-label="anchor" href="#updating-the-project-files"></a>
 </h2>
 <p>When a new version of <a href="https://github.com/bioinfocz/scdrake" class="external-link">scdrake</a> is released, you can update your project with</p>
-<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/update_project.html">update_project</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
 <p>This will <strong>overwrite</strong> project files by the package-bundled ones:</p>
 <ul>

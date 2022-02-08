@@ -35,7 +35,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">scdrake</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.1.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.2.0</span>
       </span>
     </div>
 
@@ -150,11 +150,13 @@
     <div id="ref-usage">
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">generate_dimred_plots_section</span><span class="op">(</span>
   <span class="va">dimred_names</span>,
-  <span class="va">clustering_names</span>,
-  <span class="va">selected_markers</span>,
-  <span class="va">dimred_plots_clustering</span>,
   <span class="va">dimred_plots_other_vars</span>,
+  dimred_plots_clustering <span class="op">=</span> <span class="cn">NULL</span>,
+  clustering_names <span class="op">=</span> <span class="cn">NULL</span>,
+  selected_markers <span class="op">=</span> <span class="cn">NULL</span>,
+  cell_annotation_diagnostic_plots <span class="op">=</span> <span class="cn">NULL</span>,
   selected_markers_files_rel_start <span class="op">=</span> <span class="st">"."</span>,
+  cell_annotation_diagnostic_plots_rel_start <span class="op">=</span> <span class="st">"."</span>,
   main_header <span class="op">=</span> <span class="st">"Dimensionality reduction"</span>,
   main_header_level <span class="op">=</span> <span class="fl">1</span>
 <span class="op">)</span></code></pre></div>
@@ -164,16 +166,18 @@
     <h2>Arguments</h2>
     <dl><dt>dimred_names</dt>
 <dd><p>A character vector: names of dimreds to output.</p></dd>
-<dt>clustering_names</dt>
-<dd><p>A character vector: names of clusterings to output.</p></dd>
-<dt>selected_markers</dt>
-<dd><p>A <code>tibble</code>.</p></dd>
-<dt>dimred_plots_clustering</dt>
-<dd><p>A <code>tibble</code>.</p></dd>
 <dt>dimred_plots_other_vars</dt>
 <dd><p>A <code>tibble</code>.</p></dd>
-<dt>selected_markers_files_rel_start</dt>
-<dd><p>A character scalar: relative start of path to selected markers PDF.
+<dt>dimred_plots_clustering</dt>
+<dd><p>A <code>tibble</code> or <code>NULL</code>.</p></dd>
+<dt>clustering_names</dt>
+<dd><p>A character vector or <code>NULL</code>: names of clusterings to output.</p></dd>
+<dt>selected_markers</dt>
+<dd><p>A <code>tibble</code> or <code>NULL</code>.</p></dd>
+<dt>cell_annotation_diagnostic_plots</dt>
+<dd><p>A <code>tibble</code> or <code>NULL</code>.</p></dd>
+<dt>selected_markers_files_rel_start, cell_annotation_diagnostic_plots_rel_start</dt>
+<dd><p>A character scalar: relative start of path to selected markers or cell annotation diagnostic plots PDFs.
 See the <em>Relative links</em> section in <code><a href="create_a_link.html">create_a_link()</a></code>.</p></dd>
 <dt>main_header</dt>
 <dd><p>A character scalar: text of the main header.</p></dd>

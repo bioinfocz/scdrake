@@ -85,6 +85,21 @@
     <loc>https://bioinfocz.github.io/scdrake/reference/cc_genes_fn.html</loc>
   </url>
   <url>
+    <loc>https://bioinfocz.github.io/scdrake/reference/cell_annotation_diagnostic_plots_files_fn.html</loc>
+  </url>
+  <url>
+    <loc>https://bioinfocz.github.io/scdrake/reference/cell_annotation_diagnostic_plots_fn.html</loc>
+  </url>
+  <url>
+    <loc>https://bioinfocz.github.io/scdrake/reference/cell_annotation_fn.html</loc>
+  </url>
+  <url>
+    <loc>https://bioinfocz.github.io/scdrake/reference/cell_annotation_labels_fn.html</loc>
+  </url>
+  <url>
+    <loc>https://bioinfocz.github.io/scdrake/reference/cell_annotation_params_fn.html</loc>
+  </url>
+  <url>
     <loc>https://bioinfocz.github.io/scdrake/reference/cell_data.html</loc>
   </url>
   <url>
@@ -151,13 +166,13 @@
     <loc>https://bioinfocz.github.io/scdrake/reference/create_seu_for_heatmaps.html</loc>
   </url>
   <url>
-    <loc>https://bioinfocz.github.io/scdrake/reference/dimred_plot_other_vars_fn.html</loc>
-  </url>
-  <url>
     <loc>https://bioinfocz.github.io/scdrake/reference/dimred_plot_other_vars_params_fn.html</loc>
   </url>
   <url>
     <loc>https://bioinfocz.github.io/scdrake/reference/dimred_plots_clustering_fn.html</loc>
+  </url>
+  <url>
+    <loc>https://bioinfocz.github.io/scdrake/reference/dimred_plots_other_vars_fn.html</loc>
   </url>
   <url>
     <loc>https://bioinfocz.github.io/scdrake/reference/dot-apply_config_patches.html</loc>
@@ -349,9 +364,6 @@
     <loc>https://bioinfocz.github.io/scdrake/reference/prepare_marker_source_params.html</loc>
   </url>
   <url>
-    <loc>https://bioinfocz.github.io/scdrake/reference/prepare_markers_source.html</loc>
-  </url>
-  <url>
     <loc>https://bioinfocz.github.io/scdrake/reference/process_config.html</loc>
   </url>
   <url>
@@ -365,6 +377,9 @@
   </url>
   <url>
     <loc>https://bioinfocz.github.io/scdrake/reference/run_pipeline.html</loc>
+  </url>
+  <url>
+    <loc>https://bioinfocz.github.io/scdrake/reference/save_pdf.html</loc>
   </url>
   <url>
     <loc>https://bioinfocz.github.io/scdrake/reference/save_print.html</loc>

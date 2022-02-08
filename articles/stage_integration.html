@@ -58,7 +58,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">scdrake</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.1.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.2.0</span>
       </span>
     </div>
 
@@ -178,7 +178,7 @@
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Integration stage</h1>
             
-            <h4 data-toc-skip class="date">2022-01-26</h4>
+            <h4 data-toc-skip class="date">2022-02-08</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/bioinfocz/scdrake/blob/mastervignettes/stage_integration.Rmd" class="external-link"><code>vignettes/stage_integration.Rmd</code></a></small>
       <div class="hidden name"><code>stage_integration.Rmd</code></div>
@@ -233,7 +233,7 @@
 <p>This is done prior to integration, and is same for all methods specified in the <code>INTEGRATION_METHODS</code> (see below).</p>
 <p>If a single-sample has the <code>hvg_rm_cc_genes</code> set to <code>True</code>, cell cycle-related genes will be removed prior to HVG combination and selection.</p>
 <hr>
-<p><code>HVG_COMBINATION_INT: "hvg_metric"</code></p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">HVG_COMBINATION_INT</span><span class="kw">:</span><span class="at"> </span><span class="st">"hvg_metric"</span></span></code></pre></div>
 <p><strong>Type:</strong> character scalar (<code>"hvg_metric"</code> | <code>"intersection"</code> | <code>"union"</code> | <code>"all"</code>)</p>
 <p>How to combine HVGs from single-samples:</p>
 <ul>
@@ -249,8 +249,8 @@
 <code>"all"</code>: use all common genes from all samples as HVGs (without duplicates).</li>
 </ul>
 <hr>
-<div class="sourceCode" id="cb2"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">HVG_SELECTION_INT</span><span class="kw">:</span><span class="at"> </span><span class="st">"top"</span></span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="fu">HVG_SELECTION_VALUE_INT</span><span class="kw">:</span><span class="at"> </span><span class="dv">3000</span></span></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">HVG_SELECTION_INT</span><span class="kw">:</span><span class="at"> </span><span class="st">"top"</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="fu">HVG_SELECTION_VALUE_INT</span><span class="kw">:</span><span class="at"> </span><span class="dv">3000</span></span></code></pre></div>
 <p><strong>Type:</strong> character scalar, integer scalar</p>
 <p>HVG selection strategy. Only relevant when <code>HVG_COMBINATION_INT</code> is <code>"hvg_metric"</code>, i.e. this selection will be applied to combined HVG metrics.</p>
 <p>These parameters are similar to <code>HVG_SELECTION</code> and <code>HVG_SELECTION_VALUE</code> in the <code>02_norm_clustering</code> stage of the single-sample pipeline (see <code><a href="../articles/stage_norm_clustering.html">vignette("stage_norm_clustering")</a></code> for more details).</p>
@@ -258,40 +258,40 @@
 <div class="section level3">
 <h3 id="integration-methods">Integration methods<a class="anchor" aria-label="anchor" href="#integration-methods"></a>
 </h3>
-<div class="sourceCode" id="cb3"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">INTEGRATION_METHODS</span><span class="kw">:</span></span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="kw">-</span><span class="at"> </span><span class="fu">uncorrected</span><span class="kw">:</span></span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">pca_selection_method</span><span class="kw">:</span><span class="at"> </span><span class="st">"forced"</span></span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">pca_forced_pcs</span><span class="kw">:</span><span class="at"> </span><span class="dv">15</span></span>
-<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">tsne_perp</span><span class="kw">:</span><span class="at"> </span><span class="dv">20</span></span>
-<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">tsne_max_iter</span><span class="kw">:</span><span class="at"> </span><span class="dv">1000</span></span>
-<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">rescaling</span><span class="kw">:</span></span>
-<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">pca_selection_method</span><span class="kw">:</span><span class="at"> </span><span class="st">"forced"</span></span>
-<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">pca_forced_pcs</span><span class="kw">:</span><span class="at"> </span><span class="dv">15</span></span>
-<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">tsne_perp</span><span class="kw">:</span><span class="at"> </span><span class="dv">20</span></span>
-<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">tsne_max_iter</span><span class="kw">:</span><span class="at"> </span><span class="dv">1000</span></span>
-<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">integration_params</span><span class="kw">:</span></span>
-<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">log.base</span><span class="kw">:</span><span class="at"> </span><span class="dv">2</span></span>
-<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">pseudo.count</span><span class="kw">:</span><span class="at"> </span><span class="dv">1</span></span>
-<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">regression</span><span class="kw">:</span></span>
-<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">pca_selection_method</span><span class="kw">:</span><span class="at"> </span><span class="st">"corrected"</span></span>
-<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">pca_forced_pcs</span><span class="kw">:</span><span class="at"> </span><span class="dv">15</span></span>
-<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">tsne_perp</span><span class="kw">:</span><span class="at"> </span><span class="dv">20</span></span>
-<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">tsne_max_iter</span><span class="kw">:</span><span class="at"> </span><span class="dv">1000</span></span>
-<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">integration_params</span><span class="kw">:</span></span>
-<span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">d</span><span class="kw">:</span><span class="at"> </span><span class="dv">50</span></span>
-<span id="cb3-22"><a href="#cb3-22" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">mnn</span><span class="kw">:</span></span>
-<span id="cb3-23"><a href="#cb3-23" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">pca_selection_method</span><span class="kw">:</span><span class="at"> </span><span class="st">"corrected"</span></span>
-<span id="cb3-24"><a href="#cb3-24" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">pca_forced_pcs</span><span class="kw">:</span><span class="at"> </span><span class="dv">15</span></span>
-<span id="cb3-25"><a href="#cb3-25" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">tsne_perp</span><span class="kw">:</span><span class="at"> </span><span class="dv">20</span></span>
-<span id="cb3-26"><a href="#cb3-26" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">tsne_max_iter</span><span class="kw">:</span><span class="at"> </span><span class="dv">1000</span></span>
-<span id="cb3-27"><a href="#cb3-27" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">integration_params</span><span class="kw">:</span></span>
-<span id="cb3-28"><a href="#cb3-28" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">k</span><span class="kw">:</span><span class="at"> </span><span class="dv">20</span></span>
-<span id="cb3-29"><a href="#cb3-29" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">prop.k</span><span class="kw">:</span><span class="at"> </span><span class="ch">null</span></span>
-<span id="cb3-30"><a href="#cb3-30" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">cos.norm</span><span class="kw">:</span><span class="at"> </span><span class="ch">True</span></span>
-<span id="cb3-31"><a href="#cb3-31" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">ndist</span><span class="kw">:</span><span class="at"> </span><span class="dv">3</span></span>
-<span id="cb3-32"><a href="#cb3-32" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">d</span><span class="kw">:</span><span class="at"> </span><span class="dv">50</span></span>
-<span id="cb3-33"><a href="#cb3-33" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">merge.order</span><span class="kw">:</span><span class="at"> </span><span class="ch">null</span></span>
-<span id="cb3-34"><a href="#cb3-34" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">auto.merge</span><span class="kw">:</span><span class="at"> </span><span class="ch">True</span></span></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">INTEGRATION_METHODS</span><span class="kw">:</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="kw">-</span><span class="at"> </span><span class="fu">uncorrected</span><span class="kw">:</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">pca_selection_method</span><span class="kw">:</span><span class="at"> </span><span class="st">"forced"</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">pca_forced_pcs</span><span class="kw">:</span><span class="at"> </span><span class="dv">15</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">tsne_perp</span><span class="kw">:</span><span class="at"> </span><span class="dv">20</span></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">tsne_max_iter</span><span class="kw">:</span><span class="at"> </span><span class="dv">1000</span></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">rescaling</span><span class="kw">:</span></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">pca_selection_method</span><span class="kw">:</span><span class="at"> </span><span class="st">"forced"</span></span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">pca_forced_pcs</span><span class="kw">:</span><span class="at"> </span><span class="dv">15</span></span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">tsne_perp</span><span class="kw">:</span><span class="at"> </span><span class="dv">20</span></span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">tsne_max_iter</span><span class="kw">:</span><span class="at"> </span><span class="dv">1000</span></span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">integration_params</span><span class="kw">:</span></span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">log.base</span><span class="kw">:</span><span class="at"> </span><span class="dv">2</span></span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">pseudo.count</span><span class="kw">:</span><span class="at"> </span><span class="dv">1</span></span>
+<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">regression</span><span class="kw">:</span></span>
+<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">pca_selection_method</span><span class="kw">:</span><span class="at"> </span><span class="st">"corrected"</span></span>
+<span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">pca_forced_pcs</span><span class="kw">:</span><span class="at"> </span><span class="dv">15</span></span>
+<span id="cb4-18"><a href="#cb4-18" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">tsne_perp</span><span class="kw">:</span><span class="at"> </span><span class="dv">20</span></span>
+<span id="cb4-19"><a href="#cb4-19" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">tsne_max_iter</span><span class="kw">:</span><span class="at"> </span><span class="dv">1000</span></span>
+<span id="cb4-20"><a href="#cb4-20" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">integration_params</span><span class="kw">:</span></span>
+<span id="cb4-21"><a href="#cb4-21" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">d</span><span class="kw">:</span><span class="at"> </span><span class="dv">50</span></span>
+<span id="cb4-22"><a href="#cb4-22" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">mnn</span><span class="kw">:</span></span>
+<span id="cb4-23"><a href="#cb4-23" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">pca_selection_method</span><span class="kw">:</span><span class="at"> </span><span class="st">"corrected"</span></span>
+<span id="cb4-24"><a href="#cb4-24" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">pca_forced_pcs</span><span class="kw">:</span><span class="at"> </span><span class="dv">15</span></span>
+<span id="cb4-25"><a href="#cb4-25" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">tsne_perp</span><span class="kw">:</span><span class="at"> </span><span class="dv">20</span></span>
+<span id="cb4-26"><a href="#cb4-26" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">tsne_max_iter</span><span class="kw">:</span><span class="at"> </span><span class="dv">1000</span></span>
+<span id="cb4-27"><a href="#cb4-27" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">integration_params</span><span class="kw">:</span></span>
+<span id="cb4-28"><a href="#cb4-28" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">k</span><span class="kw">:</span><span class="at"> </span><span class="dv">20</span></span>
+<span id="cb4-29"><a href="#cb4-29" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">prop.k</span><span class="kw">:</span><span class="at"> </span><span class="ch">null</span></span>
+<span id="cb4-30"><a href="#cb4-30" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">cos.norm</span><span class="kw">:</span><span class="at"> </span><span class="ch">True</span></span>
+<span id="cb4-31"><a href="#cb4-31" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">ndist</span><span class="kw">:</span><span class="at"> </span><span class="dv">3</span></span>
+<span id="cb4-32"><a href="#cb4-32" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">d</span><span class="kw">:</span><span class="at"> </span><span class="dv">50</span></span>
+<span id="cb4-33"><a href="#cb4-33" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">merge.order</span><span class="kw">:</span><span class="at"> </span><span class="ch">null</span></span>
+<span id="cb4-34"><a href="#cb4-34" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">auto.merge</span><span class="kw">:</span><span class="at"> </span><span class="ch">True</span></span></code></pre></div>
 <p><strong>Type:</strong> list of named lists</p>
 <p>Each named list is specifying parameters for one integration method. The ones specified in the <code>integration_params</code> list are used directly in an integration method, while the others are used prior/after integration. The <code>"uncorrected"</code> and at least one integration method must be set (by default, all methods are performed). Here are descriptions and possible parameters (some of them are used by multiple methods, and thus described only once) for each integration method:</p>
 <ul>
@@ -378,15 +378,15 @@
 </h4>
 <p>Used to obtain basic <a href="http://bioconductor.org/books/release/OSCA.multisample/correction-diagnostics.html" class="external-link">integration diagnostics</a>. See <code><a href="https://rdrr.io/pkg/scran/man/buildSNNGraph.html" class="external-link">scran::buildSNNGraph()</a></code> and <code><a href="https://rdrr.io/pkg/bluster/man/makeSNNGraph.html" class="external-link">bluster::makeSNNGraph()</a></code> for more details.</p>
 <hr>
-<p><code>INTEGRATION_SNN_K: 10</code></p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">INTEGRATION_SNN_K</span><span class="kw">:</span><span class="at"> </span><span class="dv">10</span></span></code></pre></div>
 <p><strong>Type:</strong> integer scalar</p>
 <p>A number of nearest neighbors to consider during graph construction.</p>
 <hr>
-<p><code>INTEGRATION_SNN_TYPE: "rank"</code></p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">INTEGRATION_SNN_TYPE</span><span class="kw">:</span><span class="at"> </span><span class="st">"rank"</span></span></code></pre></div>
 <p><strong>Type:</strong> character scalar (<code>"rank"</code> | <code>"number"</code> | <code>"jaccard"</code>)</p>
 <p>A type of weighting scheme to use for shared neighbors.</p>
 <hr>
-<p><code>INTEGRATION_SNN_CLUSTERING_METHOD: "walktrap"</code></p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">INTEGRATION_SNN_CLUSTERING_METHOD</span><span class="kw">:</span><span class="at"> </span><span class="st">"walktrap"</span></span></code></pre></div>
 <p><strong>Type:</strong> character scalar (<code>"walktrap"</code> | <code>"louvain"</code>)</p>
 <p>A type of MNN clustering algorithm. See <code><a href="https://rdrr.io/pkg/igraph/man/cluster_walktrap.html" class="external-link">igraph::cluster_walktrap()</a></code> and <code><a href="https://rdrr.io/pkg/igraph/man/cluster_louvain.html" class="external-link">igraph::cluster_louvain()</a></code> for more details.</p>
 </div>
@@ -394,32 +394,32 @@
 <div class="section level3">
 <h3 id="input-files">Input files<a class="anchor" aria-label="anchor" href="#input-files"></a>
 </h3>
-<p><code>SELECTED_MARKERS_INT_FILE: !code system.file("extdata", "selected_markers.csv", package = "scdrake", mustWork = TRUE)</code></p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">SELECTED_MARKERS_INT_FILE</span><span class="kw">:</span><span class="at"> !code system.file("extdata", "selected_markers.csv", package = "scdrake", mustWork = TRUE)</span></span></code></pre></div>
 <p><strong>Type:</strong> character scalar or <code>null</code></p>
 <p>Similar to the <code>SELECTED_MARKERS_FILE</code> parameter in <code>vignette("norm_clustering")</code>.</p>
 <hr>
-<p><code>INTEGRATION_REPORT_RMD_FILE: "Rmd/integration/01_integration.Rmd"</code></p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">INTEGRATION_REPORT_RMD_FILE</span><span class="kw">:</span><span class="at"> </span><span class="st">"Rmd/integration/01_integration.Rmd"</span></span></code></pre></div>
 <p><strong>Type:</strong> character scalar</p>
 <p>A path to RMarkdown file used for HTML report of this pipeline stage.</p>
 </div>
 <div class="section level3">
 <h3 id="output-files">Output files<a class="anchor" aria-label="anchor" href="#output-files"></a>
 </h3>
-<p><code>INTEGRATION_BASE_OUT_DIR: "01_integration"</code></p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">INTEGRATION_BASE_OUT_DIR</span><span class="kw">:</span><span class="at"> </span><span class="st">"01_integration"</span></span></code></pre></div>
 <p><strong>Type:</strong> character scalar</p>
 <p>A path to base output directory for this stage. It will be created under <code>BASE_OUT_DIR</code> specified in <code>00_main.yaml</code> config.</p>
 <hr>
-<div class="sourceCode" id="cb4"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">INTEGRATION_SELECTED_MARKERS_OUT_DIR</span><span class="kw">:</span><span class="at"> </span><span class="st">"selected_markers"</span></span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="fu">INTEGRATION_REPORT_HTML_FILE</span><span class="kw">:</span><span class="at"> </span><span class="st">"01_integration.html"</span></span></code></pre></div>
+<div class="sourceCode" id="cb11"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">INTEGRATION_SELECTED_MARKERS_OUT_DIR</span><span class="kw">:</span><span class="at"> </span><span class="st">"selected_markers"</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="fu">INTEGRATION_REPORT_HTML_FILE</span><span class="kw">:</span><span class="at"> </span><span class="st">"01_integration.html"</span></span></code></pre></div>
 <p><strong>Type:</strong> character scalar</p>
 <p>Names of files and directories created under <code>INTEGRATION_BASE_OUT_DIR</code>. Subdirectories are not allowed.</p>
 </div>
 <div class="section level3">
 <h3 id="html-output-parameters">HTML output parameters<a class="anchor" aria-label="anchor" href="#html-output-parameters"></a>
 </h3>
-<div class="sourceCode" id="cb5"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">INTEGRATION_KNITR_MESSAGE</span><span class="kw">:</span><span class="at"> </span><span class="ch">False</span></span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="fu">INTEGRATION_KNITR_WARNING</span><span class="kw">:</span><span class="at"> </span><span class="ch">False</span></span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="fu">INTEGRATION_KNITR_ECHO</span><span class="kw">:</span><span class="at"> </span><span class="ch">False</span></span></code></pre></div>
+<div class="sourceCode" id="cb12"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">INTEGRATION_KNITR_MESSAGE</span><span class="kw">:</span><span class="at"> </span><span class="ch">False</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="fu">INTEGRATION_KNITR_WARNING</span><span class="kw">:</span><span class="at"> </span><span class="ch">False</span></span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a><span class="fu">INTEGRATION_KNITR_ECHO</span><span class="kw">:</span><span class="at"> </span><span class="ch">False</span></span></code></pre></div>
 <p><strong>Type:</strong> logical scalar</p>
 <p>These are passed to <code><a href="https://rdrr.io/pkg/knitr/man/opts_chunk.html" class="external-link">knitr::opts_chunk()</a></code> and used for rendering of stage’s HTML report.</p>
 </div>

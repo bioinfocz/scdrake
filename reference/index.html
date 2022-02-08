@@ -35,7 +35,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">scdrake</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.1.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.2.0</span>
       </span>
     </div>
 
@@ -424,6 +424,30 @@ metadata (e.g. HVGs).</p></td>
         </td>
         <td><p>Load a SQL database file and run a function from the <code>AnnotationDbi</code> package.</p></td>
       </tr></tbody><tbody><tr><th colspan="2">
+          <h3 id="cell-type-annotation">Cell type annotation <a href="#cell-type-annotation" class="anchor" aria-hidden="true"></a></h3>
+          <p class="section-desc"></p>
+        </th>
+      </tr></tbody><tbody><tr><td>
+          <p><code><a href="cell_annotation_diagnostic_plots_files_fn.html">cell_annotation_diagnostic_plots_files_fn()</a></code> </p>
+        </td>
+        <td><p>Save cell annotation diagnostic plots to PDF files.</p></td>
+      </tr><tr><td>
+          <p><code><a href="cell_annotation_diagnostic_plots_fn.html">cell_annotation_diagnostic_plots_fn()</a></code> </p>
+        </td>
+        <td><p>Generate diagnostic plots for cell annotation.</p></td>
+      </tr><tr><td>
+          <p><code><a href="cell_annotation_fn.html">cell_annotation_fn()</a></code> </p>
+        </td>
+        <td><p>Perform cell annotation via <code><a href="https://rdrr.io/pkg/SingleR/man/SingleR.html" class="external-link">SingleR::SingleR()</a></code>.</p></td>
+      </tr><tr><td>
+          <p><code><a href="cell_annotation_labels_fn.html">cell_annotation_labels_fn()</a></code> </p>
+        </td>
+        <td><p>Create a named list of cell labels returned from <code><a href="https://rdrr.io/pkg/SingleR/man/SingleR.html" class="external-link">SingleR::SingleR()</a></code>.</p></td>
+      </tr><tr><td>
+          <p><code><a href="cell_annotation_params_fn.html">cell_annotation_params_fn()</a></code> </p>
+        </td>
+        <td><p>Load a list of cell annotation references into a <code>tibble</code>.</p></td>
+      </tr></tbody><tbody><tr><th colspan="2">
           <h3 id="cluster-markers">Cluster markers <a href="#cluster-markers" class="anchor" aria-hidden="true"></a></h3>
           <p class="section-desc"></p>
         </th>
@@ -601,10 +625,6 @@ or <code>CONTRASTS_SOURCES</code> (<code>contrasts.yaml</code> config).</p></td>
         </td>
         <td><p>Prepare a table with markers and render a HTML report from RMarkdown template.</p></td>
       </tr><tr><td>
-          <p><code><a href="prepare_markers_source.html">prepare_markers_source_params()</a></code> <code><a href="prepare_markers_source.html">prepare_markers_sources_params()</a></code> </p>
-        </td>
-        <td><p>Prepare a list of marker source parameters.</p></td>
-      </tr><tr><td>
           <p><code><a href="scran_markers.html">scran_markers()</a></code> </p>
         </td>
         <td><p>Compute cell cluster markers.</p></td>
@@ -657,10 +677,6 @@ or <code>CONTRASTS_SOURCES</code> (<code>contrasts.yaml</code> config).</p></td>
           <p class="section-desc"></p>
         </th>
       </tr></tbody><tbody><tr><td>
-          <p><code><a href="dimred_plot_other_vars_fn.html">dimred_plot_other_vars_fn()</a></code> </p>
-        </td>
-        <td><p>Make a dimred plot of selected variables.</p></td>
-      </tr><tr><td>
           <p><code><a href="dimred_plot_other_vars_params_fn.html">dimred_plot_other_vars_params_fn()</a></code> </p>
         </td>
         <td><p>Make a tibble with parameters for dimred plots of selected variables.</p></td>
@@ -668,6 +684,10 @@ or <code>CONTRASTS_SOURCES</code> (<code>contrasts.yaml</code> config).</p></td>
           <p><code><a href="dimred_plots_clustering_fn.html">dimred_plots_clustering_fn()</a></code> </p>
         </td>
         <td><p>Make dimred plots for each clustering method.</p></td>
+      </tr><tr><td>
+          <p><code><a href="dimred_plots_other_vars_fn.html">dimred_plots_other_vars_fn()</a></code> </p>
+        </td>
+        <td><p>Make a dimred plot of selected variables.</p></td>
       </tr><tr><td>
           <p><code><a href="highlight_points.html">highlight_points()</a></code> </p>
         </td>
@@ -789,6 +809,10 @@ or <code>CONTRASTS_SOURCES</code> (<code>contrasts.yaml</code> config).</p></td>
         </td>
         <td><p>Replace <code>NULL</code> items in a defined depth of a list.</p></td>
       </tr><tr><td>
+          <p><code><a href="save_pdf.html">save_pdf()</a></code> </p>
+        </td>
+        <td><p>Save a list of plots to multipage PDF.</p></td>
+      </tr><tr><td>
           <p><code><a href="save_print.html">save_print()</a></code> <code><a href="save_print.html">save_object_info()</a></code> </p>
         </td>
         <td><p>Capture output from <code><a href="https://rdrr.io/r/base/print.html" class="external-link">print()</a></code> of an object.</p></td>
@@ -800,7 +824,55 @@ or <code>CONTRASTS_SOURCES</code> (<code>contrasts.yaml</code> config).</p></td>
           <p><code><a href="with_plan.html">with_plan()</a></code> </p>
         </td>
         <td><p>Locally change a <code>future</code> plan.</p></td>
-      </tr></tbody><tbody></tbody></table></div>
+      </tr></tbody><tbody><tr><td>
+          <p><code><a href="dot-apply_config_patches.html">.apply_config_patches()</a></code> </p>
+        </td>
+        <td><p>Apply YAML config patches to package-bundled configs.</p></td>
+      </tr><tr><td>
+          <p><code><a href="dot-check_integration_methods.html">.check_integration_methods()</a></code> </p>
+        </td>
+        <td><p>Check for valid <code>INTEGRATION_SOURCES</code> parameter.</p></td>
+      </tr><tr><td>
+          <p><code><a href="dot-check_marker_sources.html">.check_marker_sources()</a></code> </p>
+        </td>
+        <td><p>Check for correct structure of <code>CLUSTER_MARKERS_SOURCES</code> or <code>CONTRASTS_SOURCES</code>.</p></td>
+      </tr><tr><td>
+          <p><code><a href="dot-get_dict_param.html">.get_dict_param()</a></code> </p>
+        </td>
+        <td><p>Unlist a list of length one containing a named list.</p></td>
+      </tr><tr><td>
+          <p><code><a href="dot-hereize_paths.html">.hereize_paths()</a></code> </p>
+        </td>
+        <td><p>Using the <code>here</code> package, contruct paths relative to project's root directory.</p></td>
+      </tr><tr><td>
+          <p><code><a href="dot-load_config_group.html">.load_config_group()</a></code> </p>
+        </td>
+        <td><p>Load a group of YAML config files.</p></td>
+      </tr><tr><td>
+          <p><code><a href="dot-load_configs.html">.load_configs()</a></code> </p>
+        </td>
+        <td><p>Load a list of YAML config files.</p></td>
+      </tr><tr><td>
+          <p><code><a href="dot-paths_to_base_dir.html">.paths_to_base_dir()</a></code> </p>
+        </td>
+        <td><p>Construct paths relative to base directory.</p></td>
+      </tr><tr><td>
+          <p><code><a href="dot-update_configs_recursive.html">.update_configs_recursive()</a></code> </p>
+        </td>
+        <td><p>Recursively update local configs using a file glob <code>*.default.yaml</code>.</p></td>
+      </tr><tr><td>
+          <p><code><a href="prepare_marker_source_params.html">.prepare_marker_source_params()</a></code> <code><a href="prepare_marker_source_params.html">.prepare_marker_sources_params()</a></code> </p>
+        </td>
+        <td><p>Prepare a <code>tibble</code> with parameters for cluster marker tests.</p></td>
+      </tr><tr><td>
+          <p><code><a href="process_config.html">.process_pipeline_config()</a></code> <code><a href="process_config.html">.process_main_config()</a></code> <code><a href="process_config.html">.process_cluster_markers_config()</a></code> <code><a href="process_config.html">.process_contrasts_config()</a></code> <code><a href="process_config.html">.prepare_cell_annotation_sources_params()</a></code> <code><a href="process_config.html">.process_integration_config()</a></code> <code><a href="process_config.html">.process_int_clustering_config()</a></code> <code><a href="process_config.html">.process_input_qc_config()</a></code> <code><a href="process_config.html">.process_norm_clustering_config()</a></code> </p>
+        </td>
+        <td><p>Config processing.</p></td>
+      </tr><tr><td>
+          <p><code><a href="update_config_group.html">update_config_group</a></code> </p>
+        </td>
+        <td><p>Update a group of configs, i.e. pipeline, single-sample, or integration.</p></td>
+      </tr></tbody></table></div>
 
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top"><h2 data-toc-skip>Contents</h2>
