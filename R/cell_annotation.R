@@ -229,6 +229,8 @@ cell_annotation_labels_fn <- function(cell_annotation) {
 #' @param sce A `SingleCellExperiment` object.
 #' @param base_out_dir A character scalar: path to output directory under which will be for each reference dataset its
 #'   diagnostic plots saved in.
+#' @param cluster_cols_regex A character scalar: regex to match columns in `colData()` with cluster labels.
+#'   Those columns will be used in annotation score heatmaps.
 #' @return A `tibble`. *Output target*: `cell_annotation_diagnostic_plots`
 #'
 #' @concept sc_cell_annotation

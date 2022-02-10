@@ -8,7 +8,8 @@ cell_annotation_diagnostic_plots_fn(
   cell_annotation,
   cell_data,
   sce,
-  base_out_dir
+  base_out_dir,
+  cluster_cols_regex = "^cluster_"
 )
 }
 \arguments{
@@ -20,6 +21,9 @@ cell_annotation_diagnostic_plots_fn(
 
 \item{base_out_dir}{A character scalar: path to output directory under which will be for each reference dataset its
 diagnostic plots saved in.}
+
+\item{cluster_cols_regex}{A character scalar: regex to match columns in \code{colData()} with cluster labels.
+Those columns will be used in annotation score heatmaps.}
 }
 \value{
 A \code{tibble}. \emph{Output target}: \code{cell_annotation_diagnostic_plots}
