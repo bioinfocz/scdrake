@@ -339,7 +339,8 @@ get_norm_clustering_subplan <- function(cfg, cfg_pipeline, cfg_main) {
       cell_annotation = cell_annotation,
       cell_data = cell_data,
       sce = sce_rm_doublets,
-      base_out_dir = !!cfg$NORM_CLUSTERING_CELL_ANNOTATION_OUT_DIR
+      base_out_dir = !!cfg$NORM_CLUSTERING_CELL_ANNOTATION_OUT_DIR,
+      cluster_cols_regex = "^cluster_"
     ),
     cell_annotation_diagnostic_plots_files = target(
       cell_annotation_diagnostic_plots_files_fn(cell_annotation_diagnostic_plots),

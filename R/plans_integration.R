@@ -271,7 +271,8 @@ get_int_clustering_subplan <- function(cfg, cfg_pipeline, cfg_main) {
       cell_annotation = cell_annotation,
       cell_data = cell_data,
       sce = sce_int_final,
-      base_out_dir = !!cfg$INT_CLUSTERING_CELL_ANNOTATION_OUT_DIR
+      base_out_dir = !!cfg$INT_CLUSTERING_CELL_ANNOTATION_OUT_DIR,
+      cluster_cols_regex = "^cluster_int_"
     ),
     cell_annotation_diagnostic_plots_files = target(
       cell_annotation_diagnostic_plots_files_fn(cell_annotation_diagnostic_plots),

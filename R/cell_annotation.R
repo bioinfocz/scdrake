@@ -233,13 +233,17 @@ cell_annotation_labels_fn <- function(cell_annotation) {
 #'
 #' @concept sc_cell_annotation
 #' @export
-cell_annotation_diagnostic_plots_fn <- function(cell_annotation, cell_data, sce, base_out_dir) {
+cell_annotation_diagnostic_plots_fn <- function(cell_annotation,
+                                                cell_data,
+                                                sce,
+                                                base_out_dir,
+                                                cluster_cols_regex = "^cluster_") {
   if (is_null(cell_annotation)) {
     return(NULL)
   }
 
   res <- lapply_rows(cell_annotation, FUN = function(row) {
-    cluster_cols <- str_subset(colnames(cell_data), "^cluster_")
+    cluster_cols <- str_subset(colnames(cell_data), cluster_cols_regex)
     row$score_heatmaps <- lapply(cluster_cols, FUN = function(cluster_col) {
       heatmap <- SingleR::plotScoreHeatmap(
         results = row$cell_annotation,
