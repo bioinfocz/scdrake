@@ -71,7 +71,9 @@ fs::dir_tree(tmp_dir, all = TRUE)
   Only used when RStudio project file (`.Rproj`) is not found.
 - `Rmd/`: RMarkdown files used for reporting of pipeline results. You can edit them according to your needs,
   but keep in mind that they will be overwritten by package-bundled ones whenever you call `update_project()`.
-- `config/`: config files in YAML format. See `vignette("scdrake_config")` for more details.
+- `config/`: configuration files in YAML format. The default configuration files (`*.default.yaml`) are bundled with
+  the package and used to supply new parameters to local configs (`*.yaml`) when such events appear.
+  See `vignette("scdrake_config")` for more details.
 - `_drake_integration.R`, `_drake_single_sample.R`: entry points for `{drake}` when pipeline is executed through
   `drake::r_make()`.
 - `scdrake_example_project.Rproj`: RStudio project file. Created when you call `init_project()` with
@@ -112,12 +114,12 @@ The output is saved in `output/single_sample/pbmc1k`, as specified by `BASE_OUT_
 `config/single_sample/00_main.yaml`. For `01_input_qc` stage, you can find its final report in
 `output/single_sample/pbmc1k/01_input_qc/01_input_qc.html`.
 
-<details>
-  <summary>Note about `pandoc` and RStudio</summary>
-In case you are not using RStudio, you must have directory with `pandoc` binary in your `PATH` or `RSTUDIO_PANDOC`
-environment variable, or you have to modify the `RSTUDIO_PANDOC` parameter in `config/pipeline.yaml`
-and supply the directory in which `pandoc` binary is located.
-</details>
+Note about `pandoc` and RStudio:
+in case you are not running the pipeline from within the RStudio, you must have a path to directory with `pandoc`
+binary in your `PATH` or `RSTUDIO_PANDOC` environment variable, or you have to modify the `RSTUDIO_PANDOC` parameter
+in `config/pipeline.yaml` and supply the directory here.
+
+***
 
 # Retrieving pipeline results
 
@@ -145,10 +147,11 @@ sce <- drake::readd(sce_final_input_qc)
 
 # Running the integration pipeline
 
-The integration pipeline takes as input the `sce_final_norm_clustering` targets from multiple single-sample pipelines.
+The integration pipeline takes as input the `sce_final_norm_clustering` targets from caches of multiple single-sample pipelines.
 This target is located in stage `02_norm_clustering`, but in our example with PBMC 1k dataset, we only run the target
-`report_input_qc`, which is basically the final target of the `01_input_qc` stage. So we need to run the pipeline again,
-specifying this target: open `config/pipeline.yaml` and set `DRAKE_TARGETS` to `["sce_final_norm_clustering"]`.
+`report_input_qc`, which is basically the final target of the `01_input_qc` stage. So we need to run the pipeline again
+until the `sce_final_norm_clustering` target.
+To do so, open `config/pipeline.yaml` and set `DRAKE_TARGETS` to `["sce_final_norm_clustering"]`.
 
 Also, to speed things up, consider setting `SC3_DRY` in `config/single_sample/02_norm_clustering.yaml` to `TRUE`.
 SC3 is a computationally demanding clustering algorithm, and by setting this parameter the SC3 computation will be skipped,
@@ -215,6 +218,8 @@ the integration pipeline can look a bit complicated. However, normally, you woul
 - Initialize a new `{scdrake}` project for integration, modify the `INTEGRATION_SOURCES` parameter in
   `config/integration/01_integration.yaml`, and run the integration pipeline.
 
+***
+
 # Running the pipeline reproducibly
 
 When we called `run_single_sample()` or `run_integration()`, the pipeline was executed in your current R session.
@@ -238,6 +243,24 @@ You can read more in `vignette("scdrake_run")`.
 NOTE: `scdrake_r_make()` runs `drake::r_make()` internally, but in addition returns `TRUE` when
 pipeline successfully finishes.
 
+***
+
+# Running the pipeline in parallel mode
+
+To fully utilize the implicit parallelism offered by `{drake}` you just need to modify `config/pipeline.yaml` by setting
+`DRAKE_PARALLELISM` to either:
+
+- `"future"`: uses the `{future}` as the backend. This backend should work by simply installing the `{future}` package.
+- `"clustermq"`: uses the `{clustermq}` as the backend. This is faster than `"future"`, but besides the `{clustermq}`
+  package it also requires the [ZeroMQ](https://zeromq.org/) library to be installed on your system.
+
+For more details see `vignette("config_pipeline")`.
+
+Note: `{clustermq}` also supports HPC cluster schedulers, see
+[here](https://books.ropensci.org/drake/hpc.html#the-template-argument-for-persistent-workers) for more details.
+
+***
+
 # Updating the project files
 
 When a new version of `{scdrake}` is released, you can update your project with
@@ -253,6 +276,8 @@ This will **overwrite** project files by the package-bundled ones:
 - Default YAML configs.
 
 By default, you will be asked if you want to continue, as you might lose your local modifications.
+
+***
 
 # Going further
 
