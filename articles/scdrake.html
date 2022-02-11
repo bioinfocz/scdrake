@@ -186,7 +186,7 @@
       Institute of Molecular Genetics of the Czech Academy of Sciences<br><a class="author_email" href="mailto:#"></a><a href="mailto:jan.kubovciak@img.cas.cz" class="email">jan.kubovciak@img.cas.cz</a>
       </address>
                   
-            <h4 data-toc-skip class="date">2022-02-08</h4>
+            <h4 data-toc-skip class="date">2022-02-11</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/bioinfocz/scdrake/blob/mastervignettes/scdrake.Rmd" class="external-link"><code>vignettes/scdrake.Rmd</code></a></small>
       <div class="hidden name"><code>scdrake.Rmd</code></div>
@@ -221,7 +221,7 @@ $(document).ready(function(){
 <p>Let’s inspect files in the project directory:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu">fs</span><span class="fu">::</span><span class="fu"><a href="https://fs.r-lib.org/reference/dir_tree.html" class="external-link">dir_tree</a></span><span class="op">(</span>all <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></code></pre></div>
-<pre><code><span class="co">## <span style="color: #0000BB; font-weight: bold;">/tmp/RtmpcnNmZU/file8ae628a631c5</span></span>
+<pre><code><span class="co">## <span style="color: #0000BB; font-weight: bold;">/tmp/RtmpK0aJKK/file15433155b018</span></span>
 <span class="co">## ├── .here</span>
 <span class="co">## ├── <span style="color: #0000BB; font-weight: bold;">Rmd</span></span>
 <span class="co">## │   ├── <span style="color: #0000BB; font-weight: bold;">common</span></span>
@@ -268,7 +268,7 @@ $(document).ready(function(){
 <span class="co">## │       ├── cluster_markers.yaml</span>
 <span class="co">## │       ├── contrasts.default.yaml</span>
 <span class="co">## │       └── contrasts.yaml</span>
-<span class="co">## ├── file8ae628a631c5.Rproj</span>
+<span class="co">## ├── file15433155b018.Rproj</span>
 <span class="co">## └── renv.lock</span></code></pre>
 <ul>
 <li>
@@ -276,7 +276,7 @@ $(document).ready(function(){
 <li>
 <code>Rmd/</code>: RMarkdown files used for reporting of pipeline results. You can edit them according to your needs, but keep in mind that they will be overwritten by package-bundled ones whenever you call <code><a href="../reference/update_project.html">update_project()</a></code>.</li>
 <li>
-<code>config/</code>: config files in YAML format. See <code><a href="../articles/scdrake_config.html">vignette("scdrake_config")</a></code> for more details.</li>
+<code>config/</code>: configuration files in YAML format. The default configuration files (<code>*.default.yaml</code>) are bundled with the package and used to supply new parameters to local configs (<code>*.yaml</code>) when such events appear. See <code><a href="../articles/scdrake_config.html">vignette("scdrake_config")</a></code> for more details.</li>
 <li>
 <code>_drake_integration.R</code>, <code>_drake_single_sample.R</code>: entry points for <a href="https://docs.ropensci.org/drake" class="external-link">drake</a> when pipeline is executed through <code><a href="https://docs.ropensci.org/drake/reference/r_make.html" class="external-link">drake::r_make()</a></code>.</li>
 <li>
@@ -299,11 +299,8 @@ $(document).ready(function(){
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/run_pipeline.html">run_single_sample</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
 <p>The output is saved in <code>output/single_sample/pbmc1k</code>, as specified by <code>BASE_OUT_DIR</code> in <code>config/single_sample/00_main.yaml</code>. For <code>01_input_qc</code> stage, you can find its final report in <code>output/single_sample/pbmc1k/01_input_qc/01_input_qc.html</code>.</p>
-<details><summary>
-Note about <code>pandoc</code> and RStudio
-</summary>
-In case you are not using RStudio, you must have directory with <code>pandoc</code> binary in your <code>PATH</code> or <code>RSTUDIO_PANDOC</code> environment variable, or you have to modify the <code>RSTUDIO_PANDOC</code> parameter in <code>config/pipeline.yaml</code> and supply the directory in which <code>pandoc</code> binary is located.
-</details>
+<p>Note about <code>pandoc</code> and RStudio: in case you are not running the pipeline from within the RStudio, you must have a path to directory with <code>pandoc</code> binary in your <code>PATH</code> or <code>RSTUDIO_PANDOC</code> environment variable, or you have to modify the <code>RSTUDIO_PANDOC</code> parameter in <code>config/pipeline.yaml</code> and supply the directory here.</p>
+<hr>
 </div>
 <div class="section level2">
 <h2 id="retrieving-pipeline-results">Retrieving pipeline results<a class="anchor" aria-label="anchor" href="#retrieving-pipeline-results"></a>
@@ -326,7 +323,7 @@ In case you are not using RStudio, you must have directory with <code>pandoc</co
 <div class="section level2">
 <h2 id="running-the-integration-pipeline">Running the integration pipeline<a class="anchor" aria-label="anchor" href="#running-the-integration-pipeline"></a>
 </h2>
-<p>The integration pipeline takes as input the <code>sce_final_norm_clustering</code> targets from multiple single-sample pipelines. This target is located in stage <code>02_norm_clustering</code>, but in our example with PBMC 1k dataset, we only run the target <code>report_input_qc</code>, which is basically the final target of the <code>01_input_qc</code> stage. So we need to run the pipeline again, specifying this target: open <code>config/pipeline.yaml</code> and set <code>DRAKE_TARGETS</code> to <code>["sce_final_norm_clustering"]</code>.</p>
+<p>The integration pipeline takes as input the <code>sce_final_norm_clustering</code> targets from caches of multiple single-sample pipelines. This target is located in stage <code>02_norm_clustering</code>, but in our example with PBMC 1k dataset, we only run the target <code>report_input_qc</code>, which is basically the final target of the <code>01_input_qc</code> stage. So we need to run the pipeline again until the <code>sce_final_norm_clustering</code> target. To do so, open <code>config/pipeline.yaml</code> and set <code>DRAKE_TARGETS</code> to <code>["sce_final_norm_clustering"]</code>.</p>
 <p>Also, to speed things up, consider setting <code>SC3_DRY</code> in <code>config/single_sample/02_norm_clustering.yaml</code> to <code>TRUE</code>. SC3 is a computationally demanding clustering algorithm, and by setting this parameter the SC3 computation will be skipped, and random clusters will be assigned to cells.</p>
 <p>Now we can run the pipeline again:</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
@@ -373,6 +370,7 @@ In case you are not using RStudio, you must have directory with <code>pandoc</co
 <li>In each project, run pipeline for the <code>sce_final_norm_clustering</code> target.</li>
 <li>Initialize a new <a href="https://github.com/bioinfocz/scdrake" class="external-link">scdrake</a> project for integration, modify the <code>INTEGRATION_SOURCES</code> parameter in <code>config/integration/01_integration.yaml</code>, and run the integration pipeline.</li>
 </ul>
+<hr>
 </div>
 <div class="section level2">
 <h2 id="running-the-pipeline-reproducibly">Running the pipeline reproducibly<a class="anchor" aria-label="anchor" href="#running-the-pipeline-reproducibly"></a>
@@ -384,6 +382,21 @@ In case you are not using RStudio, you must have directory with <code>pandoc</co
 <p>This function will source the input R script in which <code><a href="https://docs.ropensci.org/drake/reference/drake_config.html" class="external-link">drake::drake_config()</a></code> is the last returned value, and execute the pipeline (plan) in a new R session. More details can be found in the <a href="https://docs.ropensci.org/drake" class="external-link">drake</a> book <a href="https://books.ropensci.org/drake/projects.html#usage" class="external-link">here</a>.</p>
 <p>Of course, you can modify <code>_drake_single_sample.R</code> and <code>_drake_integration.R</code> to your needs, but, by default, loading the config files from proper paths in these scripts is done via environment variables. You can read more in <code><a href="../articles/scdrake_run.html">vignette("scdrake_run")</a></code>.</p>
 <p>NOTE: <code><a href="../reference/scdrake_make.html">scdrake_r_make()</a></code> runs <code><a href="https://docs.ropensci.org/drake/reference/r_make.html" class="external-link">drake::r_make()</a></code> internally, but in addition returns <code>TRUE</code> when pipeline successfully finishes.</p>
+<hr>
+</div>
+<div class="section level2">
+<h2 id="running-the-pipeline-in-parallel-mode">Running the pipeline in parallel mode<a class="anchor" aria-label="anchor" href="#running-the-pipeline-in-parallel-mode"></a>
+</h2>
+<p>To fully utilize the implicit parallelism offered by <a href="https://docs.ropensci.org/drake" class="external-link">drake</a> you just need to modify <code>config/pipeline.yaml</code> by setting <code>DRAKE_PARALLELISM</code> to either:</p>
+<ul>
+<li>
+<code>"future"</code>: uses the <a href="https://future.futureverse.org" class="external-link">future</a> as the backend. This backend should work by simply installing the <a href="https://future.futureverse.org" class="external-link">future</a> package.</li>
+<li>
+<code>"clustermq"</code>: uses the <a href="https://mschubert.github.io/clustermq/" class="external-link">clustermq</a> as the backend. This is faster than <code>"future"</code>, but besides the <a href="https://mschubert.github.io/clustermq/" class="external-link">clustermq</a> package it also requires the <a href="https://zeromq.org/" class="external-link">ZeroMQ</a> library to be installed on your system.</li>
+</ul>
+<p>For more details see <code><a href="../articles/config_pipeline.html">vignette("config_pipeline")</a></code>.</p>
+<p>Note: <a href="https://mschubert.github.io/clustermq/" class="external-link">clustermq</a> also supports HPC cluster schedulers, see <a href="https://books.ropensci.org/drake/hpc.html#the-template-argument-for-persistent-workers" class="external-link">here</a> for more details.</p>
+<hr>
 </div>
 <div class="section level2">
 <h2 id="updating-the-project-files">Updating the project files<a class="anchor" aria-label="anchor" href="#updating-the-project-files"></a>
@@ -398,6 +411,7 @@ In case you are not using RStudio, you must have directory with <code>pandoc</co
 <li>Default YAML configs.</li>
 </ul>
 <p>By default, you will be asked if you want to continue, as you might lose your local modifications.</p>
+<hr>
 </div>
 <div class="section level2">
 <h2 id="going-further">Going further<a class="anchor" aria-label="anchor" href="#going-further"></a>

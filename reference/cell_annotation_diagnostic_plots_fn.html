@@ -173,7 +173,8 @@ Deltas are differences between the score for the assigned label and the median a
   <span class="va">cell_annotation</span>,
   <span class="va">cell_data</span>,
   <span class="va">sce</span>,
-  <span class="va">base_out_dir</span>
+  <span class="va">base_out_dir</span>,
+  cluster_cols_regex <span class="op">=</span> <span class="st">"^cluster_"</span>
 <span class="op">)</span></code></pre></div>
     </div>
 
@@ -188,6 +189,9 @@ Deltas are differences between the score for the assigned label and the median a
 <dt>base_out_dir</dt>
 <dd><p>A character scalar: path to output directory under which will be for each reference dataset its
 diagnostic plots saved in.</p></dd>
+<dt>cluster_cols_regex</dt>
+<dd><p>A character scalar: regex to match columns in <code>colData()</code> with cluster labels.
+Those columns will be used in annotation score heatmaps.</p></dd>
 </dl></div>
     <div id="value">
     <h2>Value</h2>
