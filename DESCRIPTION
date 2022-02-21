@@ -51,6 +51,7 @@ Imports:
     BiocParallel,
     BiocSingular,
     bluster,
+    celldex,
     cli,
     cluster,
     codetools,
