@@ -177,13 +177,13 @@ The default value is obtained from <code>getOption("scdrake_verbose")</code>.</p
     <div id="ref-examples">
     <h2>Examples</h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="fu">get_sys_env</span><span class="op">(</span><span class="st">"PATH"</span><span class="op">)</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> Using environment variable <span style="color: #262626; background-color: #DADADA;">`PATH`</span> with value <span style="color: #0000BB;">"/github/home/.local/bin:/usr/lib/rstudio-server/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"</span> (character)</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> Using environment variable `PATH` with value <span style="color: #0000BB;">"/github/home/.local/bin:/usr/lib/rstudio-server/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"</span> (character)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "/github/home/.local/bin:/usr/lib/rstudio-server/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"</span>
 <span class="r-in"><span class="fu">get_sys_env</span><span class="op">(</span><span class="st">"NON_EXISTING"</span><span class="op">)</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> Using environment variable <span style="color: #262626; background-color: #DADADA;">`NON_EXISTING`</span> with value <span style="color: #0000BB;">""</span> (character)</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> Using environment variable `NON_EXISTING` with value <span style="color: #0000BB;">""</span> (character)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] ""</span>
 <span class="r-in"><span class="fu">get_sys_env</span><span class="op">(</span><span class="st">"NON_EXISTING"</span>, default <span class="op">=</span> <span class="st">"default_value"</span><span class="op">)</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">!</span> Environment variable <span style="color: #262626; background-color: #DADADA;">`NON_EXISTING`</span> is not set -&gt; using a default value <span style="color: #0000BB;">"default_value"</span> (character)</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">!</span> Environment variable `NON_EXISTING` is not set -&gt; using a default value <span style="color: #0000BB;">"default_value"</span> (character)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "default_value"</span>
 </code></pre></div>
     </div>

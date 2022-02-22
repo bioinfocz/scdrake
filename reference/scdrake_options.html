@@ -170,6 +170,7 @@ e.g. the value of <code>scdrake_verbose</code> is taken from <code>SCDRAKE_VERBO
 The environment variables are coerced to atomic types (character, logical, integer, double).</p>
 <p>The following options are used by <code>scdrake</code>:</p><ul><li><p><code>scdrake_yq_binary</code>
 (character, default: <code>Sys.which("yq")</code>)</p><ul><li><p>A path to <code>yq</code> tool's binary.</p></li>
+<li><p>If the default value is <code>""</code>, it will be set to <code><a href="get_yq_default_path.html">get_yq_default_path()</a></code>.</p></li>
 </ul></li>
 <li><p><code>scdrake_verbose</code>
 (logical, env: <code>SCDRAKE_VERBOSE</code>, default: <code>TRUE</code>)</p><ul><li><p>If <code>TRUE</code>, <code>scdrake</code> will be verbose.</p></li>
