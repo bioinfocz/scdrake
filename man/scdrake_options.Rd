@@ -30,6 +30,7 @@ The following options are used by \code{scdrake}:
 (character, default: \code{Sys.which("yq")})
 \itemize{
 \item A path to \code{yq} tool's binary.
+\item If the default value is \code{""}, it will be set to \code{get_yq_default_path()}.
 }
 \item \code{scdrake_verbose}
 (logical, env: \code{SCDRAKE_VERBOSE}, default: \code{TRUE})

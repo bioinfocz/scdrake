@@ -12,6 +12,7 @@
 #' - `scdrake_yq_binary`
 #'   (character, default: `Sys.which("yq")`)
 #'   - A path to `yq` tool's binary.
+#'   - If the default value is `""`, it will be set to `get_yq_default_path()`.
 #' - `scdrake_verbose`
 #'   (logical, env: `SCDRAKE_VERBOSE`, default: `TRUE`)
 #'   - If `TRUE`, `scdrake` will be verbose.
@@ -67,9 +68,11 @@
 #' @export
 get_scdrake_default_options <- function() {
   withr::local_options(scdrake_verbose = TRUE)
+  scdrake_yq_binary <- Sys.which("yq")
+  scdrake_yq_binary <- dplyr::if_else(scdrake_yq_binary == "", get_yq_default_path(), scdrake_yq_binary)
 
   list(
-    scdrake_yq_binary = Sys.which("yq"),
+    scdrake_yq_binary = scdrake_yq_binary,
     scdrake_verbose = get_sys_env("SCDRAKE_VERBOSE", default = TRUE, type = "logical"),
     scdrake_cache_dir = get_sys_env("SCDRAKE_CACHE_DIR", default = ".drake"),
     scdrake_pipeline_config_dir = get_sys_env(
