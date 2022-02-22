@@ -253,7 +253,7 @@ cell_data_fn <- function(col_data, clusters_all, cell_annotation_labels, cell_gr
 
   col_data <- S4Vectors::DataFrame(col_data)
 
-  if (!is_null(cell_groupings)) {
+  if (!is_empty(cell_groupings)) {
     cell_groupings <- lapply(cell_groupings, FUN = function(grp) {
       grp$description <- if (is_null(grp$description)) "" else grp$description
       return(grp)
