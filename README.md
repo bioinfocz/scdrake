@@ -152,7 +152,7 @@ where links to vignettes below become real :-)
           - Reading in data, filtering, quality control (`01_input_qc`):
             `vignette("stage_input_qc")`
           - Normalization, HVG selection, dimensionality reduction,
-            clustering (`02_norm_clustering`):
+            clustering, cell type annotation (`02_norm_clustering`):
             `vignette("stage_norm_clustering")`
       - Integration pipeline:
           - Reading in data and integration (`01_integration`):
