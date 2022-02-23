@@ -69,7 +69,7 @@ if (!requireNamespace("BiocManager", quietly = TRUE)) {
   BiocManager::install(version = "3.14")
 }
 
-BiocManager::install("bioinfocz/scdrake@v1.2.0")
+BiocManager::install("bioinfocz/scdrake@v1.2.1")
 ```
 
 For development version use
