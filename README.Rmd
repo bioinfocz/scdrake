@@ -57,14 +57,24 @@ methods and recommendations is `{scdrake}` largely based.
 `{scdrake}` is currently not released on [CRAN](https://cran.r-project.org),
 however, you can install its latest stable version from GitHub using the following code:
 
-```{r, eval = FALSE}
-if (!requireNamespace("BiocManager", quietly = TRUE)) {
-  install.packages("BiocManager")
-  BiocManager::install(version = "3.14")
-}
-
-BiocManager::install("bioinfocz/scdrake@v1.2.0")
+```{r install_stable, echo = FALSE, results = "asis"}
+version <- desc::desc(file = "DESCRIPTION")$get_version()
+gh_repo <- glue::glue("bioinfocz/scdrake@v{version}")
+out <- c(
+  '\n',
+  '```{r, eval = FALSE}',
+  'if (!requireNamespace("BiocManager", quietly = TRUE)) {',
+  '  install.packages("BiocManager")',
+  '  BiocManager::install(version = "3.14")',
+  '}',
+  '',
+  glue('BiocManager::install("bioinfocz/scdrake@v{version}")'),
+  '```',
+  '\n'
+)
 ```
+
+`r paste(knitr::knit(text = out), collapse = "\n")`
 
 For development version use
 
