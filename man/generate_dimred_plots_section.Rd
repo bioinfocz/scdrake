@@ -6,11 +6,12 @@
 \usage{
 generate_dimred_plots_section(
   dimred_names,
-  dimred_plots_other_vars,
-  dimred_plots_clustering = NULL,
+  dimred_plots_other_vars_files,
+  dimred_plots_clustering_files = NULL,
   clustering_names = NULL,
   selected_markers = NULL,
   cell_annotation_diagnostic_plots = NULL,
+  dimred_plots_rel_start = ".",
   selected_markers_files_rel_start = ".",
   cell_annotation_diagnostic_plots_rel_start = ".",
   main_header = "Dimensionality reduction",
@@ -20,9 +21,9 @@ generate_dimred_plots_section(
 \arguments{
 \item{dimred_names}{A character vector: names of dimreds to output.}
 
-\item{dimred_plots_other_vars}{A \code{tibble}.}
+\item{dimred_plots_other_vars_files}{A \code{tibble}.}
 
-\item{dimred_plots_clustering}{A \code{tibble} or \code{NULL}.}
+\item{dimred_plots_clustering_files}{A \code{tibble} or \code{NULL}.}
 
 \item{clustering_names}{A character vector or \code{NULL}: names of clusterings to output.}
 
@@ -30,8 +31,8 @@ generate_dimred_plots_section(
 
 \item{cell_annotation_diagnostic_plots}{A \code{tibble} or \code{NULL}.}
 
-\item{selected_markers_files_rel_start, cell_annotation_diagnostic_plots_rel_start}{A character scalar: relative start of path to selected markers or cell annotation diagnostic plots PDFs.
-See the \emph{Relative links} section in \code{\link[=create_a_link]{create_a_link()}}.}
+\item{dimred_plots_rel_start, selected_markers_files_rel_start, cell_annotation_diagnostic_plots_rel_start}{A character scalar: relative start of path to directory with dimred plots, selected markers or cell annotation
+diagnostic plots PDFs. See the \emph{Relative links} section in \code{\link[=create_a_link]{create_a_link()}}.}
 
 \item{main_header}{A character scalar: text of the main header.}
 

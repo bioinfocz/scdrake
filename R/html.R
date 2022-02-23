@@ -160,7 +160,7 @@ md_header <- function(text, heading, extra = "", do_cat = TRUE) {
   }
 }
 
-#' @title Generate a HTML link (`<a></a>`).
+#' @title Generate a HTML link as `<a></a>` or in the form of image as `<a><img /></a>`.
 #' @param href A character scalar: URL.
 #' @param text A character scalar: text of the link.
 #' @param href_rel_start A character scalar: relative start of `href`. See the section *Relative links*.
@@ -186,6 +186,7 @@ md_header <- function(text, heading, extra = "", do_cat = TRUE) {
 #' create_a_link("google.com", "Google")
 #' # If you want to reference a file relative to HTML saved in "output/report.html"
 #' create_a_link("output/plots/plot.pdf", "Link to plot", href_rel_start = "output")
+#' @rdname html_links
 #' @concept misc_html
 #' @export
 create_a_link <- function(href, text, href_rel_start = NULL, target = "_blank", do_cat = FALSE, ...) {
@@ -206,6 +207,51 @@ create_a_link <- function(href, text, href_rel_start = NULL, target = "_blank", 
   }
 
   return(out)
+}
+
+#' @param img_src A character scalar: path to image.
+#' @param img_src_rel_start A character scalar: same as `href_rel_start`, but for the image.
+#' @param img_width,img_height A character scalar: image size.
+#'
+#' @rdname html_links
+#' @concept misc_html
+#' @export
+create_img_link <- function(href,
+                            img_src,
+                            href_rel_start = NULL,
+                            img_src_rel_start = NULL,
+                            img_width = "250px",
+                            img_height = "",
+                            target = "_blank",
+                            do_cat = FALSE,
+                            ...) {
+  purrr::map2_chr(href, img_src, function(href, img_src) {
+    other_param_names <- list(...) %>% names()
+    other_param_values <- list(...) %>%
+      unlist() %>%
+      unname()
+    other_params <- glue("{other_param_names}='{other_param_values}'") %>% str_c(collapse = " ")
+
+    if (!is_null(href_rel_start)) {
+      href <- fs::path_rel(href, href_rel_start)
+    }
+
+    if (!is_null(img_src_rel_start)) {
+      img_src <- fs::path_rel(img_src, img_src_rel_start)
+    }
+
+    out <- glue(str_c(
+      "<a href='{href}' target='{target}' {other_params}>",
+      "<img src='{img_src}' width='{img_width}' height='{img_height}' />",
+      "</a>"
+    )) %>% as.character()
+
+    if (do_cat) {
+      cat(out)
+    }
+
+    return(out)
+  })
 }
 
 #' @title Print a HTML of table collapsible by button.
@@ -241,14 +287,14 @@ cells_per_cluster_table_collapsed_html <- function(df,
 
 #' @title Generate a section with dimred plots used in some RMarkdown files.
 #' @param dimred_names A character vector: names of dimreds to output.
-#' @param dimred_plots_other_vars A `tibble`.
-#' @param dimred_plots_clustering A `tibble` or `NULL`.
+#' @param dimred_plots_other_vars_files A `tibble`.
+#' @param dimred_plots_clustering_files A `tibble` or `NULL`.
 #' @param clustering_names A character vector or `NULL`: names of clusterings to output.
 #' @param selected_markers A `tibble` or `NULL`.
 #' @param cell_annotation_diagnostic_plots A `tibble` or `NULL`.
-#' @param selected_markers_files_rel_start,cell_annotation_diagnostic_plots_rel_start
-#'   A character scalar: relative start of path to selected markers or cell annotation diagnostic plots PDFs.
-#'   See the *Relative links* section in [create_a_link()].
+#' @param dimred_plots_rel_start,selected_markers_files_rel_start,cell_annotation_diagnostic_plots_rel_start
+#'   A character scalar: relative start of path to directory with dimred plots, selected markers or cell annotation
+#'   diagnostic plots PDFs. See the *Relative links* section in [create_a_link()].
 #' @param main_header A character scalar: text of the main header.
 #' @param main_header_level A numeric scalar: level of the main header.
 #' @return Invisibly `NULL`.
@@ -256,11 +302,12 @@ cells_per_cluster_table_collapsed_html <- function(df,
 #' @concept misc_html
 #' @export
 generate_dimred_plots_section <- function(dimred_names,
-                                          dimred_plots_other_vars,
-                                          dimred_plots_clustering = NULL,
+                                          dimred_plots_other_vars_files,
+                                          dimred_plots_clustering_files = NULL,
                                           clustering_names = NULL,
                                           selected_markers = NULL,
                                           cell_annotation_diagnostic_plots = NULL,
+                                          dimred_plots_rel_start = ".",
                                           selected_markers_files_rel_start = ".",
                                           cell_annotation_diagnostic_plots_rel_start = ".",
                                           main_header = "Dimensionality reduction",
@@ -274,7 +321,7 @@ generate_dimred_plots_section <- function(dimred_names,
       dplyr::mutate(source_column = glue("{name}_labels")) %>%
       dplyr::select(source_column, dplyr::ends_with("_out_file"))
 
-    dimred_plots_other_vars <- dimred_plots_other_vars %>%
+    dimred_plots_other_vars_files <- dimred_plots_other_vars_files %>%
       dplyr::left_join(cell_annotation_diagnostic_plots, by = "source_column")
   }
 
@@ -296,17 +343,24 @@ generate_dimred_plots_section <- function(dimred_names,
       }
     }
 
-    if (!is_null(dimred_plots_clustering) && !is_null(clustering_names)) {
+    if (!is_null(dimred_plots_clustering_files) && !is_null(clustering_names)) {
       lapply(clustering_names, FUN = function(clustering_name) {
         md_header(clustering_name, dimred_subheader_level)
-        plots <- dplyr::filter(
-          dimred_plots_clustering, dimred_name == !!dimred_name, clustering_name == !!clustering_name
-        )$plot_list
-        print(patchwork::wrap_plots(plots[[1]], ncol = 2, labels = "AUTO") + patchwork::plot_annotation(tag_levels = "A"))
+        p <- dplyr::filter(
+          dimred_plots_clustering_files, dimred_name == !!dimred_name, clustering_name == !!clustering_name
+        )
+
+        create_img_link(
+          href = p$out_pdf_file,
+          img_src = p$out_png_file,
+          href_rel_start = dimred_plots_rel_start,
+          img_width = "500px",
+          do_cat = TRUE
+        )
       })
     }
 
-    dimred_plots_other_filtered <- dplyr::filter(dimred_plots_other_vars, dimred_name == !!dimred_name)
+    dimred_plots_other_filtered <- dplyr::filter(dimred_plots_other_vars_files, dimred_name == !!dimred_name)
 
     lapply(purrr::transpose(dimred_plots_other_filtered), FUN = function(row) {
       md_header(row$source_column, dimred_subheader_level)
@@ -339,7 +393,14 @@ generate_dimred_plots_section <- function(dimred_names,
         )
         cat("\n\n")
       }
-      print(row$plot)
+
+      create_img_link(
+        href = row$out_pdf_file,
+        img_src = row$out_png_file,
+        href_rel_start = dimred_plots_rel_start,
+        img_width = "500px",
+        do_cat = TRUE
+      )
     })
   }))
 

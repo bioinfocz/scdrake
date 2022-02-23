@@ -1,10 +1,11 @@
 ```{r, results = "asis"}
 generate_dimred_plots_section(
   dimred_names = dp_dimred_names,
-  dimred_plots_other_vars = dplyr::filter(dimred_plots_other_vars, type == "other_vars"),
-  dimred_plots_clustering = dimred_plots_clustering,
+  dimred_plots_other_vars_files = dplyr::filter(dimred_plots_other_vars_files, type == "other_vars"),
+  dimred_plots_clustering_files = dimred_plots_clustering_files,
   clustering_names = dp_clustering_names,
   selected_markers = dp_selected_markers,
+  dimred_plots_rel_start = dp_dimred_plots_files_rel_start,
   selected_markers_files_rel_start = dp_selected_markers_files_rel_start,
   main_header = "Dimensionality reduction"
 )
@@ -18,11 +19,12 @@ generate_dimred_plots_section(
 if (!is_null(cell_annotation_diagnostic_plots)) {
   generate_dimred_plots_section(
     dimred_names = dp_dimred_names,
-    dimred_plots_other_vars = dplyr::filter(dimred_plots_other_vars, type == "cell_annotation"),
-    dimred_plots_clustering = NULL,
+    dimred_plots_other_vars_files = dplyr::filter(dimred_plots_other_vars_files, type == "cell_annotation"),
+    dimred_plots_clustering_files = NULL,
     clustering_names = NULL,
     selected_markers = NULL,
     cell_annotation_diagnostic_plots = cell_annotation_diagnostic_plots,
+    dimred_plots_rel_start = dp_dimred_plots_files_rel_start,
     cell_annotation_diagnostic_plots_rel_start = dp_cell_annotation_diagnostic_plots_rel_start,
     main_header = "Cell type annotation"
   )

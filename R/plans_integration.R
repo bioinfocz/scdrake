@@ -293,14 +293,21 @@ get_int_clustering_subplan <- function(cfg, cfg_pipeline, cfg_main) {
         dimred_plots_clustering_params = dimred_plots_clustering_params,
         kmeans_k = !!cfg$KMEANS_K,
         sc3_k = !!cfg$SC3_K,
+        out_dir = !!cfg$INT_CLUSTERING_DIMRED_PLOTS_OUT_DIR,
         integration = TRUE
       ),
       dynamic = map(dimred_plots_clustering_params)
     ),
-    dimred_plots_other_vars_params = dimred_plot_other_vars_params_fn(
+    dimred_plots_clustering_files = dplyr::select(dimred_plots_clustering, -plot_list),
+    dimred_plots_clustering_files_out = target(
+      c(dimred_plots_clustering_files$out_pdf_file, dimred_plots_clustering_files$out_png_file),
+      format = "file"
+    ),
+    dimred_plots_other_vars_params = dimred_plots_other_vars_params_fn(
       dimred_names = !!cfg$INT_CLUSTERING_REPORT_DIMRED_NAMES,
       dimred_plots_other = !!cfg$INT_CLUSTERING_REPORT_DIMRED_PLOTS_OTHER,
-      cell_annotation_params = cell_annotation_params
+      cell_annotation_params = cell_annotation_params,
+      out_dir = !!cfg$INT_CLUSTERING_DIMRED_PLOTS_OUT_DIR
     ),
     dimred_plots_other_vars = target(
       dimred_plots_other_vars_fn(
@@ -308,6 +315,11 @@ get_int_clustering_subplan <- function(cfg, cfg_pipeline, cfg_main) {
         dimred_plots_other_vars_params = dimred_plots_other_vars_params
       ),
       dynamic = map(dimred_plots_other_vars_params)
+    ),
+    dimred_plots_other_vars_files = dplyr::select(dimred_plots_other_vars, -plot),
+    dimred_plots_other_vars_files_out = target(
+      c(dimred_plots_other_vars_files$out_pdf_file, dimred_plots_other_vars_files$out_png_file),
+      format = "file"
     ),
 
     ## -- Selected markers plots for the chosen integration method.
@@ -328,7 +340,8 @@ get_int_clustering_subplan <- function(cfg, cfg_pipeline, cfg_main) {
         echo = !!cfg$INT_CLUSTERING_KNITR_ECHO,
         other_deps = list(
           file_in(!!here("Rmd/common/_header.Rmd")),
-          file_in(!!here("Rmd/common/_footer.Rmd"))
+          file_in(!!here("Rmd/common/_footer.Rmd")),
+          file_in(!!here("Rmd/common/dimred_plots.Rmd"))
         ),
         drake_cache_dir = !!cfg_pipeline$DRAKE_CACHE_DIR
       ),

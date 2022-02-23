@@ -97,6 +97,8 @@ INT_CLUSTERING_REPORT_RMD_FILE: "Rmd/integration/02_int_clustering.Rmd"
 
 ### Output files ##############################################################
 INT_CLUSTERING_BASE_OUT_DIR: "02_int_clustering"
+
+INT_CLUSTERING_DIMRED_PLOTS_OUT_DIR: "dimred_plots"
 INT_CLUSTERING_CELL_ANNOTATION_OUT_DIR: "cell_annotation"
 INT_CLUSTERING_REPORT_HTML_FILE: "02_int_clustering.html"
 ###############################################################################

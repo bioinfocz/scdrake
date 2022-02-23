@@ -9,6 +9,7 @@ dimred_plots_clustering_fn(
   dimred_plots_clustering_params,
   kmeans_k,
   sc3_k,
+  out_dir = NULL,
   integration = FALSE
 )
 }
@@ -23,6 +24,8 @@ dimred_plots_clustering_fn(
 
 \item{sc3_k}{An integer vector: : number of clusters for SC3 clustering. Taken from \code{SC3_K} parameter in
 \verb{02_norm_clustering.yaml} or \verb{02_int_clustering.yaml} config.}
+
+\item{out_dir}{A character scalar: output directory in which PDF and PNG files will be saved.}
 
 \item{integration}{A logical scalar: \code{TRUE} is used in the integration plan.}
 }

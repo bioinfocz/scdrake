@@ -1,5 +1,13 @@
 # scdrake (development version)
 
+# scdrake 1.2.1
+
+- Dimred plots of clusterings and other variables are now saved as PDF and PNG files.
+  - In `02_norm_clustering` and `02_int_clustering` stage reports the PNG files are displayed and act as links to
+    associated multipage PDF files.
+  - New parameters for the stages above: `NORM_CLUSTERING_DIMRED_PLOTS_OUT_DIR` and `INT_CLUSTERING_DIMRED_PLOTS_OUT_DIR`,
+    respectively.
+
 # scdrake 1.2.0
 
 - Added cell type annotation via `{SingleR}` (<https://github.com/LTLA/SingleR>).

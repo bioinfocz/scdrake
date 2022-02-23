@@ -2,12 +2,25 @@
 % Please edit documentation in R/html.R
 \name{create_a_link}
 \alias{create_a_link}
-\title{Generate a HTML link (\verb{<a></a>}).}
+\alias{create_img_link}
+\title{Generate a HTML link as \verb{<a></a>} or in the form of image as \verb{<a><img /></a>}.}
 \usage{
 create_a_link(
   href,
   text,
   href_rel_start = NULL,
+  target = "_blank",
+  do_cat = FALSE,
+  ...
+)
+
+create_img_link(
+  href,
+  img_src,
+  href_rel_start = NULL,
+  img_src_rel_start = NULL,
+  img_width = "250px",
+  img_height = "",
   target = "_blank",
   do_cat = FALSE,
   ...
@@ -25,12 +38,18 @@ create_a_link(
 \item{do_cat}{A logical scalar: if \code{TRUE}, print (using \code{cat()}) the result before returning.}
 
 \item{...}{Named parameters to put in the resulting \verb{<a>} tag.}
+
+\item{img_src}{A character scalar: path to image.}
+
+\item{img_src_rel_start}{A character scalar: same as \code{href_rel_start}, but for the image.}
+
+\item{img_width, img_height}{A character scalar: image size.}
 }
 \value{
 A character scalar.
 }
 \description{
-Generate a HTML link (\verb{<a></a>}).
+Generate a HTML link as \verb{<a></a>} or in the form of image as \verb{<a><img /></a>}.
 }
 \section{Relative links}{
 

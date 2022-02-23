@@ -317,12 +317,18 @@ save_selected_markers_plots_files <- function(selected_markers_plots, selected_m
 #'   `02_norm_clustering.yaml` or `02_int_clustering.yaml` config.
 #' @param sc3_k An integer vector: : number of clusters for SC3 clustering. Taken from `SC3_K` parameter in
 #'   `02_norm_clustering.yaml` or `02_int_clustering.yaml` config.
+#' @param out_dir A character scalar: output directory in which PDF and PNG files will be saved.
 #' @param integration A logical scalar: `TRUE` is used in the integration plan.
 #' @return A tibble. *Output target*: `dimred_plots_clustering`
 #'
 #' @concept sce_visualization
 #' @export
-dimred_plots_clustering_fn <- function(sce_final_norm_clustering, dimred_plots_clustering_params, kmeans_k, sc3_k, integration = FALSE) {
+dimred_plots_clustering_fn <- function(sce_final_norm_clustering,
+                                       dimred_plots_clustering_params,
+                                       kmeans_k,
+                                       sc3_k,
+                                       out_dir = NULL,
+                                       integration = FALSE) {
   if (integration) {
     clustering_prefix <- "cluster_int"
   } else {
@@ -407,11 +413,29 @@ dimred_plots_clustering_fn <- function(sce_final_norm_clustering, dimred_plots_c
       plot_list <- list()
     }
 
-    if (!is_empty(plot_list)) {
+    if (is_null(out_dir) || is_empty(plot_list)) {
+      out_pdf_file <- NA_character_
+      out_png_file <- NA_character_
+    } else {
+      out_pdf_file <- fs::path(out_dir, glue("{clustering_prefix}_{clustering_name}_{dimred_name}.pdf"))
+      out_png_file <- out_pdf_file
+      fs::path_ext(out_png_file) <- "png"
+    }
+
+    if (!is_null(out_dir) && !is_empty(plot_list)) {
       names(plot_list) <- glue("{names(plot_list)}_{dimred_name}")
+      save_pdf(plot_list, out_pdf_file, make_thumbnail = FALSE)
+      ggplot2::ggsave(
+        filename = out_png_file,
+        plot = patchwork::wrap_plots(plot_list, ncol = 2, labels = "AUTO") + patchwork::plot_annotation(tag_levels = "A"),
+        device = "png",
+        dpi = 150
+      )
     }
 
     par$plot_list <- plot_list
+    par$out_pdf_file <- out_pdf_file
+    par$out_png_file <- out_png_file
 
     return(par)
   })
@@ -424,11 +448,15 @@ dimred_plots_clustering_fn <- function(sce_final_norm_clustering, dimred_plots_c
 #' @param dimred_plots_other A named list: see `NORM_CLUSTERING_REPORT_DIMRED_PLOTS_OTHER` parameter in
 #'   `02_norm_clustering.yaml` or `02_int_clustering.yaml` config.
 #' @param cell_annotation_params A `tibble`.
+#' @param out_dir A character scalar: output directory in which PDF and PNG files will be later saved.
 #' @return A tibble. *Output target*: `dimred_plots_other_vars_params`
 #'
 #' @concept sce_visualization
 #' @export
-dimred_plot_other_vars_params_fn <- function(dimred_names, dimred_plots_other, cell_annotation_params) {
+dimred_plots_other_vars_params_fn <- function(dimred_names,
+                                              dimred_plots_other,
+                                              cell_annotation_params,
+                                              out_dir = NULL) {
   dimred_plots_other <- replace_list_nulls(dimred_plots_other)
   params <- lists_to_tibble(dimred_plots_other) %>%
     dplyr::rename(source_column = name) %>%
@@ -445,7 +473,24 @@ dimred_plot_other_vars_params_fn <- function(dimred_names, dimred_plots_other, c
     params <- dplyr::bind_rows(params, params_cell_annotation)
   }
 
-  params$label <- stringr::str_wrap(params$label, width = 60)
+  if (is_null(out_dir)) {
+    out_pdf_file <- NA_character_
+    out_png_file <- NA_character_
+  } else {
+    out_pdf_file <- fs::path(
+      out_dir,
+      glue::glue_data(params, "{source_column}_{dimred_name}.pdf")
+    )
+    out_png_file <- out_pdf_file
+    fs::path_ext(out_png_file) <- "png"
+  }
+
+  params <- params %>%
+    dplyr::mutate(
+      label = stringr::str_wrap(.data$label, width = 60),
+      out_pdf_file = .env$out_pdf_file,
+      out_png_file = .env$out_png_file
+    )
 
   return(params)
 }
@@ -490,6 +535,11 @@ dimred_plots_other_vars_fn <- function(sce_dimred, dimred_plots_other_vars_param
       legend_title = par$source_column,
       text_by = show_cluster_labels
     )
+
+    if (!is_na(par$out_pdf_file) && !is_na(par$out_png_file)) {
+      save_pdf(list(p), par$out_pdf_file, make_thumbnail = FALSE)
+      ggplot2::ggsave(filename = par$out_png_file, plot = p, device = "png", dpi = 150)
+    }
 
     par$plot <- p
     return(par)
