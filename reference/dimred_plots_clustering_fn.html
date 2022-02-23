@@ -35,7 +35,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">scdrake</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.2.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.2.1</span>
       </span>
     </div>
 
@@ -153,6 +153,7 @@
   <span class="va">dimred_plots_clustering_params</span>,
   <span class="va">kmeans_k</span>,
   <span class="va">sc3_k</span>,
+  out_dir <span class="op">=</span> <span class="cn">NULL</span>,
   integration <span class="op">=</span> <span class="cn">FALSE</span>
 <span class="op">)</span></code></pre></div>
     </div>
@@ -170,6 +171,8 @@
 <dt>sc3_k</dt>
 <dd><p>An integer vector: : number of clusters for SC3 clustering. Taken from <code>SC3_K</code> parameter in
 <code>02_norm_clustering.yaml</code> or <code>02_int_clustering.yaml</code> config.</p></dd>
+<dt>out_dir</dt>
+<dd><p>A character scalar: output directory in which PDF and PNG files will be saved.</p></dd>
 <dt>integration</dt>
 <dd><p>A logical scalar: <code>TRUE</code> is used in the integration plan.</p></dd>
 </dl></div>

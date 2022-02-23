@@ -157,22 +157,19 @@
     <loc>https://bioinfocz.github.io/scdrake/reference/contrasts_params.html</loc>
   </url>
   <url>
-    <loc>https://bioinfocz.github.io/scdrake/reference/create_a_link.html</loc>
-  </url>
-  <url>
     <loc>https://bioinfocz.github.io/scdrake/reference/create_dirs.html</loc>
   </url>
   <url>
     <loc>https://bioinfocz.github.io/scdrake/reference/create_seu_for_heatmaps.html</loc>
   </url>
   <url>
-    <loc>https://bioinfocz.github.io/scdrake/reference/dimred_plot_other_vars_params_fn.html</loc>
-  </url>
-  <url>
     <loc>https://bioinfocz.github.io/scdrake/reference/dimred_plots_clustering_fn.html</loc>
   </url>
   <url>
     <loc>https://bioinfocz.github.io/scdrake/reference/dimred_plots_other_vars_fn.html</loc>
+  </url>
+  <url>
+    <loc>https://bioinfocz.github.io/scdrake/reference/dimred_plots_other_vars_params_fn.html</loc>
   </url>
   <url>
     <loc>https://bioinfocz.github.io/scdrake/reference/dot-apply_config_patches.html</loc>
@@ -263,6 +260,9 @@
   </url>
   <url>
     <loc>https://bioinfocz.github.io/scdrake/reference/highlight_points.html</loc>
+  </url>
+  <url>
+    <loc>https://bioinfocz.github.io/scdrake/reference/html_links.html</loc>
   </url>
   <url>
     <loc>https://bioinfocz.github.io/scdrake/reference/hvg_int_list_fn.html</loc>
