@@ -205,7 +205,7 @@ update_project <- function(dir = NULL,
     pipeline_config_dir = pipeline_config_dir,
     single_sample_config_dir = single_sample_config_dir,
     integration_config_dir = integration_config_dir,
-    force = TRUE,
+    force = FALSE,
     verbose = verbose
   )
 
