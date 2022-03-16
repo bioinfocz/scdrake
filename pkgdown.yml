@@ -1,6 +1,6 @@
-pandoc: 2.14.0.3
+pandoc: 2.17.1.1
 pkgdown: 2.0.2.9000
-pkgdown_sha: ae7363faac9040a473a54fb3d770decdfb8dfec1
+pkgdown_sha: 9aae87398abdbe1cd5af5ff6f168d2e142d531c9
 articles:
   cluster_markers: cluster_markers.html
   config_main: config_main.html
@@ -16,7 +16,7 @@ articles:
   stage_int_clustering: stage_int_clustering.html
   stage_integration: stage_integration.html
   stage_norm_clustering: stage_norm_clustering.html
-last_built: 2022-02-23T14:59Z
+last_built: 2022-03-16T13:14Z
 urls:
   reference: https://bioinfocz.github.io/scdrake/reference
   article: https://bioinfocz.github.io/scdrake/articles

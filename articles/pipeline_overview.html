@@ -74,7 +74,7 @@
   <a href="../reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Articles
      
     <span class="caret"></span>
@@ -178,7 +178,7 @@
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Pipeline overview</h1>
             
-            <h4 data-toc-skip class="date">2022-02-23</h4>
+            <h4 data-toc-skip class="date">2022-03-16</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/bioinfocz/scdrake/blob/mastervignettes/pipeline_overview.Rmd" class="external-link"><code>vignettes/pipeline_overview.Rmd</code></a></small>
       <div class="hidden name"><code>pipeline_overview.Rmd</code></div>
@@ -188,195 +188,316 @@
     
     
 <hr>
-<p><a href="https://github.com/bioinfocz/scdrake" class="external-link">scdrake</a> offers two pipelines - one for single-sample, and second one for integration of multiple samples (which were processed by the single-sample pipeline before). As for now, each pipeline consists of two subpipelines (referred to as <em>stages</em>), and two stages common to both single-sample and integration pipelines.</p>
-<p>Each stage has its own config, plus there is a main config for each pipeline. You can read more about configs in a separate <code><a href="../articles/scdrake_config.html">vignette("scdrake_config")</a></code>. Each stage also outputs a report in HTML format with rich graphics.</p>
-<p>Pipeline steps are mostly based on recommendations given in a great book <a href="https://bioconductor.org/books/release/OSCA/" class="external-link">Orchestrating Single-Cell Analysis with Bioconductor</a>.</p>
-<p><strong>You can inspect output from the pipeline <a href="https://onco.img.cas.cz/novotnyj/scdrake/" class="external-link">here</a>.</strong> The used datasets are:</p>
+<p><a href="https://github.com/bioinfocz/scdrake" class="external-link">scdrake</a> offers two pipelines - one for single-sample,
+and second one for integration of multiple samples (which were processed
+by the single-sample pipeline before). As for now, each pipeline
+consists of two subpipelines (referred to as <em>stages</em>), and two
+stages common to both single-sample and integration pipelines.</p>
+<p>Each stage has its own config, plus there is a main config for each
+pipeline. You can read more about configs in a separate
+<code><a href="../articles/scdrake_config.html">vignette("scdrake_config")</a></code>. Each stage also outputs a
+report in HTML format with rich graphics.</p>
+<p>Pipeline steps are mostly based on recommendations given in a great
+book <a href="https://bioconductor.org/books/release/OSCA/" class="external-link">Orchestrating
+Single-Cell Analysis with Bioconductor</a>.</p>
+<p><strong>You can inspect output from the pipeline <a href="https://onco.img.cas.cz/novotnyj/scdrake/" class="external-link">here</a>.</strong> The
+used datasets are:</p>
 <ul>
 <li>
-<a href="https://www.10xgenomics.com/resources/datasets/1-k-pbm-cs-from-a-healthy-donor-v-3-chemistry-3-standard-3-0-0" class="external-link">PBMC 1k</a> (v3 chemistry, Cell Ranger 3.0.0)</li>
+<a href="https://www.10xgenomics.com/resources/datasets/1-k-pbm-cs-from-a-healthy-donor-v-3-chemistry-3-standard-3-0-0" class="external-link">PBMC
+1k</a> (v3 chemistry, Cell Ranger 3.0.0)</li>
 <li>
-<a href="https://www.10xgenomics.com/resources/datasets/3-k-pbm-cs-from-a-healthy-donor-1-standard-1-1-0" class="external-link">PBMC 3k</a> (v2 chemistry, Cell Ranger 1.1.0)</li>
+<a href="https://www.10xgenomics.com/resources/datasets/3-k-pbm-cs-from-a-healthy-donor-1-standard-1-1-0" class="external-link">PBMC
+3k</a> (v2 chemistry, Cell Ranger 1.1.0)</li>
 </ul>
-<p><strong>All credits for these datasets go to 10x Genomics.</strong> Visit <a href="https://www.10xgenomics.com/resources/datasets" class="external-link uri">https://www.10xgenomics.com/resources/datasets</a> for more information.</p>
+<p><strong>All credits for these datasets go to 10x Genomics.</strong>
+Visit <a href="https://www.10xgenomics.com/resources/datasets" class="external-link uri">https://www.10xgenomics.com/resources/datasets</a> for more
+information.</p>
 <div class="section level2">
 <h2 id="single-sample-pipeline">Single-sample pipeline<a class="anchor" aria-label="anchor" href="#single-sample-pipeline"></a>
 </h2>
-<p>This is a pipeline for processing a single-sample, where input is either:</p>
+<p>This is a pipeline for processing a single-sample, where input is
+either:</p>
 <ul>
-<li>An output from <a href="https://support.10xgenomics.com/single-cell-gene-expression/software/pipelines/latest/what-is-cell-ranger" class="external-link">cellranger</a>, that is, three files of a raw feature-barcode matrix* (<code>barcodes.tsv</code>, <code>features.tsv</code>, and <code>matrix.mtx</code>) These files can be also gzipped having a <code>.gz</code> extension.</li>
-<li>A delimited file (table) representing a feature-barcode matrix, with an additional column named <code>ENSEMBL</code> containing Ensembl IDs of features.</li>
-<li>A saved <code>SingleCellExperiment</code> in Rds format (i.e. saved by the <code><a href="https://rdrr.io/r/base/readRDS.html" class="external-link">saveRDS()</a></code> function).</li>
+<li>An output from <a href="https://support.10xgenomics.com/single-cell-gene-expression/software/pipelines/latest/what-is-cell-ranger" class="external-link">cellranger</a>,
+that is, three files of a raw feature-barcode matrix*
+(<code>barcodes.tsv</code>, <code>features.tsv</code>, and
+<code>matrix.mtx</code>) These files can be also gzipped having a
+<code>.gz</code> extension.</li>
+<li>A delimited file (table) representing a feature-barcode matrix, with
+an additional column named <code>ENSEMBL</code> containing Ensembl IDs
+of features.</li>
+<li>A saved <code>SingleCellExperiment</code> in Rds format (i.e. saved
+by the <code><a href="https://rdrr.io/r/base/readRDS.html" class="external-link">saveRDS()</a></code> function).</li>
 </ul>
-<p>Input specification is controlled via the <code>INPUT_DATA</code> parameter in <code>01_input_qc</code> config, and more details can be found in <code><a href="../articles/stage_input_qc.html">vignette("stage_input_qc")</a></code>.</p>
+<p>Input specification is controlled via the <code>INPUT_DATA</code>
+parameter in <code>01_input_qc</code> config, and more details can be
+found in <code><a href="../articles/stage_input_qc.html">vignette("stage_input_qc")</a></code>.</p>
 <ul>
-<li>Feature-barcode matrix is similar to count matrix in bulk RNA-seq where columns are samples, rows are genes or transcripts (features), and values are numbers of reads or UMIs overlapping the features. In scRNA-seq, columns are individual cells; the rest is same.</li>
+<li>Feature-barcode matrix is similar to count matrix in bulk RNA-seq
+where columns are samples, rows are genes or transcripts (features), and
+values are numbers of reads or UMIs overlapping the features. In
+scRNA-seq, columns are individual cells; the rest is same.</li>
 </ul>
 <div class="section level3">
 <h3 id="stage-01_input_qc">Stage <code>01_input_qc</code><a class="anchor" aria-label="anchor" href="#stage-01_input_qc"></a>
 </h3>
-<p>An initial stage to read in scRNA-seq data, remove empty droplets (optionally), and perform quality control, and cell and gene filtering.</p>
+<p>An initial stage to read in scRNA-seq data, remove empty droplets
+(optionally), and perform quality control, and cell and gene
+filtering.</p>
 <p>More information about scRNA-seq quality control can be found <a href="https://bioconductor.org/books/release/OSCA.basic/quality-control.html#common-choices-of-qc-metrics" class="external-link">here</a>.</p>
 <p>⚙️ Config and targets: <code><a href="../articles/stage_input_qc.html">vignette("stage_input_qc")</a></code></p>
-<p><a href="https://onco.img.cas.cz/novotnyj/scdrake/single_sample/pbmc1k/01_input_qc/01_input_qc.html" class="external-link">📜 Example report</a></p>
+<p><a href="https://onco.img.cas.cz/novotnyj/scdrake/single_sample/pbmc1k/01_input_qc/01_input_qc.html" class="external-link">📜
+Example report</a></p>
 <ul>
 <li>Reading in feature-barcode matrix.</li>
-<li>Removal of <a href="https://bioconductor.org/books/release/OSCA.advanced/droplet-processing.html" class="external-link">empty droplets</a> (<code><a href="https://rdrr.io/pkg/DropletUtils/man/emptyDrops.html" class="external-link">DropletUtils::emptyDrops()</a></code>) (optional).</li>
-<li>Calculation of per-cell QC metrics (<code><a href="https://rdrr.io/pkg/scuttle/man/perCellQCMetrics.html" class="external-link">scater::perCellQCMetrics()</a></code>):
+<li>Removal of <a href="https://bioconductor.org/books/release/OSCA.advanced/droplet-processing.html" class="external-link">empty
+droplets</a> (<code><a href="https://rdrr.io/pkg/DropletUtils/man/emptyDrops.html" class="external-link">DropletUtils::emptyDrops()</a></code>) (optional).</li>
+<li>Calculation of per-cell QC metrics
+(<code><a href="https://rdrr.io/pkg/scuttle/man/perCellQCMetrics.html" class="external-link">scater::perCellQCMetrics()</a></code>):
 <ul>
 <li>Number of UMI.</li>
 <li>Number of detected genes (non-zero UMI count).</li>
-<li>Percentage of expressed mitochondrial genes (<span class="math inline">\(\frac {UMI_{mitochondrial}} {UMI_{sum}} * 100\)</span>).</li>
+<li>Percentage of expressed mitochondrial genes (<span class="math inline">\(\frac {UMI_{mitochondrial}} {UMI_{sum}} *
+100\)</span>).</li>
 </ul>
 </li>
 <li>Two methods for cell filtering (optional):
 <ul>
-<li>Dataset-sensitive filtering, based on the median absolute deviation (MAD) from the median value of each QC metric across all cells. For “number of UMI” metric, only a lower tail is used.</li>
-<li>Custom filtering, based on fixed thresholds. For “number of UMI” metric, both upper and lower bounds are used.</li>
-<li>In both filtering types, violation of only one metric threshold leads to removal of a cell. More technically, metric filters are reduced by <strong>or</strong> operator.</li>
+<li>Dataset-sensitive filtering, based on the median absolute deviation
+(MAD) from the median value of each QC metric across all cells. For
+“number of UMI” metric, only a lower tail is used.</li>
+<li>Custom filtering, based on fixed thresholds. For “number of UMI”
+metric, both upper and lower bounds are used.</li>
+<li>In both filtering types, violation of only one metric threshold
+leads to removal of a cell. More technically, metric filters are reduced
+by <strong>or</strong> operator.</li>
 </ul>
 </li>
-<li>Gene filtering (optional) based on minimum number of UMI per cell and minimum ratio of cells expressing a gene.
+<li>Gene filtering (optional) based on minimum number of UMI per cell
+and minimum ratio of cells expressing a gene.
 <ul>
-<li>A gene is considered expressed when number of its UMI across all cells is greater than X and at the same time it is expressed in at least Y ratio of cells.</li>
+<li>A gene is considered expressed when number of its UMI across all
+cells is greater than X and at the same time it is expressed in at least
+Y ratio of cells.</li>
 </ul>
 </li>
-<li>Plots of QC metrics with visualization of differences between dataset-sensitive and custom filtering.</li>
+<li>Plots of QC metrics with visualization of differences between
+dataset-sensitive and custom filtering.</li>
 <li>Preparation of gene annotation.</li>
-<li>Final selection of either dataset-sensitive or custom filtered dataset. This selection is upon the user.</li>
+<li>Final selection of either dataset-sensitive or custom filtered
+dataset. This selection is upon the user.</li>
 </ul>
 </div>
 <div class="section level3">
 <h3 id="stage-02_norm_clustering">Stage <code>02_norm_clustering</code><a class="anchor" aria-label="anchor" href="#stage-02_norm_clustering"></a>
 </h3>
-<p>A stage for normalization, dimensionality reduction, and cell clustering.</p>
-<p>⚙️ Config and targets: <code><a href="../articles/stage_norm_clustering.html">vignette("stage_norm_clustering")</a></code></p>
-<p><a href="https://onco.img.cas.cz/novotnyj/scdrake/single_sample/pbmc1k/02_norm_clustering/02_norm_clustering.html" class="external-link">📜 Example report</a></p>
-<p><a href="https://onco.img.cas.cz/novotnyj/scdrake/single_sample/pbmc1k/02_norm_clustering/02_norm_clustering_simple.html" class="external-link">📜 Example simplified report</a></p>
+<p>A stage for normalization, dimensionality reduction, and cell
+clustering.</p>
+<p>⚙️ Config and targets:
+<code><a href="../articles/stage_norm_clustering.html">vignette("stage_norm_clustering")</a></code></p>
+<p><a href="https://onco.img.cas.cz/novotnyj/scdrake/single_sample/pbmc1k/02_norm_clustering/02_norm_clustering.html" class="external-link">📜
+Example report</a></p>
+<p><a href="https://onco.img.cas.cz/novotnyj/scdrake/single_sample/pbmc1k/02_norm_clustering/02_norm_clustering_simple.html" class="external-link">📜
+Example simplified report</a></p>
 <ul>
-<li>Calculation of cell cycle score and assignment of cells to phases (G1, G2M, S) using the list of cell cycle genes in <code><a href="https://satijalab.org/seurat/reference/cc.genes.updated.2019.html" class="external-link">Seurat::cc.genes.updated.2019</a></code> and <code><a href="https://satijalab.org/seurat/reference/CellCycleScoring.html" class="external-link">Seurat::CellCycleScoring()</a></code> function.</li>
+<li>Calculation of cell cycle score and assignment of cells to phases
+(G1, G2M, S) using the list of cell cycle genes in
+<code><a href="https://satijalab.org/seurat/reference/cc.genes.updated.2019.html" class="external-link">Seurat::cc.genes.updated.2019</a></code> and
+<code><a href="https://satijalab.org/seurat/reference/CellCycleScoring.html" class="external-link">Seurat::CellCycleScoring()</a></code> function.</li>
 <li>
-<a href="https://bioconductor.org/books/release/OSCA.basic/normalization.html" class="external-link">Normalization</a> of UMI counts by either:
+<a href="https://bioconductor.org/books/release/OSCA.basic/normalization.html" class="external-link">Normalization</a>
+of UMI counts by either:
 <ul>
 <li>
-<a href="https://bioconductor.org/books/release/OSCA.basic/normalization.html#normalization-by-deconvolution" class="external-link">Normalization by deconvolution</a> implemented in the <a href="https://bioconductor.org/packages/release/bioc/html/scran.html" class="external-link">scran</a> package.</li>
-<li>Regularized negative binomial regression to normalize UMI count data implemented in the <a href="https://github.com/ChristophH/sctransform" class="external-link">sctransform</a> package and wrapped by the <a href="https://satijalab.org/seurat/" class="external-link">Seurat</a> package. This method also allows to regress out confounding variables such as cell cycle score or percentage of mitochondrial genes expression. Note that for cell cycle score, a better method seems to be removal of CC-related genes prior to detection of highly variable genes (HVGs, see below). <code>sctransform</code> also returns a specified number of HVGs.</li>
+<a href="https://bioconductor.org/books/release/OSCA.basic/normalization.html#normalization-by-deconvolution" class="external-link">Normalization
+by deconvolution</a> implemented in the <a href="https://bioconductor.org/packages/release/bioc/html/scran.html" class="external-link">scran</a>
+package.</li>
+<li>Regularized negative binomial regression to normalize UMI count data
+implemented in the <a href="https://github.com/ChristophH/sctransform" class="external-link">sctransform</a> package
+and wrapped by the <a href="https://satijalab.org/seurat/" class="external-link">Seurat</a>
+package. This method also allows to regress out confounding variables
+such as cell cycle score or percentage of mitochondrial genes
+expression. Note that for cell cycle score, a better method seems to be
+removal of CC-related genes prior to detection of highly variable genes
+(HVGs, see below). <code>sctransform</code> also returns a specified
+number of HVGs.</li>
 </ul>
 </li>
-<li>Selection of <a href="https://bioconductor.org/books/release/OSCA.basic/feature-selection.html" class="external-link">highly variable genes</a> (HVGs):
+<li>Selection of <a href="https://bioconductor.org/books/release/OSCA.basic/feature-selection.html" class="external-link">highly
+variable genes</a> (HVGs):
 <ul>
-<li>HVGs are used downstream for dimensionality reduction and clustering.</li>
+<li>HVGs are used downstream for dimensionality reduction and
+clustering.</li>
 <li>Three metrics for HVGs are available:
 <ul>
 <li>
-<a href="https://bioconductor.org/books/release/OSCA.basic/feature-selection.html#quantifying-per-gene-variation" class="external-link">Gene variance</a>.</li>
+<a href="https://bioconductor.org/books/release/OSCA.basic/feature-selection.html#quantifying-per-gene-variation" class="external-link">Gene
+variance</a>.</li>
 <li>
-<a href="http://bioconductor.org/books/release/OSCA.advanced/more-hvgs.html#using-the-coefficient-of-variation" class="external-link">Coefficient of variation</a> (CV2).</li>
+<a href="http://bioconductor.org/books/release/OSCA.advanced/more-hvgs.html#using-the-coefficient-of-variation" class="external-link">Coefficient
+of variation</a> (CV2).</li>
 <li>HVGs obtained from the <code>sctransform</code> normalization.</li>
 </ul>
 </li>
-<li>Based on the selected one from the first two metrics above, HVGs are selected either by:
+<li>Based on the selected one from the first two metrics above, HVGs are
+selected either by:
 <ul>
-<li>Top N genes based on a metric (e.g. top 1000 genes with the highest variance).</li>
+<li>Top N genes based on a metric (e.g. top 1000 genes with the highest
+variance).</li>
 <li>Significance (FDR) threshold.</li>
 <li>Threshold on a metric value.</li>
 </ul>
 </li>
-<li>Prior to HVG selection, cell cycle-related genes can be removed. We are using a method based on the percentage of variance explained by the cell cycle phase in the expression profile for each gene (<a href="https://bioconductor.org/books/release/OSCA.advanced/cell-cycle-assignment.html#removing-cell-cycle-related-genes" class="external-link">details</a>).</li>
+<li>Prior to HVG selection, cell cycle-related genes can be removed. We
+are using a method based on the percentage of variance explained by the
+cell cycle phase in the expression profile for each gene (<a href="https://bioconductor.org/books/release/OSCA.advanced/cell-cycle-assignment.html#removing-cell-cycle-related-genes" class="external-link">details</a>).</li>
 </ul>
 </li>
-<li>Removal of <a href="https://bioconductor.org/books/release/OSCA.advanced/doublet-detection.html" class="external-link">cell doublets</a> (<code><a href="https://rdrr.io/pkg/scDblFinder/man/computeDoubletDensity.html" class="external-link">scDblFinder::computeDoubletDensity()</a></code>).</li>
+<li>Removal of <a href="https://bioconductor.org/books/release/OSCA.advanced/doublet-detection.html" class="external-link">cell
+doublets</a> (<code><a href="https://rdrr.io/pkg/scDblFinder/man/computeDoubletDensity.html" class="external-link">scDblFinder::computeDoubletDensity()</a></code>).</li>
 <li>
-<a href="https://bioconductor.org/books/release/OSCA.basic/dimensionality-reduction.html#principal-components-analysis" class="external-link">Calculation of PCA</a> and <a href="https://bioconductor.org/books/release/OSCA.basic/dimensionality-reduction.html#choosing-the-number-of-pcs" class="external-link">selection of number of principal components</a> (PCs) which will be used downstream. There are three methods to select a proper number of PCs:
+<a href="https://bioconductor.org/books/release/OSCA.basic/dimensionality-reduction.html#principal-components-analysis" class="external-link">Calculation
+of PCA</a> and <a href="https://bioconductor.org/books/release/OSCA.basic/dimensionality-reduction.html#choosing-the-number-of-pcs" class="external-link">selection
+of number of principal components</a> (PCs) which will be used
+downstream. There are three methods to select a proper number of PCs:
 <ul>
-<li>Using the <a href="http://bioconductor.org/books/release/OSCA.advanced/dimensionality-reduction-redux.html#more-choices-for-the-number-of-pcs" class="external-link">elbow point</a>.</li>
-<li>Using the <a href="http://bioconductor.org/books/release/OSCA.advanced/dimensionality-reduction-redux.html#using-the-technical-noise" class="external-link">technical noise</a>.</li>
+<li>Using the <a href="http://bioconductor.org/books/release/OSCA.advanced/dimensionality-reduction-redux.html#more-choices-for-the-number-of-pcs" class="external-link">elbow
+point</a>.</li>
+<li>Using the <a href="http://bioconductor.org/books/release/OSCA.advanced/dimensionality-reduction-redux.html#using-the-technical-noise" class="external-link">technical
+noise</a>.</li>
 <li>Using the fixed number of PCs.</li>
 </ul>
 </li>
 <li>
-<a href="https://bioconductor.org/books/release/OSCA.basic/clustering.html" class="external-link">Cell clustering</a> using several algorithms:
+<a href="https://bioconductor.org/books/release/OSCA.basic/clustering.html" class="external-link">Cell
+clustering</a> using several algorithms:
 <ul>
 <li>
-<a href="https://bioconductor.org/books/release/OSCA.basic/clustering.html#clustering-graph" class="external-link">Graph-based clustering</a> (mutual nearest neighbors) using Louvain and Walktrap algorithms.</li>
+<a href="https://bioconductor.org/books/release/OSCA.basic/clustering.html#clustering-graph" class="external-link">Graph-based
+clustering</a> (mutual nearest neighbors) using Louvain and Walktrap
+algorithms.</li>
 <li>
-<a href="https://bioconductor.org/books/release/OSCA.basic/clustering.html#vector-quantization-with-k-means" class="external-link">K-means clustering</a> using both custom numbers of K and best K selection.</li>
+<a href="https://bioconductor.org/books/release/OSCA.basic/clustering.html#vector-quantization-with-k-means" class="external-link">K-means
+clustering</a> using both custom numbers of K and best K selection.</li>
 <li>
-<a href="https://bioconductor.org/packages/release/bioc/html/SC3.html" class="external-link">Single-Cell Consensus Clustering</a> (SC3) with custom numbers of clusters.</li>
+<a href="https://bioconductor.org/packages/release/bioc/html/SC3.html" class="external-link">Single-Cell
+Consensus Clustering</a> (SC3) with custom numbers of clusters.</li>
 </ul>
 </li>
-<li>Cell type annotation using <a href="https://github.com/LTLA/SingleR" class="external-link">SingleR</a>. More details are given in the accompanying <a href="http://bioconductor.org/books/release/SingleRBook/" class="external-link">book</a> and the underlying method is described <a href="http://bioconductor.org/books/release/SingleRBook/introduction.html#method-description" class="external-link">here</a>.
+<li>Cell type annotation using <a href="https://github.com/LTLA/SingleR" class="external-link">SingleR</a>. More details are
+given in the accompanying <a href="http://bioconductor.org/books/release/SingleRBook/" class="external-link">book</a> and
+the underlying method is described <a href="http://bioconductor.org/books/release/SingleRBook/introduction.html#method-description" class="external-link">here</a>.
 <ul>
-<li>Reference datasets can be taken from the <a href="https://github.com/LTLA/celldex" class="external-link">celldex</a> package or an arbitrary <code>SingleCellExperiment</code> / <code>SummarizedExperiment</code> object can be loaded from a file.</li>
+<li>Reference datasets can be taken from the <a href="https://github.com/LTLA/celldex" class="external-link">celldex</a>
+package or an arbitrary <code>SingleCellExperiment</code> /
+<code>SummarizedExperiment</code> object can be loaded from a file.</li>
 <li>
-<a href="https://github.com/bioinfocz/scdrake" class="external-link">scdrake</a> is using a more recent version of the original <a href="https://github.com/LTLA/SingleR" class="external-link">SingleR</a> located <a href="https://github.com/LTLA/SingleR" class="external-link">here</a>.</li>
+<a href="https://github.com/bioinfocz/scdrake" class="external-link">scdrake</a> is using a more recent version of the
+original <a href="https://github.com/LTLA/SingleR" class="external-link">SingleR</a> located <a href="https://github.com/LTLA/SingleR" class="external-link">here</a>.</li>
 </ul>
 </li>
-<li>Assignment of cells to predefined groupings based on existing data. That means you can reuse an assignment of cells from e.g. clustering, and rename or merge its levels (cluster numbers).
+<li>Assignment of cells to predefined groupings based on existing data.
+That means you can reuse an assignment of cells from e.g. clustering,
+and rename or merge its levels (cluster numbers).
 <ul>
-<li>Example: you identify a biological meaning of clusters computed by k-means with <span class="math inline">\(k = 3\)</span>. You can use this information, and rename and merge the clusters, such that:
+<li>Example: you identify a biological meaning of clusters computed by
+k-means with <span class="math inline">\(k = 3\)</span>. You can use
+this information, and rename and merge the clusters, such that:
 <ul>
 <li>Cluster 1 -&gt; T cells</li>
 <li>Cluster 2 -&gt; B cells</li>
 <li>Cluster 3 -&gt; T cells</li>
 </ul>
 </li>
-<li>Now you can use this new cell grouping for e.g. plotting of reduced dimensions or calculation of cluster markers.</li>
+<li>Now you can use this new cell grouping for e.g. plotting of reduced
+dimensions or calculation of cluster markers.</li>
 </ul>
 </li>
 <li>
-<a href="https://bioconductor.org/books/release/OSCA.basic/dimensionality-reduction.html#non-linear-methods-for-visualization" class="external-link">Dimensionality reduction</a>:
+<a href="https://bioconductor.org/books/release/OSCA.basic/dimensionality-reduction.html#non-linear-methods-for-visualization" class="external-link">Dimensionality
+reduction</a>:
 <ul>
 <li>PCA</li>
 <li><a href="https://bioconductor.org/books/release/OSCA.basic/dimensionality-reduction.html#t-stochastic-neighbor-embedding" class="external-link">t-SNE</a></li>
 <li><a href="https://bioconductor.org/books/release/OSCA.basic/dimensionality-reduction.html#uniform-manifold-approximation-and-projection" class="external-link">UMAP</a></li>
 </ul>
 </li>
-<li>Expression plots of selected groups of genes (markers) in reduced dimensions.</li>
-<li>A simplified report for non-technical audience which contains only dimred plots and selected markers.</li>
+<li>Expression plots of selected groups of genes (markers) in reduced
+dimensions.</li>
+<li>A simplified report for non-technical audience which contains only
+dimred plots and selected markers.</li>
 </ul>
 </div>
 </div>
 <div class="section level2">
 <h2 id="integration-pipeline">Integration pipeline<a class="anchor" aria-label="anchor" href="#integration-pipeline"></a>
 </h2>
-<p>This is a pipeline to integrate multiple samples processed by the single-sample pipeline. Just for clarification, an individual sample is also denoted as <em>batch</em>.</p>
+<p>This is a pipeline to integrate multiple samples processed by the
+single-sample pipeline. Just for clarification, an individual sample is
+also denoted as <em>batch</em>.</p>
 <div class="section level3">
 <h3 id="stage-01_integration">Stage <code>01_integration</code><a class="anchor" aria-label="anchor" href="#stage-01_integration"></a>
 </h3>
-<p>A stage for reading in single-sample data, integration using several methods, and computing reduced dimensions. Note that currently only samples which were <strong>all</strong> normalized by <code>scran</code> method can be integrated.</p>
-<p>More information can be found in this <a href="http://bioconductor.org/books/release/OSCA.multisample" class="external-link">OSCA chapter</a>.</p>
+<p>A stage for reading in single-sample data, integration using several
+methods, and computing reduced dimensions. Note that currently only
+samples which were <strong>all</strong> normalized by <code>scran</code>
+method can be integrated.</p>
+<p>More information can be found in this <a href="http://bioconductor.org/books/release/OSCA.multisample" class="external-link">OSCA
+chapter</a>.</p>
 <p>⚙️ Config and targets: <code><a href="../articles/stage_integration.html">vignette("stage_integration")</a></code></p>
-<p><a href="https://onco.img.cas.cz/novotnyj/scdrake/integration/01_integration/01_integration.html" class="external-link">📜 Example report</a></p>
+<p><a href="https://onco.img.cas.cz/novotnyj/scdrake/integration/01_integration/01_integration.html" class="external-link">📜
+Example report</a></p>
 <ul>
-<li>Reading in data from <code>drake</code> caches of multiple single-sample pipelines.</li>
+<li>Reading in data from <code>drake</code> caches of multiple
+single-sample pipelines.</li>
 <li>Subsetting to common column and row data, and metadata.</li>
 <li>Combining of HVGs:
 <ul>
-<li>Combine HVG metric (gene variance or CV2), then apply top HVGs selection as in the single-sample pipeline. All samples must have the same HVG metric used before.</li>
-<li>Combine HVGs by their IDs: intersection, union, or take them all (without duplicates).</li>
+<li>Combine HVG metric (gene variance or CV2), then apply top HVGs
+selection as in the single-sample pipeline. All samples must have the
+same HVG metric used before.</li>
+<li>Combine HVGs by their IDs: intersection, union, or take them all
+(without duplicates).</li>
 </ul>
 </li>
 <li>Normalization of each sample for inter-batch sequencing depth.</li>
 <li>Perform integration using one or more methods:
 <ul>
-<li>Rescaling (<code><a href="https://rdrr.io/pkg/batchelor/man/rescaleBatches.html" class="external-link">batchelor::rescaleBatches()</a></code>): scale counts so that the average count within each batch is the same for each gene.</li>
-<li>Regression (<code><a href="https://rdrr.io/pkg/batchelor/man/regressBatches.html" class="external-link">batchelor::regressBatches()</a></code>): fit a linear model to each gene regress out uninteresting factors of variation, returning a matrix of residuals.</li>
-<li>Fast mutual nearest neighbors (<code><a href="https://rdrr.io/pkg/batchelor/man/fastMNN.html" class="external-link">batchelor::fastMNN()</a></code>).</li>
+<li>Rescaling (<code><a href="https://rdrr.io/pkg/batchelor/man/rescaleBatches.html" class="external-link">batchelor::rescaleBatches()</a></code>): scale counts
+so that the average count within each batch is the same for each
+gene.</li>
+<li>Regression (<code><a href="https://rdrr.io/pkg/batchelor/man/regressBatches.html" class="external-link">batchelor::regressBatches()</a></code>): fit a linear
+model to each gene regress out uninteresting factors of variation,
+returning a matrix of residuals.</li>
+<li>Fast mutual nearest neighbors
+(<code><a href="https://rdrr.io/pkg/batchelor/man/fastMNN.html" class="external-link">batchelor::fastMNN()</a></code>).</li>
 </ul>
 </li>
 </ul>
-<p>The steps below are performed for each integration method, plus separately for HVGs with removed cell cycle-related genes (if this removal was requested).</p>
+<p>The steps below are performed for each integration method, plus
+separately for HVGs with removed cell cycle-related genes (if this
+removal was requested).</p>
 <ul>
-<li>Calculation of PCA and selection of number of principal components (PCs) which will be used downstream. This is similar to what is done in the single-sample pipeline (<code>02_norm_clustering</code> stage), but, in this case, the selection of PCs can be configured for each integration method.</li>
-<li>Dimensionality reduction, which is same as in the single-sample pipeline, but as PCA can be configured for each integration method.</li>
-<li>Expression plots of selected markers, see single-sample pipeline / stage <code>02_norm_clustering</code>.</li>
-<li>Mutual nearest neighbors (MNN) clustering to assess integration results.</li>
+<li>Calculation of PCA and selection of number of principal components
+(PCs) which will be used downstream. This is similar to what is done in
+the single-sample pipeline (<code>02_norm_clustering</code> stage), but,
+in this case, the selection of PCs can be configured for each
+integration method.</li>
+<li>Dimensionality reduction, which is same as in the single-sample
+pipeline, but as PCA can be configured for each integration method.</li>
+<li>Expression plots of selected markers, see single-sample pipeline /
+stage <code>02_norm_clustering</code>.</li>
+<li>Mutual nearest neighbors (MNN) clustering to assess integration
+results.</li>
 <li>Integration diagnostics:
 <ul>
-<li>Assignment of cells of each sample to MNN clusters (tables, plots).</li>
+<li>Assignment of cells of each sample to MNN clusters (tables,
+plots).</li>
 <li>
-<a href="https://en.wikipedia.org/wiki/Rand_index" class="external-link">Rand indices</a>: used to evaluate biological heterogeneity preservation by summarizing the agreement between clusterings.</li>
+<a href="https://en.wikipedia.org/wiki/Rand_index" class="external-link">Rand indices</a>:
+used to evaluate biological heterogeneity preservation by summarizing
+the agreement between clusterings.</li>
 </ul>
 </li>
 </ul>
@@ -384,46 +505,78 @@
 <div class="section level3">
 <h3 id="stage-02_int_clustering">Stage <code>02_int_clustering</code><a class="anchor" aria-label="anchor" href="#stage-02_int_clustering"></a>
 </h3>
-<p>This stage basically reproduces the clustering and cell type annotation steps in the <code>02_norm_clustering</code> stage of the single-sample pipeline. The only difference is <strong>user selection of a final integration method, which will be used downstream.</strong> HVGs, reduced dimensions, and selected markers are already computed in the previous stage (<code>01_integration</code>).</p>
-<p>⚙️ Config and targets: <code><a href="../articles/stage_int_clustering.html">vignette("stage_int_clustering")</a></code></p>
-<p><a href="https://onco.img.cas.cz/novotnyj/scdrake/integration/02_int_clustering/02_int_clustering.html" class="external-link">📜 Example report</a></p>
+<p>This stage basically reproduces the clustering and cell type
+annotation steps in the <code>02_norm_clustering</code> stage of the
+single-sample pipeline. The only difference is <strong>user selection of
+a final integration method, which will be used downstream.</strong>
+HVGs, reduced dimensions, and selected markers are already computed in
+the previous stage (<code>01_integration</code>).</p>
+<p>⚙️ Config and targets:
+<code><a href="../articles/stage_int_clustering.html">vignette("stage_int_clustering")</a></code></p>
+<p><a href="https://onco.img.cas.cz/novotnyj/scdrake/integration/02_int_clustering/02_int_clustering.html" class="external-link">📜
+Example report</a></p>
 </div>
 </div>
 <div class="section level2">
 <h2 id="common-stages">Common stages<a class="anchor" aria-label="anchor" href="#common-stages"></a>
 </h2>
-<p>Some stages are common to both single-sample and integration pipelines.</p>
+<p>Some stages are common to both single-sample and integration
+pipelines.</p>
 <div class="section level3">
 <h3 id="stage-cluster_markers">Stage <code>cluster_markers</code><a class="anchor" aria-label="anchor" href="#stage-cluster_markers"></a>
 </h3>
-<p>A stage for calculation, visualization and reporting of cell cluster markers (“global markers”).</p>
-<p>⚙️ Config and targets: <code><a href="../articles/stage_cluster_markers.html">vignette("stage_cluster_markers")</a></code></p>
-<p><a href="https://onco.img.cas.cz/novotnyj/scdrake/single_sample/pbmc1k/cluster_markers/cluster_markers.html" class="external-link">📜 Example report for PBMC 1k data</a></p>
-<p><a href="https://onco.img.cas.cz/novotnyj/scdrake/integration/cluster_markers/cluster_markers.html" class="external-link">📜 Example report for integrated data</a></p>
+<p>A stage for calculation, visualization and reporting of cell cluster
+markers (“global markers”).</p>
+<p>⚙️ Config and targets:
+<code><a href="../articles/stage_cluster_markers.html">vignette("stage_cluster_markers")</a></code></p>
+<p><a href="https://onco.img.cas.cz/novotnyj/scdrake/single_sample/pbmc1k/cluster_markers/cluster_markers.html" class="external-link">📜
+Example report for PBMC 1k data</a></p>
+<p><a href="https://onco.img.cas.cz/novotnyj/scdrake/integration/cluster_markers/cluster_markers.html" class="external-link">📜
+Example report for integrated data</a></p>
 <ul>
 <li>
-<a href="https://bioconductor.org/books/release/OSCA.basic/marker-detection.html" class="external-link">Calculation of cluster markers</a>: any categorical grouping of cells can be used, including those manually defined based on the existing groups (from e.g. clustering), as described in the <code><a href="../articles/stage_norm_clustering.html">vignette("stage_norm_clustering")</a></code>. More details about marker computation can be found in <code><a href="../articles/cluster_markers.html">vignette("cluster_markers")</a></code>.</li>
-<li>Generation of heatmaps and plots. To reduce the size of heatmaps and number of plots, you can control a number of top N markers taken by a chosen metric (FDR, LFC, etc.). Only these top N markers will be displayed in heatmaps, and plots made for them. This can be specified for each cell grouping and test type.
+<a href="https://bioconductor.org/books/release/OSCA.basic/marker-detection.html" class="external-link">Calculation
+of cluster markers</a>: any categorical grouping of cells can be used,
+including those manually defined based on the existing groups (from
+e.g. clustering), as described in the
+<code><a href="../articles/stage_norm_clustering.html">vignette("stage_norm_clustering")</a></code>. More details about
+marker computation can be found in
+<code><a href="../articles/cluster_markers.html">vignette("cluster_markers")</a></code>.</li>
+<li>Generation of heatmaps and plots. To reduce the size of heatmaps and
+number of plots, you can control a number of top N markers taken by a
+chosen metric (FDR, LFC, etc.). Only these top N markers will be
+displayed in heatmaps, and plots made for them. This can be specified
+for each cell grouping and test type.
 <ul>
 <li>Marker plots are composed of:
 <ul>
-<li>Two plots of a dimred: one colored by a clustering, and second colored by expression of a marker (feature plot).</li>
-<li>A plot of summarized marker expression: proportion of cells expressing a marker, colored by average expression.</li>
+<li>Two plots of a dimred: one colored by a clustering, and second
+colored by expression of a marker (feature plot).</li>
+<li>A plot of summarized marker expression: proportion of cells
+expressing a marker, colored by average expression.</li>
 <li>A violin plot: expression of a marker in each cluster.</li>
 </ul>
 </li>
 </ul>
 </li>
-<li>Generation of marker tables for each cell grouping and each of its levels.</li>
+<li>Generation of marker tables for each cell grouping and each of its
+levels.</li>
 </ul>
 </div>
 <div class="section level3">
 <h3 id="stage-contrasts">Stage <code>contrasts</code><a class="anchor" aria-label="anchor" href="#stage-contrasts"></a>
 </h3>
-<p>A stage for calculation, visualization and reporting of differentially expressed markers (“contrasts”). This stage is basically the same as the <code>cluster_markers</code> stage, but all output is related to individual comparisons of levels within each cell grouping. Hence “contrasts”, a term known from bulk RNA-seq where sample groups are compared -&gt; they are put <em>in contrast</em>.</p>
+<p>A stage for calculation, visualization and reporting of
+differentially expressed markers (“contrasts”). This stage is basically
+the same as the <code>cluster_markers</code> stage, but all output is
+related to individual comparisons of levels within each cell grouping.
+Hence “contrasts”, a term known from bulk RNA-seq where sample groups
+are compared -&gt; they are put <em>in contrast</em>.</p>
 <p>⚙️ Config and targets: <code><a href="../articles/stage_contrasts.html">vignette("stage_contrasts")</a></code></p>
-<p><a href="https://onco.img.cas.cz/novotnyj/scdrake/single_sample/pbmc1k/contrasts/contrasts.html" class="external-link">📜 Example report for PBMC 1k data</a></p>
-<p><a href="https://onco.img.cas.cz/novotnyj/scdrake/integration/contrasts/contrasts.html" class="external-link">📜 Example report for integrated data</a></p>
+<p><a href="https://onco.img.cas.cz/novotnyj/scdrake/single_sample/pbmc1k/contrasts/contrasts.html" class="external-link">📜
+Example report for PBMC 1k data</a></p>
+<p><a href="https://onco.img.cas.cz/novotnyj/scdrake/integration/contrasts/contrasts.html" class="external-link">📜
+Example report for integrated data</a></p>
 </div>
 </div>
   </div>
@@ -445,7 +598,8 @@
 
 <div class="pkgdown">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.9000.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a>
+2.0.2.9000.</p>
   <p class="preferably">Using <a href="https://preferably.amirmasoudabdol.name/?source=footer" class="external-link">preferably</a> template.</p>
 </div>
 

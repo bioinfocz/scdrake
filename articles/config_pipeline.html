@@ -74,7 +74,7 @@
   <a href="../reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Articles
      
     <span class="caret"></span>
@@ -178,7 +178,7 @@
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Pipeline config</h1>
             
-            <h4 data-toc-skip class="date">2022-02-23</h4>
+            <h4 data-toc-skip class="date">2022-03-16</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/bioinfocz/scdrake/blob/mastervignettes/config_pipeline.Rmd" class="external-link"><code>vignettes/config_pipeline.Rmd</code></a></small>
       <div class="hidden name"><code>config_pipeline.Rmd</code></div>
@@ -188,57 +188,91 @@
     
     
 <hr>
-<p>Pipeline config is stored in <code>pipeline.yaml</code> file. Directory with this file is read from <code>SCDRAKE_PIPELINE_CONFIG_DIR</code> environment variable upon <a href="https://github.com/bioinfocz/scdrake" class="external-link">scdrake</a> load or attach, and saved as <code>scdrake_pipeline_config_dir</code> option. This option is used as the default argument value in several <a href="https://github.com/bioinfocz/scdrake" class="external-link">scdrake</a> functions.</p>
-<p>Pipeline parameters don’t have impact on analysis (except <code>SEED</code>, but that should be reproducibly treated by <a href="https://docs.ropensci.org/drake" class="external-link">drake</a>). Parameters starting with <code>DRAKE_</code> are generally passed to <code><a href="https://docs.ropensci.org/drake/reference/make.html" class="external-link">drake::make()</a></code> or <code><a href="https://docs.ropensci.org/drake/reference/drake_config.html" class="external-link">drake::drake_config()</a></code>.</p>
+<p>Pipeline config is stored in <code>pipeline.yaml</code> file.
+Directory with this file is read from
+<code>SCDRAKE_PIPELINE_CONFIG_DIR</code> environment variable upon
+<a href="https://github.com/bioinfocz/scdrake" class="external-link">scdrake</a> load or attach, and saved as
+<code>scdrake_pipeline_config_dir</code> option. This option is used as
+the default argument value in several <a href="https://github.com/bioinfocz/scdrake" class="external-link">scdrake</a>
+functions.</p>
+<p>Pipeline parameters don’t have impact on analysis (except
+<code>SEED</code>, but that should be reproducibly treated by
+<a href="https://docs.ropensci.org/drake" class="external-link">drake</a>). Parameters starting with <code>DRAKE_</code> are
+generally passed to <code><a href="https://docs.ropensci.org/drake/reference/make.html" class="external-link">drake::make()</a></code> or
+<code><a href="https://docs.ropensci.org/drake/reference/drake_config.html" class="external-link">drake::drake_config()</a></code>.</p>
 <div class="section level2">
 <h2 id="general-parameters">General parameters<a class="anchor" aria-label="anchor" href="#general-parameters"></a>
 </h2>
 <p><code>DRAKE_CACHE_DIR: ".drake"</code></p>
 <p><strong>Type:</strong> character scalar or <code>null</code></p>
-<p>A name of directory to store drake’s cache in. If <code>null</code>, the default directory <code>".drake"</code> will be used.</p>
+<p>A name of directory to store drake’s cache in. If <code>null</code>,
+the default directory <code>".drake"</code> will be used.</p>
 <hr>
 <p><code>DRAKE_TARGETS: null</code></p>
 <p><strong>Type:</strong> character vector or <code>null</code></p>
-<p>Array of target names to make. Setting to <code>null</code> will make all targets. Example for single-sample pipeline / stage <code>02_norm_clustering</code> reports:</p>
+<p>Array of target names to make. Setting to <code>null</code> will make
+all targets. Example for single-sample pipeline / stage
+<code>02_norm_clustering</code> reports:</p>
 <p><code>DRAKE_TARGETS: ["report_norm_clustering", "report_norm_clustering_simple"]</code></p>
 <hr>
 <p><code>DRAKE_KEEP_GOING: False</code></p>
 <p><strong>Type:</strong> logical scalar</p>
-<p>If <code>True</code>, let the pipeline continue even if some target fails.</p>
+<p>If <code>True</code>, let the pipeline continue even if some target
+fails.</p>
 <hr>
 <p><code>DRAKE_VERBOSITY: 1</code></p>
-<p><strong>Type:</strong> integer scalar (<code>1</code> | <code>2</code> | <code>3</code>)</p>
+<p><strong>Type:</strong> integer scalar (<code>1</code> |
+<code>2</code> | <code>3</code>)</p>
 <p>Verbosity of <a href="https://docs.ropensci.org/drake" class="external-link">drake</a>:</p>
 <ul>
 <li>
 <code>0</code>: print nothing.</li>
 <li>
-<code>1</code>: print target-by-target messages as <code>make()</code> progresses.</li>
+<code>1</code>: print target-by-target messages as
+<code>make()</code> progresses.</li>
 <li>
-<code>2</code>: show a progress bar to track how many targets are done so far.</li>
+<code>2</code>: show a progress bar to track how many targets are
+done so far.</li>
 </ul>
 <hr>
 <p><code>DRAKE_LOCK_ENVIR: True</code></p>
 <p><strong>Type:</strong> logical scalar</p>
-<p><a href="https://docs.ropensci.org/drake" class="external-link">drake</a> locks R global environment to avoid its unwanted modifications by targets. However, in some cases is needed to keep it unlocked.</p>
+<p><a href="https://docs.ropensci.org/drake" class="external-link">drake</a> locks R global environment to avoid its unwanted
+modifications by targets. However, in some cases is needed to keep it
+unlocked.</p>
 <hr>
 <p><code>DRAKE_UNLOCK_CACHE: True</code></p>
 <p><strong>Type:</strong> logical scalar</p>
-<p>Don’t wait for <a href="https://docs.ropensci.org/drake" class="external-link">drake</a> to discover locked cache after pipeline is run and unlock it immediately.</p>
+<p>Don’t wait for <a href="https://docs.ropensci.org/drake" class="external-link">drake</a> to discover locked cache after
+pipeline is run and unlock it immediately.</p>
 <hr>
 <p><code>DRAKE_FORMAT: "qs"</code></p>
 <p><strong>Type:</strong> character scalar</p>
-<p>A file format used to store intermediate results in <code>DRAKE_CACHE_DIR</code>. See <a href="https://books.ropensci.org/drake/plans.html#special-data-formats-for-targets" class="external-link uri">https://books.ropensci.org/drake/plans.html#special-data-formats-for-targets</a> for details.</p>
+<p>A file format used to store intermediate results in
+<code>DRAKE_CACHE_DIR</code>. See <a href="https://books.ropensci.org/drake/plans.html#special-data-formats-for-targets" class="external-link uri">https://books.ropensci.org/drake/plans.html#special-data-formats-for-targets</a>
+for details.</p>
 <hr>
 <p><code>BLAS_N_THREADS: 32</code></p>
-<p><strong>Type:</strong> positive integer scalar or <code>null</code></p>
-<p>A maximum number of threads for BLAS operations, passed to <code><a href="https://rdrr.io/pkg/RhpcBLASctl/man/RhpcBLASctl-package.html" class="external-link">RhpcBLASctl::blas_set_num_threads()</a></code>. Prevents “BLAS : Program is Terminated. Because you tried to allocate too many memory regions” when a massive target parallelism is used. Set to <code>null</code> if you want to keep BLAS defaults.</p>
+<p><strong>Type:</strong> positive integer scalar or
+<code>null</code></p>
+<p>A maximum number of threads for BLAS operations, passed to
+<code><a href="https://rdrr.io/pkg/RhpcBLASctl/man/RhpcBLASctl-package.html" class="external-link">RhpcBLASctl::blas_set_num_threads()</a></code>. Prevents “BLAS :
+Program is Terminated. Because you tried to allocate too many memory
+regions” when a massive target parallelism is used. Set to
+<code>null</code> if you want to keep BLAS defaults.</p>
 <hr>
 <p><code>RSTUDIO_PANDOC: null</code></p>
 <p><strong>Type:</strong> character scalar or <code>null</code></p>
-<p>Before pipeline is run by <code><a href="../reference/run_pipeline.html">run_single_sample()</a></code>, <code><a href="../reference/run_pipeline.html">run_integration()</a></code> or <code><a href="https://docs.ropensci.org/drake/reference/r_make.html" class="external-link">drake::r_make()</a></code>, sets <code>RSTUDIO_PANDOC</code> environment variable: a path to directory with <a href="https://pandoc.org/" class="external-link">pandoc</a>’s binary.</p>
-<p>This is needed if you are running this pipeline outside of RStudio, or the <code>pandoc</code> binary is not available in your <code>PATH</code>. Set to <code>null</code> if any condition above does not apply.</p>
-<p>You can also define this variable in <code>.Renviron</code> file and set it <code>null</code> in pipeline config.</p>
+<p>Before pipeline is run by <code><a href="../reference/run_pipeline.html">run_single_sample()</a></code>,
+<code><a href="../reference/run_pipeline.html">run_integration()</a></code> or <code><a href="https://docs.ropensci.org/drake/reference/r_make.html" class="external-link">drake::r_make()</a></code>, sets
+<code>RSTUDIO_PANDOC</code> environment variable: a path to directory
+with <a href="https://pandoc.org/" class="external-link">pandoc</a>’s binary.</p>
+<p>This is needed if you are running this pipeline outside of RStudio,
+or the <code>pandoc</code> binary is not available in your
+<code>PATH</code>. Set to <code>null</code> if any condition above does
+not apply.</p>
+<p>You can also define this variable in <code>.Renviron</code> file and
+set it <code>null</code> in pipeline config.</p>
 <hr>
 <p><code>SEED: 100</code></p>
 <p><strong>Type:</strong> integer scalar</p>
@@ -249,21 +283,28 @@
 <h2 id="parallelism">Parallelism<a class="anchor" aria-label="anchor" href="#parallelism"></a>
 </h2>
 <p><code>DRAKE_PARALLELISM: "loop"</code></p>
-<p><strong>Type:</strong> character scalar (<code>"loop"</code> | <code>"future"</code> | <code>"clustermq"</code>)</p>
+<p><strong>Type:</strong> character scalar (<code>"loop"</code> |
+<code>"future"</code> | <code>"clustermq"</code>)</p>
 <p>Type of <a href="https://docs.ropensci.org/drake" class="external-link">drake</a> paralellism:</p>
 <ul>
 <li>
 <code>"loop"</code>: sequential processing.</li>
 <li>
-<code>"future"</code>: use the <a href="https://future.futureverse.org" class="external-link">future</a> package as backend.</li>
+<code>"future"</code>: use the <a href="https://future.futureverse.org" class="external-link">future</a> package as
+backend.</li>
 <li>
-<code>"clustermq"</code>: use the <a href="https://mschubert.github.io/clustermq/" class="external-link">clustermq</a> package as backend. This also requires <a href="https://zeromq.org/" class="external-link">ZeroMQ</a> to be installed on your system.</li>
+<code>"clustermq"</code>: use the <a href="https://mschubert.github.io/clustermq/" class="external-link">clustermq</a> package
+as backend. This also requires <a href="https://zeromq.org/" class="external-link">ZeroMQ</a>
+to be installed on your system.</li>
 </ul>
-<p>See <a href="https://books.ropensci.org/drake/hpc.html" class="external-link uri">https://books.ropensci.org/drake/hpc.html</a> for more details.</p>
+<p>See <a href="https://books.ropensci.org/drake/hpc.html" class="external-link uri">https://books.ropensci.org/drake/hpc.html</a> for more
+details.</p>
 <hr>
 <p><code>DRAKE_CLUSTERMQ_SCHEDULER: "multicore"</code></p>
 <p><strong>Type:</strong> character scalar</p>
-<p>Which scheduler to use if <code>DRAKE_PARALLELISM</code> is <code>"clustermq"</code>. See <a href="https://mschubert.github.io/clustermq/articles/userguide.html#configuration" class="external-link uri">https://mschubert.github.io/clustermq/articles/userguide.html#configuration</a> for possible values.</p>
+<p>Which scheduler to use if <code>DRAKE_PARALLELISM</code> is
+<code>"clustermq"</code>. See <a href="https://mschubert.github.io/clustermq/articles/userguide.html#configuration" class="external-link uri">https://mschubert.github.io/clustermq/articles/userguide.html#configuration</a>
+for possible values.</p>
 <hr>
 <p><code>DRAKE_N_JOBS: 8</code></p>
 <p><strong>Type:</strong> positive integer scalar</p>
@@ -271,11 +312,14 @@
 <hr>
 <p><code>DRAKE_N_JOBS_PREPROCESS: 4</code></p>
 <p><strong>Type:</strong> positive integer scalar</p>
-<p>A number of parallel jobs for processing the imports and doing other preprocessing tasks.</p>
+<p>A number of parallel jobs for processing the imports and doing other
+preprocessing tasks.</p>
 <hr>
 <p><code>WITHIN_TARGET_PARALLELISM: False</code></p>
 <p><strong>Type:</strong> logical scalar</p>
-<p>Allow or disable within-target parallelism through the <a href="https://bioconductor.org/packages/release/bioc/html/BiocParallel.html" class="external-link">BiocParallel</a> package. Only possible when <code>DRAKE_PARALLELISM</code> is <code>"loop"</code>.</p>
+<p>Allow or disable within-target parallelism through the <a href="https://bioconductor.org/packages/release/bioc/html/BiocParallel.html" class="external-link">BiocParallel</a>
+package. Only possible when <code>DRAKE_PARALLELISM</code> is
+<code>"loop"</code>.</p>
 <hr>
 <p><code>N_CORES: 16</code></p>
 <p><strong>Type:</strong> positive integer scalar</p>
@@ -284,7 +328,9 @@
 <div class="section level2">
 <h2 id="targets">Targets<a class="anchor" aria-label="anchor" href="#targets"></a>
 </h2>
-<p>An informative plan is binded with every other plan, and contains targets with useful runtime information. See the Targets section in <code><a href="../articles/config_main.html">vignette("config_main")</a></code>.</p>
+<p>An informative plan is binded with every other plan, and contains
+targets with useful runtime information. See the Targets section in
+<code><a href="../articles/config_main.html">vignette("config_main")</a></code>.</p>
 </div>
   </div>
 
@@ -305,7 +351,8 @@
 
 <div class="pkgdown">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.9000.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a>
+2.0.2.9000.</p>
   <p class="preferably">Using <a href="https://preferably.amirmasoudabdol.name/?source=footer" class="external-link">preferably</a> template.</p>
 </div>
 
