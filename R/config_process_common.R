@@ -408,6 +408,14 @@ NULL
   }
 
   assert_that_(
+    !is_empty(cell_annotation_default_params),
+    msg = str_space(
+      "Error in norm_clustering config parameter {.field CELL_ANNOTATION_SOURCES_DEFAULTS}:",
+      "must not be empty. You can copy this parameter from the default config."
+    )
+  )
+
+  assert_that_(
     all(names(cell_annotation_default_params) %in% c("TRAIN_PARAMS", "CLASSIFY_PARAMS", "PRUNE_SCORE_PARAMS", "DIAGNOSTICS_PARAMS")),
     msg = str_space(
       "Error in norm_clustering config parameter {.field CELL_ANNOTATION_SOURCES_DEFAULTS}:",

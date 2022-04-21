@@ -10,7 +10,7 @@
 #' @concept sc_cell_annotation
 #' @export
 cell_annotation_params_fn <- function(cell_annotation_sources, biomart_dataset = NULL) {
-  if (is_null(cell_annotation_sources)) {
+  if (is_empty(cell_annotation_sources)) {
     return(list(NA))
   }
 
