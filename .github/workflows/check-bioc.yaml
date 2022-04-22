@@ -432,7 +432,9 @@ jobs:
         if: env.run_pkgdown == 'true' && runner.os == 'Linux'
         shell: bash
         run: |
-          echo "GITHUB_ACTOR: '$GITHUB_ACTOR'"
+          echo "Current working directory: '$(pwd)'"
+          find .
+          echo "Is current directory a git repo? '$(git rev-parse --is-inside-work-tree)'"
           git config --local user.name "$GITHUB_ACTOR"
           git config --local user.email "$GITHUB_ACTOR@users.noreply.github.com"
           # Rscript -e "pkgdown::deploy_to_branch(new_process = FALSE)"
