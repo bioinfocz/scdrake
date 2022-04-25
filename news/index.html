@@ -147,21 +147,15 @@
 </div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="1.2.1" id="scdrake-121">scdrake 1.2.1<a class="anchor" aria-label="anchor" href="#scdrake-121"></a></h2>
-<ul><li>Dimred plots of clusterings and other variables are now saved as PDF
-and PNG files.
-<ul><li>In <code>02_norm_clustering</code> and
-<code>02_int_clustering</code> stage reports the PNG files are displayed
-and act as links to associated multipage PDF files.</li>
-<li>New parameters for the stages above:
-<code>NORM_CLUSTERING_DIMRED_PLOTS_OUT_DIR</code> and
-<code>INT_CLUSTERING_DIMRED_PLOTS_OUT_DIR</code>, respectively.</li>
+<ul><li>Dimred plots of clusterings and other variables are now saved as PDF and PNG files.
+<ul><li>In <code>02_norm_clustering</code> and <code>02_int_clustering</code> stage reports the PNG files are displayed and act as links to associated multipage PDF files.</li>
+<li>New parameters for the stages above: <code>NORM_CLUSTERING_DIMRED_PLOTS_OUT_DIR</code> and <code>INT_CLUSTERING_DIMRED_PLOTS_OUT_DIR</code>, respectively.</li>
 </ul></li>
 </ul></div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="1.2.0" id="scdrake-120">scdrake 1.2.0<a class="anchor" aria-label="anchor" href="#scdrake-120"></a></h2>
 <ul><li>Added cell type annotation via <a href="https://github.com/LTLA/SingleR" class="external-link">SingleR</a> (<a href="https://github.com/LTLA/SingleR" class="external-link uri">https://github.com/LTLA/SingleR</a>).
-<ul><li>See the new config parameters <a href="https://bioinfocz.github.io/scdrake/articles/stage_norm_clustering.html#cell-type-annotation">here</a>
-and targets <a href="https://bioinfocz.github.io/scdrake/articles/stage_norm_clustering.html#cell-type-annotation-1">here</a>.</li>
+<ul><li>See the new config parameters <a href="https://bioinfocz.github.io/scdrake/articles/stage_norm_clustering.html#cell-type-annotation">here</a> and targets <a href="https://bioinfocz.github.io/scdrake/articles/stage_norm_clustering.html#cell-type-annotation-1">here</a>.</li>
 </ul></li>
 <li>Code and documentation refactoring, minor bug fixes.</li>
 <li>Updated <code>renv.lock</code>.</li>
@@ -169,37 +163,25 @@ and targets <a href="https://bioinfocz.github.io/scdrake/articles/stage_norm_clu
     <div class="section level2">
 <h2 class="page-header" data-toc-text="1.1.0" id="scdrake-110">scdrake 1.1.0<a class="anchor" aria-label="anchor" href="#scdrake-110"></a></h2>
 <ul><li>The single-sample pipeline now supports another two inputs:
-<ul><li>A delimited text file (table) representing a feature-barcode
-matrix.</li>
+<ul><li>A delimited text file (table) representing a feature-barcode matrix.</li>
 <li>A <code>SingleCellExperiment</code> object saved as a Rds file.</li>
 </ul></li>
-<li>Input type is controlled by a new <code>INPUT_DATA</code> parameter
-(replaces <code>INPUT_10X_DIR</code>) in <code>01_input_qc.yaml</code>
-config. Details can be found in
-<code><a href="../articles/stage_input_qc.html">vignette("stage_input_qc")</a></code>.</li>
-<li>Removal of empty droplets can be now disabled
-(<code>EMPTY_DROPLETS_ENABLED</code> parameter).</li>
-<li>It is now possible to turn off normalization
-(<code>NORMALIZATION_TYPE: "none"</code>) as the input can be an already
-normalized <code>SingleCellExperiment</code> object (meaning it went
-through the <a href="https://github.com/bioinfocz/scdrake" class="external-link">scdrake</a> pipeline before).</li>
+<li>Input type is controlled by a new <code>INPUT_DATA</code> parameter (replaces <code>INPUT_10X_DIR</code>) in <code>01_input_qc.yaml</code> config. Details can be found in <code><a href="../articles/stage_input_qc.html">vignette("stage_input_qc")</a></code>.</li>
+<li>Removal of empty droplets can be now disabled (<code>EMPTY_DROPLETS_ENABLED</code> parameter).</li>
+<li>It is now possible to turn off normalization (<code>NORMALIZATION_TYPE: "none"</code>) as the input can be an already normalized <code>SingleCellExperiment</code> object (meaning it went through the <a href="https://github.com/bioinfocz/scdrake" class="external-link">scdrake</a> pipeline before).</li>
 <li>Minor updates and bug fixes, updated documentation.</li>
 </ul></div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="1.0.1" id="scdrake-101">scdrake 1.0.1<a class="anchor" aria-label="anchor" href="#scdrake-101"></a></h2>
 <ul><li>Fixed <code><a href="../reference/download_yq.html">download_yq()</a></code>:
 <ul><li>
-<code><a href="../reference/download_yq.html">download_yq()</a></code> now supports the masOS
-(<code>darwin</code>).</li>
+<code><a href="../reference/download_yq.html">download_yq()</a></code> now supports the masOS (<code>darwin</code>).</li>
 <li>Fixed URL to Windows version (<code>.exe</code> extension).</li>
 <li>Better OS resolution implemented in <code>.get_os()</code>.</li>
 </ul></li>
-<li>Fixed issues with <code>yq</code> tool’s binary download on
-Windows.</li>
-<li>Modified <code>.confirm_menu()</code> for non-interactive
-usage.</li>
-<li>Activate an RStudio project on the end of
-<code><a href="../reference/init_project.html">init_project()</a></code> function.</li>
+<li>Fixed issues with <code>yq</code> tool’s binary download on Windows.</li>
+<li>Modified <code>.confirm_menu()</code> for non-interactive usage.</li>
+<li>Activate an RStudio project on the end of <code><a href="../reference/init_project.html">init_project()</a></code> function.</li>
 <li>Fixed links to source code on GH.</li>
 </ul></div>
     <div class="section level2">
@@ -220,8 +202,7 @@ usage.</li>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a>
-2.0.2.9000.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.9000.</p>
   <p class="preferably">Using <a href="https://preferably.amirmasoudabdol.name/?source=footer" class="external-link">preferably</a> template.</p>
 </div>
 
