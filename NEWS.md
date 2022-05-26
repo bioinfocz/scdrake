@@ -1,6 +1,8 @@
 # scdrake (development version)
 
 - Fixed a typo in `01_input_qc` stage report, added a line for `emptyDroplets` lower bound in barcode rank plot.
+- `save_pdf()` is now able to treat invalid plots throwing an error on save.
+  - A new helper function `create_dummy_plot()`.
 
 # scdrake 1.2.1
 

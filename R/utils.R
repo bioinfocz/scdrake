@@ -404,35 +404,87 @@ set_rstudio_drake_cache <- function(dir) {
   return(stringr::str_to_lower(os))
 }
 
-
 #' @title Save a list of plots to multipage PDF.
 #' @param plots A list of plots.
 #' @param output_file A character scalar: path to output PDF file.
 #'   If file's directory doesn't exist, it will be created recursively.
 #' @param width,height A numeric scalar: default width and height of graphics region in inches. Defaults to 7.
 #' @param make_thumbnail A logical scalar: if `TRUE`, a PNG file will be created from the first plot in `plots`.
-#' @return A character scalar (`output_file`) or vector of length two (`c(output_file, thumbnail_file)`) if
-#' `make_thumbnail` is `TRUE`.
+#' @param stop_on_error A logical scalar: if `TRUE`, the function will stop when there is an error during the
+#'   saving of the plot. Otherwise a dummy PDF/PNG thumbnail file with error description will be created instead.
+#' @return A named list with the following items:
+#' - `success`: a logical scalar indicating whether the plot saving succeeded (`TRUE`) or not (`FALSE`).
+#' - `error`: a character scalar with error message if `success` is `FALSE`, `NULL` otherwise.
+#' - `error_plot`: a `ggplot2` object with error plot if `success` is `FALSE`, `NULL` otherwise.
+#' - `output_file`: a character scalar, identical to `output_file` parameter.
+#' - `thumbnail_file`: a character scalar, path to thumbnail PNG file if `make_thumbnail` is `TRUE`, `NULL` otherwise.
+#'
+#' Note that `success` of `FALSE` and the accompanying error message and plot are only possible when `stop_on_error` is `FALSE`.
 #'
 #' @concept misc_utils
 #' @export
-save_pdf <- function(plots, output_file, width = NULL, height = NULL, make_thumbnail = FALSE) {
+save_pdf <- function(plots, output_file, width = NULL, height = NULL, make_thumbnail = FALSE, stop_on_error = FALSE) {
   fs::dir_create(fs::path_dir(output_file), recurse = TRUE)
+  res <- tryCatch(
+    {
+      grDevices::pdf(output_file, width = width, height = height, useDingbats = FALSE)
+      for (p in plots) {
+        print(p)
+      }
+      grDevices::dev.off()
+      list(plot = NULL, error = NULL)
+    },
+    error = function(e) {
+      msg <- "Error saving {.file {output_file}}: {as.character(e)}"
+      grDevices::dev.off()
+      fs::file_delete(output_file)
+      if (stop_on_error) {
+        cli::cli_abort(msg)
+      } else {
+        cli_alert_danger(msg)
+        grDevices::pdf(output_file, width = width, height = height, useDingbats = FALSE)
+        p <- create_dummy_plot(glue("Error when saving the plot: {as.character(e)}") %>% stringr::str_wrap())
+        print(p)
+        grDevices::dev.off()
+      }
 
-  grDevices::pdf(output_file, width = width, height = height, useDingbats = FALSE)
-  for (p in plots) {
-    print(p)
-  }
-  grDevices::dev.off()
+      return(list(plot = p, error = as.character(e)))
+    }
+  )
+
+  success <- is_null(res$plot)
 
   if (make_thumbnail) {
+    if (success) {
+      p_thumbnail <- plots[[1]]
+    } else {
+      p_thumbnail <- res$plot
+    }
     thumbnail_file <- fs::path_ext_set(output_file, "png")
     grDevices::png(thumbnail_file)
-    print(plots[[1]])
+    print(p_thumbnail)
     grDevices::dev.off()
-
-    return(c(output_file, thumbnail_file))
   } else {
-    return(output_file)
+    thumbnail_file <- NULL
   }
+
+  return(list(
+    success = success,
+    error = res$error,
+    error_plot = res$plot,
+    output_file = output_file,
+    thumbnail_file = thumbnail_file
+  ))
+}
+
+#' @title Create a blank `ggplot` with label.
+#' @param label A character scalar: text to display in the plot.
+#' @return A `ggplot2` object.
+#'
+#' @concept misc_utils
+#' @export
+create_dummy_plot <- function(label) {
+  ggplot() +
+    ggplot2::theme_void() +
+    ggplot2::geom_text(aes(x = 0, y = 0, label = label))
 }

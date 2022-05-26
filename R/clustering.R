@@ -325,9 +325,7 @@ make_sc3_stability_plots <- function(sce_sc3, cluster_sc3, sc3_k) {
 
   lapply(sc3_k, FUN = function(k) {
     if (sc3_dry) {
-      p <- ggplot() +
-        ggplot2::theme_void() +
-        ggplot2::geom_text(aes(x = 0, y = 0, label = "SC3 was run in dry mode."))
+      p <- create_dummy_plot("SC3 was run in dry mode.")
     } else {
       p <- SC3::sc3_plot_cluster_stability(sce_sc3, k = k) +
         ggtitle("SC3 cluster stability", subtitle = glue("k = {k}"))

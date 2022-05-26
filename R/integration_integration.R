@@ -490,9 +490,7 @@ sce_int_pca_df_fn <- function(pca_params_df, BPPARAM = BiocParallel::SerialParam
       par$sce_int <- sce_add_metadata(par$sce_int, pca_selection_method = par$pca_selection_method, pca_selected_pcs = n_pcs)
 
       title <- glue("{n_pcs} PCs were used from multiBatchPCA() calculated during integration.")
-      pca_selected_pcs_plot <- ggplot() +
-        ggplot2::theme_void() +
-        ggplot2::geom_text(aes(x = 0, y = 0, label = title))
+      pca_selected_pcs_plot <- create_dummy_plot(title)
 
       par <- c(par, list(
         sce_pca = par$sce_int, pca_percent_var = NA, pca_elbow_pcs = NA, pca_gene_var_pcs = NA,
@@ -586,9 +584,7 @@ hvg_plot_int_fn <- function(sce_int_uncorrected, ...) {
       "Combined HVGs ({n_hvgs}) were selected by {metadata(sce_int_uncorrected)$hvg_combination}",
       "of individual sample's HVGs.\n{title}"
     ))
-    p <- ggplot() +
-      ggplot2::theme_void() +
-      ggplot2::geom_text(aes(x = 0, y = 0, label = text))
+    p <- create_dummy_plot(text)
   }
 
   return(p)

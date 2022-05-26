@@ -537,7 +537,20 @@ dimred_plots_other_vars_fn <- function(sce_dimred, dimred_plots_other_vars_param
     )
 
     if (!is_na(par$out_pdf_file) && !is_na(par$out_png_file)) {
-      save_pdf(list(p), par$out_pdf_file, make_thumbnail = FALSE)
+      res <- save_pdf(list(p), par$out_pdf_file, make_thumbnail = FALSE)
+      if (!res$success) {
+        p <- res$error_plot
+        p$plot_env$label <- glue0c(
+          p$plot_env$label,
+          str_line(
+            "\ndimred_plots_other_vars_params:",
+            "source_column: {par$source_column}",
+            "label: {par$label}",
+            "dimred_name: {par$dimred_name}"
+          )
+        )
+      }
+
       ggplot2::ggsave(filename = par$out_png_file, plot = p, device = "png", dpi = 150)
     }
 
