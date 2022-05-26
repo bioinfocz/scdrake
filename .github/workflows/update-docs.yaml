@@ -65,8 +65,8 @@ jobs:
         uses: pat-s/always-upload-cache@main
         with:
           path: /home/runner/work/_temp/Library
-          key: ${{ env.cache-version }}-biocversion-RELEASE_3_13-r-4.1-${{ hashFiles('.github/update-docs-depends.Rds') }}
-          restore-keys: ${{ env.cache-version }}-biocversion-RELEASE_3_13-r-4.1-
+          key: ${{ env.cache-version }}-biocversion-RELEASE_3_15-r-4.2-${{ hashFiles('.github/update-docs-depends.Rds') }}
+          restore-keys: ${{ env.cache-version }}-biocversion-RELEASE_3_15-r-4.2-
 
       - name: Install R packages
         run: |

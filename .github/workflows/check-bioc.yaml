@@ -70,9 +70,9 @@ jobs:
       fail-fast: false
       matrix:
         config:
-          - { os: ubuntu-latest, r: '4.1', bioc: '3.14', cont: "bioconductor/bioconductor_docker:RELEASE_3_14", rspm: "https://packagemanager.rstudio.com/cran/__linux__/focal/latest" }
-          - { os: macOS-latest, r: '4.1', bioc: '3.13'}
-          # - { os: windows-latest, r: '4.1', bioc: '3.13'}
+          - { os: ubuntu-latest, r: '4.2', bioc: '3.15', cont: "bioconductor/bioconductor_docker:RELEASE_3_15", rspm: "https://packagemanager.rstudio.com/cran/__linux__/focal/latest" }
+          - { os: macOS-latest, r: '4.2', bioc: '3.15'}
+          # - { os: windows-latest, r: '4.2', bioc: '3.15'}
     runs-on: ${{ matrix.config.os }}
     name: ${{ matrix.config.os }} (${{ matrix.config.r }})
     container: ${{ matrix.config.cont }}
