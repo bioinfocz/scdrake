@@ -27,7 +27,9 @@ Check the availability and version of the \code{yq} tool.
 \details{
 When R is run from the command line, the \code{PATH} environment variable is inherited from the current shell
 session. But when R is run within the RStudio Server, user's \code{PATH} is not used. To modify the environment in which
-R is run within your project, place \code{.Renviron} file to the root of your project, e.g.:\if{html}{\out{<div class="sourceCode bash">}}\preformatted{echo 'PATH=$\{PATH\}:"/path/to/dir/with/yq"' >> .Renviron
+R is run within your project, place \code{.Renviron} file to the root of your project, e.g.:
+
+\if{html}{\out{<div class="sourceCode bash">}}\preformatted{echo 'PATH=$\{PATH\}:"/path/to/dir/with/yq"' >> .Renviron
 }\if{html}{\out{</div>}}
 
 Environment variables defined in \code{.Renviron} will be available in the R session run within the RStudio project.

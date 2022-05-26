@@ -98,25 +98,33 @@ Internally, the \href{https://github.com/mikefarah/yq}{yq} tool (version 3) is u
 
 Consider the following example of config update, showing also differences in the \code{use_default_structure} parameter:
 
-Default config:\if{html}{\out{<div class="sourceCode yaml">}}\preformatted{# Comment 1.
+Default config:
+
+\if{html}{\out{<div class="sourceCode yaml">}}\preformatted{# Comment 1.
 PARAM_1: 1
 PARAM_2: 2
 PARAM_3: 3
 }\if{html}{\out{</div>}}
 
-Local config:\if{html}{\out{<div class="sourceCode yaml">}}\preformatted{# Comment 2.
+Local config:
+
+\if{html}{\out{<div class="sourceCode yaml">}}\preformatted{# Comment 2.
 PARAM_2: 6
 # Comment 3.
 PARAM_1: 5
 }\if{html}{\out{</div>}}
 
-With \code{use_default_structure = TRUE}, the result of update will be:\if{html}{\out{<div class="sourceCode yaml">}}\preformatted{# Comment 1.
+With \code{use_default_structure = TRUE}, the result of update will be:
+
+\if{html}{\out{<div class="sourceCode yaml">}}\preformatted{# Comment 1.
 PARAM_1: 5
 PARAM_2: 6
 PARAM_3: 3
 }\if{html}{\out{</div>}}
 
-With \code{use_default_structure = FALSE}:\if{html}{\out{<div class="sourceCode yaml">}}\preformatted{# Comment 2.
+With \code{use_default_structure = FALSE}:
+
+\if{html}{\out{<div class="sourceCode yaml">}}\preformatted{# Comment 2.
 PARAM_2: 6
 # Comment 3.
 PARAM_1: 5

@@ -48,8 +48,12 @@ Render RMarkdown document for a stage of the pipeline.
 \details{
 If you are currently working within a \code{scdrake} project, you can review the Rmd files in the \verb{Rmd/} directory.
 
-This is a list of Rmd files currently bundled with the \code{scdrake} package:\if{html}{\out{<div class="sourceCode r">}}\preformatted{fs::dir_tree(system.file("Rmd", package = "scdrake"))
-}\if{html}{\out{</div>}}\preformatted{## /mnt/foibe3/Users/novotnyj/projects/bioinfocz/scdrake/inst/Rmd
+This is a list of Rmd files currently bundled with the \code{scdrake} package:
+
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{fs::dir_tree(system.file("Rmd", package = "scdrake"))
+}\if{html}{\out{</div>}}
+
+\if{html}{\out{<div class="sourceCode">}}\preformatted{## /mnt/foibe3/Users/novotnyj/projects/bioinfocz/scdrake/inst/Rmd
 ## ├── common
 ## │   ├── _footer.Rmd
 ## │   ├── _header.Rmd
@@ -67,7 +71,7 @@ This is a list of Rmd files currently bundled with the \code{scdrake} package:\i
 ##     ├── 01_input_qc_empty_droplets.Rmd
 ##     ├── 02_norm_clustering.Rmd
 ##     └── 02_norm_clustering_simple.Rmd
-}
+}\if{html}{\out{</div>}}
 
 A short description of these Rmd files:
 \itemize{

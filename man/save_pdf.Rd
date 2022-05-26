@@ -9,7 +9,8 @@ save_pdf(
   output_file,
   width = NULL,
   height = NULL,
-  make_thumbnail = FALSE
+  make_thumbnail = FALSE,
+  stop_on_error = FALSE
 )
 }
 \arguments{
@@ -21,10 +22,21 @@ If file's directory doesn't exist, it will be created recursively.}
 \item{width, height}{A numeric scalar: default width and height of graphics region in inches. Defaults to 7.}
 
 \item{make_thumbnail}{A logical scalar: if \code{TRUE}, a PNG file will be created from the first plot in \code{plots}.}
+
+\item{stop_on_error}{A logical scalar: if \code{TRUE}, the function will stop when there is an error during the
+saving of the plot. Otherwise a dummy PDF/PNG thumbnail file with error description will be created instead.}
 }
 \value{
-A character scalar (\code{output_file}) or vector of length two (\code{c(output_file, thumbnail_file)}) if
-\code{make_thumbnail} is \code{TRUE}.
+A named list with the following items:
+\itemize{
+\item \code{success}: a logical scalar indicating whether the plot saving succeeded (\code{TRUE}) or not (\code{FALSE}).
+\item \code{error}: a character scalar with error message if \code{success} is \code{FALSE}, \code{NULL} otherwise.
+\item \code{error_plot}: a \code{ggplot2} object with error plot if \code{success} is \code{FALSE}, \code{NULL} otherwise.
+\item \code{output_file}: a character scalar, identical to \code{output_file} parameter.
+\item \code{thumbnail_file}: a character scalar, path to thumbnail PNG file if \code{make_thumbnail} is \code{TRUE}, \code{NULL} otherwise.
+}
+
+Note that \code{success} of \code{FALSE} and the accompanying error message and plot are only possible when \code{stop_on_error} is \code{FALSE}.
 }
 \description{
 Save a list of plots to multipage PDF.

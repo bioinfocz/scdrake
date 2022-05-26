@@ -84,7 +84,9 @@ All parameters in the \code{yaml_file} whose value starts with \code{!code} will
 Those can reference other parameters in the \code{yaml_file}, or variables in the individual lists of the \code{other_variables} list.
 Note that you cannot reference other \code{!code} parameters as their are not already evaluated during the runtime.
 
-An example YAML file:\if{html}{\out{<div class="sourceCode yaml">}}\preformatted{VAR_1: 5
+An example YAML file:
+
+\if{html}{\out{<div class="sourceCode yaml">}}\preformatted{VAR_1: 5
 VAR_2: !code VAR_1 + 5
 VAR_3: "apple"
 VAR_4:

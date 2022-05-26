@@ -25,7 +25,9 @@ A named list, or \code{NULL} if \code{empty_to_null} is \code{TRUE} and the cond
 }
 \description{
 This is used for some YAML parameters which need to be defined this way, otherwise they would get
-overwritten by default values. Example of such parameter:\if{html}{\out{<div class="sourceCode yaml">}}\preformatted{PARAM:
+overwritten by default values. Example of such parameter:
+
+\if{html}{\out{<div class="sourceCode yaml">}}\preformatted{PARAM:
   - var_1:
       a: 1
     var_2:

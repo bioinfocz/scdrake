@@ -33,12 +33,16 @@ It behaves like a normal list, but, by default, it has more strict rules for non
 They try to extract element(s) from a \code{scdrake_list} object, but throw an error when the element(s) does not exist.
 This behaviour can be avoided for \code{[} and \code{[[} by using the \code{check = FALSE} parameter, e.g. \code{l[name, check = FALSE]}.
 Also, in that case and for \code{[}, a \code{scdrake_list} with non-existing names and \code{NULL} values is returned instead of putting
-\code{NA_character_} for them, which is the default behaviour for a base list, e.g.\if{html}{\out{<div class="sourceCode r">}}\preformatted{> list(a = 2)["b"]
+\code{NA_character_} for them, which is the default behaviour for a base list, e.g.
+
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{> list(a = 2)["b"]
 $<NA>
 NULL
 }\if{html}{\out{</div>}}
 
-compared to\if{html}{\out{<div class="sourceCode r">}}\preformatted{> scdrake_list(list(a = 2))["b", check = FALSE]
+compared to
+
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{> scdrake_list(list(a = 2))["b", check = FALSE]
 $b
 NULL
 
