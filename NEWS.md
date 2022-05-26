@@ -1,5 +1,7 @@
 # scdrake (development version)
 
+- Fixed a typo in `01_input_qc` stage report, added a line for `emptyDroplets` lower bound in barcode rank plot.
+
 # scdrake 1.2.1
 
 - Dimred plots of clusterings and other variables are now saved as PDF and PNG files.

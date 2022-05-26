@@ -75,7 +75,7 @@ It is desired to discard such droplets.
 ## Barcode rank plot
 
 A useful diagnostic for droplet-based data is the barcode rank plot, which shows the total UMI (log-)count for each
-barcode on the x-axis and the (log-)rank on the y-axis.
+barcode on the y-axis and the (log-)rank on the x-axis.
 This is effectively a transposed empirical cumulative density plot with log-transformed axes. 
 It is useful as it allows examine the distribution of total UMI counts across barcodes, focusing on those with the largest counts.
 
@@ -87,11 +87,33 @@ lines(barcode_ranks$rank[o], barcode_ranks$fitted[o], col = "red")
 
 abline(h = metadata(barcode_ranks)$knee, col = "dodgerblue", lty = 2)
 abline(h = metadata(barcode_ranks)$inflection, col = "forestgreen", lty = 2)
-legend("bottomleft", lty = 2, col = c("dodgerblue", "forestgreen"), legend = c("knee", "inflection"))
+if (cfg$EMPTY_DROPLETS_ENABLED) {
+  abline(h = cfg$EMPTY_DROPLETS_LOWER, col = "firebrick", lty = 2)
+  legend(
+    "bottomleft",
+    lty = 2,
+    col = c("dodgerblue", "forestgreen", "firebrick"),
+    legend = c("knee", "inflection", "emptyDroplets lower bound")
+  )
+} else {
+  legend(
+    "bottomleft",
+    lty = 2,
+    col = c("dodgerblue", "forestgreen"),
+    legend = c("knee", "inflection")
+  )
+}
 ```
 
 The knee and inflection points on the curve mark the transition between two components of the total UMI count distribution.
 This is assumed to represent the difference between empty droplets with little RNA and cell-containing droplets with much more RNA.
+
+```{r, results = "asis", eval = cfg$EMPTY_DROPLETS_ENABLED}
+cat(
+  "The emptyDroplets lower bound specifies at or below which number of the total UMI count all barcodes",
+  "are assumed to correspond to empty droplets."
+)
+```
 
 ```{r, results = "asis", eval = !cfg$EMPTY_DROPLETS_ENABLED}
 cat("Removal of empty droplets was disabled. You can enable it by setting `EMPTY_DROPLETS_ENABLED` parameter to `TRUE`.")
