@@ -193,7 +193,7 @@ HVG_RM_CC_GENES: False
 
 Whether to apply a correction for cell cycle prior to HVG selection.
 We implement a cell cycle-related genes removal strategy described
-[here]https://bioconductor.org/books/release/OSCA.advanced/cell-cycle-assignment.html#removing-cell-cycle-related-genes).
+[here](https://bioconductor.org/books/release/OSCA.advanced/cell-cycle-assignment.html#removing-cell-cycle-related-genes).
 It is based on the percentage of variance explained by the cell cycle phase in the expression profile for each gene.
 
 Note that when `SCTransform` is used for normalization including cell cycle variables to regress out, than
@@ -314,7 +314,9 @@ KMEANS_K: !code 3:6
 
 **Type:** integer vector
 
-A vector of numbers clusters for which to compute k-means.
+A vector of number of clusters for which to compute k-means.
+
+Note: `!code 3:6` will evaluate to `c(3, 4, 5, 6)`.
 
 ### SC3 clustering
 
@@ -324,7 +326,9 @@ SC3_K: !code 5:6
 
 **Type:** integer vector
 
-A vector of numbers clusters for which to compute SC3 clustering.
+A vector of number of clusters for which to compute SC3 clustering.
+
+Note: `!code 3:6` will evaluate to `c(5, 6)`.
 
 ***
 
@@ -335,6 +339,11 @@ SC3_N_CORES: 8
 **Type:** integer scalar
 
 A number of CPU cores to use for SC3 computation.
+
+Note that `drake` may have problems when the pipeline is run in parallel mode and at the same time a target is using
+a parallel code (*within target parallelism*). For the SC3 computation is recommended to run the pipeline in
+sequential mode (`DRAKE_PARALLELISM: "loop"`) and set `DRAKE_TARGETS: ["sce_sc3"]`.
+Once the `sce_sc3` target is finished, you can switch the parallelism back to `clustermq` or `future`.
 
 ***
 
@@ -548,7 +557,7 @@ NORM_CLUSTERING_REPORT_CLUSTERING_NAMES: ["graph", "kmeans", "sc3"]
 **Type:** character vector (`"graph"` | `"kmeans"` | `"sc3"`)
 
 A vector of names of clustering methods for which plots in each reduced dimension defined in the
-`NORM_CLUSTERING_REPORT_DIMRED_NAMES` parameter will be made and display in the report.
+`NORM_CLUSTERING_REPORT_DIMRED_NAMES` parameter will be made and displayed in the report.
 
 - `"graph"`: graph-based clustering, two algorithms: Louvain and Walktrap.
 - `"kmeans"`: k-means clustering, two algorithms: best K and numbers of clusters defined in the `KMEANS_K` parameter.
