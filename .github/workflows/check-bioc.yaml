@@ -168,6 +168,7 @@ jobs:
           sysreqs=$(Rscript -e 'cat("apt-get update -y && apt-get install -y", paste(gsub("apt-get install -y ", "", remotes::system_requirements("ubuntu", "20.04")), collapse = " "))')
           echo $sysreqs
           sudo -s eval "$sysreqs"
+          sudo apt-get install -y libgeos-dev
 
       - name: Install macOS system dependencies
         if: matrix.config.os == 'macOS-latest'
@@ -188,6 +189,9 @@ jobs:
 
           ## For clustermq
           brew install zeromq
+
+          ## For Seurat
+          brew install geos
 
       - name: Install Windows system dependencies
         if: runner.os == 'Windows'
