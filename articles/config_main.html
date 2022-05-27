@@ -178,7 +178,7 @@
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Main config</h1>
             
-            <h4 data-toc-skip class="date">2022-04-25</h4>
+            <h4 data-toc-skip class="date">2022-05-27</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/bioinfocz/scdrake/blob/mastervignettes/config_main.Rmd" class="external-link"><code>vignettes/config_main.Rmd</code></a></small>
       <div class="hidden name"><code>config_main.Rmd</code></div>
@@ -188,23 +188,15 @@
     
     
 <hr>
-<p>Main config is stored in <code>00_main.yaml</code> file. Location of
-this file is different for the single-sample and integration pipelines.
-As for the <a href="config_pipeline.html">pipeline config</a>, directory
-with this file is read from environment variables:</p>
+<p>Main config is stored in <code>00_main.yaml</code> file. Location of this file is different for the single-sample and integration pipelines. As for the <a href="config_pipeline.html">pipeline config</a>, directory with this file is read from environment variables:</p>
 <ul>
 <li>
-<code>SCDRAKE_SINGLE_SAMPLE_CONFIG_DIR</code> for the single-sample
-pipeline.</li>
+<code>SCDRAKE_SINGLE_SAMPLE_CONFIG_DIR</code> for the single-sample pipeline.</li>
 <li>
-<code>SCDRAKE_INTEGRATION_CONFIG_DIR</code> for the integration
-pipeline.</li>
+<code>SCDRAKE_INTEGRATION_CONFIG_DIR</code> for the integration pipeline.</li>
 </ul>
-<p>and options named in lowercase are set upon <a href="https://github.com/bioinfocz/scdrake" class="external-link">scdrake</a>
-load or attach.</p>
-<p>Parameters in this config are used throughout all other stages. There
-are parameters such as project name, path to CSS file used to style HTML
-documents, or path to base output directory.</p>
+<p>and options named in lowercase are set upon <a href="https://github.com/bioinfocz/scdrake" class="external-link">scdrake</a> load or attach.</p>
+<p>Parameters in this config are used throughout all other stages. There are parameters such as project name, path to CSS file used to style HTML documents, or path to base output directory.</p>
 <div class="section level2">
 <h2 id="project-information">Project information<a class="anchor" aria-label="anchor" href="#project-information"></a>
 </h2>
@@ -226,23 +218,16 @@ documents, or path to base output directory.</p>
 <div class="sourceCode" id="cb2"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ANNOTATION_LIST</span><span class="kw">:</span></span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">human</span><span class="kw">:</span><span class="at"> </span><span class="st">"org.Hs.eg.db"</span></span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">mouse</span><span class="kw">:</span><span class="at"> </span><span class="st">"org.Mm.eg.db"</span></span></code></pre></div>
-<p><strong>Type:</strong> named list (dictionary) of character
-scalars</p>
-<p>Mapping of organisms to <a href="http://bioconductor.org/packages/release/BiocViews.html#___OrgDb" class="external-link">OrgDb</a>
-annotation packages. The annotation package is selected by matching the
-<code>ORGANISM</code> parameter. If the selected package is not
-installed, you will be asked if you want to install it.</p>
-<p>In the <a href="http://bioconductor.org/packages/release/BiocViews.html#___OrgDb" class="external-link">OrgDb</a>
-list you can find annotations for many other species, e.g. rat. The
-consequent modification of the config is simple:</p>
+<p><strong>Type:</strong> named list (dictionary) of character scalars</p>
+<p>Mapping of organisms to <a href="http://bioconductor.org/packages/release/BiocViews.html#___OrgDb" class="external-link">OrgDb</a> annotation packages. The annotation package is selected by matching the <code>ORGANISM</code> parameter. If the selected package is not installed, you will be asked if you want to install it.</p>
+<p>In the <a href="http://bioconductor.org/packages/release/BiocViews.html#___OrgDb" class="external-link">OrgDb</a> list you can find annotations for many other species, e.g. rat. The consequent modification of the config is simple:</p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ORGANISM</span><span class="kw">:</span><span class="at"> </span><span class="st">"rat"</span></span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ANNOTATION_LIST</span><span class="kw">:</span></span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">rat</span><span class="kw">:</span><span class="at"> </span><span class="st">"org.Rn.eg.db"</span></span></code></pre></div>
 <hr>
 <p><code>ENSEMBL_SPECIES: "Homo_sapiens"</code></p>
 <p><strong>Type:</strong> character scalar</p>
-<p>An ENSEMBL organism name used to build links to Ensembl genes
-website, e.g. <a href="https://www.ensembl.org/Homo_sapiens/Gene/Summary?db=core;g=ENSG00000139618;r=13:32315086-32400268" class="external-link uri">https://www.ensembl.org/Homo_sapiens/Gene/Summary?db=core;g=ENSG00000139618;r=13:32315086-32400268</a></p>
+<p>An ENSEMBL organism name used to build links to Ensembl genes website, e.g. <a href="https://www.ensembl.org/Homo_sapiens/Gene/Summary?db=core;g=ENSG00000139618;r=13:32315086-32400268" class="external-link uri">https://www.ensembl.org/Homo_sapiens/Gene/Summary?db=core;g=ENSG00000139618;r=13:32315086-32400268</a></p>
 <hr>
 </div>
 <div class="section level2">
@@ -250,32 +235,21 @@ website, e.g. <a href="https://www.ensembl.org/Homo_sapiens/Gene/Summary?db=cor
 </h2>
 <p><code>CSS_FILE: "Rmd/common/stylesheet.css"</code></p>
 <p><strong>Type:</strong> character scalar</p>
-<p>A path to CSS file used for HTML reports rendered from RMarkdown
-files.</p>
+<p>A path to CSS file used for HTML reports rendered from RMarkdown files.</p>
 <hr>
 <p><code>BASE_OUT_DIR: "output"</code></p>
 <p><strong>Type:</strong> character scalar</p>
-<p>A path to base output directory to which each stage’s files will be
-saved (check “Output files” section in stage configs.)</p>
+<p>A path to base output directory to which each stage’s files will be saved (check “Output files” section in stage configs.)</p>
 </div>
 <div class="section level2">
 <h2 id="targets">Targets<a class="anchor" aria-label="anchor" href="#targets"></a>
 </h2>
-<p>An informative plan is binded with every other plan, and contains
-targets with useful runtime information:</p>
-<p><code>config_pipeline</code>, <code>config_main</code>: lists holding
-pipeline (<code>pipeline.yaml</code>) and main
-(<code>00_main.yaml</code>) parameters.</p>
-<p><code>pipeline_type</code>: a character scalar:
-<code>"single_sample"</code> or <code>"integration"</code>. These values
-are used in some plans to work with different targets.</p>
-<p><code>sessioninfo_pretty</code>, <code>sessioninfo_base</code>: info
-about loaded packages, R version, etc. Returned from
-<code><a href="https://r-lib.github.io/sessioninfo/reference/session_info.html" class="external-link">sessioninfo::session_info()</a></code> and
-<code><a href="https://rdrr.io/r/utils/sessionInfo.html" class="external-link">utils::sessionInfo()</a></code>, respectively.</p>
+<p>An informative plan is binded with every other plan, and contains targets with useful runtime information:</p>
+<p><code>config_pipeline</code>, <code>config_main</code>: lists holding pipeline (<code>pipeline.yaml</code>) and main (<code>00_main.yaml</code>) parameters.</p>
+<p><code>pipeline_type</code>: a character scalar: <code>"single_sample"</code> or <code>"integration"</code>. These values are used in some plans to work with different targets.</p>
+<p><code>sessioninfo_pretty</code>, <code>sessioninfo_base</code>: info about loaded packages, R version, etc. Returned from <code><a href="https://r-lib.github.io/sessioninfo/reference/session_info.html" class="external-link">sessioninfo::session_info()</a></code> and <code><a href="https://rdrr.io/r/utils/sessionInfo.html" class="external-link">utils::sessionInfo()</a></code>, respectively.</p>
 <p><code>biocmanager_version</code>: Bioconductor version.</p>
-<p><code>external_libs</code>: a character vector of external shared
-libraries (e.g. <code>zlib</code>).</p>
+<p><code>external_libs</code>: a character vector of external shared libraries (e.g. <code>zlib</code>).</p>
 <p><code>datetime</code>: date and time of pipeline execution.</p>
 </div>
   </div>
@@ -297,7 +271,7 @@ libraries (e.g. <code>zlib</code>).</p>
 
 <div class="pkgdown">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.9000.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
   <p class="preferably">Using <a href="https://preferably.amirmasoudabdol.name/?source=footer" class="external-link">preferably</a> template.</p>
 </div>
 

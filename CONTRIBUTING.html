@@ -142,7 +142,6 @@
     </div>
 
 <div id="contributing-to-scdrake" class="section level1">
-
 <p>This outlines how to propose a change to <a href="https://github.com/bioinfocz/scdrake" class="external-link">scdrake</a>. For more detailed info about contributing to this, and other tidyverse packages, please see the <a href="https://rstd.io/tidy-contrib" class="external-link"><strong>development contributing guide</strong></a>.</p>
 <div class="section level2">
 <h2 id="fixing-typos">Fixing typos<a class="anchor" aria-label="anchor" href="#fixing-typos"></a></h2>
@@ -162,13 +161,10 @@
 <div class="section level3">
 <h3 id="code-style">Code style<a class="anchor" aria-label="anchor" href="#code-style"></a></h3>
 <ul><li>New code should follow the tidyverse <a href="https://style.tidyverse.org" class="external-link">style guide</a>. You can use the <a href="https://CRAN.R-project.org/package=styler" class="external-link">styler</a> package to apply these styles, but please don’t restyle code that has nothing to do with your PR.</li>
-<li>In addition to the tidyverse style guide, please, use the following:
-<ul><li>Use <code>## --</code> for comments and <code>#</code> for commenting out (disabling) code.</li>
+<li>In addition to the tidyverse style guide, please, use the following:<ul><li>Use <code>## --</code> for comments and <code>#</code> for commenting out (disabling) code.</li>
 <li>Use double quotes (<code>"gene"</code>) for strings.</li>
-<li>If a function is used by a single target in a plan, name it as <code>&lt;target_name&gt;_fn</code>.
-<ul><li>In such a function, for easier reading, function arguments used as output from other targets are named the same as those targets, e.g. if <code>sample_sheet_file_trg</code> is name of a target, then a downstream function using it as the input is defined as <code>function(sample_sheet_file_trg) {}</code>
-</li>
-</ul></li>
+<li>If a function is used by a single target in a plan, name it as <code>&lt;target_name&gt;_fn</code>.<ul><li>In such a function, for easier reading, function arguments used as output from other targets are named the same as those targets, e.g. if <code>sample_sheet_file_trg</code> is name of a target, then a downstream function using it as the input is defined as <code>function(sample_sheet_file_trg) {}</code>
+</li></ul></li>
 </ul></li>
 <li>We use <a href="https://cran.r-project.org/package=roxygen2" class="external-link">roxygen2</a>, with <a href="https://cran.r-project.org/web/packages/roxygen2/vignettes/rd-formatting.html" class="external-link">Markdown syntax</a>, for documentation.</li>
 <li>We use <a href="https://cran.r-project.org/package=testthat" class="external-link">testthat</a> for unit tests. Contributions with test cases included are easier to accept.</li>
@@ -195,7 +191,7 @@
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.9000.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
   <p class="preferably">Using <a href="https://preferably.amirmasoudabdol.name/?source=footer" class="external-link">preferably</a> template.</p>
 </div>
 

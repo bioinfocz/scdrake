@@ -178,7 +178,7 @@
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Cluster markers</h1>
             
-            <h4 data-toc-skip class="date">2022-04-25</h4>
+            <h4 data-toc-skip class="date">2022-05-27</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/bioinfocz/scdrake/blob/mastervignettes/cluster_markers.Rmd" class="external-link"><code>vignettes/cluster_markers.Rmd</code></a></small>
       <div class="hidden name"><code>cluster_markers.Rmd</code></div>
@@ -188,109 +188,51 @@
     
     
 <hr>
-<p>Taken from <a href="https://bioconductor.org/books/release/OSCA.basic/marker-detection.html" class="external-link">OSCA</a>,
-slightly modified:</p>
+<p>Taken from <a href="https://bioconductor.org/books/release/OSCA.basic/marker-detection.html" class="external-link">OSCA</a>, slightly modified:</p>
 <blockquote>
-<p>To interpret our clustering results, we identify the genes that drive
-separation between clusters. These marker genes allow us to assign
-biological meaning to each cluster based on their functional annotation.
-In the most obvious case, the marker genes for each cluster are a priori
-associated with particular cell types, allowing us to treat the
-clustering as a proxy for cell type identity. The same principle can be
-applied to discover more subtle differences between clusters (e.g.,
-changes in activation or differentiation state) based on the behavior of
-genes in the affected pathways.</p>
+<p>To interpret our clustering results, we identify the genes that drive separation between clusters. These marker genes allow us to assign biological meaning to each cluster based on their functional annotation. In the most obvious case, the marker genes for each cluster are a priori associated with particular cell types, allowing us to treat the clustering as a proxy for cell type identity. The same principle can be applied to discover more subtle differences between clusters (e.g., changes in activation or differentiation state) based on the behavior of genes in the affected pathways.</p>
 </blockquote>
 <blockquote>
-<p>Identification of marker genes is usually based around the
-retrospective detection of differential expression between clusters.
-Genes that are more strongly DE are more likely to have caused separate
-clustering of cells in the first place. Several different statistical
-tests are available to quantify the differences in expression profiles,
-and different approaches can be used to consolidate test results into a
-single ranking of genes for each cluster. These choices parametrize the
-theoretical differences between the various marker detection
-strategies.</p>
+<p>Identification of marker genes is usually based around the retrospective detection of differential expression between clusters. Genes that are more strongly DE are more likely to have caused separate clustering of cells in the first place. Several different statistical tests are available to quantify the differences in expression profiles, and different approaches can be used to consolidate test results into a single ranking of genes for each cluster. These choices parametrize the theoretical differences between the various marker detection strategies.</p>
 </blockquote>
 <div class="section level2">
 <h2 id="used-statistical-tests">Used statistical tests<a class="anchor" aria-label="anchor" href="#used-statistical-tests"></a>
 </h2>
-<p>For each cell grouping and gene, three distinct, adjustable
-statistical tests are computed through
-<code><a href="https://rdrr.io/pkg/scran/man/findMarkers.html" class="external-link">scran::findMarkers()</a></code>:</p>
+<p>For each cell grouping and gene, three distinct, adjustable statistical tests are computed through <code><a href="https://rdrr.io/pkg/scran/man/findMarkers.html" class="external-link">scran::findMarkers()</a></code>:</p>
 <ul>
-<li>t-test (<code><a href="https://rdrr.io/pkg/scran/man/pairwiseTTests.html" class="external-link">scran::pairwiseTTests()</a></code>): test for difference
-in mean expression.</li>
+<li>t-test (<code><a href="https://rdrr.io/pkg/scran/man/pairwiseTTests.html" class="external-link">scran::pairwiseTTests()</a></code>): test for difference in mean expression.</li>
 <li>
-<a href="https://en.wikipedia.org/wiki/Wilcoxon_signed-rank_test" class="external-link">Wilcoxon
-signed-rank test</a> (<code><a href="https://rdrr.io/pkg/scran/man/pairwiseWilcox.html" class="external-link">scran::pairwiseWilcox()</a></code>): test for
-difference in median expression (roughly speaking).</li>
-<li>Binomial test (<code><a href="https://rdrr.io/pkg/scran/man/pairwiseBinom.html" class="external-link">scran::pairwiseBinom()</a></code>): test the null
-hypothesis that the proportion of cells expressing a gene is the same
-between groups.</li>
+<a href="https://en.wikipedia.org/wiki/Wilcoxon_signed-rank_test" class="external-link">Wilcoxon signed-rank test</a> (<code><a href="https://rdrr.io/pkg/scran/man/pairwiseWilcox.html" class="external-link">scran::pairwiseWilcox()</a></code>): test for difference in median expression (roughly speaking).</li>
+<li>Binomial test (<code><a href="https://rdrr.io/pkg/scran/man/pairwiseBinom.html" class="external-link">scran::pairwiseBinom()</a></code>): test the null hypothesis that the proportion of cells expressing a gene is the same between groups.</li>
 </ul>
-<p>These tests are performed in a <a href="https://bioconductor.org/books/release/OSCA.basic/marker-detection.html#scoring-markers-by-pairwise-comparisons" class="external-link">pairwise
-fashion</a> within each grouping, i.e. each level of the grouping is
-tested against each other.</p>
-<p>Example: three pairwise tests of each type are computed for k-means
-clustering with <span class="math inline">\(k = 3\)</span>:</p>
+<p>These tests are performed in a <a href="https://bioconductor.org/books/release/OSCA.basic/marker-detection.html#scoring-markers-by-pairwise-comparisons" class="external-link">pairwise fashion</a> within each grouping, i.e. each level of the grouping is tested against each other.</p>
+<p>Example: three pairwise tests of each type are computed for k-means clustering with <span class="math inline">\(k = 3\)</span>:</p>
 <ul>
 <li>Cluster 1 vs. Cluster 2</li>
 <li>Cluster 1 vs. Cluster 3</li>
 <li>Cluster 2 vs. Cluster 3</li>
 </ul>
-<p>The overall p-values, false discovery rate (FDR) and effect sizes
-(log2 fold change (LFC) for t- and binomial test, and Area Under Curve
-for Wilcoxon test) are calculated for the cell grouping from its all
-pairwise tests (<code><a href="https://rdrr.io/pkg/scran/man/combineMarkers.html" class="external-link">scran::combineMarkers()</a></code>).</p>
+<p>The overall p-values, false discovery rate (FDR) and effect sizes (log2 fold change (LFC) for t- and binomial test, and Area Under Curve for Wilcoxon test) are calculated for the cell grouping from its all pairwise tests (<code><a href="https://rdrr.io/pkg/scran/man/combineMarkers.html" class="external-link">scran::combineMarkers()</a></code>).</p>
 </div>
 <div class="section level2">
 <h2 id="narrowing-down-the-number-of-cluster-markers">Narrowing down the number of cluster markers<a class="anchor" aria-label="anchor" href="#narrowing-down-the-number-of-cluster-markers"></a>
 </h2>
-<p>A more or less stringent approach can be used to narrow down the
-number of cluster markers, based on results from individual pairwise
-tests. This will also affect the combined p-value and FDR:</p>
+<p>A more or less stringent approach can be used to narrow down the number of cluster markers, based on results from individual pairwise tests. This will also affect the combined p-value and FDR:</p>
 <ul>
 <li>
-<a href="https://bioconductor.org/books/3.12/OSCA/marker-detection.html#looking-for-any-differences" class="external-link">Looking
-for any differences</a>: for each level (cluster) of a grouping, take
-top markers by p-value from each pairwise test. This will be shown as
-<code>Top</code> column in marker table. Example: the set of all genes
-with <code>Top</code> values of 1 contains the gene with the lowest
-p-value from each comparison.</li>
+<a href="https://bioconductor.org/books/3.12/OSCA/marker-detection.html#looking-for-any-differences" class="external-link">Looking for any differences</a>: for each level (cluster) of a grouping, take top markers by p-value from each pairwise test. This will be shown as <code>Top</code> column in marker table. Example: the set of all genes with <code>Top</code> values of 1 contains the gene with the lowest p-value from each comparison.</li>
 <li>
-<a href="https://bioconductor.org/books/3.12/OSCA/marker-detection.html#finding-cluster-specific-markers" class="external-link">Finding
-cluster-specific markers</a>: a more stringent approach only considering
-genes that are differentially expressed in all pairwise comparisons
-involving the cluster of interest. For this purpose is used an
-intersection-union test where the combined p-value for each gene is the
-maximum of the p-values from all pairwise comparisons. A gene will only
-achieve a low combined p-value if it is strongly DE in all comparisons
-to other clusters.</li>
+<a href="https://bioconductor.org/books/3.12/OSCA/marker-detection.html#finding-cluster-specific-markers" class="external-link">Finding cluster-specific markers</a>: a more stringent approach only considering genes that are differentially expressed in all pairwise comparisons involving the cluster of interest. For this purpose is used an intersection-union test where the combined p-value for each gene is the maximum of the p-values from all pairwise comparisons. A gene will only achieve a low combined p-value if it is strongly DE in all comparisons to other clusters.</li>
 <li>
-<a href="https://bioconductor.org/books/3.12/OSCA/marker-detection.html#balancing-stringency-and-generality" class="external-link">Balancing
-stringency and generality</a>: the Holm-Bonferroni correction is applied
-on pairwise p-values and the middle-most value is taken as the combined
-p-value. This effectively tests the global null hypothesis that at least
-50% of the individual pairwise comparisons exhibit no differential
-expression.</li>
+<a href="https://bioconductor.org/books/3.12/OSCA/marker-detection.html#balancing-stringency-and-generality" class="external-link">Balancing stringency and generality</a>: the Holm-Bonferroni correction is applied on pairwise p-values and the middle-most value is taken as the combined p-value. This effectively tests the global null hypothesis that at least 50% of the individual pairwise comparisons exhibit no differential expression.</li>
 </ul>
-<p>This can be controlled via the <code>PVAL_TYPE</code> parameter in
-<code>cluster_markers.yaml</code> config. See
-<code><a href="../articles/stage_cluster_markers.html">vignette("stage_cluster_markers")</a></code> for details.</p>
+<p>This can be controlled via the <code>PVAL_TYPE</code> parameter in <code>cluster_markers.yaml</code> config. See <code><a href="../articles/stage_cluster_markers.html">vignette("stage_cluster_markers")</a></code> for details.</p>
 </div>
 <div class="section level2">
 <h2 id="handling-blocking-factors">Handling blocking factors<a class="anchor" aria-label="anchor" href="#handling-blocking-factors"></a>
 </h2>
-<p><a href="https://bioconductor.org/books/3.12/OSCA/marker-detection.html#marker-batch" class="external-link">Blocking
-factors</a> (e.g. batch effect, sex differences, cell cycle phases) can
-be handled by further nesting. For that, each pairwise test is performed
-separately in each level of the blocking factor. Then, p-values from
-individual levels’ tests are combined, and the final combined p-values
-are obtained by the method of choice (see above).</p>
-<p>This can be controlled via the <code>BLOCK_COLUMN</code> parameter in
-<code>cluster_markers.yaml</code> config. See
-<code><a href="../articles/stage_cluster_markers.html">vignette("stage_cluster_markers")</a></code> for details.</p>
+<p><a href="https://bioconductor.org/books/3.12/OSCA/marker-detection.html#marker-batch" class="external-link">Blocking factors</a> (e.g. batch effect, sex differences, cell cycle phases) can be handled by further nesting. For that, each pairwise test is performed separately in each level of the blocking factor. Then, p-values from individual levels’ tests are combined, and the final combined p-values are obtained by the method of choice (see above).</p>
+<p>This can be controlled via the <code>BLOCK_COLUMN</code> parameter in <code>cluster_markers.yaml</code> config. See <code><a href="../articles/stage_cluster_markers.html">vignette("stage_cluster_markers")</a></code> for details.</p>
 </div>
   </div>
 
@@ -311,7 +253,7 @@ are obtained by the method of choice (see above).</p>
 
 <div class="pkgdown">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.9000.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
   <p class="preferably">Using <a href="https://preferably.amirmasoudabdol.name/?source=footer" class="external-link">preferably</a> template.</p>
 </div>
 

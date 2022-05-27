@@ -16,11 +16,13 @@ $, [, and [[ operators are overloaded for this class.
 They try to extract element(s) from a scdrake_list object, but throw an error when the element(s) does not exist.
 This behaviour can be avoided for [ and [[ by using the check = FALSE parameter, e.g. l[name, check = FALSE].
 Also, in that case and for [, a scdrake_list with non-existing names and NULL values is returned instead of putting
-NA_character_ for them, which is the default behaviour for a base list, e.g.&amp;gt; list(a = 2)["b"]
+NA_character_ for them, which is the default behaviour for a base list, e.g.
+&amp;gt; list(a = 2)["b"]
 $&amp;lt;NA&amp;gt;
 NULL
 
-compared to&amp;gt; scdrake_list(list(a = 2))["b", check = FALSE]
+compared to
+&amp;gt; scdrake_list(list(a = 2))["b", check = FALSE]
 $b
 NULL
 
@@ -165,11 +167,13 @@ However, this does not work for numeric subscripts.'><!-- mathjax --><script src
 They try to extract element(s) from a <code>scdrake_list</code> object, but throw an error when the element(s) does not exist.
 This behaviour can be avoided for <code>[</code> and <code>[[</code> by using the <code>check = FALSE</code> parameter, e.g. <code>l[name, check = FALSE]</code>.
 Also, in that case and for <code>[</code>, a <code>scdrake_list</code> with non-existing names and <code>NULL</code> values is returned instead of putting
-<code>NA_character_</code> for them, which is the default behaviour for a base list, e.g.</p><div class="sourceCode r"><pre><code>&gt; list(a = 2)["b"]
+<code>NA_character_</code> for them, which is the default behaviour for a base list, e.g.</p>
+<p></p><div class="sourceCode r"><pre><code>&gt; list(a = 2)["b"]
 $&lt;NA&gt;
 NULL
 </code></pre><p></p></div>
-<p>compared to</p><div class="sourceCode r"><pre><code>&gt; scdrake_list(list(a = 2))["b", check = FALSE]
+<p>compared to</p>
+<p></p><div class="sourceCode r"><pre><code>&gt; scdrake_list(list(a = 2))["b", check = FALSE]
 $b
 NULL
 
@@ -252,7 +256,7 @@ $(x, i)
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.9000.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
   <p class="preferably">Using <a href="https://preferably.amirmasoudabdol.name/?source=footer" class="external-link">preferably</a> template.</p>
 </div>
 

@@ -178,7 +178,7 @@
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Integration stage</h1>
             
-            <h4 data-toc-skip class="date">2022-04-25</h4>
+            <h4 data-toc-skip class="date">2022-05-27</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/bioinfocz/scdrake/blob/mastervignettes/stage_integration.Rmd" class="external-link"><code>vignettes/stage_integration.Rmd</code></a></small>
       <div class="hidden name"><code>stage_integration.Rmd</code></div>
@@ -188,15 +188,8 @@
     
     
 <hr>
-<p>For a general overview of this integration pipeline stage see
-<code><a href="../articles/pipeline_overview.html">vignette("pipeline_overview")</a></code>.</p>
-<p>Config for this stage is stored in <code>01_integration.yaml</code>
-file. Directory with this file is read from
-<code>SCDRAKE_INTEGRATION_CONFIG_DIR</code> environment variable upon
-<a href="https://github.com/bioinfocz/scdrake" class="external-link">scdrake</a> load or attach, and saved as
-<code>scdrake_integration_config_dir</code> option. This option is used
-as the default argument value in several <a href="https://github.com/bioinfocz/scdrake" class="external-link">scdrake</a>
-functions.</p>
+<p>For a general overview of this integration pipeline stage see <code><a href="../articles/pipeline_overview.html">vignette("pipeline_overview")</a></code>.</p>
+<p>Config for this stage is stored in <code>01_integration.yaml</code> file. Directory with this file is read from <code>SCDRAKE_INTEGRATION_CONFIG_DIR</code> environment variable upon <a href="https://github.com/bioinfocz/scdrake" class="external-link">scdrake</a> load or attach, and saved as <code>scdrake_integration_config_dir</code> option. This option is used as the default argument value in several <a href="https://github.com/bioinfocz/scdrake" class="external-link">scdrake</a> functions.</p>
 <hr>
 <div class="section level2">
 <h2 id="config-parameters">Config parameters<a class="anchor" aria-label="anchor" href="#config-parameters"></a>
@@ -216,66 +209,36 @@ functions.</p>
 <span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">hvg_rm_cc_genes</span><span class="kw">:</span><span class="at"> </span><span class="ch">False</span></span>
 <span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">hvg_cc_genes_var_expl_threshold</span><span class="kw">:</span><span class="at"> </span><span class="ch">null</span></span></code></pre></div>
 <p><strong>Type:</strong> list of named lists</p>
-<p>This parameter specifies datasets to be integrated. Those are read in
-from single-sample pipeline results (the
-<code>sc_final_norm_clustering</code> targets) taken from corresponding
-<a href="https://docs.ropensci.org/drake" class="external-link">drake</a> caches.</p>
-<p>Each name of a nested list specifies the name of single-sample,
-e.g. <code>pbmc1k</code>. Parameters for each single-sample are:</p>
+<p>This parameter specifies datasets to be integrated. Those are read in from single-sample pipeline results (the <code>sc_final_norm_clustering</code> targets) taken from corresponding <a href="https://docs.ropensci.org/drake" class="external-link">drake</a> caches.</p>
+<p>Each name of a nested list specifies the name of single-sample, e.g. <code>pbmc1k</code>. Parameters for each single-sample are:</p>
 <ul>
 <li>
-<code>cache_path: ".drake_pbmc1k"</code> (character scalar): a path
-to <a href="https://docs.ropensci.org/drake" class="external-link">drake</a> cache.</li>
+<code>cache_path: ".drake_pbmc1k"</code> (character scalar): a path to <a href="https://docs.ropensci.org/drake" class="external-link">drake</a> cache.</li>
 <li>
-<code>description: "10x Genomics PBMC 1k dataset"</code> (character
-scalar): a description of the single-sample, will appear in
-reports.</li>
+<code>description: "10x Genomics PBMC 1k dataset"</code> (character scalar): a description of the single-sample, will appear in reports.</li>
 <li>
-<code>hvg_rm_cc_genes: True</code> (logical scalar): if
-<code>True</code>, cell cycle-related genes will be removed prior to
-selection of highly variable genes (HVGs). This is the same method of
-cell cycle correction as in the <code>02_norm_clustering</code> stage of
-the single-sample pipeline (see
-<code><a href="../articles/stage_norm_clustering.html">vignette("stage_norm_clustering")</a></code> for more details).</li>
+<code>hvg_rm_cc_genes: True</code> (logical scalar): if <code>True</code>, cell cycle-related genes will be removed prior to selection of highly variable genes (HVGs). This is the same method of cell cycle correction as in the <code>02_norm_clustering</code> stage of the single-sample pipeline (see <code><a href="../articles/stage_norm_clustering.html">vignette("stage_norm_clustering")</a></code> for more details).</li>
 <li>
-<code>hvg_cc_genes_var_expl_threshold: 5</code> (numeric scalar): a
-threshold on cell cycle variance explained. Genes with var. expl.
-greater than this threshold will be marked as CC-related.</li>
+<code>hvg_cc_genes_var_expl_threshold: 5</code> (numeric scalar): a threshold on cell cycle variance explained. Genes with var. expl. greater than this threshold will be marked as CC-related.</li>
 </ul>
-<p>Currently, there are some limitations of which datasets can be
-integrated:</p>
+<p>Currently, there are some limitations of which datasets can be integrated:</p>
 <ul>
-<li>All single-samples must be normalized by <code>{scran}</code>
-method.</li>
-<li>If the HVG selection in integrated data is based on combined HVG
-metrics (see the relevant parameters below), all single-samples had to
-use the same HVG metric (<code>HVG_METRIC</code> of
-<code>"gene_var"</code> or <code>"gene_cv2"</code>).</li>
+<li>All single-samples must be normalized by <code>{scran}</code> method.</li>
+<li>If the HVG selection in integrated data is based on combined HVG metrics (see the relevant parameters below), all single-samples had to use the same HVG metric (<code>HVG_METRIC</code> of <code>"gene_var"</code> or <code>"gene_cv2"</code>).</li>
 </ul>
 </div>
 <div class="section level3">
 <h3 id="selection-of-highly-variable-genes-hvgs">Selection of highly variable genes (HVGs)<a class="anchor" aria-label="anchor" href="#selection-of-highly-variable-genes-hvgs"></a>
 </h3>
-<p>This is done prior to integration, and is same for all methods
-specified in the <code>INTEGRATION_METHODS</code> (see below).</p>
-<p>If a single-sample has the <code>hvg_rm_cc_genes</code> set to
-<code>True</code>, cell cycle-related genes will be removed prior to HVG
-combination and selection.</p>
+<p>This is done prior to integration, and is same for all methods specified in the <code>INTEGRATION_METHODS</code> (see below).</p>
+<p>If a single-sample has the <code>hvg_rm_cc_genes</code> set to <code>True</code>, cell cycle-related genes will be removed prior to HVG combination and selection.</p>
 <hr>
 <div class="sourceCode" id="cb2"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">HVG_COMBINATION_INT</span><span class="kw">:</span><span class="at"> </span><span class="st">"hvg_metric"</span></span></code></pre></div>
-<p><strong>Type:</strong> character scalar (<code>"hvg_metric"</code> |
-<code>"intersection"</code> | <code>"union"</code> |
-<code>"all"</code>)</p>
+<p><strong>Type:</strong> character scalar (<code>"hvg_metric"</code> | <code>"intersection"</code> | <code>"union"</code> | <code>"all"</code>)</p>
 <p>How to combine HVGs from single-samples:</p>
 <ul>
 <li>
-<code>"hvg_metric"</code>: combine HVG metrics (gene variance or
-CV2) and then apply HVG selection similar to procedure in the
-<code>02_norm_clustering</code> stage of the single-sample pipeline.
-Note that in order to combine HVG metrics, all samples had to have
-<code>HVG_METRIC</code> set to either <code>"gene_var"</code>
-(<code><a href="https://rdrr.io/pkg/scran/man/combineVar.html" class="external-link">scran::combineVar()</a></code>) or <code>"gene_cv2"</code>
-(<code><a href="https://rdrr.io/pkg/scran/man/combineVar.html" class="external-link">scran::combineCV2()</a></code>).</li>
+<code>"hvg_metric"</code>: combine HVG metrics (gene variance or CV2) and then apply HVG selection similar to procedure in the <code>02_norm_clustering</code> stage of the single-sample pipeline. Note that in order to combine HVG metrics, all samples had to have <code>HVG_METRIC</code> set to either <code>"gene_var"</code> (<code><a href="https://rdrr.io/pkg/scran/man/combineVar.html" class="external-link">scran::combineVar()</a></code>) or <code>"gene_cv2"</code> (<code><a href="https://rdrr.io/pkg/scran/man/combineVar.html" class="external-link">scran::combineCV2()</a></code>).</li>
 <li>Combine HVGs by set operations:
 <ul>
 <li><code>"intersection"</code></li>
@@ -283,20 +246,14 @@ Note that in order to combine HVG metrics, all samples had to have
 </ul>
 </li>
 <li>
-<code>"all"</code>: use all common genes from all samples as HVGs
-(without duplicates).</li>
+<code>"all"</code>: use all common genes from all samples as HVGs (without duplicates).</li>
 </ul>
 <hr>
 <div class="sourceCode" id="cb3"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">HVG_SELECTION_INT</span><span class="kw">:</span><span class="at"> </span><span class="st">"top"</span></span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="fu">HVG_SELECTION_VALUE_INT</span><span class="kw">:</span><span class="at"> </span><span class="dv">3000</span></span></code></pre></div>
 <p><strong>Type:</strong> character scalar, integer scalar</p>
-<p>HVG selection strategy. Only relevant when
-<code>HVG_COMBINATION_INT</code> is <code>"hvg_metric"</code>, i.e. this
-selection will be applied to combined HVG metrics.</p>
-<p>These parameters are similar to <code>HVG_SELECTION</code> and
-<code>HVG_SELECTION_VALUE</code> in the <code>02_norm_clustering</code>
-stage of the single-sample pipeline (see
-<code><a href="../articles/stage_norm_clustering.html">vignette("stage_norm_clustering")</a></code> for more details).</p>
+<p>HVG selection strategy. Only relevant when <code>HVG_COMBINATION_INT</code> is <code>"hvg_metric"</code>, i.e. this selection will be applied to combined HVG metrics.</p>
+<p>These parameters are similar to <code>HVG_SELECTION</code> and <code>HVG_SELECTION_VALUE</code> in the <code>02_norm_clustering</code> stage of the single-sample pipeline (see <code><a href="../articles/stage_norm_clustering.html">vignette("stage_norm_clustering")</a></code> for more details).</p>
 </div>
 <div class="section level3">
 <h3 id="integration-methods">Integration methods<a class="anchor" aria-label="anchor" href="#integration-methods"></a>
@@ -336,127 +293,77 @@ stage of the single-sample pipeline (see
 <span id="cb4-33"><a href="#cb4-33" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">merge.order</span><span class="kw">:</span><span class="at"> </span><span class="ch">null</span></span>
 <span id="cb4-34"><a href="#cb4-34" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">auto.merge</span><span class="kw">:</span><span class="at"> </span><span class="ch">True</span></span></code></pre></div>
 <p><strong>Type:</strong> list of named lists</p>
-<p>Each named list is specifying parameters for one integration method.
-The ones specified in the <code>integration_params</code> list are used
-directly in an integration method, while the others are used prior/after
-integration. The <code>"uncorrected"</code> and at least one integration
-method must be set (by default, all methods are performed). Here are
-descriptions and possible parameters (some of them are used by multiple
-methods, and thus described only once) for each integration method:</p>
+<p>Each named list is specifying parameters for one integration method. The ones specified in the <code>integration_params</code> list are used directly in an integration method, while the others are used prior/after integration. The <code>"uncorrected"</code> and at least one integration method must be set (by default, all methods are performed). Here are descriptions and possible parameters (some of them are used by multiple methods, and thus described only once) for each integration method:</p>
 <ul>
 <li>
-<code>uncorrected</code>: correction for inter-batch sequencing
-depth with <code><a href="https://rdrr.io/pkg/batchelor/man/multiBatchNorm.html" class="external-link">batchelor::multiBatchNorm()</a></code>. This method is
-required, because it is used for differential expression analysis
-(cluster markers and contrasts).
+<code>uncorrected</code>: correction for inter-batch sequencing depth with <code><a href="https://rdrr.io/pkg/batchelor/man/multiBatchNorm.html" class="external-link">batchelor::multiBatchNorm()</a></code>. This method is required, because it is used for differential expression analysis (cluster markers and contrasts).
 <ul>
 <li>
-<code>pca_selection_method: "forced"</code> (character scalar:
-<code>"forced"</code> | <code>"elbow"</code> |
-<code>"technical_noise"</code>): see the
-<code>PCA_SELECTION_METHOD</code> parameter in
-<code>vignette("norm_clustering")</code>.</li>
+<code>pca_selection_method: "forced"</code> (character scalar: <code>"forced"</code> | <code>"elbow"</code> | <code>"technical_noise"</code>): see the <code>PCA_SELECTION_METHOD</code> parameter in <code>vignette("norm_clustering")</code>.</li>
 <li>
-<code>pca_forced_pcs: 15</code> (integer scalar): force this number
-of selected PCs (if <code>pca_selection_method</code> is
-<code>"forced"</code>).</li>
+<code>pca_forced_pcs: 15</code> (integer scalar): force this number of selected PCs (if <code>pca_selection_method</code> is <code>"forced"</code>).</li>
 <li>
 <code>tsne_perp: 20</code> (numeric scalar): t-SNE perplexity.</li>
 <li>
-<code>tsne_max_iter: 1000</code> (positive integer scalar): a
-maximum number of t-SNE iterations.</li>
+<code>tsne_max_iter: 1000</code> (positive integer scalar): a maximum number of t-SNE iterations.</li>
 </ul>
 </li>
 <li>
-<code>rescaling</code>: scale counts so that the average count
-within each batch is the same for each gene
-(<code><a href="https://rdrr.io/pkg/batchelor/man/rescaleBatches.html" class="external-link">batchelor::rescaleBatches()</a></code>).
+<code>rescaling</code>: scale counts so that the average count within each batch is the same for each gene (<code><a href="https://rdrr.io/pkg/batchelor/man/rescaleBatches.html" class="external-link">batchelor::rescaleBatches()</a></code>).
 <ul>
 <li><code>pca_selection_method: "forced"</code></li>
 <li><code>pca_forced_pcs: 15</code></li>
 <li><code>tsne_perp: 20</code></li>
 <li><code>tsne_max_iter: 1000</code></li>
 <li>
-<code>integration_params</code>: directly passed to
-<code><a href="https://rdrr.io/pkg/batchelor/man/BatchelorParam.html" class="external-link">batchelor::RescaleParam()</a></code> used for
-<code><a href="https://rdrr.io/pkg/batchelor/man/rescaleBatches.html" class="external-link">batchelor::rescaleBatches()</a></code>. Default values from this
-function are used by default.
+<code>integration_params</code>: directly passed to <code><a href="https://rdrr.io/pkg/batchelor/man/BatchelorParam.html" class="external-link">batchelor::RescaleParam()</a></code> used for <code><a href="https://rdrr.io/pkg/batchelor/man/rescaleBatches.html" class="external-link">batchelor::rescaleBatches()</a></code>. Default values from this function are used by default.
 <ul>
 <li>
-<code>log.base: 2</code> (numeric scalar): a base of the
-log-transformation.</li>
+<code>log.base: 2</code> (numeric scalar): a base of the log-transformation.</li>
 <li>
-<code>pseudo.count: 1</code> (numeric scalar): a pseudo-count used
-for the log-transformation.</li>
+<code>pseudo.count: 1</code> (numeric scalar): a pseudo-count used for the log-transformation.</li>
 </ul>
 </li>
 </ul>
 </li>
 <li>
-<code>regression</code>: fit a linear model to each gene regress out
-uninteresting factors of variation, returning a matrix of residuals
-(<code><a href="https://rdrr.io/pkg/batchelor/man/regressBatches.html" class="external-link">batchelor::regressBatches()</a></code>).
+<code>regression</code>: fit a linear model to each gene regress out uninteresting factors of variation, returning a matrix of residuals (<code><a href="https://rdrr.io/pkg/batchelor/man/regressBatches.html" class="external-link">batchelor::regressBatches()</a></code>).
 <ul>
 <li>
-<code>pca_selection_method: "corrected"</code>: in this integration
-method, <code><a href="https://rdrr.io/pkg/batchelor/man/multiBatchPCA.html" class="external-link">batchelor::multiBatchPCA()</a></code> is used, and all PCs (50
-by default) from this method will be used if <code>"corrected"</code> is
-specified. Otherwise any other PCA selection method can be used.</li>
+<code>pca_selection_method: "corrected"</code>: in this integration method, <code><a href="https://rdrr.io/pkg/batchelor/man/multiBatchPCA.html" class="external-link">batchelor::multiBatchPCA()</a></code> is used, and all PCs (50 by default) from this method will be used if <code>"corrected"</code> is specified. Otherwise any other PCA selection method can be used.</li>
 <li><code>pca_forced_pcs: 15</code></li>
 <li><code>tsne_perp: 20</code></li>
 <li><code>tsne_max_iter: 1000</code></li>
 <li>
-<code>integration_params</code>: directly passed to
-<code><a href="https://rdrr.io/pkg/batchelor/man/BatchelorParam.html" class="external-link">batchelor::RegressParam()</a></code> used for
-<code><a href="https://rdrr.io/pkg/batchelor/man/regressBatches.html" class="external-link">batchelor::regressBatches()</a></code>. Default values from this
-function are used by default.
+<code>integration_params</code>: directly passed to <code><a href="https://rdrr.io/pkg/batchelor/man/BatchelorParam.html" class="external-link">batchelor::RegressParam()</a></code> used for <code><a href="https://rdrr.io/pkg/batchelor/man/regressBatches.html" class="external-link">batchelor::regressBatches()</a></code>. Default values from this function are used by default.
 <ul>
 <li>
-<code>d: 50</code> (integer scalar): a number of PCs to compute in
-<code><a href="https://rdrr.io/pkg/batchelor/man/multiBatchPCA.html" class="external-link">batchelor::multiBatchPCA()</a></code>.</li>
+<code>d: 50</code> (integer scalar): a number of PCs to compute in <code><a href="https://rdrr.io/pkg/batchelor/man/multiBatchPCA.html" class="external-link">batchelor::multiBatchPCA()</a></code>.</li>
 </ul>
 </li>
 </ul>
 </li>
 <li>
-<code>mnn</code>: fast mutual nearest neighbors
-(<code><a href="https://rdrr.io/pkg/batchelor/man/fastMNN.html" class="external-link">batchelor::fastMNN()</a></code>).
+<code>mnn</code>: fast mutual nearest neighbors (<code><a href="https://rdrr.io/pkg/batchelor/man/fastMNN.html" class="external-link">batchelor::fastMNN()</a></code>).
 <ul>
 <li><code>pca_selection_method: "corrected"</code></li>
 <li><code>pca_forced_pcs: 15</code></li>
 <li><code>tsne_perp: 20</code></li>
 <li><code>tsne_max_iter: 1000</code></li>
 <li>
-<code>integration_params</code>: directly passed to
-<code><a href="https://rdrr.io/pkg/batchelor/man/BatchelorParam.html" class="external-link">batchelor::FastMnnParam()</a></code> used for
-<code><a href="https://rdrr.io/pkg/batchelor/man/fastMNN.html" class="external-link">batchelor::fastMNN()</a></code>. Default values from this function are
-used by default.
+<code>integration_params</code>: directly passed to <code><a href="https://rdrr.io/pkg/batchelor/man/BatchelorParam.html" class="external-link">batchelor::FastMnnParam()</a></code> used for <code><a href="https://rdrr.io/pkg/batchelor/man/fastMNN.html" class="external-link">batchelor::fastMNN()</a></code>. Default values from this function are used by default.
 <ul>
 <li>
-<code>k: 20</code> (integer scalar): a number of nearest neighbors
-to consider when identifying MNNs.</li>
+<code>k: 20</code> (integer scalar): a number of nearest neighbors to consider when identifying MNNs.</li>
 <li>
-<code>prop.k: null</code> (numeric scalar): a proportion of cells in
-each dataset to use for mutual nearest neighbor searching. If set, the
-number of nearest neighbors used for the MNN search in each batch is
-redefined as <code>max(k, prop.k*N)</code> where <code>N</code> is the
-number of cells in that batch.</li>
+<code>prop.k: null</code> (numeric scalar): a proportion of cells in each dataset to use for mutual nearest neighbor searching. If set, the number of nearest neighbors used for the MNN search in each batch is redefined as <code>max(k, prop.k*N)</code> where <code>N</code> is the number of cells in that batch.</li>
 <li>
-<code>cos.norm: True</code> (logical scalar): if <code>True</code>,
-cosine normalization is performed on the input data prior to PCA.</li>
+<code>cos.norm: True</code> (logical scalar): if <code>True</code>, cosine normalization is performed on the input data prior to PCA.</li>
 <li>
-<code>ndist: 3</code> (numeric scalar): a threshold beyond which
-neighbours are to be ignored when computing correction vectors. Each
-threshold is defined as a multiple of the number of median
-distances.</li>
+<code>ndist: 3</code> (numeric scalar): a threshold beyond which neighbours are to be ignored when computing correction vectors. Each threshold is defined as a multiple of the number of median distances.</li>
 <li><code>d: 50</code></li>
 <li>
-<code>merge.order: null</code> (integer vector, list of lists, or
-<code>null</code>): a merge order of single-samples. Alternatively, a
-list of lists representing a tree structure specifying a hierarchical
-merge order (not tested, see <code><a href="https://rdrr.io/pkg/batchelor/man/fastMNN.html" class="external-link">batchelor::fastMNN()</a></code> for more
-details). <code>auto.merge: True</code> (logical scalar): if
-<code>True</code>, automatically identify the “best” merge order.</li>
+<code>merge.order: null</code> (integer vector, list of lists, or <code>null</code>): a merge order of single-samples. Alternatively, a list of lists representing a tree structure specifying a hierarchical merge order (not tested, see <code><a href="https://rdrr.io/pkg/batchelor/man/fastMNN.html" class="external-link">batchelor::fastMNN()</a></code> for more details). <code>auto.merge: True</code> (logical scalar): if <code>True</code>, automatically identify the “best” merge order.</li>
 </ul>
 </li>
 </ul>
@@ -469,26 +376,19 @@ details). <code>auto.merge: True</code> (logical scalar): if
 <div class="section level4">
 <h4 id="fast-mnn-clustering">Fast MNN clustering<a class="anchor" aria-label="anchor" href="#fast-mnn-clustering"></a>
 </h4>
-<p>Used to obtain basic <a href="http://bioconductor.org/books/release/OSCA.multisample/correction-diagnostics.html" class="external-link">integration
-diagnostics</a>. See <code><a href="https://rdrr.io/pkg/scran/man/buildSNNGraph.html" class="external-link">scran::buildSNNGraph()</a></code> and
-<code><a href="https://rdrr.io/pkg/bluster/man/makeSNNGraph.html" class="external-link">bluster::makeSNNGraph()</a></code> for more details.</p>
+<p>Used to obtain basic <a href="http://bioconductor.org/books/release/OSCA.multisample/correction-diagnostics.html" class="external-link">integration diagnostics</a>. See <code><a href="https://rdrr.io/pkg/scran/man/buildSNNGraph.html" class="external-link">scran::buildSNNGraph()</a></code> and <code><a href="https://rdrr.io/pkg/bluster/man/makeSNNGraph.html" class="external-link">bluster::makeSNNGraph()</a></code> for more details.</p>
 <hr>
 <div class="sourceCode" id="cb5"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">INTEGRATION_SNN_K</span><span class="kw">:</span><span class="at"> </span><span class="dv">10</span></span></code></pre></div>
 <p><strong>Type:</strong> integer scalar</p>
-<p>A number of nearest neighbors to consider during graph
-construction.</p>
+<p>A number of nearest neighbors to consider during graph construction.</p>
 <hr>
 <div class="sourceCode" id="cb6"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">INTEGRATION_SNN_TYPE</span><span class="kw">:</span><span class="at"> </span><span class="st">"rank"</span></span></code></pre></div>
-<p><strong>Type:</strong> character scalar (<code>"rank"</code> |
-<code>"number"</code> | <code>"jaccard"</code>)</p>
+<p><strong>Type:</strong> character scalar (<code>"rank"</code> | <code>"number"</code> | <code>"jaccard"</code>)</p>
 <p>A type of weighting scheme to use for shared neighbors.</p>
 <hr>
 <div class="sourceCode" id="cb7"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">INTEGRATION_SNN_CLUSTERING_METHOD</span><span class="kw">:</span><span class="at"> </span><span class="st">"walktrap"</span></span></code></pre></div>
-<p><strong>Type:</strong> character scalar (<code>"walktrap"</code> |
-<code>"louvain"</code>)</p>
-<p>A type of MNN clustering algorithm. See
-<code><a href="https://rdrr.io/pkg/igraph/man/cluster_walktrap.html" class="external-link">igraph::cluster_walktrap()</a></code> and
-<code><a href="https://rdrr.io/pkg/igraph/man/cluster_louvain.html" class="external-link">igraph::cluster_louvain()</a></code> for more details.</p>
+<p><strong>Type:</strong> character scalar (<code>"walktrap"</code> | <code>"louvain"</code>)</p>
+<p>A type of MNN clustering algorithm. See <code><a href="https://rdrr.io/pkg/igraph/man/cluster_walktrap.html" class="external-link">igraph::cluster_walktrap()</a></code> and <code><a href="https://rdrr.io/pkg/igraph/man/cluster_louvain.html" class="external-link">igraph::cluster_louvain()</a></code> for more details.</p>
 </div>
 </div>
 <div class="section level3">
@@ -496,29 +396,23 @@ construction.</p>
 </h3>
 <div class="sourceCode" id="cb8"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">SELECTED_MARKERS_INT_FILE</span><span class="kw">:</span><span class="at"> !code system.file("extdata", "selected_markers.csv", package = "scdrake", mustWork = TRUE)</span></span></code></pre></div>
 <p><strong>Type:</strong> character scalar or <code>null</code></p>
-<p>Similar to the <code>SELECTED_MARKERS_FILE</code> parameter in
-<code>vignette("norm_clustering")</code>.</p>
+<p>Similar to the <code>SELECTED_MARKERS_FILE</code> parameter in <code>vignette("norm_clustering")</code>.</p>
 <hr>
 <div class="sourceCode" id="cb9"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">INTEGRATION_REPORT_RMD_FILE</span><span class="kw">:</span><span class="at"> </span><span class="st">"Rmd/integration/01_integration.Rmd"</span></span></code></pre></div>
 <p><strong>Type:</strong> character scalar</p>
-<p>A path to RMarkdown file used for HTML report of this pipeline
-stage.</p>
+<p>A path to RMarkdown file used for HTML report of this pipeline stage.</p>
 </div>
 <div class="section level3">
 <h3 id="output-files">Output files<a class="anchor" aria-label="anchor" href="#output-files"></a>
 </h3>
 <div class="sourceCode" id="cb10"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">INTEGRATION_BASE_OUT_DIR</span><span class="kw">:</span><span class="at"> </span><span class="st">"01_integration"</span></span></code></pre></div>
 <p><strong>Type:</strong> character scalar</p>
-<p>A path to base output directory for this stage. It will be created
-under <code>BASE_OUT_DIR</code> specified in <code>00_main.yaml</code>
-config.</p>
+<p>A path to base output directory for this stage. It will be created under <code>BASE_OUT_DIR</code> specified in <code>00_main.yaml</code> config.</p>
 <hr>
 <div class="sourceCode" id="cb11"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">INTEGRATION_SELECTED_MARKERS_OUT_DIR</span><span class="kw">:</span><span class="at"> </span><span class="st">"selected_markers"</span></span>
 <span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="fu">INTEGRATION_REPORT_HTML_FILE</span><span class="kw">:</span><span class="at"> </span><span class="st">"01_integration.html"</span></span></code></pre></div>
 <p><strong>Type:</strong> character scalar</p>
-<p>Names of files and directories created under
-<code>INTEGRATION_BASE_OUT_DIR</code>. Subdirectories are not
-allowed.</p>
+<p>Names of files and directories created under <code>INTEGRATION_BASE_OUT_DIR</code>. Subdirectories are not allowed.</p>
 </div>
 <div class="section level3">
 <h3 id="html-output-parameters">HTML output parameters<a class="anchor" aria-label="anchor" href="#html-output-parameters"></a>
@@ -527,77 +421,48 @@ allowed.</p>
 <span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="fu">INTEGRATION_KNITR_WARNING</span><span class="kw">:</span><span class="at"> </span><span class="ch">False</span></span>
 <span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a><span class="fu">INTEGRATION_KNITR_ECHO</span><span class="kw">:</span><span class="at"> </span><span class="ch">False</span></span></code></pre></div>
 <p><strong>Type:</strong> logical scalar</p>
-<p>These are passed to <code><a href="https://rdrr.io/pkg/knitr/man/opts_chunk.html" class="external-link">knitr::opts_chunk()</a></code> and used for
-rendering of stage’s HTML report.</p>
+<p>These are passed to <code><a href="https://rdrr.io/pkg/knitr/man/opts_chunk.html" class="external-link">knitr::opts_chunk()</a></code> and used for rendering of stage’s HTML report.</p>
 </div>
 </div>
 <div class="section level2">
 <h2 id="targets">Targets<a class="anchor" aria-label="anchor" href="#targets"></a>
 </h2>
-<p>Here you can find description of the most important targets for this
-stage. However, for a full overview, you have to inspect the <a href="https://github.com/bioinfocz/scdrake/blob/main/R/plans_integration.R" class="external-link">source
-code</a> of the <code><a href="../reference/get_subplan_integration.html">get_integration_subplan()</a></code> function.</p>
+<p>Here you can find description of the most important targets for this stage. However, for a full overview, you have to inspect the <a href="https://github.com/bioinfocz/scdrake/blob/main/R/plans_integration.R" class="external-link">source code</a> of the <code><a href="../reference/get_subplan_integration.html">get_integration_subplan()</a></code> function.</p>
 <div class="section level3">
 <h3 id="singlecellexperiment-objects">
 <code>SingleCellExperiment</code> objects<a class="anchor" aria-label="anchor" href="#singlecellexperiment-objects"></a>
 </h3>
-<p><code>sce_int_import</code>: list of imported single-sample SCE
-objects, as defined in the <code>INTEGRATION_SOURCES</code> parameter.
-Because <a href="https://docs.ropensci.org/drake" class="external-link">drake</a> cannot watch for changes in a cache, this
-target is always rerun. Also, some constraints are checked (common
-normalization method and HVG metrics).</p>
+<p><code>sce_int_import</code>: list of imported single-sample SCE objects, as defined in the <code>INTEGRATION_SOURCES</code> parameter. Because <a href="https://docs.ropensci.org/drake" class="external-link">drake</a> cannot watch for changes in a cache, this target is always rerun. Also, some constraints are checked (common normalization method and HVG metrics).</p>
 <hr>
-<p><code>sce_int_raw_snn_clustering</code>: <code>sce_int_import</code>
-with computed fast SNN clustering for each single-sample, used for
-integration diagnostics.</p>
+<p><code>sce_int_raw_snn_clustering</code>: <code>sce_int_import</code> with computed fast SNN clustering for each single-sample, used for integration diagnostics.</p>
 <hr>
-<p><code>sce_int_processed</code>: <code>sce_int_import</code> subsetted
-to common colData, and features (rows) and their corresponding metadata
-(<code>hvg_ids</code>, <code>hvg_metric_fit</code>).</p>
+<p><code>sce_int_processed</code>: <code>sce_int_import</code> subsetted to common colData, and features (rows) and their corresponding metadata (<code>hvg_ids</code>, <code>hvg_metric_fit</code>).</p>
 <hr>
-<p><code>sce_int_multibatchnorm</code>: <code>sce_int_processed</code>
-with SCE objects normalized for inter-batch sequencing depth
-(<code><a href="https://rdrr.io/pkg/batchelor/man/multiBatchNorm.html" class="external-link">batchelor::multiBatchNorm()</a></code>).</p>
+<p><code>sce_int_multibatchnorm</code>: <code>sce_int_processed</code> with SCE objects normalized for inter-batch sequencing depth (<code><a href="https://rdrr.io/pkg/batchelor/man/multiBatchNorm.html" class="external-link">batchelor::multiBatchNorm()</a></code>).</p>
 <hr>
-<p><code>sce_int_df</code>: a tibble with integrated SCE objects. Each
-row is one method defined in the <code>INTEGRATION_METHODS</code>
-parameter and either with or without removed cell cycle-related genes
-from HVGs. See <code><a href="../reference/sce_int_df_fn.html">?sce_int_df_fn</a></code> for information about what is
-added or modified in <code>metadata()</code> of each integrated SCE
-object.</p>
+<p><code>sce_int_df</code>: a tibble with integrated SCE objects. Each row is one method defined in the <code>INTEGRATION_METHODS</code> parameter and either with or without removed cell cycle-related genes from HVGs. See <code><a href="../reference/sce_int_df_fn.html">?sce_int_df_fn</a></code> for information about what is added or modified in <code>metadata()</code> of each integrated SCE object.</p>
 <hr>
-<p><code>sce_int_pca_df</code>: <code>sce_int_df</code> with computed
-PCA and selected number of PCs. Also includes PC selection statistics
-and plot.</p>
+<p><code>sce_int_pca_df</code>: <code>sce_int_df</code> with computed PCA and selected number of PCs. Also includes PC selection statistics and plot.</p>
 <hr>
-<p><code>sce_int_clustering_df</code>: <code>sce_int_pca_df</code> with
-computed MNN clustering used for integration diagnostics.</p>
+<p><code>sce_int_clustering_df</code>: <code>sce_int_pca_df</code> with computed MNN clustering used for integration diagnostics.</p>
 <hr>
-<p><code>sce_int_dimred_df</code>: <code>sce_int_pca_df</code> with
-computed t-SNE and UMAP dimensionality reductions.</p>
+<p><code>sce_int_dimred_df</code>: <code>sce_int_pca_df</code> with computed t-SNE and UMAP dimensionality reductions.</p>
 </div>
 <div class="section level3">
 <h3 id="highly-variable-genes-hvgs-selection">Highly variable genes (HVGs) selection<a class="anchor" aria-label="anchor" href="#highly-variable-genes-hvgs-selection"></a>
 </h3>
-<p><code>hvg_int</code>, <code>hvg_int_with_cc</code>: lists of HVGs and
-selection parameters. The latter is not <code>NULL</code> when any of
-the single-samples defined in the <code>INTEGRATION_SOURCES</code>
-parameter has <code>hvg_rm_cc_genes</code> set to <code>True</code>.</p>
+<p><code>hvg_int</code>, <code>hvg_int_with_cc</code>: lists of HVGs and selection parameters. The latter is not <code>NULL</code> when any of the single-samples defined in the <code>INTEGRATION_SOURCES</code> parameter has <code>hvg_rm_cc_genes</code> set to <code>True</code>.</p>
 <hr>
-<p><code>hvg_plots_int_df</code>: a tibble with HVG diagnostic
-plots.</p>
+<p><code>hvg_plots_int_df</code>: a tibble with HVG diagnostic plots.</p>
 </div>
 <div class="section level3">
 <h3 id="plots">Plots<a class="anchor" aria-label="anchor" href="#plots"></a>
 </h3>
-<p><code>sce_int_dimred_plots_df</code>: a tibble with dimensionality
-reduction plots.</p>
+<p><code>sce_int_dimred_plots_df</code>: a tibble with dimensionality reduction plots.</p>
 <div class="section level4">
 <h4 id="selected-markers">Selected markers<a class="anchor" aria-label="anchor" href="#selected-markers"></a>
 </h4>
-<p><code>selected_markers_plots_int_df</code>: a tibble with plots of
-selected markers, similar to <code>selected_markers_plots</code> in the
-<code>02_norm_clustering</code> stage of the single-sample pipeline.</p>
+<p><code>selected_markers_plots_int_df</code>: a tibble with plots of selected markers, similar to <code>selected_markers_plots</code> in the <code>02_norm_clustering</code> stage of the single-sample pipeline.</p>
 </div>
 </div>
 </div>
@@ -620,7 +485,7 @@ selected markers, similar to <code>selected_markers_plots</code> in the
 
 <div class="pkgdown">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.9000.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
   <p class="preferably">Using <a href="https://preferably.amirmasoudabdol.name/?source=footer" class="external-link">preferably</a> template.</p>
 </div>
 
