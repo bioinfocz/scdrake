@@ -188,51 +188,76 @@
     
     
 <hr>
-<p>For a general overview of this integration pipeline stage see <code><a href="../articles/pipeline_overview.html">vignette("pipeline_overview")</a></code>.</p>
-<p>Config for this stage is stored in <code>02_int_clustering.yaml</code> file. Directory with this file is read from <code>SCDRAKE_INTEGRATION_CONFIG_DIR</code> environment variable upon <a href="https://github.com/bioinfocz/scdrake" class="external-link">scdrake</a> load or attach, and saved as <code>scdrake_integration_config_dir</code> option. This option is used as the default argument value in several <a href="https://github.com/bioinfocz/scdrake" class="external-link">scdrake</a> functions.</p>
+<p>For a general overview of this integration pipeline stage see
+<code><a href="../articles/pipeline_overview.html">vignette("pipeline_overview")</a></code>.</p>
+<p>Config for this stage is stored in
+<code>02_int_clustering.yaml</code> file. Directory with this file is
+read from <code>SCDRAKE_INTEGRATION_CONFIG_DIR</code> environment
+variable upon <a href="https://github.com/bioinfocz/scdrake" class="external-link">scdrake</a> load or attach, and saved as
+<code>scdrake_integration_config_dir</code> option. This option is used
+as the default argument value in several <a href="https://github.com/bioinfocz/scdrake" class="external-link">scdrake</a>
+functions.</p>
 <hr>
 <div class="section level2">
 <h2 id="config-parameters">Config parameters<a class="anchor" aria-label="anchor" href="#config-parameters"></a>
 </h2>
-<p>The following parameters are the same as those in the <code>02_norm_clustering</code> stage of the single-sample pipeline (see <code><a href="../articles/stage_norm_clustering.html">vignette("stage_norm_clustering")</a></code>):</p>
+<p>The following parameters are the same as those in the
+<code>02_norm_clustering</code> stage of the single-sample pipeline (see
+<code><a href="../articles/stage_norm_clustering.html">vignette("stage_norm_clustering")</a></code>):</p>
 <ul>
 <li>Clustering and cell annotation parameters.</li>
 <li><code>CELL_GROUPINGS</code></li>
 <li>
-<code>INT_CLUSTERING_REPORT_DIMRED_NAMES</code>, <code>INT_CLUSTERING_REPORT_CLUSTERING_NAMES</code>, <code>INT_CLUSTERING_REPORT_DIMRED_PLOTS_OTHER</code>
+<code>INT_CLUSTERING_REPORT_DIMRED_NAMES</code>,
+<code>INT_CLUSTERING_REPORT_CLUSTERING_NAMES</code>,
+<code>INT_CLUSTERING_REPORT_DIMRED_PLOTS_OTHER</code>
 </li>
 <li>
-<code>INT_CLUSTERING_KNITR_MESSAGE</code>, <code>INT_CLUSTERING_KNITR_WARNING</code>, <code>INT_CLUSTERING_KNITR_ECHO</code>
+<code>INT_CLUSTERING_KNITR_MESSAGE</code>,
+<code>INT_CLUSTERING_KNITR_WARNING</code>,
+<code>INT_CLUSTERING_KNITR_ECHO</code>
 </li>
 </ul>
 <div class="section level3">
 <h3 id="selection-of-final-integration-method">Selection of final integration method<a class="anchor" aria-label="anchor" href="#selection-of-final-integration-method"></a>
 </h3>
 <div class="sourceCode" id="cb1"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">INTEGRATION_FINAL_METHOD</span><span class="kw">:</span><span class="at"> </span><span class="st">"mnn"</span></span></code></pre></div>
-<p><strong>Type:</strong> character scalar (<code>"mnn"</code> | <code>"rescaling"</code> | <code>"regression"</code>)</p>
-<p>A name of the final integration method that will be used for clustering and downstream steps.</p>
+<p><strong>Type:</strong> character scalar (<code>"mnn"</code> |
+<code>"rescaling"</code> | <code>"regression"</code>)</p>
+<p>A name of the final integration method that will be used for
+clustering and downstream steps.</p>
 <hr>
 <div class="sourceCode" id="cb2"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">INTEGRATION_FINAL_METHOD_RM_CC</span><span class="kw">:</span><span class="at"> </span><span class="ch">False</span></span></code></pre></div>
 <p><strong>Type:</strong> logical scalar</p>
-<p>Whether to take the result with removed cell cycle-related genes. This will be also applied to the “uncorrected” method (which is used for cluster markers and contrasts). <code>True</code> is only possible when any of the single-samples in the <code>INTEGRATION_SOURCES</code> parameter (<code>01_integration.yaml</code>) has <code>hvg_rm_cc_genes</code> set to <code>True</code>.</p>
+<p>Whether to take the result with removed cell cycle-related genes.
+This will be also applied to the “uncorrected” method (which is used for
+cluster markers and contrasts). <code>True</code> is only possible when
+any of the single-samples in the <code>INTEGRATION_SOURCES</code>
+parameter (<code>01_integration.yaml</code>) has
+<code>hvg_rm_cc_genes</code> set to <code>True</code>.</p>
 </div>
 <div class="section level3">
 <h3 id="input-files">Input files<a class="anchor" aria-label="anchor" href="#input-files"></a>
 </h3>
 <div class="sourceCode" id="cb3"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">INT_CLUSTERING_REPORT_RMD_FILE</span><span class="kw">:</span><span class="at"> </span><span class="st">"Rmd/integration/02_int_clustering.Rmd"</span></span></code></pre></div>
 <p><strong>Type:</strong> character scalar</p>
-<p>A path to RMarkdown files used for HTML report of this pipeline stage.</p>
+<p>A path to RMarkdown files used for HTML report of this pipeline
+stage.</p>
 </div>
 <div class="section level3">
 <h3 id="output-files">Output files<a class="anchor" aria-label="anchor" href="#output-files"></a>
 </h3>
 <div class="sourceCode" id="cb4"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">INT_CLUSTERING_BASE_OUT_DIR</span><span class="kw">:</span><span class="at"> </span><span class="st">"02_int_clustering"</span></span></code></pre></div>
 <p><strong>Type:</strong> character scalar</p>
-<p>A path to base output directory for this stage. It will be created under <code>BASE_OUT_DIR</code> specified in <code>00_main.yaml</code> config.</p>
+<p>A path to base output directory for this stage. It will be created
+under <code>BASE_OUT_DIR</code> specified in <code>00_main.yaml</code>
+config.</p>
 <hr>
 <div class="sourceCode" id="cb5"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">INT_CLUSTERING_REPORT_HTML_FILE</span><span class="kw">:</span><span class="at"> </span><span class="st">"02_int_clustering.html"</span></span></code></pre></div>
 <p><strong>Type:</strong> character scalar</p>
-<p>Names of files and directories created under <code>INT_CLUSTERING_BASE_OUT_DIR</code>. Subdirectories are not allowed.</p>
+<p>Names of files and directories created under
+<code>INT_CLUSTERING_BASE_OUT_DIR</code>. Subdirectories are not
+allowed.</p>
 </div>
 </div>
 <div class="section level2">
@@ -242,17 +267,26 @@
 <h3 id="singlecellexperiment-objects">
 <code>SingleCellExperiment</code> objects<a class="anchor" aria-label="anchor" href="#singlecellexperiment-objects"></a>
 </h3>
-<p><code>sce_int_uncorrected</code>: the selected uncorrected SCE object according to the <code>INTEGRATION_FINAL_METHOD_RM_CC</code> parameter.</p>
+<p><code>sce_int_uncorrected</code>: the selected uncorrected SCE object
+according to the <code>INTEGRATION_FINAL_METHOD_RM_CC</code>
+parameter.</p>
 <hr>
-<p><code>sce_int_final</code>: the selected integrated SCE object according to the <code>INTEGRATION_FINAL_METHOD</code> and <code>INTEGRATION_FINAL_METHOD_RM_CC</code> parameters.</p>
+<p><code>sce_int_final</code>: the selected integrated SCE object
+according to the <code>INTEGRATION_FINAL_METHOD</code> and
+<code>INTEGRATION_FINAL_METHOD_RM_CC</code> parameters.</p>
 <hr>
-<p><code>sce_int_final_clustering</code>: similar to <code>sce_final_norm_clustering</code> in the <code>02_norm_clustering</code> stage of the single-sample pipeline.</p>
+<p><code>sce_int_final_clustering</code>: similar to
+<code>sce_final_norm_clustering</code> in the
+<code>02_norm_clustering</code> stage of the single-sample pipeline.</p>
 </div>
 <div class="section level3">
 <h3 id="targes-similar-to-02_norm_clustering">Targes similar to <code>02_norm_clustering</code><a class="anchor" aria-label="anchor" href="#targes-similar-to-02_norm_clustering"></a>
 </h3>
-<p>These targets are basically the same as those in the <code>02_norm_clustering</code> pipeline in the single-sample pipeline (see <code><a href="../articles/stage_norm_clustering.html">vignette("stage_norm_clustering")</a></code>).</p>
-<p>However, for a full overview, you have to inspect the <a href="https://github.com/bioinfocz/scdrake/blob/main/R/plans_integration.R" class="external-link">source code</a> of the <code><a href="../reference/get_subplan_integration.html">get_int_clustering_subplan()</a></code> function.</p>
+<p>These targets are basically the same as those in the
+<code>02_norm_clustering</code> pipeline in the single-sample pipeline
+(see <code><a href="../articles/stage_norm_clustering.html">vignette("stage_norm_clustering")</a></code>).</p>
+<p>However, for a full overview, you have to inspect the <a href="https://github.com/bioinfocz/scdrake/blob/main/R/plans_integration.R" class="external-link">source
+code</a> of the <code><a href="../reference/get_subplan_integration.html">get_int_clustering_subplan()</a></code> function.</p>
 </div>
 <div class="section level3">
 <h3 id="cell-clustering">Cell clustering<a class="anchor" aria-label="anchor" href="#cell-clustering"></a>
@@ -260,13 +294,24 @@
 <ul>
 <li><code>clusters_all</code></li>
 <li>
-<code>graph_int_k</code>, <code>cluster_int_graph_walktrap</code>, <code>cluster_int_graph_walktrap_n</code>, <code>cluster_int_graph_walktrap_table</code>, <code>cluster_int_graph_louvain</code>, <code>cluster_int_graph_louvain_n</code>, <code>cluster_int_graph_louvain_table</code>
+<code>graph_int_k</code>, <code>cluster_int_graph_walktrap</code>,
+<code>cluster_int_graph_walktrap_n</code>,
+<code>cluster_int_graph_walktrap_table</code>,
+<code>cluster_int_graph_louvain</code>,
+<code>cluster_int_graph_louvain_n</code>,
+<code>cluster_int_graph_louvain_table</code>
 </li>
 <li>
-<code>kmeans_gaps</code>, <code>kmeans_best_k</code>, <code>cluster_int_kmeans_kbest</code>, <code>cluster_int_kmeans_kbest_table</code>, <code>cluster_int_kmeans_kc</code>, <code>cluster_int_kmeans_kc_tables</code>
+<code>kmeans_gaps</code>, <code>kmeans_best_k</code>,
+<code>cluster_int_kmeans_kbest</code>,
+<code>cluster_int_kmeans_kbest_table</code>,
+<code>cluster_int_kmeans_kc</code>,
+<code>cluster_int_kmeans_kc_tables</code>
 </li>
 <li>
-<code>sce_int_sc3</code>, <code>cluster_int_sc3</code>, <code>cluster_int_sc3_tables</code>, <code>cluster_int_sc3_stability_plots</code>
+<code>sce_int_sc3</code>, <code>cluster_int_sc3</code>,
+<code>cluster_int_sc3_tables</code>,
+<code>cluster_int_sc3_stability_plots</code>
 </li>
 </ul>
 </div>
@@ -275,7 +320,10 @@
 </h3>
 <ul>
 <li>
-<code>cell_annotation_params</code>, <code>cell_annotation</code>, <code>cell_annotation_labels</code>, <code>cell_annotation_diagnostic_plots</code>, <code>cell_annotation_diagnostic_plots_files</code>
+<code>cell_annotation_params</code>, <code>cell_annotation</code>,
+<code>cell_annotation_labels</code>,
+<code>cell_annotation_diagnostic_plots</code>,
+<code>cell_annotation_diagnostic_plots_files</code>
 </li>
 </ul>
 </div>
@@ -284,7 +332,8 @@
 </h3>
 <ul>
 <li>
-<code>dimred_plots_clustering</code>, <code>dimred_plots_other_vars</code>
+<code>dimred_plots_clustering</code>,
+<code>dimred_plots_other_vars</code>
 </li>
 <li><code>selected_markers_plots_int_final</code></li>
 </ul>
@@ -316,7 +365,7 @@
 
 <div class="pkgdown">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.9000.</p>
   <p class="preferably">Using <a href="https://preferably.amirmasoudabdol.name/?source=footer" class="external-link">preferably</a> template.</p>
 </div>
 

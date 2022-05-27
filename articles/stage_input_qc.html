@@ -188,8 +188,15 @@
     
     
 <hr>
-<p>For a general overview of this single-sample pipeline stage see <code><a href="../articles/pipeline_overview.html">vignette("pipeline_overview")</a></code>.</p>
-<p>Config for this stage is stored in <code>01_input_qc.yaml</code> file. Directory with this file is read from <code>SCDRAKE_SINGLE_SAMPLE_CONFIG_DIR</code> environment variable upon <a href="https://github.com/bioinfocz/scdrake" class="external-link">scdrake</a> load or attach, and saved as <code>scdrake_single_sample_config_dir</code> option. This option is used as the default argument value in several <a href="https://github.com/bioinfocz/scdrake" class="external-link">scdrake</a> functions.</p>
+<p>For a general overview of this single-sample pipeline stage see
+<code><a href="../articles/pipeline_overview.html">vignette("pipeline_overview")</a></code>.</p>
+<p>Config for this stage is stored in <code>01_input_qc.yaml</code>
+file. Directory with this file is read from
+<code>SCDRAKE_SINGLE_SAMPLE_CONFIG_DIR</code> environment variable upon
+<a href="https://github.com/bioinfocz/scdrake" class="external-link">scdrake</a> load or attach, and saved as
+<code>scdrake_single_sample_config_dir</code> option. This option is
+used as the default argument value in several <a href="https://github.com/bioinfocz/scdrake" class="external-link">scdrake</a>
+functions.</p>
 <div class="section level2">
 <h2 id="config-parameters">Config parameters<a class="anchor" aria-label="anchor" href="#config-parameters"></a>
 </h2>
@@ -201,28 +208,53 @@
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">path</span><span class="kw">:</span><span class="at"> </span><span class="st">"/path/to/dir"</span></span>
 <span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">delimiter</span><span class="kw">:</span><span class="at"> </span><span class="st">","</span></span></code></pre></div>
 <p><strong>Type:</strong> list of named character scalars</p>
-<p>This parameter is specifying input data type and path. There are three possible types of input data:</p>
+<p>This parameter is specifying input data type and path. There are
+three possible types of input data:</p>
 <ul>
 <li>
-<p><code>type: "cellranger"</code>: an output from <a href="https://support.10xgenomics.com/single-cell-gene-expression/software/pipelines/latest/what-is-cell-ranger" class="external-link">cellranger</a>, that is, files of a raw feature-barcode matrix - <code>barcodes.tsv</code>, <code>features.tsv</code>, and <code>matrix.mtx</code> (can be also gzipped having a <code>.gz</code> extension). Internally, BC matrix is imported via <code><a href="https://rdrr.io/pkg/DropletUtils/man/read10xCounts.html" class="external-link">DropletUtils::read10xCounts()</a></code>.</p>
+<p><code>type: "cellranger"</code>: an output from <a href="https://support.10xgenomics.com/single-cell-gene-expression/software/pipelines/latest/what-is-cell-ranger" class="external-link">cellranger</a>,
+that is, files of a raw feature-barcode matrix -
+<code>barcodes.tsv</code>, <code>features.tsv</code>, and
+<code>matrix.mtx</code> (can be also gzipped having a <code>.gz</code>
+extension). Internally, BC matrix is imported via
+<code><a href="https://rdrr.io/pkg/DropletUtils/man/read10xCounts.html" class="external-link">DropletUtils::read10xCounts()</a></code>.</p>
 <ul>
-<li>You can download example PBMC data from 10x Genomics using the <code><a href="../reference/download_example_data.html">download_pbmc1k()</a></code> and <code><a href="../reference/download_example_data.html">download_pbmc1k()</a></code> functions.</li>
+<li>You can download example PBMC data from 10x Genomics using the
+<code><a href="../reference/download_example_data.html">download_pbmc1k()</a></code> and <code><a href="../reference/download_example_data.html">download_pbmc1k()</a></code>
+functions.</li>
 </ul>
 </li>
-<li><p><code>type: "table"</code>: a delimited file (table) representing a feature-barcode matrix, with an additional column named <code>ENSEMBL</code> containing Ensembl IDs of features (rows).</p></li>
+<li><p><code>type: "table"</code>: a delimited file (table) representing
+a feature-barcode matrix, with an additional column named
+<code>ENSEMBL</code> containing Ensembl IDs of features (rows).</p></li>
 <li>
-<p><code>type: "sce"</code>: a saved <code>SingleCellExperiment</code> in Rds format (i.e. saved by the <code><a href="https://rdrr.io/r/base/readRDS.html" class="external-link">saveRDS()</a></code> function). The object must contain feature-barcode matrix with raw UMI counts in the <code>counts</code> slot of <code>assays</code> (such that this BC matrix can be retrieved by <code>counts(sce)</code>).</p>
+<p><code>type: "sce"</code>: a saved
+<code>SingleCellExperiment</code> in Rds format (i.e. saved by the
+<code><a href="https://rdrr.io/r/base/readRDS.html" class="external-link">saveRDS()</a></code> function). The object must contain
+feature-barcode matrix with raw UMI counts in the <code>counts</code>
+slot of <code>assays</code> (such that this BC matrix can be retrieved
+by <code>counts(sce)</code>).</p>
 <ul>
-<li>Additionaly, you can include whatever you want in <code>colData()</code> and use it later (e.g. cell grouping/clusters to compute markers or to include batch effect during that).</li>
+<li>Additionaly, you can include whatever you want in
+<code>colData()</code> and use it later (e.g. cell grouping/clusters to
+compute markers or to include batch effect during that).</li>
 </ul>
 </li>
-<li><p><code>path: "path/to/dir"</code>: a path to input file (can be relative to project root directory). For <code>type: "cellranger"</code>, this is a path to directory containing the <code>barcodes.tsv</code>, <code>features.tsv</code>, and <code>matrix.mtx</code> files (can be also gzipped having a <code>.gz</code> extension).</p></li>
-<li><p><code>delimiter: ","</code>: used when <code>type: "table"</code>. Specifies the field delimiter in table.</p></li>
+<li><p><code>path: "path/to/dir"</code>: a path to input file (can be
+relative to project root directory). For
+<code>type: "cellranger"</code>, this is a path to directory containing
+the <code>barcodes.tsv</code>, <code>features.tsv</code>, and
+<code>matrix.mtx</code> files (can be also gzipped having a
+<code>.gz</code> extension).</p></li>
+<li><p><code>delimiter: ","</code>: used when
+<code>type: "table"</code>. Specifies the field delimiter in
+table.</p></li>
 </ul>
 <hr>
 <div class="sourceCode" id="cb2"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">INPUT_QC_REPORT_RMD_FILE</span><span class="kw">:</span><span class="at"> </span><span class="st">"Rmd/single_sample/01_input_qc.Rmd"</span></span></code></pre></div>
 <p><strong>Type:</strong> character scalar</p>
-<p>A path to RMarkdown file used for HTML report of this pipeline stage.</p>
+<p>A path to RMarkdown file used for HTML report of this pipeline
+stage.</p>
 <hr>
 </div>
 <div class="section level3">
@@ -232,72 +264,104 @@
 <hr>
 <div class="sourceCode" id="cb3"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">EMPTY_DROPLETS_ENABLED</span><span class="kw">:</span><span class="at"> </span><span class="ch">True</span></span></code></pre></div>
 <p><strong>Type:</strong> logical scalar</p>
-<p>If <code>False</code>, skip calculation and removal of empty droplets.</p>
-<p>You might consider turning off this procedure if the input is not a raw feature-barcode matrix from <code>cellranger</code>, but an already processed dataset (table or <code>SingleCellExperiment</code> object). Otherwise <code><a href="https://rdrr.io/pkg/DropletUtils/man/emptyDrops.html" class="external-link">DropletUtils::emptyDrops()</a></code> will fail as there are not enough empty droplets having the total UMI count &lt; <code>EMPTY_DROPLETS_LOWER</code> (100 by default).</p>
+<p>If <code>False</code>, skip calculation and removal of empty
+droplets.</p>
+<p>You might consider turning off this procedure if the input is not a
+raw feature-barcode matrix from <code>cellranger</code>, but an already
+processed dataset (table or <code>SingleCellExperiment</code> object).
+Otherwise <code><a href="https://rdrr.io/pkg/DropletUtils/man/emptyDrops.html" class="external-link">DropletUtils::emptyDrops()</a></code> will fail as there are
+not enough empty droplets having the total UMI count &lt;
+<code>EMPTY_DROPLETS_LOWER</code> (100 by default).</p>
 <hr>
 <div class="sourceCode" id="cb4"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">EMPTY_DROPLETS_LOWER</span><span class="kw">:</span><span class="at"> </span><span class="dv">100</span></span></code></pre></div>
 <p><strong>Type:</strong> positive integer scalar</p>
-<p>A lower bound on the total UMI count at or below which all barcodes are assumed to correspond to empty droplets.</p>
+<p>A lower bound on the total UMI count at or below which all barcodes
+are assumed to correspond to empty droplets.</p>
 <hr>
 <div class="sourceCode" id="cb5"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">EMPTY_DROPLETS_FDR_THRESHOLD</span><span class="kw">:</span><span class="at"> </span><span class="fl">0.01</span></span></code></pre></div>
 <p><strong>Type:</strong> numeric scalar &lt;0; 1&gt;</p>
-<p>A threshold for FDR adjusted p-values for null hypothesis that barcode comes from ambient environment. In other words, probability that a droplet was empty and contained ambient RNA.</p>
+<p>A threshold for FDR adjusted p-values for null hypothesis that
+barcode comes from ambient environment. In other words, probability that
+a droplet was empty and contained ambient RNA.</p>
 </div>
 <div class="section level3">
 <h3 id="cell-filtering">Cell filtering<a class="anchor" aria-label="anchor" href="#cell-filtering"></a>
 </h3>
-<p>Two types of cell filtering are performed: <em>dataset-sensitive</em> (using MAD threshold), and <em>custom</em> (using custom thresholds). See <code><a href="../articles/pipeline_overview.html">vignette("pipeline_overview")</a></code> for more details.</p>
-<p>In both filtering types, violation of only one metric threshold leads to removal of a cell.</p>
+<p>Two types of cell filtering are performed: <em>dataset-sensitive</em>
+(using MAD threshold), and <em>custom</em> (using custom thresholds).
+See <code><a href="../articles/pipeline_overview.html">vignette("pipeline_overview")</a></code> for more details.</p>
+<p>In both filtering types, violation of only one metric threshold leads
+to removal of a cell.</p>
 <hr>
 <div class="sourceCode" id="cb6"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">SAVE_DATASET_SENSITIVE_FILTERING</span><span class="kw">:</span><span class="at"> </span><span class="ch">True</span></span></code></pre></div>
 <p><strong>Type:</strong> logical scalar</p>
-<p>If <code>True</code>, proceed to other stages with dataset filtered by dataset-sensitive filtering (target <code>sce_qc_filter_genes</code>), otherwise with dataset filtered by custom filtering (target <code>sce_custom_filter_genes</code>).</p>
+<p>If <code>True</code>, proceed to other stages with dataset filtered
+by dataset-sensitive filtering (target
+<code>sce_qc_filter_genes</code>), otherwise with dataset filtered by
+custom filtering (target <code>sce_custom_filter_genes</code>).</p>
 <div class="section level4">
 <h4 id="dataset-sensitive-cell-filtering">Dataset-sensitive cell filtering<a class="anchor" aria-label="anchor" href="#dataset-sensitive-cell-filtering"></a>
 </h4>
 <div class="sourceCode" id="cb7"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">MAD_THRESHOLD</span><span class="kw">:</span><span class="at"> </span><span class="dv">3</span></span></code></pre></div>
 <p><strong>Type:</strong> positive numeric scalar</p>
-<p>A threshold for maximum MAD (median absolute deviation) for QC cell metrics:</p>
+<p>A threshold for maximum MAD (median absolute deviation) for QC cell
+metrics:</p>
 <ul>
 <li>Number of UMI (lower tail).</li>
 <li>Number of detected genes = non-zero UMI count (lower tail).</li>
-<li>Percentage of expressed mitochondrial genes = <span class="math inline">\(\frac {UMI_{mitochondrial}} {UMI_{sum}} * 100\)</span> (upper tail).</li>
+<li>Percentage of expressed mitochondrial genes = <span class="math inline">\(\frac {UMI_{mitochondrial}} {UMI_{sum}} *
+100\)</span> (upper tail).</li>
 </ul>
-<p>“Lower tail” means cells having a metric value less than <code>-MAD_THRESHOLD</code> MAD will be discarded. For “upper tail”, it is <code>+MAD_THRESHOLD</code> MAD.</p>
-<p>Violation of only one metric threshold leads to removal of a cell.</p>
-<p>To disable the dataset-sensitive filtering, set <code>MAD_THRESHOLD: .inf</code>. That will force passing of each cell as every QC metric will be always lower than positive infinity MAD.</p>
+<p>“Lower tail” means cells having a metric value less than
+<code>-MAD_THRESHOLD</code> MAD will be discarded. For “upper tail”, it
+is <code>+MAD_THRESHOLD</code> MAD.</p>
+<p>Violation of only one metric threshold leads to removal of a
+cell.</p>
+<p>To disable the dataset-sensitive filtering, set
+<code>MAD_THRESHOLD: .inf</code>. That will force passing of each cell
+as every QC metric will be always lower than positive infinity MAD.</p>
 </div>
 <div class="section level4">
 <h4 id="custom-cell-filtering">Custom cell filtering<a class="anchor" aria-label="anchor" href="#custom-cell-filtering"></a>
 </h4>
 <div class="sourceCode" id="cb8"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">MIN_UMI_CF</span><span class="kw">:</span><span class="at"> </span><span class="dv">1000</span></span></code></pre></div>
 <p><strong>Type:</strong> positive integer scalar</p>
-<p>A threshold for minimum number of UMI per cell, i.e. cells with UMI less than <code>MIN_UMI_CF</code> will be removed.</p>
+<p>A threshold for minimum number of UMI per cell, i.e. cells with UMI
+less than <code>MIN_UMI_CF</code> will be removed.</p>
 <p>To disable this filter, set <code>MIN_UMI_CF: -.inf</code></p>
 <hr>
 <div class="sourceCode" id="cb9"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">MAX_UMI_CF</span><span class="kw">:</span><span class="at"> </span><span class="dv">50000</span></span></code></pre></div>
 <p><strong>Type:</strong> positive integer scalar</p>
-<p>A threshold for maximum number of UMI per cell, i.e. cells with UMI greater than <code>MAX_UMI_CF</code> will be removed.</p>
+<p>A threshold for maximum number of UMI per cell, i.e. cells with UMI
+greater than <code>MAX_UMI_CF</code> will be removed.</p>
 <p>To disable this filter, set <code>MAX_UMI_CF: .inf</code></p>
 <hr>
 <div class="sourceCode" id="cb10"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">MIN_FEATURES</span><span class="kw">:</span><span class="at"> </span><span class="dv">1000</span></span></code></pre></div>
 <p><strong>Type:</strong> positive integer scalar</p>
-<p>A threshold for minimum number of features (genes) detected per cell, i.e. cells with detected features less than <code>MIN_FEATURES</code> will be removed.</p>
+<p>A threshold for minimum number of features (genes) detected per cell,
+i.e. cells with detected features less than <code>MIN_FEATURES</code>
+will be removed.</p>
 <p>To disable this filter, set <code>MIN_FEATURES: -.inf</code></p>
 <hr>
 <div class="sourceCode" id="cb11"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">MAX_MITO_RATIO</span><span class="kw">:</span><span class="at"> </span><span class="fl">0.2</span></span></code></pre></div>
 <p><strong>Type:</strong> numeric scalar &lt;0; 1&gt;</p>
-<p>A threshold for maximum ratio of expressed mitochondrial genes per cell, i.e. cells with mitochondrial genes detected in more than (<code>MAX_MITO_RATIO</code> * 100)% of all genes will be removed.</p>
+<p>A threshold for maximum ratio of expressed mitochondrial genes per
+cell, i.e. cells with mitochondrial genes detected in more than
+(<code>MAX_MITO_RATIO</code> * 100)% of all genes will be removed.</p>
 <p>To disable this filter, set <code>MAX_MITO_RATIO: .inf</code></p>
 </div>
 <div class="section level4">
 <h4 id="gene-filtering">Gene filtering<a class="anchor" aria-label="anchor" href="#gene-filtering"></a>
 </h4>
-<p>Gene filtering thresholds are applied in both types of cell filtering (after it is performed). The filter is computed by the <code><a href="../reference/get_gene_filter.html">get_gene_filter()</a></code> function as following:</p>
+<p>Gene filtering thresholds are applied in both types of cell filtering
+(after it is performed). The filter is computed by the
+<code><a href="../reference/get_gene_filter.html">get_gene_filter()</a></code> function as following:</p>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">num_cells</span> <span class="op">&lt;-</span> <span class="va">min_ratio_cells</span> <span class="op">*</span> <span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">ncol</a></span><span class="op">(</span><span class="va">sce</span><span class="op">)</span>
 <span class="va">is_expressed</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/colSums.html" class="external-link">rowSums</a></span><span class="op">(</span><span class="fu">counts</span><span class="op">(</span><span class="va">sce</span><span class="op">)</span> <span class="op">&gt;=</span> <span class="va">min_umi</span><span class="op">)</span> <span class="op">&gt;=</span> <span class="va">num_cells</span></code></pre></div>
-<p>A gene is considered expressed when number of its UMIs across all cells is greater than <code>min_umi</code> and at the same time it is expressed in at least <code>min_ratio_cells</code> ratio of cells.</p>
+<p>A gene is considered expressed when number of its UMIs across all
+cells is greater than <code>min_umi</code> and at the same time it is
+expressed in at least <code>min_ratio_cells</code> ratio of cells.</p>
 <p>To disable the gene filtering, set</p>
 <div class="sourceCode" id="cb13"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">MIN_UMI</span><span class="kw">:</span><span class="at"> </span><span class="dv">0</span></span>
 <span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="fu">MIN_RATIO_CELLS</span><span class="kw">:</span><span class="at"> </span><span class="dv">0</span></span></code></pre></div>
@@ -305,15 +369,20 @@
 <div class="sourceCode" id="cb14"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">MITO_REGEX</span><span class="kw">:</span><span class="at"> </span><span class="st">"^MT-"</span></span>
 <span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="fu">RIBO_REGEX</span><span class="kw">:</span><span class="at"> </span><span class="st">"^RP[SL]"</span></span></code></pre></div>
 <p><strong>Type:</strong> character scalar</p>
-<p>Regexes used to match and count occurences of mitochondrial and ribosomal features. The latter is currently not used for gene filtering.</p>
+<p>Regexes used to match and count occurences of mitochondrial and
+ribosomal features. The latter is currently not used for gene
+filtering.</p>
 <hr>
 <div class="sourceCode" id="cb15"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="fu">MIN_UMI</span><span class="kw">:</span><span class="at"> </span><span class="dv">1</span></span></code></pre></div>
 <p><strong>Type:</strong> zero or positive integer scalar</p>
-<p>A threshold for minimum number of UMI per cell, i.e. genes with UMI &lt; <code>MIN_UMI</code> will be removed.</p>
+<p>A threshold for minimum number of UMI per cell, i.e. genes with UMI
+&lt; <code>MIN_UMI</code> will be removed.</p>
 <hr>
 <div class="sourceCode" id="cb16"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="fu">MIN_RATIO_CELLS</span><span class="kw">:</span><span class="at"> </span><span class="fl">0.01</span></span></code></pre></div>
 <p><strong>Type:</strong> numeric scalar &lt;0; 1&gt;</p>
-<p>A minimum ratio of cells expressing a gene, i.e. genes expressed in less than (<code>MIN_RATIO_CELLS</code> * 100)% of cells will be removed.</p>
+<p>A minimum ratio of cells expressing a gene, i.e. genes expressed in
+less than (<code>MIN_RATIO_CELLS</code> * 100)% of cells will be
+removed.</p>
 <hr>
 </div>
 </div>
@@ -322,11 +391,14 @@
 </h3>
 <div class="sourceCode" id="cb17"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="fu">INPUT_QC_BASE_OUT_DIR</span><span class="kw">:</span><span class="at"> </span><span class="st">"01_input_qc"</span></span></code></pre></div>
 <p><strong>Type:</strong> character scalar</p>
-<p>A path to base output directory for this stage. It will be created under <code>BASE_OUT_DIR</code> specified in <code>00_main.yaml</code> config.</p>
+<p>A path to base output directory for this stage. It will be created
+under <code>BASE_OUT_DIR</code> specified in <code>00_main.yaml</code>
+config.</p>
 <hr>
 <div class="sourceCode" id="cb18"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu">INPUT_QC_REPORT_HTML_FILE</span><span class="kw">:</span><span class="at"> </span><span class="st">"01_input_qc.html"</span></span></code></pre></div>
 <p><strong>Type:</strong> character scalar</p>
-<p>A name of HTML report file for this stage. Created in <code>INPUT_QC_BASE_OUT_DIR</code>. Subdirectories are not allowed.</p>
+<p>A name of HTML report file for this stage. Created in
+<code>INPUT_QC_BASE_OUT_DIR</code>. Subdirectories are not allowed.</p>
 </div>
 <div class="section level3">
 <h3 id="html-output-parameters">HTML output parameters<a class="anchor" aria-label="anchor" href="#html-output-parameters"></a>
@@ -335,73 +407,115 @@
 <span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a><span class="fu">INPUT_QC_KNITR_WARNING</span><span class="kw">:</span><span class="at"> </span><span class="ch">False</span></span>
 <span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a><span class="fu">INPUT_QC_KNITR_ECHO</span><span class="kw">:</span><span class="at"> </span><span class="ch">False</span></span></code></pre></div>
 <p><strong>Type:</strong> logical scalar</p>
-<p>These are passed to <code><a href="https://rdrr.io/pkg/knitr/man/opts_chunk.html" class="external-link">knitr::opts_chunk()</a></code> and used for rendering of stage’s HTML report.</p>
+<p>These are passed to <code><a href="https://rdrr.io/pkg/knitr/man/opts_chunk.html" class="external-link">knitr::opts_chunk()</a></code> and used for
+rendering of stage’s HTML report.</p>
 </div>
 </div>
 <div class="section level2">
 <h2 id="targets">Targets<a class="anchor" aria-label="anchor" href="#targets"></a>
 </h2>
-<p>Here you can find description of the most important targets for this stage. However, for a full overview, you have to inspect the <a href="https://github.com/bioinfocz/scdrake/blob/main/R/plans_single_sample.R" class="external-link">source code</a> of the <code><a href="../reference/get_subplan_single_sample.html">get_input_qc_subplan()</a></code> function.</p>
+<p>Here you can find description of the most important targets for this
+stage. However, for a full overview, you have to inspect the <a href="https://github.com/bioinfocz/scdrake/blob/main/R/plans_single_sample.R" class="external-link">source
+code</a> of the <code><a href="../reference/get_subplan_single_sample.html">get_input_qc_subplan()</a></code> function.</p>
 <div class="section level3">
 <h3 id="singlecellexperiment-objects">
 <code>SingleCellExperiment</code> objects<a class="anchor" aria-label="anchor" href="#singlecellexperiment-objects"></a>
 </h3>
-<p><code>sce_raw</code>: an untouched SCE object as loaded from <code><a href="https://rdrr.io/pkg/DropletUtils/man/read10xCounts.html" class="external-link">DropletUtils::read10xCounts()</a></code>.</p>
+<p><code>sce_raw</code>: an untouched SCE object as loaded from
+<code><a href="https://rdrr.io/pkg/DropletUtils/man/read10xCounts.html" class="external-link">DropletUtils::read10xCounts()</a></code>.</p>
 <hr>
-<p><code>sce_valid_cells</code>: a SCE object with empty droplets removed.</p>
+<p><code>sce_valid_cells</code>: a SCE object with empty droplets
+removed.</p>
 <hr>
-<p><code>sce_unfiltered</code>: <code>sce_valid_cells</code> with added columns:</p>
+<p><code>sce_unfiltered</code>: <code>sce_valid_cells</code> with added
+columns:</p>
 <ul>
-<li>Columns from the <code>cell_qc</code> target containing DataFrame with cell QC metrics.</li>
+<li>Columns from the <code>cell_qc</code> target containing DataFrame
+with cell QC metrics.</li>
 <li>
 <code>discard_qc</code>: dataset-sensitive filter.</li>
 <li>
 <code>discard_custom</code>: custom filter.</li>
 </ul>
 <hr>
-<p><code>sce_qc_filter</code>, <code>sce_qc_filter_genes</code>: a SCE object with cells filtered by dataset-sensitive filtering. The latter with filtered genes.</p>
-<p><code>sce_custom_filter</code>, <code>sce_custom_filter_genes</code>: a SCE object with cells filtered by custom filtering. The latter with filtered genes.</p>
+<p><code>sce_qc_filter</code>, <code>sce_qc_filter_genes</code>: a SCE
+object with cells filtered by dataset-sensitive filtering. The latter
+with filtered genes.</p>
+<p><code>sce_custom_filter</code>, <code>sce_custom_filter_genes</code>:
+a SCE object with cells filtered by custom filtering. The latter with
+filtered genes.</p>
 <hr>
-<p><code>sce_selected</code>: a SCE object selected from either <code>sce_qc_filter_genes</code> or <code>sce_custom_filter_genes</code> - depends on the <code>SAVE_DATASET_SENSITIVE_FILTERING</code> parameter.</p>
-<p><code>sce_final_input_qc</code>: <code>sce_selected</code> with added gene annotation (<code>gene_annotation</code> target) to <code>rowData()</code>. This is the final SCE object which will be used in the next stage <code>norm_clustering</code>.</p>
+<p><code>sce_selected</code>: a SCE object selected from either
+<code>sce_qc_filter_genes</code> or <code>sce_custom_filter_genes</code>
+- depends on the <code>SAVE_DATASET_SENSITIVE_FILTERING</code>
+parameter.</p>
+<p><code>sce_final_input_qc</code>: <code>sce_selected</code> with added
+gene annotation (<code>gene_annotation</code> target) to
+<code>rowData()</code>. This is the final SCE object which will be used
+in the next stage <code>norm_clustering</code>.</p>
 </div>
 <div class="section level3">
 <h3 id="cell-filters">Cell filters<a class="anchor" aria-label="anchor" href="#cell-filters"></a>
 </h3>
 <p><code>cell_qc</code>: a DataFrame with cell QC metrics.</p>
 <hr>
-<p>The following list of filters are computed by <code><a href="https://rdrr.io/pkg/scuttle/man/isOutlier.html" class="external-link">scater::isOutlier()</a></code> from <code>cell_qc</code> columns, which are shown for individual filters (e.g. <code>qc_lib</code>: <code>total</code> column). In those, <code>FALSE</code> refers to cells <strong>not passing</strong> a filter.</p>
-<p><code>qc_filters</code>: a list of named lists with logical values for dataset-sensitive cell filtering:</p>
+<p>The following list of filters are computed by
+<code><a href="https://rdrr.io/pkg/scuttle/man/isOutlier.html" class="external-link">scater::isOutlier()</a></code> from <code>cell_qc</code> columns,
+which are shown for individual filters (e.g. <code>qc_lib</code>:
+<code>total</code> column). In those, <code>FALSE</code> refers to cells
+<strong>not passing</strong> a filter.</p>
+<p><code>qc_filters</code>: a list of named lists with logical values
+for dataset-sensitive cell filtering:</p>
 <ul>
 <li>
-<code>qc_lib</code> (<code>total</code>): low number of UMI (lower tail).</li>
+<code>qc_lib</code> (<code>total</code>): low number of UMI (lower
+tail).</li>
 <li>
-<code>qc_nexprs</code> (<code>detected</code>): low number of detected genes = non-zero UMI count (lower tail).</li>
+<code>qc_nexprs</code> (<code>detected</code>): low number of
+detected genes = non-zero UMI count (lower tail).</li>
 <li>
-<code>qc_mito</code> (<code>subsets_mito_percent</code>): high percentage of expressed mitochondrial genes expression (upper tail).</li>
+<code>qc_mito</code> (<code>subsets_mito_percent</code>): high
+percentage of expressed mitochondrial genes expression (upper
+tail).</li>
 </ul>
-<p><code>custom_filters</code>: a list of named lists with logical values for custom cell filtering:</p>
+<p><code>custom_filters</code>: a list of named lists with logical
+values for custom cell filtering:</p>
 <ul>
 <li>
-<code>low_count</code> (<code>total</code>): low number of UMIs.</li>
+<code>low_count</code> (<code>total</code>): low number of
+UMIs.</li>
 <li>
-<code>high_count</code> (<code>total</code>): high number of UMIs.</li>
+<code>high_count</code> (<code>total</code>): high number of
+UMIs.</li>
 <li>
-<code>low_expression</code> (<code>detected</code>): low number of detected genes.</li>
+<code>low_expression</code> (<code>detected</code>): low number of
+detected genes.</li>
 <li>
-<code>high_mito</code> (<code>subsets_mito_percent</code>): high percentage of expressed mitochondrial genes.</li>
+<code>high_mito</code> (<code>subsets_mito_percent</code>): high
+percentage of expressed mitochondrial genes.</li>
 </ul>
-<p><code>qc_filter</code>, <code>custom_filter</code>: a summarized filter (by “or” operation) of <code>qc_filters</code> and <code>custom_filters</code>, respectively.</p>
+<p><code>qc_filter</code>, <code>custom_filter</code>: a summarized
+filter (by “or” operation) of <code>qc_filters</code> and
+<code>custom_filters</code>, respectively.</p>
 </div>
 <div class="section level3">
 <h3 id="gene-filters">Gene filters<a class="anchor" aria-label="anchor" href="#gene-filters"></a>
 </h3>
-<p><code>sce_qc_gene_filter</code>, <code>sce_custom_gene_filter</code>: gene filters (logical vectors) obtained from <code><a href="../reference/get_gene_filter.html">get_gene_filter()</a></code> for SCE objects with cells filtered by dataset-sensitive and custom filter, respectively. In those, <code>FALSE</code> refers to genes <strong>not passing</strong> the filter.</p>
+<p><code>sce_qc_gene_filter</code>, <code>sce_custom_gene_filter</code>:
+gene filters (logical vectors) obtained from
+<code><a href="../reference/get_gene_filter.html">get_gene_filter()</a></code> for SCE objects with cells filtered by
+dataset-sensitive and custom filter, respectively. In those,
+<code>FALSE</code> refers to genes <strong>not passing</strong> the
+filter.</p>
 </div>
 <div class="section level3">
 <h3 id="plots">Plots<a class="anchor" aria-label="anchor" href="#plots"></a>
 </h3>
-<p><code>sce_unfiltered_plotlist</code>: a list of various violin plots for cell QC metrics (<a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a> objects), generated using <code>sce_unfiltered</code> target. Cells are colored by <code>discard_qc</code> column - blue points pass the dataset-sensitive filter, while the orange ones do not.</p>
+<p><code>sce_unfiltered_plotlist</code>: a list of various violin plots
+for cell QC metrics (<a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a> objects), generated using
+<code>sce_unfiltered</code> target. Cells are colored by
+<code>discard_qc</code> column - blue points pass the dataset-sensitive
+filter, while the orange ones do not.</p>
 <p>For example, the following code is used to plot total UMI counts:</p>
 <div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/plot_colData.html">plot_colData</a></span><span class="op">(</span>
@@ -412,30 +526,50 @@
   scale_y <span class="op">=</span> <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_continuous.html" class="external-link">scale_y_log10</a></span><span class="op">(</span><span class="op">)</span>
 <span class="op">)</span></code></pre></div>
 <hr>
-<p><code>sce_qc_filter_genes_plotlist</code>, <code>sce_custom_filter_genes_plotlist</code>: similar to <code>sce_unfiltered_plotlist</code>, but in each of them, cells are colored by the other filter. That is, cells in <code>sce_qc_filter_genes_plotlist</code> are colored by <code>discard_custom</code> column, and thus, showing which cells would be discarded in custom-filtered dataset. Vice versa for <code>sce_custom_filter_genes_plotlist</code>.</p>
+<p><code>sce_qc_filter_genes_plotlist</code>,
+<code>sce_custom_filter_genes_plotlist</code>: similar to
+<code>sce_unfiltered_plotlist</code>, but in each of them, cells are
+colored by the other filter. That is, cells in
+<code>sce_qc_filter_genes_plotlist</code> are colored by
+<code>discard_custom</code> column, and thus, showing which cells would
+be discarded in custom-filtered dataset. Vice versa for
+<code>sce_custom_filter_genes_plotlist</code>.</p>
 </div>
 <div class="section level3">
 <h3 id="other-targets">Other targets<a class="anchor" aria-label="anchor" href="#other-targets"></a>
 </h3>
-<p><code>config_input_qc</code>: a list holding parameters for this stage.</p>
+<p><code>config_input_qc</code>: a list holding parameters for this
+stage.</p>
 <hr>
-<p><code>barcode_ranks</code>: a DataFrame with barcode ranks for <a href="https://bioconductor.org/books/release/OSCA.advanced/droplet-processing.html" class="external-link">knee plot</a>, computed by <code><a href="https://rdrr.io/pkg/DropletUtils/man/barcodeRanks.html" class="external-link">DropletUtils::barcodeRanks()</a></code> on UMI counts from <code>sce_raw</code> target.</p>
-<p><code>empty_droplets</code>: a DataFrame of statistics for empty droplets, computed <code><a href="https://rdrr.io/pkg/DropletUtils/man/emptyDrops.html" class="external-link">DropletUtils::emptyDrops()</a></code> on UMI counts from <code>sce_raw</code> target.</p>
+<p><code>barcode_ranks</code>: a DataFrame with barcode ranks for <a href="https://bioconductor.org/books/release/OSCA.advanced/droplet-processing.html" class="external-link">knee
+plot</a>, computed by <code><a href="https://rdrr.io/pkg/DropletUtils/man/barcodeRanks.html" class="external-link">DropletUtils::barcodeRanks()</a></code> on UMI
+counts from <code>sce_raw</code> target.</p>
+<p><code>empty_droplets</code>: a DataFrame of statistics for empty
+droplets, computed <code><a href="https://rdrr.io/pkg/DropletUtils/man/emptyDrops.html" class="external-link">DropletUtils::emptyDrops()</a></code> on UMI counts
+from <code>sce_raw</code> target.</p>
 <hr>
-<p><code>sce_history</code>: a tibble with cell and gene “history”, showing their numbers in unfiltered and filtered data.</p>
-<p><code>sce_history_plot</code>: a <a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a> object summarizing information from <code>sce_history</code> target.</p>
+<p><code>sce_history</code>: a tibble with cell and gene “history”,
+showing their numbers in unfiltered and filtered data.</p>
+<p><code>sce_history_plot</code>: a <a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a> object
+summarizing information from <code>sce_history</code> target.</p>
 <hr>
-<p><code>gene_annotation</code>: a dataframe with gene annotation, processed such that:</p>
+<p><code>gene_annotation</code>: a dataframe with gene annotation,
+processed such that:</p>
 <ul>
-<li>If a single ENSEMBL ID has multiple symbols, gene descriptions, or ENTREZ IDs, they are collapsed by comma (<code>,</code>).</li>
-<li>ENSEMBL ID is used as a symbol for ENSEMBL IDs with unknown symbols.</li>
+<li>If a single ENSEMBL ID has multiple symbols, gene descriptions, or
+ENTREZ IDs, they are collapsed by comma (<code>,</code>).</li>
+<li>ENSEMBL ID is used as a symbol for ENSEMBL IDs with unknown
+symbols.</li>
 <li>ENSEMBL ID is appended to symbols having multiple ENSEMBL IDs.
 <ul>
-<li>For example, <em>TBCE</em> has both ENSG00000285053 and ENSG00000284770 ENSEMBL IDs assigned -&gt; its symbol is changed to TBCE_ENSG00000285053 and TBCE_ENSG00000284770.</li>
+<li>For example, <em>TBCE</em> has both ENSG00000285053 and
+ENSG00000284770 ENSEMBL IDs assigned -&gt; its symbol is changed to
+TBCE_ENSG00000285053 and TBCE_ENSG00000284770.</li>
 </ul>
 </li>
 </ul>
-<p><code>gene_annotation</code> can be also retrieved from <code>rowData(sce_final_input_qc)</code>.</p>
+<p><code>gene_annotation</code> can be also retrieved from
+<code>rowData(sce_final_input_qc)</code>.</p>
 </div>
 </div>
   </div>
@@ -457,7 +591,7 @@
 
 <div class="pkgdown">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.9000.</p>
   <p class="preferably">Using <a href="https://preferably.amirmasoudabdol.name/?source=footer" class="external-link">preferably</a> template.</p>
 </div>
 

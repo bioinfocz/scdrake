@@ -188,19 +188,34 @@
     
     
 <hr>
-<p>For a general overview of this stage see <code><a href="../articles/pipeline_overview.html">vignette("pipeline_overview")</a></code>.</p>
-<p>Cluster markers config is stored in <code>contrasts.yaml</code> file. Location of this file is different for the single-sample and integration pipelines. As for the <a href="config_pipeline.html">pipeline config</a>, directory with this file is read from environment variables:</p>
+<p>For a general overview of this stage see
+<code><a href="../articles/pipeline_overview.html">vignette("pipeline_overview")</a></code>.</p>
+<p>Cluster markers config is stored in <code>contrasts.yaml</code> file.
+Location of this file is different for the single-sample and integration
+pipelines. As for the <a href="config_pipeline.html">pipeline
+config</a>, directory with this file is read from environment
+variables:</p>
 <ul>
 <li>
-<code>SCDRAKE_SINGLE_SAMPLE_CONFIG_DIR</code> for the single-sample pipeline.</li>
+<code>SCDRAKE_SINGLE_SAMPLE_CONFIG_DIR</code> for the single-sample
+pipeline.</li>
 <li>
-<code>SCDRAKE_INTEGRATION_CONFIG_DIR</code> for the integration pipeline.</li>
+<code>SCDRAKE_INTEGRATION_CONFIG_DIR</code> for the integration
+pipeline.</li>
 </ul>
-<p>and options named in lowercase are set upon <a href="https://github.com/bioinfocz/scdrake" class="external-link">scdrake</a> load or attach. Then the actual directory used depends on whether you run <code><a href="../reference/run_pipeline.html">run_single_sample()</a></code> or <code><a href="../reference/run_pipeline.html">run_integration()</a></code>, or <code><a href="../reference/scdrake_make.html">scdrake_r_make()</a></code> with <code>_drake_single_sample.R</code> or <code>_drake_integration.R</code>.</p>
+<p>and options named in lowercase are set upon <a href="https://github.com/bioinfocz/scdrake" class="external-link">scdrake</a>
+load or attach. Then the actual directory used depends on whether you
+run <code><a href="../reference/run_pipeline.html">run_single_sample()</a></code> or <code><a href="../reference/run_pipeline.html">run_integration()</a></code>,
+or <code><a href="../reference/scdrake_make.html">scdrake_r_make()</a></code> with
+<code>_drake_single_sample.R</code> or
+<code>_drake_integration.R</code>.</p>
 <div class="section level2">
 <h2 id="config-parameters">Config parameters<a class="anchor" aria-label="anchor" href="#config-parameters"></a>
 </h2>
-<p>Parameters for this stage are almost identical to those for <code>cluster_markers</code> stage (see <code><a href="../articles/stage_cluster_markers.html">vignette("stage_cluster_markers")</a></code>). You just need to replace <code>CLUSTER_MARKERS</code> with <code>CONTRASTS</code> 🙂</p>
+<p>Parameters for this stage are almost identical to those for
+<code>cluster_markers</code> stage (see
+<code><a href="../articles/stage_cluster_markers.html">vignette("stage_cluster_markers")</a></code>). You just need to
+replace <code>CLUSTER_MARKERS</code> with <code>CONTRASTS</code> 🙂</p>
 <p>The different parameters are below.</p>
 <hr>
 <div class="sourceCode" id="cb1"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">CONTRASTS_SOURCES</span><span class="kw">:</span></span>
@@ -226,23 +241,37 @@
 <span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">top_n_heatmap</span><span class="kw">:</span><span class="at"> </span><span class="dv">20</span></span>
 <span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">contrasts</span><span class="kw">:</span><span class="at"> </span><span class="st">"all"</span></span></code></pre></div>
 <p><strong>Type:</strong> list of named lists</p>
-<p>This parameter is similar to <code>CLUSTER_MARKERS_SOURCES</code>, but an additional parameter <code>contrasts</code> is used. It is used to specify which levels in <code>source_column</code> will be compared (differential expression).</p>
+<p>This parameter is similar to <code>CLUSTER_MARKERS_SOURCES</code>,
+but an additional parameter <code>contrasts</code> is used. It is used
+to specify which levels in <code>source_column</code> will be compared
+(differential expression).</p>
 <ul>
-<li>If list of lists, the following character scalar items can/must be set:
+<li>If list of lists, the following character scalar items can/must be
+set:
 <ul>
 <li>
-<code>target</code> (required): target level of <code>source_column</code>.</li>
+<code>target</code> (required): target level of
+<code>source_column</code>.</li>
 <li>
-<code>reference</code> (required): reference level of <code>source_column</code>.</li>
+<code>reference</code> (required): reference level of
+<code>source_column</code>.</li>
 <li>
-<code>name</code> (optional): unique contrast name. If not specified, will be created as <code>{target}_vs_{reference}</code>.</li>
+<code>name</code> (optional): unique contrast name. If not
+specified, will be created as <code>{target}_vs_{reference}</code>.</li>
 </ul>
 </li>
-<li>If <code>"all"</code>, all combinations of levels in <code>source_column</code> will be compared. For example, if <code>source_column</code> is <code>"cluster_kmeans_kc_3"</code> (k-means with <code>k = 3</code>), it contains three levels, and the following comparisons (contrasts) will be made: <code>1_vs_2</code>, <code>1_vs_3</code>, and <code>2_vs_3</code>.</li>
+<li>If <code>"all"</code>, all combinations of levels in
+<code>source_column</code> will be compared. For example, if
+<code>source_column</code> is <code>"cluster_kmeans_kc_3"</code>
+(k-means with <code>k = 3</code>), it contains three levels, and the
+following comparisons (contrasts) will be made: <code>1_vs_2</code>,
+<code>1_vs_3</code>, and <code>2_vs_3</code>.</li>
 </ul>
 <hr>
 <p><code>CONTRASTS_SOURCES_DEFAULTS</code></p>
-<p>Same as <code>CLUSTER_MARKERS_SOURCES_DEFAULTS</code>, but the following parameters for statistical tests cannot be used, and hardcoded values are used for them internally:</p>
+<p>Same as <code>CLUSTER_MARKERS_SOURCES_DEFAULTS</code>, but the
+following parameters for statistical tests cannot be used, and hardcoded
+values are used for them internally:</p>
 <ul>
 <li>
 <code>LFC_DIRECTION</code> (<code>"any"</code>)</li>
@@ -255,32 +284,55 @@
 <div class="section level2">
 <h2 id="targets">Targets<a class="anchor" aria-label="anchor" href="#targets"></a>
 </h2>
-<p>Here you can find description of the most important targets for this stage. However, for a full overview, you have to inspect the <a href="https://github.com/bioinfocz/scdrake/blob/main/R/plans_common.R" class="external-link">source code</a> of the <code><a href="../reference/get_subplan_common.html">get_contrasts_subplan()</a></code> function.</p>
-<p>As in the config for this stage, all target names are similar to those in the stage <code>cluster_markers</code> after replacing <code>cluster_markers</code> with <code>contrasts</code> (with few exceptions, see below). Please, refer to <code><a href="../articles/stage_cluster_markers.html">vignette("stage_cluster_markers")</a></code>.</p>
+<p>Here you can find description of the most important targets for this
+stage. However, for a full overview, you have to inspect the <a href="https://github.com/bioinfocz/scdrake/blob/main/R/plans_common.R" class="external-link">source
+code</a> of the <code><a href="../reference/get_subplan_common.html">get_contrasts_subplan()</a></code> function.</p>
+<p>As in the config for this stage, all target names are similar to
+those in the stage <code>cluster_markers</code> after replacing
+<code>cluster_markers</code> with <code>contrasts</code> (with few
+exceptions, see below). Please, refer to
+<code><a href="../articles/stage_cluster_markers.html">vignette("stage_cluster_markers")</a></code>.</p>
 <div class="section level3">
 <h3 id="singlecellexperiment-objects-sce">
 <code>SingleCellExperiment</code> objects (SCE)<a class="anchor" aria-label="anchor" href="#singlecellexperiment-objects-sce"></a>
 </h3>
-<p><code>sce_dimred_contrasts</code>, <code>sce_final_contrasts</code>, <code>sce_contrasts</code></p>
+<p><code>sce_dimred_contrasts</code>, <code>sce_final_contrasts</code>,
+<code>sce_contrasts</code></p>
 </div>
 <div class="section level3">
 <h3 id="tibbles-with-parameters">Tibbles with parameters<a class="anchor" aria-label="anchor" href="#tibbles-with-parameters"></a>
 </h3>
-<p><code>contrasts_params</code>, <code>contrasts_test_params</code>, <code>contrasts_heatmap_params</code>, <code>contrasts_plot_params</code>, <code>contrasts_dimred_plot_params</code></p>
+<p><code>contrasts_params</code>, <code>contrasts_test_params</code>,
+<code>contrasts_heatmap_params</code>,
+<code>contrasts_plot_params</code>,
+<code>contrasts_dimred_plot_params</code></p>
 </div>
 <div class="section level3">
 <h3 id="tibbles-with-cluster-markers-contrasts-test-results">Tibbles with cluster markers (contrasts) test results<a class="anchor" aria-label="anchor" href="#tibbles-with-cluster-markers-contrasts-test-results"></a>
 </h3>
-<p><code>contrasts_raw</code>: a tibble, same as <code>cluster_markers_raw</code>. Used to extract results for contrasts of interest.</p>
+<p><code>contrasts_raw</code>: a tibble, same as
+<code>cluster_markers_raw</code>. Used to extract results for contrasts
+of interest.</p>
 <hr>
-<p><code>contrasts</code>: a tibble with extracted results (in <code>markers</code> column) for contrasts of interest. Contrasts are identified by columns <code>target</code>, <code>reference</code>, or <code>contrast_name</code>, and their cell grouping of origin by <code>source_column</code>. The <code>name</code> column comes from list names in <code>CONTRASTS_SOURCES</code>.</p>
-<p><code>contrasts_out</code>: same as <code>contrasts</code>, but <code>markers</code> are coerced to dataframes and column names are normalized to snake_case.</p>
-<p><code>contrasts_for_tables</code>: same as <code>contrasts_out</code>, but <code>markers</code> dataframes are prepared for HTML output. See <code>cluster_markers_for_tables</code> in <code><a href="../articles/cluster_markers.html">vignette("cluster_markers")</a></code>.</p>
+<p><code>contrasts</code>: a tibble with extracted results (in
+<code>markers</code> column) for contrasts of interest. Contrasts are
+identified by columns <code>target</code>, <code>reference</code>, or
+<code>contrast_name</code>, and their cell grouping of origin by
+<code>source_column</code>. The <code>name</code> column comes from list
+names in <code>CONTRASTS_SOURCES</code>.</p>
+<p><code>contrasts_out</code>: same as <code>contrasts</code>, but
+<code>markers</code> are coerced to dataframes and column names are
+normalized to snake_case.</p>
+<p><code>contrasts_for_tables</code>: same as
+<code>contrasts_out</code>, but <code>markers</code> dataframes are
+prepared for HTML output. See <code>cluster_markers_for_tables</code> in
+<code><a href="../articles/cluster_markers.html">vignette("cluster_markers")</a></code>.</p>
 </div>
 <div class="section level3">
 <h3 id="heatmaps">Heatmaps<a class="anchor" aria-label="anchor" href="#heatmaps"></a>
 </h3>
-<p><code>seu_for_contrasts_heatmaps</code>, <code>contrasts_heatmaps_df</code></p>
+<p><code>seu_for_contrasts_heatmaps</code>,
+<code>contrasts_heatmaps_df</code></p>
 </div>
 <div class="section level3">
 <h3 id="marker-plots">Marker plots<a class="anchor" aria-label="anchor" href="#marker-plots"></a>
@@ -295,7 +347,8 @@
 <div class="section level3">
 <h3 id="other-targets">Other targets<a class="anchor" aria-label="anchor" href="#other-targets"></a>
 </h3>
-<p><code>config_contrasts</code>: a list holding parameters for this stage.</p>
+<p><code>config_contrasts</code>: a list holding parameters for this
+stage.</p>
 </div>
 </div>
   </div>
@@ -317,7 +370,7 @@
 
 <div class="pkgdown">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.9000.</p>
   <p class="preferably">Using <a href="https://preferably.amirmasoudabdol.name/?source=footer" class="external-link">preferably</a> template.</p>
 </div>
 

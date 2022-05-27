@@ -188,15 +188,26 @@
     
     
 <hr>
-<p>For a general overview of this stage see <code><a href="../articles/pipeline_overview.html">vignette("pipeline_overview")</a></code>.</p>
-<p>Cluster markers config is stored in <code>cluster_markers.yaml</code> file. Location of this file is different for the single-sample and integration pipelines. As for the <a href="config_pipeline.html">pipeline config</a>, directory with this file is read from environment variables:</p>
+<p>For a general overview of this stage see
+<code><a href="../articles/pipeline_overview.html">vignette("pipeline_overview")</a></code>.</p>
+<p>Cluster markers config is stored in <code>cluster_markers.yaml</code>
+file. Location of this file is different for the single-sample and
+integration pipelines. As for the <a href="config_pipeline.html">pipeline config</a>, directory with this
+file is read from environment variables:</p>
 <ul>
 <li>
-<code>SCDRAKE_SINGLE_SAMPLE_CONFIG_DIR</code> for the single-sample pipeline.</li>
+<code>SCDRAKE_SINGLE_SAMPLE_CONFIG_DIR</code> for the single-sample
+pipeline.</li>
 <li>
-<code>SCDRAKE_INTEGRATION_CONFIG_DIR</code> for the integration pipeline.</li>
+<code>SCDRAKE_INTEGRATION_CONFIG_DIR</code> for the integration
+pipeline.</li>
 </ul>
-<p>and options named in lowercase are set upon <a href="https://github.com/bioinfocz/scdrake" class="external-link">scdrake</a> load or attach. Then the actual directory used depends on whether you run <code><a href="../reference/run_pipeline.html">run_single_sample()</a></code> or <code><a href="../reference/run_pipeline.html">run_integration()</a></code>, or <code><a href="../reference/scdrake_make.html">scdrake_r_make()</a></code> with <code>_drake_single_sample.R</code> or <code>_drake_integration.R</code>.</p>
+<p>and options named in lowercase are set upon <a href="https://github.com/bioinfocz/scdrake" class="external-link">scdrake</a>
+load or attach. Then the actual directory used depends on whether you
+run <code><a href="../reference/run_pipeline.html">run_single_sample()</a></code> or <code><a href="../reference/run_pipeline.html">run_integration()</a></code>,
+or <code><a href="../reference/scdrake_make.html">scdrake_r_make()</a></code> with
+<code>_drake_single_sample.R</code> or
+<code>_drake_integration.R</code>.</p>
 <div class="section level2">
 <h2 id="config-parameters">Config parameters<a class="anchor" aria-label="anchor" href="#config-parameters"></a>
 </h2>
@@ -238,51 +249,95 @@
 <span id="cb1-33"><a href="#cb1-33" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">TOP_N_PLOT</span><span class="kw">:</span><span class="at"> </span><span class="dv">5</span></span>
 <span id="cb1-34"><a href="#cb1-34" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">TOP_N_WT_PLOT</span><span class="kw">:</span><span class="at"> </span><span class="st">"top"</span></span></code></pre></div>
 <p><strong>Type:</strong> named list (dictionary) of named lists</p>
-<p>Default parameters for computation and reporting of cluster markers. These can be overriden for each of the cluster markers source in <code>CLUSTER_MARKERS_SOURCES</code> (see below).</p>
+<p>Default parameters for computation and reporting of cluster markers.
+These can be overriden for each of the cluster markers source in
+<code>CLUSTER_MARKERS_SOURCES</code> (see below).</p>
 <ul>
 <li>
-<code>COMMON_PARAMS</code>: used for all statistical tests and their results.
+<code>COMMON_PARAMS</code>: used for all statistical tests and their
+results.
 <ul>
 <li>
-<code>PLOT_DIMREDS</code> (character vector: <code>"pca"</code>, <code>"tsne"</code>, <code>"umap"</code>): which dimensionality reductions to use for marker plots.</li>
+<code>PLOT_DIMREDS</code> (character vector: <code>"pca"</code>,
+<code>"tsne"</code>, <code>"umap"</code>): which dimensionality
+reductions to use for marker plots.</li>
 <li>
-<code>BLOCK_COLUMN</code> (character scalar or <code>null</code>): which column to use as the blocking factor. Examples: <code>phase</code> (cell cycle phase), <code>batch</code> (sample of origin - integration pipeline).</li>
+<code>BLOCK_COLUMN</code> (character scalar or <code>null</code>):
+which column to use as the blocking factor. Examples: <code>phase</code>
+(cell cycle phase), <code>batch</code> (sample of origin - integration
+pipeline).</li>
 </ul>
 </li>
 <li>
-<code>PARAMS_T</code>, <code>PARAMS_WILCOX</code>, <code>PARAMS_BINOM</code>: parameters for individual test types.
+<code>PARAMS_T</code>, <code>PARAMS_WILCOX</code>,
+<code>PARAMS_BINOM</code>: parameters for individual test types.
 <ul>
-<li>Computation parameters (passed to <code><a href="https://rdrr.io/pkg/scran/man/findMarkers.html" class="external-link">scran::findMarkers()</a></code>, <code><a href="https://rdrr.io/pkg/scran/man/pairwiseTTests.html" class="external-link">scran::pairwiseTTests()</a></code>, <code><a href="https://rdrr.io/pkg/scran/man/pairwiseWilcox.html" class="external-link">scran::pairwiseWilcox()</a></code>, or <code><a href="https://rdrr.io/pkg/scran/man/pairwiseBinom.html" class="external-link">scran::pairwiseBinom()</a></code>):
+<li>Computation parameters (passed to <code><a href="https://rdrr.io/pkg/scran/man/findMarkers.html" class="external-link">scran::findMarkers()</a></code>,
+<code><a href="https://rdrr.io/pkg/scran/man/pairwiseTTests.html" class="external-link">scran::pairwiseTTests()</a></code>,
+<code><a href="https://rdrr.io/pkg/scran/man/pairwiseWilcox.html" class="external-link">scran::pairwiseWilcox()</a></code>, or
+<code><a href="https://rdrr.io/pkg/scran/man/pairwiseBinom.html" class="external-link">scran::pairwiseBinom()</a></code>):
 <ul>
 <li>
-<code>LFC_DIRECTION</code> (character scalar: <code>"any"</code> | <code>"up"</code> | <code>"down"</code>): the direction of log-fold changes to be considered in the alternative hypothesis.</li>
+<code>LFC_DIRECTION</code> (character scalar: <code>"any"</code> |
+<code>"up"</code> | <code>"down"</code>): the direction of log-fold
+changes to be considered in the alternative hypothesis.</li>
 <li>
-<code>LFC_TEST</code> (positive numeric scalar): the log-fold change threshold to be tested against.</li>
+<code>LFC_TEST</code> (positive numeric scalar): the log-fold change
+threshold to be tested against.</li>
 <li>
-<code>PVAL_TYPE</code> (character scalar: <code>"any"</code> | <code>"some"</code> | <code>"all"</code>): how p-values are to be combined across pairwise comparisons for a given group/cluster. If <code>"any"</code>, <code>top</code> column will be present in cluster markers tables. By this parameter you can control the stringency of marker detection - see <code><a href="../articles/cluster_markers.html">vignette("cluster_markers")</a></code> for more details.</li>
+<code>PVAL_TYPE</code> (character scalar: <code>"any"</code> |
+<code>"some"</code> | <code>"all"</code>): how p-values are to be
+combined across pairwise comparisons for a given group/cluster. If
+<code>"any"</code>, <code>top</code> column will be present in cluster
+markers tables. By this parameter you can control the stringency of
+marker detection - see <code><a href="../articles/cluster_markers.html">vignette("cluster_markers")</a></code> for more
+details.</li>
 <li>
-<code>MIN_PROP</code> (numeric scalar: <code>&lt;0; 1&gt;</code>, or <code>null</code>): the minimum proportion of significant comparisons per gene. Defaults to <code>0.5</code> when <code>PVAL_TYPE</code> is <code>"some"</code>, otherwise defaults to zero.</li>
+<code>MIN_PROP</code> (numeric scalar: <code>&lt;0; 1&gt;</code>, or
+<code>null</code>): the minimum proportion of significant comparisons
+per gene. Defaults to <code>0.5</code> when <code>PVAL_TYPE</code> is
+<code>"some"</code>, otherwise defaults to zero.</li>
 <li>
-<code>STD_LFC</code> (logical scalar): whether log-fold changes should be standardized by the variance. Only possible when t-test is being used, and it is equivalent to Cohen’s <span class="math inline">\(d\)</span>. Standardized log-fold changes may be more appealing for visualization as it avoids large fold changes due to large variance. The choice of <code>STD_LFC</code> does not affect the calculation of the p-values. Note: for compatibility reasons, <code>STD_LFC</code> parameter is set, but not used in <code>PARAMS_WILCOX</code> and <code>PARAMS_BINOM</code>.</li>
+<code>STD_LFC</code> (logical scalar): whether log-fold changes
+should be standardized by the variance. Only possible when t-test is
+being used, and it is equivalent to Cohen’s <span class="math inline">\(d\)</span>. Standardized log-fold changes may be
+more appealing for visualization as it avoids large fold changes due to
+large variance. The choice of <code>STD_LFC</code> does not affect the
+calculation of the p-values. Note: for compatibility reasons,
+<code>STD_LFC</code> parameter is set, but not used in
+<code>PARAMS_WILCOX</code> and <code>PARAMS_BINOM</code>.</li>
 </ul>
 </li>
 <li>Reporting parameters:
 <ul>
 <li>
-<code>TOP_N_HEATMAP</code> (positive integer scalar or <code>.inf</code>): for how many top N markers to generate heatmaps. The column used for determination of the top N markers is set by <code>TOP_N_WT_HEATMAP</code>. You can also use all markers, either by supplying a huge number, or by using <code>.inf</code>, which is translated to R’s <code>Inf</code>.</li>
+<code>TOP_N_HEATMAP</code> (positive integer scalar or
+<code>.inf</code>): for how many top N markers to generate heatmaps. The
+column used for determination of the top N markers is set by
+<code>TOP_N_WT_HEATMAP</code>. You can also use all markers, either by
+supplying a huge number, or by using <code>.inf</code>, which is
+translated to R’s <code>Inf</code>.</li>
 <li>
-<code>TOP_N_WT_HEATMAP</code> (character scalar: <code>"top"</code> | <code>"fdr"</code> | <code>"lfc"</code> | <code>"auc"</code>): which column from a marker table to use for determination of the top N markers.
+<code>TOP_N_WT_HEATMAP</code> (character scalar: <code>"top"</code>
+| <code>"fdr"</code> | <code>"lfc"</code> | <code>"auc"</code>): which
+column from a marker table to use for determination of the top N
+markers.
 <ul>
 <li>
-<code>"top"</code> can be only used when <code>PVAL_TYPE</code> is <code>"some"</code>.</li>
+<code>"top"</code> can be only used when <code>PVAL_TYPE</code> is
+<code>"some"</code>.</li>
 <li>
-<code>"auc"</code> can be only used inside <code>PARAMS_WILCOX</code>.</li>
+<code>"auc"</code> can be only used inside
+<code>PARAMS_WILCOX</code>.</li>
 </ul>
 </li>
 <li>
-<code>TOP_N_PLOT</code> (positive integer scalar): same as <code>TOP_N_HEATMAP</code>, but used for marker plots.</li>
+<code>TOP_N_PLOT</code> (positive integer scalar): same as
+<code>TOP_N_HEATMAP</code>, but used for marker plots.</li>
 <li>
-<code>TOP_N_WT_PLOT</code> (character scalar: <code>"top"</code> | <code>"fdr"</code> | <code>"lfc"</code> | <code>"auc"</code>): same as <code>TOP_N_WT_HEATMAP</code>, but used for marker plots.</li>
+<code>TOP_N_WT_PLOT</code> (character scalar: <code>"top"</code> |
+<code>"fdr"</code> | <code>"lfc"</code> | <code>"auc"</code>): same as
+<code>TOP_N_WT_HEATMAP</code>, but used for marker plots.</li>
 </ul>
 </li>
 </ul>
@@ -305,36 +360,54 @@
 <span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">common_params</span><span class="kw">:</span></span>
 <span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">block_column</span><span class="kw">:</span><span class="at"> </span><span class="st">"batch"</span></span></code></pre></div>
 <p><strong>Type:</strong> list of named lists</p>
-<p>This parameter is used to specify cell groupings (“sources”) in which markers are searched for, and test and output parameters. You can use any categorical column - results of cell clustering, <code>phase</code> (cell cycle), etc., or custom groupings defined by <code>CELL_GROUPINGS</code> in <code>02_norm_clustering.yaml</code> and <code>02_int_clustering.yaml</code>. See <a href="#clustering">clustering targets</a> for a list of clustering names.</p>
-<p>In each entry you can override parameters in <code>CLUSTER_MARKERS_SOURCES_DEFAULTS</code> (by using lowercase names).</p>
+<p>This parameter is used to specify cell groupings (“sources”) in which
+markers are searched for, and test and output parameters. You can use
+any categorical column - results of cell clustering, <code>phase</code>
+(cell cycle), etc., or custom groupings defined by
+<code>CELL_GROUPINGS</code> in <code>02_norm_clustering.yaml</code> and
+<code>02_int_clustering.yaml</code>. See <a href="#clustering">clustering targets</a> for a list of clustering
+names.</p>
+<p>In each entry you can override parameters in
+<code>CLUSTER_MARKERS_SOURCES_DEFAULTS</code> (by using lowercase
+names).</p>
 <p>Let’s examine the first entry:</p>
 <ul>
 <li>
-<code>markers_cluster_int_kmeans_kc_4</code>: name of this comparison. You can use whatever name you want.</li>
+<code>markers_cluster_int_kmeans_kc_4</code>: name of this
+comparison. You can use whatever name you want.</li>
 <li>
-<code>source_column: "cluster_int_kmeans_kc_4"</code> (character scalar): which cell grouping to use for computation of cell markers.</li>
+<code>source_column: "cluster_int_kmeans_kc_4"</code> (character
+scalar): which cell grouping to use for computation of cell
+markers.</li>
 <li>
-<code>description: "Cluster markers for k-means clustering (k = 4)"</code> (character scalar): description of this comparison, will appear in reports and plots.</li>
+<code>description: "Cluster markers for k-means clustering (k = 4)"</code>
+(character scalar): description of this comparison, will appear in
+reports and plots.</li>
 </ul>
 <div class="sourceCode" id="cb3"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">common_params</span><span class="kw">:</span></span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">plot_dimreds</span><span class="kw">:</span><span class="at"> </span><span class="kw">[</span><span class="st">"umap"</span><span class="kw">,</span><span class="at"> </span><span class="st">"pca"</span><span class="kw">]</span></span></code></pre></div>
 <ul>
-<li>This will override corresponding parameters in <code>COMMON_PARAMS</code> in <code>CLUSTER_MARKERS_SOURCES_DEFAULTS</code>.</li>
+<li>This will override corresponding parameters in
+<code>COMMON_PARAMS</code> in
+<code>CLUSTER_MARKERS_SOURCES_DEFAULTS</code>.</li>
 </ul>
 <div class="sourceCode" id="cb4"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">params_t</span><span class="kw">:</span></span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">pval_type</span><span class="kw">:</span><span class="at"> </span><span class="st">"some"</span></span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">top_n_wt_heatmap</span><span class="kw">:</span><span class="at"> </span><span class="st">"fdr"</span></span>
 <span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">top_n_wt_plot</span><span class="kw">:</span><span class="at"> </span><span class="st">"fdr"</span></span></code></pre></div>
 <ul>
-<li>This will override corresponding parameters <code>PARAMS_T</code> in <code>CLUSTER_MARKERS_SOURCES_DEFAULTS</code>.</li>
+<li>This will override corresponding parameters <code>PARAMS_T</code> in
+<code>CLUSTER_MARKERS_SOURCES_DEFAULTS</code>.</li>
 </ul>
 <blockquote>
-<p>Watch out for the proper indentation. See the “Merging of nested named lists” section in <code><a href="../articles/scdrake_config.html">vignette("scdrake_config")</a></code>.</p>
+<p>Watch out for the proper indentation. See the “Merging of nested
+named lists” section in <code><a href="../articles/scdrake_config.html">vignette("scdrake_config")</a></code>.</p>
 </blockquote>
 <hr>
 <div class="sourceCode" id="cb5"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">MAKE_CLUSTER_MARKERS_PLOTS</span><span class="kw">:</span><span class="at"> </span><span class="ch">True</span></span></code></pre></div>
 <p><strong>Type:</strong> logical scalar</p>
-<p>Set to <code>False</code> to skip making of marker plots. In that case, for compatibility reasons, empty files will be created.</p>
+<p>Set to <code>False</code> to skip making of marker plots. In that
+case, for compatibility reasons, empty files will be created.</p>
 <hr>
 </div>
 <div class="section level3">
@@ -343,7 +416,8 @@
 <div class="sourceCode" id="cb6"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">CLUSTER_MARKERS_TABLE_TEMPLATE_RMD_FILE</span><span class="kw">:</span><span class="at"> </span><span class="st">"Rmd/common/cluster_markers_table_template.Rmd"</span></span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="fu">CLUSTER_MARKERS_REPORT_RMD_FILE</span><span class="kw">:</span><span class="at"> </span><span class="st">"Rmd/common/cluster_markers.Rmd"</span></span></code></pre></div>
 <p><strong>Type:</strong> character scalar</p>
-<p>Paths to RMarkdown files used for HTML reports of this pipeline stage.</p>
+<p>Paths to RMarkdown files used for HTML reports of this pipeline
+stage.</p>
 <hr>
 </div>
 <div class="section level3">
@@ -351,7 +425,9 @@
 </h3>
 <div class="sourceCode" id="cb7"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">CLUSTER_MARKERS_BASE_OUT_DIR</span><span class="kw">:</span><span class="at"> </span><span class="st">"cluster_markers"</span></span></code></pre></div>
 <p><strong>Type:</strong> character scalar</p>
-<p>A path to base output directory for this stage. It will be created under <code>BASE_OUT_DIR</code> specified in <code>00_main.yaml</code> config.</p>
+<p>A path to base output directory for this stage. It will be created
+under <code>BASE_OUT_DIR</code> specified in <code>00_main.yaml</code>
+config.</p>
 <hr>
 <div class="sourceCode" id="cb8"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">CLUSTER_MARKERS_REPORT_HTML_FILE</span><span class="kw">:</span><span class="at"> </span><span class="st">"cluster_markers.html"</span></span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="fu">CLUSTER_MARKERS_HEATMAPS_OUT_DIR</span><span class="kw">:</span><span class="at"> </span><span class="st">"cluster_markers_heatmaps"</span></span>
@@ -359,19 +435,30 @@
 <span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a><span class="fu">CLUSTER_MARKERS_DIMRED_PLOTS_BASE_OUT_DIR</span><span class="kw">:</span><span class="at"> </span><span class="st">"cluster_markers_dimred_plots"</span></span>
 <span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a><span class="fu">CLUSTER_MARKERS_TABLES_OUT_DIR</span><span class="kw">:</span><span class="at"> </span><span class="st">"cluster_markers_tables"</span></span></code></pre></div>
 <p><strong>Type:</strong> character scalar</p>
-<p>Names of files and directories created under <code>CLUSTER_MARKERS_BASE_OUT_DIR</code>. Subdirectories are not allowed.</p>
+<p>Names of files and directories created under
+<code>CLUSTER_MARKERS_BASE_OUT_DIR</code>. Subdirectories are not
+allowed.</p>
 </div>
 </div>
 <div class="section level2">
 <h2 id="targets">Targets<a class="anchor" aria-label="anchor" href="#targets"></a>
 </h2>
-<p>Here you can find description of the most important targets for this stage. However, for a full overview, you have to inspect the <a href="https://github.com/bioinfocz/scdrake/blob/main/R/plans_common.R" class="external-link">source code</a> of the <code><a href="../reference/get_subplan_common.html">get_cluster_markers_subplan()</a></code> function.</p>
+<p>Here you can find description of the most important targets for this
+stage. However, for a full overview, you have to inspect the <a href="https://github.com/bioinfocz/scdrake/blob/main/R/plans_common.R" class="external-link">source
+code</a> of the <code><a href="../reference/get_subplan_common.html">get_cluster_markers_subplan()</a></code> function.</p>
 <div class="section level3">
 <h3 id="singlecellexperiment-objects">
 <code>SingleCellExperiment</code> objects<a class="anchor" aria-label="anchor" href="#singlecellexperiment-objects"></a>
 </h3>
-<p><code>sce_dimred_cluster_markers</code>, <code>sce_final_cluster_markers</code>: SCE objects with computed dimensionality reductions. Used for generation of marker plots and heatmaps.</p>
-<p><code>sce_cluster_markers</code>: Final SCE object with cell clusterings from the <code>02_norm_clustering</code> (single-sample pipeline) or <code>02_int_clustering</code> stage (integration pipeline). Used to compute cluster markers. You can inspect the cell groupings which can be used for marker computation:</p>
+<p><code>sce_dimred_cluster_markers</code>,
+<code>sce_final_cluster_markers</code>: SCE objects with computed
+dimensionality reductions. Used for generation of marker plots and
+heatmaps.</p>
+<p><code>sce_cluster_markers</code>: Final SCE object with cell
+clusterings from the <code>02_norm_clustering</code> (single-sample
+pipeline) or <code>02_int_clustering</code> stage (integration
+pipeline). Used to compute cluster markers. You can inspect the cell
+groupings which can be used for marker computation:</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu">drake</span><span class="fu">::</span><span class="fu"><a href="https://docs.ropensci.org/drake/reference/readd.html" class="external-link">loadd</a></span><span class="op">(</span><span class="va">sce_final_cluster_markers</span><span class="op">)</span>
 <span class="fu">SingleCellExperiment</span><span class="fu">::</span><span class="fu">colData</span><span class="op">(</span><span class="va">sce_final_cluster_markers</span><span class="op">)</span></code></pre></div>
@@ -380,31 +467,70 @@
 <h3 id="tibbles-with-parameters">Tibbles with parameters<a class="anchor" aria-label="anchor" href="#tibbles-with-parameters"></a>
 </h3>
 <p>Usually, each row of these tibbles is passed to a function.</p>
-<p><code>cluster_markers_params</code>: all parameters for computation of cluster markers.</p>
-<p>The following tibbles are derived from <code>cluster_markers_params</code>: <code>cluster_markers_test_params</code>, <code>cluster_markers_heatmap_params</code>, <code>cluster_markers_plot_params</code>, <code>cluster_markers_dimred_plot_params</code></p>
+<p><code>cluster_markers_params</code>: all parameters for computation
+of cluster markers.</p>
+<p>The following tibbles are derived from
+<code>cluster_markers_params</code>:
+<code>cluster_markers_test_params</code>,
+<code>cluster_markers_heatmap_params</code>,
+<code>cluster_markers_plot_params</code>,
+<code>cluster_markers_dimred_plot_params</code></p>
 </div>
 <div class="section level3">
 <h3 id="tibbles-with-cluster-markers-test-results">Tibbles with cluster markers test results<a class="anchor" aria-label="anchor" href="#tibbles-with-cluster-markers-test-results"></a>
 </h3>
-<p><code>cluster_markers_raw</code>: this tibble has the same columns as <code>cluster_markers_test_params</code>, except the list column (<code>&lt;DataFrame&gt;</code>) <code>markers</code> with test results is added, and each level of <code>source_column</code> is expanded to a separate row.</p>
-<p>So for example, if a row has <code>group_level = 1</code>, its <code>markers</code> <code>DataFrame</code> contains test results of this level versus all other ones.</p>
-<p>See <code><a href="https://rdrr.io/pkg/scran/man/combineMarkers.html" class="external-link">scran::combineMarkers()</a></code> for more details on the output format, and <code><a href="../reference/scran_markers.html">scran_markers()</a></code> for a description of changes made to the output of the former function.</p>
+<p><code>cluster_markers_raw</code>: this tibble has the same columns as
+<code>cluster_markers_test_params</code>, except the list column
+(<code>&lt;DataFrame&gt;</code>) <code>markers</code> with test results
+is added, and each level of <code>source_column</code> is expanded to a
+separate row.</p>
+<p>So for example, if a row has <code>group_level = 1</code>, its
+<code>markers</code> <code>DataFrame</code> contains test results of
+this level versus all other ones.</p>
+<p>See <code><a href="https://rdrr.io/pkg/scran/man/combineMarkers.html" class="external-link">scran::combineMarkers()</a></code> for more details on the
+output format, and <code><a href="../reference/scran_markers.html">scran_markers()</a></code> for a description of
+changes made to the output of the former function.</p>
 <hr>
-<p><code>cluster_markers</code>: same as <code>cluster_markers_raw</code>, but for Wilcox tests, combined LFC is added to <code>DataFrame</code>s in <code>markers</code> column.</p>
+<p><code>cluster_markers</code>: same as
+<code>cluster_markers_raw</code>, but for Wilcox tests, combined LFC is
+added to <code>DataFrame</code>s in <code>markers</code> column.</p>
 <hr>
-<p><code>cluster_markers_processed</code>: same as <code>cluster_markers</code>, but <code>markers</code> <code>DataFrame</code>s don’t contain nested <code>DataFrame</code>s (<code>lfc_*</code> or <code>auc_*</code>) - those are replaced by combined effect sizes. This way you can inspect the effect sizes of comparisons with all other levels.</p>
-<p><code>cluster_markers_out</code>: holds the same data as <code>cluster_markers_processed</code>, but <code>markers</code> are coerced to dataframes and column names are normalized to snake_case.</p>
+<p><code>cluster_markers_processed</code>: same as
+<code>cluster_markers</code>, but <code>markers</code>
+<code>DataFrame</code>s don’t contain nested <code>DataFrame</code>s
+(<code>lfc_*</code> or <code>auc_*</code>) - those are replaced by
+combined effect sizes. This way you can inspect the effect sizes of
+comparisons with all other levels.</p>
+<p><code>cluster_markers_out</code>: holds the same data as
+<code>cluster_markers_processed</code>, but <code>markers</code> are
+coerced to dataframes and column names are normalized to snake_case.</p>
 <hr>
-<p><code>cluster_markers_for_tables</code>: a summarized tibble glued from <code>cluster_markers_out</code>, <code>cluster_markers_heatmaps_df</code>, and <code>cluster_markers_plots_top</code>. Marker tables in <code>markers</code> column are in publish-ready forms for HTML output, e.g. there are <code>&lt;a&gt;</code> links to ENSEMBL or PDF files of marker plots.</p>
+<p><code>cluster_markers_for_tables</code>: a summarized tibble glued
+from <code>cluster_markers_out</code>,
+<code>cluster_markers_heatmaps_df</code>, and
+<code>cluster_markers_plots_top</code>. Marker tables in
+<code>markers</code> column are in publish-ready forms for HTML output,
+e.g. there are <code>&lt;a&gt;</code> links to ENSEMBL or PDF files of
+marker plots.</p>
 </div>
 <div class="section level3">
 <h3 id="heatmaps">Heatmaps<a class="anchor" aria-label="anchor" href="#heatmaps"></a>
 </h3>
-<p><code>seu_for_cluster_markers_heatmaps</code>: a <code>Seurat</code> object used to generate heatmaps through <code><a href="../reference/marker_heatmap.html">marker_heatmap()</a></code> (a wrapper around <code><a href="https://satijalab.org/seurat/reference/DoHeatmap.html" class="external-link">Seurat::DoHeatmap()</a></code>). In <code>scale.data</code> slot of the <code>RNA</code> assay are UMI counts transformed to z-score.</p>
+<p><code>seu_for_cluster_markers_heatmaps</code>: a <code>Seurat</code>
+object used to generate heatmaps through <code><a href="../reference/marker_heatmap.html">marker_heatmap()</a></code>
+(a wrapper around <code><a href="https://satijalab.org/seurat/reference/DoHeatmap.html" class="external-link">Seurat::DoHeatmap()</a></code>). In
+<code>scale.data</code> slot of the <code>RNA</code> assay are UMI
+counts transformed to z-score.</p>
 <hr>
-<p><code>cluster_markers_heatmaps_df</code>: a tibble derived from <code>cluster_markers_heatmaps_df</code>, but enriched with cluster markers test results.</p>
-<p>Two heatmaps for each row in <code>cluster_markers_heatmaps_df</code> are made: one with log2 UMI counts, and second with the same values transformed to z-score.</p>
-<p>For storage reasons, heatmap objects are not saved as R objects, but only exported to PDF. However, you can obtain a tibble holding these objects with</p>
+<p><code>cluster_markers_heatmaps_df</code>: a tibble derived from
+<code>cluster_markers_heatmaps_df</code>, but enriched with cluster
+markers test results.</p>
+<p>Two heatmaps for each row in <code>cluster_markers_heatmaps_df</code>
+are made: one with log2 UMI counts, and second with the same values
+transformed to z-score.</p>
+<p>For storage reasons, heatmap objects are not saved as R objects, but
+only exported to PDF. However, you can obtain a tibble holding these
+objects with</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu">drake</span><span class="fu">::</span><span class="fu"><a href="https://docs.ropensci.org/drake/reference/readd.html" class="external-link">loadd</a></span><span class="op">(</span><span class="va">cluster_markers_heatmaps_df</span><span class="op">)</span>
 <span class="va">heatmaps_tbl</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/marker_heatmaps_wrapper.html">marker_heatmaps_wrapper</a></span><span class="op">(</span>
@@ -414,33 +540,49 @@
   save <span class="op">=</span> <span class="cn">FALSE</span>,
   return_type <span class="op">=</span> <span class="st">"tibble"</span>
 <span class="op">)</span></code></pre></div>
-<p>In <code>heatmaps_tbl</code>, two list columns are appended to <code>cluster_markers_heatmaps_df</code>:</p>
+<p>In <code>heatmaps_tbl</code>, two list columns are appended to
+<code>cluster_markers_heatmaps_df</code>:</p>
 <ul>
 <li>
-<code>heatmaps</code>: a named list with heatmap object (<code>p_heatmap</code>) and its z-score-transformed version (<code>p_heatmap_zscore</code>).</li>
+<code>heatmaps</code>: a named list with heatmap object
+(<code>p_heatmap</code>) and its z-score-transformed version
+(<code>p_heatmap_zscore</code>).</li>
 <li>
-<code>markers_top</code>: a dataframe with top markers used in the heatmaps (subsetted <code>cluster_markers_processed$markers</code>).</li>
+<code>markers_top</code>: a dataframe with top markers used in the
+heatmaps (subsetted
+<code>cluster_markers_processed$markers</code>).</li>
 </ul>
-<p>For more control you can use the <code><a href="../reference/marker_heatmap.html">marker_heatmap()</a></code> function (of which is <code><a href="../reference/marker_heatmaps_wrapper.html">marker_heatmaps_wrapper()</a></code> a wrapper).</p>
+<p>For more control you can use the <code><a href="../reference/marker_heatmap.html">marker_heatmap()</a></code>
+function (of which is <code><a href="../reference/marker_heatmaps_wrapper.html">marker_heatmaps_wrapper()</a></code> a
+wrapper).</p>
 </div>
 <div class="section level3">
 <h3 id="marker-plots">Marker plots<a class="anchor" aria-label="anchor" href="#marker-plots"></a>
 </h3>
-<p><code>cluster_markers_plots_top</code>: a tibble with markers for which plots will be made. See <code><a href="../reference/markers_plots_top.html">?markers_plots_top</a></code> for details.</p>
-<p>As for heatmaps, plot objects (<a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a>, <a href="https://patchwork.data-imaginist.com" class="external-link">patchwork</a>) are not saved, but the underlying function can be used:</p>
+<p><code>cluster_markers_plots_top</code>: a tibble with markers for
+which plots will be made. See <code><a href="../reference/markers_plots_top.html">?markers_plots_top</a></code> for
+details.</p>
+<p>As for heatmaps, plot objects (<a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a>,
+<a href="https://patchwork.data-imaginist.com" class="external-link">patchwork</a>) are not saved, but the underlying function can
+be used:</p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/markers_plots_files.html">markers_plots_files</a></span><span class="op">(</span><span class="va">sce_dimred_cluster_markers</span>, <span class="va">cluster_markers_plots_top</span>, save <span class="op">=</span> <span class="cn">FALSE</span>, return_type <span class="op">=</span> <span class="st">"tibble"</span><span class="op">)</span></code></pre></div>
-<p>Similarly, the actual plotting function can be used, see <code><a href="../reference/marker_plot.html">?marker_plot</a></code>.</p>
+<p>Similarly, the actual plotting function can be used, see
+<code><a href="../reference/marker_plot.html">?marker_plot</a></code>.</p>
 </div>
 <div class="section level3">
 <h3 id="dimensionality-reduction-plots">Dimensionality reduction plots<a class="anchor" aria-label="anchor" href="#dimensionality-reduction-plots"></a>
 </h3>
-<p><code>cluster_markers_dimred_plots</code>: a tibble with dimensionality reduction plots for each of <code>source_column</code> in the <code>CLUSTER_MARKERS_SOURCES</code> parameter and <code>PLOT_DIMREDS</code> in <code>COMMON_PARAMS</code>.</p>
+<p><code>cluster_markers_dimred_plots</code>: a tibble with
+dimensionality reduction plots for each of <code>source_column</code> in
+the <code>CLUSTER_MARKERS_SOURCES</code> parameter and
+<code>PLOT_DIMREDS</code> in <code>COMMON_PARAMS</code>.</p>
 </div>
 <div class="section level3">
 <h3 id="other-targets">Other targets<a class="anchor" aria-label="anchor" href="#other-targets"></a>
 </h3>
-<p><code>config_cluster_markers</code>: a list holding parameters for this stage.</p>
+<p><code>config_cluster_markers</code>: a list holding parameters for
+this stage.</p>
 </div>
 </div>
   </div>
@@ -462,7 +604,7 @@
 
 <div class="pkgdown">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.9000.</p>
   <p class="preferably">Using <a href="https://preferably.amirmasoudabdol.name/?source=footer" class="external-link">preferably</a> template.</p>
 </div>
 
