@@ -22,6 +22,10 @@ Directory with this file is read from `SCDRAKE_INTEGRATION_CONFIG_DIR` environme
 attach, and saved as `scdrake_integration_config_dir` option. This option is used as the default argument value in
 several `{scdrake}` functions.
 
+Target for this stage's report: `report_int_clustering`
+
+You can make this target by setting `DRAKE_TARGETS: ["report_int_clustering"]` in `pipeline.yaml` config file.
+
 ***
 
 # Config parameters
