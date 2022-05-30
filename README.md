@@ -66,10 +66,10 @@ stable version from GitHub using the following code:
 ``` r
 if (!requireNamespace("BiocManager", quietly = TRUE)) {
   install.packages("BiocManager")
-  BiocManager::install(version = "3.14")
+  BiocManager::install(version = "3.15")
 }
 
-BiocManager::install("bioinfocz/scdrake@v1.2.1")
+BiocManager::install("bioinfocz/scdrake@v1.2.2")
 ```
 
 For development version use
@@ -77,7 +77,7 @@ For development version use
 ``` r
 if (!requireNamespace("BiocManager", quietly = TRUE)) {
   install.packages("BiocManager")
-  BiocManager::install(version = "3.14")
+  BiocManager::install(version = "3.15")
 }
 
 BiocManager::install("bioinfocz/scdrake")
