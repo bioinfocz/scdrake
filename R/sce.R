@@ -269,17 +269,26 @@ cell_data_fn <- function(col_data, clusters_all, cell_annotation_labels, cell_gr
 }
 
 #' @title Add columns to `colData()` of a `SingleCellExperiment` object.
-#' @description Only columns unique to `cell_data` will be added.
 #' @param sce_dimred A `SingleCellExperiment` object.
 #' @param cell_data A dataframe.
-#' @return A modified `sce_dimred` with added `colData()` columns from `cell_data`.
+#' @param overwrite_sce A logical scalar: if `TRUE`, columns in `colData(sce_dimred)` will be overwritten by
+#'   those with the same names in `cell_data`. Otherwise the opposite will happen.
+#' @return A modified `sce_dimred` with added/updated `colData()` columns from `cell_data`.
 #'
 #' @concept sc_sce
 #' @export
-sce_add_cell_data <- function(sce_dimred, cell_data) {
+sce_add_cell_data <- function(sce_dimred, cell_data, overwrite_sce = TRUE) {
+  if (overwrite_sce) {
+    sce_cols <- setdiff(colnames(colData(sce_dimred)), colnames(cell_data))
+    cell_data_cols <- colnames(cell_data)
+  } else {
+    sce_cols <- colData(sce_dimred) %>% colnames()
+    cell_data_cols <- setdiff(colnames(cell_data), colnames(colData(sce_dimred)))
+  }
+
   colData(sce_dimred) <- cbind(
-    colData(sce_dimred),
-    cell_data[, setdiff(colnames(cell_data), colnames(colData(sce_dimred)))]
+    colData(sce_dimred)[, sce_cols],
+    cell_data[, cell_data_cols]
   )
 
   metadata(sce_dimred)$cell_groupings <- metadata(cell_data)$cell_groupings

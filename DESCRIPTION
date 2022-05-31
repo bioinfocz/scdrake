@@ -1,7 +1,7 @@
 Package: scdrake
 Type: Package
 Title: A pipeline for droplet-based single-cell RNA-seq data secondary analysis implemented in the drake Make-like toolkit for R language
-Version: 1.2.2
+Version: 1.2.3
 Date: 2021-02-23
 Authors@R:
     c(

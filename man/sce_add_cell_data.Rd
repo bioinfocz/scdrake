@@ -4,17 +4,20 @@
 \alias{sce_add_cell_data}
 \title{Add columns to \code{colData()} of a \code{SingleCellExperiment} object.}
 \usage{
-sce_add_cell_data(sce_dimred, cell_data)
+sce_add_cell_data(sce_dimred, cell_data, overwrite_sce = TRUE)
 }
 \arguments{
 \item{sce_dimred}{A \code{SingleCellExperiment} object.}
 
 \item{cell_data}{A dataframe.}
+
+\item{overwrite_sce}{A logical scalar: if \code{TRUE}, columns in \code{colData(sce_dimred)} will be overwritten by
+those with the same names in \code{cell_data}. Otherwise the opposite will happen.}
 }
 \value{
-A modified \code{sce_dimred} with added \code{colData()} columns from \code{cell_data}.
+A modified \code{sce_dimred} with added/updated \code{colData()} columns from \code{cell_data}.
 }
 \description{
-Only columns unique to \code{cell_data} will be added.
+Add columns to \code{colData()} of a \code{SingleCellExperiment} object.
 }
 \concept{sc_sce}

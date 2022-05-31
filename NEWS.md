@@ -1,5 +1,11 @@
 # scdrake (development version)
 
+# scdrake 1.2.3
+
+- Fixed a bug in the `sce_final_norm_clustering` target where already present columns in `colData()` were not updated by
+  new ones in the `cell_data` target. This could happen when SCE object was imported in the `01_input_qc` stage
+  and already contained cluster assignments in `colData()` from the previous `scdrake` run.
+
 # scdrake 1.2.2
 
 - Fixed a typo in `01_input_qc` stage report, added a line for `emptyDroplets` lower bound in barcode rank plot.
