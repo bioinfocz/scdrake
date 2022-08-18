@@ -23,7 +23,7 @@ contrasts_params_fn <- function(contrasts_sources, cell_data) {
     assert_column_in_cell_data(source_column, cell_data, contrast_source_name)
     groups <- cell_data[[source_column]]
     assert_that_(
-      is_character(groups) || is_integer(groups),
+      is.factor(groups) || is_character(groups) || is_integer(groups),
       msg = str_space(
         "Error in contrasts config {.field CONTRASTS_SOURCES} / {.field {contrast_source_name}}:",
         "The selected {.field source_column} {.val {source_column}} is not of character or integer type."
@@ -38,7 +38,7 @@ contrasts_params_fn <- function(contrasts_sources, cell_data) {
       assert_column_in_cell_data(block_column, cell_data, contrast_source_name)
       blocks <- cell_data[[block_column]]
       assert_that_(
-        is_character(blocks) || is_integer(blocks),
+        is.factor(blocks) || is_character(blocks) || is_integer(blocks),
         msg = str_space(
           "Error in contrasts config {.field CONTRASTS_SOURCES} / {.field {contrast_source_name}}:",
           "The selected block_column {.val {block_column}} is not of character or integer type."

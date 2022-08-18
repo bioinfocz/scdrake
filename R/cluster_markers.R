@@ -30,7 +30,7 @@ cluster_markers_params_fn <- function(cluster_markers_sources, cell_data) {
       params$test_type <- test_params_names[[test_params_name]]
       groups <- cell_data[[source_column]]
       assert_that_(
-        is_character(groups) || is_integer(groups),
+        is.factor(groups) || is_character(groups) || is_integer(groups),
         msg = str_space(
           "Error in cluster_markers config {.field CLUSTER_MARKERS_SOURCES} / {.field {cluster_marker_source_name}}:",
           "The selected source_column {.val {source_column}} is not of numeric, factor or integer type."
@@ -52,7 +52,7 @@ cluster_markers_params_fn <- function(cluster_markers_sources, cell_data) {
       assert_column_in_cell_data(block_column, cell_data, cluster_marker_source_name)
       blocks <- cell_data[[block_column]]
       assert_that_(
-        is_character(blocks) || is_integer(blocks),
+        is.factor(blocks) || is_character(blocks) || is_integer(blocks),
         msg = str_space(
           "Error in cluster_markers config {.field CLUSTER_MARKERS_SOURCES} / {.field {cluster_marker_source_name}}:",
           "The selected block_column {.val {block_column}} is not of numeric, factor or integer type."
