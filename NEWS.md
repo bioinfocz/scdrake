@@ -4,6 +4,7 @@
 - The GitHub version of `{SingleR}` was removed from `DESCRIPTION` as the version for the current Bioconductor version
   is available from the official Bioc repository. The GitHub version is compatible with Bioc 3.16 and caused
   installation error on Bioc 3.15
+- Fixed "object cfg not found".
 
 # scdrake 1.2.3
 

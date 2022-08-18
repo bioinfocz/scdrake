@@ -33,6 +33,7 @@ loadd(
 )
 
 cfg <- config_input_qc
+empty_droplets_enabled <- cfg$EMPTY_DROPLETS_ENABLED
 
 input_type <- cfg$INPUT_DATA$type
 filtering_type <- ifelse(cfg$SAVE_DATASET_SENSITIVE_FILTERING, "dataset-sensitive", "custom")
@@ -87,8 +88,8 @@ lines(barcode_ranks$rank[o], barcode_ranks$fitted[o], col = "red")
 
 abline(h = metadata(barcode_ranks)$knee, col = "dodgerblue", lty = 2)
 abline(h = metadata(barcode_ranks)$inflection, col = "forestgreen", lty = 2)
-if (cfg$EMPTY_DROPLETS_ENABLED) {
-  abline(h = cfg$EMPTY_DROPLETS_LOWER, col = "firebrick", lty = 2)
+if (empty_droplets_enabled) {
+  abline(h = empty_droplets_enabled, col = "firebrick", lty = 2)
   legend(
     "bottomleft",
     lty = 2,
@@ -108,18 +109,18 @@ if (cfg$EMPTY_DROPLETS_ENABLED) {
 The knee and inflection points on the curve mark the transition between two components of the total UMI count distribution.
 This is assumed to represent the difference between empty droplets with little RNA and cell-containing droplets with much more RNA.
 
-```{r, results = "asis", eval = cfg$EMPTY_DROPLETS_ENABLED}
-cat(
-  "The emptyDroplets lower bound specifies at or below which number of the total UMI count all barcodes",
-  "are assumed to correspond to empty droplets."
-)
+```{r, results = "asis"}
+if (empty_droplets_enabled) {
+  cat(
+    "The emptyDroplets lower bound specifies at or below which number of the total UMI count all barcodes",
+    "are assumed to correspond to empty droplets."
+  )
+} else {
+  cat("Removal of empty droplets was disabled. You can enable it by setting `EMPTY_DROPLETS_ENABLED` parameter to `TRUE`.")
+}
 ```
 
-```{r, results = "asis", eval = !cfg$EMPTY_DROPLETS_ENABLED}
-cat("Removal of empty droplets was disabled. You can enable it by setting `EMPTY_DROPLETS_ENABLED` parameter to `TRUE`.")
-```
-
-```{r, child = here::here("Rmd/single_sample/01_input_qc_empty_droplets.Rmd"), eval = cfg$EMPTY_DROPLETS_ENABLED}
+```{r, child = here::here("Rmd/single_sample/01_input_qc_empty_droplets.Rmd"), eval = tryCatch(empty_droplets_enabled, error = function(e){})}
 ```
 
 ***
