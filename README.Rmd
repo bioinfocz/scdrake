@@ -52,7 +52,7 @@ methods and recommendations is `{scdrake}` largely based.
 
 ***
 
-## Installation instructions
+# Installation instructions
 
 `{scdrake}` is currently not released on [CRAN](https://cran.r-project.org),
 however, you can install its latest stable version from GitHub using the following code:
@@ -87,25 +87,42 @@ if (!requireNamespace("BiocManager", quietly = TRUE)) {
 BiocManager::install("bioinfocz/scdrake")
 ```
 
-### Parallelization
+In case you **won't** be using `{scdrake}` from within the RStudio, you will need to install [pandoc](https://pandoc.org/),
+which is used for rendering of HTML reports.
 
-To fully utilize the parallelization, you should consider installing [ZeroMQ](https://zeromq.org) and
-`{clustermq}` R package (probably only usable on Linux), which is used by `{drake}`.
-However, it is also possible to use the `{future}` package, which doesn't require any additional system dependencies,
-but it's a bit slower.
+- For Ubuntu: `sudo apt install pandoc`
+- For MacOS: `brew install pandoc`
+- For other OSs see [official instructions](https://pandoc.org/installing.html).
 
-More reading about this topic can be found at <https://books.ropensci.org/drake/hpc.html>.
+## Installation failed?
 
-### Alternative storage format
+The most common reason for a failed installation are missing system libraries.
+When packages are compiled from source, some of them require shared libraries not provided by R.
+Below you can find commands to install those libraries for a specific OS.
 
-`{drake}` supports several types of storage formats for cached objects, but `{qs}` is recommended and used by
-`{scdrake}` by default due to its performance. You can install `{qs}` with
+If it does not help and you are really helpless, do not hesitate to open a new issue.
 
-```{r, eval = FALSE}
-BiocManager::install("qs")
+### Linux
+
+[See here](required_libs_linux.md)
+
+### MacOS
+
+You can install the required libraries with [Homebrew](https://brew.sh/) package manager:
+
+```bash
+brew install libxml2 imagemagick@6 harfbuzz fribidi libgit2 geos
 ```
 
-### Using `renv`
+***
+
+## Using `renv` (optional)
+
+`{renv}` package allows to install other packages into local, project-specific library, and thus, those won't interfere
+with system-wide packages.
+
+<details>
+  <summary>&#9654; Click for details</summary>
 
 Because `{scdrake}` uses a lot of packages, we also encourage users to use the `{renv}` package, which will install all
 dependencies to a local, private, project library. In case you have already initialized a new `{scdrake}` project
@@ -116,8 +133,7 @@ you can initialize a new `{renv}` private library with
 renv::restore()
 ```
 
-It will use the `renv.lock` file (which is bundled with `{scdrake}` package) holding all dependencies and
-their versions.
+It will use the `renv.lock` file (which is bundled with `{scdrake}` package) holding all dependencies and their versions.
 
 To save time and space, you can also symlink the `renv/library` directory to multiple `{scdrake}` projects.
 
@@ -125,32 +141,40 @@ Alternatively, just install `{scdrake}` from within the activated renv and all d
 private library. But keep in mind in that case dependencies will be installed from package's `DESCRIPTION` file in
 which package versions are not specified, and thus the latest (and possibly untested) package versions will be installed.
 
+</details>
+
 ***
 
 ## Vignettes and other readings
 
-See <https://bioinfocz.github.io/scdrake> for a documentation website, where links to vignettes below become real :-)
+See <https://bioinfocz.github.io/scdrake> for a documentation website where links to vignettes below become real :-)
 
-- Get started: `vignette("scdrake")`
-- Pipeline overview: `vignette("pipeline_overview")`
+- Guides:
+  - 01 Quick start (single-sample pipeline): `vignette("scdrake")`
+  - 02 Integration pipeline guide: `vignette("scdrake_integration")`
+  - Extending the pipeline: `vignette("scdrake_extend")`
+  - `{drake}` basics: `vignette("drake_basics")`
+    - Or the official `{drake}` book: <https://books.ropensci.org/drake/>
+- General information:
+  - Pipeline overview: `vignette("pipeline_overview")`
+  - FAQ & Howtos: `vignette("scdrake_faq")`
+  - Config files: `vignette("scdrake_config")`
   - Cluster markers: `vignette("cluster_markers")`
-- Running the pipeline, environment variables: `vignette("scdrake_run")`
-- Config files (basic concept): `vignette("scdrake_config")`
-- Targets and config parameters for each stage:
-  - Common:
+  - Environment variables: `vignette("scdrake_envvars")`
+- General configs:
     - Pipeline config: `vignette("config_pipeline")`
     - Main config: `vignette("config_main")`
-    - Cluster markers stage: `vignette("stage_cluster_markers")`
-    - Contrasts stage: `vignette("stage_contrasts")`
+- Targets and config parameters for each stage:
   - Single-sample pipeline:
     - Reading in data, filtering, quality control (`01_input_qc`): `vignette("stage_input_qc")`
     - Normalization, HVG selection, dimensionality reduction, clustering, cell type annotation (`02_norm_clustering`):
       `vignette("stage_norm_clustering")`
   - Integration pipeline:
     - Reading in data and integration (`01_integration`): `vignette("stage_integration")`
-    - Clustering (`02_int_clustering`): `vignette("stage_int_clustering")`
-- `{drake}` basics: `vignette("drake_basics")`
-  - Or the official `{drake}` book: <https://books.ropensci.org/drake/>
+    - Post-integration clustering (`02_int_clustering`): `vignette("stage_int_clustering")`
+  - Common:
+    - Cluster markers stage: `vignette("stage_cluster_markers")`
+    - Contrasts stage: `vignette("stage_contrasts")`
 
 We encourage all users to read [basics](https://books.ropensci.org/drake) of the `{drake}` package.
 While it is not necessary to know all `{drake}` internals to successfully run the `{scdrake}` pipeline,

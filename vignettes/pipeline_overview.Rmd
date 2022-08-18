@@ -50,7 +50,7 @@ This is a pipeline for processing a single-sample, where input is either:
 Input specification is controlled via the `INPUT_DATA` parameter in `01_input_qc` config, and more details can be
 found in `vignette("stage_input_qc")`.
 
-* Feature-barcode matrix is similar to count matrix in bulk RNA-seq where columns are samples, rows are genes or
+> Feature-barcode matrix is similar to count matrix in bulk RNA-seq where columns are samples, rows are genes or
 transcripts (features), and values are numbers of reads or UMIs overlapping the features.
 In scRNA-seq, columns are individual cells; the rest is same.
 
@@ -158,6 +158,8 @@ A stage for normalization, dimensionality reduction, and cell clustering.
 - Expression plots of selected groups of genes (markers) in reduced dimensions.
 - A simplified report for non-technical audience which contains only dimred plots and selected markers.
 
+***
+
 # Integration pipeline
 
 This is a pipeline to integrate multiple samples processed by the single-sample pipeline.
@@ -214,6 +216,8 @@ HVGs, reduced dimensions, and selected markers are already computed in the previ
 
 [`r emoji::emoji("scroll")` Example report](https://onco.img.cas.cz/novotnyj/scdrake/integration/02_int_clustering/02_int_clustering.html)
 
+***
+
 # Common stages
 
 Some stages are common to both single-sample and integration pipelines.
@@ -245,7 +249,7 @@ A stage for calculation, visualization and reporting of cell cluster markers ("g
 
 A stage for calculation, visualization and reporting of differentially expressed markers ("contrasts").
 This stage is basically the same as the `cluster_markers` stage, but all output is related to individual comparisons
-of levels within each cell grouping. Hence "contrasts", a term known from bulk RNA-seq where sample groups are compared
+of levels of cell groupings. Hence "contrasts", a term known from bulk RNA-seq where sample groups are compared
 -> they are put *in contrast*.
 
 `r emoji::emoji("gear")` Config and targets: `vignette("stage_contrasts")`

@@ -1,0 +1,95 @@
+---
+title: "Extending the pipeline"
+date: "`r Sys.Date()`"
+package: scdrake
+output:
+  BiocStyle::html_document:
+    toc: true
+    toc_float: true
+vignette: >
+  %\VignetteIndexEntry{Extending the pipeline}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}  
+---
+
+In this vignette we will reuse the project initialized within the Quick start guide (`vignette("scdrake")`) that should
+live in `~/scdrake_single_sample_example`.
+
+***
+
+`{drake}`'s pipeline definitions (plans) are R objects which can be arbitrarily extended by new targets.
+There are several ways how to extend plans provided by `{scdrake}`, but the easiest way is to utilize the built-in
+plan extension called inside the `{drake}` init scripts `_drake_single_sample.R` and `_drake_integration.R`.
+
+Before the plan (or more precisely, `drake::drake_config()`) is returned from those scripts, an additional R script
+(`plan_custom.R` in project root by default) is sourced. In this script, the last returned value must be a valid
+`drake` plan (`drake::drake_plan()`) which is consequently merged with the original plan.
+
+The path to R script with custom plan is taken from the `SCDRAKE_PLAN_CUSTOM_FILE` environment variable.
+
+***
+
+# Defining a custom plan
+
+Let's try a dummy additional plan which is already present in `plan_custom.R`. Just uncomment the lines under
+`Example:`, or if you want, you can try to define your own target/s. A quick intro to `{drake}` plans can be found
+[here](https://books.ropensci.org/drake/plans.html#intro-to-plans).
+
+We also need to tell `{drake}` to make this new target. Open `config/pipeline.yaml` and set `DRAKE_TARGETS` to
+`["my_target"]` (or more targets if you have defined them).
+
+Now just run the pipeline as usual
+
+```{r, eval = FALSE}
+run_single_sample_r()
+```
+
+In the terminal you should see an informative text `ℹ Extending the plan with a custom one defined in 'plan_custom.R'`.
+
+When the pipeline finishes, you can load the new target to your session with
+
+```{r, eval = FALSE}
+drake::loadd(my_target)
+```
+
+***
+
+# Parametrized custom plan
+
+In `plan_custom.R` you can use any variables defined in `_drake_single_sample.R` or `_drake_integration.R`.
+Probably the most important are `cfg` and `cfg_pipeline` lists holding pipeline parameters.
+Note that in `plan_custom.R` all variables from the parent script are locked and cannot be modified.
+
+Let's see how you can utilize the `cfg` list. Open `config/single_sample/01_input_qc.yaml` and add a new line:
+
+```yaml
+MY_GENE: "NOC2L"
+```
+
+Then replace the code in `plan_custom.R` with
+
+```{r, eval = FALSE}
+drake::drake_plan(
+  my_target = scater::plotExpression(sce_final_input_qc, cfg$input_qc$MY_GENE, exprs_values = "counts", swap_rownames = "SYMBOL")
+)
+```
+
+You can see we used the `MY_GENE` parameter defined in the config file. Later, `{drake}` will replace
+`cfg$input_qc$MY_GENE` with its value `"NOC2L"`.
+
+***
+
+In case you don't want to use the standard config files, you can make your own one, e.g. `config/my_params.yaml`:
+
+```yaml
+MY_GENE: "NOC2L"
+```
+
+, and use it in `plan_custom.R`:
+
+```{r, eval = FALSE}
+my_cfg <- load_config("config/my_params.yaml")
+drake::drake_plan(
+  my_target = scater::plotExpression(sce_final_input_qc, my_cfg$MY_GENE, exprs_values = "counts", swap_rownames = "SYMBOL")
+)
+```

@@ -51,26 +51,24 @@ If you are currently working within a \code{scdrake} project, you can review the
 This is a list of Rmd files currently bundled with the \code{scdrake} package:
 
 \if{html}{\out{<div class="sourceCode r">}}\preformatted{fs::dir_tree(system.file("Rmd", package = "scdrake"))
-}\if{html}{\out{</div>}}
-
-\if{html}{\out{<div class="sourceCode">}}\preformatted{## /mnt/foibe3/Users/novotnyj/projects/bioinfocz/scdrake/inst/Rmd
-## ├── common
-## │   ├── _footer.Rmd
-## │   ├── _header.Rmd
-## │   ├── cluster_markers.Rmd
-## │   ├── cluster_markers_table_template.Rmd
-## │   ├── contrasts.Rmd
-## │   ├── contrasts_table_template.Rmd
-## │   ├── dimred_plots.Rmd
-## │   └── stylesheet.css
-## ├── integration
-## │   ├── 01_integration.Rmd
-## │   └── 02_int_clustering.Rmd
-## └── single_sample
-##     ├── 01_input_qc.Rmd
-##     ├── 01_input_qc_empty_droplets.Rmd
-##     ├── 02_norm_clustering.Rmd
-##     └── 02_norm_clustering_simple.Rmd
+#> /mnt/foibe3/Users/novotnyj/projects/bioinfocz/scdrake/inst/Rmd
+#> +-- common
+#> |   +-- _footer.Rmd
+#> |   +-- _header.Rmd
+#> |   +-- cluster_markers.Rmd
+#> |   +-- cluster_markers_table_template.Rmd
+#> |   +-- contrasts.Rmd
+#> |   +-- contrasts_table_template.Rmd
+#> |   +-- dimred_plots.Rmd
+#> |   \\-- stylesheet.css
+#> +-- integration
+#> |   +-- 01_integration.Rmd
+#> |   \\-- 02_int_clustering.Rmd
+#> \\-- single_sample
+#>     +-- 01_input_qc.Rmd
+#>     +-- 01_input_qc_empty_droplets.Rmd
+#>     +-- 02_norm_clustering.Rmd
+#>     \\-- 02_norm_clustering_simple.Rmd
 }\if{html}{\out{</div>}}
 
 A short description of these Rmd files:

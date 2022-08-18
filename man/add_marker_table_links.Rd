@@ -6,8 +6,8 @@
 \usage{
 add_marker_table_links(
   df,
-  links = list(list(colname_target = "ENSEMBL", colname_source = "ENSEMBL",
-    template_url = "https://www.ensembl.org/{ensembl_species}/Gene/Summary?g={id}"),
+  links = list(list(colname_target = "ENSEMBL", colname_source = "ENSEMBL", template_url
+    = "https://www.ensembl.org/{ensembl_species}/Gene/Summary?g={id}"),
     list(colname_target = "ENTREZID", colname_source = "ENTREZID", template_url =
     "https://www.ncbi.nlm.nih.gov/gene/{id}"), list(colname_target = "SYMBOL",
     colname_source = "SYMBOL", template_url =

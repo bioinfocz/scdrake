@@ -1,0 +1,57 @@
+---
+output: github_document
+---
+
+```{r libs_knitr, include = FALSE}
+knitr::opts_chunk$set(echo = FALSE, warning = FALSE, message = FALSE)
+```
+
+# Required libraries for Linux systems
+
+Below you can find commands to install the required libraries for different Linux distributions and their releases.
+If you are not sure which release are you using, check contents of the `/etc/os-release` file.
+
+```{r libs_prepare}
+library(magrittr)
+dists <- remotes:::supported_os_versions()
+## -- See https://github.com/rstudio/r-system-requirements#operating-systems
+unsupported_releases <- list(ubuntu = c("14.04"), centos = c("6"), redhat = c("6"), opensuse = c("15.0"), sle = c("15.0"))
+res <- purrr::map_dfr(names(dists), function(dist) {
+  res_dist_release <- purrr::map_dfr(dists[[dist]], function(release) {
+    if (!release %in% unsupported_releases[[dist]]) {
+      tibble::tibble(
+        distribution = dist,
+        release = release,
+        install_cmd = remotes::system_requirements(os = dist, os_release = release)
+      )
+    }
+  }) %>%
+    dplyr::bind_rows() %>%
+    dplyr::mutate(install_cmd = paste("sudo", install_cmd))
+})
+
+res_grp <- res %>%
+  dplyr::group_by(distribution, release) %>%
+  dplyr::summarise(install_cmd = paste(install_cmd, collapse = "\n")) %>%
+  dplyr::ungroup() %>%
+  dplyr::arrange(dplyr::desc(distribution), dplyr::desc(release))
+```
+
+```{r libs_index, results = "asis"}
+x <- apply(res_grp, 1, function(row) {
+  row <- as.list(row)
+  cat(glue::glue("- [{row$distribution} {row$release}](#{row$distribution}-{row$release})\n", .trim = FALSE))
+})
+```
+
+***
+
+```{r libs_content, results = "asis"}
+x <- apply(res_grp, 1, function(row) {
+  row <- as.list(row)
+  cat(glue::glue("\n\n## {row$distribution} {row$release}\n\n", .trim = FALSE))
+  cat("```bash\n")
+  cat(row$install_cmd)
+  cat("\n```")
+})
+```

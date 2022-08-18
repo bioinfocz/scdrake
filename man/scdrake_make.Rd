@@ -50,7 +50,7 @@ This is a wrapper around \code{\link[drake:make]{drake::make()}} with some sensi
 Before a plan is executed, this function sets \emph{locally} some options, environment variables and other things.
 That means no side effects are left. Note that this is a less reproducible way to run
 the \code{scdrake} pipeline since it is executed in the current R session.
-Note that \code{\link[=create_single_sample_dirs]{create_single_sample_dirs()}} or \code{\link[=create_integration_dirs]{create_integration_dirs()}} must be run before.
+Also note that \code{\link[=create_single_sample_dirs]{create_single_sample_dirs()}} or \code{\link[=create_integration_dirs]{create_integration_dirs()}} must be run before.
 
 The preferred way is calling the \code{\link[=scdrake_r_make]{scdrake_r_make()}} function,
 which is a wrapper around \code{\link[drake:r_make]{drake::r_make()}}

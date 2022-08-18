@@ -297,12 +297,16 @@ INTEGRATION_KNITR_ECHO: False
 
 These are passed to `knitr::opts_chunk()` and used for rendering of stage's HTML report.
 
+***
+
 # Targets
 
 Here you can find description of the most important targets for this stage.
 However, for a full overview, you have to inspect the
 [source code](https://github.com/bioinfocz/scdrake/blob/main/R/plans_integration.R) of the
 `get_integration_subplan()` function.
+
+HTML report target name: `report_integration`
 
 ## `SingleCellExperiment` objects
 

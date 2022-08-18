@@ -92,7 +92,16 @@ INT_CLUSTERING_REPORT_HTML_FILE: "02_int_clustering.html"
 
 Names of files and directories created under `INT_CLUSTERING_BASE_OUT_DIR`. Subdirectories are not allowed.
 
+***
+
 # Targets
+
+Here you can find description of the most important targets for this stage.
+However, for a full overview, you have to inspect the
+[source code](https://github.com/bioinfocz/scdrake/blob/main/R/plans_integration.R) of the
+`get_int_clustering_subplan()` function.
+
+HTML report target name: `report_int_clustering`
 
 ## `SingleCellExperiment` objects
 

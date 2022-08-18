@@ -42,7 +42,9 @@ These values will appear in stage reports (HTML documents).
 
 # Annotation
 
-`ORGANISM: "human"`
+```yaml
+ORGANISM: "human"
+```
 
 **Type:** character scalar
 
@@ -73,18 +75,24 @@ ANNOTATION_LIST:
 
 ***
 
-`ENSEMBL_SPECIES: "Homo_sapiens"`
+```yaml
+ENSEMBL_SPECIES: "Homo_sapiens"
+```
 
 **Type:** character scalar
 
-An ENSEMBL organism name used to build links to Ensembl genes website,
+An ENSEMBL species name used to build links to Ensembl genes website,
 e.g. <https://www.ensembl.org/Homo_sapiens/Gene/Summary?db=core;g=ENSG00000139618;r=13:32315086-32400268>
+
+A list of ENSEMBL species is available at <https://www.ensembl.org/info/about/species.html>.
 
 ***
 
 # Input and output files
 
-`CSS_FILE: "Rmd/common/stylesheet.css"`
+```yaml
+CSS_FILE: "Rmd/common/stylesheet.css"
+```
 
 **Type:** character scalar
 
@@ -92,11 +100,15 @@ A path to CSS file used for HTML reports rendered from RMarkdown files.
 
 ***
 
-`BASE_OUT_DIR: "output"`
+```yaml
+BASE_OUT_DIR: "output"
+```
 
 **Type:** character scalar
 
 A path to base output directory to which each stage's files will be saved (check "Output files" section in stage configs.)
+
+***
 
 # Targets
 

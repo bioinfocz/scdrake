@@ -31,7 +31,7 @@ whether you run `run_single_sample()` or `run_integration()`, or `scdrake_r_make
 
 Parameters for this stage are almost identical to those for `cluster_markers` stage
 (see `vignette("stage_cluster_markers")`). You just need to replace `CLUSTER_MARKERS` with
-`CONTRASTS` `r emoji::emoji("slightly_smiling_face")`
+`CONTRASTS` in parameter names `r emoji::emoji("slightly_smiling_face")`
 
 The different parameters are below.
 
@@ -39,26 +39,18 @@ The different parameters are below.
 
 ```yaml
 CONTRASTS_SOURCES:
-  - dea_cluster_louvain_annotated:
-      source_column: "cluster_graph_louvain_annotated"
+  - dea_cluster_louvain:
+      source_column: "cluster_graph_louvain"
       description: "DEA of some groups in graph-based clustering clustering (Louvain alg.)"
-      common_params:
-        plot_dimreds: ["umap", "pca"]
-      params_t:
-        lfc_test: 1
       contrasts:
-        - target: "memory_CD4+"
-          reference: "B"
+        - target: "2"
+          reference: "1"
         - target: "3"
-          reference: "4"
+          reference: "2"
           name: "cl3_vs_cl4"
-    dea_cluster_kmeans_kc_3_cc_block:
+    dea_cluster_kmeans_kc_3:
       source_column: "cluster_kmeans_kc_3_renamed"
-      description: "DEA of all groups in k-means clustering (k = 3) with blocking on cell cycle phase"
-      common_params:
-        block_column: "phase"
-      params_wilcox:
-        top_n_heatmap: 20
+      description: "DEA of all groups in k-means clustering (k = 3)"
       contrasts: "all"
 ```
 
@@ -86,6 +78,8 @@ and hardcoded values are used for them internally:
 - `LFC_DIRECTION` (`"any"`)
 - `PVAL_TYPE` (`"any"`)
 - `MIN_PROP` (`null`)
+
+***
 
 # Targets
 

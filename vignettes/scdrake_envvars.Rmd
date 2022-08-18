@@ -1,0 +1,43 @@
+---
+title: "Environment variables"
+date: "`r Sys.Date()`"
+package: scdrake
+output:
+  BiocStyle::html_document:
+    toc: true
+    toc_float: true
+vignette: >
+  %\VignetteIndexEntry{Environment variables}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}  
+---
+
+<script>
+$(document).ready(function(){
+  $('[data-toggle="tooltip"]').tooltip(); 
+});
+</script>
+
+***
+
+On `{scdrake}` load or
+<a data-toggle="tooltip" title="(i.e. when you call some function from a package, e.g. `drake::run_single_sample_r()`)">attach</a>,
+several environment variables are read and corresponding `options()` are set. Those are mainly variables controlling
+paths to config directories. See `?scdrake_options` for more details and list of used environment variables.
+
+We can take the `SCDRAKE_SINGLE_SAMPLE_CONFIG_DIR` environment variable as an example:
+
+- If it is set, the `scdrake_single_sample_config_dir` option is set on `{scdrake}` load or attach.
+- It it is not set, a default value `"config/single_sample"` will be used for the option above.
+  You can see that the default value is consistent with the file structure of a newly initialized `{scdrake}` project.
+- Value of the `scdrake_single_sample_config_dir` option is the default one for many `{scdrake}` functions, e.g.
+  `update_single_sample_configs(dir = getOption("scdrake_pipeline_config_dir"), ...)` or
+  `run_single_sample(dir = getOption("scdrake_pipeline_config_dir"), ...)`.
+
+***
+
+Environment variables are mainly used in `_drake_single_sample.R` and `_drake_integration.R` scripts.
+Those are scripts sourced by `{drake}` in a fresh new R session via `{callr}` when you call e.g. `run_single_sample_r()`.
+For this reason, environment variables are the only way how to pass dynamic parameters into such scripts.
+In case of `{scdrake}`, the most important are paths to directories with config files, which carry
+analysis/pipeline-specific parameters.

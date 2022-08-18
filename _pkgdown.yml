@@ -16,26 +16,38 @@ repo:
     user: https://github.com/bioinfocz
 navbar:
   structure:
-    left:  [home, intro, pipeline_overview, reference, articles, news]
+    left:  [home, intro, scdrake_integration, pipeline_overview, faq, articles, reference, news]
     right: [github]
   components:
     pipeline_overview:
       text: Pipeline overview
       href: articles/pipeline_overview.html
+    scdrake_integration:
+      text: Integration pipeline guide
+      href: articles/scdrake_integration.html
+    faq:
+      text: FAQ & Howtos
+      href: articles/scdrake_faq.html
 articles:
+  - title: Guides
+    navbar: Guides
+    contents:
+    - scdrake_integration
+    - scdrake_extend
+    - drake_basics
+
   - title: General information
     navbar: General information
     contents:
-    - scdrake
     - pipeline_overview
-    - scdrake_run
+    - scdrake_faq
     - cluster_markers
-    - drake_basics
-
-  - title: Configs
-    navbar: Configs
-    contents:
     - scdrake_config
+    - scdrake_envvars
+
+  - title: General configs
+    navbar: General configs
+    contents:
     - config_pipeline
     - config_main
 
@@ -93,6 +105,9 @@ reference:
   - subtitle: Integration pipeline subplans
   - contents:
     - has_concept("get_subplan_integration")
+  - subtitle: Custom plan
+  - contents:
+    - load_custom_plan
 
   - title: Download example data
   - contents:

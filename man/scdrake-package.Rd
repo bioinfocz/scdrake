@@ -14,19 +14,16 @@ This pipeline is implemented in the drake Make-like toolkit (https://github.com/
 
 \section{Included datasets}{
 
-For pipeline testing two datasets from 10x Genomics are included:
+For pipeline testing two datasets from 10x Genomics can be automatically downloaded:
 \itemize{
-\item \href{https://support.10xgenomics.com/single-cell-gene-expression/datasets/3.0.0/pbmc_1k_v3?}{PBMC 1k}
+\item \code{\link[=download_pbmc1k]{download_pbmc1k()}}: \href{https://support.10xgenomics.com/single-cell-gene-expression/datasets/3.0.0/pbmc_1k_v3?}{PBMC 1k}
 (v3 chemistry, Cell Ranger 3.0.0)
-\item \href{https://support.10xgenomics.com/single-cell-gene-expression/datasets/1.1.0/pbmc3k}{PBMC 3k}
+\item \code{\link[=download_pbmc3k]{download_pbmc3k()}}: \href{https://support.10xgenomics.com/single-cell-gene-expression/datasets/1.1.0/pbmc3k}{PBMC 3k}
 (v1 chemistry, Cell Ranger 1.1.0). This dataset is used for testing of integration pipeline.
 }
 
 \strong{All credits for these datasets go to 10x Genomics.}
 Visit \url{https://www.10xgenomics.com/resources/datasets} for more information.
-
-Directories with dataset files can be retrieved by
-\code{system.file("extdata", "pbmc1k", package = "scdrake", mustWork = TRUE)} (or \code{"pbmc3k"}, respectively).
 }
 
 \seealso{

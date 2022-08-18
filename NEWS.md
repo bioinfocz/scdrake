@@ -5,6 +5,12 @@
   is available from the official Bioc repository. The GitHub version is compatible with Bioc 3.16 and caused
   installation error on Bioc 3.15
 - Fixed "object cfg not found".
+- Documentation has been improved:
+  - Clearer instruction in Get Started vignette. The part about the integration pipeline was moved to a separate
+    vignette.
+  - New vignettes about extension of the pipeline and FAQ & Howto.
+  - Clearer installation instructions, including commands needed to install shared libraries on different OSs.
+  - Some parts in other vignettes have been rewritten, spellchecked and improved cosmetically.
 
 # scdrake 1.2.3
 

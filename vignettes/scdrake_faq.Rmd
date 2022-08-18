@@ -1,0 +1,123 @@
+---
+title: "FAQ & Howtos"
+date: "`r Sys.Date()`"
+author:
+  - name: Jiri Novotny
+    affiliation: Institute of Molecular Genetics of the Czech Academy of Sciences
+    email: jiri.novotny@img.cas.cz
+  - name: Jan Kubovciak
+    affiliation: Institute of Molecular Genetics of the Czech Academy of Sciences
+    email: jan.kubovciak@img.cas.cz
+package: scdrake
+output:
+  BiocStyle::html_document:
+    toc: true
+    toc_float: true
+vignette: >
+  %\VignetteIndexEntry{FAQ & Howtos}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}  
+---
+
+# Are you planning to migrate the pipeline to `{targets}`?
+
+We will [cite](https://books.ropensci.org/targets/drake.html) the author of both packages:
+
+> `{targets}` is the successor of `{drake}`, an older pipeline tool. As of 2021-01-21, `{drake}` is superseded,
+which means there are no plans for new features or discretionary enhancements, but basic maintenance and support will
+continue indefinitely. **Existing projects that use `{drake}` can safely continue to use `{drake}`, and there is no need to
+retrofit `{targets}`.** New projects should use `{targets}` because it is friendlier and more robust.
+
+# I have some installation problems
+
+The most common cause are missing shared libraries. Please, refer to
+[instructions](../index.html#installation-failed) in README.
+
+If those are unsuccessful, feel free to [open a new issue](https://github.com/bioinfocz/scdrake/issues).
+
+# The pipeline is failing for my data
+
+First make sure you have read the [Before you analyse your own data](scdrake.html#before-you-analyse-your-own-data) in the
+Quick start vignette (`vignette("scdrake")`).
+
+If the problem persists, feel free to [open a new issue](https://github.com/bioinfocz/scdrake/issues) or start a
+[discussion](https://github.com/bioinfocz/scdrake/discussions).
+
+# I want to change the output directory
+
+This can be simply done by changing the appropriate parameters in config files:
+
+- `BASE_OUT_DIR` in `config/{single_sample,integration}/00_main.yaml` is the root directory for all outputs.
+- Each stage in each pipeline type has it's own base directory created under `BASE_OUT_DIR`.
+  For example, `INPUT_QC_BASE_OUT_DIR` in `config/single_sample/01_input_qc.yaml`.
+
+# I want to use different cache directory
+
+This is controlled by `DRAKE_CACHE_DIR` in `config/pipeline.yaml`.
+
+# I want to load intermediate results
+
+All results of the pipeline (targets) are saved into a `{drake}` cache, and can be simply retrieved using
+the `drake::loadd()` or `drake::readd()` functions:
+
+```{r, eval = FALSE}
+drake::loadd(name_of_target)
+target <- drake::readd(name_of_target)
+```
+
+To know which targets you can load, please, refer to vignettes of individual pipeline stages.
+
+# I want to extend the pipeline
+
+See `vignette("scdrake_extend")`, please.
+
+# I want to manually annotate cells
+
+You can do it using the `CELL_GROUPINGS` parameter in `config/single_sample/02_norm_clustering.yaml` and
+`config/integration/02_int_clustering.yaml` configs. Please, refer to `vignette("stage_norm_clustering")` and
+`vignette("stage_int_clustering")`, respectively, for description and usage of the `CELL_GROUPINGS` parameter.
+
+***
+
+Alternatively, you can reuse a `SingleCellExperiment` object, for example:
+
+```{r, eval = FALSE}
+drake::loadd(sce_final_norm_clustering)
+umap <- reducedDim(sce_final_norm_clustering, "umap")
+cell_types <- dplyr::case_when(
+  umap[, 1] > 1 & umap[, 2] < 5 ~ "cell_type_1",
+  umap[, 1] > 5 & umap[, 2] < 10 ~ "cell_type_2",
+  TRUE ~ "cell_type_3"
+)
+sce_final_norm_clustering$my_cell_types <- factor(cell_types)
+saveRDS(sce_final_norm_clustering, "sce_my_annotation.Rds")
+```
+
+We have added a new `colData()` column named `my_cell_types` to the SCE object that divides cells based on their
+UMAP coordinates.
+
+Now you need to modify the `INPUT_DATA` parameter in `config/single_sample/01_input_qc.yaml` in order to start the
+pipeline from the saved SCE object instead of `cellranger` output:
+
+```yaml
+INPUT_DATA:
+  type: "sce"
+  path: "sce_my_annotation.Rds"
+```
+
+The `sce_final_norm_clustering` object is already filtered and normalized, so you should skip those procedures:
+
+```yaml
+EMPTY_DROPLETS_ENABLED: False
+# This will indirectly disable the dataset-sensitive filtering.
+MAD_THRESHOLD: .inf
+```
+
+You can also set to skip the normalization step in `config/single_sample/02_norm_clustering.yaml`:
+
+```yaml
+NORMALIZATION_TYPE: "none"
+```
+
+The `my_cell_types` column can be now used for different purposes, e.g. for cluster markers detection, differential
+expression (stage `contrasts`) or visualization.

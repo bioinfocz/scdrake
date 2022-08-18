@@ -24,7 +24,9 @@ Parameters starting with `DRAKE_` are generally passed to `drake::make()` or `dr
 
 # General parameters
 
-`DRAKE_CACHE_DIR: ".drake"`
+```yaml
+DRAKE_CACHE_DIR: ".drake"
+```
 
 **Type:** character scalar or `null`
 
@@ -33,18 +35,24 @@ If `null`, the default directory `".drake"` will be used.
 
 ***
 
-`DRAKE_TARGETS: null`
+```yaml
+DRAKE_TARGETS: null
+```
 
 **Type:** character vector or `null`
 
 Array of target names to make. Setting to `null` will make all targets.
 Example for single-sample pipeline / stage `02_norm_clustering` reports:
 
-`DRAKE_TARGETS: ["report_norm_clustering", "report_norm_clustering_simple"]`
+```yaml
+DRAKE_TARGETS: ["report_norm_clustering", "report_norm_clustering_simple"]
+```
 
 ***
 
-`DRAKE_KEEP_GOING: False`
+```yaml
+DRAKE_KEEP_GOING: False
+```
 
 **Type:** logical scalar
 
@@ -52,7 +60,9 @@ If `True`, let the pipeline continue even if some target fails.
 
 ***
 
-`DRAKE_VERBOSITY: 1`
+```yaml
+DRAKE_VERBOSITY: 1
+```
 
 **Type:** integer scalar (`1` | `2` | `3`)
 
@@ -64,7 +74,9 @@ Verbosity of `{drake}`:
 
 ***
 
-`DRAKE_LOCK_ENVIR: True`
+```yaml
+DRAKE_LOCK_ENVIR: True
+```
 
 **Type:** logical scalar
 
@@ -73,7 +85,9 @@ However, in some cases is needed to keep it unlocked.
 
 ***
 
-`DRAKE_UNLOCK_CACHE: True`
+```yaml
+DRAKE_UNLOCK_CACHE: True
+```
 
 **Type:** logical scalar
 
@@ -81,7 +95,9 @@ Don't wait for `{drake}` to discover locked cache after pipeline is run and unlo
 
 ***
 
-`DRAKE_FORMAT: "qs"`
+```yaml
+DRAKE_FORMAT: "qs"
+```
 
 **Type:** character scalar
 
@@ -90,7 +106,9 @@ See <https://books.ropensci.org/drake/plans.html#special-data-formats-for-target
 
 ***
 
-`BLAS_N_THREADS: 32`
+```yaml
+BLAS_N_THREADS: 32
+```
 
 **Type:** positive integer scalar or `null`
 
@@ -100,21 +118,25 @@ parallelism is used. Set to `null` if you want to keep BLAS defaults.
 
 ***
 
-`RSTUDIO_PANDOC: null`
+```yaml
+RSTUDIO_PANDOC: null
+```
 
 **Type:** character scalar or `null`
 
-Before pipeline is run by `run_single_sample()`, `run_integration()` or `drake::r_make()`, sets `RSTUDIO_PANDOC`
-environment variable: a path to directory with [pandoc](https://pandoc.org/)'s binary.
+Before pipeline is run by `run_single_sample_r()`, `run_single_sample_r()`, `run_integration_r()`, or
+`run_integration()`, the `RSTUDIO_PANDOC` is set: a path to directory with [pandoc](https://pandoc.org/)'s binary.
 
 This is needed if you are running this pipeline outside of RStudio, or the `pandoc` binary is not available in your `PATH`.
 Set to `null` if any condition above does not apply.
 
-You can also define this variable in `.Renviron` file and set it `null` in pipeline config.
+You can also define this variable in `.Renviron` file and set it to `null` in pipeline config.
 
 ***
 
-`SEED: 100`
+```yaml
+SEED: 100
+```
 
 **Type:** integer scalar
 
@@ -124,7 +146,9 @@ An initial seed for random number generator.
 
 # Parallelism
 
-`DRAKE_PARALLELISM: "loop"`
+```yaml
+DRAKE_PARALLELISM: "loop"
+```
 
 **Type:** character scalar (`"loop"` | `"future"` | `"clustermq"`)
 
@@ -139,7 +163,9 @@ See <https://books.ropensci.org/drake/hpc.html> for more details.
 
 ***
 
-`DRAKE_CLUSTERMQ_SCHEDULER: "multicore"`
+```yaml
+DRAKE_CLUSTERMQ_SCHEDULER: "multicore"
+```
 
 **Type:** character scalar
 
@@ -148,7 +174,9 @@ See <https://mschubert.github.io/clustermq/articles/userguide.html#configuration
 
 ***
 
-`DRAKE_N_JOBS: 8`
+```yaml
+DRAKE_N_JOBS: 8
+```
 
 **Type:** positive integer scalar
 
@@ -156,7 +184,9 @@ A number of parallel jobs for drake.
 
 ***
 
-`DRAKE_N_JOBS_PREPROCESS: 4`
+```yaml
+DRAKE_N_JOBS_PREPROCESS: 4
+```
 
 **Type:** positive integer scalar
 
@@ -164,7 +194,9 @@ A number of parallel jobs for processing the imports and doing other preprocessi
 
 ***
 
-`WITHIN_TARGET_PARALLELISM: False`
+```yaml
+WITHIN_TARGET_PARALLELISM: False
+```
 
 **Type:** logical scalar
 
@@ -174,11 +206,15 @@ Only possible when `DRAKE_PARALLELISM` is `"loop"`.
 
 ***
 
-`N_CORES: 16`
+```yaml
+N_CORES: 16
+```
 
 **Type:** positive integer scalar
 
 A number of cores for within-target parallelism.
+
+***
 
 # Targets
 

@@ -1,5 +1,5 @@
 ---
-title: "scdrake configs: a general overview"
+title: "scdrake config internals"
 description: "How YAML config files are used in `scdrake`"
 date: "`r Sys.Date()`"
 package: scdrake
@@ -8,7 +8,7 @@ output:
     toc: true
     toc_float: true
 vignette: >
-  %\VignetteIndexEntry{scdrake configs: a general overview}
+  %\VignetteIndexEntry{scdrake config internals}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -17,8 +17,9 @@ vignette: >
 
 # Introduction
 
-Configs are stored in YAML files (in `config/` directory by default), which are parsed in R to lists and used to build
-`{drake}` plans. YAML ([quick reference](https://docs.ansible.com/ansible/latest/reference_appendices/YAMLSyntax.html),
+`{scdrake}` configs are stored in YAML files (in the `config/` directory by default), which are parsed in R to lists
+and used to build `{drake}` plans.
+YAML ([quick reference](https://docs.ansible.com/ansible/latest/reference_appendices/YAMLSyntax.html),
 cheatsheets [here](https://lzone.de/cheat-sheet/YAML) and [here](https://learnxinyminutes.com/docs/yaml/))
 is a human-readable format and uses indentation (spaces) for nesting of parameters.
 
@@ -31,6 +32,8 @@ Default and local configs are named `*.default.yaml` and `*.yaml`, respectively.
 Config files are separated according to general parameters and each pipeline's main stage
 (quality control, normalization, etc.), but for consistency are always read all at once
 (by default if you run e.g. `run_single_sample()` or `drake::r_make("_drake_single_sample.R")`).
+
+All paths in configs must be relative to project root, or absolute (not recommended), unless otherwise stated.
 
 # Updating (merging) configs
 

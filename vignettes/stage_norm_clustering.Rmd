@@ -42,7 +42,8 @@ NORMALIZATION_TYPE: "scran"
 A normalization type:
 
 - `"scran"`: normalization by deconvolution.
-- `"sctransform"`: regularized negative binomial regression.
+- `"sctransform"`: regularized negative binomial regression. Note: `SingleCellExperiment` normalized by this method
+  cannot be used for integration.
 - `"none"`: skip normalization. This should be used only in case you are importing a `SingleCellExperiment`
   object in the `01_input_qc` stage and this object was normalized before within this pipeline,
   i.e. you are importing a modified `sce_norm` target or one of its downstream, dependent `SingleCellExperiment` targets.
@@ -396,8 +397,8 @@ annotation reference source in `CELL_ANNOTATION_SOURCES` (see below).
     between pairs of labels. Defaults to `"classic"`, which sorts genes by the log-fold changes and takes the top `DE_N`.
     Setting to `"wilcox"` or `"t"` will use Wilcoxon ranked sum test or Welch t-test between labels, respectively,
     and take the top `DE_N` upregulated genes per comparison.
-  - `DE_N: null` (`null` or integer scalar): the number of DE genes to use when `GENES: "de"`. If `DE_METHOD: "classic"`, defaults to
-    $500 * (2/3) ^ log2(N)$ where $N$ is the number of unique labels. Otherwise, `null` defaults to `10`.
+  - `DE_N: null` (`null` or integer scalar): the number of DE genes to use when `GENES: "de"`. If `DE_METHOD: "classic"`,
+    defaults to $500 * (2/3) ^ log2(N)$ where $N$ is the number of unique labels. Otherwise, `null` defaults to `10`.
   - `ASSAY_TYPE: "logcounts"` (character scalar or integer): the assay of the reference dataset containing the relevant
     expression matrix.
 - `CLASSIFY_PARAMS`: used for classification, passed to `SingleR::classifySingleR()`.
@@ -426,17 +427,12 @@ CELL_ANNOTATION_SOURCES:
         Most of the labels refer to blood subpopulations but cell types from other tissues are also available.
       label_column: "label.main"
       label_subsets: []
-      train_params:
-        de_method: "wilcox"
-        de_n: 30
     monaco_immune_fine:
       reference_type: "celldex"
       reference: "MonacoImmuneData"
       description: "This is the human immune reference that best covers all of the bases for a typical PBMC sample."
       label_column: "label.fine"
       label_subsets: []
-      train_params:
-        genes: "sd"
 ```
 
 **Type:** list of named lists
@@ -466,12 +462,16 @@ Each reference dataset must have the following parameters:
 - `label_subsets: []` (character vector): labels to subset the reference dataset prior to training,
   e.g. `["T cells", "B cells", "Progenitors"]`.
 
-In each entry you can override default parameters in `CELL_ANNOTATION_SOURCES_DEFAULTS` (by using lowercase names), e.g.
+In each entry (e.g. `human_primary_cell_atlas_main` above) you can override default parameters in
+`CELL_ANNOTATION_SOURCES_DEFAULTS` (by using lowercase names), e.g.
 
 ```yaml
-train_params:
-  de_method: "wilcox"
-  de_n: 30
+CELL_ANNOTATION_SOURCES:
+  - human_primary_cell_atlas_main:
+      ...
+      train_params:
+        de_method: "wilcox"
+        de_n: 30
 ```
 
 will override corresponding parameters in `TRAIN_PARAMS` in `CELL_ANNOTATION_SOURCES_DEFAULTS`.
@@ -540,7 +540,7 @@ cluster_graph_louvain_annotated:
   and levels `1` and `7` will be merged to a new level `"memory_CD4+"`.
   All unspecified levels will be kept as they are.
 
-NOTE: The example cluster renamings serve as an example for 10x PBMC 1k dataset, but initially on your dataset you
+> NOTE: The example cluster renamings serve as an example for 10x PBMC 1k dataset, but initially on your dataset you
 should use `null` and set renamings after you examine the pipeline results.
 
 ## Dimensionality reduction plots
@@ -583,9 +583,9 @@ NORM_CLUSTERING_REPORT_DIMRED_PLOTS_OTHER:
 
 Names of other variables in `colData()` to plot and color by, displayed in the report.
 
-The format is `"<variable_name": "<description>"`, where description will appear in plot title.
+The format is `"variable_name": "description"`, where description will appear in plot title.
 
-Variables defined in the `CELL_GROUPINGS` parameter could have <description> set to `null` -
+Variables defined in the `CELL_GROUPINGS` parameter could have `description` set to `null` -
 their description from `CELL_GROUPINGS` will be used.
 
 ## Input files
@@ -658,12 +658,16 @@ NORM_CLUSTERING_KNITR_ECHO: False
 
 These are passed to `knitr::opts_chunk()` and used for rendering of stage's HTML report.
 
+***
+
 # Targets
 
 Here you can find description of the most important targets for this stage.
 However, for a full overview, you have to inspect the
 [source code](https://github.com/bioinfocz/scdrake/blob/main/R/plans_single_sample.R) of the
 `get_input_norm_clustering_subplan()` function.
+
+HTML report target names: `report_norm_clustering`, `report_norm_clustering_simple` (only dimred plots)
 
 ## `SingleCellExperiment` objects
 
