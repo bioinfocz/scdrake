@@ -44,3 +44,39 @@ get_integration_plan <- function(cfg, cfg_pipeline = NULL) {
   contrasts_plan <- get_contrasts_subplan(cfg$contrasts, cfg_pipeline, cfg$main)
   drake::bind_plans(common_plan, integration_plan, int_clustering_plan, cluster_markers_plan, contrasts_plan)
 }
+
+#' @title Source a file returning a custom [drake] plan.
+#' @description This function is used in [drake]s init scripts `_drake_single_sample.R` and `_drake_integration.R`.
+#' It sources an R script (`plan_custom.R` by default) which must return a [drake::drake_plan()] object.
+#' In the R script, all variables defined in the init script are available, mainly `cfg` and `cfg_pipeline` lists
+#' holding pipeline parameters. At the same time, all those variables are locked and cannot be modified in `file` script.
+#'
+#' @param file A character scalar: path to R script returning a [drake::drake_plan()].
+#' @param envir An environment in which the R script will be sourced (defaults to caller env).
+#' @return A [drake::drake_plan()] object (`tibble`).
+#'
+#' @export
+load_custom_plan <- function(file = getOption("scdrake_plan_custom_file"), envir = parent.frame()) {
+  if (!fs::file_exists(file)) {
+    cli_alert_warning("The script file {.file {file}} with custom plan not found.")
+    return(NULL)
+  }
+
+  ## -- To protect the caller env from modifications.
+  purrr::map(ls(envir = envir), ~ lockBinding(., envir))
+  res <- source(file, local = envir)
+  purrr::map(ls(envir = envir), ~ unlockBinding(., envir))
+  val <- res$value
+  if (!is_null(val)) {
+    assert_that_(
+      inherits(val, "data.frame"),
+      msg = "The sourced script {.file {file}} didn't return a {.code data.frame} object."
+    )
+    assert_that_(
+      all(c("target", "command") %in% colnames(val)),
+      msg = "The sourced script {.file {file}} didn't return a {.code data.frame} with {.field 'target'} and {.field 'command'} columns."
+    )
+  }
+
+  return(val)
+}

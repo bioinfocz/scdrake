@@ -64,6 +64,19 @@ see the \code{dir} parameter in \code{\link[=load_single_sample_configs]{load_si
 \item A path to directory containing files for integration analysis,
 see the \code{dir} parameter in \code{\link[=load_integration_configs]{load_integration_configs()}}.
 }
+\item \code{scdrake_plan_custom_file}
+(character, env: \code{SCDRAKE_PLAN_CUSTOM_FILE}, default: \code{"plan_custom.R"})
+\itemize{
+\item A path to file with custom \code{drake} plan.
+}
+\item \code{scdrake_project_root}
+(character, env: \code{SCDRAKE_PROJECT_ROOT}, default: \code{.})
+\itemize{
+\item A path to \code{scdrake} project root. If different from the current working directory (\code{.}), \code{scdrake} will first
+change the working directory before pipeline is run in e.g. \code{run_single_sample_r()} or \code{run_single_sample()}.
+That means other path-specifying options (e.g. \code{scdrake_pipeline_config_dir}) and config parameters will become
+relative to \code{scdrake_project_root} - \strong{use at your own risk}!
+}
 }
 
 Some of the options are internal, used for unit tests:

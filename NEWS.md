@@ -1,5 +1,7 @@
 # scdrake (development version)
 
+- Added support for a custom plan located (by default) in `plan_custom.R` script in project directory.
+
 # scdrake 1.2.3
 
 - Fixed a bug in the `sce_final_norm_clustering` target where already present columns in `colData()` were not updated by

@@ -41,7 +41,8 @@
       [36] "config/single_sample/cluster_markers.yaml"           
       [37] "config/single_sample/contrasts.default.yaml"         
       [38] "config/single_sample/contrasts.yaml"                 
-      [39] "renv.lock"                                           
+      [39] "plan_custom.R"                                       
+      [40] "renv.lock"                                           
 
 ---
 
@@ -97,5 +98,7 @@
       [47] "config/single_sample/contrasts.default.yaml"         
       [48] "config/single_sample/contrasts.yaml"                 
       [49] "config/single_sample/contrasts.yaml.backup"          
-      [50] "renv.lock"                                           
+      [50] "plan_custom.R"                                       
+      [51] "plan_custom.orig.R"                                  
+      [52] "renv.lock"                                           
 

@@ -12,7 +12,7 @@
 
   fs::dir_create(fs::path_dir(file_dest))
   fs::file_copy(file_src, file_dest, overwrite = TRUE)
-  verbose %&&% cli_alert_info("Copied {.file {file_src}} to {.file {file_dest}}")
+  verbose %&&% cli_alert_success("Copied the {.file {fs::path_file(file_src)}} file.")
   invisible(TRUE)
 }
 
@@ -85,7 +85,7 @@ init_project <- function(dir = NULL,
     cli_alert_warning(msg)
     continue <- .confirm_menu()
     if (continue != 1L) {
-      cli_abort("Interrupting the initialization.")
+      cli_abort("Interrupting the project initialization.")
     }
   }
 
@@ -111,6 +111,8 @@ init_project <- function(dir = NULL,
 
   copy_single_sample_drake_file(dir, ask = FALSE, verbose = verbose)
   copy_integration_drake_file(dir, ask = FALSE, verbose = verbose)
+  fs::file_copy(system.file("plan_custom.R", package = "scdrake", mustWork = TRUE), dir, overwrite = TRUE)
+  verbose %&&% cli_alert_success("Copied the {.file plan_custom.R} file.")
 
   if (set_wd) {
     verbose %&&% cli_alert_success("Changing the working directory and project's root for {.pkg here} package.")
@@ -200,6 +202,17 @@ update_project <- function(dir = NULL,
 
   copy_single_sample_drake_file(dir, ask = FALSE, verbose = verbose)
   copy_integration_drake_file(dir, ask = FALSE, verbose = verbose)
+  plan_custom_path <- fs::path(dir, "plan_custom.R")
+  if (fs::file_exists(plan_custom_path)) {
+    plan_custom_new_file <- fs::path(dir, "plan_custom.orig.R")
+    verbose %&&% cli_alert_info(
+      "{.file {fs::path_file(plan_custom_path)}} exists, copying the original file as {.file {fs::path_file(plan_custom_new_file)}}"
+    )
+  } else {
+    plan_custom_new_file <- "plan_custom.R"
+  }
+  fs::file_copy(system.file("plan_custom.R", package = "scdrake", mustWork = TRUE), plan_custom_new_file, overwrite = TRUE)
+  verbose %&&% cli_alert_success("Copied the {.file plan_custom.R} file.")
 
   update_configs(
     pipeline_config_dir = pipeline_config_dir,

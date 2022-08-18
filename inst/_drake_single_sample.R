@@ -78,6 +78,13 @@ options(
 create_single_sample_dirs(cfg)
 plan <- get_single_sample_plan(cfg, cfg_pipeline)
 
+plan_custom_file <- getOption("scdrake_plan_custom_file")
+plan_custom <- load_custom_plan(plan_custom_file)
+if (!rlang::is_null(plan_custom)) {
+  cli_alert_info("Extending the plan with a custom one defined in {.file {plan_custom_file}}")
+  plan <- drake::bind_plans(plan, plan_custom)
+}
+
 verbose %&&% cli::cli_h2("Running the single-sample pipeline")
 verbose %&&% cli({
   cli_alert_info("BASE OUTPUT DIRECTORY: {cfg$main$BASE_OUT_DIR}")

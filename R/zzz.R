@@ -35,6 +35,15 @@
 #'   (character, env: `SCDRAKE_INTEGRATION_CONFIG_DIR`, default: `"config/integration"`)
 #'   - A path to directory containing files for integration analysis,
 #'     see the `dir` parameter in [load_integration_configs()].
+#' - `scdrake_plan_custom_file`
+#'   (character, env: `SCDRAKE_PLAN_CUSTOM_FILE`, default: `"plan_custom.R"`)
+#'   - A path to file with custom `drake` plan.
+#' - `scdrake_project_root`
+#'   (character, env: `SCDRAKE_PROJECT_ROOT`, default: `.`)
+#'   - A path to `scdrake` project root. If different from the current working directory (`.`), `scdrake` will first
+#'     change the working directory before pipeline is run in e.g. `run_single_sample_r()` or `run_single_sample()`.
+#'     That means other path-specifying options (e.g. `scdrake_pipeline_config_dir`) and config parameters will become
+#'     relative to `scdrake_project_root` - **use at your own risk**!
 #'
 #' Some of the options are internal, used for unit tests:
 #'
@@ -86,6 +95,14 @@ get_scdrake_default_options <- function() {
     scdrake_integration_config_dir = get_sys_env(
       "SCDRAKE_INTEGRATION_CONFIG_DIR",
       default = "config/integration"
+    ),
+    scdrake_plan_custom_file = get_sys_env(
+      "SCDRAKE_PLAN_CUSTOM_FILE",
+      default = "plan_custom.R"
+    ),
+    scdrake_project_root = get_sys_env(
+      "SCDRAKE_PROJECT_ROOT",
+      default = "."
     ),
 
     ## -- Internal options, mostly for unit tests.

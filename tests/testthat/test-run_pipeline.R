@@ -58,7 +58,7 @@ test_that("the full single-sample pipeline for PBMC 1k dataset finishes", {
     analysis_config_dir = getOption("scdrake_single_sample_config_dir")
   )
 
-  expect_true(scdrake_r_make("_drake_single_sample.R"))
+  expect_true(run_single_sample_r())
 })
 
 skip_if(is_false(getOption("scdrake_test_run_pipeline_integration")))
@@ -74,7 +74,7 @@ test_that("'sce_final_norm_clustering' target in single-sample pipeline for PBMC
     analysis_config_dir = getOption("scdrake_single_sample_config_dir")
   )
 
-  expect_true(scdrake_r_make("_drake_single_sample.R"))
+  expect_true(run_single_sample_r())
 })
 
 ## -- This is a second dataset used for integration. We only need the "sce_final_norm_clustering" target
@@ -86,7 +86,7 @@ test_that("'sce_final_norm_clustering' target in single-sample pipeline for PBMC
     analysis_config_dir = getOption("scdrake_single_sample_config_dir")
   )
 
-  expect_true(scdrake_r_make("_drake_single_sample.R"))
+  expect_true(run_single_sample_r())
 })
 
 test_that("integration pipeline finishes", {
@@ -96,5 +96,5 @@ test_that("integration pipeline finishes", {
     analysis_config_dir = getOption("scdrake_integration_config_dir")
   )
 
-  expect_true(scdrake_r_make("_drake_integration.R"))
+  expect_true(run_integration())
 })
