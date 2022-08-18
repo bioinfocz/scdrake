@@ -1,12 +1,12 @@
 ### Integration sources #######################################################
 INTEGRATION_SOURCES:
   - pbmc1k:
-      cache_path: ".drake_pbmc1k"
+      cache_path: "path/to/.drake"
       description: "10x Genomics PBMC 1k dataset"
       hvg_rm_cc_genes: True
       hvg_cc_genes_var_expl_threshold: 5
     pbmc3k:
-      cache_path: ".drake_pbmc3k"
+      cache_path: "path/to/.drake"
       description: "10x Genomics PBMC 3k dataset"
       hvg_rm_cc_genes: False
       hvg_cc_genes_var_expl_threshold: null

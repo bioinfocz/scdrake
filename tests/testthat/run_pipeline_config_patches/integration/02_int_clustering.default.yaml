@@ -1,1 +1,41 @@
 SC3_DRY: True
+CELL_ANNOTATION_SOURCES:
+  - human_primary_cell_atlas_main:
+      reference_type: "celldex"
+      reference: "HumanPrimaryCellAtlasData"
+      description: >
+        Microarray datasets derived from human primary cells (Mabbott et al. 2013).
+        Most of the labels refer to blood subpopulations but cell types from other tissues are also available.
+      label_column: "label.main"
+      label_subsets: []
+      train_params:
+        de_method: "wilcox"
+        de_n: 30
+    monaco_immune_main:
+      reference_type: "celldex"
+      reference: "MonacoImmuneData"
+      description: "This is the human immune reference that best covers all of the bases for a typical PBMC sample."
+      label_column: "label.main"
+      label_subsets: []
+      train_params:
+        genes: "sd"
+CELL_GROUPINGS:
+  - cluster_int_graph_louvain_annotated:
+      source_column: "cluster_int_graph_louvain"
+      description: "Graph-based clustering (Louvain alg.), annotated clusters"
+      assignments:
+        1: "memory_CD4+"
+        6: "B"
+        7: "memory_CD4+"
+    cluster_int_kmeans_kc_3_renamed:
+      source_column: "cluster_int_kmeans_kc_3"
+      description: "k-means clustering (k = 3), renamed clusters"
+      assignments:
+        1: "kc_1"
+        2: "kc_2"
+    cluster_int_sc3_6_renamed:
+      source_column: "cluster_int_sc3_6"
+      description: "SC3 clustering (k = 6), renamed clusters"
+      assignments:
+        1: "sc3_1"
+        5: "sc3_5"

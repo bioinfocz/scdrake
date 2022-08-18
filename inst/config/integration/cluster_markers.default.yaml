@@ -38,17 +38,9 @@ CLUSTER_MARKERS_SOURCES:
   - markers_cluster_int_kmeans_kc_4:
       source_column: "cluster_int_kmeans_kc_4"
       description: "Cluster markers for k-means clustering (k = 4)"
-      common_params:
-        plot_dimreds: ["umap", "pca"]
-      params_t:
-        pval_type: "some"
-        top_n_wt_heatmap: "fdr"
-        top_n_wt_plot: "fdr"
-    markers_cluster_int_kmeans_kc_3_batch_block:
-      source_column: "cluster_int_kmeans_kc_3_renamed"
-      description: "Cluster markers for k-means clustering (k = 3) with blocking on batch"
-      common_params:
-        block_column: "batch"
+    markers_cluster_int_sc3_3:
+      source_column: "cluster_int_sc3_3"
+      description: "Cluster markers for SC3 (k = 3)"
 
 MAKE_CLUSTER_MARKERS_PLOTS: True
 ###############################################################################

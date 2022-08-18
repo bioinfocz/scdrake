@@ -26,26 +26,18 @@ CONTRASTS_SOURCES_DEFAULTS:
     TOP_N_WT_PLOT: "fdr"
 
 CONTRASTS_SOURCES:
-  - dea_cluster_louvain_annotated:
-      source_column: "cluster_graph_louvain_annotated"
+  - dea_cluster_graph_louvain:
+      source_column: "cluster_graph_louvain"
       description: "DEA of some groups in graph-based clustering clustering (Louvain alg.)"
-      common_params:
-        plot_dimreds: ["umap", "pca"]
-      params_t:
-        lfc_test: 1
       contrasts:
-        - target: "memory_CD4+"
-          reference: "B"
+        - target: "2"
+          reference: "1"
         - target: "3"
-          reference: "4"
+          reference: "2"
           name: "cl3_vs_cl4"
-    dea_cluster_kmeans_kc_3_cc_block:
-      source_column: "cluster_kmeans_kc_3_renamed"
-      description: "DEA of all groups in k-means clustering (k = 3) with blocking on cell cycle phase"
-      common_params:
-        block_column: "phase"
-      params_wilcox:
-        top_n_heatmap: 20
+    dea_cluster_kmeans_kc_3:
+      source_column: "cluster_kmeans_kc_3"
+      description: "DEA of all groups in k-means clustering (k = 3)"
       contrasts: "all"
 
 MAKE_CONTRASTS_PLOTS: True

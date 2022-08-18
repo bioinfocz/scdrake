@@ -24,17 +24,12 @@ CELL_ANNOTATION_SOURCES:
         Most of the labels refer to blood subpopulations but cell types from other tissues are also available.
       label_column: "label.main"
       label_subsets: []
-      train_params:
-        de_method: "wilcox"
-        de_n: 30
     monaco_immune_main:
       reference_type: "celldex"
       reference: "MonacoImmuneData"
       description: "This is the human immune reference that best covers all of the bases for a typical PBMC sample."
       label_column: "label.main"
       label_subsets: []
-      train_params:
-        genes: "sd"
 
 CELL_ANNOTATION_SOURCES_DEFAULTS:
   TRAIN_PARAMS:
