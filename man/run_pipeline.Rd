@@ -3,11 +3,14 @@
 \name{run_single_sample}
 \alias{run_single_sample}
 \alias{run_integration}
-\title{A shortcut to run the \code{scdrake} pipeline in the current R session.}
+\alias{run_single_sample_r}
+\alias{run_integration_r}
+\title{Run the \code{scdrake} pipeline.}
 \usage{
 run_single_sample(
   pipeline_config_dir = getOption("scdrake_pipeline_config_dir"),
   single_sample_config_dir = getOption("scdrake_single_sample_config_dir"),
+  project_root = getOption("scdrake_project_root"),
   do_update_configs = TRUE,
   verbose = getOption("scdrake_verbose"),
   .dry = FALSE,
@@ -17,9 +20,22 @@ run_single_sample(
 run_integration(
   pipeline_config_dir = getOption("scdrake_pipeline_config_dir"),
   integration_config_dir = getOption("scdrake_integration_config_dir"),
+  project_root = getOption("scdrake_project_root"),
   do_update_configs = TRUE,
   verbose = getOption("scdrake_verbose"),
   .dry = FALSE,
+  ...
+)
+
+run_single_sample_r(
+  drake_file = "_drake_single_sample.R",
+  project_root = getOption("scdrake_project_root"),
+  ...
+)
+
+run_integration_r(
+  drake_file = "_drake_integration.R",
+  project_root = getOption("scdrake_project_root"),
   ...
 )
 }
@@ -29,6 +45,10 @@ run_integration(
 \item{single_sample_config_dir}{A character scalar: path to directory with \verb{00_main.yaml}, \verb{01_input_qc.yaml},
 \verb{02_norm_clustering.yaml}, \code{cluster_markers.yaml}, and \code{contrasts.yaml} files.}
 
+\item{project_root}{A character scalar: path to directory in which the pipeline will be run,
+i.e. a new working directory. The working directory will be used only temporarily. Default value of the
+\code{scdrake_project_root} options is the current working directory.}
+
 \item{do_update_configs}{A logical scalar: if \code{TRUE}, run \code{\link[=update_single_sample_configs]{update_single_sample_configs()}} or
 \code{\link[=update_integration_configs]{update_integration_configs()}} before loading configs.}
 
@@ -37,16 +57,25 @@ The default value is obtained from \code{getOption("scdrake_verbose")}.}
 
 \item{.dry}{A logical scalar: if \code{TRUE}, omit the last step in the description and just return \code{TRUE}.}
 
-\item{...}{Passed to \code{\link[=scdrake_make]{scdrake_make()}}.}
+\item{...}{Passed to \code{\link[=scdrake_make]{scdrake_make()}} or \code{\link[=scdrake_r_make]{scdrake_r_make()}}.}
 
 \item{integration_config_dir}{A character scalar: path to directory with \verb{00_main.yaml}, \verb{01_integration.yaml},
 \verb{02_int_clustering.yaml}, \code{cluster_markers.yaml}, and \code{contrasts.yaml} files.}
+
+\item{drake_file}{A character scalar: path to entry script for \link{drake}.}
 }
 \value{
 \code{TRUE} if pipeline finishes successfully.
 }
 \description{
-This is a shortcut for:
+There are two ways how to run \code{scdrake} pipeline:
+
+The first, reproducible way is via \code{\link[=run_single_sample_r]{run_single_sample_r()}} or \code{\link[=run_integration_r]{run_integration_r()}}. In the end, \code{\link[drake:r_make]{drake::r_make()}}
+is called and sources \code{"_drake_single_sample.R"} or \code{"_drake_integration.R"} scripts in a fresh new R session.
+Those scripts are entry points for \code{drake}. See \code{\link[=scdrake_r_make]{scdrake_r_make()}} for more details.
+
+The second way is to run pipeline in the current R session via \code{\link[=run_single_sample]{run_single_sample()}} or \code{\link[=run_integration]{run_integration()}},
+which is a shortcut for:
 \itemize{
 \item Loading configs: \code{\link[=load_pipeline_config]{load_pipeline_config()}}, and \code{\link[=load_single_sample_configs]{load_single_sample_configs()}} or \code{\link[=load_integration_configs]{load_integration_configs()}}.
 \item Obtaining the pipeline plan: \code{\link[=get_single_sample_plan]{get_single_sample_plan()}} or \code{\link[=get_integration_plan]{get_integration_plan()}}.
@@ -55,7 +84,10 @@ This is a shortcut for:
 \item Running the pipeline: \code{\link[=scdrake_make]{scdrake_make()}}.
 }
 
-Note that this is not a recommended way to run the pipeline. Instead, you should run \code{\link[drake:r_make]{drake::r_make()}} with
-\code{source} parameter of \code{"_drake_single_sample.R"} or \code{"_drake_integration.R"}. See \code{\link[=scdrake_r_make]{scdrake_r_make()}} for more details.
+This way is considered as nonreproducible, because the pipeline is run in the current session and there might be
+interfering variables or loaded packages. Internally, the \code{\link[=run_single_sample]{run_single_sample()}} and \code{\link[=run_integration]{run_integration()}} functions
+are basically replicating the code that is in \code{"_drake_single_sample.R"} and \code{"_drake_integration.R"} scripts,
+respectively, while protecting from side effects (e.g. setting \code{options()} etc.) on your current session
+(i.e. all environment modifications are limited to function's scope).
 }
 \concept{run_pipeline}
