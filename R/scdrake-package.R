@@ -25,17 +25,14 @@
 #'
 #' @section Package options: See [get_scdrake_default_options()].
 #' @section Included datasets:
-#' For pipeline testing two datasets from 10x Genomics are included:
-#' - [PBMC 1k](https://support.10xgenomics.com/single-cell-gene-expression/datasets/3.0.0/pbmc_1k_v3?)
+#' For pipeline testing two datasets from 10x Genomics can be automatically downloaded:
+#' - [download_pbmc1k()]: [PBMC 1k](https://support.10xgenomics.com/single-cell-gene-expression/datasets/3.0.0/pbmc_1k_v3?)
 #'   (v3 chemistry, Cell Ranger 3.0.0)
-#' - [PBMC 3k](https://support.10xgenomics.com/single-cell-gene-expression/datasets/1.1.0/pbmc3k)
+#' - [download_pbmc3k()]: [PBMC 3k](https://support.10xgenomics.com/single-cell-gene-expression/datasets/1.1.0/pbmc3k)
 #'   (v1 chemistry, Cell Ranger 1.1.0). This dataset is used for testing of integration pipeline.
 #'
 #' **All credits for these datasets go to 10x Genomics.**
 #' Visit <https://www.10xgenomics.com/resources/datasets> for more information.
-#'
-#' Directories with dataset files can be retrieved by
-#' `system.file("extdata", "pbmc1k", package = "scdrake", mustWork = TRUE)` (or `"pbmc3k"`, respectively).
 "_PACKAGE"
 
 # The following block is used by usethis to automatically manage

@@ -21,7 +21,7 @@ get_sys_env <- function(var,
 
   if (!is_null(default) && val == "") {
     verbose %&&% cli_alert_warning(
-      "Environment variable {.envvar {var}} is not set -> using a default value {.val {default}} ({typeof(default)})"
+      "Environment variable {.envvar {var}} is not set -> using default value {.val {default}} ({typeof(default)})"
     )
     val <- default
   } else {

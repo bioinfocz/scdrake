@@ -3,7 +3,7 @@
 #' Before a plan is executed, this function sets *locally* some options, environment variables and other things.
 #' That means no side effects are left. Note that this is a less reproducible way to run
 #' the `scdrake` pipeline since it is executed in the current R session.
-#' Note that [create_single_sample_dirs()] or [create_integration_dirs()] must be run before.
+#' Also note that [create_single_sample_dirs()] or [create_integration_dirs()] must be run before.
 #' @param plan A `drake` plan.
 #' @inheritParams cfg_pipeline_param
 #' @param cfg_main A `scdrake_list` object: main config (see [load_config])
