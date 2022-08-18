@@ -48,14 +48,14 @@ group_list <- dplyr::group_split(groups) %>%
 x <- lapply(names(group_list), function(group_name) {
   df_group <- group_list[[group_name]]
   md_header(group_name, 2, extra = "{.tabset}")
-  
+
   md_header("Dimred plots", 3, extra = "{.tabset}")
   dimred_plots <- dplyr::distinct(df_group, name, .keep_all = TRUE)$dimred_plots[[1]]
   y <- lapply_rows(dimred_plots, FUN = function(par) {
     md_header(str_to_upper(par$plot_dimreds), 4)
     print(par$plot)
   })
-  
+
   md_header("Results by contrasts", 3, extra = "{.tabset}")
   generate_markers_results_section(
     df_group, group_var = "contrast_name", dt_order_by = "test_type",

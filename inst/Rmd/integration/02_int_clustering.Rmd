@@ -33,7 +33,7 @@ loadd(
   dimred_plots_other_vars_files, dimred_plots_other_vars_files_out,
   selected_markers_plots_int_final,
   cell_annotation_diagnostic_plots, cell_annotation_diagnostic_plots_files,
-  
+
   path = drake_cache_dir
 )
 
@@ -86,7 +86,12 @@ Here, we illustrate two of these methods; the walktrap algorithm (*Pons and Lata
 We can visualise similarity of both assignments with heatmap and PCA.
 
 ```{r}
-pheatmap::pheatmap(table(readd(cluster_int_graph_walktrap, path = drake_cache_dir)[[1]], readd(cluster_int_graph_louvain, path = drake_cache_dir)[[1]]))
+pheatmap::pheatmap(
+  table(
+    readd(cluster_int_graph_walktrap, path = drake_cache_dir)[[1]],
+    readd(cluster_int_graph_louvain, path = drake_cache_dir)[[1]]
+  )
+)
 ```
 
 **Walktrap algorithm: found `r readd(cluster_int_graph_walktrap_n, path = drake_cache_dir)` clusters.**

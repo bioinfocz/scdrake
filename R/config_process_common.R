@@ -163,7 +163,8 @@
     params <- params[c(names(default_params), c("test_label", "test_dirname"))] %>% scdrake_list()
 
     return(params)
-  }) %>% set_names(test_names)
+  }) %>%
+    set_names(test_names)
 
   marker_source[test_names] <- params_per_test
 
@@ -468,10 +469,12 @@ NULL
       params <- params[names(default_params)] %>% scdrake_list()
 
       return(params)
-    }) %>% set_names(param_list_names)
+    }) %>%
+      set_names(param_list_names)
 
     cell_annotation_source[param_list_names] <- param_lists
 
     return(cell_annotation_source)
-  }) %>% set_names(names(cell_annotation_sources))
+  }) %>%
+    set_names(names(cell_annotation_sources))
 }

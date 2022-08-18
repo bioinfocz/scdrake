@@ -287,7 +287,8 @@ lapply_rows <- function(df, as_scdrake_list = TRUE, return_tibble = TRUE, FUN, .
       } else {
         return(x)
       }
-    }) %>% unclass()
+    }) %>%
+    unclass()
 
   assert_that_(typeof(res) == "list", msg = "{.var FUN} must return a list.")
   res <- dplyr::bind_rows(res)

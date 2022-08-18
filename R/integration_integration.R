@@ -674,7 +674,10 @@ int_diagnostics_df_fn <- function(sce_int_clustering_df, sce_int_raw_snn_cluster
     tbl_base <- table(cluster = sce_clustering$int_cluster_snn, Batch = sce_clustering$batch) %>% unclass()
     norm <- scater::normalizeCounts(tbl_base, pseudo.count = 10)
     rv <- MatrixGenerics::rowVars(norm)
-    df_var <- tibble::tibble(as.data.frame(tbl_base) %>% tibble::rownames_to_column("cluster"), var = rv) %>%
+    df_var <- tibble::tibble(
+      as.data.frame(tbl_base) %>%
+        tibble::rownames_to_column("cluster"), var = rv
+    ) %>%
       dplyr::arrange(-rv)
 
     clusters <- as.integer(sce_clustering$int_cluster_snn)

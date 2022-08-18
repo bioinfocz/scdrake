@@ -1,4 +1,4 @@
-##-- Functions related to cell type annotation.
+## -- Functions related to cell type annotation.
 
 #' @title Load a list of cell annotation references into a `tibble`.
 #' @description Cell annotation references are defined in `02_norm_clustering.yaml` (single-sample) and
@@ -207,7 +207,8 @@ cell_annotation_labels_fn <- function(cell_annotation) {
     ) %>% purrr::map(factor)
     names(res) <- glue("{name}_{names(res)}")
     return(res)
-  }) %>% unlist(recursive = FALSE)
+  }) %>%
+    unlist(recursive = FALSE)
 }
 
 #' @title Generate diagnostic plots for cell annotation.
@@ -253,10 +254,12 @@ cell_annotation_diagnostic_plots_fn <- function(cell_annotation,
         show.pruned = TRUE,
         main = glue("Cell annotation score\n{row$name}\n{cluster_col}"),
         silent = TRUE
-      ) %>% ggplotify::as.ggplot()
+      ) %>%
+        ggplotify::as.ggplot()
 
       return(heatmap)
-    }) %>% magrittr::set_names(glue("{cluster_cols}_vs_{row$name}"))
+    }) %>%
+      magrittr::set_names(glue("{cluster_cols}_vs_{row$name}"))
 
     row$delta_distribution_plot <- SingleR::plotDeltaDistribution(row$cell_annotation) +
       ggtitle("Delta score distribution", subtitle = row$name)
@@ -268,7 +271,9 @@ cell_annotation_diagnostic_plots_fn <- function(cell_annotation,
       ref_markers <- metadata(row$cell_annotation)$de.genes
       empirical_markers <- scran::findMarkers(sce, groups = labels, direction = "up")
       row$marker_heatmaps <- lapply(unique(labels), FUN = function(label) {
-        ref_markers_label <- ref_markers[[label]] %>% unlist() %>% unique()
+        ref_markers_label <- ref_markers[[label]] %>%
+          unlist() %>%
+          unique()
         m <- match(ref_markers_label, rownames(empirical_markers[[label]]))
         m <- ref_markers_label[rank(m) <= heatmap_n_top_markers]
 
@@ -282,7 +287,8 @@ cell_annotation_diagnostic_plots_fn <- function(cell_annotation,
         ) %>% ggplotify::as.ggplot()
 
         return(heatmap)
-      }) %>% magrittr::set_names(unique(labels))
+      }) %>%
+        magrittr::set_names(unique(labels))
     } else {
       row$marker_heatmaps <- list(NULL)
     }

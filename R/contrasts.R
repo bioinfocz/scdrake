@@ -127,7 +127,8 @@ contrasts_params_fn <- function(contrasts_sources, cell_data) {
       )
 
     return(res)
-  }) %>% purrr::discard(is_null)
+  }) %>%
+    purrr::discard(is_null)
 
   res <- dplyr::bind_rows(res)
 

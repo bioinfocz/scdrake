@@ -48,20 +48,20 @@ group_list <- dplyr::group_split(groups) %>%
 x <- lapply(names(group_list), function(group_name) {
   df_group <- group_list[[group_name]]
   md_header(group_name, 2, extra = "{.tabset}")
-  
+
   md_header("Dimred plots", 3, extra = "{.tabset}")
   dimred_plots <- dplyr::distinct(df_group, name, .keep_all = TRUE)$dimred_plots[[1]]
   y <- lapply_rows(dimred_plots, FUN = function(par) {
     md_header(str_to_upper(par$plot_dimreds), 4)
     print(par$plot)
   })
-  
+
   md_header("Results by levels", 3, extra = "{.tabset}")
   generate_markers_results_section(
     df_group, group_var = "group_level", dt_order_by = "test_type",
     base_out_dir = config_cluster_markers$CLUSTER_MARKERS_BASE_OUT_DIR
   )
-  
+
   md_header("Results by test type", 3, extra = "{.tabset}")
   generate_markers_results_section(
     df_group, group_var = "test_type", dt_order_by = "group_level",

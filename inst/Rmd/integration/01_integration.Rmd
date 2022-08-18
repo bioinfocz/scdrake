@@ -86,7 +86,6 @@ if (!is_null(hvg_int_with_cc)) {
   catg0(
     "These cell cycle related genes (n = {n_cc_genes}) were removed before HVG selection: {gene}\n\n",
     n_cc_genes = length(hvg_rm_cc_genes_ids),
-    # hvg_rm_cc_genes_ids = str_comma(hvg_rm_cc_genes_ids, space = TRUE)
     gene = str_comma(glue("{hvg_rm_cc_genes_ann$ENSEMBL} ({hvg_rm_cc_genes_ann$SYMBOL})"), space = TRUE)
   )
 }
@@ -100,7 +99,7 @@ if (hvg_combination == "hvg_metric") {
   hvg_selection <- hvg_int$hvg_selection
   hvg_selection_value <- hvg_int$hvg_selection_value
   catg0('Based on "{hvg_metric}", HVGs were selected by: ')
-  
+
   if (hvg_selection == "top") {
     catg0("top {hvg_selection_value} HVGs.\n\n")
   } else if (hvg_selection == "significance") {
@@ -118,7 +117,7 @@ invisible(lapply_rows(hvg_plots_int_df, FUN = function(par) {
   } else {
     md_header("All HVGs", 2)
   }
-  
+
   catg0("**Found {length(par$hvg_int$hvg_ids)} HVGs.**\n\n")
   print(par$hvg_plot)
   return(list())
@@ -143,17 +142,17 @@ invisible(dplyr::group_by(sce_int_pca_df_for_report, name) %>% dplyr::group_map(
   int_method_name <- key$name
   int_method_description <- get_int_method_description(int_method_name)
   md_header(int_method_description$header, 2, extra = "{.tabset}")
-  
+
   dplyr::group_by(group, hvg_rm_cc_genes) %>%
     dplyr::group_map(function(group, key) {
       hvg_rm_cc_genes <- key$hvg_rm_cc_genes
-      
+
       if (hvg_rm_cc_genes) {
         md_header("Removed cell cycle genes from HVGs", 3)
       } else {
         md_header("With all HVGs", 3)
       }
-      
+
       print(group$pca_selected_pcs_plot[[1]])
       catg0("\n\n**{group$pca_selected_pcs} PCs were selected using the '{group$pca_selection_method}' method.**\n\n")
     }
@@ -174,22 +173,22 @@ invisible(dplyr::group_by(sce_int_dimred_plots_df, name) %>% dplyr::group_map(fu
   int_method_description <- get_int_method_description(int_method_name)
   md_header(int_method_description$header, 2, extra = "{.tabset}")
   catg0(details_template, title = "Method details", text = int_method_description$description)
-  
+
   by_hvg_rm_cc_genes <- dplyr::group_by(group, hvg_rm_cc_genes)
   dplyr::group_map(by_hvg_rm_cc_genes, function(group, key) {
     hvg_rm_cc_genes <- key$hvg_rm_cc_genes
-    
+
     if (hvg_rm_cc_genes) {
       md_header("Removed cell cycle genes from HVGs", 3, extra = "{.tabset}")
     } else {
       md_header("With all HVGs", 3, extra = "{.tabset}")
     }
-    
+
     by_dimred <- dplyr::group_by(group, dimred_name)
     dplyr::group_map(by_dimred, function(group, key) {
       dimred_name <- key$dimred_name
       md_header(str_to_upper(dimred_name), 4)
-      
+
       selected_markers_file <- selected_markers_plots_int_df %>%
         dplyr::filter(name == int_method_name, hvg_rm_cc_genes == !!hvg_rm_cc_genes, dimred_name == !!dimred_name) %>%
         dplyr::pull(out_file)
@@ -201,7 +200,7 @@ invisible(dplyr::group_by(sce_int_dimred_plots_df, name) %>% dplyr::group_map(fu
           do_cat = TRUE
       )
       cat("\n\n")
-      
+
       by_colour_by <- dplyr::group_by(group, colour_by)
       dplyr::group_map(by_colour_by, function(group, key) {
         print(group$plot[[1]])
@@ -222,38 +221,39 @@ invisible(dplyr::group_by(int_diagnostics_df, name) %>% dplyr::group_map(functio
   int_method_name <- key$name
   int_method_description <- get_int_method_description(int_method_name)
   md_header(int_method_description$header, 2, extra = "{.tabset}")
-  
+
   dplyr::group_by(group, hvg_rm_cc_genes) %>%
     dplyr::group_map(function(group, key) {
       hvg_rm_cc_genes <- key$hvg_rm_cc_genes
-      
+
       if (hvg_rm_cc_genes) {
         md_header("Removed cell cycle genes from HVGs", 3, extra = "{.tabset}")
       } else {
         md_header("With all HVGs", 3, extra = "{.tabset}")
       }
-      
+
       md_header("Cells's assignment", 4)
       cells_per_batch_cluster <- group$cells_per_batch_cluster[[1]]
       cluster_has_zeros <- apply(dplyr::select(cells_per_batch_cluster, -cluster), 1, FUN = function(row) any(row == 0))
       cluster_has_zeros <- cells_per_batch_cluster$cluster[cluster_has_zeros]
-      
+
       if (!is_empty(cluster_has_zeros)) {
         catg0(
           "**WARNING**: The following clusters have zero number of assigned cells in some samples: ",
           "{str_comma(cluster_has_zeros)}\n\n\n"
         )
       }
-      
+
       print(
         kableExtra::kable(group$cells_per_batch_cluster_percentages[[1]], row.names = FALSE) %>%
           kableExtra::kable_styling(bootstrap_options = c("striped", "hover", "condensed"))
-      ) %>% cat()
-      
+      ) %>%
+        cat()
+
       md_header("Cells's assignment (plots)", 4)
       print(group$plot_batch_cluster_absolute[[1]])
       print(group$plot_batch_cluster_ratio[[1]])
-      
+
       md_header("Variance in cluster assignment", 4)
       cat(
         "The variation in the log-abundances to rank the clusters with the greatest variability",
@@ -266,8 +266,9 @@ invisible(dplyr::group_by(int_diagnostics_df, name) %>% dplyr::group_map(functio
       print(
         kableExtra::kable(group$batch_cluster_var_df[[1]], row.names = FALSE) %>%
           kableExtra::kable_styling(bootstrap_options = c("striped", "hover", "condensed"))
-      ) %>% cat()
-      
+      ) %>%
+        cat()
+
       md_header("Rand indices", 4)
       cat(
         "Rand index is used to evaluate biological heterogeneity preservation by summarizing the agreement between clusterings.",
@@ -279,7 +280,8 @@ invisible(dplyr::group_by(int_diagnostics_df, name) %>% dplyr::group_map(functio
       print(
         kableExtra::kable(group$rand_indices[[1]], row.names = FALSE) %>%
           kableExtra::kable_styling(bootstrap_options = c("striped", "hover", "condensed"))
-      ) %>% cat()
+      ) %>%
+        cat()
     }
   )
 }))

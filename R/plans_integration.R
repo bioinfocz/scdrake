@@ -186,14 +186,17 @@ get_int_clustering_subplan <- function(cfg, cfg_pipeline, cfg_main) {
     ## -- Save config.
     config_int_clustering = !!cfg,
     sce_int_uncorrected = dplyr::filter(sce_int_uncorrected_df, hvg_rm_cc_genes == !!cfg$INTEGRATION_FINAL_METHOD_RM_CC) %>%
-      dplyr::pull(sce_int) %>% .[[1]],
+      dplyr::pull(sce_int) %>%
+      .[[1]],
 
     ## -- Select the integration method result.
     sce_int_final = dplyr::filter(
       sce_int_dimred_df,
       name == !!cfg$INTEGRATION_FINAL_METHOD,
       hvg_rm_cc_genes == !!cfg$INTEGRATION_FINAL_METHOD_RM_CC
-    ) %>% dplyr::pull(sce_dimred) %>% .[[1]],
+    ) %>%
+      dplyr::pull(sce_dimred) %>%
+      .[[1]],
     sce_int_final_info = save_object_info(sce_int_final),
 
     ## -- Graph-based clustering

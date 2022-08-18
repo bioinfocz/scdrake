@@ -114,21 +114,21 @@ catg0('**HVG metric: "{hvg_metric}"**\n\n')
 
 if (hvg_metric == "gene_var") {
   var_field <- "bio"
-  
+
   cat(
     "`modelGeneVar()` models the variance of the log-expression profiles for each gene,",
     "decomposing it into technical and biological components based on a fitted mean-variance trend.\n\n"
   )
-  
+
   plot_hvg_fit(sce, "var")
 } else if (hvg_metric == "gene_cv2") {
   var_field <- "ratio"
-  
+
   cat(
     "`modelGeneCV2()` models the squared coefficient of variation (CV2) of the normalized expression profiles for each gene,",
     "fitting a trend to account for the mean-variance relationship across genes.\n\n"
   )
-  
+
   plot_hvg_fit(sce, "cv2")
 } else if (hvg_metric == "sctransform") {
   catg0("HVGs (n = {cfg$SCT_N_HVG}) were selected by the `sctransform` method.")
@@ -139,13 +139,13 @@ if (!is_null(sce_metadata$hvg_rm_cc_genes) && sce_metadata$hvg_rm_cc_genes) {
     "Using the percentage of variance explained by the cell cycle phase in the expression profile for each gene, ",
     "we removed the following genes with percentage > {sce_metadata$hvg_cc_genes_var_expl_threshold} prior to HVG selection:"
   )
-  
+
   render_bootstrap_table(sce_rowData[sce_rowData$is_cc_related, c("ENSEMBL", "SYMBOL")], row.names = FALSE)
 }
 
 if (hvg_metric %in% c("gene_var", "gene_cv2")) {
   catg0('\n\nBased on "{hvg_metric}", HVGs were selected by: ')
-  
+
   if (hvg_selection == "top") {
     catg0("top {hvg_selection_value} HVGs.\n\n")
   } else if (hvg_selection == "significance") {
@@ -153,7 +153,7 @@ if (hvg_metric %in% c("gene_var", "gene_cv2")) {
   } else if (hvg_selection == "threshold") {
     catg0("variance or CV2 > {hvg_selection_value}\n\n")
   }
-  
+
   catg0("**Found {length(sce_metadata$hvg_ids)} HVGs.**\n\n")
 }
 ```

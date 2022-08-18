@@ -32,12 +32,15 @@ loadd(
   dimred_plots_other_vars_files, dimred_plots_other_vars_files_out,
   selected_markers_plots, selected_markers_plots_files,
   cell_annotation_diagnostic_plots, cell_annotation_diagnostic_plots_files,
-  
+
   path = drake_cache_dir
 )
 
 if (!is_null(selected_markers_plots)) {
-  selected_markers_plots_final <- dplyr::bind_cols(selected_markers_plots, selected_markers_plots_files = selected_markers_plots_files)
+  selected_markers_plots_final <- dplyr::bind_cols(
+    selected_markers_plots,
+    selected_markers_plots_files = selected_markers_plots_files
+  )
 } else {
   selected_markers_plots_final <- NULL
 }

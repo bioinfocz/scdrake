@@ -239,7 +239,8 @@ cluster_kmeans_kc_fn <- function(sce_pca, kmeans_k, integration = FALSE) {
   lapply(kmeans_k, FUN = function(k) {
     stats::kmeans(reducedDim(sce_pca, "pca"), centers = k, nstart = 25, iter.max = 1e3)$cluster %>%
       factor()
-  }) %>% set_names(clustering_names_new)
+  }) %>%
+    set_names(clustering_names_new)
 }
 
 #' @title Calculate SC3 clustering.

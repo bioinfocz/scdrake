@@ -154,13 +154,6 @@ scran_normalization <- function(sce, use_quickcluster = TRUE, quickcluster_metho
   sce <- scater::logNormCounts(sce)
   sce <- sce_add_metadata(sce, normalization_type = "scran")
 
-  # if (CC_REGRESS) {
-  #   message("Regressing out cell cycle in sce.")
-  #   sce_cor <- regressBatches(sce_norm, batch = sce_norm$phase)
-  #   assay(sce_norm, "logcounts_with_cc") <- assay(sce_norm, "logcounts")
-  #   assay(sce_norm, "logcounts") <- assay(sce_cor, "corrected")
-  # }
-
   return(sce)
 }
 
