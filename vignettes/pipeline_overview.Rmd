@@ -50,7 +50,7 @@ This is a pipeline for processing a single-sample, where input is either:
 Input specification is controlled via the `INPUT_DATA` parameter in `01_input_qc` config, and more details can be
 found in `vignette("stage_input_qc")`.
 
-> Feature-barcode matrix is similar to count matrix in bulk RNA-seq where columns are samples, rows are genes or
+Feature-barcode matrix is similar to count matrix in bulk RNA-seq where columns are samples, rows are genes or
 transcripts (features), and values are numbers of reads or UMIs overlapping the features.
 In scRNA-seq, columns are individual cells; the rest is same.
 

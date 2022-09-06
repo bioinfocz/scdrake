@@ -29,9 +29,9 @@ scdrake::init_project(tmp_dir, set_active_project = FALSE, set_wd = FALSE, ask =
 
 # Quick start guide
 
-In this guide you will see how to quickly setup `{scdrake}` and run its single-sample pipeline using the provided example data.
-Once you familiarize yourself with `{scdrake}` basics, you can continue with guide for the integration pipeline in
-`vignette("scdrake_integration")`.
+In this guide you will see how to quickly setup `{scdrake}` and run the first stage (`01_input_qc`) of its single-sample
+pipeline using the provided example data. Once you familiarize yourself with `{scdrake}` basics, you can continue with
+guide for the integration pipeline in `vignette("scdrake_integration")`.
 
 # The three steps
 
@@ -182,6 +182,10 @@ scater::plotExpression(sce, "NOC2L", exprs_values = "counts", swap_rownames = "S
 Each pipeline stage has its own vignette describing its configuration parameters and also the most important targets.
 At <https://bioinfocz.github.io/scdrake> simply navigate to the top dropdown menu Articles and choose a stage you are
 interested in.
+
+For a more schematic overview of pipelines and stages see `vignette("pipeline_overview")`. Advanced users might be
+interested in looking into source code of `{scdrake}`'s [plans](https://github.com/bioinfocz/scdrake/tree/main/R)
+(files named `plans_*.R`).
 
 ***
 
