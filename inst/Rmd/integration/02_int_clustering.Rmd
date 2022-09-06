@@ -1,5 +1,5 @@
 ---
-title: "scdrake | 02 - Clustering of integrated data"
+title: "scdrake | 02 - Post-integration clustering"
 author: "Jiri Novotny, Jan Kubovciak"
 institute: "Laboratory of Genomics and Bioinformatics @ Institute of Molecular Genetics of the ASCR"
 output:
@@ -15,18 +15,18 @@ output:
 params:
   css_file: !expr here::here("Rmd/common/stylesheet.css")
   drake_cache_dir: !expr here::here(".drake")
-date: "`r glue('Document generated: {Sys.Date()}')`"
+date: "`r glue::glue('Document generated: {Sys.Date()}')`"
 css: "`r params$css_file`"
 ---
 
 ```{r, include = FALSE, message = FALSE, warning = FALSE}
-library(drake)
+suppressPackageStartupMessages(library(magrittr))
 if (rlang::is_true(getOption("knitr.in.progress"))) {
-  params_ <- scdrake_list(params)
+  params_ <- scdrake::scdrake_list(params)
 }
 drake_cache_dir <- params_$drake_cache_dir
 
-loadd(
+drake::loadd(
   config_main, config_int_clustering,
   cluster_int_kmeans_kc_tables, cluster_int_sc3_tables, cluster_int_sc3_stability_plots,
   dimred_plots_clustering_files, dimred_plots_clustering_files_out,
@@ -43,7 +43,7 @@ cfg <- config_int_clustering
 dp_dimred_names <- cfg$INT_CLUSTERING_REPORT_DIMRED_NAMES
 dp_clustering_names <- cfg$INT_CLUSTERING_REPORT_CLUSTERING_NAMES
 dp_selected_markers <- selected_markers_plots_int_final
-dp_selected_markers_files_rel_start <- fs::path_dir(cfg$INT_CLUSTERING_REPORT_HTML_FILE)
+dp_selected_markers_files_rel_start <- if (!is_null(dp_selected_markers)) fs::path_dir(cfg$INT_CLUSTERING_REPORT_HTML_FILE) else NULL
 dp_dimred_plots_files_rel_start <- fs::path_dir(cfg$INT_CLUSTERING_REPORT_HTML_FILE)
 dp_cell_annotation_diagnostic_plots_rel_start <- fs::path_dir(cfg$INT_CLUSTERING_REPORT_HTML_FILE)
 ```
@@ -60,14 +60,24 @@ dp_cell_annotation_diagnostic_plots_rel_start <- fs::path_dir(cfg$INT_CLUSTERING
 Just to review data from the preceding pipeline step (`01 - integration`).
 
 ```{r, results = "asis"}
-catg0("The chosen integration method was '{cfg$INTEGRATION_FINAL_METHOD}'.")
+int_method_desc <- scdrake::get_int_method_description(cfg$INTEGRATION_FINAL_METHOD)
+scdrake::catg0("The chosen integration method was '{cfg$INTEGRATION_FINAL_METHOD}': {int_method_desc$header}\n\n")
 if (cfg$INTEGRATION_FINAL_METHOD_RM_CC) {
-  cat(" Cell cycle related genes were removed prior to HVG selection.\n\n")
+  cat("\n\nCell cycle related genes were removed prior to HVG selection.\n\n")
 }
 ```
 
+<details>
+  <summary class='used-functions'>Show integration method details &#9662;</summary>
+
+  `r int_method_desc$fn_link`
+
+  `r int_method_desc$description`
+
+</details>
+
 ```{r}
-cat(readd(sce_int_final_info, path = drake_cache_dir)$str)
+cat(drake::readd(sce_int_final_info, path = drake_cache_dir)$str)
 ```
 
 ***
@@ -88,23 +98,25 @@ We can visualise similarity of both assignments with heatmap and PCA.
 ```{r}
 pheatmap::pheatmap(
   table(
-    readd(cluster_int_graph_walktrap, path = drake_cache_dir)[[1]],
-    readd(cluster_int_graph_louvain, path = drake_cache_dir)[[1]]
+    drake::readd(cluster_int_graph_walktrap, path = drake_cache_dir)[[1]],
+    drake::readd(cluster_int_graph_louvain, path = drake_cache_dir)[[1]]
   )
 )
 ```
 
-**Walktrap algorithm: found `r readd(cluster_int_graph_walktrap_n, path = drake_cache_dir)` clusters.**
+**Walktrap algorithm: found `r drake::readd(cluster_int_graph_walktrap_n, path = drake_cache_dir)` clusters.**
 
 ```{r, results = "asis"}
-cells_per_cluster_table_collapsed_html(readd(cluster_int_graph_walktrap_table, path = drake_cache_dir))
+scdrake::cells_per_cluster_table_collapsed_html(drake::readd(cluster_int_graph_walktrap_table, path = drake_cache_dir))
 ```
 
-**Louvain algorithm: found `r readd(cluster_int_graph_louvain_n, path = drake_cache_dir)` clusters.**
+**Louvain algorithm: found `r drake::readd(cluster_int_graph_louvain_n, path = drake_cache_dir)` clusters.**
 
 ```{r, results = "asis"}
-cells_per_cluster_table_collapsed_html(readd(cluster_int_graph_louvain_table, path = drake_cache_dir))
+scdrake::cells_per_cluster_table_collapsed_html(drake::readd(cluster_int_graph_louvain_table, path = drake_cache_dir))
 ```
+
+`r scdrake::format_used_functions(c("scran::buildSNNGraph()", "igraph::cluster_walktrap()", "igraph::cluster_louvain()"))`
 
 ## k-means
 
@@ -119,14 +131,16 @@ We need to define the number of clusters in advance.
 Determining the number of clusters from the gap statistics and their standard deviations.
 
 ```{r}
-readd(kmeans_gaps_plot, path = drake_cache_dir)
+drake::readd(kmeans_gaps_plot, path = drake_cache_dir)
 ```
 
-**The best K selected: `r readd(kmeans_best_k, path = drake_cache_dir)`**
+**The best K selected: `r drake::readd(kmeans_best_k, path = drake_cache_dir)`**
 
 ```{r, results = "asis"}
-cells_per_cluster_table_collapsed_html(readd(cluster_int_kmeans_kbest_table, path = drake_cache_dir))
+scdrake::cells_per_cluster_table_collapsed_html(drake::readd(cluster_int_kmeans_kbest_table, path = drake_cache_dir))
 ```
+
+`r scdrake::format_used_functions(c("cluster::clusGap()", "cluster::maxSE()", "stats::kmeans()"))`
 
 ### Custom K {.tabset}
 
@@ -134,11 +148,13 @@ cells_per_cluster_table_collapsed_html(readd(cluster_int_kmeans_kbest_table, pat
 
 ```{r, results = "asis"}
 for (k in cfg$KMEANS_K) {
-  cluster_col <- glue("cluster_int_kmeans_kc_{k}")
-  md_header(glue("k = {k}"), 4)
-  cells_per_cluster_table_collapsed_html(cluster_int_kmeans_kc_tables[[cluster_col]])
+  cluster_col <- glue::glue("cluster_int_kmeans_kc_{k}")
+  scdrake::md_header(glue::glue("k = {k}"), 4)
+  scdrake::cells_per_cluster_table_collapsed_html(cluster_int_kmeans_kc_tables[[cluster_col]])
 }
 ```
+
+`r scdrake::format_used_functions("stats::kmeans()")`
 
 ## SC3 {.tabset}
 
@@ -150,14 +166,16 @@ The stability index varies between 0 and 1, where 1 means that the same cluster 
 
 ```{r, results = "asis"}
 for (k in cfg$SC3_K) {
-  cluster_col <- glue("cluster_int_sc3_{k}")
-  md_header(glue("k = {k}"), 3)
-  cells_per_cluster_table_collapsed_html(cluster_int_sc3_tables[[cluster_col]])
+  cluster_col <- glue::glue("cluster_int_sc3_{k}")
+  scdrake::md_header(glue::glue("k = {k}"), 3)
+  scdrake::cells_per_cluster_table_collapsed_html(cluster_int_sc3_tables[[cluster_col]])
   print(cluster_int_sc3_stability_plots[[cluster_col]])
 }
 ```
 
 #
+
+`r scdrake::format_used_functions(c("SC3::sc3()", "SC3::sc3_plot_cluster_stability()"))`
 
 ***
 

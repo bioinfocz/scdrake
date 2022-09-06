@@ -1,6 +1,6 @@
 ## Detecting empty droplets
 
-`emptyDrops()` computes Monte Carlo p-values based on a Dirichlet-multinomial model of sampling molecules into droplets. 
+`DropletUtils::emptyDrops()` computes Monte Carlo p-values based on a Dirichlet-multinomial model of sampling molecules into droplets. 
 `emptyDrops()` assumes that libraries with total UMI counts below a certain threshold (`r cfg$EMPTY_DROPLETS_LOWER` by default)
 correspond to empty droplets.
 These are used to estimate the ambient expression profile against which the remaining libraries are tested.
@@ -20,3 +20,5 @@ Droplets with empty-droplet FDR > `r cfg$EMPTY_DROPLETS_FDR_THRESHOLD` have been
 ```{r}
 cat(sce_valid_cells_info$str)
 ```
+
+`r scdrake::format_used_functions("DropletUtils::emptyDrops()")`

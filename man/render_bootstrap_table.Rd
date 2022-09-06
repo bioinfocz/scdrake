@@ -9,6 +9,7 @@ render_bootstrap_table(
   bootstrap_options = c("striped", "hover", "condensed"),
   full_width = TRUE,
   position = "center",
+  row.names = TRUE,
   ...
 )
 }
@@ -16,6 +17,8 @@ render_bootstrap_table(
 \item{df}{A dataframe-like object.}
 
 \item{bootstrap_options, full_width, position}{Passed to \code{\link[kableExtra:kable_styling]{kableExtra::kable_styling()}}.}
+
+\item{row.names}{Passed to \code{\link[knitr:kable]{knitr::kable()}}.}
 
 \item{...}{Passed to \code{\link[knitr:kable]{knitr::kable()}} and \code{\link[kableExtra:kable_styling]{kableExtra::kable_styling()}}.}
 }

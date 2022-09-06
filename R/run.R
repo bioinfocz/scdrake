@@ -115,6 +115,7 @@ run_single_sample <- function(pipeline_config_dir = getOption("scdrake_pipeline_
 #' @inheritParams integration_config_dir
 #'
 #' @rdname run_pipeline
+#' @export
 run_integration <- function(pipeline_config_dir = getOption("scdrake_pipeline_config_dir"),
                             integration_config_dir = getOption("scdrake_integration_config_dir"),
                             project_root = getOption("scdrake_project_root"),

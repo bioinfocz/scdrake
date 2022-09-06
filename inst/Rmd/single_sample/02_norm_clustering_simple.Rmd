@@ -15,18 +15,18 @@ output:
 params:
   css_file: !expr here::here("Rmd/common/stylesheet.css")
   drake_cache_dir: !expr here::here(".drake")
-date: "`r glue('Document generated: {Sys.Date()}')`"
+date: "`r glue::glue('Document generated: {Sys.Date()}')`"
 css: "`r params$css_file`"
 ---
 
 ```{r, include = FALSE, message = FALSE, warning = FALSE}
-library(drake)
+suppressPackageStartupMessages(library(magrittr))
 if (rlang::is_true(getOption("knitr.in.progress"))) {
-  params_ <- scdrake_list(params)
+  params_ <- scdrake::scdrake_list(params)
 }
 drake_cache_dir <- params_$drake_cache_dir
 
-loadd(
+drake::loadd(
   config_main, config_norm_clustering,
   dimred_plots_clustering_files, dimred_plots_clustering_files_out,
   dimred_plots_other_vars_files, dimred_plots_other_vars_files_out,
@@ -36,7 +36,7 @@ loadd(
   path = drake_cache_dir
 )
 
-if (!is_null(selected_markers_plots)) {
+if (!rlang::is_null(selected_markers_plots)) {
   selected_markers_plots_final <- dplyr::bind_cols(
     selected_markers_plots,
     selected_markers_plots_files = selected_markers_plots_files

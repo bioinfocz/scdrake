@@ -81,7 +81,7 @@
 #' @rdname update_config
 #' @export
 update_config <- function(default_file,
-                          use_default_structure = TRUE,
+                          use_default_structure = FALSE,
                           force = FALSE,
                           yq_binary = getOption("scdrake_yq_binary"),
                           verbose = getOption("scdrake_verbose")) {

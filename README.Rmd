@@ -34,9 +34,9 @@ The main features of the `{scdrake}` pipeline are:
 - Cell type annotation.
 - Integration of multiple datasets.
 - Computation of cluster markers and differentially expressed genes between clusters (denoted as "contrasts").
-- Rich graphical and HTML outputs.
+- Rich graphical and HTML outputs based on customizable RMarkdown documents.
   - You can find links to example outputs [here](https://bioinfocz.github.io/scdrake/articles/pipeline_overview.html).
-- Thanks to `{drake}`, the pipeline is highly scalable and reproducible.
+- Thanks to `{drake}`, the pipeline is highly efficient, scalable and reproducible, and also extendable.
   - Want to change some parameter? No problem! Only parts of the pipeline which changed will rerun,
     while up-to-date ones will be skipped.
   - Want to reuse the intermediate results for your own analyses? No problem!

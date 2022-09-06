@@ -319,7 +319,7 @@ check_pkg_installed <- function(pkg, msg = "") {
   if (!pkg_installed) {
     cli({
       cli_alert_warning("Package {.pkg {pkg}} is not installed. {msg}")
-      cli_alert_info('Consider its installation with {.code BiocManager::install("{pkg}")}')
+      cli_alert_info('Please, consider its installation with\n{.code BiocManager::install("{pkg}")}')
     })
   }
 
@@ -338,19 +338,87 @@ check_qs_installed <- function() {
 #' @rdname check_pkg_installed
 #' @export
 check_future_installed <- function() {
-  check_pkg_installed("future", "It is used for {.pkg drake}'s parallelism.")
+  check_pkg_installed("future", "It is used for drake's parallelism (alternative to {.pkg clustermq}).")
 }
 
 #' @rdname check_pkg_installed
 #' @export
 check_clustermq_installed <- function() {
-  check_pkg_installed("clustermq", "It is used for {.pkg drake}'s parallelism.")
+  # check_pkg_installed("clustermq", "It is used for {.pkg drake}'s parallelism.")
+  clustermq_installed <- rlang::is_installed("clustermq")
+
+  if (clustermq_installed) {
+    clustermq_version <- utils::packageVersion("clustermq")
+  } else {
+    clustermq_version <- numeric_version(0)
+  }
+
+  if (!clustermq_installed || clustermq_version > "0.8.8") {
+    cli({
+      cli_alert_warning(str_space(
+        "Package {.pkg clustermq} used for drake's parallelism (alternative to {.pkg future}) is not installed, or its version",
+        "({.field {clustermq_version}}) is different than {.field 0.8.8} and may cause {.pkg drake}'s parallel",
+        "execution to hang."
+      ))
+      cli_alert_info(str_space("
+        Please, consider installing the required version with\n",
+        '{.field remotes::install_version("clustermq", version = "0.8.8")}'
+      ))
+    })
+
+    return(FALSE)
+  }
+
+  return(TRUE)
 }
 
 #' @rdname check_pkg_installed
 #' @export
 check_future.callr_installed <- function() {
   check_pkg_installed("future.callr", "It is used as a backend for {.pkg drake}'s future parallelism.")
+}
+
+#' @rdname check_pkg_installed
+#' @export
+check_sc3_version <- function() {
+  sc3_source <- sessioninfo::package_info(pkgs = "installed") %>%
+    dplyr::filter(.data$package == "SC3") %>%
+    dplyr::pull(.data$source)
+
+  if (is_empty(sc3_source) || !stringr::str_detect(sc3_source, stringr::fixed("gorgitko/SC3"))) {
+    cli_alert_danger(str_space(
+      "The {.pkg SC3} package is not installed from the GitHub repository {.field gorgitko/SC3}",
+      "which has enhanced parallel execution compared to the original Bioconductor version. This can happen when you update",
+      "all packages with {.field BiocManager::install()}."
+    ))
+    cli_alert_info(str_space(
+      "Please, consider installing the modified {.pkg SC3} version with\n",
+      '{.field BiocManager::install("gorgitko/SC3")}'
+    ))
+    return("bioconductor")
+  }
+
+  if (is_empty(sc3_source)) {
+    return(FALSE)
+  }
+
+  return("github")
+}
+
+#' @rdname check_pkg_installed
+#' @export
+check_scdrake_packages <- function() {
+  cli::cli_h3("{.pkg scdrake} package checks")
+  check_qs_installed()
+  check_clustermq_installed()
+  check_future_installed()
+  if (!parallelly::supportsMulticore()) {
+    check_future.callr_installed()
+  }
+  check_sc3_version()
+  cli::cli_h3("Done")
+
+  invisible(NULL)
 }
 
 #' @title Set `rstudio_drake_cache` option.

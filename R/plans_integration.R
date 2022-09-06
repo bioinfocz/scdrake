@@ -296,6 +296,7 @@ get_int_clustering_subplan <- function(cfg, cfg_pipeline, cfg_main) {
         dimred_plots_clustering_params = dimred_plots_clustering_params,
         kmeans_k = !!cfg$KMEANS_K,
         sc3_k = !!cfg$SC3_K,
+        sc3_dry = !!cfg$SC3_DRY,
         out_dir = !!cfg$INT_CLUSTERING_DIMRED_PLOTS_OUT_DIR,
         integration = TRUE
       ),
@@ -326,11 +327,12 @@ get_int_clustering_subplan <- function(cfg, cfg_pipeline, cfg_main) {
     ),
 
     ## -- Selected markers plots for the chosen integration method.
-    selected_markers_plots_int_final = dplyr::bind_cols(
+    selected_markers_plots_int_final = selected_markers_plots_int_final_fn(
       selected_markers_plots_int_df,
-      selected_markers_plots_files = selected_markers_plots_int_files
-    ) %>%
-      dplyr::filter(name == !!cfg$INTEGRATION_FINAL_METHOD, hvg_rm_cc_genes == !!cfg$INTEGRATION_FINAL_METHOD_RM_CC),
+      selected_markers_plots_int_files,
+      !!cfg$INTEGRATION_FINAL_METHOD,
+      !!cfg$INTEGRATION_FINAL_METHOD_RM_CC
+    ),
 
     ## -- HTML report
     report_int_clustering = target(

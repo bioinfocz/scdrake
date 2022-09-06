@@ -1,4 +1,4 @@
-# scdrake (development version)
+# scdrake 1.3.0
 
 - Added support for a custom plan located (by default) in `plan_custom.R` script in project directory.
 - The GitHub version of `{SingleR}` was removed from `DESCRIPTION` as the version for the current Bioconductor version
@@ -6,11 +6,19 @@
   installation error on Bioc 3.15
 - Fixed "object cfg not found".
 - Documentation has been improved:
-  - Clearer instruction in Get Started vignette. The part about the integration pipeline was moved to a separate
+  - Clearer instructions in the Get Started vignette. The part about the integration pipeline was moved to a separate
     vignette.
   - New vignettes about extension of the pipeline and FAQ & Howto.
   - Clearer installation instructions, including commands needed to install shared libraries on different OSs.
   - Some parts in other vignettes have been rewritten, spellchecked and improved cosmetically.
+- Cell or gene filtering can be now disabled by a single parameter (`ENABLE_CELL_FILTERING`, `ENABLE_GENE_FILTERING`).
+- Require `{clustermq}` version `>= 0.8.8`, but show a warning if the version is greater.
+- Checks for `{SC3}` version if it is not installed from `github.com/gorgitko/SC3`, but also allow version from Bioconductor.
+- Show used functions with links in stage reports.
+- New pipeline config variable `DRAKE_REBUILD` allowing to force rebuild targets.
+- Fixed various corner case bugs.
+- Small enhancements in some functions.
+- Some vignettes have been extended or updated.
 
 # scdrake 1.2.3
 

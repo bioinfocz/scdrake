@@ -18,6 +18,7 @@ css: "`r here::here('Rmd/common/stylesheet.css')`"
 
 ```{r, include = FALSE}
 knitr::opts_chunk$set(echo = FALSE, warning = FALSE, message = FALSE)
+suppressPackageStartupMessages(library(magrittr))
 DT::datatable(matrix())
 ```
 
@@ -34,7 +35,7 @@ body .main-container {
 ```
 
 ```{r}
-other_params <- scdrake_list(params$other_params)
+other_params <- scdrake::scdrake_list(params$other_params)
 ```
 
 <details style="display: inline !important;">
@@ -62,10 +63,10 @@ other_params <- scdrake_list(params$other_params)
 ## Dimred plots {.tabset}
 
 ```{r, results = "asis"}
-x <- lapply_rows(other_params$dimred_plots, FUN = function(par) {
-  md_header(str_to_upper(par$plot_dimreds), 3)
+x <- scdrake::lapply_rows(other_params$dimred_plots, FUN = function(par) {
+  scdrake::md_header(str_to_upper(par$plot_dimreds), 3)
   p <- par$plot
-  highlight_points(p, column_name = "colour_by", levels = c(other_params$target, other_params$reference)) %>% print()
+  scdrake::highlight_points(p, column_name = "colour_by", levels = c(other_params$target, other_params$reference)) %>% print()
 })
 ```
 

@@ -207,16 +207,8 @@ with the previous report.
 
 # Running the pipeline in parallel mode
 
-Because `{drake}` knows the inner relationships between targets in your plan, it also knows which targets are
-independent of each other, and thus, can be run concurrently. This is called *implicit parallelism*, and to fully
-utilize this important feature, you just need to modify `config/pipeline.yaml` by setting `DRAKE_PARALLELISM` to either:
-
-- `"future"`: uses the `{future}` as the backend. This backend should work by simply installing the `{future}` package.
-- `"clustermq"`: uses the `{clustermq}` as the backend. This is faster than `"future"`, but besides the `{clustermq}`
-  package it also requires the [ZeroMQ](https://zeromq.org/) library to be [installed](https://zeromq.org/download/)
-  on your system.
-  - `{clustermq}` also supports HPC cluster schedulers, see
-    [here](https://books.ropensci.org/drake/hpc.html#the-template-argument-for-persistent-workers) for more details.
+```{r, child = "_drake_parallelism.Rmd"}
+```
 
 ***
 

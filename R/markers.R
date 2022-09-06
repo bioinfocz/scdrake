@@ -316,14 +316,16 @@ marker_heatmap <- function(seu,
     }
   }
 
-  p_heatmap <- Seurat::DoHeatmap(seu, features = markers_top$SYMBOL, assay = assay, slot = slot, angle = angle, ...) +
-    fill_scale +
-    ggtitle(label = title, subtitle = subtitle) +
-    theme(
-      axis.text.y = element_text(size = y_text_size),
-      title = element_text(size = 8),
-      plot.subtitle = element_text(size = 7)
-    )
+  p_heatmap <- suppressMessages(
+    Seurat::DoHeatmap(seu, features = markers_top$SYMBOL, assay = assay, slot = slot, angle = angle, ...) +
+      fill_scale +
+      ggtitle(label = title, subtitle = subtitle) +
+      theme(
+        axis.text.y = element_text(size = y_text_size),
+        title = element_text(size = 8),
+        plot.subtitle = element_text(size = 7)
+      )
+  )
 
   return(list(p_heatmap = p_heatmap, markers_top = markers_top))
 }
@@ -463,8 +465,7 @@ marker_plot <- function(sce,
     sce,
     features = gene_ensembl_id,
     group = group_name,
-    low_color = "lightgrey",
-    high_color = "blue"
+    color = c("lightgrey", "blue")
   ) +
     guides(color = ggplot2::guide_colorbar(barwidth = 8, title.vjust = 0.9)) +
     labs(title = gene_title, x = NULL) +
@@ -483,7 +484,7 @@ marker_plot <- function(sce,
     groups = group_name,
     labs = labs(title = NULL, x = vln_plot_legend_title, y = "log2(expression)", fill = vln_plot_legend_title)
   ) +
-    guides(color = FALSE) +
+    guides(color = "none") +
     p_clusters$theme
 
   p <- (p_clusters | p_expression) / p_dot / p_vln
@@ -514,7 +515,7 @@ markers_plots_files <- function(sce_dimred, markers_plots_top, save = TRUE, dry 
 
   markers_plots_top <- lapply_rows(markers_plots_top, FUN = function(par) {
     if (!dry) {
-      p <- marker_plot(
+      p <- suppressMessages(marker_plot(
         sce_dimred,
         dimred_name = par$plot_dimreds,
         gene_ensembl_id = par$ENSEMBL,
@@ -524,7 +525,7 @@ markers_plots_files <- function(sce_dimred, markers_plots_top, save = TRUE, dry 
         cluster_plot_legend_title = "",
         # vln_plot_legend_title = source_column
         vln_plot_legend_title = "",
-      )
+      ))
 
       par$marker_plot <- p
     } else {

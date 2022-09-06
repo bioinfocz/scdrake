@@ -43,6 +43,11 @@ Quick start vignette (`vignette("scdrake")`).
 If the problem persists, feel free to [open a new issue](https://github.com/bioinfocz/scdrake/issues) or start a
 [discussion](https://github.com/bioinfocz/scdrake/discussions).
 
+# I want to run the pipeline in parallel mode
+
+```{r, child = "_drake_parallelism.Rmd"}
+```
+
 # I want to change the output directory
 
 This can be simply done by changing the appropriate parameters in config files:
@@ -62,6 +67,7 @@ the `drake::loadd()` or `drake::readd()` functions:
 
 ```{r, eval = FALSE}
 drake::loadd(name_of_target)
+## -- name_of_target can be either quoted (character) or unquoted (symbol)
 target <- drake::readd(name_of_target)
 ```
 
@@ -121,3 +127,12 @@ NORMALIZATION_TYPE: "none"
 
 The `my_cell_types` column can be now used for different purposes, e.g. for cluster markers detection, differential
 expression (stage `contrasts`) or visualization.
+
+# A target is not getting built
+
+It might happen a target (especially RMarkdown one) is not getting built although some changes were introduced.
+However, you can either:
+
+- Manually invalidate the target in `{drake}` cache using the `drake::clean()` function and
+  it will be built from scratch next time you run the pipeline.
+- Use the `DRAKE_REBUILD` parameter in `config/pipeline.yaml` (see `vignette("config_pipeline")`).

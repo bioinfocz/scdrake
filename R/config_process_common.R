@@ -260,13 +260,13 @@ NULL
       cfg$DRAKE_PARALLELISM <- "loop"
       cfg$DRAKE_N_JOBS <- 1L
       cfg$DRAKE_N_JOBS_PREPROCESS <- 1L
-      cli_alert_info("Setting {.pkg drake} parallelism to {.val loop}")
+      cli_alert_info("Setting {.pkg drake} parallelism to {.val loop} (fallback).")
     }
   }
 
   if (cfg$DRAKE_FORMAT == "qs" && !check_qs_installed()) {
     cfg$DRAKE_FORMAT <- "rds"
-    cli_alert_info("Setting {.pkg drake} storage format to {.val rds}")
+    cli_alert_info("Setting {.pkg drake} storage format to {.val rds} (fallback).")
   }
 
   cfg$DRAKE_VERBOSITY <- as.integer(cfg$DRAKE_VERBOSITY)

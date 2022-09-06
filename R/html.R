@@ -6,6 +6,8 @@
 #' @param output_dir A character scalar: path to directory in which `out_html_file_name` will be created.
 #'   This directory will be created if it does not exist.
 #' @param css_file A character scalar: path to CSS file which will be included in the resulting HTML.
+#' @param params A list of RMarkdown document parameters:
+#'   passed to [rmarkdown::render()] together with `css_file` and `drake_cache_dir` items.
 #' @param message,warning,echo A logical scalar: passed to `knitr::opts_chunk$set()`.
 #' @param quiet A logical scalar: if `TRUE`, do not be verbose during rendering. Passed to [rmarkdown::render()].
 #' @param other_deps A list of symbols (unquoted): used inside [drake::plan()] to mark other target dependencies,
@@ -76,6 +78,7 @@ generate_stage_report <- function(rmd_file,
                                   out_html_file_name,
                                   output_dir = fs::path_dir(out_html_file_name),
                                   css_file = here("Rmd/common/stylesheet.css"),
+                                  params = list(),
                                   message = TRUE,
                                   warning = TRUE,
                                   echo = TRUE,
@@ -108,7 +111,7 @@ generate_stage_report <- function(rmd_file,
     rmd_file,
     output_dir = output_dir,
     output_file = out_html_file_name,
-    params = list(css_file = css_file, drake_cache_dir = drake_cache_dir),
+    params = c(list(css_file = css_file, drake_cache_dir = drake_cache_dir), params),
     envir = new.env(),
     knit_root_dir = here(),
     quiet = quiet,
@@ -119,6 +122,7 @@ generate_stage_report <- function(rmd_file,
 #' @title Render a dataframe-like object using [knitr::kable()] and [kableExtra::kable_styling()].
 #' @param df A dataframe-like object.
 #' @param bootstrap_options,full_width,position Passed to [kableExtra::kable_styling()].
+#' @param row.names Passed to [knitr::kable()].
 #' @param ... Passed to [knitr::kable()] and [kableExtra::kable_styling()].
 #' @return An object of class `kableExtra` and `knitr_kable`.
 #'
@@ -128,8 +132,9 @@ render_bootstrap_table <- function(df,
                                    bootstrap_options = c("striped", "hover", "condensed"),
                                    full_width = TRUE,
                                    position = "center",
+                                   row.names = TRUE,
                                    ...) {
-  df_kable <- knitr::kable(df, ...)
+  df_kable <- knitr::kable(df, row.names = row.names, ...)
 
   rlang::exec(
     kableExtra::kable_styling,
@@ -405,4 +410,33 @@ generate_dimred_plots_section <- function(dimred_names,
   }))
 
   invisible(NULL)
+}
+
+#' @title Use the `{downlit}` package to generate a Markdown list of autolinked functions wrapped inside `<details>` tags.
+#' @param functions A character scalar: functions to be autolinked, e.g. `scran::clusterCells()`.
+#' @param do_cat A logical scalar: if `TRUE`, cat the result to stdout.
+#' @return A character scalar. Invisibly if `do_cat` is `TRUE`.
+#'
+#' @examples
+#' format_used_functions(c("scran::clusterCells()", "Seurat::DimPlot()"), do_cat = TRUE)
+#'
+#' @concept misc_html
+#' @export
+format_used_functions <- function(functions, do_cat = FALSE) {
+  function_links <- purrr::map_chr(functions, ~ gluec("- `{.}`") %>% downlit::downlit_md_string() %>% stringr::str_trim())
+  out <- str_line(
+    "\n<details>",
+    "  <summary class='used-functions'>Show used functions \u25be</summary>\n",
+    "  <div class='used-functions-content'>",
+    str_line(function_links),
+    "\n  </div>",
+    "</details>\n\n"
+  )
+
+  if (do_cat) {
+    cat(out)
+    return(invisible(out))
+  } else {
+    return(out)
+  }
 }

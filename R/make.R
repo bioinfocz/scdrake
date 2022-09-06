@@ -28,6 +28,8 @@ scdrake_make <- function(plan,
                          log_worker = TRUE,
                          options = list(),
                          ...) {
+  check_scdrake_packages()
+
   if (is_null(cfg_pipeline)) {
     cfg_pipeline <- load_pipeline_config()
   }
@@ -40,8 +42,10 @@ scdrake_make <- function(plan,
 
     if (parallelly::supportsMulticore()) {
       future::plan(future::multicore, workers = cfg_pipeline$DRAKE_N_JOBS)
+      cli_alert_info("Using {.code future::multicore} with {cfg_pipeline$DRAKE_N_JOBS} workers.")
     } else {
       future::plan(future.callr::callr, workers = cfg_pipeline$DRAKE_N_JOBS)
+      cli_alert_info("Using {.code future.callr::callr} (multisession) with {cfg_pipeline$DRAKE_N_JOBS} workers.")
     }
   }
 
@@ -67,7 +71,6 @@ scdrake_make <- function(plan,
     withr::defer(RhpcBLASctl::blas_set_num_threads(blas_threads_orig))
   }
 
-  # if (!is_null(cfg_pipeline$RSTUDIO_PANDOC) && get_sys_env("RSTUDIO_PANDOC", type = "character", verbose = FALSE) != "") {
   if (!is_null(cfg_pipeline$RSTUDIO_PANDOC)) {
     withr::local_envvar(RSTUDIO_PANDOC = cfg_pipeline$RSTUDIO_PANDOC)
   }
@@ -83,6 +86,33 @@ scdrake_make <- function(plan,
   if (cfg_pipeline$DRAKE_UNLOCK_CACHE && !is_null(drake_cache_object)) {
     cli_alert_info("Unlocking {.pkg drake} cache in {.file {cfg_pipeline$DRAKE_CACHE_DIR}}")
     drake_cache_object$unlock()
+  }
+
+  drake_rebuild <- cfg_pipeline$DRAKE_REBUILD
+  drake_trigger <- drake::trigger()
+
+  if (is_scalar_character(drake_rebuild)) {
+    ## -- NULL means all targets, so rebuild them all.
+    if (is_null(cfg_pipeline$DRAKE_TARGETS)) {
+      drake_rebuild <- "all"
+    }
+
+    if (drake_rebuild == "all") {
+      str_line(
+        "{.field DRAKE_REBUILD} is {.val 'all'} -> ",
+        "the pipeline will be run from scratch."
+      ) %>% cli_alert_info()
+      drake_trigger <- drake::trigger(condition = TRUE)
+    } else if (drake_rebuild == "current") {
+      str_line(
+        "{.field DRAKE_REBUILD} is {.val 'current'} -> ",
+        "calling {.code drake::clean({dput(cfg_pipeline$DRAKE_TARGETS)}, path = {DRAKE_CACHE_DIR})}"
+      ) %>%
+        cli_alert_info()
+      drake::clean(list = cfg_pipeline$DRAKE_TARGETS, path = cfg_pipeline$DRAKE_CACHE_DIR)
+    } else {
+      cli_alert_warning("Unknown value for {.field DRAKE_REBUILD}: {.val {drake_rebuild}}")
+    }
   }
 
   withr::local_options(
@@ -113,6 +143,8 @@ scdrake_make <- function(plan,
     cli::cli_ul(drake::outdated(plan = plan, targets = cfg_pipeline$DRAKE_TARGETS, cache = drake_cache_object))
   })
 
+  packages <- c("HDF5Array", "ensembldb", rev(.packages()))
+
   drake::make(
     plan,
     targets = cfg_pipeline$DRAKE_TARGETS,
@@ -122,8 +154,9 @@ scdrake_make <- function(plan,
     parallelism = cfg_pipeline$DRAKE_PARALLELISM,
     jobs = cfg_pipeline$DRAKE_N_JOBS,
     jobs_preprocess = cfg_pipeline$DRAKE_N_JOBS_PREPROCESS,
-    packages = c("HDF5Array", rev(.packages())),
+    packages = packages[packages != "scdrake"],
     prework = prework,
+    trigger = drake_trigger,
     seed = cfg_pipeline$SEED,
     caching = caching,
     keep_going = cfg_pipeline$DRAKE_KEEP_GOING,
@@ -156,6 +189,9 @@ scdrake_make <- function(plan,
 #' @rdname scdrake_make
 #' @export
 scdrake_r_make <- function(drake_file = NULL, ...) {
+  cli_alert_info(
+    "Calling {.code drake::r_make()} using the entry script {.file {if (is_null(drake_file)) '_drake.R' else drake_file}}"
+  )
   drake::r_make(drake_file, ...)
   return(invisible(TRUE))
 }

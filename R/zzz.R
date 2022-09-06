@@ -151,7 +151,6 @@ get_scdrake_options <- function() {
   options(get_scdrake_default_options())
   set_rstudio_drake_cache(getOption("scdrake_cache_dir"))
   Sys.setenv(`_R_CHECK_LENGTH_1_CONDITION_` = "true")
-  check_qs_installed()
 }
 
 .onAttach <- function(libname, pkgname) {

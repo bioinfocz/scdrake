@@ -9,6 +9,7 @@ dimred_plots_clustering_fn(
   dimred_plots_clustering_params,
   kmeans_k,
   sc3_k,
+  sc3_dry,
   out_dir = NULL,
   integration = FALSE
 )
@@ -24,6 +25,9 @@ dimred_plots_clustering_fn(
 
 \item{sc3_k}{An integer vector: : number of clusters for SC3 clustering. Taken from \code{SC3_K} parameter in
 \verb{02_norm_clustering.yaml} or \verb{02_int_clustering.yaml} config.}
+
+\item{sc3_dry}{A logical scalar: whether SC3 was run in dry mode, that is, random clusters were assigned to cells.
+Taken from \code{SC3_DRY} parameter in \verb{02_norm_clustering.yaml} or \verb{02_int_clustering.yaml} config.}
 
 \item{out_dir}{A character scalar: output directory in which PDF and PNG files will be saved.}
 

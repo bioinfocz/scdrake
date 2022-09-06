@@ -9,6 +9,7 @@ generate_stage_report(
   out_html_file_name,
   output_dir = fs::path_dir(out_html_file_name),
   css_file = here("Rmd/common/stylesheet.css"),
+  params = list(),
   message = TRUE,
   warning = TRUE,
   echo = TRUE,
@@ -27,6 +28,9 @@ generate_stage_report(
 This directory will be created if it does not exist.}
 
 \item{css_file}{A character scalar: path to CSS file which will be included in the resulting HTML.}
+
+\item{params}{A list of RMarkdown document parameters:
+passed to \code{\link[rmarkdown:render]{rmarkdown::render()}} together with \code{css_file} and \code{drake_cache_dir} items.}
 
 \item{message, warning, echo}{A logical scalar: passed to \code{knitr::opts_chunk$set()}.}
 
@@ -66,7 +70,12 @@ This is a list of Rmd files currently bundled with the \code{scdrake} package:
 #> |   \\-- 02_int_clustering.Rmd
 #> \\-- single_sample
 #>     +-- 01_input_qc.Rmd
-#>     +-- 01_input_qc_empty_droplets.Rmd
+#>     +-- 01_input_qc_children
+#>     |   +-- cell_filtering_custom.Rmd
+#>     |   +-- cell_filtering_qc.Rmd
+#>     |   +-- empty_droplets.Rmd
+#>     |   +-- gene_filtering_custom.Rmd
+#>     |   \\-- gene_filtering_qc.Rmd
 #>     +-- 02_norm_clustering.Rmd
 #>     \\-- 02_norm_clustering_simple.Rmd
 }\if{html}{\out{</div>}}

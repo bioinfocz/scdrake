@@ -55,24 +55,25 @@ get_top_hvgs <- function(sce_norm,
 #' @param sce A `SingleCellExperiment` object.
 #' @param var_expl_threshold A numeric scalar: threshold for variance explained.
 #'   Features exceeding this threshold will be marked as CC-related.
-#' @param variable A character scalar: column to use for variance explained computation.
+#' @param variable A character scalar: column to use for calculation of variance explained.
+#' @param ... Passed to [scater::getVarianceExplained()].
 #' @return A character vector of gene IDs marked as CC-related.
 #'
 #' @concept sc_hvg
 #' @export
-sce_get_cc_genes <- function(sce, var_expl_threshold, variable = "phase") {
-  cc_genes_var_expl <- scater::getVarianceExplained(sce, variables = variable) %>% as.data.frame()
+sce_get_cc_genes <- function(sce, var_expl_threshold, variable = "phase", ...) {
+  cc_genes_var_expl <- scater::getVarianceExplained(sce, variables = variable, ...) %>% as.data.frame()
   to_remove <- cc_genes_var_expl$phase > var_expl_threshold
 
-  if (any(to_remove)) {
-    to_remove_ids <- rownames(sce)[to_remove]
-    cli_alert_info("Found {length(to_remove_ids)} cell cycle-related genes.")
+  if (all(!is.na(to_remove)) && any(to_remove)) {
+    cc_gene_ids <- rownames(sce)[to_remove]
+    cli_alert_info("Found {length(cc_gene_ids)} cell cycle-related genes.")
   } else {
-    to_remove_ids <- c()
+    cc_gene_ids <- c()
     cli_alert_info("No cell cycle-related genes exceeding the variance explained threshold were found.")
   }
 
-  return(to_remove_ids)
+  return(list(cc_gene_ids = cc_gene_ids, cc_genes_var_expl = cc_genes_var_expl))
 }
 
 #' @title Remove cell cycle-related genes from HVGs.
@@ -80,6 +81,7 @@ sce_get_cc_genes <- function(sce, var_expl_threshold, variable = "phase") {
 #' @param var_expl_threshold A numeric scalar: threshold for variance explained.
 #'   Genes exceeding this threshold will be marked as CC-related.
 #' @param variable A character scalar: column to use for variance explained computation.
+#' @param hvg_metric_fit A `DataFrame` object.
 #' @param ... Passed to [get_top_hvgs()].
 #' @return A `SingleCellExperiment` object with removed CC-related genes from HVGs.
 #'
@@ -97,25 +99,38 @@ sce_get_cc_genes <- function(sce, var_expl_threshold, variable = "phase") {
 sce_remove_cc_genes <- function(sce,
                                 var_expl_threshold,
                                 variable = "phase",
+                                hvg_metric_fit = NULL,
                                 ...) {
   sce <- sce_add_metadata(sce, hvg_rm_cc_genes = TRUE, hvg_cc_genes_var_expl_threshold = var_expl_threshold)
-  cc_gene_ids <- sce_get_cc_genes(sce, var_expl_threshold, variable = variable)
+  cc_genes_data <- sce_get_cc_genes(sce, var_expl_threshold, variable = variable)
+  cc_gene_ids <- cc_genes_data$cc_gene_ids
 
   if (!is_empty(cc_gene_ids)) {
     cli_alert_info("Removing {length(cc_gene_ids)} cell cycle-related genes prior to HVG selection.")
     hvg_metric_fit <- metadata(sce)$hvg_metric_fit
     is_cc_related <- rownames(hvg_metric_fit) %in% cc_gene_ids
-    rowData(sce) <- cbind(rowData(sce), is_cc_related = is_cc_related)
+    rowData(sce) <- cbind(
+      rowData(sce),
+      is_cc_related = is_cc_related,
+      phase_variance_explained = cc_genes_data$cc_genes_var_expl$phase
+    )
     hvg_ids <- get_top_hvgs(
       sce_norm = sce,
       hvg_metric_fit = hvg_metric_fit[!is_cc_related, ],
       ...
     )
 
-    sce <- sce_add_metadata(sce, hvg_ids = hvg_ids, hvg_rm_cc_genes_ids = cc_gene_ids)
+    sce <- sce_add_metadata(
+      sce,
+      hvg_ids = hvg_ids,
+      hvg_rm_cc_genes_ids = cc_gene_ids
+    )
   } else {
-    cli_alert_info("No cell cycle-related genes exceeding the variance explained threshold were found.")
-    rowData(sce) <- cbind(rowData(sce), is_cc_related = rep(FALSE, nrow(sce)))
+    rowData(sce) <- cbind(
+      rowData(sce),
+      is_cc_related = rep(FALSE, nrow(sce)),
+      phase_variance_explained = rep(NA, nrow(sce))
+    )
     sce <- sce_add_metadata(sce, hvg_rm_cc_genes_ids = c())
   }
 

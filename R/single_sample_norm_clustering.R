@@ -72,17 +72,35 @@ cc_genes_fn <- function(sce_final_input_qc, organism, annotation_db_file) {
 #' @export
 sce_cc_fn <- function(sce_final_input_qc, cc_genes, data = NULL) {
   seu <- Seurat::as.Seurat(sce_final_input_qc, data = data)
-  seu_cc <- Seurat::CellCycleScoring(
+  ## -- CellCycleScoring() can fail if there are no cell cycle genes.
+  seu_cc <- tryCatch(
+   Seurat::CellCycleScoring(
     seu,
     s.features = cc_genes[cc_genes$phase == "S", "ENSEMBL"],
     g2m.features = cc_genes[cc_genes$phase == "G2M", "ENSEMBL"],
     set.ident = TRUE
+    ),
+    error = function(e) {
+      cli_alert_warning(str_space(
+        "{.code Seurat::CellCycleScoring()} failed, setting {.field phase}, {.field s_score}, {.field g2m_score} and",
+        "{.field cc_difference} to {.val NA}."
+      ))
+      return(NULL)
+    }
   )
 
-  seu_cc$phase <- factor(seu_cc$Phase, levels = c("G1", "G2M", "S"))
-  seu_cc$s_score <- seu_cc$S.Score
-  seu_cc$g2m_score <- seu_cc$G2M.Score
-  seu_cc$cc_difference <- seu_cc$s_score - seu_cc$g2m_score
+  if (is_null(seu_cc)) {
+    seu_cc$phase <- NA
+    seu_cc$s_score <- NA
+    seu_cc$g2m_score <- NA
+    ## -- NA minus NA is NA, but let's be explicit here.
+    seu_cc$cc_difference <- NA
+  } else {
+    seu_cc$phase <- factor(seu_cc$Phase, levels = c("G1", "G2M", "S"))
+    seu_cc$s_score <- seu_cc$S.Score
+    seu_cc$g2m_score <- seu_cc$G2M.Score
+    seu_cc$cc_difference <- seu_cc$s_score - seu_cc$g2m_score
+  }
 
   assert_that(are_equal(rownames(seu_cc@meta.data), colnames(sce_final_input_qc)))
 

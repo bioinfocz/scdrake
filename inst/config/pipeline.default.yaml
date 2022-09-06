@@ -1,5 +1,9 @@
 DRAKE_CACHE_DIR: ".drake"
 
+## -- Comment/uncomment DRAKE_TARGETS below to make specific stage reports. Only one must be uncommented!
+## -- But you can specify any target/s you want - you can review the stage vignettes, e.g. vignette("stage_norm_clustering"),
+## -- to see the most important targets.
+
 ## -- Single-sample pipeline stage reports:
 ## -- Stage 01_input_qc:
 DRAKE_TARGETS: ["report_input_qc"]
@@ -17,11 +21,15 @@ DRAKE_TARGETS: ["report_input_qc"]
 # DRAKE_TARGETS: ["report_cluster_markers"]
 # DRAKE_TARGETS: ["report_contrasts"]
 
+## -- All targets:
+# DRAKE_TARGETS: null
+
 DRAKE_KEEP_GOING: False
 DRAKE_VERBOSITY: 1
 DRAKE_LOCK_ENVIR: True
 DRAKE_UNLOCK_CACHE: True
 DRAKE_FORMAT: "qs"
+DRAKE_REBUILD: null
 
 BLAS_N_THREADS: 32
 RSTUDIO_PANDOC: null

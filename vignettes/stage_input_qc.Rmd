@@ -58,7 +58,7 @@ This parameter is specifying input data type and path. There are three possible 
   For `type: "cellranger"`, this is a path to directory containing the `barcodes.tsv`, `features.tsv`, and `matrix.mtx`
   files (can be also gzipped having a `.gz` extension).
 
-- `delimiter: ","`: used when `type: "table"`. Specifies the field delimiter in table.
+- `delimiter: ","`: used when `type: "table"`. Specifies the field delimiter in the table.
 
 ***
 
@@ -122,6 +122,20 @@ In both filtering types, violation of only one metric threshold leads to removal
 ***
 
 ```yaml
+ENABLE_CELL_FILTERING: True
+```
+
+**Type:** logical scalar
+
+If `False`, both types of cell filtering will be disabled.
+
+The filtering thresholds in both filtering types will be overridden such that every cell will pass the filtering
+(e.g. `MAD_THRESHOLD: .inf` or `MIN_UMI_CF: -.inf`). In the end, `SAVE_DATASET_SENSITIVE_FILTERING` will have no
+effect as both filtered SCE targets will be identical. All QC metrics and plots will still be calculated and created.
+
+***
+
+```yaml
 SAVE_DATASET_SENSITIVE_FILTERING: True
 ```
 
@@ -129,6 +143,7 @@ SAVE_DATASET_SENSITIVE_FILTERING: True
 
 If `True`, proceed to other stages with dataset filtered by dataset-sensitive filtering (target `sce_qc_filter_genes`),
 otherwise with dataset filtered by custom filtering (target `sce_custom_filter_genes`).
+Note that the selected SCE target will be referred to as `sce_final_input_qc` in subsequent stages.
 
 ### Dataset-sensitive cell filtering
 
@@ -221,6 +236,19 @@ To disable the gene filtering, set
 MIN_UMI: 0
 MIN_RATIO_CELLS: 0
 ```
+
+***
+
+```yaml
+ENABLE_GENE_FILTERING: True
+```
+
+**Type:** logical scalar
+
+If `False`, gene filtering will be disabled.
+
+The filtering thresholds will be overridden such that every gene will pass the filtering
+(`MIN_UMI: 0` and `MIN_RATIO_CELLS: 0`).
 
 ***
 

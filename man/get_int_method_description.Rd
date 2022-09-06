@@ -12,7 +12,7 @@ get_int_method_description(
 \item{int_method_name}{A character scalar: integration method name.}
 }
 \value{
-A character scalar.
+A named list with character scalars: \code{header}, \code{description}, \code{fn_link}.
 }
 \description{
 Return description for an integration method.

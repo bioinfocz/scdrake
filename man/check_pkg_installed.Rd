@@ -6,6 +6,8 @@
 \alias{check_future_installed}
 \alias{check_clustermq_installed}
 \alias{check_future.callr_installed}
+\alias{check_sc3_version}
+\alias{check_scdrake_packages}
 \title{Check if a package is installed and display an informative message.}
 \usage{
 check_pkg_installed(pkg, msg = "")
@@ -17,6 +19,10 @@ check_future_installed()
 check_clustermq_installed()
 
 check_future.callr_installed()
+
+check_sc3_version()
+
+check_scdrake_packages()
 }
 \arguments{
 \item{pkg}{A character scalar: name of package.}

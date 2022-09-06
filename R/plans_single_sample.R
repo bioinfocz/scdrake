@@ -157,7 +157,11 @@ get_input_qc_subplan <- function(cfg, cfg_pipeline, cfg_main) {
         other_deps = list(
           file_in(!!here("Rmd/common/_header.Rmd")),
           file_in(!!here("Rmd/common/_footer.Rmd")),
-          file_in(!!here("Rmd/single_sample/01_input_qc_empty_droplets.Rmd"))
+          file_in(!!here("Rmd/single_sample/01_input_qc_children/empty_droplets.Rmd")),
+          file_in(!!here("Rmd/single_sample/01_input_qc_children/cell_filtering_qc.Rmd")),
+          file_in(!!here("Rmd/single_sample/01_input_qc_children/cell_filtering_custom.Rmd")),
+          file_in(!!here("Rmd/single_sample/01_input_qc_children/gene_filtering_qc.Rmd")),
+          file_in(!!here("Rmd/single_sample/01_input_qc_children/gene_filtering_custom.Rmd"))
         ),
         drake_cache_dir = !!cfg_pipeline$DRAKE_CACHE_DIR
       ),
@@ -363,6 +367,7 @@ get_norm_clustering_subplan <- function(cfg, cfg_pipeline, cfg_main) {
         dimred_plots_clustering_params = dimred_plots_clustering_params,
         kmeans_k = !!cfg$KMEANS_K,
         sc3_k = !!cfg$SC3_K,
+        sc3_dry = !!cfg$SC3_DRY,
         out_dir = !!cfg$NORM_CLUSTERING_DIMRED_PLOTS_OUT_DIR
       ),
       dynamic = map(dimred_plots_clustering_params)

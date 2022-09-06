@@ -4,7 +4,7 @@
 \alias{sce_get_cc_genes}
 \title{Identify cell cycle-related genes by using variance explained threshold.}
 \usage{
-sce_get_cc_genes(sce, var_expl_threshold, variable = "phase")
+sce_get_cc_genes(sce, var_expl_threshold, variable = "phase", ...)
 }
 \arguments{
 \item{sce}{A \code{SingleCellExperiment} object.}
@@ -12,7 +12,9 @@ sce_get_cc_genes(sce, var_expl_threshold, variable = "phase")
 \item{var_expl_threshold}{A numeric scalar: threshold for variance explained.
 Features exceeding this threshold will be marked as CC-related.}
 
-\item{variable}{A character scalar: column to use for variance explained computation.}
+\item{variable}{A character scalar: column to use for calculation of variance explained.}
+
+\item{...}{Passed to \code{\link[scater:getVarianceExplained]{scater::getVarianceExplained()}}.}
 }
 \value{
 A character vector of gene IDs marked as CC-related.

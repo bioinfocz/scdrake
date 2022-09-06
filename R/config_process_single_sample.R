@@ -1,5 +1,28 @@
 #' @rdname process_config
 .process_input_qc_config <- function(cfg, other_variables) {
+  if (!cfg$ENABLE_CELL_FILTERING) {
+    cli_alert_info(str_space(
+      "Cell filtering is disabled ({.field ENABLE_CELL_FILTERING} is {.val {FALSE}}),",
+      "setting all filtering thresholds to cell-always-pass values."
+    ))
+
+    cfg$MAD_THRESHOLD <- Inf
+    cfg$MIN_UMI_CF <- -Inf
+    cfg$MAX_UMI_CF <- Inf
+    cfg$MIN_FEATURES <- -Inf
+    cfg$MAX_MITO_RATIO <- Inf
+  }
+
+  if (!cfg$ENABLE_GENE_FILTERING) {
+    cli_alert_info(str_space(
+      "Gene filtering is disabled ({.field ENABLE_GENE_FILTERING} is {.val {FALSE}}),",
+      "setting all filtering thresholds to gene-always-pass values."
+    ))
+
+    cfg$MIN_UMI <- 0
+    cfg$MIN_RATIO_CELLS <- 0
+  }
+
   assert_that_(
     !is_null(cfg$INPUT_DATA$type), cfg$INPUT_DATA$type %in% c("cellranger", "table", "sce"),
     msg = "{.var input_data$type} must be {.field 'cellranger'}, {.field 'table'}, or {.field 'sce'}"

@@ -94,18 +94,18 @@ empty_droplets_fn <- function(sce_raw,
 #' @concept single_sample_input_qc_fn
 #' @export
 sce_valid_cells_fn <- function(sce_raw, empty_droplets, empty_droplets_fdr_threshold) {
-  sce_valid_cells <- sce_raw
+  assert_that_(ncol(sce_raw) > 0, msg = "{.var sce_raw} contains zero cells")
 
   if (is_null(empty_droplets)) {
-    sce_valid_cells$is_empty_fdr <- NA
+    sce_raw$is_empty_fdr <- NA
   } else {
     is_cell_index <- which(empty_droplets$FDR <= empty_droplets_fdr_threshold)
-    colnames_orig <- colnames(sce_valid_cells)
-    sce_valid_cells <- sce_valid_cells[, is_cell_index]
-    sce_valid_cells$is_empty_fdr <- empty_droplets$FDR[is_cell_index]
+    colnames_orig <- colnames(sce_raw)
+    sce_raw <- sce_raw[, is_cell_index]
+    sce_raw$is_empty_fdr <- empty_droplets$FDR[is_cell_index]
   }
 
-  return(sce_valid_cells)
+  return(sce_raw)
 }
 
 #' @title Get a logical filter for genes not passing a ratio of cells expressing a gene and a minimum number of UMI per gene.

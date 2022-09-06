@@ -13,20 +13,20 @@ output:
 params:
   css_file: !expr here::here("Rmd/common/stylesheet.css")
   drake_cache_dir: !expr here::here(".drake")
-date: "`r glue('Document generated: {Sys.Date()}')`"
+date: "`r glue::glue('Document generated: {Sys.Date()}')`"
 css: "`r params$css_file`"
 ---
 
 ```{r, echo = FALSE, message = FALSE, warning = FALSE}
-library(drake)
+suppressPackageStartupMessages(library(magrittr))
 if (rlang::is_true(getOption("knitr.in.progress"))) {
-  params_ <- scdrake_list(params)
+  params_ <- scdrake::scdrake_list(params)
 }
 drake_cache_dir <- params_$drake_cache_dir
 
-loadd(config_main, config_contrasts, contrasts_for_tables, path = params_$drake_cache_dir)
+drake::loadd(config_main, config_contrasts, contrasts_for_tables, path = params_$drake_cache_dir)
 ##-- Just mark these files as dependencies for drake.
-loadd(contrasts_plots_files, contrasts_dimred_plots_files, contrasts_table_files, path = params_$drake_cache_dir)
+drake::loadd(contrasts_plots_files, contrasts_dimred_plots_files, contrasts_table_files, path = params_$drake_cache_dir)
 ```
 
 ***
@@ -47,17 +47,17 @@ group_list <- dplyr::group_split(groups) %>%
 
 x <- lapply(names(group_list), function(group_name) {
   df_group <- group_list[[group_name]]
-  md_header(group_name, 2, extra = "{.tabset}")
+  scdrake::md_header(group_name, 2, extra = "{.tabset}")
 
-  md_header("Dimred plots", 3, extra = "{.tabset}")
+  scdrake::md_header("Dimred plots", 3, extra = "{.tabset}")
   dimred_plots <- dplyr::distinct(df_group, name, .keep_all = TRUE)$dimred_plots[[1]]
-  y <- lapply_rows(dimred_plots, FUN = function(par) {
-    md_header(str_to_upper(par$plot_dimreds), 4)
+  y <- scdrake::lapply_rows(dimred_plots, FUN = function(par) {
+    scdrake::md_header(str_to_upper(par$plot_dimreds), 4)
     print(par$plot)
   })
 
-  md_header("Results by contrasts", 3, extra = "{.tabset}")
-  generate_markers_results_section(
+  scdrake::md_header("Results by contrasts", 3, extra = "{.tabset}")
+  scdrake::generate_markers_results_section(
     df_group, group_var = "contrast_name", dt_order_by = "test_type",
     base_out_dir = config_contrasts$CONTRASTS_BASE_OUT_DIR
   )
@@ -65,6 +65,8 @@ x <- lapply(names(group_list), function(group_name) {
 ```
 
 # {-}
+
+`r scdrake::format_used_functions(c("scran::findMarkers()", "scran::pairwiseWilcox()", "scran::pairwiseTTests()", "scran::pairwiseBinom()", "scran::combineMarkers()"))`
 
 ***
 

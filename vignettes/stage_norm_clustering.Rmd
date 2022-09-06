@@ -42,8 +42,8 @@ NORMALIZATION_TYPE: "scran"
 A normalization type:
 
 - `"scran"`: normalization by deconvolution.
-- `"sctransform"`: regularized negative binomial regression. Note: `SingleCellExperiment` normalized by this method
-  cannot be used for integration.
+- `"sctransform"`: regularized negative binomial regression. The returned counts in log1p (natural log) scale are
+  converted to log2. Note: `SingleCellExperiment` normalized by this method cannot be used for integration.
 - `"none"`: skip normalization. This should be used only in case you are importing a `SingleCellExperiment`
   object in the `01_input_qc` stage and this object was normalized before within this pipeline,
   i.e. you are importing a modified `sce_norm` target or one of its downstream, dependent `SingleCellExperiment` targets.

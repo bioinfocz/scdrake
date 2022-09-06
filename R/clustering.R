@@ -275,7 +275,13 @@ calc_sc3 <- function(sce_pca, sc3_k, sc3_dry = FALSE, integration = FALSE, BPPAR
     rowData(sce_pca)$feature_symbol <- rownames(sce_pca)
     counts(sce_pca) <- as.matrix(counts(sce_pca))
     logcounts(sce_pca) <- as.matrix(logcounts(sce_pca))
-    sce_sc3 <- SC3::sc3(sce_pca, ks = sc3_k, BPPARAM = BPPARAM)
+
+    if (check_sc3_version() == "github") {
+      cli_alert_info("The {.pkg SC3} package version from {.url github.com/gorgitko/SC3} will be used.")
+      sce_sc3 <- SC3::sc3(sce_pca, ks = sc3_k, BPPARAM = BPPARAM)
+    } else {
+      sce_sc3 <- SC3::sc3(sce_pca, ks = sc3_k)
+    }
   }
 
   sce_sc3 <- sce_add_metadata(sce_sc3, sc3_dry = sc3_dry)

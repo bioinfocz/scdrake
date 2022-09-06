@@ -10,7 +10,7 @@ output:
 vignette: >
   %\VignetteIndexEntry{Integration stage}
   %\VignetteEngine{knitr::rmarkdown}
-  %\VignetteEncoding{UTF-8}  
+  %\VignetteEncoding{UTF-8}
 ---
 
 ***
@@ -204,7 +204,7 @@ for each integration method:
     - `merge.order: null` (integer vector, list of lists, or `null`): a merge order of single-samples.
       Alternatively, a list of lists representing a tree structure specifying a hierarchical merge order
       (not tested, see `batchelor::fastMNN()` for more details).
-    `auto.merge: True` (logical scalar): if `True`, automatically identify the "best" merge order.
+    - `auto.merge: True` (logical scalar): if `True`, automatically identify the "best" merge order.
 
 ## Integration diagnostics
 

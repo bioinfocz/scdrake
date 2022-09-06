@@ -33,12 +33,13 @@ The path to R script with custom plan is taken from the `SCDRAKE_PLAN_CUSTOM_FIL
 
 Let's try a dummy additional plan which is already present in `plan_custom.R`. Just uncomment the lines under
 `Example:`, or if you want, you can try to define your own target/s. A quick intro to `{drake}` plans can be found
+[here](https://books.ropensci.org/drake/walkthrough.html) and
 [here](https://books.ropensci.org/drake/plans.html#intro-to-plans).
 
 We also need to tell `{drake}` to make this new target. Open `config/pipeline.yaml` and set `DRAKE_TARGETS` to
 `["my_target"]` (or more targets if you have defined them).
 
-Now just run the pipeline as usual
+Now just run the pipeline as usual:
 
 ```{r, eval = FALSE}
 run_single_sample_r()
@@ -54,7 +55,7 @@ drake::loadd(my_target)
 
 ***
 
-# Parametrized custom plan
+## Parametrized custom plan
 
 In `plan_custom.R` you can use any variables defined in `_drake_single_sample.R` or `_drake_integration.R`.
 Probably the most important are `cfg` and `cfg_pipeline` lists holding pipeline parameters.
@@ -93,3 +94,164 @@ drake::drake_plan(
   my_target = scater::plotExpression(sce_final_input_qc, my_cfg$MY_GENE, exprs_values = "counts", swap_rownames = "SYMBOL")
 )
 ```
+
+***
+
+# Extending the RMarkdown documents
+
+## Stage-specific RMarkdown documents
+
+All RMarkdown files used for stage reports are located in the `Rmd/` directory in project's root.
+Feel free to modify them to your needs. Just keep in mind that when you call `update_project()`,
+those files will be **overwritten** by the default ones. To overcome this situation, you can save your modified file
+using a different name and then modify the parameter specifying a path to stage's Rmd file.
+
+For example, you modify `Rmd/single_sample/01_input_qc.Rmd`, save it as `Rmd/single_sample/01_input_qc_modified.Rmd`,
+and change accordingly the `INPUT_QC_REPORT_RMD_FILE` parameter in `config/single_sample/01_input_qc.yaml`.
+
+## Custom RMarkdown documents
+
+For additional RMarkdown documents you just need to incorporate a file-returning target into your custom plan, e.g.
+
+`Rmd/my_report.Rmd`
+
+````{verbatim, lang = "markdown"}
+---
+title: "My report"
+---
+
+```{r}
+drake::loadd(sce_final_norm_clustering)
+scater::plotReducedDim(sce_final_norm_clustering, dimred = "umap", colour_by = "cluster_graph_louvain")
+```
+````
+
+`plan_custom.R`
+
+```{r, eval = FALSE}
+drake::drake_plan(
+  my_report = drake::target(
+    rmarkdown::render(
+      drake::knitr_in("Rmd/my_report.Rmd"),
+      output_file = here::here("my_report.html"),
+      knit_root_dir = here::here()
+    ),
+
+    format = "file"
+  )
+)
+```
+
+Let's break down the plan above:
+
+- `my_report` target has `format = "file"` meaning `{drake}` expects the return value to be a character vector
+  of file or directory paths, and `rmarkdown::render()` returns path to output file.
+- `drake::knitr_in("Rmd/my_report.Rmd")` is a special function which marks the Rmd file as a dependency.
+  Internally, it scans active code chunks and search for calls to `drake::loadd()` and `drake::readd()`, and marks
+  the targets inside as dependencies of the target (`my_report`).
+- By default, `{knitr}`, which is responsible for rendering of Rmd files, uses working directory the same as the
+  location of the Rmd file. This is violating our project-based approach (*everything is specified relative to project
+  root*), and so we are using `here::here()` to specify the output file and working directory.
+  `here::here()` remembers the project root directory on its load and converts root-relative paths to absolute.
+  You can try it yourself: call `here::here()` or `here::here("Rmd/my_report.Rmd")`.
+
+Just for curiosity, we can see the dependencies of `my_target` using
+`drake::r_deps_target(my_report, source = "_drake_single_sample.R")`:
+
+```
+  name                      type       hash            
+1 here::here                namespaced NA              
+2 rmarkdown::render         namespaced NA              
+3 sce_final_norm_clustering loadd      911414192d751378
+4 Rmd/my_report.Rmd         knitr_in   NA
+```
+
+## Reusing the stage-specific RMarkdown documents
+
+Another possibility is to reuse the machinery responsible for rendering of stage reports, that is:
+
+- The headmost part of Rmd documents (you can check e.g. 
+  [Rmd/single_sample/01_input_qc.Rmd](https://github.com/bioinfocz/scdrake/blob/main/inst/Rmd/single_sample/01_input_qc.Rmd)):
+
+````{verbatim, lang = "markdown"}
+---
+title: "`r params$title`"
+author: "Your name"
+institute: "Your institute"
+output:
+  html_document:
+    toc: true
+    toc_depth: 4
+    toc_float: true
+    number_sections: false
+    theme: "flatly"
+    self_contained: true
+    code_download: true
+    df_print: "paged"
+params:
+  css_file: !expr here::here("Rmd/common/stylesheet.css")
+  drake_cache_dir: !expr here::here(".drake")
+  title: "Your title"
+date: "`r glue::glue('Document generated: {Sys.Date()}')`"
+css: "`r params$css_file`"
+---
+
+```{r, message = FALSE, warning = FALSE}
+drake_cache_dir <- params_$drake_cache_dir
+drake::loadd(your_target_1, your_target_2, ..., path = drake_cache_dir)
+```
+````
+
+The example Rmd document above has several parameters:
+
+- `css_file`: a path to CSS file with HTML styling.
+- `drake_cache_dir`: used to load targets from nondefault cache directory.
+- `title`: a dynamic document title.
+
+***
+
+The second part of the machinery is the `generate_stage_report()` function. Internally, it's a wrapper around
+`rmarkdown::render()` with some sensible defaults, and passing `css_file`, `drake_cache_dir` and other user-defined
+parameters to the Rmd document. For the Rmd document above, we would call this function as
+
+```{r, eval = FALSE}
+generate_stage_report(
+  ## -- We assume the document is saved here.
+  "Rmd/my_report.Rmd",
+  "output/my_report.html",
+  params = list(title = "My report")
+)
+```
+
+***
+
+And here is an example of target rendering a report for the `01_input_qc` stage
+([source](https://github.com/bioinfocz/scdrake/blob/main/R/plans_single_sample.R)):
+
+```{r, eval = FALSE}
+drake::drake_plan(
+  report_input_qc = target(
+      generate_stage_report(
+        rmd_file = knitr_in(!!cfg$INPUT_QC_REPORT_RMD_FILE),
+        out_html_file_name = file_out(!!cfg$INPUT_QC_REPORT_HTML_FILE),
+        css_file = file_in(!!cfg_main$CSS_FILE),
+        message = !!cfg$INPUT_QC_KNITR_MESSAGE,
+        warning = !!cfg$INPUT_QC_KNITR_WARNING,
+        echo = !!cfg$INPUT_QC_KNITR_ECHO,
+        other_deps = list(
+          file_in(!!here("Rmd/common/_header.Rmd")),
+          file_in(!!here("Rmd/common/_footer.Rmd")),
+          file_in(!!here("Rmd/single_sample/01_input_qc_children/empty_droplets.Rmd"))
+        ),
+        drake_cache_dir = !!cfg_pipeline$DRAKE_CACHE_DIR
+      ),
+      format = "file"
+    )
+)
+```
+
+You can see that almost all function parameters are dynamic, based on config file (`cfg`).
+Also, we force `{drake}` to watch for changes in other child Rmd documents by specifying them inside `other_deps`.
+
+Note that `drake::file_in()` is watching for changes in file size/structure and not for calls to `drake::loadd()` and
+`drake::readd()` as `drake::knitr_in()` is doing (static code analysis).

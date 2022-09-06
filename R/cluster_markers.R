@@ -170,8 +170,14 @@ cluster_markers_processed_fn <- function(cluster_markers) {
             stats_columns <- str_c("lfc_", setdiff(levels(groups), group_level))
           }
 
-          stats_columns_metric <- str_c(stats_columns, stats_columns_metric_name)
           stats_df <- markers[, stats_columns] %>% as.data.frame()
+
+          if (length(levels(groups)) > 2) {
+            stats_columns_metric <- str_c(stats_columns, stats_columns_metric_name)
+          } else {
+            stats_columns_metric <- if (test_type == "wilcox") "AUC" else "logFC"
+          }
+
           markers[, stats_columns] <- stats_df[, stats_columns_metric]
 
           return(markers)

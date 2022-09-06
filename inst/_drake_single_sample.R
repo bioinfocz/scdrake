@@ -18,6 +18,8 @@ conflict_prefer("is_true", "rlang")
 here::i_am(".here")
 verbose <- getOption("scdrake_verbose")
 
+check_scdrake_packages()
+
 update_pipeline_config()
 update_single_sample_configs()
 
@@ -29,8 +31,10 @@ set.seed(cfg_pipeline$SEED)
 if (cfg_pipeline$DRAKE_PARALLELISM == "future") {
   if (parallelly::supportsMulticore()) {
     future::plan(future::multicore, workers = cfg_pipeline$DRAKE_N_JOBS)
+    cli_alert_info("Using {.code future::multicore} with {cfg_pipeline$DRAKE_N_JOBS} workers.")
   } else {
     future::plan(future.callr::callr, workers = cfg_pipeline$DRAKE_N_JOBS)
+    cli_alert_info("Using {.code future.callr::callr} (multisession) with {cfg_pipeline$DRAKE_N_JOBS} workers.")
   }
 }
 
@@ -50,7 +54,6 @@ if (!is.null(cfg_pipeline$BLAS_N_THREADS)) {
   RhpcBLASctl::blas_set_num_threads(cfg_pipeline$BLAS_N_THREADS)
 }
 
-# if (!is.null(cfg_pipeline$RSTUDIO_PANDOC) && get_sys_env("RSTUDIO_PANDOC", type = "character", verbose = FALSE) != "") {
 if (!is_null(cfg_pipeline$RSTUDIO_PANDOC)) {
   Sys.setenv(RSTUDIO_PANDOC = cfg_pipeline$RSTUDIO_PANDOC)
 }
@@ -63,6 +66,33 @@ drake_cache_object <- drake::new_cache(path = cfg_pipeline$DRAKE_CACHE_DIR)
 if (cfg_pipeline$DRAKE_UNLOCK_CACHE && !is.null(drake_cache_object)) {
   cli_alert_info("Unlocking {.pkg drake} cache in {.file {cfg_pipeline$DRAKE_CACHE_DIR}}")
   drake_cache_object$unlock()
+}
+
+drake_rebuild <- cfg_pipeline$DRAKE_REBUILD
+drake_trigger <- drake::trigger()
+
+if (is_scalar_character(drake_rebuild)) {
+  ## -- NULL means all targets, so rebuild them all.
+  if (is_null(cfg_pipeline$DRAKE_TARGETS)) {
+    drake_rebuild <- "all"
+  }
+
+  if (drake_rebuild == "all") {
+    str_line(
+      "{.field DRAKE_REBUILD} is {.val 'all'} -> ",
+      "the pipeline will be run from scratch."
+    ) %>% cli_alert_info()
+    drake_trigger <- drake::trigger(condition = TRUE)
+  } else if (drake_rebuild == "current") {
+    str_line(
+      "{.field DRAKE_REBUILD} is {.val 'current'} -> ",
+      "calling {.code drake::clean({dput(cfg_pipeline$DRAKE_TARGETS)}, path = {DRAKE_CACHE_DIR})}"
+    ) %>%
+      cli_alert_info()
+    drake::clean(list = cfg_pipeline$DRAKE_TARGETS, path = cfg_pipeline$DRAKE_CACHE_DIR)
+  } else {
+    cli_alert_warning("Unknown value for {.field DRAKE_REBUILD}: {.val {drake_rebuild}}")
+  }
 }
 
 options(
@@ -97,6 +127,8 @@ verbose %&&% cli({
   }
 })
 
+packages <- c("HDF5Array", "ensembldb", rev(.packages()))
+
 drake::drake_config(
   plan,
   targets = cfg_pipeline$DRAKE_TARGETS,
@@ -106,8 +138,9 @@ drake::drake_config(
   parallelism = cfg_pipeline$DRAKE_PARALLELISM,
   jobs = cfg_pipeline$DRAKE_N_JOBS,
   jobs_preprocess = cfg_pipeline$DRAKE_N_JOBS_PREPROCESS,
-  packages = c("HDF5Array", rev(.packages())),
+  packages = packages[packages != "scdrake"],
   prework = prework,
+  trigger = drake_trigger,
   seed = cfg_pipeline$SEED,
   caching = "worker",
   keep_going = cfg_pipeline$DRAKE_KEEP_GOING,

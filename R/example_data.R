@@ -15,7 +15,7 @@
     cli_alert_success("Downloaded {dataset} raw feature barcode matrix files from {.url {url}}:")
     cli_ul(files)
     cli_alert_info(
-      "Now you can use {.file {out_dir}} in the {.field INPUT_DATA} parameter in {.file 01_input_qc.yaml} config:"
+      "Now you can use the data directory in the {.field INPUT_DATA} parameter in the {.file 01_input_qc.yaml} config:"
     )
     cli_code(
       "INPUT_DATA:",

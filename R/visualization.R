@@ -112,7 +112,7 @@ plotReducedDim_mod <- function(sce,
     }
 
     if (use_default_ggplot_palette) {
-      p <- p + ggplot2::scale_color_hue(labels = legend_labels)
+      p <- suppressMessages(p + ggplot2::scale_color_hue(labels = legend_labels))
     } else {
       p$scales$scales[[1]]$labels <- legend_labels
     }
@@ -120,9 +120,9 @@ plotReducedDim_mod <- function(sce,
     p <- p + guides(color = ggplot2::guide_legend(title = legend_title, override.aes = list(size = 3)))
   } else {
     if (use_default_ggplot_palette && is_null(colour_gradient)) {
-      p <- p + ggplot2::scale_color_gradient()
+      p <- suppressMessages(p + ggplot2::scale_color_gradient())
     } else {
-      p <- p + ggplot2::scale_color_gradient(low = colour_gradient$low, high = colour_gradient$high)
+      p <- suppressMessages(p + ggplot2::scale_color_gradient(low = colour_gradient$low, high = colour_gradient$high))
     }
 
     p <- p + guides(color = ggplot2::guide_colorbar(title = legend_title))
@@ -317,6 +317,8 @@ save_selected_markers_plots_files <- function(selected_markers_plots, selected_m
 #'   `02_norm_clustering.yaml` or `02_int_clustering.yaml` config.
 #' @param sc3_k An integer vector: : number of clusters for SC3 clustering. Taken from `SC3_K` parameter in
 #'   `02_norm_clustering.yaml` or `02_int_clustering.yaml` config.
+#' @param sc3_dry A logical scalar: whether SC3 was run in dry mode, that is, random clusters were assigned to cells.
+#'   Taken from `SC3_DRY` parameter in `02_norm_clustering.yaml` or `02_int_clustering.yaml` config.
 #' @param out_dir A character scalar: output directory in which PDF and PNG files will be saved.
 #' @param integration A logical scalar: `TRUE` is used in the integration plan.
 #' @return A tibble. *Output target*: `dimred_plots_clustering`
@@ -327,6 +329,7 @@ dimred_plots_clustering_fn <- function(sce_final_norm_clustering,
                                        dimred_plots_clustering_params,
                                        kmeans_k,
                                        sc3_k,
+                                       sc3_dry,
                                        out_dir = NULL,
                                        integration = FALSE) {
   if (integration) {
@@ -396,14 +399,21 @@ dimred_plots_clustering_fn <- function(sce_final_norm_clustering,
     } else if (clustering_name == "sc3") {
       plot_list <- lapply(sc3_k, FUN = function(k) {
         cluster_col <- glue("{clustering_prefix}_sc3_{k}")
+        if (sc3_dry) {
+          title <- glue("SC3 consensus clustering (DRY MODE) | {dimred_name_upper}")
+          subtitle <- glue("N clusters: {k} (DRY MODE -> RANDOM ASSIGNMENTS)")
+        } else {
+          title <- glue("SC3 consensus clustering | {dimred_name_upper}")
+          subtitle <- glue("N clusters: {k}")
+        }
 
         plotReducedDim_mod(
           sce_final_norm_clustering,
           dimred = dimred_name,
           colour_by = cluster_col,
           text_by = cluster_col,
-          title = glue("SC3 consensus clustering | {dimred_name_upper}"),
-          subtitle = glue("N clusters: {k}"),
+          title = title,
+          subtitle = subtitle,
           use_default_ggplot_palette = TRUE,
           legend_title = "Cluster"
         )

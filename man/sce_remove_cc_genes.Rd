@@ -4,7 +4,13 @@
 \alias{sce_remove_cc_genes}
 \title{Remove cell cycle-related genes from HVGs.}
 \usage{
-sce_remove_cc_genes(sce, var_expl_threshold, variable = "phase", ...)
+sce_remove_cc_genes(
+  sce,
+  var_expl_threshold,
+  variable = "phase",
+  hvg_metric_fit = NULL,
+  ...
+)
 }
 \arguments{
 \item{sce}{A \code{SingleCellExperiment} object.}
@@ -13,6 +19,8 @@ sce_remove_cc_genes(sce, var_expl_threshold, variable = "phase", ...)
 Genes exceeding this threshold will be marked as CC-related.}
 
 \item{variable}{A character scalar: column to use for variance explained computation.}
+
+\item{hvg_metric_fit}{A \code{DataFrame} object.}
 
 \item{...}{Passed to \code{\link[=get_top_hvgs]{get_top_hvgs()}}.}
 }

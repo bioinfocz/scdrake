@@ -14,7 +14,7 @@ vignette: >
 
 ***
 
-Here you can find some basic `{drake}` functions.
+Here you can find some basic `{drake}` functions ([reference](https://docs.ropensci.org/drake/reference/index.html).
 
 However, we encourage all users to read [official book](https://books.ropensci.org/drake/) for the `{drake}` package.
 While it is not necessary to know all `{drake}` internals to successfully run the `{scdrake}` pipeline,
@@ -28,7 +28,9 @@ its knowledge is a plus.
 - Get diagnostic metadata on a target: `drake::diagnose()`
 - List the dependencies of a target: `drake::deps_target()`
 - Find out why a target is out of date: `drake::deps_profile()`
+- Manually invalidate a target: `drake::clean()`
 
 Some functions are also usable in a reproducible manner similar to `drake::r_make()`,
 i.e. first, `_drake.R`-like file is sourced and a separate new R process is launched.
 Examples: `drake::r_outdated()`, `drake::r_deps_target()`.
+The list of such functions can be found [here](https://docs.ropensci.org/drake/reference/index.html#reproducible-r-session-management)

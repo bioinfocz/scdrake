@@ -104,6 +104,22 @@ DRAKE_FORMAT: "qs"
 A file format used to store intermediate results in `DRAKE_CACHE_DIR`.
 See <https://books.ropensci.org/drake/plans.html#special-data-formats-for-targets> for details.
 
+In case of problems with `qs` use `rds` which is slower, but the most compatible.
+
+***
+
+```yaml
+DRAKE_REBUILD: null
+```
+
+**Type:** character scalar (`all` | `current`) or `null`
+
+Instruct `{drake}` to rebuild targets although they are considered finished.
+
+- For `"all"`, the pipeline is run from scratch (`drake::trigger(condition = TRUE)` is passed as `trigger` argument to
+  `drake::make()` or `drake::drake_config()`).
+- For `"current"`, `drake::clean()` is run for targets specified in `DRAKE_TARGETS`.
+
 ***
 
 ```yaml

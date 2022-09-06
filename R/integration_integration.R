@@ -145,13 +145,13 @@ sce_int_processed_fn <- function(sce_int_raw) {
     if (!is_null(cell_groupings) && length(cell_groupings)) {
       return(names(cell_groupings))
     } else {
-      return("")
+      return(character())
     }
   })
 
-  common_cell_groupings <- Reduce(intersect, common_cell_groupings)
+  common_cell_groupings <- Reduce(intersect, common_cell_groupings) %>%
+    purrr::discard(is_empty)
   common_columns <- c(common_clusterings, common_cell_groupings) %>% unique()
-
   sce_int_processed <- lapply(sce_int_raw, function(sce) {
     n_features_orig <- nrow(sce)
     sce <- sce[common_features, ]
@@ -790,7 +790,7 @@ selected_markers_plots_int_df_fn <- function(selected_markers_int_df, sce_int_di
 
 #' @title Return description for an integration method.
 #' @param int_method_name A character scalar: integration method name.
-#' @return A character scalar.
+#' @return A named list with character scalars: `header`, `description`, `fn_link`.
 #'
 #' @concept integration_integration_fn
 #' @export
@@ -804,6 +804,7 @@ get_int_method_description <- function(int_method_name = c("uncorrected", "resca
       "These data will be used for differential expression analysis.",
       sep = " "
     )
+    fn_link <- downlit::downlit_md_string("`batchelor::multiBatchNorm()`") %>% stringr::str_trim()
   } else if (int_method_name == "rescaling") {
     header <- "Rescaling (`rescaleBatches()`)"
     description <- str_c(
@@ -817,6 +818,7 @@ get_int_method_description <- function(int_method_name = c("uncorrected", "resca
       "suppressing any differences in variance across batches.)",
       sep = " "
     )
+    fn_link <- downlit::downlit_md_string("`batchelor::rescaleBatches()`") %>% stringr::str_trim()
   } else if (int_method_name == "regression") {
     header <- "Linear regression (`regressBatches()`)"
     description <- str_c(
@@ -837,6 +839,7 @@ get_int_method_description <- function(int_method_name = c("uncorrected", "resca
       "but this situation is even less common.",
       sep = " "
     )
+    fn_link <- downlit::downlit_md_string("`batchelor::regressBatches()`") %>% stringr::str_trim()
   } else if (int_method_name == "mnn") {
     header <- "Mutual nearest neighbors (`fastMNN()`)"
     description <- str_c(
@@ -854,7 +857,8 @@ get_int_method_description <- function(int_method_name = c("uncorrected", "resca
       "Nonetheless, the assumption is usually reasonable as a random vector is very likely to be orthogonal in high-dimensional space.",
       sep = " "
     )
+    fn_link <- downlit::downlit_md_string("`batchelor::fastMNN()`") %>% stringr::str_trim()
   }
 
-  return(list(header = header, description = description))
+  return(list(header = header, description = description, fn_link = fn_link))
 }
