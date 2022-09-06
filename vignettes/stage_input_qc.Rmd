@@ -230,13 +230,6 @@ is_expressed <- rowSums(counts(sce) >= min_umi) >= num_cells
 A gene is considered expressed when number of its UMIs across all cells is greater than `min_umi` and
 at the same time it is expressed in at least `min_ratio_cells` ratio of cells.
 
-To disable the gene filtering, set
-
-```yaml
-MIN_UMI: 0
-MIN_RATIO_CELLS: 0
-```
-
 ***
 
 ```yaml

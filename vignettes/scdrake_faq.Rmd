@@ -115,8 +115,8 @@ The `sce_final_norm_clustering` object is already filtered and normalized, so yo
 
 ```yaml
 EMPTY_DROPLETS_ENABLED: False
-# This will indirectly disable the dataset-sensitive filtering.
-MAD_THRESHOLD: .inf
+ENABLE_CELL_FILTERING: False
+ENABLE_GENE_FILTERING: False
 ```
 
 You can also set to skip the normalization step in `config/single_sample/02_norm_clustering.yaml`:
