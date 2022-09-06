@@ -365,8 +365,8 @@ output:</p>
 <p>The <code>sce_final_norm_clustering</code> object is already filtered
 and normalized, so you should skip those procedures:</p>
 <div class="sourceCode" id="cb4"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">EMPTY_DROPLETS_ENABLED</span><span class="kw">:</span><span class="at"> </span><span class="ch">False</span></span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="co"># This will indirectly disable the dataset-sensitive filtering.</span></span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="fu">MAD_THRESHOLD</span><span class="kw">:</span><span class="at"> </span><span class="fl">.inf</span></span></code></pre></div>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ENABLE_CELL_FILTERING</span><span class="kw">:</span><span class="at"> </span><span class="ch">False</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="fu">ENABLE_GENE_FILTERING</span><span class="kw">:</span><span class="at"> </span><span class="ch">False</span></span></code></pre></div>
 <p>You can also set to skip the normalization step in
 <code>config/single_sample/02_norm_clustering.yaml</code>:</p>
 <div class="sourceCode" id="cb5"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">NORMALIZATION_TYPE</span><span class="kw">:</span><span class="at"> </span><span class="st">"none"</span></span></code></pre></div>
