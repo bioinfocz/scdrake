@@ -31,11 +31,12 @@ The main features of the `{scdrake}` pipeline are:
   - Integration of multiple datasets.
   - Computation of cluster markers and differentially expressed genes
     between clusters (denoted as “contrasts”).
-  - Rich graphical and HTML outputs.
+  - Rich graphical and HTML outputs based on customizable RMarkdown
+    documents.
       - You can find links to example outputs
         [here](https://bioinfocz.github.io/scdrake/articles/pipeline_overview.html).
-  - Thanks to `{drake}`, the pipeline is highly scalable and
-    reproducible.
+  - Thanks to `{drake}`, the pipeline is highly efficient, scalable and
+    reproducible, and also extendable.
       - Want to change some parameter? No problem\! Only parts of the
         pipeline which changed will rerun, while up-to-date ones will be
         skipped.
@@ -57,7 +58,7 @@ whose methods and recommendations is `{scdrake}` largely based.
 
 -----
 
-## Installation instructions
+# Installation instructions
 
 `{scdrake}` is currently not released on
 [CRAN](https://cran.r-project.org), however, you can install its latest
@@ -69,7 +70,7 @@ if (!requireNamespace("BiocManager", quietly = TRUE)) {
   BiocManager::install(version = "3.15")
 }
 
-BiocManager::install("bioinfocz/scdrake@v1.2.3")
+BiocManager::install("bioinfocz/scdrake@v1.3.0")
 ```
 
 For development version use
@@ -83,28 +84,49 @@ if (!requireNamespace("BiocManager", quietly = TRUE)) {
 BiocManager::install("bioinfocz/scdrake")
 ```
 
-### Parallelization
+In case you **won’t** be using `{scdrake}` from within the RStudio, you
+will need to install [pandoc](https://pandoc.org/), which is used for
+rendering of HTML reports.
 
-To fully utilize the parallelization, you should consider installing
-[ZeroMQ](https://zeromq.org) and `{clustermq}` R package (probably only
-usable on Linux), which is used by `{drake}`. However, it is also
-possible to use the `{future}` package, which doesn’t require any
-additional system dependencies, but it’s a bit slower.
+  - For Ubuntu: `sudo apt install pandoc`
+  - For MacOS: `brew install pandoc`
+  - For other OSs see [official
+    instructions](https://pandoc.org/installing.html).
 
-More reading about this topic can be found at
-<https://books.ropensci.org/drake/hpc.html>.
+## Installation failed?
 
-### Alternative storage format
+The most common reason for a failed installation are missing system
+libraries. When packages are compiled from source, some of them require
+shared libraries not provided by R. Below you can find commands to
+install those libraries for a specific OS.
 
-`{drake}` supports several types of storage formats for cached objects,
-but `{qs}` is recommended and used by `{scdrake}` by default due to its
-performance. You can install `{qs}` with
+If it does not help and you are really helpless, do not hesitate to open
+a new issue.
 
-``` r
-BiocManager::install("qs")
+### Linux
+
+[See here](required_libs_linux.md)
+
+### MacOS
+
+You can install the required libraries with [Homebrew](https://brew.sh/)
+package manager:
+
+``` bash
+brew install libxml2 imagemagick@6 harfbuzz fribidi libgit2 geos
 ```
 
-### Using `renv`
+-----
+
+## Using `renv` (optional)
+
+`{renv}` package allows to install other packages into local,
+project-specific library, and thus, those won’t interfere with
+system-wide packages.
+
+<details>
+
+<summary>▶ Click for details</summary>
 
 Because `{scdrake}` uses a lot of packages, we also encourage users to
 use the `{renv}` package, which will install all dependencies to a
@@ -129,25 +151,32 @@ in mind in that case dependencies will be installed from package’s
 `DESCRIPTION` file in which package versions are not specified, and thus
 the latest (and possibly untested) package versions will be installed.
 
+</details>
+
 -----
 
 ## Vignettes and other readings
 
-See <https://bioinfocz.github.io/scdrake> for a documentation website,
+See <https://bioinfocz.github.io/scdrake> for a documentation website
 where links to vignettes below become real :-)
 
-  - Get started: `vignette("scdrake")`
-  - Pipeline overview: `vignette("pipeline_overview")`
+  - Guides:
+      - 01 Quick start (single-sample pipeline): `vignette("scdrake")`
+      - 02 Integration pipeline guide: `vignette("scdrake_integration")`
+      - Extending the pipeline: `vignette("scdrake_extend")`
+      - `{drake}` basics: `vignette("drake_basics")`
+          - Or the official `{drake}` book:
+            <https://books.ropensci.org/drake/>
+  - General information:
+      - Pipeline overview: `vignette("pipeline_overview")`
+      - FAQ & Howtos: `vignette("scdrake_faq")`
+      - Config files: `vignette("scdrake_config")`
       - Cluster markers: `vignette("cluster_markers")`
-  - Running the pipeline, environment variables:
-    `vignette("scdrake_run")`
-  - Config files (basic concept): `vignette("scdrake_config")`
+      - Environment variables: `vignette("scdrake_envvars")`
+  - General configs:
+      - Pipeline config: `vignette("config_pipeline")`
+      - Main config: `vignette("config_main")`
   - Targets and config parameters for each stage:
-      - Common:
-          - Pipeline config: `vignette("config_pipeline")`
-          - Main config: `vignette("config_main")`
-          - Cluster markers stage: `vignette("stage_cluster_markers")`
-          - Contrasts stage: `vignette("stage_contrasts")`
       - Single-sample pipeline:
           - Reading in data, filtering, quality control (`01_input_qc`):
             `vignette("stage_input_qc")`
@@ -157,11 +186,11 @@ where links to vignettes below become real :-)
       - Integration pipeline:
           - Reading in data and integration (`01_integration`):
             `vignette("stage_integration")`
-          - Clustering (`02_int_clustering`):
+          - Post-integration clustering (`02_int_clustering`):
             `vignette("stage_int_clustering")`
-  - `{drake}` basics: `vignette("drake_basics")`
-      - Or the official `{drake}` book:
-        <https://books.ropensci.org/drake/>
+      - Common:
+          - Cluster markers stage: `vignette("stage_cluster_markers")`
+          - Contrasts stage: `vignette("stage_contrasts")`
 
 We encourage all users to read
 [basics](https://books.ropensci.org/drake) of the `{drake}` package.
