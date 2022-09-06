@@ -222,7 +222,8 @@ Sciences<br><a class="author_email" href="mailto:#"></a><a href="mailto:jan.kubo
 <h2 id="quick-start-guide">Quick start guide<a class="anchor" aria-label="anchor" href="#quick-start-guide"></a>
 </h2>
 <p>In this guide you will see how to quickly setup
-<a href="https://github.com/bioinfocz/scdrake" class="external-link">scdrake</a> and run its single-sample pipeline using the
+<a href="https://github.com/bioinfocz/scdrake" class="external-link">scdrake</a> and run the first stage
+(<code>01_input_qc</code>) of its single-sample pipeline using the
 provided example data. Once you familiarize yourself with
 <a href="https://github.com/bioinfocz/scdrake" class="external-link">scdrake</a> basics, you can continue with guide for the
 integration pipeline in
@@ -275,7 +276,7 @@ root.</p>
 <p>Let’s inspect files in the project directory:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">fs</span><span class="fu">::</span><span class="fu"><a href="https://fs.r-lib.org/reference/dir_tree.html" class="external-link">dir_tree</a></span><span class="op">(</span>all <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">## <span style="color: #0000BB; font-weight: bold;">/tmp/Rtmpymd8Wi/file190f48aa5f63</span></span></span>
+<pre><code><span><span class="co">## <span style="color: #0000BB; font-weight: bold;">/tmp/RtmpethULC/file192179610f61</span></span></span>
 <span><span class="co">## ├── .here</span></span>
 <span><span class="co">## ├── <span style="color: #0000BB; font-weight: bold;">Rmd</span></span></span>
 <span><span class="co">## │   ├── <span style="color: #0000BB; font-weight: bold;">common</span></span></span>
@@ -336,7 +337,7 @@ root.</p>
 <span><span class="co">## │       ├── barcodes.tsv</span></span>
 <span><span class="co">## │       ├── genes.tsv</span></span>
 <span><span class="co">## │       └── matrix.mtx</span></span>
-<span><span class="co">## ├── file190f48aa5f63.Rproj</span></span>
+<span><span class="co">## ├── file192179610f61.Rproj</span></span>
 <span><span class="co">## ├── <span style="color: #00BB00;">plan_custom.R</span></span></span>
 <span><span class="co">## └── renv.lock</span></span></code></pre>
 <p>The most important files and directories are:</p>
@@ -467,6 +468,10 @@ do?<a class="anchor" aria-label="anchor" href="#how-to-know-which-targets-you-ca
 parameters and also the most important targets. At <a href="https://bioinfocz.github.io/scdrake" class="uri">https://bioinfocz.github.io/scdrake</a> simply navigate to
 the top dropdown menu Articles and choose a stage you are interested
 in.</p>
+<p>For a more schematic overview of pipelines and stages see
+<code><a href="../articles/pipeline_overview.html">vignette("pipeline_overview")</a></code>. Advanced users might be
+interested in looking into source code of <a href="https://github.com/bioinfocz/scdrake" class="external-link">scdrake</a>’s <a href="https://github.com/bioinfocz/scdrake/tree/main/R" class="external-link">plans</a> (files
+named <code>plans_*.R</code>).</p>
 <hr>
 </div>
 <div class="section level2">

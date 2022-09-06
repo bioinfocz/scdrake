@@ -201,6 +201,7 @@
 
       </header><div class="row">
   <div class="contents col-md-9">
+
 <div class="section level1">
 <div class="page-header"><h1 id="scdrake">scdrake<a class="anchor" aria-label="anchor" href="#scdrake"></a>
 </h1></div>
@@ -214,12 +215,12 @@
 <li>Cell type annotation.</li>
 <li>Integration of multiple datasets.</li>
 <li>Computation of cluster markers and differentially expressed genes between clusters (denoted as “contrasts”).</li>
-<li>Rich graphical and HTML outputs.
+<li>Rich graphical and HTML outputs based on customizable RMarkdown documents.
 <ul>
 <li>You can find links to example outputs <a href="https://bioinfocz.github.io/scdrake/articles/pipeline_overview.html">here</a>.</li>
 </ul>
 </li>
-<li>Thanks to <a href="https://docs.ropensci.org/drake" class="external-link">drake</a>, the pipeline is highly scalable and reproducible.
+<li>Thanks to <a href="https://docs.ropensci.org/drake" class="external-link">drake</a>, the pipeline is highly efficient, scalable and reproducible, and also extendable.
 <ul>
 <li>Want to change some parameter? No problem! Only parts of the pipeline which changed will rerun, while up-to-date ones will be skipped.</li>
 <li>Want to reuse the intermediate results for your own analyses? No problem! The pipeline has smartly defined checkpoints which can be loaded from a <a href="https://docs.ropensci.org/drake" class="external-link">drake</a> cache.</li>
@@ -230,9 +231,10 @@
 <p><a href="https://github.com/bioinfocz/scdrake" class="external-link">scdrake</a> is aimed at both non-technical and bioinformatic public: both will benefit from reports and visualizations, and the latter also from the possibility to utilize all benefits of <a href="https://docs.ropensci.org/drake" class="external-link">drake</a> for custom analyses.</p>
 <p>Huge thanks go to the authors of the <a href="https://bioconductor.org/books/release/OSCA" class="external-link">Orchestrating Single-Cell Analysis with Bioconductor</a> book on whose methods and recommendations is <a href="https://github.com/bioinfocz/scdrake" class="external-link">scdrake</a> largely based.</p>
 <hr>
-<div class="section level2">
-<h2 id="installation-instructions">Installation instructions<a class="anchor" aria-label="anchor" href="#installation-instructions"></a>
-</h2>
+</div>
+<div class="section level1">
+<h1 id="installation-instructions">Installation instructions<a class="anchor" aria-label="anchor" href="#installation-instructions"></a>
+</h1>
 <p><a href="https://github.com/bioinfocz/scdrake" class="external-link">scdrake</a> is currently not released on <a href="https://cran.r-project.org" class="external-link">CRAN</a>, however, you can install its latest stable version from GitHub using the following code:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw">if</span> <span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/ns-load.html" class="external-link">requireNamespace</a></span><span class="op">(</span><span class="st">"BiocManager"</span>, quietly <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
@@ -240,7 +242,7 @@
 <span>  <span class="fu">BiocManager</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/BiocManager/man/install.html" class="external-link">install</a></span><span class="op">(</span>version <span class="op">=</span> <span class="st">"3.15"</span><span class="op">)</span></span>
 <span><span class="op">}</span></span>
 <span></span>
-<span><span class="fu">BiocManager</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/BiocManager/man/install.html" class="external-link">install</a></span><span class="op">(</span><span class="st">"bioinfocz/scdrake@v1.2.3"</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu">BiocManager</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/BiocManager/man/install.html" class="external-link">install</a></span><span class="op">(</span><span class="st">"bioinfocz/scdrake@v1.3.0"</span><span class="op">)</span></span></code></pre></div>
 <p>For development version use</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw">if</span> <span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/ns-load.html" class="external-link">requireNamespace</a></span><span class="op">(</span><span class="st">"BiocManager"</span>, quietly <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
@@ -249,63 +251,92 @@
 <span><span class="op">}</span></span>
 <span></span>
 <span><span class="fu">BiocManager</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/BiocManager/man/install.html" class="external-link">install</a></span><span class="op">(</span><span class="st">"bioinfocz/scdrake"</span><span class="op">)</span></span></code></pre></div>
+<p>In case you <strong>won’t</strong> be using <a href="https://github.com/bioinfocz/scdrake" class="external-link">scdrake</a> from within the RStudio, you will need to install <a href="https://pandoc.org/" class="external-link">pandoc</a>, which is used for rendering of HTML reports.</p>
+<ul>
+<li>For Ubuntu: <code>sudo apt install pandoc</code>
+</li>
+<li>For MacOS: <code>brew install pandoc</code>
+</li>
+<li>For other OSs see <a href="https://pandoc.org/installing.html" class="external-link">official instructions</a>.</li>
+</ul>
+<div class="section level2">
+<h2 id="installation-failed">Installation failed?<a class="anchor" aria-label="anchor" href="#installation-failed"></a>
+</h2>
+<p>The most common reason for a failed installation are missing system libraries. When packages are compiled from source, some of them require shared libraries not provided by R. Below you can find commands to install those libraries for a specific OS.</p>
+<p>If it does not help and you are really helpless, do not hesitate to open a new issue.</p>
 <div class="section level3">
-<h3 id="parallelization">Parallelization<a class="anchor" aria-label="anchor" href="#parallelization"></a>
+<h3 id="linux">Linux<a class="anchor" aria-label="anchor" href="#linux"></a>
 </h3>
-<p>To fully utilize the parallelization, you should consider installing <a href="https://zeromq.org" class="external-link">ZeroMQ</a> and <a href="https://mschubert.github.io/clustermq/" class="external-link">clustermq</a> R package (probably only usable on Linux), which is used by <a href="https://docs.ropensci.org/drake" class="external-link">drake</a>. However, it is also possible to use the <a href="https://future.futureverse.org" class="external-link">future</a> package, which doesn’t require any additional system dependencies, but it’s a bit slower.</p>
-<p>More reading about this topic can be found at <a href="https://books.ropensci.org/drake/hpc.html" class="external-link uri">https://books.ropensci.org/drake/hpc.html</a>.</p>
+<p><a href="required_libs_linux.html">See here</a></p>
 </div>
 <div class="section level3">
-<h3 id="alternative-storage-format">Alternative storage format<a class="anchor" aria-label="anchor" href="#alternative-storage-format"></a>
+<h3 id="macos">MacOS<a class="anchor" aria-label="anchor" href="#macos"></a>
 </h3>
-<p><a href="https://docs.ropensci.org/drake" class="external-link">drake</a> supports several types of storage formats for cached objects, but <a href="https://github.com/traversc/qs" class="external-link">qs</a> is recommended and used by <a href="https://github.com/bioinfocz/scdrake" class="external-link">scdrake</a> by default due to its performance. You can install <a href="https://github.com/traversc/qs" class="external-link">qs</a> with</p>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu">BiocManager</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/BiocManager/man/install.html" class="external-link">install</a></span><span class="op">(</span><span class="st">"qs"</span><span class="op">)</span></span></code></pre></div>
+<p>You can install the required libraries with <a href="https://brew.sh/" class="external-link">Homebrew</a> package manager:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="ex">brew</span> install libxml2 imagemagick@6 harfbuzz fribidi libgit2 geos</span></code></pre></div>
+<hr>
 </div>
-<div class="section level3">
-<h3 id="using-renv">Using <code>renv</code>
-<a class="anchor" aria-label="anchor" href="#using-renv"></a>
-</h3>
-<p>Because <a href="https://github.com/bioinfocz/scdrake" class="external-link">scdrake</a> uses a lot of packages, we also encourage users to use the <a href="https://rstudio.github.io/renv/" class="external-link">renv</a> package, which will install all dependencies to a local, private, project library. In case you have already initialized a new <a href="https://github.com/bioinfocz/scdrake" class="external-link">scdrake</a> project (as described in <code><a href="articles/scdrake.html">vignette("scdrake")</a></code>) and your working directory is in the project’s root, you can initialize a new <a href="https://rstudio.github.io/renv/" class="external-link">renv</a> private library with</p>
+</div>
+<div class="section level2">
+<h2 id="using-renv-optional">Using <code>renv</code> (optional)<a class="anchor" aria-label="anchor" href="#using-renv-optional"></a>
+</h2>
+<p><a href="https://rstudio.github.io/renv/" class="external-link">renv</a> package allows to install other packages into local, project-specific library, and thus, those won’t interfere with system-wide packages.</p>
+<details><summary>
+▶ Click for details
+</summary><p>Because <a href="https://github.com/bioinfocz/scdrake" class="external-link">scdrake</a> uses a lot of packages, we also encourage users to use the <a href="https://rstudio.github.io/renv/" class="external-link">renv</a> package, which will install all dependencies to a local, private, project library. In case you have already initialized a new <a href="https://github.com/bioinfocz/scdrake" class="external-link">scdrake</a> project (as described in <code><a href="articles/scdrake.html">vignette("scdrake")</a></code>) and your working directory is in the project’s root, you can initialize a new <a href="https://rstudio.github.io/renv/" class="external-link">renv</a> private library with</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">renv</span><span class="fu">::</span><span class="fu">restore</span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <p>It will use the <code>renv.lock</code> file (which is bundled with <a href="https://github.com/bioinfocz/scdrake" class="external-link">scdrake</a> package) holding all dependencies and their versions.</p>
 <p>To save time and space, you can also symlink the <code>renv/library</code> directory to multiple <a href="https://github.com/bioinfocz/scdrake" class="external-link">scdrake</a> projects.</p>
 <p>Alternatively, just install <a href="https://github.com/bioinfocz/scdrake" class="external-link">scdrake</a> from within the activated renv and all dependencies will be installed to the private library. But keep in mind in that case dependencies will be installed from package’s <code>DESCRIPTION</code> file in which package versions are not specified, and thus the latest (and possibly untested) package versions will be installed.</p>
-<hr>
-</div>
+</details><hr>
 </div>
 <div class="section level2">
 <h2 id="vignettes-and-other-readings">Vignettes and other readings<a class="anchor" aria-label="anchor" href="#vignettes-and-other-readings"></a>
 </h2>
-<p>See <a href="https://bioinfocz.github.io/scdrake" class="uri">https://bioinfocz.github.io/scdrake</a> for a documentation website, where links to vignettes below become real :-)</p>
+<p>See <a href="https://bioinfocz.github.io/scdrake" class="uri">https://bioinfocz.github.io/scdrake</a> for a documentation website where links to vignettes below become real :-)</p>
 <ul>
-<li>Get started: <code><a href="articles/scdrake.html">vignette("scdrake")</a></code>
+<li>Guides:
+<ul>
+<li>01 Quick start (single-sample pipeline): <code><a href="articles/scdrake.html">vignette("scdrake")</a></code>
 </li>
-<li>Pipeline overview: <code><a href="articles/pipeline_overview.html">vignette("pipeline_overview")</a></code>
+<li>02 Integration pipeline guide: <code><a href="articles/scdrake_integration.html">vignette("scdrake_integration")</a></code>
+</li>
+<li>Extending the pipeline: <code><a href="articles/scdrake_extend.html">vignette("scdrake_extend")</a></code>
+</li>
+<li>
+<a href="https://docs.ropensci.org/drake" class="external-link">drake</a> basics: <code><a href="articles/drake_basics.html">vignette("drake_basics")</a></code>
 <ul>
-<li>Cluster markers: <code><a href="articles/cluster_markers.html">vignette("cluster_markers")</a></code>
+<li>Or the official <a href="https://docs.ropensci.org/drake" class="external-link">drake</a> book: <a href="https://books.ropensci.org/drake/" class="external-link uri">https://books.ropensci.org/drake/</a>
 </li>
 </ul>
 </li>
-<li>Running the pipeline, environment variables: <code>vignette("scdrake_run")</code>
+</ul>
 </li>
-<li>Config files (basic concept): <code><a href="articles/scdrake_config.html">vignette("scdrake_config")</a></code>
-</li>
-<li>Targets and config parameters for each stage:
+<li>General information:
 <ul>
-<li>Common:
+<li>Pipeline overview: <code><a href="articles/pipeline_overview.html">vignette("pipeline_overview")</a></code>
+</li>
+<li>FAQ &amp; Howtos: <code><a href="articles/scdrake_faq.html">vignette("scdrake_faq")</a></code>
+</li>
+<li>Config files: <code><a href="articles/scdrake_config.html">vignette("scdrake_config")</a></code>
+</li>
+<li>Cluster markers: <code><a href="articles/cluster_markers.html">vignette("cluster_markers")</a></code>
+</li>
+<li>Environment variables: <code><a href="articles/scdrake_envvars.html">vignette("scdrake_envvars")</a></code>
+</li>
+</ul>
+</li>
+<li>General configs:
 <ul>
 <li>Pipeline config: <code><a href="articles/config_pipeline.html">vignette("config_pipeline")</a></code>
 </li>
 <li>Main config: <code><a href="articles/config_main.html">vignette("config_main")</a></code>
 </li>
-<li>Cluster markers stage: <code><a href="articles/stage_cluster_markers.html">vignette("stage_cluster_markers")</a></code>
-</li>
-<li>Contrasts stage: <code><a href="articles/stage_contrasts.html">vignette("stage_contrasts")</a></code>
-</li>
 </ul>
 </li>
+<li>Targets and config parameters for each stage:
+<ul>
 <li>Single-sample pipeline:
 <ul>
 <li>Reading in data, filtering, quality control (<code>01_input_qc</code>): <code><a href="articles/stage_input_qc.html">vignette("stage_input_qc")</a></code>
@@ -318,16 +349,17 @@
 <ul>
 <li>Reading in data and integration (<code>01_integration</code>): <code><a href="articles/stage_integration.html">vignette("stage_integration")</a></code>
 </li>
-<li>Clustering (<code>02_int_clustering</code>): <code><a href="articles/stage_int_clustering.html">vignette("stage_int_clustering")</a></code>
+<li>Post-integration clustering (<code>02_int_clustering</code>): <code><a href="articles/stage_int_clustering.html">vignette("stage_int_clustering")</a></code>
 </li>
 </ul>
 </li>
-</ul>
-</li>
-<li>
-<a href="https://docs.ropensci.org/drake" class="external-link">drake</a> basics: <code><a href="articles/drake_basics.html">vignette("drake_basics")</a></code>
+<li>Common:
 <ul>
-<li>Or the official <a href="https://docs.ropensci.org/drake" class="external-link">drake</a> book: <a href="https://books.ropensci.org/drake/" class="external-link uri">https://books.ropensci.org/drake/</a>
+<li>Cluster markers stage: <code><a href="articles/stage_cluster_markers.html">vignette("stage_cluster_markers")</a></code>
+</li>
+<li>Contrasts stage: <code><a href="articles/stage_contrasts.html">vignette("stage_contrasts")</a></code>
+</li>
+</ul>
 </li>
 </ul>
 </li>
@@ -408,6 +440,7 @@
 </div>
 </div>
 </div>
+
   </div>
 
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
