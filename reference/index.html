@@ -35,7 +35,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">scdrake</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.2.3</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.3.0</span>
       </span>
     </div>
 
@@ -44,10 +44,13 @@
   <a href="../articles/scdrake.html">Get started</a>
 </li>
 <li>
+  <a href="../articles/scdrake_integration.html">Integration pipeline guide</a>
+</li>
+<li>
   <a href="../articles/pipeline_overview.html">Pipeline overview</a>
 </li>
 <li>
-  <a href="../reference/index.html">Reference</a>
+  <a href="../articles/scdrake_faq.html">FAQ &amp; Howtos</a>
 </li>
 <li class="dropdown">
   <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -56,24 +59,35 @@
     <span class="caret"></span>
   </a>
   <ul class="dropdown-menu" role="menu"><li class="divider">
-    <li class="dropdown-header">General information</li>
+    <li class="dropdown-header">Guides</li>
     <li>
-      <a href="../articles/pipeline_overview.html">Pipeline overview</a>
+      <a href="../articles/scdrake_integration.html">02 Integration pipeline guide</a>
     </li>
     <li>
-      <a href="../articles/scdrake_run.html">Running the pipeline, environment variables</a>
-    </li>
-    <li>
-      <a href="../articles/cluster_markers.html">Cluster markers</a>
+      <a href="../articles/scdrake_extend.html">Extending the pipeline</a>
     </li>
     <li>
       <a href="../articles/drake_basics.html">drake basics</a>
     </li>
     <li class="divider">
-    <li class="dropdown-header">Configs</li>
+    <li class="dropdown-header">General information</li>
     <li>
-      <a href="../articles/scdrake_config.html">scdrake configs: a general overview</a>
+      <a href="../articles/pipeline_overview.html">Pipeline overview</a>
     </li>
+    <li>
+      <a href="../articles/scdrake_faq.html">FAQ &amp; Howtos</a>
+    </li>
+    <li>
+      <a href="../articles/cluster_markers.html">Cluster markers</a>
+    </li>
+    <li>
+      <a href="../articles/scdrake_config.html">scdrake config internals</a>
+    </li>
+    <li>
+      <a href="../articles/scdrake_envvars.html">Environment variables</a>
+    </li>
+    <li class="divider">
+    <li class="dropdown-header">General configs</li>
     <li>
       <a href="../articles/config_pipeline.html">Pipeline config</a>
     </li>
@@ -105,6 +119,9 @@
       <a href="../articles/stage_contrasts.html">Contrasts stage</a>
     </li>
   </ul></li>
+<li>
+  <a href="../reference/index.html">Reference</a>
+</li>
 <li>
   <a href="../news/index.html">Changelog</a>
 </li>
@@ -198,9 +215,9 @@
           <p class="section-desc"></p>
         </th>
       </tr></tbody><tbody><tr><td>
-          <p><code><a href="run_pipeline.html">run_single_sample()</a></code> <code><a href="run_pipeline.html">run_integration()</a></code> </p>
+          <p><code><a href="run_pipeline.html">run_single_sample()</a></code> <code><a href="run_pipeline.html">run_integration()</a></code> <code><a href="run_pipeline.html">run_single_sample_r()</a></code> <code><a href="run_pipeline.html">run_integration_r()</a></code> </p>
         </td>
-        <td><p>A shortcut to run the <code>scdrake</code> pipeline in the current R session.</p></td>
+        <td><p>Run the <code>scdrake</code> pipeline.</p></td>
       </tr><tr><td>
           <p><code><a href="create_dirs.html">create_single_sample_dirs()</a></code> <code><a href="create_dirs.html">create_integration_dirs()</a></code> </p>
         </td>
@@ -245,6 +262,14 @@
           <p><code><a href="get_subplan_integration.html">get_integration_subplan()</a></code> <code><a href="get_subplan_integration.html">get_int_clustering_subplan()</a></code> </p>
         </td>
         <td><p>Get a <code>drake</code> plan for a stage of integration pipeline.</p></td>
+      </tr></tbody><tbody><tr><th colspan="2">
+          <h3 id="custom-plan">Custom plan <a href="#custom-plan" class="anchor" aria-hidden="true"></a></h3>
+          <p class="section-desc"></p>
+        </th>
+      </tr></tbody><tbody><tr><td>
+          <p><code><a href="load_custom_plan.html">load_custom_plan()</a></code> </p>
+        </td>
+        <td><p>Source a file returning a custom drake plan.</p></td>
       </tr></tbody><tbody><tr><th colspan="2">
           <h2 id="download-example-data">Download example data <a href="#download-example-data" class="anchor" aria-hidden="true"></a></h2>
           <p class="section-desc"></p>
@@ -725,6 +750,10 @@ or <code>CONTRASTS_SOURCES</code> (<code>contrasts.yaml</code> config).</p></td>
         </td>
         <td><p>Print a HTML of table collapsible by button.</p></td>
       </tr><tr><td>
+          <p><code><a href="format_used_functions.html">format_used_functions()</a></code> </p>
+        </td>
+        <td><p>Use the <a href="https://downlit.r-lib.org/" class="external-link">downlit</a> package to generate a Markdown list of autolinked functions wrapped inside <code>&lt;details&gt;</code> tags.</p></td>
+      </tr><tr><td>
           <p><code><a href="generate_dimred_plots_section.html">generate_dimred_plots_section()</a></code> </p>
         </td>
         <td><p>Generate a section with dimred plots used in some RMarkdown files.</p></td>
@@ -769,7 +798,7 @@ or <code>CONTRASTS_SOURCES</code> (<code>contrasts.yaml</code> config).</p></td>
         </td>
         <td><p>A wrapper around <code><a href="https://rdrr.io/pkg/assertthat/man/assert_that.html" class="external-link">assertthat::assert_that()</a></code>.</p></td>
       </tr><tr><td>
-          <p><code><a href="check_pkg_installed.html">check_pkg_installed()</a></code> <code><a href="check_pkg_installed.html">check_qs_installed()</a></code> <code><a href="check_pkg_installed.html">check_future_installed()</a></code> <code><a href="check_pkg_installed.html">check_clustermq_installed()</a></code> <code><a href="check_pkg_installed.html">check_future.callr_installed()</a></code> </p>
+          <p><code><a href="check_pkg_installed.html">check_pkg_installed()</a></code> <code><a href="check_pkg_installed.html">check_qs_installed()</a></code> <code><a href="check_pkg_installed.html">check_future_installed()</a></code> <code><a href="check_pkg_installed.html">check_clustermq_installed()</a></code> <code><a href="check_pkg_installed.html">check_future.callr_installed()</a></code> <code><a href="check_pkg_installed.html">check_sc3_version()</a></code> <code><a href="check_pkg_installed.html">check_scdrake_packages()</a></code> </p>
         </td>
         <td><p>Check if a package is installed and display an informative message.</p></td>
       </tr><tr><td>
@@ -889,7 +918,7 @@ or <code>CONTRASTS_SOURCES</code> (<code>contrasts.yaml</code> config).</p></td>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.9000.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.9000.</p>
   <p class="preferably">Using <a href="https://preferably.amirmasoudabdol.name/?source=footer" class="external-link">preferably</a> template.</p>
 </div>
 

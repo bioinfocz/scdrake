@@ -35,7 +35,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">scdrake</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.2.3</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.3.0</span>
       </span>
     </div>
 
@@ -44,10 +44,13 @@
   <a href="../articles/scdrake.html">Get started</a>
 </li>
 <li>
+  <a href="../articles/scdrake_integration.html">Integration pipeline guide</a>
+</li>
+<li>
   <a href="../articles/pipeline_overview.html">Pipeline overview</a>
 </li>
 <li>
-  <a href="../reference/index.html">Reference</a>
+  <a href="../articles/scdrake_faq.html">FAQ &amp; Howtos</a>
 </li>
 <li class="dropdown">
   <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -56,24 +59,35 @@
     <span class="caret"></span>
   </a>
   <ul class="dropdown-menu" role="menu"><li class="divider">
-    <li class="dropdown-header">General information</li>
+    <li class="dropdown-header">Guides</li>
     <li>
-      <a href="../articles/pipeline_overview.html">Pipeline overview</a>
+      <a href="../articles/scdrake_integration.html">02 Integration pipeline guide</a>
     </li>
     <li>
-      <a href="../articles/scdrake_run.html">Running the pipeline, environment variables</a>
-    </li>
-    <li>
-      <a href="../articles/cluster_markers.html">Cluster markers</a>
+      <a href="../articles/scdrake_extend.html">Extending the pipeline</a>
     </li>
     <li>
       <a href="../articles/drake_basics.html">drake basics</a>
     </li>
     <li class="divider">
-    <li class="dropdown-header">Configs</li>
+    <li class="dropdown-header">General information</li>
     <li>
-      <a href="../articles/scdrake_config.html">scdrake configs: a general overview</a>
+      <a href="../articles/pipeline_overview.html">Pipeline overview</a>
     </li>
+    <li>
+      <a href="../articles/scdrake_faq.html">FAQ &amp; Howtos</a>
+    </li>
+    <li>
+      <a href="../articles/cluster_markers.html">Cluster markers</a>
+    </li>
+    <li>
+      <a href="../articles/scdrake_config.html">scdrake config internals</a>
+    </li>
+    <li>
+      <a href="../articles/scdrake_envvars.html">Environment variables</a>
+    </li>
+    <li class="divider">
+    <li class="dropdown-header">General configs</li>
     <li>
       <a href="../articles/config_pipeline.html">Pipeline config</a>
     </li>
@@ -105,6 +119,9 @@
       <a href="../articles/stage_contrasts.html">Contrasts stage</a>
     </li>
   </ul></li>
+<li>
+  <a href="../reference/index.html">Reference</a>
+</li>
 <li>
   <a href="../news/index.html">Changelog</a>
 </li>
@@ -148,34 +165,45 @@
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">save_pdf</span><span class="op">(</span>
-  <span class="va">plots</span>,
-  <span class="va">output_file</span>,
-  width <span class="op">=</span> <span class="cn">NULL</span>,
-  height <span class="op">=</span> <span class="cn">NULL</span>,
-  make_thumbnail <span class="op">=</span> <span class="cn">FALSE</span>,
-  stop_on_error <span class="op">=</span> <span class="cn">FALSE</span>
-<span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">save_pdf</span><span class="op">(</span></span>
+<span>  <span class="va">plots</span>,</span>
+<span>  <span class="va">output_file</span>,</span>
+<span>  width <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  height <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  make_thumbnail <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  stop_on_error <span class="op">=</span> <span class="cn">FALSE</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>plots</dt>
 <dd><p>A list of plots.</p></dd>
+
+
 <dt>output_file</dt>
 <dd><p>A character scalar: path to output PDF file.
 If file's directory doesn't exist, it will be created recursively.</p></dd>
+
+
 <dt>width, height</dt>
 <dd><p>A numeric scalar: default width and height of graphics region in inches. Defaults to 7.</p></dd>
+
+
 <dt>make_thumbnail</dt>
 <dd><p>A logical scalar: if <code>TRUE</code>, a PNG file will be created from the first plot in <code>plots</code>.</p></dd>
+
+
 <dt>stop_on_error</dt>
 <dd><p>A logical scalar: if <code>TRUE</code>, the function will stop when there is an error during the
 saving of the plot. Otherwise a dummy PDF/PNG thumbnail file with error description will be created instead.</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>A named list with the following items:</p><ul><li><p><code>success</code>: a logical scalar indicating whether the plot saving succeeded (<code>TRUE</code>) or not (<code>FALSE</code>).</p></li>
+    
+
+<p>A named list with the following items:</p><ul><li><p><code>success</code>: a logical scalar indicating whether the plot saving succeeded (<code>TRUE</code>) or not (<code>FALSE</code>).</p></li>
 <li><p><code>error</code>: a character scalar with error message if <code>success</code> is <code>FALSE</code>, <code>NULL</code> otherwise.</p></li>
 <li><p><code>error_plot</code>: a <code>ggplot2</code> object with error plot if <code>success</code> is <code>FALSE</code>, <code>NULL</code> otherwise.</p></li>
 <li><p><code>output_file</code>: a character scalar, identical to <code>output_file</code> parameter.</p></li>
@@ -195,7 +223,7 @@ saving of the plot. Otherwise a dummy PDF/PNG thumbnail file with error descript
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.9000.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.9000.</p>
   <p class="preferably">Using <a href="https://preferably.amirmasoudabdol.name/?source=footer" class="external-link">preferably</a> template.</p>
 </div>
 

@@ -35,7 +35,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">scdrake</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.2.3</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.3.0</span>
       </span>
     </div>
 
@@ -44,10 +44,13 @@
   <a href="../articles/scdrake.html">Get started</a>
 </li>
 <li>
+  <a href="../articles/scdrake_integration.html">Integration pipeline guide</a>
+</li>
+<li>
   <a href="../articles/pipeline_overview.html">Pipeline overview</a>
 </li>
 <li>
-  <a href="../reference/index.html">Reference</a>
+  <a href="../articles/scdrake_faq.html">FAQ &amp; Howtos</a>
 </li>
 <li class="dropdown">
   <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -56,24 +59,35 @@
     <span class="caret"></span>
   </a>
   <ul class="dropdown-menu" role="menu"><li class="divider">
-    <li class="dropdown-header">General information</li>
+    <li class="dropdown-header">Guides</li>
     <li>
-      <a href="../articles/pipeline_overview.html">Pipeline overview</a>
+      <a href="../articles/scdrake_integration.html">02 Integration pipeline guide</a>
     </li>
     <li>
-      <a href="../articles/scdrake_run.html">Running the pipeline, environment variables</a>
-    </li>
-    <li>
-      <a href="../articles/cluster_markers.html">Cluster markers</a>
+      <a href="../articles/scdrake_extend.html">Extending the pipeline</a>
     </li>
     <li>
       <a href="../articles/drake_basics.html">drake basics</a>
     </li>
     <li class="divider">
-    <li class="dropdown-header">Configs</li>
+    <li class="dropdown-header">General information</li>
     <li>
-      <a href="../articles/scdrake_config.html">scdrake configs: a general overview</a>
+      <a href="../articles/pipeline_overview.html">Pipeline overview</a>
     </li>
+    <li>
+      <a href="../articles/scdrake_faq.html">FAQ &amp; Howtos</a>
+    </li>
+    <li>
+      <a href="../articles/cluster_markers.html">Cluster markers</a>
+    </li>
+    <li>
+      <a href="../articles/scdrake_config.html">scdrake config internals</a>
+    </li>
+    <li>
+      <a href="../articles/scdrake_envvars.html">Environment variables</a>
+    </li>
+    <li class="divider">
+    <li class="dropdown-header">General configs</li>
     <li>
       <a href="../articles/config_pipeline.html">Pipeline config</a>
     </li>
@@ -105,6 +119,9 @@
       <a href="../articles/stage_contrasts.html">Contrasts stage</a>
     </li>
   </ul></li>
+<li>
+  <a href="../reference/index.html">Reference</a>
+</li>
 <li>
   <a href="../news/index.html">Changelog</a>
 </li>
@@ -148,29 +165,37 @@
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">markers_for_tables</span><span class="op">(</span>
-  <span class="va">markers_out</span>,
-  <span class="va">markers_heatmaps_df</span>,
-  <span class="va">markers_plots_top</span>,
-  <span class="va">markers_dimred_plots_files</span>,
-  <span class="va">out_dir</span>,
-  ensembl_species <span class="op">=</span> <span class="st">"Homo_sapiens"</span>,
-  <span class="va">...</span>
-<span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">markers_for_tables</span><span class="op">(</span></span>
+<span>  <span class="va">markers_out</span>,</span>
+<span>  <span class="va">markers_heatmaps_df</span>,</span>
+<span>  <span class="va">markers_plots_top</span>,</span>
+<span>  <span class="va">markers_dimred_plots_files</span>,</span>
+<span>  <span class="va">out_dir</span>,</span>
+<span>  ensembl_species <span class="op">=</span> <span class="st">"Homo_sapiens"</span>,</span>
+<span>  <span class="va">...</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>markers_out</dt>
 <dd><p>A tibble. See <code>cluster_markers_out</code> or <code>contrasts_out</code> target for details.</p></dd>
+
+
 <dt>markers_heatmaps_df</dt>
 <dd><p>A tibble. See <code>cluster_markers_heatmaps_df</code> or <code>contrasts_heatmaps_df</code> for details.</p></dd>
+
+
 <dt>markers_plots_top</dt>
 <dd><p>A tibble.
 See <code>cluster_markers_plots_top</code> or <code>contrasts_plots_top</code> for details.</p></dd>
+
+
 <dt>markers_dimred_plots_files</dt>
 <dd><p>A tibble.
 See <code>cluster_markers_dimred_plots_files</code> or <code>contrasts_dimred_plots_files</code> for details.</p></dd>
+
+
 <dt>out_dir</dt>
 <dd><p>A character scalar: path to base output directory to save HTML tables in.
 Files and subdirectories will be created as:</p><ul><li><p><code>&lt;source_name&gt;/&lt;source_name&gt;_&lt;test_type&gt;_&lt;group_level&gt;.html</code> for cluster markers.
@@ -178,14 +203,21 @@ Example: <code>markers_cluster_kmeans_kc_4/markers_cluster_kmeans_kc_4_t_1.html<
 <li><p><code>&lt;source_name&gt;/&lt;source_name&gt;_&lt;test_type&gt;_&lt;target_level&gt;_vs_&lt;reference_level&gt;.html</code> for contrasts.
 Example: <code>dea_cluster_louvain_annotated/dea_cluster_louvain_annotated_binom_cl3_vs_cl4.html</code></p></li>
 </ul></dd>
+
+
 <dt>ensembl_species</dt>
 <dd><p>A character scalar: passed to <code><a href="add_marker_table_links.html">add_marker_table_links()</a></code>.</p></dd>
+
+
 <dt>...</dt>
 <dd><p>Currently not used.</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>A tibble. See <code>cluster_markers_for_tables</code> or <code>contrasts_for_tables</code> for details.</p>
+    
+
+<p>A tibble. See <code>cluster_markers_for_tables</code> or <code>contrasts_for_tables</code> for details.</p>
     </div>
 
   </div>
@@ -200,7 +232,7 @@ Example: <code>dea_cluster_louvain_annotated/dea_cluster_louvain_annotated_binom
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.9000.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.9000.</p>
   <p class="preferably">Using <a href="https://preferably.amirmasoudabdol.name/?source=footer" class="external-link">preferably</a> template.</p>
 </div>
 

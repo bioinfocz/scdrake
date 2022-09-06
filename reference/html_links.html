@@ -35,7 +35,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">scdrake</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.2.3</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.3.0</span>
       </span>
     </div>
 
@@ -44,10 +44,13 @@
   <a href="../articles/scdrake.html">Get started</a>
 </li>
 <li>
+  <a href="../articles/scdrake_integration.html">Integration pipeline guide</a>
+</li>
+<li>
   <a href="../articles/pipeline_overview.html">Pipeline overview</a>
 </li>
 <li>
-  <a href="../reference/index.html">Reference</a>
+  <a href="../articles/scdrake_faq.html">FAQ &amp; Howtos</a>
 </li>
 <li class="dropdown">
   <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -56,24 +59,35 @@
     <span class="caret"></span>
   </a>
   <ul class="dropdown-menu" role="menu"><li class="divider">
-    <li class="dropdown-header">General information</li>
+    <li class="dropdown-header">Guides</li>
     <li>
-      <a href="../articles/pipeline_overview.html">Pipeline overview</a>
+      <a href="../articles/scdrake_integration.html">02 Integration pipeline guide</a>
     </li>
     <li>
-      <a href="../articles/scdrake_run.html">Running the pipeline, environment variables</a>
-    </li>
-    <li>
-      <a href="../articles/cluster_markers.html">Cluster markers</a>
+      <a href="../articles/scdrake_extend.html">Extending the pipeline</a>
     </li>
     <li>
       <a href="../articles/drake_basics.html">drake basics</a>
     </li>
     <li class="divider">
-    <li class="dropdown-header">Configs</li>
+    <li class="dropdown-header">General information</li>
     <li>
-      <a href="../articles/scdrake_config.html">scdrake configs: a general overview</a>
+      <a href="../articles/pipeline_overview.html">Pipeline overview</a>
     </li>
+    <li>
+      <a href="../articles/scdrake_faq.html">FAQ &amp; Howtos</a>
+    </li>
+    <li>
+      <a href="../articles/cluster_markers.html">Cluster markers</a>
+    </li>
+    <li>
+      <a href="../articles/scdrake_config.html">scdrake config internals</a>
+    </li>
+    <li>
+      <a href="../articles/scdrake_envvars.html">Environment variables</a>
+    </li>
+    <li class="divider">
+    <li class="dropdown-header">General configs</li>
     <li>
       <a href="../articles/config_pipeline.html">Pipeline config</a>
     </li>
@@ -105,6 +119,9 @@
       <a href="../articles/stage_contrasts.html">Contrasts stage</a>
     </li>
   </ul></li>
+<li>
+  <a href="../reference/index.html">Reference</a>
+</li>
 <li>
   <a href="../news/index.html">Changelog</a>
 </li>
@@ -148,52 +165,71 @@
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">create_a_link</span><span class="op">(</span>
-  <span class="va">href</span>,
-  <span class="va">text</span>,
-  href_rel_start <span class="op">=</span> <span class="cn">NULL</span>,
-  target <span class="op">=</span> <span class="st">"_blank"</span>,
-  do_cat <span class="op">=</span> <span class="cn">FALSE</span>,
-  <span class="va">...</span>
-<span class="op">)</span>
-
-<span class="fu">create_img_link</span><span class="op">(</span>
-  <span class="va">href</span>,
-  <span class="va">img_src</span>,
-  href_rel_start <span class="op">=</span> <span class="cn">NULL</span>,
-  img_src_rel_start <span class="op">=</span> <span class="cn">NULL</span>,
-  img_width <span class="op">=</span> <span class="st">"250px"</span>,
-  img_height <span class="op">=</span> <span class="st">""</span>,
-  target <span class="op">=</span> <span class="st">"_blank"</span>,
-  do_cat <span class="op">=</span> <span class="cn">FALSE</span>,
-  <span class="va">...</span>
-<span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">create_a_link</span><span class="op">(</span></span>
+<span>  <span class="va">href</span>,</span>
+<span>  <span class="va">text</span>,</span>
+<span>  href_rel_start <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  target <span class="op">=</span> <span class="st">"_blank"</span>,</span>
+<span>  do_cat <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  <span class="va">...</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">create_img_link</span><span class="op">(</span></span>
+<span>  <span class="va">href</span>,</span>
+<span>  <span class="va">img_src</span>,</span>
+<span>  href_rel_start <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  img_src_rel_start <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  img_width <span class="op">=</span> <span class="st">"250px"</span>,</span>
+<span>  img_height <span class="op">=</span> <span class="st">""</span>,</span>
+<span>  target <span class="op">=</span> <span class="st">"_blank"</span>,</span>
+<span>  do_cat <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  <span class="va">...</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>href</dt>
 <dd><p>A character scalar: URL.</p></dd>
+
+
 <dt>text</dt>
 <dd><p>A character scalar: text of the link.</p></dd>
+
+
 <dt>href_rel_start</dt>
 <dd><p>A character scalar: relative start of <code>href</code>. See the section <em>Relative links</em>.</p></dd>
+
+
 <dt>target</dt>
 <dd><p>A character scalar: <code>target</code> parameter of <code>&lt;a&gt;</code> tag.</p></dd>
+
+
 <dt>do_cat</dt>
 <dd><p>A logical scalar: if <code>TRUE</code>, print (using <code><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat()</a></code>) the result before returning.</p></dd>
+
+
 <dt>...</dt>
 <dd><p>Named parameters to put in the resulting <code>&lt;a&gt;</code> tag.</p></dd>
+
+
 <dt>img_src</dt>
 <dd><p>A character scalar: path to image.</p></dd>
+
+
 <dt>img_src_rel_start</dt>
 <dd><p>A character scalar: same as <code>href_rel_start</code>, but for the image.</p></dd>
+
+
 <dt>img_width, img_height</dt>
 <dd><p>A character scalar: image size.</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>A character scalar.</p>
+    
+
+<p>A character scalar.</p>
     </div>
     <div id="relative-links">
     <h2>Relative links</h2>
@@ -213,10 +249,10 @@ to <code>../plots/plot.pdf</code>.</p>
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="fu">create_a_link</span><span class="op">(</span><span class="st">"google.com"</span>, <span class="st">"Google"</span><span class="op">)</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu">create_a_link</span><span class="op">(</span><span class="st">"google.com"</span>, <span class="st">"Google"</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "&lt;a href='google.com' target='_blank' &gt;Google&lt;/a&gt;"</span>
-<span class="r-in"><span class="co"># If you want to reference a file relative to HTML saved in "output/report.html"</span></span>
-<span class="r-in"><span class="fu">create_a_link</span><span class="op">(</span><span class="st">"output/plots/plot.pdf"</span>, <span class="st">"Link to plot"</span>, href_rel_start <span class="op">=</span> <span class="st">"output"</span><span class="op">)</span></span>
+<span class="r-in"><span><span class="co"># If you want to reference a file relative to HTML saved in "output/report.html"</span></span></span>
+<span class="r-in"><span><span class="fu">create_a_link</span><span class="op">(</span><span class="st">"output/plots/plot.pdf"</span>, <span class="st">"Link to plot"</span>, href_rel_start <span class="op">=</span> <span class="st">"output"</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "&lt;a href='plots/plot.pdf' target='_blank' &gt;Link to plot&lt;/a&gt;"</span>
 </code></pre></div>
     </div>
@@ -232,7 +268,7 @@ to <code>../plots/plot.pdf</code>.</p>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.9000.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.9000.</p>
   <p class="preferably">Using <a href="https://preferably.amirmasoudabdol.name/?source=footer" class="external-link">preferably</a> template.</p>
 </div>
 

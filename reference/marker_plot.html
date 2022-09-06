@@ -40,7 +40,7 @@ A violin plot: expression of a marker in each cluster.
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">scdrake</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.2.3</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.3.0</span>
       </span>
     </div>
 
@@ -49,10 +49,13 @@ A violin plot: expression of a marker in each cluster.
   <a href="../articles/scdrake.html">Get started</a>
 </li>
 <li>
+  <a href="../articles/scdrake_integration.html">Integration pipeline guide</a>
+</li>
+<li>
   <a href="../articles/pipeline_overview.html">Pipeline overview</a>
 </li>
 <li>
-  <a href="../reference/index.html">Reference</a>
+  <a href="../articles/scdrake_faq.html">FAQ &amp; Howtos</a>
 </li>
 <li class="dropdown">
   <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -61,24 +64,35 @@ A violin plot: expression of a marker in each cluster.
     <span class="caret"></span>
   </a>
   <ul class="dropdown-menu" role="menu"><li class="divider">
-    <li class="dropdown-header">General information</li>
+    <li class="dropdown-header">Guides</li>
     <li>
-      <a href="../articles/pipeline_overview.html">Pipeline overview</a>
+      <a href="../articles/scdrake_integration.html">02 Integration pipeline guide</a>
     </li>
     <li>
-      <a href="../articles/scdrake_run.html">Running the pipeline, environment variables</a>
-    </li>
-    <li>
-      <a href="../articles/cluster_markers.html">Cluster markers</a>
+      <a href="../articles/scdrake_extend.html">Extending the pipeline</a>
     </li>
     <li>
       <a href="../articles/drake_basics.html">drake basics</a>
     </li>
     <li class="divider">
-    <li class="dropdown-header">Configs</li>
+    <li class="dropdown-header">General information</li>
     <li>
-      <a href="../articles/scdrake_config.html">scdrake configs: a general overview</a>
+      <a href="../articles/pipeline_overview.html">Pipeline overview</a>
     </li>
+    <li>
+      <a href="../articles/scdrake_faq.html">FAQ &amp; Howtos</a>
+    </li>
+    <li>
+      <a href="../articles/cluster_markers.html">Cluster markers</a>
+    </li>
+    <li>
+      <a href="../articles/scdrake_config.html">scdrake config internals</a>
+    </li>
+    <li>
+      <a href="../articles/scdrake_envvars.html">Environment variables</a>
+    </li>
+    <li class="divider">
+    <li class="dropdown-header">General configs</li>
     <li>
       <a href="../articles/config_pipeline.html">Pipeline config</a>
     </li>
@@ -110,6 +124,9 @@ A violin plot: expression of a marker in each cluster.
       <a href="../articles/stage_contrasts.html">Contrasts stage</a>
     </li>
   </ul></li>
+<li>
+  <a href="../reference/index.html">Reference</a>
+</li>
 <li>
   <a href="../news/index.html">Changelog</a>
 </li>
@@ -155,46 +172,63 @@ A violin plot: expression of a marker in each cluster.
 </ul></div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">marker_plot</span><span class="op">(</span>
-  <span class="va">sce</span>,
-  <span class="va">dimred_name</span>,
-  <span class="va">gene_ensembl_id</span>,
-  <span class="va">group</span>,
-  cluster_plot_title <span class="op">=</span> <span class="cn">NULL</span>,
-  cluster_plot_subtitle <span class="op">=</span> <span class="cn">NULL</span>,
-  cluster_plot_legend_title <span class="op">=</span> <span class="cn">NULL</span>,
-  cluster_plot_label <span class="op">=</span> <span class="cn">TRUE</span>,
-  cluster_plot_point_size <span class="op">=</span> <span class="fl">1</span>,
-  feature_plot_point_size <span class="op">=</span> <span class="fl">1</span>,
-  vln_plot_legend_title <span class="op">=</span> <span class="cn">NULL</span>
-<span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">marker_plot</span><span class="op">(</span></span>
+<span>  <span class="va">sce</span>,</span>
+<span>  <span class="va">dimred_name</span>,</span>
+<span>  <span class="va">gene_ensembl_id</span>,</span>
+<span>  <span class="va">group</span>,</span>
+<span>  cluster_plot_title <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  cluster_plot_subtitle <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  cluster_plot_legend_title <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  cluster_plot_label <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  cluster_plot_point_size <span class="op">=</span> <span class="fl">1</span>,</span>
+<span>  feature_plot_point_size <span class="op">=</span> <span class="fl">1</span>,</span>
+<span>  vln_plot_legend_title <span class="op">=</span> <span class="cn">NULL</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>sce</dt>
 <dd><p>A <code>SingleCellExperiment</code> object.</p></dd>
+
+
 <dt>dimred_name</dt>
 <dd><p>A character scalar.</p></dd>
+
+
 <dt>gene_ensembl_id</dt>
 <dd><p>A character scalar. ENSEMBL ID of a marker.</p></dd>
+
+
 <dt>group</dt>
 <dd><ul><li><p>A character scalar: name of column in <code>colData(sce)</code> by which are cells separated (e.g. clustering).</p></li>
 <li><p>A character vector or factor: assignment of cells to groups (clusters). Must have the same length as the number
 of cells (columns) in <code>sce</code>.</p></li>
 </ul></dd>
+
+
 <dt>cluster_plot_title, cluster_plot_subtitle, cluster_plot_legend_title, cluster_plot_label</dt>
 <dd><p>A character scalar. Applied to the dimred plot which is colored by <code>group</code>.</p></dd>
+
+
 <dt>cluster_plot_point_size</dt>
 <dd><p>A numeric scalar.</p></dd>
+
+
 <dt>feature_plot_point_size</dt>
 <dd><p>A numeric scalar. Applied to the feature plot.</p></dd>
+
+
 <dt>vln_plot_legend_title</dt>
 <dd><p>A character scalar. Applied to the violin plot.</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>A <code>patchwork</code> object.</p>
+    
+
+<p>A <code>patchwork</code> object.</p>
     </div>
 
   </div>
@@ -209,7 +243,7 @@ of cells (columns) in <code>sce</code>.</p></li>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.9000.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.9000.</p>
   <p class="preferably">Using <a href="https://preferably.amirmasoudabdol.name/?source=footer" class="external-link">preferably</a> template.</p>
 </div>
 

@@ -37,7 +37,16 @@
     <loc>https://bioinfocz.github.io/scdrake/articles/scdrake_config.html</loc>
   </url>
   <url>
-    <loc>https://bioinfocz.github.io/scdrake/articles/scdrake_run.html</loc>
+    <loc>https://bioinfocz.github.io/scdrake/articles/scdrake_envvars.html</loc>
+  </url>
+  <url>
+    <loc>https://bioinfocz.github.io/scdrake/articles/scdrake_extend.html</loc>
+  </url>
+  <url>
+    <loc>https://bioinfocz.github.io/scdrake/articles/scdrake_faq.html</loc>
+  </url>
+  <url>
+    <loc>https://bioinfocz.github.io/scdrake/articles/scdrake_integration.html</loc>
   </url>
   <url>
     <loc>https://bioinfocz.github.io/scdrake/articles/stage_cluster_markers.html</loc>
@@ -217,6 +226,9 @@
     <loc>https://bioinfocz.github.io/scdrake/reference/filter_nulls.html</loc>
   </url>
   <url>
+    <loc>https://bioinfocz.github.io/scdrake/reference/format_used_functions.html</loc>
+  </url>
+  <url>
     <loc>https://bioinfocz.github.io/scdrake/reference/generate_dimred_plots_section.html</loc>
   </url>
   <url>
@@ -296,6 +308,9 @@
   </url>
   <url>
     <loc>https://bioinfocz.github.io/scdrake/reference/load_config.html</loc>
+  </url>
+  <url>
+    <loc>https://bioinfocz.github.io/scdrake/reference/load_custom_plan.html</loc>
   </url>
   <url>
     <loc>https://bioinfocz.github.io/scdrake/reference/make_gene_annotation.html</loc>

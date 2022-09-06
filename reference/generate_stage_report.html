@@ -35,7 +35,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">scdrake</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.2.3</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.3.0</span>
       </span>
     </div>
 
@@ -44,10 +44,13 @@
   <a href="../articles/scdrake.html">Get started</a>
 </li>
 <li>
+  <a href="../articles/scdrake_integration.html">Integration pipeline guide</a>
+</li>
+<li>
   <a href="../articles/pipeline_overview.html">Pipeline overview</a>
 </li>
 <li>
-  <a href="../reference/index.html">Reference</a>
+  <a href="../articles/scdrake_faq.html">FAQ &amp; Howtos</a>
 </li>
 <li class="dropdown">
   <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -56,24 +59,35 @@
     <span class="caret"></span>
   </a>
   <ul class="dropdown-menu" role="menu"><li class="divider">
-    <li class="dropdown-header">General information</li>
+    <li class="dropdown-header">Guides</li>
     <li>
-      <a href="../articles/pipeline_overview.html">Pipeline overview</a>
+      <a href="../articles/scdrake_integration.html">02 Integration pipeline guide</a>
     </li>
     <li>
-      <a href="../articles/scdrake_run.html">Running the pipeline, environment variables</a>
-    </li>
-    <li>
-      <a href="../articles/cluster_markers.html">Cluster markers</a>
+      <a href="../articles/scdrake_extend.html">Extending the pipeline</a>
     </li>
     <li>
       <a href="../articles/drake_basics.html">drake basics</a>
     </li>
     <li class="divider">
-    <li class="dropdown-header">Configs</li>
+    <li class="dropdown-header">General information</li>
     <li>
-      <a href="../articles/scdrake_config.html">scdrake configs: a general overview</a>
+      <a href="../articles/pipeline_overview.html">Pipeline overview</a>
     </li>
+    <li>
+      <a href="../articles/scdrake_faq.html">FAQ &amp; Howtos</a>
+    </li>
+    <li>
+      <a href="../articles/cluster_markers.html">Cluster markers</a>
+    </li>
+    <li>
+      <a href="../articles/scdrake_config.html">scdrake config internals</a>
+    </li>
+    <li>
+      <a href="../articles/scdrake_envvars.html">Environment variables</a>
+    </li>
+    <li class="divider">
+    <li class="dropdown-header">General configs</li>
     <li>
       <a href="../articles/config_pipeline.html">Pipeline config</a>
     </li>
@@ -105,6 +119,9 @@
       <a href="../articles/stage_contrasts.html">Contrasts stage</a>
     </li>
   </ul></li>
+<li>
+  <a href="../reference/index.html">Reference</a>
+</li>
 <li>
   <a href="../news/index.html">Changelog</a>
 </li>
@@ -148,71 +165,101 @@
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">generate_stage_report</span><span class="op">(</span>
-  <span class="va">rmd_file</span>,
-  <span class="va">out_html_file_name</span>,
-  output_dir <span class="op">=</span> <span class="fu">fs</span><span class="fu">::</span><span class="fu"><a href="https://fs.r-lib.org/reference/path_file.html" class="external-link">path_dir</a></span><span class="op">(</span><span class="va">out_html_file_name</span><span class="op">)</span>,
-  css_file <span class="op">=</span> <span class="fu">here</span><span class="op">(</span><span class="st">"Rmd/common/stylesheet.css"</span><span class="op">)</span>,
-  message <span class="op">=</span> <span class="cn">TRUE</span>,
-  warning <span class="op">=</span> <span class="cn">TRUE</span>,
-  echo <span class="op">=</span> <span class="cn">TRUE</span>,
-  quiet <span class="op">=</span> <span class="cn">TRUE</span>,
-  other_deps <span class="op">=</span> <span class="cn">NULL</span>,
-  drake_cache_dir <span class="op">=</span> <span class="fu">here</span><span class="op">(</span><span class="st">".drake"</span><span class="op">)</span>,
-  <span class="va">...</span>
-<span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">generate_stage_report</span><span class="op">(</span></span>
+<span>  <span class="va">rmd_file</span>,</span>
+<span>  <span class="va">out_html_file_name</span>,</span>
+<span>  output_dir <span class="op">=</span> <span class="fu">fs</span><span class="fu">::</span><span class="fu"><a href="https://fs.r-lib.org/reference/path_file.html" class="external-link">path_dir</a></span><span class="op">(</span><span class="va">out_html_file_name</span><span class="op">)</span>,</span>
+<span>  css_file <span class="op">=</span> <span class="fu">here</span><span class="op">(</span><span class="st">"Rmd/common/stylesheet.css"</span><span class="op">)</span>,</span>
+<span>  params <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span>,</span>
+<span>  message <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  warning <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  echo <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  quiet <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  other_deps <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  drake_cache_dir <span class="op">=</span> <span class="fu">here</span><span class="op">(</span><span class="st">".drake"</span><span class="op">)</span>,</span>
+<span>  <span class="va">...</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>rmd_file</dt>
 <dd><p>A character scalar: path to Rmd file to render.</p></dd>
+
+
 <dt>out_html_file_name</dt>
 <dd><p>A character scalar: name of the output HTML file.</p></dd>
+
+
 <dt>output_dir</dt>
 <dd><p>A character scalar: path to directory in which <code>out_html_file_name</code> will be created.
 This directory will be created if it does not exist.</p></dd>
+
+
 <dt>css_file</dt>
 <dd><p>A character scalar: path to CSS file which will be included in the resulting HTML.</p></dd>
+
+
+<dt>params</dt>
+<dd><p>A list of RMarkdown document parameters:
+passed to <code><a href="https://pkgs.rstudio.com/rmarkdown/reference/render.html" class="external-link">rmarkdown::render()</a></code> together with <code>css_file</code> and <code>drake_cache_dir</code> items.</p></dd>
+
+
 <dt>message, warning, echo</dt>
 <dd><p>A logical scalar: passed to <code>knitr::opts_chunk$set()</code>.</p></dd>
+
+
 <dt>quiet</dt>
 <dd><p>A logical scalar: if <code>TRUE</code>, do not be verbose during rendering. Passed to <code><a href="https://pkgs.rstudio.com/rmarkdown/reference/render.html" class="external-link">rmarkdown::render()</a></code>.</p></dd>
+
+
 <dt>other_deps</dt>
 <dd><p>A list of symbols (unquoted): used inside <code><a href="https://docs.ropensci.org/drake/reference/plan.html" class="external-link">drake::plan()</a></code> to mark other target dependencies,
 which are not loaded (<code><a href="https://docs.ropensci.org/drake/reference/readd.html" class="external-link">drake::loadd()</a></code>) or read (<code><a href="https://docs.ropensci.org/drake/reference/readd.html" class="external-link">drake::loadd()</a></code>) inside the <code>rmd_file</code>.</p></dd>
+
+
 <dt>drake_cache_dir</dt>
 <dd><p>A character scalar: path to <code>drake</code> cache directory.</p></dd>
+
+
 <dt>...</dt>
 <dd><p>Passed to <code><a href="https://pkgs.rstudio.com/rmarkdown/reference/render.html" class="external-link">rmarkdown::render()</a></code>.</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>Invisibly <code>NULL</code>.</p>
+    
+
+<p>Invisibly <code>NULL</code>.</p>
     </div>
     <div id="details">
     <h2>Details</h2>
     <p>If you are currently working within a <code>scdrake</code> project, you can review the Rmd files in the <code>Rmd/</code> directory.</p>
 <p>This is a list of Rmd files currently bundled with the <code>scdrake</code> package:</p>
-<p></p><div class="sourceCode r"><pre><code><span class="fu">fs</span><span class="fu">::</span><span class="fu"><a href="https://fs.r-lib.org/reference/dir_tree.html" class="external-link">dir_tree</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"Rmd"</span>, package <span class="op">=</span> <span class="st">"scdrake"</span><span class="op">)</span><span class="op">)</span></code></pre><p></p></div>
-<p></p><div class="sourceCode"><pre><code><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="do">## /mnt/foibe3/Users/novotnyj/projects/bioinfocz/scdrake/inst/Rmd</span></span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="do">## ├── common</span></span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="do">## │   ├── _footer.Rmd</span></span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="do">## │   ├── _header.Rmd</span></span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="do">## │   ├── cluster_markers.Rmd</span></span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="do">## │   ├── cluster_markers_table_template.Rmd</span></span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="do">## │   ├── contrasts.Rmd</span></span>
-<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="do">## │   ├── contrasts_table_template.Rmd</span></span>
-<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="do">## │   ├── dimred_plots.Rmd</span></span>
-<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="do">## │   └── stylesheet.css</span></span>
-<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a><span class="do">## ├── integration</span></span>
-<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a><span class="do">## │   ├── 01_integration.Rmd</span></span>
-<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a><span class="do">## │   └── 02_int_clustering.Rmd</span></span>
-<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a><span class="do">## └── single_sample</span></span>
-<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a><span class="do">##     ├── 01_input_qc.Rmd</span></span>
-<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a><span class="do">##     ├── 01_input_qc_empty_droplets.Rmd</span></span>
-<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a><span class="do">##     ├── 02_norm_clustering.Rmd</span></span>
-<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a><span class="do">##     └── 02_norm_clustering_simple.Rmd</span></span></code></pre><p></p></div>
+<p></p><div class="sourceCode r"><pre><code><span><span class="fu">fs</span><span class="fu">::</span><span class="fu"><a href="https://fs.r-lib.org/reference/dir_tree.html" class="external-link">dir_tree</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"Rmd"</span>, package <span class="op">=</span> <span class="st">"scdrake"</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co">#&gt; /mnt/foibe3/Users/novotnyj/projects/bioinfocz/scdrake/inst/Rmd</span></span>
+<span><span class="co">#&gt; +-- common</span></span>
+<span><span class="co">#&gt; |   +-- _footer.Rmd</span></span>
+<span><span class="co">#&gt; |   +-- _header.Rmd</span></span>
+<span><span class="co">#&gt; |   +-- cluster_markers.Rmd</span></span>
+<span><span class="co">#&gt; |   +-- cluster_markers_table_template.Rmd</span></span>
+<span><span class="co">#&gt; |   +-- contrasts.Rmd</span></span>
+<span><span class="co">#&gt; |   +-- contrasts_table_template.Rmd</span></span>
+<span><span class="co">#&gt; |   +-- dimred_plots.Rmd</span></span>
+<span><span class="co">#&gt; |   \-- stylesheet.css</span></span>
+<span><span class="co">#&gt; +-- integration</span></span>
+<span><span class="co">#&gt; |   +-- 01_integration.Rmd</span></span>
+<span><span class="co">#&gt; |   \-- 02_int_clustering.Rmd</span></span>
+<span><span class="co">#&gt; \-- single_sample</span></span>
+<span><span class="co">#&gt;     +-- 01_input_qc.Rmd</span></span>
+<span><span class="co">#&gt;     +-- 01_input_qc_children</span></span>
+<span><span class="co">#&gt;     |   +-- cell_filtering_custom.Rmd</span></span>
+<span><span class="co">#&gt;     |   +-- cell_filtering_qc.Rmd</span></span>
+<span><span class="co">#&gt;     |   +-- empty_droplets.Rmd</span></span>
+<span><span class="co">#&gt;     |   +-- gene_filtering_custom.Rmd</span></span>
+<span><span class="co">#&gt;     |   \-- gene_filtering_qc.Rmd</span></span>
+<span><span class="co">#&gt;     +-- 02_norm_clustering.Rmd</span></span>
+<span><span class="co">#&gt;     \-- 02_norm_clustering_simple.Rmd</span></span></code></pre><p></p></div>
 <p>A short description of these Rmd files:</p><ul><li><p>Common to single-sample and integration analyses:</p><ul><li><p>Cluster markers: <code>common/cluster_markers.Rmd</code> (signpost),
 <code>common/cluster_markers_table_template.Rmd</code> (actual table with markers)</p></li>
 <li><p>Contrasts: <code>common/cluster_markers.Rmd</code>, <code>common/cluster_markers_table_template.Rmd</code></p></li>
@@ -251,15 +298,15 @@ because <code>generate_stage_report()</code> also sets some temporary options an
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span>
-<span class="r-in"><span class="fu">generate_stage_report</span><span class="op">(</span></span>
-<span class="r-in">  rmd_file <span class="op">=</span> <span class="fu">here</span><span class="op">(</span><span class="st">"Rmd/single_sample/01_input_qc.Rmd"</span><span class="op">)</span>,</span>
-<span class="r-in">  out_html_file_name <span class="op">=</span> <span class="st">"01_input_qc.html"</span>,</span>
-<span class="r-in">  output_dir <span class="op">=</span> <span class="fu">here</span><span class="op">(</span><span class="st">"my_output"</span><span class="op">)</span>,</span>
-<span class="r-in">  drake_cache_dir <span class="op">=</span> <span class="fu">here</span><span class="op">(</span><span class="st">".drake_cache"</span><span class="op">)</span></span>
-<span class="r-in"><span class="op">)</span></span>
-<span class="r-in"><span class="op">}</span></span>
-<span class="r-in"></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span></span>
+<span class="r-in"><span><span class="fu">generate_stage_report</span><span class="op">(</span></span></span>
+<span class="r-in"><span>  rmd_file <span class="op">=</span> <span class="fu">here</span><span class="op">(</span><span class="st">"Rmd/single_sample/01_input_qc.Rmd"</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>  out_html_file_name <span class="op">=</span> <span class="st">"01_input_qc.html"</span>,</span></span>
+<span class="r-in"><span>  output_dir <span class="op">=</span> <span class="fu">here</span><span class="op">(</span><span class="st">"my_output"</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>  drake_cache_dir <span class="op">=</span> <span class="fu">here</span><span class="op">(</span><span class="st">".drake_cache"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">}</span></span></span>
+<span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
   </div>
@@ -274,7 +321,7 @@ because <code>generate_stage_report()</code> also sets some temporary options an
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.9000.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.9000.</p>
   <p class="preferably">Using <a href="https://preferably.amirmasoudabdol.name/?source=footer" class="external-link">preferably</a> template.</p>
 </div>
 

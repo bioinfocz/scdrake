@@ -35,7 +35,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">scdrake</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.2.3</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.3.0</span>
       </span>
     </div>
 
@@ -44,10 +44,13 @@
   <a href="../articles/scdrake.html">Get started</a>
 </li>
 <li>
+  <a href="../articles/scdrake_integration.html">Integration pipeline guide</a>
+</li>
+<li>
   <a href="../articles/pipeline_overview.html">Pipeline overview</a>
 </li>
 <li>
-  <a href="../reference/index.html">Reference</a>
+  <a href="../articles/scdrake_faq.html">FAQ &amp; Howtos</a>
 </li>
 <li class="dropdown">
   <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -56,24 +59,35 @@
     <span class="caret"></span>
   </a>
   <ul class="dropdown-menu" role="menu"><li class="divider">
-    <li class="dropdown-header">General information</li>
+    <li class="dropdown-header">Guides</li>
     <li>
-      <a href="../articles/pipeline_overview.html">Pipeline overview</a>
+      <a href="../articles/scdrake_integration.html">02 Integration pipeline guide</a>
     </li>
     <li>
-      <a href="../articles/scdrake_run.html">Running the pipeline, environment variables</a>
-    </li>
-    <li>
-      <a href="../articles/cluster_markers.html">Cluster markers</a>
+      <a href="../articles/scdrake_extend.html">Extending the pipeline</a>
     </li>
     <li>
       <a href="../articles/drake_basics.html">drake basics</a>
     </li>
     <li class="divider">
-    <li class="dropdown-header">Configs</li>
+    <li class="dropdown-header">General information</li>
     <li>
-      <a href="../articles/scdrake_config.html">scdrake configs: a general overview</a>
+      <a href="../articles/pipeline_overview.html">Pipeline overview</a>
     </li>
+    <li>
+      <a href="../articles/scdrake_faq.html">FAQ &amp; Howtos</a>
+    </li>
+    <li>
+      <a href="../articles/cluster_markers.html">Cluster markers</a>
+    </li>
+    <li>
+      <a href="../articles/scdrake_config.html">scdrake config internals</a>
+    </li>
+    <li>
+      <a href="../articles/scdrake_envvars.html">Environment variables</a>
+    </li>
+    <li class="divider">
+    <li class="dropdown-header">General configs</li>
     <li>
       <a href="../articles/config_pipeline.html">Pipeline config</a>
     </li>
@@ -105,6 +119,9 @@
       <a href="../articles/stage_contrasts.html">Contrasts stage</a>
     </li>
   </ul></li>
+<li>
+  <a href="../reference/index.html">Reference</a>
+</li>
 <li>
   <a href="../news/index.html">Changelog</a>
 </li>
@@ -156,14 +173,12 @@
     <h2>Included datasets</h2>
     
 
-<p>For pipeline testing two datasets from 10x Genomics are included:</p><ul><li><p><a href="https://support.10xgenomics.com/single-cell-gene-expression/datasets/3.0.0/pbmc_1k_v3?" class="external-link">PBMC 1k</a>
+<p>For pipeline testing two datasets from 10x Genomics can be automatically downloaded:</p><ul><li><p><code><a href="download_example_data.html">download_pbmc1k()</a></code>: <a href="https://support.10xgenomics.com/single-cell-gene-expression/datasets/3.0.0/pbmc_1k_v3?" class="external-link">PBMC 1k</a>
 (v3 chemistry, Cell Ranger 3.0.0)</p></li>
-<li><p><a href="https://support.10xgenomics.com/single-cell-gene-expression/datasets/1.1.0/pbmc3k" class="external-link">PBMC 3k</a>
+<li><p><code><a href="download_example_data.html">download_pbmc3k()</a></code>: <a href="https://support.10xgenomics.com/single-cell-gene-expression/datasets/1.1.0/pbmc3k" class="external-link">PBMC 3k</a>
 (v1 chemistry, Cell Ranger 1.1.0). This dataset is used for testing of integration pipeline.</p></li>
 </ul><p><strong>All credits for these datasets go to 10x Genomics.</strong>
 Visit <a href="https://www.10xgenomics.com/resources/datasets" class="external-link">https://www.10xgenomics.com/resources/datasets</a> for more information.</p>
-<p>Directories with dataset files can be retrieved by
-<code>system.file("extdata", "pbmc1k", package = "scdrake", mustWork = TRUE)</code> (or <code>"pbmc3k"</code>, respectively).</p>
     </div>
     <div id="see-also">
     <h2>See also</h2>
@@ -190,7 +205,7 @@ Visit <a href="https://www.10xgenomics.com/resources/datasets" class="external-l
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.9000.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.9000.</p>
   <p class="preferably">Using <a href="https://preferably.amirmasoudabdol.name/?source=footer" class="external-link">preferably</a> template.</p>
 </div>
 

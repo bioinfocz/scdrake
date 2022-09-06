@@ -58,7 +58,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">scdrake</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.2.3</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.3.0</span>
       </span>
     </div>
 
@@ -68,10 +68,13 @@
   <a href="../articles/scdrake.html">Get started</a>
 </li>
 <li>
+  <a href="../articles/scdrake_integration.html">Integration pipeline guide</a>
+</li>
+<li>
   <a href="../articles/pipeline_overview.html">Pipeline overview</a>
 </li>
 <li>
-  <a href="../reference/index.html">Reference</a>
+  <a href="../articles/scdrake_faq.html">FAQ &amp; Howtos</a>
 </li>
 <li class="dropdown">
   <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -82,25 +85,37 @@
   <ul class="dropdown-menu" role="menu">
 <li class="divider">
     </li>
-<li class="dropdown-header">General information</li>
+<li class="dropdown-header">Guides</li>
     <li>
-      <a href="../articles/pipeline_overview.html">Pipeline overview</a>
+      <a href="../articles/scdrake_integration.html">02 Integration pipeline guide</a>
     </li>
     <li>
-      <a href="../articles/scdrake_run.html">Running the pipeline, environment variables</a>
-    </li>
-    <li>
-      <a href="../articles/cluster_markers.html">Cluster markers</a>
+      <a href="../articles/scdrake_extend.html">Extending the pipeline</a>
     </li>
     <li>
       <a href="../articles/drake_basics.html">drake basics</a>
     </li>
     <li class="divider">
     </li>
-<li class="dropdown-header">Configs</li>
+<li class="dropdown-header">General information</li>
     <li>
-      <a href="../articles/scdrake_config.html">scdrake configs: a general overview</a>
+      <a href="../articles/pipeline_overview.html">Pipeline overview</a>
     </li>
+    <li>
+      <a href="../articles/scdrake_faq.html">FAQ &amp; Howtos</a>
+    </li>
+    <li>
+      <a href="../articles/cluster_markers.html">Cluster markers</a>
+    </li>
+    <li>
+      <a href="../articles/scdrake_config.html">scdrake config internals</a>
+    </li>
+    <li>
+      <a href="../articles/scdrake_envvars.html">Environment variables</a>
+    </li>
+    <li class="divider">
+    </li>
+<li class="dropdown-header">General configs</li>
     <li>
       <a href="../articles/config_pipeline.html">Pipeline config</a>
     </li>
@@ -135,6 +150,9 @@
       <a href="../articles/stage_contrasts.html">Contrasts stage</a>
     </li>
   </ul>
+</li>
+<li>
+  <a href="../reference/index.html">Reference</a>
 </li>
 <li>
   <a href="../news/index.html">Changelog</a>
@@ -178,7 +196,7 @@
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Contrasts stage</h1>
             
-            <h4 data-toc-skip class="date">2022-05-31</h4>
+            <h4 data-toc-skip class="date">2022-09-06</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/bioinfocz/scdrake/blob/mastervignettes/stage_contrasts.Rmd" class="external-link"><code>vignettes/stage_contrasts.Rmd</code></a></small>
       <div class="hidden name"><code>stage_contrasts.Rmd</code></div>
@@ -215,31 +233,24 @@ or <code><a href="../reference/scdrake_make.html">scdrake_r_make()</a></code> wi
 <p>Parameters for this stage are almost identical to those for
 <code>cluster_markers</code> stage (see
 <code><a href="../articles/stage_cluster_markers.html">vignette("stage_cluster_markers")</a></code>). You just need to
-replace <code>CLUSTER_MARKERS</code> with <code>CONTRASTS</code> 🙂</p>
+replace <code>CLUSTER_MARKERS</code> with <code>CONTRASTS</code> in
+parameter names 🙂</p>
 <p>The different parameters are below.</p>
 <hr>
 <div class="sourceCode" id="cb1"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">CONTRASTS_SOURCES</span><span class="kw">:</span></span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="kw">-</span><span class="at"> </span><span class="fu">dea_cluster_louvain_annotated</span><span class="kw">:</span></span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">source_column</span><span class="kw">:</span><span class="at"> </span><span class="st">"cluster_graph_louvain_annotated"</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="kw">-</span><span class="at"> </span><span class="fu">dea_cluster_louvain</span><span class="kw">:</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">source_column</span><span class="kw">:</span><span class="at"> </span><span class="st">"cluster_graph_louvain"</span></span>
 <span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">description</span><span class="kw">:</span><span class="at"> </span><span class="st">"DEA of some groups in graph-based clustering clustering (Louvain alg.)"</span></span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">common_params</span><span class="kw">:</span></span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">plot_dimreds</span><span class="kw">:</span><span class="at"> </span><span class="kw">[</span><span class="st">"umap"</span><span class="kw">,</span><span class="at"> </span><span class="st">"pca"</span><span class="kw">]</span></span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">params_t</span><span class="kw">:</span></span>
-<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">lfc_test</span><span class="kw">:</span><span class="at"> </span><span class="dv">1</span></span>
-<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">contrasts</span><span class="kw">:</span></span>
-<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="kw">-</span><span class="at"> </span><span class="fu">target</span><span class="kw">:</span><span class="at"> </span><span class="st">"memory_CD4+"</span></span>
-<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a><span class="at">          </span><span class="fu">reference</span><span class="kw">:</span><span class="at"> </span><span class="st">"B"</span></span>
-<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="kw">-</span><span class="at"> </span><span class="fu">target</span><span class="kw">:</span><span class="at"> </span><span class="st">"3"</span></span>
-<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a><span class="at">          </span><span class="fu">reference</span><span class="kw">:</span><span class="at"> </span><span class="st">"4"</span></span>
-<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a><span class="at">          </span><span class="fu">name</span><span class="kw">:</span><span class="at"> </span><span class="st">"cl3_vs_cl4"</span></span>
-<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">dea_cluster_kmeans_kc_3_cc_block</span><span class="kw">:</span></span>
-<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">source_column</span><span class="kw">:</span><span class="at"> </span><span class="st">"cluster_kmeans_kc_3_renamed"</span></span>
-<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">description</span><span class="kw">:</span><span class="at"> </span><span class="st">"DEA of all groups in k-means clustering (k = 3) with blocking on cell cycle phase"</span></span>
-<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">common_params</span><span class="kw">:</span></span>
-<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">block_column</span><span class="kw">:</span><span class="at"> </span><span class="st">"phase"</span></span>
-<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">params_wilcox</span><span class="kw">:</span></span>
-<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">top_n_heatmap</span><span class="kw">:</span><span class="at"> </span><span class="dv">20</span></span>
-<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">contrasts</span><span class="kw">:</span><span class="at"> </span><span class="st">"all"</span></span></code></pre></div>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">contrasts</span><span class="kw">:</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="kw">-</span><span class="at"> </span><span class="fu">target</span><span class="kw">:</span><span class="at"> </span><span class="st">"2"</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="at">          </span><span class="fu">reference</span><span class="kw">:</span><span class="at"> </span><span class="st">"1"</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="kw">-</span><span class="at"> </span><span class="fu">target</span><span class="kw">:</span><span class="at"> </span><span class="st">"3"</span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="at">          </span><span class="fu">reference</span><span class="kw">:</span><span class="at"> </span><span class="st">"2"</span></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="at">          </span><span class="fu">name</span><span class="kw">:</span><span class="at"> </span><span class="st">"cl3_vs_cl4"</span></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">dea_cluster_kmeans_kc_3</span><span class="kw">:</span></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">source_column</span><span class="kw">:</span><span class="at"> </span><span class="st">"cluster_kmeans_kc_3_renamed"</span></span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">description</span><span class="kw">:</span><span class="at"> </span><span class="st">"DEA of all groups in k-means clustering (k = 3)"</span></span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">contrasts</span><span class="kw">:</span><span class="at"> </span><span class="st">"all"</span></span></code></pre></div>
 <p><strong>Type:</strong> list of named lists</p>
 <p>This parameter is similar to <code>CLUSTER_MARKERS_SOURCES</code>,
 but an additional parameter <code>contrasts</code> is used. It is used
@@ -280,6 +291,7 @@ values are used for them internally:</p>
 <li>
 <code>MIN_PROP</code> (<code>null</code>)</li>
 </ul>
+<hr>
 </div>
 <div class="section level2">
 <h2 id="targets">Targets<a class="anchor" aria-label="anchor" href="#targets"></a>
@@ -370,7 +382,7 @@ stage.</p>
 
 <div class="pkgdown">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.9000.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.9000.</p>
   <p class="preferably">Using <a href="https://preferably.amirmasoudabdol.name/?source=footer" class="external-link">preferably</a> template.</p>
 </div>
 

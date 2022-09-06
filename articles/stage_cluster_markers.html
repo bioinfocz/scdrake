@@ -58,7 +58,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">scdrake</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.2.3</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.3.0</span>
       </span>
     </div>
 
@@ -68,10 +68,13 @@
   <a href="../articles/scdrake.html">Get started</a>
 </li>
 <li>
+  <a href="../articles/scdrake_integration.html">Integration pipeline guide</a>
+</li>
+<li>
   <a href="../articles/pipeline_overview.html">Pipeline overview</a>
 </li>
 <li>
-  <a href="../reference/index.html">Reference</a>
+  <a href="../articles/scdrake_faq.html">FAQ &amp; Howtos</a>
 </li>
 <li class="dropdown">
   <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -82,25 +85,37 @@
   <ul class="dropdown-menu" role="menu">
 <li class="divider">
     </li>
-<li class="dropdown-header">General information</li>
+<li class="dropdown-header">Guides</li>
     <li>
-      <a href="../articles/pipeline_overview.html">Pipeline overview</a>
+      <a href="../articles/scdrake_integration.html">02 Integration pipeline guide</a>
     </li>
     <li>
-      <a href="../articles/scdrake_run.html">Running the pipeline, environment variables</a>
-    </li>
-    <li>
-      <a href="../articles/cluster_markers.html">Cluster markers</a>
+      <a href="../articles/scdrake_extend.html">Extending the pipeline</a>
     </li>
     <li>
       <a href="../articles/drake_basics.html">drake basics</a>
     </li>
     <li class="divider">
     </li>
-<li class="dropdown-header">Configs</li>
+<li class="dropdown-header">General information</li>
     <li>
-      <a href="../articles/scdrake_config.html">scdrake configs: a general overview</a>
+      <a href="../articles/pipeline_overview.html">Pipeline overview</a>
     </li>
+    <li>
+      <a href="../articles/scdrake_faq.html">FAQ &amp; Howtos</a>
+    </li>
+    <li>
+      <a href="../articles/cluster_markers.html">Cluster markers</a>
+    </li>
+    <li>
+      <a href="../articles/scdrake_config.html">scdrake config internals</a>
+    </li>
+    <li>
+      <a href="../articles/scdrake_envvars.html">Environment variables</a>
+    </li>
+    <li class="divider">
+    </li>
+<li class="dropdown-header">General configs</li>
     <li>
       <a href="../articles/config_pipeline.html">Pipeline config</a>
     </li>
@@ -135,6 +150,9 @@
       <a href="../articles/stage_contrasts.html">Contrasts stage</a>
     </li>
   </ul>
+</li>
+<li>
+  <a href="../reference/index.html">Reference</a>
 </li>
 <li>
   <a href="../news/index.html">Changelog</a>
@@ -178,7 +196,7 @@
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Cluster markers stage</h1>
             
-            <h4 data-toc-skip class="date">2022-05-31</h4>
+            <h4 data-toc-skip class="date">2022-09-06</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/bioinfocz/scdrake/blob/mastervignettes/stage_cluster_markers.Rmd" class="external-link"><code>vignettes/stage_cluster_markers.Rmd</code></a></small>
       <div class="hidden name"><code>stage_cluster_markers.Rmd</code></div>
@@ -348,17 +366,9 @@ markers.
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="kw">-</span><span class="at"> </span><span class="fu">markers_cluster_int_kmeans_kc_4</span><span class="kw">:</span></span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">source_column</span><span class="kw">:</span><span class="at"> </span><span class="st">"cluster_int_kmeans_kc_4"</span></span>
 <span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">description</span><span class="kw">:</span><span class="at"> </span><span class="st">"Cluster markers for k-means clustering (k = 4)"</span></span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">common_params</span><span class="kw">:</span></span>
-<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">plot_dimreds</span><span class="kw">:</span><span class="at"> </span><span class="kw">[</span><span class="st">"umap"</span><span class="kw">,</span><span class="at"> </span><span class="st">"pca"</span><span class="kw">]</span></span>
-<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">params_t</span><span class="kw">:</span></span>
-<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">pval_type</span><span class="kw">:</span><span class="at"> </span><span class="st">"some"</span></span>
-<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">top_n_wt_heatmap</span><span class="kw">:</span><span class="at"> </span><span class="st">"fdr"</span></span>
-<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">top_n_wt_plot</span><span class="kw">:</span><span class="at"> </span><span class="st">"fdr"</span></span>
-<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">markers_cluster_int_kmeans_kc_3_batch_block</span><span class="kw">:</span></span>
-<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">source_column</span><span class="kw">:</span><span class="at"> </span><span class="st">"cluster_int_kmeans_kc_3_renamed"</span></span>
-<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">description</span><span class="kw">:</span><span class="at"> </span><span class="st">"Cluster markers for k-means clustering (k = 3) with blocking on batch"</span></span>
-<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">common_params</span><span class="kw">:</span></span>
-<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">block_column</span><span class="kw">:</span><span class="at"> </span><span class="st">"batch"</span></span></code></pre></div>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">markers_cluster_int_kmeans_kc_3_batch_block</span><span class="kw">:</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">source_column</span><span class="kw">:</span><span class="at"> </span><span class="st">"cluster_int_kmeans_kc_3_renamed"</span></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">description</span><span class="kw">:</span><span class="at"> </span><span class="st">"Cluster markers for k-means clustering (k = 3) with blocking on batch"</span></span></code></pre></div>
 <p><strong>Type:</strong> list of named lists</p>
 <p>This parameter is used to specify cell groupings (“sources”) in which
 markers are searched for, and test and output parameters. You can use
@@ -367,10 +377,8 @@ any categorical column - results of cell clustering, <code>phase</code>
 <code>CELL_GROUPINGS</code> in <code>02_norm_clustering.yaml</code> and
 <code>02_int_clustering.yaml</code>. See <a href="#clustering">clustering targets</a> for a list of clustering
 names.</p>
-<p>In each entry you can override parameters in
-<code>CLUSTER_MARKERS_SOURCES_DEFAULTS</code> (by using lowercase
-names).</p>
-<p>Let’s examine the first entry:</p>
+<p>Let’s examine the first entry
+(<code>markers_cluster_int_kmeans_kc_4</code>):</p>
 <ul>
 <li>
 <code>markers_cluster_int_kmeans_kc_4</code>: name of this
@@ -384,27 +392,29 @@ markers.</li>
 (character scalar): description of this comparison, will appear in
 reports and plots.</li>
 </ul>
-<div class="sourceCode" id="cb3"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">common_params</span><span class="kw">:</span></span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">plot_dimreds</span><span class="kw">:</span><span class="at"> </span><span class="kw">[</span><span class="st">"umap"</span><span class="kw">,</span><span class="at"> </span><span class="st">"pca"</span><span class="kw">]</span></span></code></pre></div>
-<ul>
-<li>This will override corresponding parameters in
-<code>COMMON_PARAMS</code> in
-<code>CLUSTER_MARKERS_SOURCES_DEFAULTS</code>.</li>
-</ul>
-<div class="sourceCode" id="cb4"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">params_t</span><span class="kw">:</span></span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">pval_type</span><span class="kw">:</span><span class="at"> </span><span class="st">"some"</span></span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">top_n_wt_heatmap</span><span class="kw">:</span><span class="at"> </span><span class="st">"fdr"</span></span>
-<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">top_n_wt_plot</span><span class="kw">:</span><span class="at"> </span><span class="st">"fdr"</span></span></code></pre></div>
-<ul>
-<li>This will override corresponding parameters <code>PARAMS_T</code> in
-<code>CLUSTER_MARKERS_SOURCES_DEFAULTS</code>.</li>
-</ul>
+<p>In each entry you can override parameters in
+<code>CLUSTER_MARKERS_SOURCES_DEFAULTS</code> (by using lowercase
+names). For example, let’s consider the following scenario:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">CLUSTER_MARKERS_SOURCES</span><span class="kw">:</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="kw">-</span><span class="at"> </span><span class="fu">markers_cluster_kmeans_kc_4</span><span class="kw">:</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">source_column</span><span class="kw">:</span><span class="at"> </span><span class="st">"cluster_kmeans_kc_4"</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">description</span><span class="kw">:</span><span class="at"> </span><span class="st">"Cluster markers for k-means clustering (k = 4)"</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">common_params</span><span class="kw">:</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">plot_dimreds</span><span class="kw">:</span><span class="at"> </span><span class="kw">[</span><span class="st">"umap"</span><span class="kw">,</span><span class="at"> </span><span class="st">"pca"</span><span class="kw">]</span></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">params_t</span><span class="kw">:</span></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">pval_type</span><span class="kw">:</span><span class="at"> </span><span class="st">"some"</span></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">top_n_wt_heatmap</span><span class="kw">:</span><span class="at"> </span><span class="st">"fdr"</span></span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">top_n_wt_plot</span><span class="kw">:</span><span class="at"> </span><span class="st">"fdr"</span></span></code></pre></div>
+<p>Here, <code>train_params</code> and <code>common_params</code> will
+override corresponding parameters in <code>PARAMS_T</code> and
+<code>COMMON_PARAMS</code>, respectively, in
+<code>CELL_ANNOTATION_SOURCES_DEFAULTS</code>.</p>
 <blockquote>
 <p>Watch out for the proper indentation. See the “Merging of nested
 named lists” section in <code><a href="../articles/scdrake_config.html">vignette("scdrake_config")</a></code>.</p>
 </blockquote>
 <hr>
-<div class="sourceCode" id="cb5"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">MAKE_CLUSTER_MARKERS_PLOTS</span><span class="kw">:</span><span class="at"> </span><span class="ch">True</span></span></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">MAKE_CLUSTER_MARKERS_PLOTS</span><span class="kw">:</span><span class="at"> </span><span class="ch">True</span></span></code></pre></div>
 <p><strong>Type:</strong> logical scalar</p>
 <p>Set to <code>False</code> to skip making of marker plots. In that
 case, for compatibility reasons, empty files will be created.</p>
@@ -413,8 +423,8 @@ case, for compatibility reasons, empty files will be created.</p>
 <div class="section level3">
 <h3 id="input-files">Input files<a class="anchor" aria-label="anchor" href="#input-files"></a>
 </h3>
-<div class="sourceCode" id="cb6"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">CLUSTER_MARKERS_TABLE_TEMPLATE_RMD_FILE</span><span class="kw">:</span><span class="at"> </span><span class="st">"Rmd/common/cluster_markers_table_template.Rmd"</span></span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="fu">CLUSTER_MARKERS_REPORT_RMD_FILE</span><span class="kw">:</span><span class="at"> </span><span class="st">"Rmd/common/cluster_markers.Rmd"</span></span></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">CLUSTER_MARKERS_TABLE_TEMPLATE_RMD_FILE</span><span class="kw">:</span><span class="at"> </span><span class="st">"Rmd/common/cluster_markers_table_template.Rmd"</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="fu">CLUSTER_MARKERS_REPORT_RMD_FILE</span><span class="kw">:</span><span class="at"> </span><span class="st">"Rmd/common/cluster_markers.Rmd"</span></span></code></pre></div>
 <p><strong>Type:</strong> character scalar</p>
 <p>Paths to RMarkdown files used for HTML reports of this pipeline
 stage.</p>
@@ -423,21 +433,22 @@ stage.</p>
 <div class="section level3">
 <h3 id="output-files">Output files<a class="anchor" aria-label="anchor" href="#output-files"></a>
 </h3>
-<div class="sourceCode" id="cb7"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">CLUSTER_MARKERS_BASE_OUT_DIR</span><span class="kw">:</span><span class="at"> </span><span class="st">"cluster_markers"</span></span></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">CLUSTER_MARKERS_BASE_OUT_DIR</span><span class="kw">:</span><span class="at"> </span><span class="st">"cluster_markers"</span></span></code></pre></div>
 <p><strong>Type:</strong> character scalar</p>
 <p>A path to base output directory for this stage. It will be created
 under <code>BASE_OUT_DIR</code> specified in <code>00_main.yaml</code>
 config.</p>
 <hr>
-<div class="sourceCode" id="cb8"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">CLUSTER_MARKERS_REPORT_HTML_FILE</span><span class="kw">:</span><span class="at"> </span><span class="st">"cluster_markers.html"</span></span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="fu">CLUSTER_MARKERS_HEATMAPS_OUT_DIR</span><span class="kw">:</span><span class="at"> </span><span class="st">"cluster_markers_heatmaps"</span></span>
-<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="fu">CLUSTER_MARKERS_PLOTS_BASE_OUT_DIR</span><span class="kw">:</span><span class="at"> </span><span class="st">"cluster_markers_plots"</span></span>
-<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a><span class="fu">CLUSTER_MARKERS_DIMRED_PLOTS_BASE_OUT_DIR</span><span class="kw">:</span><span class="at"> </span><span class="st">"cluster_markers_dimred_plots"</span></span>
-<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a><span class="fu">CLUSTER_MARKERS_TABLES_OUT_DIR</span><span class="kw">:</span><span class="at"> </span><span class="st">"cluster_markers_tables"</span></span></code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">CLUSTER_MARKERS_REPORT_HTML_FILE</span><span class="kw">:</span><span class="at"> </span><span class="st">"cluster_markers.html"</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="fu">CLUSTER_MARKERS_HEATMAPS_OUT_DIR</span><span class="kw">:</span><span class="at"> </span><span class="st">"cluster_markers_heatmaps"</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="fu">CLUSTER_MARKERS_PLOTS_BASE_OUT_DIR</span><span class="kw">:</span><span class="at"> </span><span class="st">"cluster_markers_plots"</span></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="fu">CLUSTER_MARKERS_DIMRED_PLOTS_BASE_OUT_DIR</span><span class="kw">:</span><span class="at"> </span><span class="st">"cluster_markers_dimred_plots"</span></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a><span class="fu">CLUSTER_MARKERS_TABLES_OUT_DIR</span><span class="kw">:</span><span class="at"> </span><span class="st">"cluster_markers_tables"</span></span></code></pre></div>
 <p><strong>Type:</strong> character scalar</p>
 <p>Names of files and directories created under
 <code>CLUSTER_MARKERS_BASE_OUT_DIR</code>. Subdirectories are not
 allowed.</p>
+<hr>
 </div>
 </div>
 <div class="section level2">
@@ -459,9 +470,9 @@ clusterings from the <code>02_norm_clustering</code> (single-sample
 pipeline) or <code>02_int_clustering</code> stage (integration
 pipeline). Used to compute cluster markers. You can inspect the cell
 groupings which can be used for marker computation:</p>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu">drake</span><span class="fu">::</span><span class="fu"><a href="https://docs.ropensci.org/drake/reference/readd.html" class="external-link">loadd</a></span><span class="op">(</span><span class="va">sce_final_cluster_markers</span><span class="op">)</span>
-<span class="fu">SingleCellExperiment</span><span class="fu">::</span><span class="fu">colData</span><span class="op">(</span><span class="va">sce_final_cluster_markers</span><span class="op">)</span></code></pre></div>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu">drake</span><span class="fu">::</span><span class="fu"><a href="https://docs.ropensci.org/drake/reference/readd.html" class="external-link">loadd</a></span><span class="op">(</span><span class="va">sce_final_cluster_markers</span><span class="op">)</span></span>
+<span><span class="fu">SingleCellExperiment</span><span class="fu">::</span><span class="fu">colData</span><span class="op">(</span><span class="va">sce_final_cluster_markers</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="tibbles-with-parameters">Tibbles with parameters<a class="anchor" aria-label="anchor" href="#tibbles-with-parameters"></a>
@@ -531,15 +542,15 @@ transformed to z-score.</p>
 <p>For storage reasons, heatmap objects are not saved as R objects, but
 only exported to PDF. However, you can obtain a tibble holding these
 objects with</p>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu">drake</span><span class="fu">::</span><span class="fu"><a href="https://docs.ropensci.org/drake/reference/readd.html" class="external-link">loadd</a></span><span class="op">(</span><span class="va">cluster_markers_heatmaps_df</span><span class="op">)</span>
-<span class="va">heatmaps_tbl</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/marker_heatmaps_wrapper.html">marker_heatmaps_wrapper</a></span><span class="op">(</span>
-  seu <span class="op">=</span> <span class="va">seu_for_cluster_markers_heatmaps</span>,
-  params <span class="op">=</span> <span class="va">cluster_markers_heatmaps_df</span>,
-  marker_type <span class="op">=</span> <span class="st">"global"</span>,
-  save <span class="op">=</span> <span class="cn">FALSE</span>,
-  return_type <span class="op">=</span> <span class="st">"tibble"</span>
-<span class="op">)</span></code></pre></div>
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu">drake</span><span class="fu">::</span><span class="fu"><a href="https://docs.ropensci.org/drake/reference/readd.html" class="external-link">loadd</a></span><span class="op">(</span><span class="va">cluster_markers_heatmaps_df</span><span class="op">)</span></span>
+<span><span class="va">heatmaps_tbl</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/marker_heatmaps_wrapper.html">marker_heatmaps_wrapper</a></span><span class="op">(</span></span>
+<span>  seu <span class="op">=</span> <span class="va">seu_for_cluster_markers_heatmaps</span>,</span>
+<span>  params <span class="op">=</span> <span class="va">cluster_markers_heatmaps_df</span>,</span>
+<span>  marker_type <span class="op">=</span> <span class="st">"global"</span>,</span>
+<span>  save <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  return_type <span class="op">=</span> <span class="st">"tibble"</span></span>
+<span><span class="op">)</span></span></code></pre></div>
 <p>In <code>heatmaps_tbl</code>, two list columns are appended to
 <code>cluster_markers_heatmaps_df</code>:</p>
 <ul>
@@ -565,8 +576,8 @@ details.</p>
 <p>As for heatmaps, plot objects (<a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a>,
 <a href="https://patchwork.data-imaginist.com" class="external-link">patchwork</a>) are not saved, but the underlying function can
 be used:</p>
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/markers_plots_files.html">markers_plots_files</a></span><span class="op">(</span><span class="va">sce_dimred_cluster_markers</span>, <span class="va">cluster_markers_plots_top</span>, save <span class="op">=</span> <span class="cn">FALSE</span>, return_type <span class="op">=</span> <span class="st">"tibble"</span><span class="op">)</span></code></pre></div>
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/markers_plots_files.html">markers_plots_files</a></span><span class="op">(</span><span class="va">sce_dimred_cluster_markers</span>, <span class="va">cluster_markers_plots_top</span>, save <span class="op">=</span> <span class="cn">FALSE</span>, return_type <span class="op">=</span> <span class="st">"tibble"</span><span class="op">)</span></span></code></pre></div>
 <p>Similarly, the actual plotting function can be used, see
 <code><a href="../reference/marker_plot.html">?marker_plot</a></code>.</p>
 </div>
@@ -604,7 +615,7 @@ this stage.</p>
 
 <div class="pkgdown">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.9000.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.9000.</p>
   <p class="preferably">Using <a href="https://preferably.amirmasoudabdol.name/?source=footer" class="external-link">preferably</a> template.</p>
 </div>
 

@@ -58,7 +58,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">scdrake</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.2.3</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.3.0</span>
       </span>
     </div>
 
@@ -68,10 +68,13 @@
   <a href="../articles/scdrake.html">Get started</a>
 </li>
 <li>
+  <a href="../articles/scdrake_integration.html">Integration pipeline guide</a>
+</li>
+<li>
   <a href="../articles/pipeline_overview.html">Pipeline overview</a>
 </li>
 <li>
-  <a href="../reference/index.html">Reference</a>
+  <a href="../articles/scdrake_faq.html">FAQ &amp; Howtos</a>
 </li>
 <li class="dropdown">
   <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -82,25 +85,37 @@
   <ul class="dropdown-menu" role="menu">
 <li class="divider">
     </li>
-<li class="dropdown-header">General information</li>
+<li class="dropdown-header">Guides</li>
     <li>
-      <a href="../articles/pipeline_overview.html">Pipeline overview</a>
+      <a href="../articles/scdrake_integration.html">02 Integration pipeline guide</a>
     </li>
     <li>
-      <a href="../articles/scdrake_run.html">Running the pipeline, environment variables</a>
-    </li>
-    <li>
-      <a href="../articles/cluster_markers.html">Cluster markers</a>
+      <a href="../articles/scdrake_extend.html">Extending the pipeline</a>
     </li>
     <li>
       <a href="../articles/drake_basics.html">drake basics</a>
     </li>
     <li class="divider">
     </li>
-<li class="dropdown-header">Configs</li>
+<li class="dropdown-header">General information</li>
     <li>
-      <a href="../articles/scdrake_config.html">scdrake configs: a general overview</a>
+      <a href="../articles/pipeline_overview.html">Pipeline overview</a>
     </li>
+    <li>
+      <a href="../articles/scdrake_faq.html">FAQ &amp; Howtos</a>
+    </li>
+    <li>
+      <a href="../articles/cluster_markers.html">Cluster markers</a>
+    </li>
+    <li>
+      <a href="../articles/scdrake_config.html">scdrake config internals</a>
+    </li>
+    <li>
+      <a href="../articles/scdrake_envvars.html">Environment variables</a>
+    </li>
+    <li class="divider">
+    </li>
+<li class="dropdown-header">General configs</li>
     <li>
       <a href="../articles/config_pipeline.html">Pipeline config</a>
     </li>
@@ -135,6 +150,9 @@
       <a href="../articles/stage_contrasts.html">Contrasts stage</a>
     </li>
   </ul>
+</li>
+<li>
+  <a href="../reference/index.html">Reference</a>
 </li>
 <li>
   <a href="../news/index.html">Changelog</a>
@@ -178,7 +196,7 @@
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Normalization and clustering stage</h1>
             
-            <h4 data-toc-skip class="date">2022-05-31</h4>
+            <h4 data-toc-skip class="date">2022-09-06</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/bioinfocz/scdrake/blob/mastervignettes/stage_norm_clustering.Rmd" class="external-link"><code>vignettes/stage_norm_clustering.Rmd</code></a></small>
       <div class="hidden name"><code>stage_norm_clustering.Rmd</code></div>
@@ -218,7 +236,9 @@ in <code>pipeline.yaml</code> config file.</p>
 <code>"scran"</code>: normalization by deconvolution.</li>
 <li>
 <code>"sctransform"</code>: regularized negative binomial
-regression.</li>
+regression. The returned counts in log1p (natural log) scale are
+converted to log2. Note: <code>SingleCellExperiment</code> normalized by
+this method cannot be used for integration.</li>
 <li>
 <code>"none"</code>: skip normalization. This should be used only in
 case you are importing a <code>SingleCellExperiment</code> object in the
@@ -610,17 +630,12 @@ computed after classification using the predicted cell labels.</li>
 <span id="cb27-7"><a href="#cb27-7" aria-hidden="true" tabindex="-1"></a>        Most of the labels refer to blood subpopulations but cell types from other tissues are also available.</span>
 <span id="cb27-8"><a href="#cb27-8" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">label_column</span><span class="kw">:</span><span class="at"> </span><span class="st">"label.main"</span></span>
 <span id="cb27-9"><a href="#cb27-9" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">label_subsets</span><span class="kw">:</span><span class="at"> </span><span class="kw">[]</span></span>
-<span id="cb27-10"><a href="#cb27-10" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">train_params</span><span class="kw">:</span></span>
-<span id="cb27-11"><a href="#cb27-11" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">de_method</span><span class="kw">:</span><span class="at"> </span><span class="st">"wilcox"</span></span>
-<span id="cb27-12"><a href="#cb27-12" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">de_n</span><span class="kw">:</span><span class="at"> </span><span class="dv">30</span></span>
-<span id="cb27-13"><a href="#cb27-13" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">monaco_immune_fine</span><span class="kw">:</span></span>
-<span id="cb27-14"><a href="#cb27-14" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">reference_type</span><span class="kw">:</span><span class="at"> </span><span class="st">"celldex"</span></span>
-<span id="cb27-15"><a href="#cb27-15" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">reference</span><span class="kw">:</span><span class="at"> </span><span class="st">"MonacoImmuneData"</span></span>
-<span id="cb27-16"><a href="#cb27-16" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">description</span><span class="kw">:</span><span class="at"> </span><span class="st">"This is the human immune reference that best covers all of the bases for a typical PBMC sample."</span></span>
-<span id="cb27-17"><a href="#cb27-17" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">label_column</span><span class="kw">:</span><span class="at"> </span><span class="st">"label.fine"</span></span>
-<span id="cb27-18"><a href="#cb27-18" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">label_subsets</span><span class="kw">:</span><span class="at"> </span><span class="kw">[]</span></span>
-<span id="cb27-19"><a href="#cb27-19" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">train_params</span><span class="kw">:</span></span>
-<span id="cb27-20"><a href="#cb27-20" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">genes</span><span class="kw">:</span><span class="at"> </span><span class="st">"sd"</span></span></code></pre></div>
+<span id="cb27-10"><a href="#cb27-10" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">monaco_immune_fine</span><span class="kw">:</span></span>
+<span id="cb27-11"><a href="#cb27-11" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">reference_type</span><span class="kw">:</span><span class="at"> </span><span class="st">"celldex"</span></span>
+<span id="cb27-12"><a href="#cb27-12" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">reference</span><span class="kw">:</span><span class="at"> </span><span class="st">"MonacoImmuneData"</span></span>
+<span id="cb27-13"><a href="#cb27-13" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">description</span><span class="kw">:</span><span class="at"> </span><span class="st">"This is the human immune reference that best covers all of the bases for a typical PBMC sample."</span></span>
+<span id="cb27-14"><a href="#cb27-14" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">label_column</span><span class="kw">:</span><span class="at"> </span><span class="st">"label.fine"</span></span>
+<span id="cb27-15"><a href="#cb27-15" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">label_subsets</span><span class="kw">:</span><span class="at"> </span><span class="kw">[]</span></span></code></pre></div>
 <p><strong>Type:</strong> list of named lists</p>
 <p>Specifies reference dataset(s) to be used for cell type annotation.
 The method used in <a href="https://github.com/LTLA/SingleR" class="external-link">SingleR</a> for training and
@@ -668,12 +683,16 @@ dataset will be used for training. For datasets from the
 the reference dataset prior to training,
 e.g. <code>["T cells", "B cells", "Progenitors"]</code>.</li>
 </ul>
-<p>In each entry you can override default parameters in
+<p>In each entry (e.g. <code>human_primary_cell_atlas_main</code> above)
+you can override default parameters in
 <code>CELL_ANNOTATION_SOURCES_DEFAULTS</code> (by using lowercase
 names), e.g.</p>
-<div class="sourceCode" id="cb28"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="fu">train_params</span><span class="kw">:</span></span>
-<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">de_method</span><span class="kw">:</span><span class="at"> </span><span class="st">"wilcox"</span></span>
-<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">de_n</span><span class="kw">:</span><span class="at"> </span><span class="dv">30</span></span></code></pre></div>
+<div class="sourceCode" id="cb28"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="fu">CELL_ANNOTATION_SOURCES</span><span class="kw">:</span></span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="kw">-</span><span class="at"> </span><span class="fu">human_primary_cell_atlas_main</span><span class="kw">:</span></span>
+<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a><span class="at">      ...</span></span>
+<span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">train_params</span><span class="kw">:</span></span>
+<span id="cb28-5"><a href="#cb28-5" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">de_method</span><span class="kw">:</span><span class="at"> </span><span class="st">"wilcox"</span></span>
+<span id="cb28-6"><a href="#cb28-6" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">de_n</span><span class="kw">:</span><span class="at"> </span><span class="dv">30</span></span></code></pre></div>
 <p>will override corresponding parameters in <code>TRAIN_PARAMS</code>
 in <code>CELL_ANNOTATION_SOURCES_DEFAULTS</code>.</p>
 <hr>
@@ -757,10 +776,12 @@ That is, level (cluster) <code>6</code> will be renamed to
 merged to a new level <code>"memory_CD4+"</code>. All unspecified levels
 will be kept as they are.</li>
 </ul>
+<blockquote>
 <p>NOTE: The example cluster renamings serve as an example for 10x PBMC
 1k dataset, but initially on your dataset you should use
 <code>null</code> and set renamings after you examine the pipeline
 results.</p>
+</blockquote>
 </div>
 <div class="section level3">
 <h3 id="dimensionality-reduction-plots">Dimensionality reduction plots<a class="anchor" aria-label="anchor" href="#dimensionality-reduction-plots"></a>
@@ -800,12 +821,11 @@ the <code>SC3_K</code> parameter.</li>
 <p><strong>Type:</strong> list of named lists with character scalars</p>
 <p>Names of other variables in <code>colData()</code> to plot and color
 by, displayed in the report.</p>
-<p>The format is
-<code>"&lt;variable_name": "&lt;description&gt;"</code>, where
+<p>The format is <code>"variable_name": "description"</code>, where
 description will appear in plot title.</p>
 <p>Variables defined in the <code>CELL_GROUPINGS</code> parameter could
-have <description> set to <code>null</code> - their description from
-<code>CELL_GROUPINGS</code> will be used.</description></p>
+have <code>description</code> set to <code>null</code> - their
+description from <code>CELL_GROUPINGS</code> will be used.</p>
 </div>
 <div class="section level3">
 <h3 id="input-files">Input files<a class="anchor" aria-label="anchor" href="#input-files"></a>
@@ -861,6 +881,7 @@ allowed.</p>
 <p><strong>Type:</strong> logical scalar</p>
 <p>These are passed to <code><a href="https://rdrr.io/pkg/knitr/man/opts_chunk.html" class="external-link">knitr::opts_chunk()</a></code> and used for
 rendering of stage’s HTML report.</p>
+<hr>
 </div>
 </div>
 <div class="section level2">
@@ -870,6 +891,8 @@ rendering of stage’s HTML report.</p>
 stage. However, for a full overview, you have to inspect the <a href="https://github.com/bioinfocz/scdrake/blob/main/R/plans_single_sample.R" class="external-link">source
 code</a> of the <code>get_input_norm_clustering_subplan()</code>
 function.</p>
+<p>HTML report target names: <code>report_norm_clustering</code>,
+<code>report_norm_clustering_simple</code> (only dimred plots)</p>
 <div class="section level3">
 <h3 id="singlecellexperiment-objects">
 <code>SingleCellExperiment</code> objects<a class="anchor" aria-label="anchor" href="#singlecellexperiment-objects"></a>
@@ -1133,16 +1156,16 @@ parameter. Selected markers are read from CSV file defined in the
 <p>You can also use the underlying function
 <code><a href="../reference/selected_markers_dimplot.html">selected_markers_dimplot()</a></code>:</p>
 <div class="sourceCode" id="cb39"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/selected_markers_dimplot.html">selected_markers_dimplot</a></span><span class="op">(</span>
-  sce <span class="op">=</span> <span class="va">sce_final_norm_clustering</span>,
-  dimred <span class="op">=</span> <span class="st">"umap"</span>,
-  selected_markers_df <span class="op">=</span> <span class="va">selected_markers_df</span>,
-  assay <span class="op">=</span> <span class="st">"logcounts"</span>
-<span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/selected_markers_dimplot.html">selected_markers_dimplot</a></span><span class="op">(</span></span>
+<span>  sce <span class="op">=</span> <span class="va">sce_final_norm_clustering</span>,</span>
+<span>  dimred <span class="op">=</span> <span class="st">"umap"</span>,</span>
+<span>  selected_markers_df <span class="op">=</span> <span class="va">selected_markers_df</span>,</span>
+<span>  assay <span class="op">=</span> <span class="st">"logcounts"</span></span>
+<span><span class="op">)</span></span></code></pre></div>
 <p>The <code>selected_markers_df</code> tibble can be read from the CSV
 file with</p>
 <div class="sourceCode" id="cb40"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">selected_markers_df</span> <span class="op">&lt;-</span> <span class="fu">readr</span><span class="fu">::</span><span class="fu"><a href="https://readr.tidyverse.org/reference/read_delim.html" class="external-link">read_csv</a></span><span class="op">(</span><span class="st">"markers.csv"</span>, col_names <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"group"</span>, <span class="st">"markers"</span><span class="op">)</span>, col_types <span class="op">=</span> <span class="st">"cc"</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">selected_markers_df</span> <span class="op">&lt;-</span> <span class="fu">readr</span><span class="fu">::</span><span class="fu"><a href="https://readr.tidyverse.org/reference/read_delim.html" class="external-link">read_csv</a></span><span class="op">(</span><span class="st">"markers.csv"</span>, col_names <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"group"</span>, <span class="st">"markers"</span><span class="op">)</span>, col_types <span class="op">=</span> <span class="st">"cc"</span><span class="op">)</span></span></code></pre></div>
 </div>
 </div>
 <div class="section level3">
@@ -1183,7 +1206,7 @@ defined in the <code>CELL_GROUPINGS</code> parameter.</p>
 
 <div class="pkgdown">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.9000.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.9000.</p>
   <p class="preferably">Using <a href="https://preferably.amirmasoudabdol.name/?source=footer" class="external-link">preferably</a> template.</p>
 </div>
 

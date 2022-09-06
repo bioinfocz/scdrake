@@ -47,7 +47,7 @@ Columns with output PDF files are named as score_heatmaps_out_file etc.'><!-- ma
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">scdrake</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.2.3</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.3.0</span>
       </span>
     </div>
 
@@ -56,10 +56,13 @@ Columns with output PDF files are named as score_heatmaps_out_file etc.'><!-- ma
   <a href="../articles/scdrake.html">Get started</a>
 </li>
 <li>
+  <a href="../articles/scdrake_integration.html">Integration pipeline guide</a>
+</li>
+<li>
   <a href="../articles/pipeline_overview.html">Pipeline overview</a>
 </li>
 <li>
-  <a href="../reference/index.html">Reference</a>
+  <a href="../articles/scdrake_faq.html">FAQ &amp; Howtos</a>
 </li>
 <li class="dropdown">
   <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -68,24 +71,35 @@ Columns with output PDF files are named as score_heatmaps_out_file etc.'><!-- ma
     <span class="caret"></span>
   </a>
   <ul class="dropdown-menu" role="menu"><li class="divider">
-    <li class="dropdown-header">General information</li>
+    <li class="dropdown-header">Guides</li>
     <li>
-      <a href="../articles/pipeline_overview.html">Pipeline overview</a>
+      <a href="../articles/scdrake_integration.html">02 Integration pipeline guide</a>
     </li>
     <li>
-      <a href="../articles/scdrake_run.html">Running the pipeline, environment variables</a>
-    </li>
-    <li>
-      <a href="../articles/cluster_markers.html">Cluster markers</a>
+      <a href="../articles/scdrake_extend.html">Extending the pipeline</a>
     </li>
     <li>
       <a href="../articles/drake_basics.html">drake basics</a>
     </li>
     <li class="divider">
-    <li class="dropdown-header">Configs</li>
+    <li class="dropdown-header">General information</li>
     <li>
-      <a href="../articles/scdrake_config.html">scdrake configs: a general overview</a>
+      <a href="../articles/pipeline_overview.html">Pipeline overview</a>
     </li>
+    <li>
+      <a href="../articles/scdrake_faq.html">FAQ &amp; Howtos</a>
+    </li>
+    <li>
+      <a href="../articles/cluster_markers.html">Cluster markers</a>
+    </li>
+    <li>
+      <a href="../articles/scdrake_config.html">scdrake config internals</a>
+    </li>
+    <li>
+      <a href="../articles/scdrake_envvars.html">Environment variables</a>
+    </li>
+    <li class="divider">
+    <li class="dropdown-header">General configs</li>
     <li>
       <a href="../articles/config_pipeline.html">Pipeline config</a>
     </li>
@@ -117,6 +131,9 @@ Columns with output PDF files are named as score_heatmaps_out_file etc.'><!-- ma
       <a href="../articles/stage_contrasts.html">Contrasts stage</a>
     </li>
   </ul></li>
+<li>
+  <a href="../reference/index.html">Reference</a>
+</li>
 <li>
   <a href="../news/index.html">Changelog</a>
 </li>
@@ -169,33 +186,46 @@ Deltas are differences between the score for the assigned label and the median a
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">cell_annotation_diagnostic_plots_fn</span><span class="op">(</span>
-  <span class="va">cell_annotation</span>,
-  <span class="va">cell_data</span>,
-  <span class="va">sce</span>,
-  <span class="va">base_out_dir</span>,
-  cluster_cols_regex <span class="op">=</span> <span class="st">"^cluster_"</span>
-<span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">cell_annotation_diagnostic_plots_fn</span><span class="op">(</span></span>
+<span>  <span class="va">cell_annotation</span>,</span>
+<span>  <span class="va">cell_data</span>,</span>
+<span>  <span class="va">sce</span>,</span>
+<span>  <span class="va">base_out_dir</span>,</span>
+<span>  cluster_cols_regex <span class="op">=</span> <span class="st">"^cluster_"</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>cell_annotation</dt>
 <dd><p>(<em>input target</em>) A <code>tibble</code>.</p></dd>
+
+
 <dt>cell_data</dt>
 <dd><p>(<em>input target</em>) A <code>DataFrame</code>.</p></dd>
+
+
 <dt>sce</dt>
 <dd><p>A <code>SingleCellExperiment</code> object.</p></dd>
+
+
 <dt>base_out_dir</dt>
 <dd><p>A character scalar: path to output directory under which will be for each reference dataset its
 diagnostic plots saved in.</p></dd>
+
+
 <dt>cluster_cols_regex</dt>
 <dd><p>A character scalar: regex to match columns in <code>colData()</code> with cluster labels.
 Those columns will be used in annotation score heatmaps.</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>A <code>tibble</code>. <em>Output target</em>: <code>cell_annotation_diagnostic_plots</code></p>
+    
+
+<p>A <code>tibble</code>. <em>Output target</em>: <code>cell_annotation_diagnostic_plots</code></p>
+
+
     </div>
 
   </div>
@@ -210,7 +240,7 @@ Those columns will be used in annotation score heatmaps.</p></dd>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.9000.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.9000.</p>
   <p class="preferably">Using <a href="https://preferably.amirmasoudabdol.name/?source=footer" class="external-link">preferably</a> template.</p>
 </div>
 

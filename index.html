@@ -66,7 +66,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">scdrake</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.2.3</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.3.0</span>
       </span>
     </div>
 
@@ -76,10 +76,13 @@
   <a href="articles/scdrake.html">Get started</a>
 </li>
 <li>
+  <a href="articles/scdrake_integration.html">Integration pipeline guide</a>
+</li>
+<li>
   <a href="articles/pipeline_overview.html">Pipeline overview</a>
 </li>
 <li>
-  <a href="reference/index.html">Reference</a>
+  <a href="articles/scdrake_faq.html">FAQ &amp; Howtos</a>
 </li>
 <li class="dropdown">
   <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -90,25 +93,37 @@
   <ul class="dropdown-menu" role="menu">
 <li class="divider">
     </li>
-<li class="dropdown-header">General information</li>
+<li class="dropdown-header">Guides</li>
     <li>
-      <a href="articles/pipeline_overview.html">Pipeline overview</a>
+      <a href="articles/scdrake_integration.html">02 Integration pipeline guide</a>
     </li>
     <li>
-      <a href="articles/scdrake_run.html">Running the pipeline, environment variables</a>
-    </li>
-    <li>
-      <a href="articles/cluster_markers.html">Cluster markers</a>
+      <a href="articles/scdrake_extend.html">Extending the pipeline</a>
     </li>
     <li>
       <a href="articles/drake_basics.html">drake basics</a>
     </li>
     <li class="divider">
     </li>
-<li class="dropdown-header">Configs</li>
+<li class="dropdown-header">General information</li>
     <li>
-      <a href="articles/scdrake_config.html">scdrake configs: a general overview</a>
+      <a href="articles/pipeline_overview.html">Pipeline overview</a>
     </li>
+    <li>
+      <a href="articles/scdrake_faq.html">FAQ &amp; Howtos</a>
+    </li>
+    <li>
+      <a href="articles/cluster_markers.html">Cluster markers</a>
+    </li>
+    <li>
+      <a href="articles/scdrake_config.html">scdrake config internals</a>
+    </li>
+    <li>
+      <a href="articles/scdrake_envvars.html">Environment variables</a>
+    </li>
+    <li class="divider">
+    </li>
+<li class="dropdown-header">General configs</li>
     <li>
       <a href="articles/config_pipeline.html">Pipeline config</a>
     </li>
@@ -143,6 +158,9 @@
       <a href="articles/stage_contrasts.html">Contrasts stage</a>
     </li>
   </ul>
+</li>
+<li>
+  <a href="reference/index.html">Reference</a>
 </li>
 <li>
   <a href="news/index.html">Changelog</a>
@@ -217,20 +235,20 @@
 </h2>
 <p><a href="https://github.com/bioinfocz/scdrake" class="external-link">scdrake</a> is currently not released on <a href="https://cran.r-project.org" class="external-link">CRAN</a>, however, you can install its latest stable version from GitHub using the following code:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw">if</span> <span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/ns-load.html" class="external-link">requireNamespace</a></span><span class="op">(</span><span class="st">"BiocManager"</span>, quietly <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span>
-  <span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"BiocManager"</span><span class="op">)</span>
-  <span class="fu">BiocManager</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/BiocManager/man/install.html" class="external-link">install</a></span><span class="op">(</span>version <span class="op">=</span> <span class="st">"3.15"</span><span class="op">)</span>
-<span class="op">}</span>
-
-<span class="fu">BiocManager</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/BiocManager/man/install.html" class="external-link">install</a></span><span class="op">(</span><span class="st">"bioinfocz/scdrake@v1.2.2"</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="kw">if</span> <span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/ns-load.html" class="external-link">requireNamespace</a></span><span class="op">(</span><span class="st">"BiocManager"</span>, quietly <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"BiocManager"</span><span class="op">)</span></span>
+<span>  <span class="fu">BiocManager</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/BiocManager/man/install.html" class="external-link">install</a></span><span class="op">(</span>version <span class="op">=</span> <span class="st">"3.15"</span><span class="op">)</span></span>
+<span><span class="op">}</span></span>
+<span></span>
+<span><span class="fu">BiocManager</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/BiocManager/man/install.html" class="external-link">install</a></span><span class="op">(</span><span class="st">"bioinfocz/scdrake@v1.2.3"</span><span class="op">)</span></span></code></pre></div>
 <p>For development version use</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw">if</span> <span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/ns-load.html" class="external-link">requireNamespace</a></span><span class="op">(</span><span class="st">"BiocManager"</span>, quietly <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span>
-  <span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"BiocManager"</span><span class="op">)</span>
-  <span class="fu">BiocManager</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/BiocManager/man/install.html" class="external-link">install</a></span><span class="op">(</span>version <span class="op">=</span> <span class="st">"3.15"</span><span class="op">)</span>
-<span class="op">}</span>
-
-<span class="fu">BiocManager</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/BiocManager/man/install.html" class="external-link">install</a></span><span class="op">(</span><span class="st">"bioinfocz/scdrake"</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="kw">if</span> <span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/ns-load.html" class="external-link">requireNamespace</a></span><span class="op">(</span><span class="st">"BiocManager"</span>, quietly <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"BiocManager"</span><span class="op">)</span></span>
+<span>  <span class="fu">BiocManager</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/BiocManager/man/install.html" class="external-link">install</a></span><span class="op">(</span>version <span class="op">=</span> <span class="st">"3.15"</span><span class="op">)</span></span>
+<span><span class="op">}</span></span>
+<span></span>
+<span><span class="fu">BiocManager</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/BiocManager/man/install.html" class="external-link">install</a></span><span class="op">(</span><span class="st">"bioinfocz/scdrake"</span><span class="op">)</span></span></code></pre></div>
 <div class="section level3">
 <h3 id="parallelization">Parallelization<a class="anchor" aria-label="anchor" href="#parallelization"></a>
 </h3>
@@ -242,7 +260,7 @@
 </h3>
 <p><a href="https://docs.ropensci.org/drake" class="external-link">drake</a> supports several types of storage formats for cached objects, but <a href="https://github.com/traversc/qs" class="external-link">qs</a> is recommended and used by <a href="https://github.com/bioinfocz/scdrake" class="external-link">scdrake</a> by default due to its performance. You can install <a href="https://github.com/traversc/qs" class="external-link">qs</a> with</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu">BiocManager</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/BiocManager/man/install.html" class="external-link">install</a></span><span class="op">(</span><span class="st">"qs"</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu">BiocManager</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/BiocManager/man/install.html" class="external-link">install</a></span><span class="op">(</span><span class="st">"qs"</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="using-renv">Using <code>renv</code>
@@ -250,7 +268,7 @@
 </h3>
 <p>Because <a href="https://github.com/bioinfocz/scdrake" class="external-link">scdrake</a> uses a lot of packages, we also encourage users to use the <a href="https://rstudio.github.io/renv/" class="external-link">renv</a> package, which will install all dependencies to a local, private, project library. In case you have already initialized a new <a href="https://github.com/bioinfocz/scdrake" class="external-link">scdrake</a> project (as described in <code><a href="articles/scdrake.html">vignette("scdrake")</a></code>) and your working directory is in the project’s root, you can initialize a new <a href="https://rstudio.github.io/renv/" class="external-link">renv</a> private library with</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu">renv</span><span class="fu">::</span><span class="fu">restore</span><span class="op">(</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu">renv</span><span class="fu">::</span><span class="fu">restore</span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <p>It will use the <code>renv.lock</code> file (which is bundled with <a href="https://github.com/bioinfocz/scdrake" class="external-link">scdrake</a> package) holding all dependencies and their versions.</p>
 <p>To save time and space, you can also symlink the <code>renv/library</code> directory to multiple <a href="https://github.com/bioinfocz/scdrake" class="external-link">scdrake</a> projects.</p>
 <p>Alternatively, just install <a href="https://github.com/bioinfocz/scdrake" class="external-link">scdrake</a> from within the activated renv and all dependencies will be installed to the private library. But keep in mind in that case dependencies will be installed from package’s <code>DESCRIPTION</code> file in which package versions are not specified, and thus the latest (and possibly untested) package versions will be installed.</p>
@@ -270,7 +288,7 @@
 </li>
 </ul>
 </li>
-<li>Running the pipeline, environment variables: <code><a href="articles/scdrake_run.html">vignette("scdrake_run")</a></code>
+<li>Running the pipeline, environment variables: <code>vignette("scdrake_run")</code>
 </li>
 <li>Config files (basic concept): <code><a href="articles/scdrake_config.html">vignette("scdrake_config")</a></code>
 </li>
@@ -323,7 +341,7 @@
 </h2>
 <p>Below is the citation output from using <code>citation("scdrake")</code> in R. Please run this yourself to check for any updates on how to cite <strong>scdrake</strong>.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/utils/citation.html" class="external-link">citation</a></span><span class="op">(</span><span class="st">"scdrake"</span><span class="op">)</span>, bibtex <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/utils/citation.html" class="external-link">citation</a></span><span class="op">(</span><span class="st">"scdrake"</span><span class="op">)</span>, bibtex <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
 <div class="sourceCode" id="cb6"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>To cite package ‘scdrake’ <span class="cf">in</span> publications use<span class="sc">:</span></span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>  Jiri Novotny and Jan <span class="fu">Kubovciak</span> (<span class="dv">2021</span>). scdrake<span class="sc">:</span> A Pipeline For 10x Chromium Single<span class="sc">-</span>Cell RNA<span class="sc">-</span>seq Data Analysis.</span>
@@ -455,7 +473,7 @@
 
 <div class="pkgdown">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.9000.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.9000.</p>
   <p class="preferably">Using <a href="https://preferably.amirmasoudabdol.name/?source=footer" class="external-link">preferably</a> template.</p>
 </div>
 

@@ -36,7 +36,7 @@ See the corresponding section there."><!-- mathjax --><script src="https://cdnjs
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">scdrake</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.2.3</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.3.0</span>
       </span>
     </div>
 
@@ -45,10 +45,13 @@ See the corresponding section there."><!-- mathjax --><script src="https://cdnjs
   <a href="../articles/scdrake.html">Get started</a>
 </li>
 <li>
+  <a href="../articles/scdrake_integration.html">Integration pipeline guide</a>
+</li>
+<li>
   <a href="../articles/pipeline_overview.html">Pipeline overview</a>
 </li>
 <li>
-  <a href="../reference/index.html">Reference</a>
+  <a href="../articles/scdrake_faq.html">FAQ &amp; Howtos</a>
 </li>
 <li class="dropdown">
   <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -57,24 +60,35 @@ See the corresponding section there."><!-- mathjax --><script src="https://cdnjs
     <span class="caret"></span>
   </a>
   <ul class="dropdown-menu" role="menu"><li class="divider">
-    <li class="dropdown-header">General information</li>
+    <li class="dropdown-header">Guides</li>
     <li>
-      <a href="../articles/pipeline_overview.html">Pipeline overview</a>
+      <a href="../articles/scdrake_integration.html">02 Integration pipeline guide</a>
     </li>
     <li>
-      <a href="../articles/scdrake_run.html">Running the pipeline, environment variables</a>
-    </li>
-    <li>
-      <a href="../articles/cluster_markers.html">Cluster markers</a>
+      <a href="../articles/scdrake_extend.html">Extending the pipeline</a>
     </li>
     <li>
       <a href="../articles/drake_basics.html">drake basics</a>
     </li>
     <li class="divider">
-    <li class="dropdown-header">Configs</li>
+    <li class="dropdown-header">General information</li>
     <li>
-      <a href="../articles/scdrake_config.html">scdrake configs: a general overview</a>
+      <a href="../articles/pipeline_overview.html">Pipeline overview</a>
     </li>
+    <li>
+      <a href="../articles/scdrake_faq.html">FAQ &amp; Howtos</a>
+    </li>
+    <li>
+      <a href="../articles/cluster_markers.html">Cluster markers</a>
+    </li>
+    <li>
+      <a href="../articles/scdrake_config.html">scdrake config internals</a>
+    </li>
+    <li>
+      <a href="../articles/scdrake_envvars.html">Environment variables</a>
+    </li>
+    <li class="divider">
+    <li class="dropdown-header">General configs</li>
     <li>
       <a href="../articles/config_pipeline.html">Pipeline config</a>
     </li>
@@ -106,6 +120,9 @@ See the corresponding section there."><!-- mathjax --><script src="https://cdnjs
       <a href="../articles/stage_contrasts.html">Contrasts stage</a>
     </li>
   </ul></li>
+<li>
+  <a href="../reference/index.html">Reference</a>
+</li>
 <li>
   <a href="../news/index.html">Changelog</a>
 </li>
@@ -150,28 +167,36 @@ See the corresponding section there.</p>
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">get_top_hvgs</span><span class="op">(</span>
-  <span class="va">sce_norm</span>,
-  <span class="va">hvg_metric_fit</span>,
-  <span class="va">hvg_selection_value</span>,
-  hvg_metric <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"gene_var"</span>, <span class="st">"gene_cv2"</span>, <span class="st">"sctransform"</span><span class="op">)</span>,
-  hvg_selection <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"top"</span>, <span class="st">"significance"</span>, <span class="st">"threshold"</span><span class="op">)</span>
-<span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">get_top_hvgs</span><span class="op">(</span></span>
+<span>  <span class="va">sce_norm</span>,</span>
+<span>  <span class="va">hvg_metric_fit</span>,</span>
+<span>  <span class="va">hvg_selection_value</span>,</span>
+<span>  hvg_metric <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"gene_var"</span>, <span class="st">"gene_cv2"</span>, <span class="st">"sctransform"</span><span class="op">)</span>,</span>
+<span>  hvg_selection <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"top"</span>, <span class="st">"significance"</span>, <span class="st">"threshold"</span><span class="op">)</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>sce_norm</dt>
 <dd><p>A <code>SingleCellExperiment</code> object with computed HVG metric.</p></dd>
+
+
 <dt>hvg_metric_fit</dt>
 <dd><p>A <code>DataFrame</code> with HVG metric fit as produced by e.g. <code><a href="https://rdrr.io/pkg/scran/man/modelGeneVar.html" class="external-link">scran::modelGeneVar()</a></code>.</p></dd>
+
+
 <dt>hvg_selection_value</dt>
 <dd><p>A numeric scalar: threshold value to select HVGs. This depends on <code>hvg_metric</code>.</p></dd>
+
+
 <dt>hvg_metric</dt>
 <dd><p>A character scalar: type of HVG metric.
 If <code>sctransform</code> is used, HVGs are selected by the underlying method, and number of them is controlled by
 <code>SCT_N_HVG</code> parameter in <code>02_norm_clustering.yaml</code>.
 For the other metric types, see the <code>hvg_selection</code> and <code>hvg_selection_value</code> parameters.</p></dd>
+
+
 <dt>hvg_selection</dt>
 <dd><p>A character scalar: method to use for selection of HVGs.
 This is only relevant when <code>hvg_metric</code> is <code>"gene_var"</code> or <code>"gene_cv2"</code>.
@@ -182,10 +207,13 @@ See <a href="https://bioconductor.org/books/release/OSCA.basic/feature-selection
 <li><p><code>"threshold"</code>: Use threshold on the minimum value of a metric.
 <code>"bio"</code> and <code>"ratio"</code> columns are used for <code>hvg_metric</code> of <code>"gene_var"</code> and <code>"gene_cv2"</code>, respectively.</p></li>
 </ul></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>A character vector of HVG IDs (ENSEMBL).</p>
+    
+
+<p>A character vector of HVG IDs (ENSEMBL).</p>
     </div>
 
   </div>
@@ -200,7 +228,7 @@ See <a href="https://bioconductor.org/books/release/OSCA.basic/feature-selection
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.9000.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.9000.</p>
   <p class="preferably">Using <a href="https://preferably.amirmasoudabdol.name/?source=footer" class="external-link">preferably</a> template.</p>
 </div>
 

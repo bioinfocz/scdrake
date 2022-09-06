@@ -35,7 +35,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">scdrake</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.2.3</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.3.0</span>
       </span>
     </div>
 
@@ -44,10 +44,13 @@
   <a href="../articles/scdrake.html">Get started</a>
 </li>
 <li>
+  <a href="../articles/scdrake_integration.html">Integration pipeline guide</a>
+</li>
+<li>
   <a href="../articles/pipeline_overview.html">Pipeline overview</a>
 </li>
 <li>
-  <a href="../reference/index.html">Reference</a>
+  <a href="../articles/scdrake_faq.html">FAQ &amp; Howtos</a>
 </li>
 <li class="dropdown">
   <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -56,24 +59,35 @@
     <span class="caret"></span>
   </a>
   <ul class="dropdown-menu" role="menu"><li class="divider">
-    <li class="dropdown-header">General information</li>
+    <li class="dropdown-header">Guides</li>
     <li>
-      <a href="../articles/pipeline_overview.html">Pipeline overview</a>
+      <a href="../articles/scdrake_integration.html">02 Integration pipeline guide</a>
     </li>
     <li>
-      <a href="../articles/scdrake_run.html">Running the pipeline, environment variables</a>
-    </li>
-    <li>
-      <a href="../articles/cluster_markers.html">Cluster markers</a>
+      <a href="../articles/scdrake_extend.html">Extending the pipeline</a>
     </li>
     <li>
       <a href="../articles/drake_basics.html">drake basics</a>
     </li>
     <li class="divider">
-    <li class="dropdown-header">Configs</li>
+    <li class="dropdown-header">General information</li>
     <li>
-      <a href="../articles/scdrake_config.html">scdrake configs: a general overview</a>
+      <a href="../articles/pipeline_overview.html">Pipeline overview</a>
     </li>
+    <li>
+      <a href="../articles/scdrake_faq.html">FAQ &amp; Howtos</a>
+    </li>
+    <li>
+      <a href="../articles/cluster_markers.html">Cluster markers</a>
+    </li>
+    <li>
+      <a href="../articles/scdrake_config.html">scdrake config internals</a>
+    </li>
+    <li>
+      <a href="../articles/scdrake_envvars.html">Environment variables</a>
+    </li>
+    <li class="divider">
+    <li class="dropdown-header">General configs</li>
     <li>
       <a href="../articles/config_pipeline.html">Pipeline config</a>
     </li>
@@ -105,6 +119,9 @@
       <a href="../articles/stage_contrasts.html">Contrasts stage</a>
     </li>
   </ul></li>
+<li>
+  <a href="../reference/index.html">Reference</a>
+</li>
 <li>
   <a href="../news/index.html">Changelog</a>
 </li>
@@ -148,34 +165,41 @@
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">add_marker_table_links</span><span class="op">(</span>
-  <span class="va">df</span>,
-  links <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>colname_target <span class="op">=</span> <span class="st">"ENSEMBL"</span>, colname_source <span class="op">=</span> <span class="st">"ENSEMBL"</span>,
-    template_url <span class="op">=</span> <span class="st">"https://www.ensembl.org/{ensembl_species}/Gene/Summary?g={id}"</span><span class="op">)</span>,
-    <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>colname_target <span class="op">=</span> <span class="st">"ENTREZID"</span>, colname_source <span class="op">=</span> <span class="st">"ENTREZID"</span>, template_url <span class="op">=</span>
-    <span class="st">"https://www.ncbi.nlm.nih.gov/gene/{id}"</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>colname_target <span class="op">=</span> <span class="st">"SYMBOL"</span>,
-    colname_source <span class="op">=</span> <span class="st">"SYMBOL"</span>, template_url <span class="op">=</span>
-    <span class="st">"https://www.genecards.org/cgi-bin/carddisp.pl?gene={id}"</span><span class="op">)</span><span class="op">)</span>,
-  ensembl_species <span class="op">=</span> <span class="st">"Homo_sapiens"</span>
-<span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">add_marker_table_links</span><span class="op">(</span></span>
+<span>  <span class="va">df</span>,</span>
+<span>  links <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>colname_target <span class="op">=</span> <span class="st">"ENSEMBL"</span>, colname_source <span class="op">=</span> <span class="st">"ENSEMBL"</span>, template_url</span>
+<span>    <span class="op">=</span> <span class="st">"https://www.ensembl.org/{ensembl_species}/Gene/Summary?g={id}"</span><span class="op">)</span>,</span>
+<span>    <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>colname_target <span class="op">=</span> <span class="st">"ENTREZID"</span>, colname_source <span class="op">=</span> <span class="st">"ENTREZID"</span>, template_url <span class="op">=</span></span>
+<span>    <span class="st">"https://www.ncbi.nlm.nih.gov/gene/{id}"</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>colname_target <span class="op">=</span> <span class="st">"SYMBOL"</span>,</span>
+<span>    colname_source <span class="op">=</span> <span class="st">"SYMBOL"</span>, template_url <span class="op">=</span></span>
+<span>    <span class="st">"https://www.genecards.org/cgi-bin/carddisp.pl?gene={id}"</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>  ensembl_species <span class="op">=</span> <span class="st">"Homo_sapiens"</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>df</dt>
 <dd><p>A dataframe-like object.</p></dd>
+
+
 <dt>links</dt>
 <dd><p>A list of named lists. Each named list has three items:</p><ul><li><p><code>colname_target</code>: which column in <code>df</code> will be converted to link.</p></li>
 <li><p><code>colname_source</code>: which column in <code>df</code> will be used as data source.</p></li>
 <li><p><code>template_url</code>: URL template for link where <code>{id}</code> will be replaced by values in <code>colname_source</code> column of <code>df</code>.
 For <code>ENSEMBL</code> column is also used the <code>ensembl_species</code> parameter (see the default value of <code>links</code>).</p></li>
 </ul></dd>
+
+
 <dt>ensembl_species</dt>
 <dd><p>A character scalar: ID/name of ENSEMBL species.</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>A modified <code>df</code>.</p>
+    
+
+<p>A modified <code>df</code>.</p>
     </div>
 
   </div>
@@ -190,7 +214,7 @@ For <code>ENSEMBL</code> column is also used the <code>ensembl_species</code> pa
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.9000.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.9000.</p>
   <p class="preferably">Using <a href="https://preferably.amirmasoudabdol.name/?source=footer" class="external-link">preferably</a> template.</p>
 </div>
 

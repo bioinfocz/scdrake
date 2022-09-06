@@ -36,7 +36,7 @@ For more details see the HVG selection section in 02_norm_clustering.yaml config
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">scdrake</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.2.3</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.3.0</span>
       </span>
     </div>
 
@@ -45,10 +45,13 @@ For more details see the HVG selection section in 02_norm_clustering.yaml config
   <a href="../articles/scdrake.html">Get started</a>
 </li>
 <li>
+  <a href="../articles/scdrake_integration.html">Integration pipeline guide</a>
+</li>
+<li>
   <a href="../articles/pipeline_overview.html">Pipeline overview</a>
 </li>
 <li>
-  <a href="../reference/index.html">Reference</a>
+  <a href="../articles/scdrake_faq.html">FAQ &amp; Howtos</a>
 </li>
 <li class="dropdown">
   <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -57,24 +60,35 @@ For more details see the HVG selection section in 02_norm_clustering.yaml config
     <span class="caret"></span>
   </a>
   <ul class="dropdown-menu" role="menu"><li class="divider">
-    <li class="dropdown-header">General information</li>
+    <li class="dropdown-header">Guides</li>
     <li>
-      <a href="../articles/pipeline_overview.html">Pipeline overview</a>
+      <a href="../articles/scdrake_integration.html">02 Integration pipeline guide</a>
     </li>
     <li>
-      <a href="../articles/scdrake_run.html">Running the pipeline, environment variables</a>
-    </li>
-    <li>
-      <a href="../articles/cluster_markers.html">Cluster markers</a>
+      <a href="../articles/scdrake_extend.html">Extending the pipeline</a>
     </li>
     <li>
       <a href="../articles/drake_basics.html">drake basics</a>
     </li>
     <li class="divider">
-    <li class="dropdown-header">Configs</li>
+    <li class="dropdown-header">General information</li>
     <li>
-      <a href="../articles/scdrake_config.html">scdrake configs: a general overview</a>
+      <a href="../articles/pipeline_overview.html">Pipeline overview</a>
     </li>
+    <li>
+      <a href="../articles/scdrake_faq.html">FAQ &amp; Howtos</a>
+    </li>
+    <li>
+      <a href="../articles/cluster_markers.html">Cluster markers</a>
+    </li>
+    <li>
+      <a href="../articles/scdrake_config.html">scdrake config internals</a>
+    </li>
+    <li>
+      <a href="../articles/scdrake_envvars.html">Environment variables</a>
+    </li>
+    <li class="divider">
+    <li class="dropdown-header">General configs</li>
     <li>
       <a href="../articles/config_pipeline.html">Pipeline config</a>
     </li>
@@ -106,6 +120,9 @@ For more details see the HVG selection section in 02_norm_clustering.yaml config
       <a href="../articles/stage_contrasts.html">Contrasts stage</a>
     </li>
   </ul></li>
+<li>
+  <a href="../reference/index.html">Reference</a>
+</li>
 <li>
   <a href="../news/index.html">Changelog</a>
 </li>
@@ -150,39 +167,56 @@ For more details see the HVG selection section in <code>02_norm_clustering.yaml<
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">sce_norm_hvg_fn</span><span class="op">(</span>
-  <span class="va">sce_norm</span>,
-  <span class="va">hvg_selection_value</span>,
-  hvg_metric <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"gene_var"</span>, <span class="st">"gene_cv2"</span>, <span class="st">"sctransform"</span><span class="op">)</span>,
-  hvg_selection <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"top"</span>, <span class="st">"significance"</span>, <span class="st">"threshold"</span><span class="op">)</span>,
-  hvg_rm_cc_genes <span class="op">=</span> <span class="cn">FALSE</span>,
-  hvg_cc_genes_var_expl_threshold <span class="op">=</span> <span class="fl">5</span>,
-  BSPARAM <span class="op">=</span> <span class="fu">BiocSingular</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/BiocSingular/man/BiocSingularParam.html" class="external-link">IrlbaParam</a></span><span class="op">(</span><span class="op">)</span>,
-  BPPARAM <span class="op">=</span> <span class="fu">BiocParallel</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/BiocParallel/man/SerialParam-class.html" class="external-link">SerialParam</a></span><span class="op">(</span><span class="op">)</span>
-<span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">sce_norm_hvg_fn</span><span class="op">(</span></span>
+<span>  <span class="va">sce_norm</span>,</span>
+<span>  <span class="va">hvg_selection_value</span>,</span>
+<span>  hvg_metric <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"gene_var"</span>, <span class="st">"gene_cv2"</span>, <span class="st">"sctransform"</span><span class="op">)</span>,</span>
+<span>  hvg_selection <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"top"</span>, <span class="st">"significance"</span>, <span class="st">"threshold"</span><span class="op">)</span>,</span>
+<span>  hvg_rm_cc_genes <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  hvg_cc_genes_var_expl_threshold <span class="op">=</span> <span class="fl">5</span>,</span>
+<span>  BSPARAM <span class="op">=</span> <span class="fu">BiocSingular</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/BiocSingular/man/BiocSingularParam.html" class="external-link">IrlbaParam</a></span><span class="op">(</span><span class="op">)</span>,</span>
+<span>  BPPARAM <span class="op">=</span> <span class="fu">BiocParallel</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/BiocParallel/man/SerialParam-class.html" class="external-link">SerialParam</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>sce_norm</dt>
 <dd><p>(<em>input target</em>) A <code>SingleCellExperiment</code> object.</p></dd>
+
+
 <dt>hvg_selection_value, hvg_metric, hvg_selection</dt>
 <dd><p>Passed to <code><a href="get_top_hvgs.html">get_top_hvgs()</a></code> - see its help page.</p></dd>
+
+
 <dt>hvg_rm_cc_genes</dt>
 <dd><p>A logical scalar: if <code>TRUE</code>, remove cell cycle-related genes exceeding the
 <code>hvg_cc_genes_var_expl_threshold</code> prior to HVG selection.</p></dd>
+
+
 <dt>hvg_cc_genes_var_expl_threshold</dt>
 <dd><p>A numeric scalar: threshold for variance explained.
 Genes exceeding this threshold will be marked as CC-related.</p></dd>
+
+
 <dt>BSPARAM</dt>
 <dd><p>A BiocSingular::BiocSingularParam object.</p></dd>
+
+
 <dt>BPPARAM</dt>
 <dd><p>A <a href="https://rdrr.io/pkg/BiocParallel/man/BiocParallelParam-class.html" class="external-link">BiocParallel::BiocParallelParam</a> object.</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>A modified <code>sce_norm</code> object with added HVG data in <code>metadata()</code>.
-<em>Output target</em>: <code>sce_norm_hvg</code>The following items of <code>metadata(sce_norm)</code> are added or modified:</p><ul><li><p><code>hvg_metric</code>, <code>hvg_selection</code>, <code>hvg_selection_value</code>, <code>hvg_rm_cc_genes</code>, <code>hvg_cc_genes_var_expl_threshold</code>:
+    
+
+<p>A modified <code>sce_norm</code> object with added HVG data in <code>metadata()</code>.
+<em>Output target</em>: <code>sce_norm_hvg</code></p>
+
+
+
+<p>The following items of <code>metadata(sce_norm)</code> are added or modified:</p><ul><li><p><code>hvg_metric</code>, <code>hvg_selection</code>, <code>hvg_selection_value</code>, <code>hvg_rm_cc_genes</code>, <code>hvg_cc_genes_var_expl_threshold</code>:
 values passed to the function.</p></li>
 <li><p><code>hvg_metric_fit</code>: either <code>DataFrame</code> returned from <code><a href="https://rdrr.io/pkg/scran/man/modelGeneVar.html" class="external-link">scran::modelGeneVar()</a></code> or <code><a href="https://rdrr.io/pkg/scran/man/modelGeneCV2.html" class="external-link">scran::modelGeneCV2()</a></code>,
 or <code>feature.attributes</code> dataframe returned from <code><a href="https://satijalab.org/seurat/reference/SCTransform.html" class="external-link">Seurat::SCTransform()</a></code>.</p></li>
@@ -202,7 +236,7 @@ or <code>feature.attributes</code> dataframe returned from <code><a href="https:
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.9000.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.9000.</p>
   <p class="preferably">Using <a href="https://preferably.amirmasoudabdol.name/?source=footer" class="external-link">preferably</a> template.</p>
 </div>
 

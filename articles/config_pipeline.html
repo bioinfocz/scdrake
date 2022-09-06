@@ -58,7 +58,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">scdrake</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.2.3</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.3.0</span>
       </span>
     </div>
 
@@ -68,10 +68,13 @@
   <a href="../articles/scdrake.html">Get started</a>
 </li>
 <li>
+  <a href="../articles/scdrake_integration.html">Integration pipeline guide</a>
+</li>
+<li>
   <a href="../articles/pipeline_overview.html">Pipeline overview</a>
 </li>
 <li>
-  <a href="../reference/index.html">Reference</a>
+  <a href="../articles/scdrake_faq.html">FAQ &amp; Howtos</a>
 </li>
 <li class="dropdown">
   <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -82,25 +85,37 @@
   <ul class="dropdown-menu" role="menu">
 <li class="divider">
     </li>
-<li class="dropdown-header">General information</li>
+<li class="dropdown-header">Guides</li>
     <li>
-      <a href="../articles/pipeline_overview.html">Pipeline overview</a>
+      <a href="../articles/scdrake_integration.html">02 Integration pipeline guide</a>
     </li>
     <li>
-      <a href="../articles/scdrake_run.html">Running the pipeline, environment variables</a>
-    </li>
-    <li>
-      <a href="../articles/cluster_markers.html">Cluster markers</a>
+      <a href="../articles/scdrake_extend.html">Extending the pipeline</a>
     </li>
     <li>
       <a href="../articles/drake_basics.html">drake basics</a>
     </li>
     <li class="divider">
     </li>
-<li class="dropdown-header">Configs</li>
+<li class="dropdown-header">General information</li>
     <li>
-      <a href="../articles/scdrake_config.html">scdrake configs: a general overview</a>
+      <a href="../articles/pipeline_overview.html">Pipeline overview</a>
     </li>
+    <li>
+      <a href="../articles/scdrake_faq.html">FAQ &amp; Howtos</a>
+    </li>
+    <li>
+      <a href="../articles/cluster_markers.html">Cluster markers</a>
+    </li>
+    <li>
+      <a href="../articles/scdrake_config.html">scdrake config internals</a>
+    </li>
+    <li>
+      <a href="../articles/scdrake_envvars.html">Environment variables</a>
+    </li>
+    <li class="divider">
+    </li>
+<li class="dropdown-header">General configs</li>
     <li>
       <a href="../articles/config_pipeline.html">Pipeline config</a>
     </li>
@@ -135,6 +150,9 @@
       <a href="../articles/stage_contrasts.html">Contrasts stage</a>
     </li>
   </ul>
+</li>
+<li>
+  <a href="../reference/index.html">Reference</a>
 </li>
 <li>
   <a href="../news/index.html">Changelog</a>
@@ -178,7 +196,7 @@
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Pipeline config</h1>
             
-            <h4 data-toc-skip class="date">2022-05-31</h4>
+            <h4 data-toc-skip class="date">2022-09-06</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/bioinfocz/scdrake/blob/mastervignettes/config_pipeline.Rmd" class="external-link"><code>vignettes/config_pipeline.Rmd</code></a></small>
       <div class="hidden name"><code>config_pipeline.Rmd</code></div>
@@ -203,24 +221,24 @@ generally passed to <code><a href="https://docs.ropensci.org/drake/reference/mak
 <div class="section level2">
 <h2 id="general-parameters">General parameters<a class="anchor" aria-label="anchor" href="#general-parameters"></a>
 </h2>
-<p><code>DRAKE_CACHE_DIR: ".drake"</code></p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">DRAKE_CACHE_DIR</span><span class="kw">:</span><span class="at"> </span><span class="st">".drake"</span></span></code></pre></div>
 <p><strong>Type:</strong> character scalar or <code>null</code></p>
 <p>A name of directory to store drake’s cache in. If <code>null</code>,
 the default directory <code>".drake"</code> will be used.</p>
 <hr>
-<p><code>DRAKE_TARGETS: null</code></p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">DRAKE_TARGETS</span><span class="kw">:</span><span class="at"> </span><span class="ch">null</span></span></code></pre></div>
 <p><strong>Type:</strong> character vector or <code>null</code></p>
 <p>Array of target names to make. Setting to <code>null</code> will make
 all targets. Example for single-sample pipeline / stage
 <code>02_norm_clustering</code> reports:</p>
-<p><code>DRAKE_TARGETS: ["report_norm_clustering", "report_norm_clustering_simple"]</code></p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">DRAKE_TARGETS</span><span class="kw">:</span><span class="at"> </span><span class="kw">[</span><span class="st">"report_norm_clustering"</span><span class="kw">,</span><span class="at"> </span><span class="st">"report_norm_clustering_simple"</span><span class="kw">]</span></span></code></pre></div>
 <hr>
-<p><code>DRAKE_KEEP_GOING: False</code></p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">DRAKE_KEEP_GOING</span><span class="kw">:</span><span class="at"> </span><span class="ch">False</span></span></code></pre></div>
 <p><strong>Type:</strong> logical scalar</p>
 <p>If <code>True</code>, let the pipeline continue even if some target
 fails.</p>
 <hr>
-<p><code>DRAKE_VERBOSITY: 1</code></p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">DRAKE_VERBOSITY</span><span class="kw">:</span><span class="at"> </span><span class="dv">1</span></span></code></pre></div>
 <p><strong>Type:</strong> integer scalar (<code>1</code> |
 <code>2</code> | <code>3</code>)</p>
 <p>Verbosity of <a href="https://docs.ropensci.org/drake" class="external-link">drake</a>:</p>
@@ -235,24 +253,40 @@ fails.</p>
 done so far.</li>
 </ul>
 <hr>
-<p><code>DRAKE_LOCK_ENVIR: True</code></p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">DRAKE_LOCK_ENVIR</span><span class="kw">:</span><span class="at"> </span><span class="ch">True</span></span></code></pre></div>
 <p><strong>Type:</strong> logical scalar</p>
 <p><a href="https://docs.ropensci.org/drake" class="external-link">drake</a> locks R global environment to avoid its unwanted
 modifications by targets. However, in some cases is needed to keep it
 unlocked.</p>
 <hr>
-<p><code>DRAKE_UNLOCK_CACHE: True</code></p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">DRAKE_UNLOCK_CACHE</span><span class="kw">:</span><span class="at"> </span><span class="ch">True</span></span></code></pre></div>
 <p><strong>Type:</strong> logical scalar</p>
 <p>Don’t wait for <a href="https://docs.ropensci.org/drake" class="external-link">drake</a> to discover locked cache after
 pipeline is run and unlock it immediately.</p>
 <hr>
-<p><code>DRAKE_FORMAT: "qs"</code></p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">DRAKE_FORMAT</span><span class="kw">:</span><span class="at"> </span><span class="st">"qs"</span></span></code></pre></div>
 <p><strong>Type:</strong> character scalar</p>
 <p>A file format used to store intermediate results in
 <code>DRAKE_CACHE_DIR</code>. See <a href="https://books.ropensci.org/drake/plans.html#special-data-formats-for-targets" class="external-link uri">https://books.ropensci.org/drake/plans.html#special-data-formats-for-targets</a>
 for details.</p>
+<p>In case of problems with <code>qs</code> use <code>rds</code> which
+is slower, but the most compatible.</p>
 <hr>
-<p><code>BLAS_N_THREADS: 32</code></p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">DRAKE_REBUILD</span><span class="kw">:</span><span class="at"> </span><span class="ch">null</span></span></code></pre></div>
+<p><strong>Type:</strong> character scalar (<code>all</code> |
+<code>current</code>) or <code>null</code></p>
+<p>Instruct <a href="https://docs.ropensci.org/drake" class="external-link">drake</a> to rebuild targets although they are
+considered finished.</p>
+<ul>
+<li>For <code>"all"</code>, the pipeline is run from scratch
+(<code>drake::trigger(condition = TRUE)</code> is passed as
+<code>trigger</code> argument to <code><a href="https://docs.ropensci.org/drake/reference/make.html" class="external-link">drake::make()</a></code> or
+<code><a href="https://docs.ropensci.org/drake/reference/drake_config.html" class="external-link">drake::drake_config()</a></code>).</li>
+<li>For <code>"current"</code>, <code><a href="https://docs.ropensci.org/drake/reference/clean.html" class="external-link">drake::clean()</a></code> is run for
+targets specified in <code>DRAKE_TARGETS</code>.</li>
+</ul>
+<hr>
+<div class="sourceCode" id="cb10"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">BLAS_N_THREADS</span><span class="kw">:</span><span class="at"> </span><span class="dv">32</span></span></code></pre></div>
 <p><strong>Type:</strong> positive integer scalar or
 <code>null</code></p>
 <p>A maximum number of threads for BLAS operations, passed to
@@ -261,20 +295,21 @@ Program is Terminated. Because you tried to allocate too many memory
 regions” when a massive target parallelism is used. Set to
 <code>null</code> if you want to keep BLAS defaults.</p>
 <hr>
-<p><code>RSTUDIO_PANDOC: null</code></p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">RSTUDIO_PANDOC</span><span class="kw">:</span><span class="at"> </span><span class="ch">null</span></span></code></pre></div>
 <p><strong>Type:</strong> character scalar or <code>null</code></p>
-<p>Before pipeline is run by <code><a href="../reference/run_pipeline.html">run_single_sample()</a></code>,
-<code><a href="../reference/run_pipeline.html">run_integration()</a></code> or <code><a href="https://docs.ropensci.org/drake/reference/r_make.html" class="external-link">drake::r_make()</a></code>, sets
-<code>RSTUDIO_PANDOC</code> environment variable: a path to directory
-with <a href="https://pandoc.org/" class="external-link">pandoc</a>’s binary.</p>
+<p>Before pipeline is run by <code><a href="../reference/run_pipeline.html">run_single_sample_r()</a></code>,
+<code><a href="../reference/run_pipeline.html">run_single_sample_r()</a></code>, <code><a href="../reference/run_pipeline.html">run_integration_r()</a></code>, or
+<code><a href="../reference/run_pipeline.html">run_integration()</a></code>, the <code>RSTUDIO_PANDOC</code> is set:
+a path to directory with <a href="https://pandoc.org/" class="external-link">pandoc</a>’s
+binary.</p>
 <p>This is needed if you are running this pipeline outside of RStudio,
 or the <code>pandoc</code> binary is not available in your
 <code>PATH</code>. Set to <code>null</code> if any condition above does
 not apply.</p>
 <p>You can also define this variable in <code>.Renviron</code> file and
-set it <code>null</code> in pipeline config.</p>
+set it to <code>null</code> in pipeline config.</p>
 <hr>
-<p><code>SEED: 100</code></p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">SEED</span><span class="kw">:</span><span class="at"> </span><span class="dv">100</span></span></code></pre></div>
 <p><strong>Type:</strong> integer scalar</p>
 <p>An initial seed for random number generator.</p>
 <hr>
@@ -282,7 +317,7 @@ set it <code>null</code> in pipeline config.</p>
 <div class="section level2">
 <h2 id="parallelism">Parallelism<a class="anchor" aria-label="anchor" href="#parallelism"></a>
 </h2>
-<p><code>DRAKE_PARALLELISM: "loop"</code></p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">DRAKE_PARALLELISM</span><span class="kw">:</span><span class="at"> </span><span class="st">"loop"</span></span></code></pre></div>
 <p><strong>Type:</strong> character scalar (<code>"loop"</code> |
 <code>"future"</code> | <code>"clustermq"</code>)</p>
 <p>Type of <a href="https://docs.ropensci.org/drake" class="external-link">drake</a> paralellism:</p>
@@ -300,30 +335,31 @@ to be installed on your system.</li>
 <p>See <a href="https://books.ropensci.org/drake/hpc.html" class="external-link uri">https://books.ropensci.org/drake/hpc.html</a> for more
 details.</p>
 <hr>
-<p><code>DRAKE_CLUSTERMQ_SCHEDULER: "multicore"</code></p>
+<div class="sourceCode" id="cb14"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">DRAKE_CLUSTERMQ_SCHEDULER</span><span class="kw">:</span><span class="at"> </span><span class="st">"multicore"</span></span></code></pre></div>
 <p><strong>Type:</strong> character scalar</p>
 <p>Which scheduler to use if <code>DRAKE_PARALLELISM</code> is
 <code>"clustermq"</code>. See <a href="https://mschubert.github.io/clustermq/articles/userguide.html#configuration" class="external-link uri">https://mschubert.github.io/clustermq/articles/userguide.html#configuration</a>
 for possible values.</p>
 <hr>
-<p><code>DRAKE_N_JOBS: 8</code></p>
+<div class="sourceCode" id="cb15"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="fu">DRAKE_N_JOBS</span><span class="kw">:</span><span class="at"> </span><span class="dv">8</span></span></code></pre></div>
 <p><strong>Type:</strong> positive integer scalar</p>
 <p>A number of parallel jobs for drake.</p>
 <hr>
-<p><code>DRAKE_N_JOBS_PREPROCESS: 4</code></p>
+<div class="sourceCode" id="cb16"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="fu">DRAKE_N_JOBS_PREPROCESS</span><span class="kw">:</span><span class="at"> </span><span class="dv">4</span></span></code></pre></div>
 <p><strong>Type:</strong> positive integer scalar</p>
 <p>A number of parallel jobs for processing the imports and doing other
 preprocessing tasks.</p>
 <hr>
-<p><code>WITHIN_TARGET_PARALLELISM: False</code></p>
+<div class="sourceCode" id="cb17"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="fu">WITHIN_TARGET_PARALLELISM</span><span class="kw">:</span><span class="at"> </span><span class="ch">False</span></span></code></pre></div>
 <p><strong>Type:</strong> logical scalar</p>
 <p>Allow or disable within-target parallelism through the <a href="https://bioconductor.org/packages/release/bioc/html/BiocParallel.html" class="external-link">BiocParallel</a>
 package. Only possible when <code>DRAKE_PARALLELISM</code> is
 <code>"loop"</code>.</p>
 <hr>
-<p><code>N_CORES: 16</code></p>
+<div class="sourceCode" id="cb18"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu">N_CORES</span><span class="kw">:</span><span class="at"> </span><span class="dv">16</span></span></code></pre></div>
 <p><strong>Type:</strong> positive integer scalar</p>
 <p>A number of cores for within-target parallelism.</p>
+<hr>
 </div>
 <div class="section level2">
 <h2 id="targets">Targets<a class="anchor" aria-label="anchor" href="#targets"></a>
@@ -351,7 +387,7 @@ targets with useful runtime information. See the Targets section in
 
 <div class="pkgdown">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.9000.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.9000.</p>
   <p class="preferably">Using <a href="https://preferably.amirmasoudabdol.name/?source=footer" class="external-link">preferably</a> template.</p>
 </div>
 

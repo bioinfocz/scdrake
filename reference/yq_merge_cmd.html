@@ -35,7 +35,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">scdrake</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.2.3</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.3.0</span>
       </span>
     </div>
 
@@ -44,10 +44,13 @@
   <a href="../articles/scdrake.html">Get started</a>
 </li>
 <li>
+  <a href="../articles/scdrake_integration.html">Integration pipeline guide</a>
+</li>
+<li>
   <a href="../articles/pipeline_overview.html">Pipeline overview</a>
 </li>
 <li>
-  <a href="../reference/index.html">Reference</a>
+  <a href="../articles/scdrake_faq.html">FAQ &amp; Howtos</a>
 </li>
 <li class="dropdown">
   <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -56,24 +59,35 @@
     <span class="caret"></span>
   </a>
   <ul class="dropdown-menu" role="menu"><li class="divider">
-    <li class="dropdown-header">General information</li>
+    <li class="dropdown-header">Guides</li>
     <li>
-      <a href="../articles/pipeline_overview.html">Pipeline overview</a>
+      <a href="../articles/scdrake_integration.html">02 Integration pipeline guide</a>
     </li>
     <li>
-      <a href="../articles/scdrake_run.html">Running the pipeline, environment variables</a>
-    </li>
-    <li>
-      <a href="../articles/cluster_markers.html">Cluster markers</a>
+      <a href="../articles/scdrake_extend.html">Extending the pipeline</a>
     </li>
     <li>
       <a href="../articles/drake_basics.html">drake basics</a>
     </li>
     <li class="divider">
-    <li class="dropdown-header">Configs</li>
+    <li class="dropdown-header">General information</li>
     <li>
-      <a href="../articles/scdrake_config.html">scdrake configs: a general overview</a>
+      <a href="../articles/pipeline_overview.html">Pipeline overview</a>
     </li>
+    <li>
+      <a href="../articles/scdrake_faq.html">FAQ &amp; Howtos</a>
+    </li>
+    <li>
+      <a href="../articles/cluster_markers.html">Cluster markers</a>
+    </li>
+    <li>
+      <a href="../articles/scdrake_config.html">scdrake config internals</a>
+    </li>
+    <li>
+      <a href="../articles/scdrake_envvars.html">Environment variables</a>
+    </li>
+    <li class="divider">
+    <li class="dropdown-header">General configs</li>
     <li>
       <a href="../articles/config_pipeline.html">Pipeline config</a>
     </li>
@@ -105,6 +119,9 @@
       <a href="../articles/stage_contrasts.html">Contrasts stage</a>
     </li>
   </ul></li>
+<li>
+  <a href="../reference/index.html">Reference</a>
+</li>
 <li>
   <a href="../news/index.html">Changelog</a>
 </li>
@@ -148,37 +165,48 @@
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">yq_merge_cmd</span><span class="op">(</span>
-  <span class="va">f1</span>,
-  <span class="va">f2</span>,
-  stdout <span class="op">=</span> <span class="cn">TRUE</span>,
-  check_yq <span class="op">=</span> <span class="cn">TRUE</span>,
-  check_exit <span class="op">=</span> <span class="cn">TRUE</span>,
-  yq_binary <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">getOption</a></span><span class="op">(</span><span class="st">"scdrake_yq_binary"</span><span class="op">)</span>
-<span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">yq_merge_cmd</span><span class="op">(</span></span>
+<span>  <span class="va">f1</span>,</span>
+<span>  <span class="va">f2</span>,</span>
+<span>  stdout <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  check_yq <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  check_exit <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  yq_binary <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">getOption</a></span><span class="op">(</span><span class="st">"scdrake_yq_binary"</span><span class="op">)</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>f1, f2</dt>
 <dd><p>A character scalar: path to YAML file. <code>f2</code> is the file whose parameters will overwrite those in <code>f1</code>.</p></dd>
+
+
 <dt>stdout</dt>
 <dd><p>A character or logical scalar, or <code>NULL</code>: passed to <code><a href="https://rdrr.io/r/base/system2.html" class="external-link">base::system2()</a></code>.</p><ul><li><p>For character scalar: path to file into which the resulting merged YAML file will be written.
 If empty string (<code>""</code>), the result will be written to R console.</p></li>
 <li><p>For logical scalar <code>TRUE</code>: return the stdout as a character scalar.</p></li>
 <li><p>For logical scalar <code>FALSE</code>, or <code>NULL</code>: discard the stdout.</p></li>
 </ul></dd>
+
+
 <dt>check_yq</dt>
 <dd><p>A logical scalar: if <code>TRUE</code>, check <code>yq</code> tool presence with <code><a href="check_yq.html">check_yq()</a></code> prior to merging.</p></dd>
+
+
 <dt>check_exit</dt>
 <dd><p>A logical scalar: if <code>TRUE</code> and <code>stdout</code> is <code>FALSE</code>,
 check exit code of shell command used for merging.</p></dd>
+
+
 <dt>yq_binary</dt>
 <dd><p>A character scalar: path to <code>yq</code> tool's binary.</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>An output from <code><a href="https://rdrr.io/r/base/system2.html" class="external-link">base::system2()</a></code> - depends on the <code>stdout</code> argument.</p>
+    
+
+<p>An output from <code><a href="https://rdrr.io/r/base/system2.html" class="external-link">base::system2()</a></code> - depends on the <code>stdout</code> argument.</p>
     </div>
 
   </div>
@@ -193,7 +221,7 @@ check exit code of shell command used for merging.</p></dd>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.9000.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.9000.</p>
   <p class="preferably">Using <a href="https://preferably.amirmasoudabdol.name/?source=footer" class="external-link">preferably</a> template.</p>
 </div>
 

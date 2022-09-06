@@ -18,14 +18,14 @@
       "<link id=\"css\" rel=\"stylesheet\" href=\"https://bootswatch.com/3/flatly/bootstrap.css\" onload=\"document.documentElement.style.display = ''\">"
     );
   }
-</script><title>Running the pipeline, environment variables • scdrake</title>
+</script><title>Environment variables • scdrake</title>
 <!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script><!-- Bootstrap --><script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script><!-- bootstrap-toc --><link rel="stylesheet" href="../bootstrap-toc.css">
 <script src="../bootstrap-toc.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
 <!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- pkgdown --><link href="../pkgdown.css" rel="stylesheet">
 <script src="../pkgdown.js"></script><!-- docsearch --><script src="../docsearch.js"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/docsearch.js/2.6.3/docsearch.min.css" integrity="sha256-QOSRU/ra9ActyXkIBbiIB144aDBdtvXBcNc3OTNuX/Q=" crossorigin="anonymous">
 <link href="../docsearch.css" rel="stylesheet">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/jquery.mark.min.js" integrity="sha256-4HLtjeVgH0eIB3aZ9mLYF6E8oU5chNdjU6p6rrXpl9U=" crossorigin="anonymous"></script><meta property="og:title" content="Running the pipeline, environment variables">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/jquery.mark.min.js" integrity="sha256-4HLtjeVgH0eIB3aZ9mLYF6E8oU5chNdjU6p6rrXpl9U=" crossorigin="anonymous"></script><meta property="og:title" content="Environment variables">
 <meta property="og:description" content="scdrake">
 <!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
@@ -58,7 +58,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">scdrake</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.2.3</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.3.0</span>
       </span>
     </div>
 
@@ -68,10 +68,13 @@
   <a href="../articles/scdrake.html">Get started</a>
 </li>
 <li>
+  <a href="../articles/scdrake_integration.html">Integration pipeline guide</a>
+</li>
+<li>
   <a href="../articles/pipeline_overview.html">Pipeline overview</a>
 </li>
 <li>
-  <a href="../reference/index.html">Reference</a>
+  <a href="../articles/scdrake_faq.html">FAQ &amp; Howtos</a>
 </li>
 <li class="dropdown">
   <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -82,25 +85,37 @@
   <ul class="dropdown-menu" role="menu">
 <li class="divider">
     </li>
-<li class="dropdown-header">General information</li>
+<li class="dropdown-header">Guides</li>
     <li>
-      <a href="../articles/pipeline_overview.html">Pipeline overview</a>
+      <a href="../articles/scdrake_integration.html">02 Integration pipeline guide</a>
     </li>
     <li>
-      <a href="../articles/scdrake_run.html">Running the pipeline, environment variables</a>
-    </li>
-    <li>
-      <a href="../articles/cluster_markers.html">Cluster markers</a>
+      <a href="../articles/scdrake_extend.html">Extending the pipeline</a>
     </li>
     <li>
       <a href="../articles/drake_basics.html">drake basics</a>
     </li>
     <li class="divider">
     </li>
-<li class="dropdown-header">Configs</li>
+<li class="dropdown-header">General information</li>
     <li>
-      <a href="../articles/scdrake_config.html">scdrake configs: a general overview</a>
+      <a href="../articles/pipeline_overview.html">Pipeline overview</a>
     </li>
+    <li>
+      <a href="../articles/scdrake_faq.html">FAQ &amp; Howtos</a>
+    </li>
+    <li>
+      <a href="../articles/cluster_markers.html">Cluster markers</a>
+    </li>
+    <li>
+      <a href="../articles/scdrake_config.html">scdrake config internals</a>
+    </li>
+    <li>
+      <a href="../articles/scdrake_envvars.html">Environment variables</a>
+    </li>
+    <li class="divider">
+    </li>
+<li class="dropdown-header">General configs</li>
     <li>
       <a href="../articles/config_pipeline.html">Pipeline config</a>
     </li>
@@ -135,6 +150,9 @@
       <a href="../articles/stage_contrasts.html">Contrasts stage</a>
     </li>
   </ul>
+</li>
+<li>
+  <a href="../reference/index.html">Reference</a>
 </li>
 <li>
   <a href="../news/index.html">Changelog</a>
@@ -176,12 +194,12 @@
       </header><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
-      <h1 data-toc-skip>Running the pipeline, environment variables</h1>
+      <h1 data-toc-skip>Environment variables</h1>
             
-            <h4 data-toc-skip class="date">2022-05-31</h4>
+            <h4 data-toc-skip class="date">2022-09-06</h4>
       
-      <small class="dont-index">Source: <a href="https://github.com/bioinfocz/scdrake/blob/mastervignettes/scdrake_run.Rmd" class="external-link"><code>vignettes/scdrake_run.Rmd</code></a></small>
-      <div class="hidden name"><code>scdrake_run.Rmd</code></div>
+      <small class="dont-index">Source: <a href="https://github.com/bioinfocz/scdrake/blob/mastervignettes/scdrake_envvars.Rmd" class="external-link"><code>vignettes/scdrake_envvars.Rmd</code></a></small>
+      <div class="hidden name"><code>scdrake_envvars.Rmd</code></div>
 
     </div>
 
@@ -192,14 +210,8 @@ $(document).ready(function(){
   $('[data-toggle="tooltip"]').tooltip(); 
 });
 </script><hr>
-<p>This vignette expects you have already initialized a new
-<a href="https://github.com/bioinfocz/scdrake" class="external-link">scdrake</a> project, as described in
-<code><a href="../articles/scdrake.html">vignette("scdrake")</a></code>.</p>
-<div class="section level2">
-<h2 id="environment-variables">Environment variables<a class="anchor" aria-label="anchor" href="#environment-variables"></a>
-</h2>
 <p>On <a href="https://github.com/bioinfocz/scdrake" class="external-link">scdrake</a> load or
-<a data-toggle="tooltip" title="(i.e. when you call some function from a package, e.g. `drake::run_single_sample()`)">attach</a>,
+<a data-toggle="tooltip" title="(i.e. when you call some function from a package, e.g. `drake::run_single_sample_r()`)">attach</a>,
 several environment variables are read and corresponding
 <code><a href="https://rdrr.io/r/base/options.html" class="external-link">options()</a></code> are set. Those are mainly variables controlling
 paths to config directories. See <code>?scdrake_options</code> for more
@@ -219,78 +231,21 @@ the default one for many <a href="https://github.com/bioinfocz/scdrake" class="e
 or
 <code>run_single_sample(dir = getOption("scdrake_pipeline_config_dir"), ...)</code>.</li>
 </ul>
-</div>
-<div class="section level2">
-<h2 id="running-the-pipeline-in-current-r-session">Running the pipeline in current R session<a class="anchor" aria-label="anchor" href="#running-the-pipeline-in-current-r-session"></a>
-</h2>
-<p>The pipeline can be run in current R session, however, this is
-considered a bad practice for reproducibility. The most high-level
-functions are <code><a href="../reference/run_pipeline.html">run_single_sample()</a></code> and
-<code><a href="../reference/run_pipeline.html">run_integration()</a></code> - see description in their help pages for
-overview of what they do before pipeline is executed.</p>
-<p>Anyway, to replicate what is done inside
-<code><a href="../reference/run_pipeline.html">run_single_sample()</a></code>, you just need this code (assuming you
-have created a <a href="https://github.com/bioinfocz/scdrake" class="external-link">scdrake</a> project and your current working
-directory is in its root):</p>
-<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/update_config.html">update_pipeline_config</a></span><span class="op">(</span><span class="op">)</span>
-<span class="fu"><a href="../reference/update_config.html">update_single_sample_configs</a></span><span class="op">(</span><span class="op">)</span>
-<span class="va">cfg_pipeline</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/load_config.html">load_pipeline_config</a></span><span class="op">(</span><span class="op">)</span>
-<span class="va">cfg</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/load_config.html">load_single_sample_configs</a></span><span class="op">(</span><span class="va">cfg_pipeline</span><span class="op">)</span>
-<span class="va">plan</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_plan.html">get_single_sample_plan</a></span><span class="op">(</span><span class="va">cfg</span>, <span class="va">cfg_pipeline</span><span class="op">)</span>
-<span class="fu"><a href="../reference/create_dirs.html">create_single_sample_dirs</a></span><span class="op">(</span><span class="va">cfg</span><span class="op">)</span>
-<span class="fu"><a href="../reference/scdrake_make.html">scdrake_make</a></span><span class="op">(</span><span class="va">plan</span>, cfg_pipeline <span class="op">=</span> <span class="va">cfg_pipeline</span>, cfg_main <span class="op">=</span> <span class="va">cfg_main</span><span class="op">)</span></code></pre></div>
-<p>Now you have almost full control over what will be executed in the
-pipeline:</p>
-<ul>
-<li>You can modify <code>cfg_pipeline</code> and <code>cfg</code>, as
-these are lists (but with strict rules, see <code><a href="../reference/scdrake_list.html">?scdrake_list</a></code>).
-However, you should do modifications with caution, as config parameters
-are processed by internal functions (<a href="https://github.com/bioinfocz/scdrake/tree/main/R/config_process_common.R" class="external-link">config_process_common.R</a>,
-<a href="https://github.com/bioinfocz/scdrake/tree/main/R/config_process_single_sample.R" class="external-link">config_process_single_sample.R</a>,
-<a href="https://github.com/bioinfocz/scdrake/tree/main/R/config_process_integration.R" class="external-link">config_process_integration.R</a>).
-This might change in the future and these functions will be exposed to
-package users.</li>
-<li>You can add more targets to <code>plan</code>, e.g.</li>
-</ul>
-<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">my_plan</span> <span class="op">&lt;-</span> <span class="fu">drake</span><span class="fu">::</span><span class="fu"><a href="https://docs.ropensci.org/drake/reference/drake_plan.html" class="external-link">drake_plan</a></span><span class="op">(</span>
-  my_target <span class="op">=</span> <span class="fu">scater</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/scater/man/plotReducedDim.html" class="external-link">plotReducedDim</a></span><span class="op">(</span><span class="va">sce_final_norm_clustering</span>, <span class="st">"umap"</span>, colour_by <span class="op">=</span> <span class="st">"total"</span><span class="op">)</span>
-<span class="op">)</span>
-<span class="va">plan</span> <span class="op">&lt;-</span> <span class="fu">drake</span><span class="fu">::</span><span class="fu"><a href="https://docs.ropensci.org/drake/reference/bind_plans.html" class="external-link">bind_plans</a></span><span class="op">(</span><span class="va">plan</span>, <span class="va">my_plan</span><span class="op">)</span>
-<span class="fu"><a href="../reference/scdrake_make.html">scdrake_make</a></span><span class="op">(</span><span class="va">plan</span>, cfg_pipeline <span class="op">=</span> <span class="va">cfg_pipeline</span>, cfg_main <span class="op">=</span> <span class="va">cfg_main</span><span class="op">)</span></code></pre></div>
-<p>Just keep in mind that the list of targets to be made is taken from
-<code>cfg_pipeline$DRAKE_TARGETS</code>, so unless it is set to
-<code>null</code> (= make all targets in plan) in your
-<code>pipeline.yaml</code> config, you have to add names of your own
-targets to be made, i.e.</p>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">cfg_pipeline</span><span class="op">$</span><span class="va">DRAKE_TARGETS</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">cfg_pipeline</span><span class="op">$</span><span class="va">DRAKE_TARGETS</span>, <span class="st">"my_target"</span><span class="op">)</span>
-<span class="fu"><a href="../reference/scdrake_make.html">scdrake_make</a></span><span class="op">(</span><span class="va">plan</span>, cfg_pipeline <span class="op">=</span> <span class="va">cfg_pipeline</span>, cfg_main <span class="op">=</span> <span class="va">cfg_main</span><span class="op">)</span></code></pre></div>
-</div>
-<div class="section level2">
-<h2 id="running-the-pipeline-reproducibly-in-a-fresh-new-r-session">Running the pipeline reproducibly in a fresh new R session<a class="anchor" aria-label="anchor" href="#running-the-pipeline-reproducibly-in-a-fresh-new-r-session"></a>
-</h2>
-<p>In <a href="https://docs.ropensci.org/drake" class="external-link">drake</a>, the preferred way to execute pipeline is
-through <code><a href="https://docs.ropensci.org/drake/reference/r_make.html" class="external-link">drake::r_make()</a></code>, with the <code>source</code>
-parameter set to an initial script. In <a href="https://github.com/bioinfocz/scdrake" class="external-link">scdrake</a>, there are
-two such scripts for the single-sample and integration pipeline:
+<hr>
+<p>Environment variables are mainly used in
 <code>_drake_single_sample.R</code> and
-<code>_drake_integration.R</code>, respectively. Loading the config
-files from proper paths in these scripts is done via <a href="#environment-variables">environment variables</a>.</p>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu">drake</span><span class="fu">::</span><span class="fu"><a href="https://docs.ropensci.org/drake/reference/r_make.html" class="external-link">r_make</a></span><span class="op">(</span><span class="st">"_drake_single_sample.R"</span><span class="op">)</span>
-<span class="fu">drake</span><span class="fu">::</span><span class="fu"><a href="https://docs.ropensci.org/drake/reference/r_make.html" class="external-link">r_make</a></span><span class="op">(</span><span class="st">"_drake_integration.R"</span><span class="op">)</span></code></pre></div>
-<p>All important details are already given in <em>Running the pipeline
-reproducibly</em> section in <code><a href="../articles/scdrake.html">vignette("scdrake")</a></code>.</p>
-</div>
+<code>_drake_integration.R</code> scripts. Those are scripts sourced by
+<a href="https://docs.ropensci.org/drake" class="external-link">drake</a> in a fresh new R session via <a href="https://callr.r-lib.org" class="external-link">callr</a>
+when you call e.g. <code><a href="../reference/run_pipeline.html">run_single_sample_r()</a></code>. For this reason,
+environment variables are the only way how to pass dynamic parameters
+into such scripts. In case of <a href="https://github.com/bioinfocz/scdrake" class="external-link">scdrake</a>, the most important
+are paths to directories with config files, which carry
+analysis/pipeline-specific parameters.</p>
   </div>
 
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
 
-        <nav id="toc" data-toggle="toc"><h2 data-toc-skip>Contents</h2>
-    </nav>
-</div>
+      </div>
 
 </div>
 
@@ -303,7 +258,7 @@ reproducibly</em> section in <code><a href="../articles/scdrake.html">vignette("
 
 <div class="pkgdown">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.9000.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.9000.</p>
   <p class="preferably">Using <a href="https://preferably.amirmasoudabdol.name/?source=footer" class="external-link">preferably</a> template.</p>
 </div>
 

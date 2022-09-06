@@ -35,7 +35,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">scdrake</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.2.3</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.3.0</span>
       </span>
     </div>
 
@@ -44,10 +44,13 @@
   <a href="../articles/scdrake.html">Get started</a>
 </li>
 <li>
+  <a href="../articles/scdrake_integration.html">Integration pipeline guide</a>
+</li>
+<li>
   <a href="../articles/pipeline_overview.html">Pipeline overview</a>
 </li>
 <li>
-  <a href="../reference/index.html">Reference</a>
+  <a href="../articles/scdrake_faq.html">FAQ &amp; Howtos</a>
 </li>
 <li class="dropdown">
   <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -56,24 +59,35 @@
     <span class="caret"></span>
   </a>
   <ul class="dropdown-menu" role="menu"><li class="divider">
-    <li class="dropdown-header">General information</li>
+    <li class="dropdown-header">Guides</li>
     <li>
-      <a href="../articles/pipeline_overview.html">Pipeline overview</a>
+      <a href="../articles/scdrake_integration.html">02 Integration pipeline guide</a>
     </li>
     <li>
-      <a href="../articles/scdrake_run.html">Running the pipeline, environment variables</a>
-    </li>
-    <li>
-      <a href="../articles/cluster_markers.html">Cluster markers</a>
+      <a href="../articles/scdrake_extend.html">Extending the pipeline</a>
     </li>
     <li>
       <a href="../articles/drake_basics.html">drake basics</a>
     </li>
     <li class="divider">
-    <li class="dropdown-header">Configs</li>
+    <li class="dropdown-header">General information</li>
     <li>
-      <a href="../articles/scdrake_config.html">scdrake configs: a general overview</a>
+      <a href="../articles/pipeline_overview.html">Pipeline overview</a>
     </li>
+    <li>
+      <a href="../articles/scdrake_faq.html">FAQ &amp; Howtos</a>
+    </li>
+    <li>
+      <a href="../articles/cluster_markers.html">Cluster markers</a>
+    </li>
+    <li>
+      <a href="../articles/scdrake_config.html">scdrake config internals</a>
+    </li>
+    <li>
+      <a href="../articles/scdrake_envvars.html">Environment variables</a>
+    </li>
+    <li class="divider">
+    <li class="dropdown-header">General configs</li>
     <li>
       <a href="../articles/config_pipeline.html">Pipeline config</a>
     </li>
@@ -105,6 +119,9 @@
       <a href="../articles/stage_contrasts.html">Contrasts stage</a>
     </li>
   </ul></li>
+<li>
+  <a href="../reference/index.html">Reference</a>
+</li>
 <li>
   <a href="../news/index.html">Changelog</a>
 </li>
@@ -148,40 +165,53 @@
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">selected_markers_dimplot</span><span class="op">(</span>
-  <span class="va">sce</span>,
-  <span class="va">dimred</span>,
-  <span class="va">selected_markers_df</span>,
-  assay <span class="op">=</span> <span class="st">"logcounts"</span>,
-  low_color <span class="op">=</span> <span class="st">"lightgrey"</span>,
-  high_color <span class="op">=</span> <span class="st">"red"</span>,
-  combine <span class="op">=</span> <span class="cn">TRUE</span>
-<span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">selected_markers_dimplot</span><span class="op">(</span></span>
+<span>  <span class="va">sce</span>,</span>
+<span>  <span class="va">dimred</span>,</span>
+<span>  <span class="va">selected_markers_df</span>,</span>
+<span>  assay <span class="op">=</span> <span class="st">"logcounts"</span>,</span>
+<span>  low_color <span class="op">=</span> <span class="st">"lightgrey"</span>,</span>
+<span>  high_color <span class="op">=</span> <span class="st">"red"</span>,</span>
+<span>  combine <span class="op">=</span> <span class="cn">TRUE</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>sce</dt>
 <dd><p>A <code>SingleCellExperiment</code> object.</p></dd>
+
+
 <dt>dimred</dt>
 <dd><p>A character scalar: name of dimred to plot.</p></dd>
+
+
 <dt>selected_markers_df</dt>
 <dd><p>A dataframe-like object with two character columns:</p><ul><li><p><code>group</code>: marker group.</p></li>
 <li><p><code>markers</code>: gene symbols of markers separated by <code>":"</code>.
 Such dataframe is created from a CSV file defined in the <code>SELECTED_MARKERS_FILE</code> parameter in e.g.
 <code>02_norm_clustering.yaml</code> config.</p></li>
 </ul><p><em>Input target</em>: <code>selected_markers_df</code> or <code>selected_markers_int_df</code></p></dd>
+
+
 <dt>assay</dt>
 <dd><p>A character scalar: name of assay in <code>sce</code> to be used.</p></dd>
+
+
 <dt>low_color, high_color</dt>
 <dd><p>Passed as <code>list(low = low_color, high = high_color)</code> to <code><a href="plotReducedDim_mod.html">plotReducedDim_mod()</a></code>.</p></dd>
+
+
 <dt>combine</dt>
 <dd><p>A logical scalar: if <code>TRUE</code>, combine plots to a single <code>patchwork</code> object, otherwise return
 list of <code>ggplot2</code> objects.</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>See the <code>combine</code> argument.</p>
+    
+
+<p>See the <code>combine</code> argument.</p>
     </div>
 
   </div>
@@ -196,7 +226,7 @@ list of <code>ggplot2</code> objects.</p></dd>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.9000.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.9000.</p>
   <p class="preferably">Using <a href="https://preferably.amirmasoudabdol.name/?source=footer" class="external-link">preferably</a> template.</p>
 </div>
 
