@@ -316,16 +316,20 @@ marker_heatmap <- function(seu,
     }
   }
 
-  p_heatmap <- suppressMessages(
-    Seurat::DoHeatmap(seu, features = markers_top$SYMBOL, assay = assay, slot = slot, angle = angle, ...) +
-      fill_scale +
-      ggtitle(label = title, subtitle = subtitle) +
-      theme(
-        axis.text.y = element_text(size = y_text_size),
-        title = element_text(size = 8),
-        plot.subtitle = element_text(size = 7)
-      )
-  )
+  if (is_empty(markers_top$SYMBOL)) {
+    p_heatmap <- create_dummy_plot(glue0("{title}\n{subtitle}\nNo top markers were found."))
+  } else {
+    p_heatmap <- suppressMessages(
+      Seurat::DoHeatmap(seu, features = markers_top$SYMBOL, assay = assay, slot = slot, angle = angle, ...) +
+        fill_scale +
+        ggtitle(label = title, subtitle = subtitle) +
+        theme(
+          axis.text.y = element_text(size = y_text_size),
+          title = element_text(size = 8),
+          plot.subtitle = element_text(size = 7)
+        )
+    )
+  }
 
   return(list(p_heatmap = p_heatmap, markers_top = markers_top))
 }
