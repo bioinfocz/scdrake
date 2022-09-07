@@ -275,17 +275,21 @@ cell_annotation_diagnostic_plots_fn <- function(cell_annotation,
           unlist() %>%
           unique()
         m <- match(ref_markers_label, rownames(empirical_markers[[label]]))
-        m <- ref_markers_label[rank(m) <= heatmap_n_top_markers]
 
-        heatmap <- scater::plotHeatmap(
-          sce,
-          features = m,
-          order_columns_by = "labels",
-          labels_row = rowData(sce)[m, "SYMBOL", drop = TRUE],
-          main = glue("{row$name}\n{label} (top {heatmap_n_top_markers} markers)"),
-          silent = TRUE
-        ) %>% ggplotify::as.ggplot()
-
+        if (is_empty(m)) {
+          heatmap <- create_dummy_plot(glue("No DE genes found for:\n{row$name} / {label}"))
+        } else {
+          m <- ref_markers_label[rank(m) <= heatmap_n_top_markers]
+          heatmap <- scater::plotHeatmap(
+            sce,
+            features = m,
+            order_columns_by = "labels",
+            labels_row = rowData(sce)[m, "SYMBOL", drop = TRUE],
+            main = glue("{row$name}\n{label} (top {heatmap_n_top_markers} markers)"),
+            silent = TRUE
+          ) %>%
+            ggplotify::as.ggplot()
+        }
         return(heatmap)
       }) %>%
         magrittr::set_names(unique(labels))
