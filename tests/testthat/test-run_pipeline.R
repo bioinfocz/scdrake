@@ -49,6 +49,15 @@ if (!is_r_build_check) {
 init_project(project_dir, use_rstudio = FALSE, ask = FALSE)
 here::i_am(".here")
 
+## -- A test file for additional cell data.
+additional_cell_data <- data.frame(
+  Barcode = c("AAACCCAAGGAGAGTA-1", "AAACGCTTCAGCCCAG-1", "AAAGAACAGACGACTG-1", "AAAGAACCAATGGCAG-1", "AAAGAACGTCTGCAAT-1"),
+  letters = letters[1:5],
+  cluster_sc3_2 = glue("cluster_{letters[1:5]}"),
+  cluster_sc3_6_custom = glue("cluster_{LETTERS[1:5]}")
+)
+saveRDS(additional_cell_data, "pbmc1k_additional_cell_data.Rds")
+
 test_that("the full single-sample pipeline for PBMC 1k dataset finishes", {
   skip_if(is_false(getOption("scdrake_test_run_pipeline_single_sample_full")))
   cli_alert_info("TEST: PBMC 1k full")
@@ -87,6 +96,11 @@ test_that("'sce_final_norm_clustering' target in single-sample pipeline for PBMC
   )
 
   expect_true(run_single_sample_r())
+  ## -- To test the integration pipeline's ability to also start from a SCE object.
+  saveRDS(
+    drake::readd(sce_final_norm_clustering, path = fs::path(project_dir, ".drake_pbmc3k")),
+    fs::path(project_dir, "sce_final_norm_clustering_pbmc3k.Rds")
+  )
 })
 
 test_that("integration pipeline finishes", {

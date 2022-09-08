@@ -19,3 +19,12 @@ CELL_ANNOTATION_SOURCES:
       label_subsets: []
       train_params:
         genes: "sd"
+ADDITIONAL_CELL_DATA_FILE: "pbmc1k_additional_cell_data.Rds"
+NORM_CLUSTERING_REPORT_DIMRED_PLOTS_OTHER:
+  - "phase": "Cell cycle phases"
+    "doublet_score": "Doublet score"
+    "total": "Total number of UMI"
+    "detected": "Detected number of genes"
+    "cluster_graph_louvain_annotated": null
+    "cluster_sc3_2": "From additional cell data."
+    "cluster_sc3_6_custom": "From additional cell data."

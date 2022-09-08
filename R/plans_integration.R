@@ -27,7 +27,7 @@ get_integration_subplan <- function(cfg, cfg_pipeline, cfg_main) {
     ## -- so we need to always load all sce objects before pipeline run.
     ## -- Also, some constraints are checked (common normalization method and HVG metrics).
     sce_int_import = target(
-      sce_int_import_fn(!!cfg$INTEGRATION_SOURCES),
+      sce_int_import_fn(!!cfg$INTEGRATION_SOURCES, hvg_combination = !!cfg$HVG_COMBINATION_INT),
       trigger = trigger(condition = TRUE)
     ),
 
@@ -263,11 +263,14 @@ get_int_clustering_subplan <- function(cfg, cfg_pipeline, cfg_main) {
     ),
     cell_annotation_labels = cell_annotation_labels_fn(cell_annotation),
 
+    additional_cell_data = additional_cell_data_fn(file_in(!!cfg$ADDITIONAL_CELL_DATA_FILE)),
     cell_data = cell_data_fn(
       col_data = colData(sce_int_final) %>% as.data.frame(),
       clusters_all = clusters_all,
       cell_annotation_labels = cell_annotation_labels,
-      cell_groupings = !!cfg$CELL_GROUPINGS
+      cell_groupings = !!cfg$CELL_GROUPINGS,
+      additional_cell_data = additional_cell_data,
+      pipeline_type = "integration"
     ),
 
     cell_annotation_diagnostic_plots = cell_annotation_diagnostic_plots_fn(

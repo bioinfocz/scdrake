@@ -235,20 +235,89 @@ make_cell_groupings <- function(df, cell_groupings, do_cbind = FALSE) {
   }
 }
 
+#' @title Load additional cell data from a CSV or Rds (dataframe) file.
+#' @param additional_cell_data_file A character scalar: path to input file.
+#' @return A dataframe-like object.
+#'
+#' @concept sc_sce
+#' @export
+additional_cell_data_fn <- function(additional_cell_data_file) {
+  if (is_empty(additional_cell_data_file)) {
+    return(NULL)
+  }
+
+  assert_that_(fs::file_exists(additional_cell_data_file), msg = "File not found: {.file {additional_cell_data_file}}")
+  extension <- fs::path_ext(additional_cell_data_file)
+  if (extension == "csv") {
+    obj <- readr::read_csv(additional_cell_data_file)
+  } else if (stringr::str_to_lower(extension) == "rds") {
+    obj <- readRDS(additional_cell_data_file)
+    assert_that_(
+      inherits(obj, "data.frame") || inherits(obj, "DFrame"),
+      msg = "{.file {additional_cell_data_file}} is not {.field data.frame} or {.field DataFrame}."
+    )
+    if (inherits(obj, "DFrame")) {
+      obj <- as.data.frame(obj)
+    }
+  } else {
+    cli_abort(glue(str_space(
+      "Allowed file types of additional cell data are CSV and Rds.",
+      "Your file has an unrecognized extension {.file extension}."
+    )))
+  }
+  return(obj)
+}
+
+
+#' @title Merge all cell-related data to a single DataFrame.
 #' @param col_data A dataframe.
 #' @param clusters_all A named list.
 #' @param cell_annotation_labels A named list.
+#' @param cell_groupings A dataframe: see [make_cell_groupings()].
+#' @param additional_cell_data A data.frame-like object with additional cell data to be joined.
+#' @param pipeline_type A character scalar:
+#'   - If `"single_sample"`, then `additional_cell_data` must contain `Barcode` column.
+#'   - If `"integration"`, then `additional_cell_data` must contain `Barcode` and `batch` columns.
+#' @return A DataFrame object.
 #'
 #' @concept sc_sce
-#' @rdname cell_data
 #' @export
-cell_data_fn <- function(col_data, clusters_all, cell_annotation_labels, cell_groupings) {
+cell_data_fn <- function(col_data,
+                         clusters_all,
+                         cell_annotation_labels,
+                         cell_groupings,
+                         additional_cell_data,
+                         pipeline_type = c("single_sample", "integration")) {
+  row_names <- rownames(col_data)
   existing_columns <- intersect(colnames(col_data), c(names(clusters_all), names(cell_annotation_labels)))
   col_data <- col_data[, !colnames(col_data) %in% existing_columns] %>%
     dplyr::bind_cols(tibble::as_tibble(clusters_all))
 
   if (!is_null(cell_annotation_labels)) {
     col_data <- dplyr::bind_cols(col_data, tibble::as_tibble(cell_annotation_labels))
+  }
+
+  if (!is_null(additional_cell_data)) {
+    pipeline_type <- arg_match(pipeline_type)
+    if (pipeline_type == "single_sample") {
+      assert_that_("Barcode" %in% colnames(additional_cell_data), msg = "Additional cell data must contain {.field Barcode} column.")
+      join_cols <- "Barcode"
+    } else {
+      assert_that_(
+        all(c("Barcode", "batch") %in% colnames(additional_cell_data)),
+        msg = "Additional cell data must contain {.field Barcode} and {.field batch} columns."
+      )
+      join_cols <- c("Barcode", "batch")
+    }
+
+    existing_columns <- intersect(colnames(col_data), setdiff(colnames(additional_cell_data), join_cols))
+    if (!is_empty(existing_columns)) {
+      cli_alert_info("Additional cell data will override existing columns: {.vals {existing_columns}}")
+    }
+
+    col_data <- col_data %>%
+      dplyr::select(-dplyr::all_of(existing_columns)) %>%
+      dplyr::left_join(additional_cell_data, by = join_cols)
   }
 
   col_data <- S4Vectors::DataFrame(col_data)
@@ -265,6 +334,7 @@ cell_data_fn <- function(col_data, clusters_all, cell_annotation_labels, cell_gr
     metadata(col_data)$cell_groupings <- cell_groupings
   }
 
+  rownames(col_data) <- row_names
   return(col_data)
 }
 

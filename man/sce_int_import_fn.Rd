@@ -28,7 +28,7 @@ A list of \code{SingleCellExperiment} objects. \emph{Output target}: \code{sce_i
 
 The following items of \code{metadata()} of each imported \code{SingleCellExperiment} object are added or modified:
 \itemize{
-\item \code{single_sample_cache_path}, \code{single_sample_name}, \code{single_sample_description}, \code{hvg_rm_cc_genes},
+\item \code{single_sample_path}, \code{single_sample_path_type}, \code{single_sample_name}, \code{single_sample_description}, \code{hvg_rm_cc_genes},
 \code{hvg_cc_genes_var_expl_threshold}: taken from \code{INTEGRATION_SOURCES} config parameter.
 \item \code{hvg_combination}: the value of the \code{hvg_combination} function argument.
 }

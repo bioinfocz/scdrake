@@ -87,11 +87,14 @@ hvg_int_with_cc <- hvg_int_list$hvg_int_with_cc
 if (!rlang::is_null(hvg_int_with_cc)) {
   hvg_rm_cc_genes_ids <- hvg_int$hvg_rm_cc_genes_ids
   hvg_rm_cc_genes_ann <- gene_annotation[hvg_rm_cc_genes_ids, ]
-  scdrake::catg0(
-    "These cell cycle related genes (n = {n_cc_genes}) were removed before HVG selection: {gene}\n\n",
-    n_cc_genes = length(hvg_rm_cc_genes_ids),
-    gene = scdrake::str_comma(glue::glue("{hvg_rm_cc_genes_ann$ENSEMBL} ({hvg_rm_cc_genes_ann$SYMBOL})"), space = TRUE)
-  )
+  scdrake::catg0("{length(hvg_rm_cc_genes_ids)} cell cycle related genes were removed before HVG selection.\n\n")
+  cc_genes_table <- hvg_rm_cc_genes_ann[, c("ENSEMBL", "SYMBOL")] %>%
+    scdrake::render_bootstrap_table(row.names = FALSE) %>%
+    as.character()
+
+  cat("<details>\n  <summary class='used-functions'>Show cell cycle-related genes \u25be</summary>\n\n")
+  cat(cc_genes_table)
+  cat("\n\n</details>")
 }
 
 if (hvg_combination == "hvg_metric") {
@@ -235,6 +238,8 @@ invisible(dplyr::group_by(sce_int_dimred_plots_df, name) %>% dplyr::group_map(fu
 ***
 
 # Integration diagnostics {.tabset}
+
+Graph-based clustering was used for diagnostics below.
 
 ```{r, results = "asis"}
 invisible(dplyr::group_by(int_diagnostics_df, name) %>% dplyr::group_map(function(group, key) {

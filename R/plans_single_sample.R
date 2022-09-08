@@ -331,13 +331,16 @@ get_norm_clustering_subplan <- function(cfg, cfg_pipeline, cfg_main) {
     ),
     cell_annotation_labels = cell_annotation_labels_fn(cell_annotation),
 
+    additional_cell_data = additional_cell_data_fn(file_in(!!cfg$ADDITIONAL_CELL_DATA_FILE)),
     ## -- Save colData. No new column is added between sce_rm_doublets and sce_dimred and so we can use
     ## -- this colData in cluster markers/contrasts stages without unnecessary dependencies.
     cell_data = cell_data_fn(
       col_data = colData(sce_rm_doublets) %>% as.data.frame(),
       clusters_all = clusters_all,
       cell_annotation_labels = cell_annotation_labels,
-      cell_groupings = !!cfg$CELL_GROUPINGS
+      cell_groupings = !!cfg$CELL_GROUPINGS,
+      additional_cell_data = additional_cell_data,
+      pipeline_type = "single_sample"
     ),
 
     cell_annotation_diagnostic_plots = cell_annotation_diagnostic_plots_fn(

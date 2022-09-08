@@ -13,7 +13,7 @@
 #' @return A list of `SingleCellExperiment` objects. *Output target*: `sce_int_import`
 #'
 #' The following items of `metadata()` of each imported `SingleCellExperiment` object are added or modified:
-#' - `single_sample_cache_path`, `single_sample_name`, `single_sample_description`, `hvg_rm_cc_genes`,
+#' - `single_sample_path`, `single_sample_path_type`, `single_sample_name`, `single_sample_description`, `hvg_rm_cc_genes`,
 #'   `hvg_cc_genes_var_expl_threshold`: taken from `INTEGRATION_SOURCES` config parameter.
 #' - `hvg_combination`: the value of the `hvg_combination` function argument.
 #'
@@ -23,20 +23,33 @@ sce_int_import_fn <- function(integration_sources, hvg_combination = c("hvg_metr
   hvg_combination <- arg_match(hvg_combination)
 
   sce_int_import <- lapply(integration_sources, function(single_sample) {
-    cache_path <- single_sample$cache_path
+    path <- single_sample$path
     assert_that_(
-      fs::file_exists(cache_path),
-      msg = "Directory {.file {cache_path}} with {.pkg drake}'s cache for sample {.val {single_sample$name}} does not exist."
+      fs::file_exists(path),
+      msg = "The file or directory {.file {path}} for sample {.val {single_sample$name}} does not exist."
     )
+    path_type <- single_sample$path_type
+    sample_name <- single_sample$name
 
-    sce <- drake::readd(sce_final_norm_clustering, path = cache_path) %>%
+    if (path_type == "drake_cache") {
+      cli_alert_info("Loading sample {.field {sample_name}} from {.pkg drake} cache {.file {path}}")
+      sce <- drake::readd(sce_final_norm_clustering, path = path)
+    } else if (path_type == "sce") {
+      cli_alert_info("Loading sample {.field {sample_name}} from {.file {path}}")
+      sce <- readRDS(path)
+    } else {
+      cli_abort("Unknown {.field path_type}: {.val {path_type}}. Only {.val drake_cache} and {.val sce} is allowed.")
+    }
+
+    sce <- sce %>%
       sce_add_metadata(
-        single_sample_cache_path = here(cache_path),
+        single_sample_path = here(path),
+        single_sample_path_type = path_type,
         single_sample_name = single_sample$name,
         single_sample_description = single_sample$description,
         hvg_rm_cc_genes = single_sample$hvg_rm_cc_genes
-      )
-    sce <- sce_add_colData(sce, df = data.frame(batch = rep(single_sample$name, ncol(sce)) %>% factor()))
+      ) %>%
+      sce_add_colData(df = data.frame(batch = rep(single_sample$name, ncol(sce)) %>% factor()))
 
     ## -- Make unique sce colnames (barcodes).
     colnames(sce) <- str_c(colnames(sce), "-", single_sample$name)
@@ -408,7 +421,8 @@ sce_int_df_fn <- function(sce_int_multibatchnorm, integration_methods_df, BPPARA
     single_samples_metadata_df <- tibble(
       sample_name = merge_sce_metadata(sce_int_multibatchnorm, "single_sample_name"),
       description = merge_sce_metadata(sce_int_multibatchnorm, "single_sample_description"),
-      cache_path = merge_sce_metadata(sce_int_multibatchnorm, "single_sample_cache_path"),
+      path = merge_sce_metadata(sce_int_multibatchnorm, "single_sample_path"),
+      path_type = merge_sce_metadata(sce_int_multibatchnorm, "single_sample_path_type"),
       n_cells = purrr::map_int(sce_int_multibatchnorm, ncol),
       n_features = merge_sce_metadata(sce_int_multibatchnorm, "n_features_orig"),
       hvg_ids = merge_sce_metadata(sce_int_multibatchnorm, "hvg_ids", as_vector = FALSE),
@@ -442,7 +456,7 @@ sce_int_df_fn <- function(sce_int_multibatchnorm, integration_methods_df, BPPARA
       "Samples",
       "hvg_rm_cc_genes", "hvg_cc_genes_var_expl_threshold", "hvg_without_cc_genes",
       "has_filtered_doublets", "max_doublet_score", "cell_groupings",
-      "single_sample_cache_path", "single_sample_name", "single_sample_description"
+      "single_sample_path", "single_sample_path_type", "single_sample_name", "single_sample_description"
     )
 
     sce_int@metadata[names(metadata(sce_int)) %in% mdata_to_rm] <- NULL

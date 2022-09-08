@@ -83,6 +83,7 @@ CELL_ANNOTATION_SOURCES_DEFAULTS:
 ###############################################################################
 
 ### Cell grouping assignment ##################################################
+ADDITIONAL_CELL_DATA_FILE: null
 CELL_GROUPINGS:
   - cluster_graph_louvain_annotated:
       source_column: "cluster_graph_louvain"

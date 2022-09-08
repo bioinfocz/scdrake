@@ -1,3 +1,12 @@
+# scdrake 1.3.1
+
+- New feature: "inject" custom cell data. See the `ADDITIONAL_CELL_DATA_FILE` parameter in `02_norm_clustering` stage
+  vignette.
+- Datasets for integration can be now imported also from Rds files. The structure of the `INTEGRATION_SOURCES`
+  parameters has changed - please, review your configs.
+- Updated documentation.
+- Fixed some rare bugs.
+
 # scdrake 1.3.0
 
 - Added support for a custom plan located (by default) in `plan_custom.R` script in project directory.

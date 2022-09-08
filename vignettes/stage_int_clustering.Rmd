@@ -62,6 +62,32 @@ Whether to take the result with removed cell cycle-related genes. This will be a
 `True` is only possible when any of the single-samples in the `INTEGRATION_SOURCES` parameter (`01_integration.yaml`)
 has `hvg_rm_cc_genes` set to `True`.
 
+## Cell grouping assignment
+
+```yaml
+ADDITIONAL_CELL_DATA_FILE: null
+```
+
+**Type:** character scalar or `null`
+
+Same as in the `02_norm_clustering` stage of the single-sample pipeline (see `vignette("stage_norm_clustering")`),
+except the additional data must contain two columns: `Barcode` and `batch`.
+The latter must match the dataset names in `INTEGRATION_SOURCES` in `01_integration.yaml` config file. Example:
+
+```
+DataFrame with 4 rows and 3 columns
+                          Barcode              batch     cluster_custom
+                          <character>          <factor>  <factor>
+AAACCCAAGTTGGGAC-1-pbmc1k AAACCCAAGTTGGGAC-1   pbmc1k    2
+AAACCCACATTCTGTT-1-pbmc1k AAACCCACATTCTGTT-1   pbmc1k    1
+AAACCCAGTCAGACGA-1-pbmc3k AAACCCAGTCAGACGA-1   pbmc3k    1
+AAACCCAGTTTGTTGG-1-pbmc3k AAACCCAGTTTGTTGG-1   pbmc3k    2
+...
+
+Note that rownames are not mandatory.
+
+```
+
 ## Input files
 
 ```yaml

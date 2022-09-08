@@ -103,7 +103,7 @@ plotReducedDim_mod <- function(sce,
     return(p)
   }
 
-  if (class(colData(sce)[[colour_by]]) %in% c("character", "factor")) {
+  if (any(c("character", "factor") %in% class(colData(sce)[[colour_by]]))) {
     if (add_cells_per_cluster) {
       cells_per_cluster <- cells_per_cluster_table(sce[[colour_by]])
       legend_labels <- gluec("{cells_per_cluster$Cluster} ({cells_per_cluster$n})")

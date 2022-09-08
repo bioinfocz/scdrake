@@ -51,6 +51,7 @@ CELL_ANNOTATION_SOURCES_DEFAULTS:
 ###############################################################################
 
 ### Group assignment ##########################################################
+ADDITIONAL_CELL_DATA_FILE: null
 CELL_GROUPINGS:
   - cluster_int_graph_louvain_annotated:
       source_column: "cluster_int_graph_louvain"
@@ -83,6 +84,7 @@ INT_CLUSTERING_REPORT_DIMRED_PLOTS_OTHER:
     "doublet_score": "Doublet score"
     "total": "Total number of UMI"
     "detected": "Detected number of genes"
+    "cluster_quickcluster": "Graph-based clustering for integration diagnostics."
     "cluster_int_graph_louvain_annotated": null
 ###############################################################################
 

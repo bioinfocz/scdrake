@@ -35,12 +35,14 @@ You can make this target by setting `DRAKE_TARGETS: ["report_integration"]` in `
 ```yaml
 INTEGRATION_SOURCES:
   - pbmc1k:
-      cache_path: ".drake_pbmc1k"
+      path: "path/to/.drake or path/to/sce.Rds"
+      path_type: "drake_cache"
       description: "10x Genomics PBMC 1k dataset"
       hvg_rm_cc_genes: True
       hvg_cc_genes_var_expl_threshold: 5
     pbmc3k:
-      cache_path: ".drake_pbmc3k"
+      path: "path/to/.drake or path/to/sce.Rds"
+      path_type: "drake_cache"
       description: "10x Genomics PBMC 3k dataset"
       hvg_rm_cc_genes: False
       hvg_cc_genes_var_expl_threshold: null
@@ -49,11 +51,15 @@ INTEGRATION_SOURCES:
 **Type:** list of named lists
 
 This parameter specifies datasets to be integrated. Those are read in from single-sample pipeline results
-(the `sc_final_norm_clustering` targets) taken from corresponding `{drake}` caches.
+(the `sce_final_norm_clustering` targets) taken from corresponding `{drake}` caches or from SCE objects saved in Rds format.
+The latter should correspond to `sce_final_norm_clustering` targets, but one can modify their e.g. `colData()` as needed.
 
-Each name of a nested list specifies the name of single-sample, e.g. `pbmc1k`. Parameters for each single-sample are:
+Each name of a nested list specifies the name of a single-sample, e.g. `pbmc1k`. Parameters for each single-sample are:
 
-- `cache_path: ".drake_pbmc1k"` (character scalar): a path to `{drake}` cache.
+- `path: "path/to/.drake or path/to/sce.Rds"` (character scalar): a path to `{drake}` cache directory or SCE object Rds file
+  (depends on `path_type`).
+- `path_type: "drake_cache"` (character scalar: `"drake_cache"` | `"sce"`): a type of input data - either a `{drake}`
+  cache directory or SCE object Rds file.
 - `description: "10x Genomics PBMC 1k dataset"` (character scalar): a description of the single-sample, will appear in reports.
 - `hvg_rm_cc_genes: True` (logical scalar): if `True`, cell cycle-related genes will be removed prior to selection of
   highly variable genes (HVGs). This is the same method of cell cycle correction as in the `02_norm_clustering` stage

@@ -481,6 +481,23 @@ will override corresponding parameters in `TRAIN_PARAMS` in `CELL_ANNOTATION_SOU
 ## Cell grouping assignment
 
 ```yaml
+ADDITIONAL_CELL_DATA_FILE: null
+```
+
+**Type:** character scalar or `null`
+
+A path to file with additional cell data which will be added to `colData()` of the final SCE object of this stage.
+The additional data will overwrite existing columns (e.g. `cluster_graph_louvain`), but are appended before the
+`CELL_GROUPINGS` below is applied, so you can refer to additional data columns inside `CELL_GROUPINGS`.
+There can be only a subset of barcodes in the additional data - the missing ones will have `NA` set in the resulting data.
+Rownames are not mandatory.
+
+The supported file formats are CSV (comma separated, `.csv` extension) and Rds (dataframe-like objects, `.Rds` extension).
+The additional data must contain `Barcode` column by which they will be joined with the original cell data (`colData()`).
+
+***
+
+```yaml
 CELL_GROUPINGS:
   - cluster_graph_louvain_annotated:
       source_column: "cluster_graph_louvain"

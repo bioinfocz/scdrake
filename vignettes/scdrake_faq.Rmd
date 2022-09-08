@@ -79,9 +79,10 @@ See `vignette("scdrake_extend")`, please.
 
 # I want to manually annotate cells
 
-You can do it using the `CELL_GROUPINGS` parameter in `config/single_sample/02_norm_clustering.yaml` and
-`config/integration/02_int_clustering.yaml` configs. Please, refer to `vignette("stage_norm_clustering")` and
-`vignette("stage_int_clustering")`, respectively, for description and usage of the `CELL_GROUPINGS` parameter.
+You can do it using the `CELL_GROUPINGS` or `ADDITIONAL_CELL_DATA_FILE` parameter in
+`config/single_sample/02_norm_clustering.yaml` and `config/integration/02_int_clustering.yaml` configs.
+Please, refer to `vignette("stage_norm_clustering")` and `vignette("stage_int_clustering")`, respectively,
+for description and usage of these parameters.
 
 ***
 
@@ -127,6 +128,9 @@ NORMALIZATION_TYPE: "none"
 
 The `my_cell_types` column can be now used for different purposes, e.g. for cluster markers detection, differential
 expression (stage `contrasts`) or visualization.
+
+The same can be done for input data for the integration pipeline. Please, refer to the `INTEGRATION_SOURCES` parameter
+in `vignette("stage_integration")`.
 
 # A target is not getting built
 
