@@ -36,7 +36,7 @@ existing column."><!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">scdrake</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.3.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.3.1</span>
       </span>
     </div>
 
@@ -167,9 +167,7 @@ existing column.</p>
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">make_cell_groupings</span><span class="op">(</span><span class="va">df</span>, <span class="va">cell_groupings</span>, do_cbind <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
-<span></span>
-<span><span class="fu">cell_data_fn</span><span class="op">(</span><span class="va">col_data</span>, <span class="va">clusters_all</span>, <span class="va">cell_annotation_labels</span>, <span class="va">cell_groupings</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">make_cell_groupings</span><span class="op">(</span><span class="va">df</span>, <span class="va">cell_groupings</span>, do_cbind <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
@@ -188,18 +186,6 @@ See the <code>CELL_GROUPINGS</code> parameter in <code>02_norm_clustering.yaml</
 
 <dt>do_cbind</dt>
 <dd><p>A logical scalar: if <code>TRUE</code>, bind column-wise <code>df</code> and dataframe with new cell groupings.</p></dd>
-
-
-<dt>col_data</dt>
-<dd><p>A dataframe.</p></dd>
-
-
-<dt>clusters_all</dt>
-<dd><p>A named list.</p></dd>
-
-
-<dt>cell_annotation_labels</dt>
-<dd><p>A named list.</p></dd>
 
 </dl></div>
     <div id="value">

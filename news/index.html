@@ -169,16 +169,17 @@
     <div class="section level2">
 <h2 class="page-header" data-toc-text="1.3.0" id="scdrake-130">scdrake 1.3.0<a class="anchor" aria-label="anchor" href="#scdrake-130"></a></h2>
 <ul><li>Added support for a custom plan located (by default) in <code>plan_custom.R</code> script in project directory.</li>
-<li>The GitHub version of <code>{SingleR}</code> was removed from <code>DESCRIPTION</code> as the version for the current Bioconductor version is available from the official Bioc repository. The GitHub version is compatible with Bioc 3.16 and caused installation error on Bioc 3.15</li>
+<li>The GitHub version of <a href="https://github.com/LTLA/SingleR" class="external-link">SingleR</a> was removed from <code>DESCRIPTION</code> as the version for the current Bioconductor version is available from the official Bioc repository. The GitHub version is compatible with Bioc 3.16 and caused installation error on Bioc 3.15</li>
 <li>Fixed “object cfg not found”.</li>
-<li>Documentation has been improved:<ul><li>Clearer instructions in the Get Started vignette. The part about the integration pipeline was moved to a separate vignette.</li>
+<li>Documentation has been improved:
+<ul><li>Clearer instructions in the Get Started vignette. The part about the integration pipeline was moved to a separate vignette.</li>
 <li>New vignettes about extension of the pipeline and FAQ &amp; Howto.</li>
 <li>Clearer installation instructions, including commands needed to install shared libraries on different OSs.</li>
 <li>Some parts in other vignettes have been rewritten, spellchecked and improved cosmetically.</li>
 </ul></li>
 <li>Cell or gene filtering can be now disabled by a single parameter (<code>ENABLE_CELL_FILTERING</code>, <code>ENABLE_GENE_FILTERING</code>).</li>
 <li>Require <a href="https://mschubert.github.io/clustermq/" class="external-link">clustermq</a> version <code>&gt;= 0.8.8</code>, but show a warning if the version is greater.</li>
-<li>Checks for <code>{SC3}</code> version if it is not installed from <code>github.com/gorgitko/SC3</code>, but also allow version from Bioconductor.</li>
+<li>Checks for <a href="https://github.com/hemberg-lab/SC3" class="external-link">SC3</a> version if it is not installed from <code>github.com/gorgitko/SC3</code>, but also allow version from Bioconductor.</li>
 <li>Show used functions with links in stage reports.</li>
 <li>New pipeline config variable <code>DRAKE_REBUILD</code> allowing to force rebuild targets.</li>
 <li>Fixed various corner case bugs.</li>
@@ -187,37 +188,46 @@
 </ul></div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="1.2.3" id="scdrake-123">scdrake 1.2.3<a class="anchor" aria-label="anchor" href="#scdrake-123"></a></h2>
-<ul><li>Fixed a bug in the <code>sce_final_norm_clustering</code> target where already present columns in <code>colData()</code> were not updated by new ones in the <code>cell_data</code> target. This could happen when SCE object was imported in the <code>01_input_qc</code> stage and already contained cluster assignments in <code>colData()</code> from the previous <code>scdrake</code> run.</li></ul></div>
+<ul><li>Fixed a bug in the <code>sce_final_norm_clustering</code> target where already present columns in <code>colData()</code> were not updated by new ones in the <code>cell_data</code> target. This could happen when SCE object was imported in the <code>01_input_qc</code> stage and already contained cluster assignments in <code>colData()</code> from the previous <code>scdrake</code> run.</li>
+</ul></div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="1.2.2" id="scdrake-122">scdrake 1.2.2<a class="anchor" aria-label="anchor" href="#scdrake-122"></a></h2>
 <ul><li>Fixed a typo in <code>01_input_qc</code> stage report, added a line for <code>emptyDroplets</code> lower bound in barcode rank plot.</li>
 <li>
-<code><a href="../reference/save_pdf.html">save_pdf()</a></code> is now able to treat invalid plots throwing an error on save.<ul><li>A new helper function <code><a href="../reference/create_dummy_plot.html">create_dummy_plot()</a></code>.</li></ul></li>
+<code><a href="../reference/save_pdf.html">save_pdf()</a></code> is now able to treat invalid plots throwing an error on save.
+<ul><li>A new helper function <code><a href="../reference/create_dummy_plot.html">create_dummy_plot()</a></code>.</li>
+</ul></li>
 </ul></div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="1.2.1" id="scdrake-121">scdrake 1.2.1<a class="anchor" aria-label="anchor" href="#scdrake-121"></a></h2>
-<ul><li>Dimred plots of clusterings and other variables are now saved as PDF and PNG files.<ul><li>In <code>02_norm_clustering</code> and <code>02_int_clustering</code> stage reports the PNG files are displayed and act as links to associated multipage PDF files.</li>
+<ul><li>Dimred plots of clusterings and other variables are now saved as PDF and PNG files.
+<ul><li>In <code>02_norm_clustering</code> and <code>02_int_clustering</code> stage reports the PNG files are displayed and act as links to associated multipage PDF files.</li>
 <li>New parameters for the stages above: <code>NORM_CLUSTERING_DIMRED_PLOTS_OUT_DIR</code> and <code>INT_CLUSTERING_DIMRED_PLOTS_OUT_DIR</code>, respectively.</li>
-</ul></li></ul></div>
+</ul></li>
+</ul></div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="1.2.0" id="scdrake-120">scdrake 1.2.0<a class="anchor" aria-label="anchor" href="#scdrake-120"></a></h2>
-<ul><li>Added cell type annotation via <code>{SingleR}</code> (<a href="https://github.com/LTLA/SingleR" class="external-link uri">https://github.com/LTLA/SingleR</a>).<ul><li>See the new config parameters <a href="https://bioinfocz.github.io/scdrake/articles/stage_norm_clustering.html#cell-type-annotation">here</a> and targets <a href="https://bioinfocz.github.io/scdrake/articles/stage_norm_clustering.html#cell-type-annotation-1">here</a>.</li></ul></li>
+<ul><li>Added cell type annotation via <a href="https://github.com/LTLA/SingleR" class="external-link">SingleR</a> (<a href="https://github.com/LTLA/SingleR" class="external-link uri">https://github.com/LTLA/SingleR</a>).
+<ul><li>See the new config parameters <a href="https://bioinfocz.github.io/scdrake/articles/stage_norm_clustering.html#cell-type-annotation">here</a> and targets <a href="https://bioinfocz.github.io/scdrake/articles/stage_norm_clustering.html#cell-type-annotation-1">here</a>.</li>
+</ul></li>
 <li>Code and documentation refactoring, minor bug fixes.</li>
 <li>Updated <code>renv.lock</code>.</li>
 </ul></div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="1.1.0" id="scdrake-110">scdrake 1.1.0<a class="anchor" aria-label="anchor" href="#scdrake-110"></a></h2>
-<ul><li>The single-sample pipeline now supports another two inputs:<ul><li>A delimited text file (table) representing a feature-barcode matrix.</li>
+<ul><li>The single-sample pipeline now supports another two inputs:
+<ul><li>A delimited text file (table) representing a feature-barcode matrix.</li>
 <li>A <code>SingleCellExperiment</code> object saved as a Rds file.</li>
 </ul></li>
 <li>Input type is controlled by a new <code>INPUT_DATA</code> parameter (replaces <code>INPUT_10X_DIR</code>) in <code>01_input_qc.yaml</code> config. Details can be found in <code><a href="../articles/stage_input_qc.html">vignette("stage_input_qc")</a></code>.</li>
 <li>Removal of empty droplets can be now disabled (<code>EMPTY_DROPLETS_ENABLED</code> parameter).</li>
-<li>It is now possible to turn off normalization (<code>NORMALIZATION_TYPE: "none"</code>) as the input can be an already normalized <code>SingleCellExperiment</code> object (meaning it went through the <code>{scdrake}</code> pipeline before).</li>
+<li>It is now possible to turn off normalization (<code>NORMALIZATION_TYPE: "none"</code>) as the input can be an already normalized <code>SingleCellExperiment</code> object (meaning it went through the <a href="https://github.com/bioinfocz/scdrake" class="external-link">scdrake</a> pipeline before).</li>
 <li>Minor updates and bug fixes, updated documentation.</li>
 </ul></div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="1.0.1" id="scdrake-101">scdrake 1.0.1<a class="anchor" aria-label="anchor" href="#scdrake-101"></a></h2>
-<ul><li>Fixed <code><a href="../reference/download_yq.html">download_yq()</a></code>:<ul><li>
+<ul><li>Fixed <code><a href="../reference/download_yq.html">download_yq()</a></code>:
+<ul><li>
 <code><a href="../reference/download_yq.html">download_yq()</a></code> now supports the masOS (<code>darwin</code>).</li>
 <li>Fixed URL to Windows version (<code>.exe</code> extension).</li>
 <li>Better OS resolution implemented in <code>.get_os()</code>.</li>
@@ -229,7 +239,8 @@
 </ul></div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="1.0.0" id="scdrake-100">scdrake 1.0.0<a class="anchor" aria-label="anchor" href="#scdrake-100"></a></h2>
-<ul><li>Initial release.</li></ul></div>
+<ul><li>Initial release.</li>
+</ul></div>
   </div>
 
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
@@ -244,7 +255,7 @@
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.9000.</p>
   <p class="preferably">Using <a href="https://preferably.amirmasoudabdol.name/?source=footer" class="external-link">preferably</a> template.</p>
 </div>
 

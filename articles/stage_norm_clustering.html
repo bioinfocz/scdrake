@@ -58,7 +58,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">scdrake</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.3.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.3.1</span>
       </span>
     </div>
 
@@ -196,7 +196,7 @@
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Normalization and clustering stage</h1>
             
-            <h4 data-toc-skip class="date">2022-09-07</h4>
+            <h4 data-toc-skip class="date">2022-09-08</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/bioinfocz/scdrake/blob/mastervignettes/stage_norm_clustering.Rmd" class="external-link"><code>vignettes/stage_norm_clustering.Rmd</code></a></small>
       <div class="hidden name"><code>stage_norm_clustering.Rmd</code></div>
@@ -700,26 +700,43 @@ in <code>CELL_ANNOTATION_SOURCES_DEFAULTS</code>.</p>
 <div class="section level3">
 <h3 id="cell-grouping-assignment">Cell grouping assignment<a class="anchor" aria-label="anchor" href="#cell-grouping-assignment"></a>
 </h3>
-<div class="sourceCode" id="cb29"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="fu">CELL_GROUPINGS</span><span class="kw">:</span></span>
-<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="kw">-</span><span class="at"> </span><span class="fu">cluster_graph_louvain_annotated</span><span class="kw">:</span></span>
-<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">source_column</span><span class="kw">:</span><span class="at"> </span><span class="st">"cluster_graph_louvain"</span></span>
-<span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">description</span><span class="kw">:</span><span class="at"> </span><span class="st">"Graph-based clustering (Louvain alg.), annotated clusters"</span></span>
-<span id="cb29-5"><a href="#cb29-5" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">assignments</span><span class="kw">:</span></span>
-<span id="cb29-6"><a href="#cb29-6" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">1</span><span class="kw">:</span><span class="at"> </span><span class="st">"memory_CD4+"</span></span>
-<span id="cb29-7"><a href="#cb29-7" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">6</span><span class="kw">:</span><span class="at"> </span><span class="st">"B"</span></span>
-<span id="cb29-8"><a href="#cb29-8" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">7</span><span class="kw">:</span><span class="at"> </span><span class="st">"memory_CD4+"</span></span>
-<span id="cb29-9"><a href="#cb29-9" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">cluster_kmeans_kc_3_renamed</span><span class="kw">:</span></span>
-<span id="cb29-10"><a href="#cb29-10" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">source_column</span><span class="kw">:</span><span class="at"> </span><span class="st">"cluster_kmeans_kc_3"</span></span>
-<span id="cb29-11"><a href="#cb29-11" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">description</span><span class="kw">:</span><span class="at"> </span><span class="st">"k-means clustering (k = 3), renamed clusters"</span></span>
-<span id="cb29-12"><a href="#cb29-12" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">assignments</span><span class="kw">:</span></span>
-<span id="cb29-13"><a href="#cb29-13" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">1</span><span class="kw">:</span><span class="at"> </span><span class="st">"kc_1"</span></span>
-<span id="cb29-14"><a href="#cb29-14" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">2</span><span class="kw">:</span><span class="at"> </span><span class="st">"kc_2"</span></span>
-<span id="cb29-15"><a href="#cb29-15" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">cluster_sc3_6_renamed</span><span class="kw">:</span></span>
-<span id="cb29-16"><a href="#cb29-16" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">source_column</span><span class="kw">:</span><span class="at"> </span><span class="st">"cluster_sc3_6"</span></span>
-<span id="cb29-17"><a href="#cb29-17" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">description</span><span class="kw">:</span><span class="at"> </span><span class="st">"SC3 clustering (k = 6), renamed clusters"</span></span>
-<span id="cb29-18"><a href="#cb29-18" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">assignments</span><span class="kw">:</span></span>
-<span id="cb29-19"><a href="#cb29-19" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">1</span><span class="kw">:</span><span class="at"> </span><span class="st">"sc3_1"</span></span>
-<span id="cb29-20"><a href="#cb29-20" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">5</span><span class="kw">:</span><span class="at"> </span><span class="st">"sc3_5"</span></span></code></pre></div>
+<div class="sourceCode" id="cb29"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ADDITIONAL_CELL_DATA_FILE</span><span class="kw">:</span><span class="at"> </span><span class="ch">null</span></span></code></pre></div>
+<p><strong>Type:</strong> character scalar or <code>null</code></p>
+<p>A path to file with additional cell data which will be added to
+<code>colData()</code> of the final SCE object of this stage. The
+additional data will overwrite existing columns
+(e.g. <code>cluster_graph_louvain</code>), but are appended before the
+<code>CELL_GROUPINGS</code> below is applied, so you can refer to
+additional data columns inside <code>CELL_GROUPINGS</code>. There can be
+only a subset of barcodes in the additional data - the missing ones will
+have <code>NA</code> set in the resulting data. Rownames are not
+mandatory.</p>
+<p>The supported file formats are CSV (comma separated,
+<code>.csv</code> extension) and Rds (dataframe-like objects,
+<code>.Rds</code> extension). The additional data must contain
+<code>Barcode</code> column by which they will be joined with the
+original cell data (<code>colData()</code>).</p>
+<hr>
+<div class="sourceCode" id="cb30"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="fu">CELL_GROUPINGS</span><span class="kw">:</span></span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="kw">-</span><span class="at"> </span><span class="fu">cluster_graph_louvain_annotated</span><span class="kw">:</span></span>
+<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">source_column</span><span class="kw">:</span><span class="at"> </span><span class="st">"cluster_graph_louvain"</span></span>
+<span id="cb30-4"><a href="#cb30-4" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">description</span><span class="kw">:</span><span class="at"> </span><span class="st">"Graph-based clustering (Louvain alg.), annotated clusters"</span></span>
+<span id="cb30-5"><a href="#cb30-5" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">assignments</span><span class="kw">:</span></span>
+<span id="cb30-6"><a href="#cb30-6" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">1</span><span class="kw">:</span><span class="at"> </span><span class="st">"memory_CD4+"</span></span>
+<span id="cb30-7"><a href="#cb30-7" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">6</span><span class="kw">:</span><span class="at"> </span><span class="st">"B"</span></span>
+<span id="cb30-8"><a href="#cb30-8" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">7</span><span class="kw">:</span><span class="at"> </span><span class="st">"memory_CD4+"</span></span>
+<span id="cb30-9"><a href="#cb30-9" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">cluster_kmeans_kc_3_renamed</span><span class="kw">:</span></span>
+<span id="cb30-10"><a href="#cb30-10" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">source_column</span><span class="kw">:</span><span class="at"> </span><span class="st">"cluster_kmeans_kc_3"</span></span>
+<span id="cb30-11"><a href="#cb30-11" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">description</span><span class="kw">:</span><span class="at"> </span><span class="st">"k-means clustering (k = 3), renamed clusters"</span></span>
+<span id="cb30-12"><a href="#cb30-12" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">assignments</span><span class="kw">:</span></span>
+<span id="cb30-13"><a href="#cb30-13" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">1</span><span class="kw">:</span><span class="at"> </span><span class="st">"kc_1"</span></span>
+<span id="cb30-14"><a href="#cb30-14" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">2</span><span class="kw">:</span><span class="at"> </span><span class="st">"kc_2"</span></span>
+<span id="cb30-15"><a href="#cb30-15" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">cluster_sc3_6_renamed</span><span class="kw">:</span></span>
+<span id="cb30-16"><a href="#cb30-16" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">source_column</span><span class="kw">:</span><span class="at"> </span><span class="st">"cluster_sc3_6"</span></span>
+<span id="cb30-17"><a href="#cb30-17" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">description</span><span class="kw">:</span><span class="at"> </span><span class="st">"SC3 clustering (k = 6), renamed clusters"</span></span>
+<span id="cb30-18"><a href="#cb30-18" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">assignments</span><span class="kw">:</span></span>
+<span id="cb30-19"><a href="#cb30-19" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">1</span><span class="kw">:</span><span class="at"> </span><span class="st">"sc3_1"</span></span>
+<span id="cb30-20"><a href="#cb30-20" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">5</span><span class="kw">:</span><span class="at"> </span><span class="st">"sc3_5"</span></span></code></pre></div>
 <p><strong>Type:</strong> list of named lists or <code>null</code></p>
 <p>This parameter specifies new cell groupings based on existing columns
 (primarily the clustering ones). Each key is a name of new cell grouping
@@ -749,13 +766,13 @@ groupings (columns).</li>
 <p>For possible column names for <code>source_column</code>, see the
 <code>sce_final_norm_clustering</code> target in the <a href="#targets">section</a> below.</p>
 <p>Let’s look at one of the example assignments:</p>
-<div class="sourceCode" id="cb30"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cluster_graph_louvain_annotated</span><span class="kw">:</span></span>
-<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">source_column</span><span class="kw">:</span><span class="at"> </span><span class="st">"cluster_graph_louvain"</span></span>
-<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">description</span><span class="kw">:</span><span class="at"> </span><span class="st">"Graph-based clustering (Louvain alg.), annotated clusters"</span></span>
-<span id="cb30-4"><a href="#cb30-4" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">assignments</span><span class="kw">:</span></span>
-<span id="cb30-5"><a href="#cb30-5" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">1</span><span class="kw">:</span><span class="at"> </span><span class="st">"memory_CD4+"</span></span>
-<span id="cb30-6"><a href="#cb30-6" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">6</span><span class="kw">:</span><span class="at"> </span><span class="st">"B"</span></span>
-<span id="cb30-7"><a href="#cb30-7" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">7</span><span class="kw">:</span><span class="at"> </span><span class="st">"memory_CD4+"</span></span></code></pre></div>
+<div class="sourceCode" id="cb31"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cluster_graph_louvain_annotated</span><span class="kw">:</span></span>
+<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">source_column</span><span class="kw">:</span><span class="at"> </span><span class="st">"cluster_graph_louvain"</span></span>
+<span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">description</span><span class="kw">:</span><span class="at"> </span><span class="st">"Graph-based clustering (Louvain alg.), annotated clusters"</span></span>
+<span id="cb31-4"><a href="#cb31-4" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">assignments</span><span class="kw">:</span></span>
+<span id="cb31-5"><a href="#cb31-5" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">1</span><span class="kw">:</span><span class="at"> </span><span class="st">"memory_CD4+"</span></span>
+<span id="cb31-6"><a href="#cb31-6" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">6</span><span class="kw">:</span><span class="at"> </span><span class="st">"B"</span></span>
+<span id="cb31-7"><a href="#cb31-7" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">7</span><span class="kw">:</span><span class="at"> </span><span class="st">"memory_CD4+"</span></span></code></pre></div>
 <ul>
 <li>
 <code>cluster_graph_louvain_annotated</code>: a name of new cell
@@ -786,13 +803,13 @@ results.</p>
 <div class="section level3">
 <h3 id="dimensionality-reduction-plots">Dimensionality reduction plots<a class="anchor" aria-label="anchor" href="#dimensionality-reduction-plots"></a>
 </h3>
-<div class="sourceCode" id="cb31"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="fu">NORM_CLUSTERING_REPORT_DIMRED_NAMES</span><span class="kw">:</span><span class="at"> </span><span class="kw">[</span><span class="st">"umap"</span><span class="kw">,</span><span class="at"> </span><span class="st">"pca"</span><span class="kw">,</span><span class="at"> </span><span class="st">"tsne"</span><span class="kw">]</span></span></code></pre></div>
+<div class="sourceCode" id="cb32"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="fu">NORM_CLUSTERING_REPORT_DIMRED_NAMES</span><span class="kw">:</span><span class="at"> </span><span class="kw">[</span><span class="st">"umap"</span><span class="kw">,</span><span class="at"> </span><span class="st">"pca"</span><span class="kw">,</span><span class="at"> </span><span class="st">"tsne"</span><span class="kw">]</span></span></code></pre></div>
 <p><strong>Type:</strong> character vector (<code>"umap"</code> |
 <code>"pca"</code> | <code>"tsne"</code>)</p>
 <p>A vector of names of dimensionality reduction methods for which plots
 in the report will be made.</p>
 <hr>
-<div class="sourceCode" id="cb32"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="fu">NORM_CLUSTERING_REPORT_CLUSTERING_NAMES</span><span class="kw">:</span><span class="at"> </span><span class="kw">[</span><span class="st">"graph"</span><span class="kw">,</span><span class="at"> </span><span class="st">"kmeans"</span><span class="kw">,</span><span class="at"> </span><span class="st">"sc3"</span><span class="kw">]</span></span></code></pre></div>
+<div class="sourceCode" id="cb33"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="fu">NORM_CLUSTERING_REPORT_CLUSTERING_NAMES</span><span class="kw">:</span><span class="at"> </span><span class="kw">[</span><span class="st">"graph"</span><span class="kw">,</span><span class="at"> </span><span class="st">"kmeans"</span><span class="kw">,</span><span class="at"> </span><span class="st">"sc3"</span><span class="kw">]</span></span></code></pre></div>
 <p><strong>Type:</strong> character vector (<code>"graph"</code> |
 <code>"kmeans"</code> | <code>"sc3"</code>)</p>
 <p>A vector of names of clustering methods for which plots in each
@@ -812,12 +829,12 @@ parameter.</li>
 the <code>SC3_K</code> parameter.</li>
 </ul>
 <hr>
-<div class="sourceCode" id="cb33"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="fu">NORM_CLUSTERING_REPORT_DIMRED_PLOTS_OTHER</span><span class="kw">:</span></span>
-<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="kw">-</span><span class="at"> </span><span class="st">"phase"</span><span class="kw">:</span><span class="at"> </span><span class="st">"Cell cycle phases"</span></span>
-<span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">"doublet_score"</span><span class="kw">:</span><span class="at"> </span><span class="st">"Doublet score"</span></span>
-<span id="cb33-4"><a href="#cb33-4" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">"total"</span><span class="kw">:</span><span class="at"> </span><span class="st">"Total number of UMI"</span></span>
-<span id="cb33-5"><a href="#cb33-5" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">"detected"</span><span class="kw">:</span><span class="at"> </span><span class="st">"Detected number of genes"</span></span>
-<span id="cb33-6"><a href="#cb33-6" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">"cluster_graph_louvain_annotated"</span><span class="kw">:</span><span class="at"> </span><span class="ch">null</span></span></code></pre></div>
+<div class="sourceCode" id="cb34"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="fu">NORM_CLUSTERING_REPORT_DIMRED_PLOTS_OTHER</span><span class="kw">:</span></span>
+<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="kw">-</span><span class="at"> </span><span class="st">"phase"</span><span class="kw">:</span><span class="at"> </span><span class="st">"Cell cycle phases"</span></span>
+<span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">"doublet_score"</span><span class="kw">:</span><span class="at"> </span><span class="st">"Doublet score"</span></span>
+<span id="cb34-4"><a href="#cb34-4" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">"total"</span><span class="kw">:</span><span class="at"> </span><span class="st">"Total number of UMI"</span></span>
+<span id="cb34-5"><a href="#cb34-5" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">"detected"</span><span class="kw">:</span><span class="at"> </span><span class="st">"Detected number of genes"</span></span>
+<span id="cb34-6"><a href="#cb34-6" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">"cluster_graph_louvain_annotated"</span><span class="kw">:</span><span class="at"> </span><span class="ch">null</span></span></code></pre></div>
 <p><strong>Type:</strong> list of named lists with character scalars</p>
 <p>Names of other variables in <code>colData()</code> to plot and color
 by, displayed in the report.</p>
@@ -830,7 +847,7 @@ description from <code>CELL_GROUPINGS</code> will be used.</p>
 <div class="section level3">
 <h3 id="input-files">Input files<a class="anchor" aria-label="anchor" href="#input-files"></a>
 </h3>
-<div class="sourceCode" id="cb34"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="fu">SELECTED_MARKERS_FILE</span><span class="kw">:</span><span class="at"> !code system.file("extdata", "selected_markers.csv", package = "scdrake", mustWork = TRUE)</span></span></code></pre></div>
+<div class="sourceCode" id="cb35"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="fu">SELECTED_MARKERS_FILE</span><span class="kw">:</span><span class="at"> !code system.file("extdata", "selected_markers.csv", package = "scdrake", mustWork = TRUE)</span></span></code></pre></div>
 <p><strong>Type:</strong> character scalar or <code>null</code></p>
 <p>A path to CSV file with groups of markers to make plots for. Set to
 <code>null</code> to skip. The plots will be created for each of
@@ -844,8 +861,8 @@ delimited by “:”. Example:</p>
 normally you should use
 <code>SELECTED_MARKERS_FILE: "path/to/file.csv"</code>.</p>
 <hr>
-<div class="sourceCode" id="cb35"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="fu">NORM_CLUSTERING_REPORT_RMD_FILE</span><span class="kw">:</span><span class="at"> </span><span class="st">"Rmd/single_sample/02_norm_clustering.Rmd"</span></span>
-<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a><span class="fu">NORM_CLUSTERING_REPORT_SIMPLE_RMD_FILE</span><span class="kw">:</span><span class="at"> </span><span class="st">"Rmd/single_sample/02_norm_clustering_simple.Rmd"</span></span></code></pre></div>
+<div class="sourceCode" id="cb36"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="fu">NORM_CLUSTERING_REPORT_RMD_FILE</span><span class="kw">:</span><span class="at"> </span><span class="st">"Rmd/single_sample/02_norm_clustering.Rmd"</span></span>
+<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a><span class="fu">NORM_CLUSTERING_REPORT_SIMPLE_RMD_FILE</span><span class="kw">:</span><span class="at"> </span><span class="st">"Rmd/single_sample/02_norm_clustering_simple.Rmd"</span></span></code></pre></div>
 <p><strong>Type:</strong> character scalar</p>
 <p>Paths to RMarkdown files used for HTML reports of this pipeline
 stage.</p>
@@ -857,16 +874,16 @@ annotation.</p>
 <div class="section level3">
 <h3 id="output-files">Output files<a class="anchor" aria-label="anchor" href="#output-files"></a>
 </h3>
-<div class="sourceCode" id="cb36"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="fu">NORM_CLUSTERING_BASE_OUT_DIR</span><span class="kw">:</span><span class="at"> </span><span class="st">"02_norm_clustering"</span></span></code></pre></div>
+<div class="sourceCode" id="cb37"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="fu">NORM_CLUSTERING_BASE_OUT_DIR</span><span class="kw">:</span><span class="at"> </span><span class="st">"02_norm_clustering"</span></span></code></pre></div>
 <p><strong>Type:</strong> character scalar</p>
 <p>A path to base output directory for this stage. It will be created
 under <code>BASE_OUT_DIR</code> specified in <code>00_main.yaml</code>
 config.</p>
 <hr>
-<div class="sourceCode" id="cb37"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="fu">NORM_CLUSTERING_SELECTED_MARKERS_OUT_DIR</span><span class="kw">:</span><span class="at"> </span><span class="st">"selected_markers"</span></span>
-<span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a><span class="fu">NORM_CLUSTERING_CELL_ANNOTATION_OUT_DIR</span><span class="kw">:</span><span class="at"> </span><span class="st">"cell_annotation"</span></span>
-<span id="cb37-3"><a href="#cb37-3" aria-hidden="true" tabindex="-1"></a><span class="fu">NORM_CLUSTERING_REPORT_HTML_FILE</span><span class="kw">:</span><span class="at"> </span><span class="st">"02_norm_clustering.html"</span></span>
-<span id="cb37-4"><a href="#cb37-4" aria-hidden="true" tabindex="-1"></a><span class="fu">NORM_CLUSTERING_REPORT_SIMPLE_HTML_FILE</span><span class="kw">:</span><span class="at"> </span><span class="st">"02_norm_clustering_simple.html"</span></span></code></pre></div>
+<div class="sourceCode" id="cb38"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="fu">NORM_CLUSTERING_SELECTED_MARKERS_OUT_DIR</span><span class="kw">:</span><span class="at"> </span><span class="st">"selected_markers"</span></span>
+<span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a><span class="fu">NORM_CLUSTERING_CELL_ANNOTATION_OUT_DIR</span><span class="kw">:</span><span class="at"> </span><span class="st">"cell_annotation"</span></span>
+<span id="cb38-3"><a href="#cb38-3" aria-hidden="true" tabindex="-1"></a><span class="fu">NORM_CLUSTERING_REPORT_HTML_FILE</span><span class="kw">:</span><span class="at"> </span><span class="st">"02_norm_clustering.html"</span></span>
+<span id="cb38-4"><a href="#cb38-4" aria-hidden="true" tabindex="-1"></a><span class="fu">NORM_CLUSTERING_REPORT_SIMPLE_HTML_FILE</span><span class="kw">:</span><span class="at"> </span><span class="st">"02_norm_clustering_simple.html"</span></span></code></pre></div>
 <p><strong>Type:</strong> character scalar</p>
 <p>Names of files and directories created under
 <code>NORM_CLUSTERING_BASE_OUT_DIR</code>. Subdirectories are not
@@ -875,9 +892,9 @@ allowed.</p>
 <div class="section level3">
 <h3 id="html-output-parameters">HTML output parameters<a class="anchor" aria-label="anchor" href="#html-output-parameters"></a>
 </h3>
-<div class="sourceCode" id="cb38"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="fu">NORM_CLUSTERING_KNITR_MESSAGE</span><span class="kw">:</span><span class="at"> </span><span class="ch">False</span></span>
-<span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a><span class="fu">NORM_CLUSTERING_KNITR_WARNING</span><span class="kw">:</span><span class="at"> </span><span class="ch">False</span></span>
-<span id="cb38-3"><a href="#cb38-3" aria-hidden="true" tabindex="-1"></a><span class="fu">NORM_CLUSTERING_KNITR_ECHO</span><span class="kw">:</span><span class="at"> </span><span class="ch">False</span></span></code></pre></div>
+<div class="sourceCode" id="cb39"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a><span class="fu">NORM_CLUSTERING_KNITR_MESSAGE</span><span class="kw">:</span><span class="at"> </span><span class="ch">False</span></span>
+<span id="cb39-2"><a href="#cb39-2" aria-hidden="true" tabindex="-1"></a><span class="fu">NORM_CLUSTERING_KNITR_WARNING</span><span class="kw">:</span><span class="at"> </span><span class="ch">False</span></span>
+<span id="cb39-3"><a href="#cb39-3" aria-hidden="true" tabindex="-1"></a><span class="fu">NORM_CLUSTERING_KNITR_ECHO</span><span class="kw">:</span><span class="at"> </span><span class="ch">False</span></span></code></pre></div>
 <p><strong>Type:</strong> logical scalar</p>
 <p>These are passed to <code><a href="https://rdrr.io/pkg/knitr/man/opts_chunk.html" class="external-link">knitr::opts_chunk()</a></code> and used for
 rendering of stage’s HTML report.</p>
@@ -1155,7 +1172,7 @@ parameter. Selected markers are read from CSV file defined in the
 <code>SELECTED_MARKERS_FILE</code> parameter.</p>
 <p>You can also use the underlying function
 <code><a href="../reference/selected_markers_dimplot.html">selected_markers_dimplot()</a></code>:</p>
-<div class="sourceCode" id="cb39"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb40"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/selected_markers_dimplot.html">selected_markers_dimplot</a></span><span class="op">(</span></span>
 <span>  sce <span class="op">=</span> <span class="va">sce_final_norm_clustering</span>,</span>
 <span>  dimred <span class="op">=</span> <span class="st">"umap"</span>,</span>
@@ -1164,7 +1181,7 @@ parameter. Selected markers are read from CSV file defined in the
 <span><span class="op">)</span></span></code></pre></div>
 <p>The <code>selected_markers_df</code> tibble can be read from the CSV
 file with</p>
-<div class="sourceCode" id="cb40"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb41"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">selected_markers_df</span> <span class="op">&lt;-</span> <span class="fu">readr</span><span class="fu">::</span><span class="fu"><a href="https://readr.tidyverse.org/reference/read_delim.html" class="external-link">read_csv</a></span><span class="op">(</span><span class="st">"markers.csv"</span>, col_names <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"group"</span>, <span class="st">"markers"</span><span class="op">)</span>, col_types <span class="op">=</span> <span class="st">"cc"</span><span class="op">)</span></span></code></pre></div>
 </div>
 </div>

@@ -82,6 +82,9 @@
     <loc>https://bioinfocz.github.io/scdrake/reference/add_marker_table_links.html</loc>
   </url>
   <url>
+    <loc>https://bioinfocz.github.io/scdrake/reference/additional_cell_data_fn.html</loc>
+  </url>
+  <url>
     <loc>https://bioinfocz.github.io/scdrake/reference/as_seurat.html</loc>
   </url>
   <url>
@@ -110,6 +113,9 @@
   </url>
   <url>
     <loc>https://bioinfocz.github.io/scdrake/reference/cell_data.html</loc>
+  </url>
+  <url>
+    <loc>https://bioinfocz.github.io/scdrake/reference/cell_data_fn.html</loc>
   </url>
   <url>
     <loc>https://bioinfocz.github.io/scdrake/reference/cells_per_cluster_table.html</loc>

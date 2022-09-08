@@ -58,7 +58,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">scdrake</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.3.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.3.1</span>
       </span>
     </div>
 
@@ -196,7 +196,7 @@
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Post-integration clustering stage</h1>
             
-            <h4 data-toc-skip class="date">2022-09-07</h4>
+            <h4 data-toc-skip class="date">2022-09-08</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/bioinfocz/scdrake/blob/mastervignettes/stage_int_clustering.Rmd" class="external-link"><code>vignettes/stage_int_clustering.Rmd</code></a></small>
       <div class="hidden name"><code>stage_int_clustering.Rmd</code></div>
@@ -260,9 +260,33 @@ parameter (<code>01_integration.yaml</code>) has
 <code>hvg_rm_cc_genes</code> set to <code>True</code>.</p>
 </div>
 <div class="section level3">
+<h3 id="cell-grouping-assignment">Cell grouping assignment<a class="anchor" aria-label="anchor" href="#cell-grouping-assignment"></a>
+</h3>
+<div class="sourceCode" id="cb3"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ADDITIONAL_CELL_DATA_FILE</span><span class="kw">:</span><span class="at"> </span><span class="ch">null</span></span></code></pre></div>
+<p><strong>Type:</strong> character scalar or <code>null</code></p>
+<p>Same as in the <code>02_norm_clustering</code> stage of the
+single-sample pipeline (see
+<code><a href="../articles/stage_norm_clustering.html">vignette("stage_norm_clustering")</a></code>), except the additional
+data must contain two columns: <code>Barcode</code> and
+<code>batch</code>. The latter must match the dataset names in
+<code>INTEGRATION_SOURCES</code> in <code>01_integration.yaml</code>
+config file. Example:</p>
+<pre><code>DataFrame with 4 rows and 3 columns
+                          Barcode              batch     cluster_custom
+                          &lt;character&gt;          &lt;factor&gt;  &lt;factor&gt;
+AAACCCAAGTTGGGAC-1-pbmc1k AAACCCAAGTTGGGAC-1   pbmc1k    2
+AAACCCACATTCTGTT-1-pbmc1k AAACCCACATTCTGTT-1   pbmc1k    1
+AAACCCAGTCAGACGA-1-pbmc3k AAACCCAGTCAGACGA-1   pbmc3k    1
+AAACCCAGTTTGTTGG-1-pbmc3k AAACCCAGTTTGTTGG-1   pbmc3k    2
+...
+
+Note that rownames are not mandatory.
+</code></pre>
+</div>
+<div class="section level3">
 <h3 id="input-files">Input files<a class="anchor" aria-label="anchor" href="#input-files"></a>
 </h3>
-<div class="sourceCode" id="cb3"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">INT_CLUSTERING_REPORT_RMD_FILE</span><span class="kw">:</span><span class="at"> </span><span class="st">"Rmd/integration/02_int_clustering.Rmd"</span></span></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">INT_CLUSTERING_REPORT_RMD_FILE</span><span class="kw">:</span><span class="at"> </span><span class="st">"Rmd/integration/02_int_clustering.Rmd"</span></span></code></pre></div>
 <p><strong>Type:</strong> character scalar</p>
 <p>A path to RMarkdown files used for HTML report of this pipeline
 stage.</p>
@@ -270,13 +294,13 @@ stage.</p>
 <div class="section level3">
 <h3 id="output-files">Output files<a class="anchor" aria-label="anchor" href="#output-files"></a>
 </h3>
-<div class="sourceCode" id="cb4"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">INT_CLUSTERING_BASE_OUT_DIR</span><span class="kw">:</span><span class="at"> </span><span class="st">"02_int_clustering"</span></span></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">INT_CLUSTERING_BASE_OUT_DIR</span><span class="kw">:</span><span class="at"> </span><span class="st">"02_int_clustering"</span></span></code></pre></div>
 <p><strong>Type:</strong> character scalar</p>
 <p>A path to base output directory for this stage. It will be created
 under <code>BASE_OUT_DIR</code> specified in <code>00_main.yaml</code>
 config.</p>
 <hr>
-<div class="sourceCode" id="cb5"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">INT_CLUSTERING_REPORT_HTML_FILE</span><span class="kw">:</span><span class="at"> </span><span class="st">"02_int_clustering.html"</span></span></code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">INT_CLUSTERING_REPORT_HTML_FILE</span><span class="kw">:</span><span class="at"> </span><span class="st">"02_int_clustering.html"</span></span></code></pre></div>
 <p><strong>Type:</strong> character scalar</p>
 <p>Names of files and directories created under
 <code>INT_CLUSTERING_BASE_OUT_DIR</code>. Subdirectories are not
