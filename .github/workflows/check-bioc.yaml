@@ -262,10 +262,10 @@ jobs:
       - name: Install Bioconductor (Linux)
         if: matrix.config.os == 'ubuntu-latest'
         run: |
-          ## SC3 and SingleR are installed from GitHub, but if install() is run without the pkgs argument,
+          ## SC3 is installed from GitHub, but if install() is run without the pkgs argument,
           ## the BioConductor version will be installed instead.
           installed <- rownames(installed.packages())
-          installed <- installed[installed %in% c("SC3", "SingleR")]
+          installed <- installed[installed %in% c("SC3")]
           BiocManager::install(pkgs = installed, version = "${{ matrix.config.bioc }}", ask = FALSE, update = TRUE)
         shell: Rscript {0}
 
@@ -297,14 +297,14 @@ jobs:
           )
         shell: Rscript {0}
 
-      - name: Install SingleR from GitHub (LTLA/SingleR)
-        run: |
-          message(paste('****', Sys.time(), 'installing LTLA/SingleR ****'))
-          remotes::install_github(
-            "LTLA/SingleR", dependencies = TRUE, build_vignettes = FALSE, repos = BiocManager::repositories(),
-            type = "${{ env.R_PACKAGES_TYPE }}"
-          )
-        shell: Rscript {0}
+      # - name: Install SingleR from GitHub (LTLA/SingleR)
+      #   run: |
+      #     message(paste('****', Sys.time(), 'installing LTLA/SingleR ****'))
+      #     remotes::install_github(
+      #       "LTLA/SingleR", dependencies = TRUE, build_vignettes = FALSE, repos = BiocManager::repositories(),
+      #       type = "${{ env.R_PACKAGES_TYPE }}"
+      #     )
+      #   shell: Rscript {0}
 
       - name: Install scdrake dependencies (pass 1)
         run: |

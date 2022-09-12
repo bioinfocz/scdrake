@@ -142,7 +142,6 @@ A stage for normalization, dimensionality reduction, and cell clustering.
   [here](http://bioconductor.org/books/release/SingleRBook/introduction.html#method-description).
   - Reference datasets can be taken from the `{celldex}` package or an arbitrary
     `SingleCellExperiment` / `SummarizedExperiment` object can be loaded from a file.
-  - `{scdrake}` is using a more recent version of the original `{SingleR}` located [here](https://github.com/LTLA/SingleR).
 - Assignment of cells to predefined groupings based on existing data. That means you can reuse an assignment of cells
   from e.g. clustering, and rename or merge its levels (cluster numbers).
   - Example: you identify a biological meaning of clusters computed by k-means with $k = 3$.
