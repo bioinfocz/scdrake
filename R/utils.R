@@ -426,19 +426,20 @@ check_scdrake_packages <- function() {
 #' (it can be set in `Tools -> Modify Keyboard Shortcuts`).
 #' This shortcut will call `loadd(<name of target under cursor>, cache = getOptions("rstudio_drake_cache"))`.
 #' @param dir A character scalar: path to directory with `drake` cache.
-#' @return Invisibly `NULL`.
+#' @inheritParams verbose
+#' @return Invisibly `TRUE` if `dir` exists, `FALSE` otherwise.
 #'
 #' @concept misc_utils
 #' @export
-set_rstudio_drake_cache <- function(dir) {
+set_rstudio_drake_cache <- function(dir, verbose = TRUE) {
   if (!fs::dir_exists(dir)) {
-    cli_alert_warning("Failed to set {.var rstudio_drake_cache} option: the directory {.file {dir}} does not exist.")
+    verbose %&&% cli_alert_warning("Failed to set {.var rstudio_drake_cache} option: the directory {.file {dir}} does not exist.")
+    return(invisible(FALSE))
   } else {
     options(rstudio_drake_cache = drake::drake_cache(path = dir))
-    cli_alert_success("Set {.var rstudio_drake_cache} option: the directory {.file {dir}} will be used.")
+    verbose %&&% cli_alert_success("Set {.var rstudio_drake_cache} option: the directory {.file {dir}} will be used.")
+    return(invisible(TRUE))
   }
-
-  invisible(NULL)
 }
 
 .confirm_menu <- function(choices = c("Yes.", "No"), title = "Do you want to continue?", .choice = 1L) {

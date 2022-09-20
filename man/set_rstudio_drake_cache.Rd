@@ -4,13 +4,16 @@
 \alias{set_rstudio_drake_cache}
 \title{Set \code{rstudio_drake_cache} option.}
 \usage{
-set_rstudio_drake_cache(dir)
+set_rstudio_drake_cache(dir, verbose = TRUE)
 }
 \arguments{
 \item{dir}{A character scalar: path to directory with \code{drake} cache.}
+
+\item{verbose}{A logical scalar: if \code{TRUE}, be verbose.
+The default value is obtained from \code{getOption("scdrake_verbose")}.}
 }
 \value{
-Invisibly \code{NULL}.
+Invisibly \code{TRUE} if \code{dir} exists, \code{FALSE} otherwise.
 }
 \description{
 Value of this option is used internally by \code{drake} to "loadd target under cursor"
