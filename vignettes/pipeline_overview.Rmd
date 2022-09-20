@@ -60,26 +60,35 @@ An initial stage to read in scRNA-seq data, remove empty droplets (optionally), 
 and cell and gene filtering.
 
 More information about scRNA-seq quality control can be found
-[here](https://bioconductor.org/books/release/OSCA.basic/quality-control.html#common-choices-of-qc-metrics).
+[here](https://bioconductor.org/books/release/OSCA.basic/quality-control.html).
 
 `r emoji::emoji("gear")` Config and targets: `vignette("stage_input_qc")`
 
 [`r emoji::emoji("scroll")` Example report](https://onco.img.cas.cz/novotnyj/scdrake/single_sample/pbmc1k/01_input_qc/01_input_qc.html)
+([used config](https://github.com/bioinfocz/scdrake/blob/main/tests/testthat/run_pipeline_config_patches/single_sample_pbmc1k_full/01_input_qc.default.yaml))
 
-- Reading in feature-barcode matrix.
+`r emoji::emoji("ladder")` Structure
+
+- Reading in feature-barcode matrix either from:
+  - `cellranger` output
+  - `SingleCellExperiment` object
+  - delimited table
 - Removal of [empty droplets](https://bioconductor.org/books/release/OSCA.advanced/droplet-processing.html)
   (`DropletUtils::emptyDrops()`) (optional).
-- Calculation of per-cell QC metrics (`scater::perCellQCMetrics()`):
+- Calculation of per-cell QC metrics (`scater::perCellQCMetrics()`,
+  [theory](https://bioconductor.org/books/release/OSCA.basic/quality-control.html#common-choices-of-qc-metrics)):
   - Number of UMI.
   - Number of detected genes (non-zero UMI count).
   - Percentage of expressed mitochondrial genes ($\frac {UMI_{mitochondrial}} {UMI_{sum}} * 100$).
 - Two methods for cell filtering (optional):
   - Dataset-sensitive filtering, based on the median absolute deviation (MAD) from the median value of
-     each QC metric across all cells. For "number of UMI" metric, only a lower tail is used.
-  - Custom filtering, based on fixed thresholds. For "number of UMI" metric, both upper and lower bounds are used.
+     each QC metric across all cells. For "number of UMI" metric, only a lower tail is used
+     ([theory](https://bioconductor.org/books/release/OSCA.basic/quality-control.html#quality-control-outlier).
+  - Custom filtering, based on fixed thresholds. For "number of UMI" metric, both upper and lower bounds are used
+    ([theory](https://bioconductor.org/books/release/OSCA.basic/quality-control.html#fixed-qc).
   - In both filtering types, violation of only one metric threshold leads to removal of a cell.
     More technically, metric filters are reduced by **or** operator.
-- Gene filtering (optional) based on minimum number of UMI per cell and minimum ratio of cells expressing a gene.
+- Gene filtering (optional) based on a minimum number of UMI per cell and a minimum ratio of cells expressing a gene.
   - A gene is considered expressed when number of its UMI across all cells is greater than X and
     at the same time it is expressed in at least Y ratio of cells.
 - Plots of QC metrics with visualization of differences between dataset-sensitive and custom filtering.
@@ -95,6 +104,9 @@ A stage for normalization, dimensionality reduction, and cell clustering.
 [`r emoji::emoji("scroll")` Example report](https://onco.img.cas.cz/novotnyj/scdrake/single_sample/pbmc1k/02_norm_clustering/02_norm_clustering.html)
 
 [`r emoji::emoji("scroll")` Example simplified report](https://onco.img.cas.cz/novotnyj/scdrake/single_sample/pbmc1k/02_norm_clustering/02_norm_clustering_simple.html)
+([used config](https://github.com/bioinfocz/scdrake/blob/main/tests/testthat/run_pipeline_config_patches/single_sample_pbmc1k_full/02_norm_clustering.default.yaml))
+
+`r emoji::emoji("ladder")` Structure
 
 - Calculation of cell cycle score and assignment of cells to phases (G1, G2M, S) using the list of cell cycle genes in
   `Seurat::cc.genes.updated.2019` and `Seurat::CellCycleScoring()` function.
@@ -129,14 +141,14 @@ A stage for normalization, dimensionality reduction, and cell clustering.
   (PCs) which will be used downstream. There are three methods to select a proper number of PCs:
   - Using the [elbow point](http://bioconductor.org/books/release/OSCA.advanced/dimensionality-reduction-redux.html#more-choices-for-the-number-of-pcs).
   - Using the [technical noise](http://bioconductor.org/books/release/OSCA.advanced/dimensionality-reduction-redux.html#using-the-technical-noise).
-  - Using the fixed number of PCs.
+  - Using a fixed number of PCs.
 - [Cell clustering](https://bioconductor.org/books/release/OSCA.basic/clustering.html) using several algorithms:
   - [Graph-based clustering](https://bioconductor.org/books/release/OSCA.basic/clustering.html#clustering-graph)
     (mutual nearest neighbors) using Louvain and Walktrap algorithms.
   - [K-means clustering](https://bioconductor.org/books/release/OSCA.basic/clustering.html#vector-quantization-with-k-means)
-    using both custom numbers of K and best K selection.
+    using both defined numbers of K and best K selection.
   - [Single-Cell Consensus Clustering](https://bioconductor.org/packages/release/bioc/html/SC3.html) (SC3) with
-    custom numbers of clusters.
+    defined numbers of clusters.
 - Cell type annotation using `{SingleR}`. More details are given in the accompanying
   [book](http://bioconductor.org/books/release/SingleRBook/) and the underlying method is described
   [here](http://bioconductor.org/books/release/SingleRBook/introduction.html#method-description).
@@ -174,20 +186,27 @@ More information can be found in this [OSCA chapter](http://bioconductor.org/boo
 `r emoji::emoji("gear")` Config and targets: `vignette("stage_integration")`
 
 [`r emoji::emoji("scroll")` Example report](https://onco.img.cas.cz/novotnyj/scdrake/integration/01_integration/01_integration.html)
+([used config](https://github.com/bioinfocz/scdrake/blob/main/tests/testthat/run_pipeline_config_patches/integration/01_integration.default.yaml))
+
+`r emoji::emoji("ladder")` Structure
 
 - Reading in data from `drake` caches of multiple single-sample pipelines.
 - Subsetting to common column and row data, and metadata.
-- Combining of HVGs:
-  - Combine HVG metric (gene variance or CV2), then apply top HVGs selection as in the single-sample pipeline.
+- Normalization of each sample for inter-batch sequencing depth (`batchelor::multiBatchNorm()`,
+  [theory](http://bioconductor.org/books/3.15/OSCA.multisample/integrating-datasets.html#slower-setup)).
+- Combining of HVGs by either ([theory](http://bioconductor.org/books/3.15/OSCA.multisample/integrating-datasets.html#slower-setup)):
+  - A HVG metric (gene variance or CV2), then apply top HVGs selection as in the single-sample pipeline.
     All samples must have the same HVG metric used before.
-  - Combine HVGs by their IDs: intersection, union, or take them all (without duplicates).
-- Normalization of each sample for inter-batch sequencing depth.
+  - Set operations (without duplicates): intersection, union, or take them all.
 - Perform integration using one or more methods:
-  - Rescaling (`batchelor::rescaleBatches()`):
+  - Rescaling (`batchelor::rescaleBatches()`,
+    [theory](http://bioconductor.org/books/3.15/OSCA.multisample/integrating-datasets.html#by-rescaling-the-counts)):
     scale counts so that the average count within each batch is the same for each gene.
-  - Regression (`batchelor::regressBatches()`):
+  - Regression (`batchelor::regressBatches()`,
+    [theory](http://bioconductor.org/books/3.15/OSCA.multisample/integrating-datasets.html#by-fitting-a-linear-model)):
     fit a linear model to each gene regress out uninteresting factors of variation, returning a matrix of residuals.
-  - Fast mutual nearest neighbors (`batchelor::fastMNN()`).
+  - Fast mutual nearest neighbors (`batchelor::fastMNN()`,
+    [theory](http://bioconductor.org/books/3.15/OSCA.multisample/integrating-datasets.html#mnn-correction)).
 
 The steps below are performed for each integration method, plus separately for HVGs with removed cell cycle-related
 genes (if this removal was requested).
@@ -208,12 +227,13 @@ genes (if this removal was requested).
 
 This stage basically reproduces the clustering and cell type annotation steps in the `02_norm_clustering` stage of
 the single-sample pipeline.
-The only difference is **user selection of a final integration method, which will be used downstream.**
+The only difference is the **user selection of a final integration method which will be used downstream.**
 HVGs, reduced dimensions, and selected markers are already computed in the previous stage (`01_integration`).
 
 `r emoji::emoji("gear")` Config and targets: `vignette("stage_int_clustering")`
 
 [`r emoji::emoji("scroll")` Example report](https://onco.img.cas.cz/novotnyj/scdrake/integration/02_int_clustering/02_int_clustering.html)
+([used config](https://github.com/bioinfocz/scdrake/blob/main/tests/testthat/run_pipeline_config_patches/integration/02_int_clustering.default.yaml))
 
 ***
 
@@ -228,8 +248,12 @@ A stage for calculation, visualization and reporting of cell cluster markers ("g
 `r emoji::emoji("gear")` Config and targets: `vignette("stage_cluster_markers")`
 
 [`r emoji::emoji("scroll")` Example report for PBMC 1k data](https://onco.img.cas.cz/novotnyj/scdrake/single_sample/pbmc1k/cluster_markers/cluster_markers.html)
+([used config](https://github.com/bioinfocz/scdrake/blob/main/tests/testthat/run_pipeline_config_patches/single_sample_pbmc1k_full/cluster_markers.default.yaml))
 
 [`r emoji::emoji("scroll")` Example report for integrated data](https://onco.img.cas.cz/novotnyj/scdrake/integration/cluster_markers/cluster_markers.html)
+([used config](https://github.com/bioinfocz/scdrake/blob/main/tests/testthat/run_pipeline_config_patches/integration/cluster_markers.default.yaml))
+
+`r emoji::emoji("ladder")` Structure
 
 - [Calculation of cluster markers](https://bioconductor.org/books/release/OSCA.basic/marker-detection.html):
   any categorical grouping of cells can be used, including those manually defined based on the existing groups
@@ -254,5 +278,7 @@ of levels of cell groupings. Hence "contrasts", a term known from bulk RNA-seq w
 `r emoji::emoji("gear")` Config and targets: `vignette("stage_contrasts")`
 
 [`r emoji::emoji("scroll")` Example report for PBMC 1k data](https://onco.img.cas.cz/novotnyj/scdrake/single_sample/pbmc1k/contrasts/contrasts.html)
+([used config](https://github.com/bioinfocz/scdrake/blob/main/tests/testthat/run_pipeline_config_patches/single_sample_pbmc1k_full/contrasts.default.yaml))
 
 [`r emoji::emoji("scroll")` Example report for integrated data](https://onco.img.cas.cz/novotnyj/scdrake/integration/contrasts/contrasts.html)
+([used config](https://github.com/bioinfocz/scdrake/blob/main/tests/testthat/run_pipeline_config_patches/integration/contrasts.default.yaml))

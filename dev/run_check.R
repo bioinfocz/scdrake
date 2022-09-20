@@ -17,4 +17,4 @@ run_check <- function(out_dir = NULL, ...) {
   list(out_dir = out_dir, res = devtools::check(check_dir = out_dir, env_vars = env_vars, ...))
 }
 
-check <- run_check("../scdrake_check_20220526-bioc3.15")
+check <- run_check("../scdrake_check_20220919-bioc3.15")

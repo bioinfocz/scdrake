@@ -42,7 +42,7 @@ KMEANS_K: !code 3:6
 
 ### SC3 clustering ############################################################
 SC3_K: !code 5:6
-SC3_N_CORES: 8
+SC3_N_CORES: 4
 SC3_DRY: False
 ###############################################################################
 
@@ -84,26 +84,7 @@ CELL_ANNOTATION_SOURCES_DEFAULTS:
 
 ### Cell grouping assignment ##################################################
 ADDITIONAL_CELL_DATA_FILE: null
-CELL_GROUPINGS:
-  - cluster_graph_louvain_annotated:
-      source_column: "cluster_graph_louvain"
-      description: "Graph-based clustering (Louvain alg.), annotated clusters"
-      assignments:
-        1: "memory_CD4+"
-        6: "B"
-        7: "memory_CD4+"
-    cluster_kmeans_kc_3_renamed:
-      source_column: "cluster_kmeans_kc_3"
-      description: "k-means clustering (k = 3), renamed clusters"
-      assignments:
-        1: "kc_1"
-        2: "kc_2"
-    cluster_sc3_6_renamed:
-      source_column: "cluster_sc3_6"
-      description: "SC3 clustering (k = 6), renamed clusters"
-      assignments:
-        1: "sc3_1"
-        5: "sc3_5"
+CELL_GROUPINGS: null
 ###############################################################################
 
 ### Dimensionality reduction plots ############################################
@@ -115,11 +96,10 @@ NORM_CLUSTERING_REPORT_DIMRED_PLOTS_OTHER:
     "doublet_score": "Doublet score"
     "total": "Total number of UMI"
     "detected": "Detected number of genes"
-    "cluster_graph_louvain_annotated": null
 ###############################################################################
 
 ### Input files ###############################################################
-SELECTED_MARKERS_FILE: !code system.file("extdata", "selected_markers.csv", package = "scdrake", mustWork = TRUE)
+SELECTED_MARKERS_FILE: null
 
 NORM_CLUSTERING_REPORT_RMD_FILE: "Rmd/single_sample/02_norm_clustering.Rmd"
 NORM_CLUSTERING_REPORT_SIMPLE_RMD_FILE: "Rmd/single_sample/02_norm_clustering_simple.Rmd"

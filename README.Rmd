@@ -46,6 +46,9 @@ The main features of the `{scdrake}` pipeline are:
 `{scdrake}` is aimed at both non-technical and bioinformatic public: both will benefit from reports and visualizations,
 and the latter also from the possibility to utilize all benefits of `{drake}` for custom analyses.
 
+The pipeline structure along with diagrams and links to outputs is described in `vignette("pipeline_overview")`
+([link](https://bioinfocz.github.io/scdrake/articles/pipeline_overview.html)).
+
 Huge thanks go to the authors of the
 [Orchestrating Single-Cell Analysis with Bioconductor](https://bioconductor.org/books/release/OSCA) book on whose
 methods and recommendations is `{scdrake}` largely based.
@@ -65,9 +68,8 @@ out <- c(
   '```{r, eval = FALSE}',
   'if (!requireNamespace("BiocManager", quietly = TRUE)) {',
   '  install.packages("BiocManager")',
-  '  BiocManager::install(version = "3.15")',
   '}',
-  '',
+  'BiocManager::install(version = "3.15")',
   bioc_install,
   '```',
   '\n'
@@ -81,9 +83,8 @@ For development version use
 ```{r, eval = FALSE}
 if (!requireNamespace("BiocManager", quietly = TRUE)) {
   install.packages("BiocManager")
-  BiocManager::install(version = "3.15")
 }
-
+BiocManager::install(version = "3.15")
 BiocManager::install("bioinfocz/scdrake")
 ```
 

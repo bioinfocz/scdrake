@@ -4,8 +4,8 @@ INTEGRATION_SOURCES:
       path: "path/to/.drake or path/to/sce.Rds"
       path_type: "drake_cache"
       description: "10x Genomics PBMC 1k dataset"
-      hvg_rm_cc_genes: True
-      hvg_cc_genes_var_expl_threshold: 5
+      hvg_rm_cc_genes: False
+      hvg_cc_genes_var_expl_threshold: null
     pbmc3k:
       path: "path/to/.drake or path/to/sce.Rds"
       path_type: "drake_cache"
@@ -64,7 +64,7 @@ INTEGRATION_SNN_CLUSTERING_METHOD: "walktrap"
 ###############################################################################
 
 ### Input files ###############################################################
-SELECTED_MARKERS_INT_FILE: !code system.file("extdata", "selected_markers.csv", package = "scdrake", mustWork = TRUE)
+SELECTED_MARKERS_INT_FILE: null
 INTEGRATION_REPORT_RMD_FILE: "Rmd/integration/01_integration.Rmd"
 ###############################################################################
 

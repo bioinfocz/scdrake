@@ -1,3 +1,8 @@
+# development version
+
+- Simplified default configs, vignettes updated accordingly.
+- Minor updates in some vignettes.
+
 # scdrake 1.3.1
 
 - New feature: "inject" custom cell data. See the `ADDITIONAL_CELL_DATA_FILE` parameter in `02_norm_clustering` stage

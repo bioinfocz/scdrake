@@ -1,5 +1,5 @@
 ---
-title: "01 Quick start"
+title: "01 Get started"
 date: "`r Sys.Date()`"
 author:
   - name: Jiri Novotny
@@ -14,7 +14,7 @@ output:
     toc: true
     toc_float: true
 vignette: >
-  %\VignetteIndexEntry{01 Quick start}
+  %\VignetteIndexEntry{01 Get started}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}  
 ---
@@ -59,7 +59,7 @@ This will:
 
 - Create a new project directory named `scdrake_single_sample_example` in your home.
 - Switch your current working directory to project's directory.
-- Copy all files, which are bundled with the `{scdrake}` package: YAML configs, Rmd files, R scripts etc.
+- Copy all files, which are bundled with the `{scdrake}` package: default YAML configs, Rmd files, R scripts etc.
 - Download (if needed) the [yq tool](https://github.com/mikefarah/yq) used to manipulate YAML files.
 - Create a new RStudio project (`.RProj`) file and set it as the active project (can be disabled).
 - Download the example dataset (10X Genomics PBMC).
@@ -123,19 +123,83 @@ Before we run the pipeline, we only need one last step, and that is installation
 BiocManager::install("org.Hs.eg.db")
 ```
 
-Finally, we can run the single-sample pipeline for the PBMC 1k dataset:
+By default, only the final target `report_input_qc` (and all targets it depends on) of the input and QC stage
+(`01_input_qc`) will be made, that is, a HTML report. This is specified by `DRAKE_TARGETS` parameter in
+`config/pipeline.yaml`. You can look [below](#how-to-know-which-targets-you-can-load-and-what-each-parameter-do) for how
+to identify other targets which can be made.
+
+Now we can run the single-sample pipeline for the PBMC 1k dataset:
 
 ```{r, eval = FALSE}
 run_single_sample_r()
 ```
 
-By default, only the final target `report_input_qc` (and all targets it depends on) of the input and QC stage
-(`01_input_qc`) will be made, that is, a HTML report.
-This is specified by `DRAKE_TARGETS` parameter in `config/pipeline.yaml`.
-
-The output is saved in `output/single_sample/pbmc1k`, as specified by `BASE_OUT_DIR` in
+The output is saved in `output/single_sample` directory, as specified by `BASE_OUT_DIR` in
 `config/single_sample/00_main.yaml`. You can find the final report of the `01_input_qc` stage in
-`output/single_sample/pbmc1k/01_input_qc/01_input_qc.html`.
+`output/single_sample/01_input_qc/01_input_qc.html`.
+
+If you want to run the main target for next stage (`02_norm_clustering`), just open `config/pipeline.yaml` and
+change `DRAKE_TARGETS` to `["report_norm_clustering"]` (or comment the current `DRAKE_TARGETS` line and uncomment
+the predefined one).
+
+Just note the default config files are meant for the example PBMC data, and so before you analyse your own data, you should
+read the section [below](#before-you-analyse-your-own-data) about important steps before you do so.
+
+***
+
+# Before you analyse your own data
+
+The default config files are designed to work with provided example data and contain parameters which are used to
+test/showcase various features of the pipeline. Hence, some parameters are example data-specific, and might lead to
+pipeline failure when kept as-is for your data. Also, some parameters are critical for the analysis outcomes and you
+should be aware of them.
+
+Below you can find important parameters which you should review before you run the pipeline on your data for
+the first time (but it doesn't mean you shouldn't use them later). All parameters are documented in vignettes for their
+respective stages.
+
+<details>
+  <summary>&#9654; Show important parameters</summary>
+
+### Main config (`00_main.yaml`) {.unlisted}
+
+- `ORGANISM`
+- `ANNOTATION_LIST`
+- `ENSEMBL_SPECIES`
+- `BASE_OUT_DIR`
+
+### Single-sample / Input QC stage (`01_input_qc.yaml`) {.unlisted}
+
+- `INPUT_DATA`
+- `EMPTY_DROPLETS_ENABLED`
+- `SAVE_DATASET_SENSITIVE_FILTERING`
+
+### Single-sample / Normalization and clustering stage (`02_norm_clustering.yaml`) {.unlisted}
+
+- `NORMALIZATION_TYPE`
+- `HVG_METRIC`
+- `PCA_SELECTION_METHOD`
+- `PCA_FORCED_PCS` (if `PCA_SELECTION_METHOD` is `"forced"`)
+- `KMEANS_K`
+- `SC3_K`
+- `SC3_N_CORES`
+
+### Integration / Integration (`01_integration.yaml`) {.unlisted}
+
+- `INTEGRATION_SOURCES`
+
+### Integration / Post-integration clustering (`02_int_clustering.yaml`) {.unlisted}
+
+- `KMEANS_K`
+- `SC3_K`
+- `SC3_N_CORES`
+
+### Common / Cluster markers and contrasts stages (`cluster_markers.yaml`, `contrasts.yaml`) {.unlisted}
+
+- `CLUSTER_MARKERS_SOURCES`
+- `CONTRASTS_SOURCES`
+
+</details>
 
 ***
 
@@ -181,10 +245,10 @@ scater::plotExpression(sce, "NOC2L", exprs_values = "counts", swap_rownames = "S
 
 Each pipeline stage has its own vignette describing its configuration parameters and also the most important targets.
 At <https://bioinfocz.github.io/scdrake> simply navigate to the top dropdown menu Articles and choose a stage you are
-interested in.
+interested in. Also, in `config/pipeline.yaml` there are commented the summary targets for each stage - HTML reports.
 
-For a more schematic overview of pipelines and stages see `vignette("pipeline_overview")`. Advanced users might be
-interested in looking into source code of `{scdrake}`'s [plans](https://github.com/bioinfocz/scdrake/tree/main/R)
+For a more schematic overview of pipelines and stages see `vignette("pipeline_overview")` (also includes a diagram).
+Advanced users might be interested in looking into source code of `{scdrake}`'s [plans](https://github.com/bioinfocz/scdrake/tree/main/R)
 (files named `plans_*.R`).
 
 ***
@@ -231,74 +295,6 @@ This will **overwrite** project files by the package-bundled ones:
 - Default YAML configs in `config/` (`*.default.yaml`).
 
 By default, you will be asked if you want to continue, as you might lose your local modifications.
-
-***
-
-# Before you analyse your own data
-
-The default config files are designed to work with provided example data and contain parameters which are used to
-test/showcase various features of the pipeline. Hence, some parameters are example data-specific, and might lead to
-pipeline failure when kept as-is for your data. Also, some parameters are critical for the analysis outcomes and you
-should be aware of them.
-
-Below you can find important parameters which you should disable/modify before you run the pipeline on your data for
-the first time (but it doesn't mean you shouldn't use them later). All parameters are documented in vignettes for their
-respective stages.
-
-## Parameters to disable (**important**)
-
-In `config/single_sample/02_norm_clustering.yaml` and `config/integration/02_int_clustering.yaml`:
-
-- `CELL_GROUPINGS`: set to `null` and define cell groupings later if needed.
-- `NORM_CLUSTERING_REPORT_DIMRED_PLOTS_OTHER`, `INT_CLUSTERING_REPORT_DIMRED_PLOTS_OTHER`:
-  remove `cluster_graph_louvain_annotated` and `cluster_int_graph_louvain_annotated`, respectively, as these variable are
-  no longer defined in `CELL_GROUPINGS`.
-- `SELECTED_MARKERS_FILE`, `SELECTED_MARKERS_INT_FILE`: set to `null`.
-
-## Important parameters to review and modify (if needed) {.unlisted}
-
-<details>
-  <summary>&#9654; Show parameters</summary>
-
-### Main config (`00_main.yaml`) {.unlisted}
-
-- `ORGANISM`
-- `ANNOTATION_LIST`
-- `ENSEMBL_SPECIES`
-- `BASE_OUT_DIR`
-
-### Single-sample / Input QC stage (`01_input_qc.yaml`) {.unlisted}
-
-- `INPUT_DATA`
-- `EMPTY_DROPLETS_ENABLED`
-- `SAVE_DATASET_SENSITIVE_FILTERING`
-
-### Single-sample / Normalization and clustering stage (`02_norm_clustering.yaml`) {.unlisted}
-
-- `NORMALIZATION_TYPE`
-- `HVG_METRIC`
-- `PCA_SELECTION_METHOD`
-- `PCA_FORCED_PCS` (if `PCA_SELECTION_METHOD` is `"forced"`)
-- `KMEANS_K`
-- `SC3_K`
-- `SC3_N_CORES`
-
-### Integration / Integration (`01_integration.yaml`) {.unlisted}
-
-- `INTEGRATION_SOURCES`
-
-### Integration / Post-integration clustering (`02_int_clustering.yaml`) {.unlisted}
-
-- `KMEANS_K`
-- `SC3_K`
-- `SC3_N_CORES`
-
-### Common / Cluster markers and contrasts stages (`cluster_markers.yaml`, `contrasts.yaml`) {.unlisted}
-
-- `CLUSTER_MARKERS_SOURCES`
-- `CONTRASTS_SOURCES`
-
-</details>
 
 ***
 

@@ -1,5 +1,3 @@
-DRAKE_CACHE_DIR: ".drake"
-
 ## -- Comment/uncomment DRAKE_TARGETS below to make specific stage reports. Only one must be uncommented!
 ## -- But you can specify any target/s you want - you can review the stage vignettes, e.g. vignette("stage_norm_clustering"),
 ## -- to see the most important targets.
@@ -24,6 +22,7 @@ DRAKE_TARGETS: ["report_input_qc"]
 ## -- All targets:
 # DRAKE_TARGETS: null
 
+DRAKE_CACHE_DIR: ".drake"
 DRAKE_KEEP_GOING: False
 DRAKE_VERBOSITY: 1
 DRAKE_LOCK_ENVIR: True
@@ -31,7 +30,7 @@ DRAKE_UNLOCK_CACHE: True
 DRAKE_FORMAT: "qs"
 DRAKE_REBUILD: null
 
-BLAS_N_THREADS: 32
+BLAS_N_THREADS: null
 RSTUDIO_PANDOC: null
 SEED: 100
 
@@ -41,8 +40,8 @@ DRAKE_PARALLELISM: "loop"
 # DRAKE_PARALLELISM: "clustermq"
 
 DRAKE_CLUSTERMQ_SCHEDULER: "multicore"
-DRAKE_N_JOBS: 8
+DRAKE_N_JOBS: 4
 DRAKE_N_JOBS_PREPROCESS: 4
 WITHIN_TARGET_PARALLELISM: False
-N_CORES: 16
+N_CORES: 4
 ###############################################################################

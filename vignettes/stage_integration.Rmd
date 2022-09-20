@@ -253,7 +253,7 @@ A type of MNN clustering algorithm. See `igraph::cluster_walktrap()` and `igraph
 ## Input files
 
 ```yaml
-SELECTED_MARKERS_INT_FILE: !code system.file("extdata", "selected_markers.csv", package = "scdrake", mustWork = TRUE)
+SELECTED_MARKERS_INT_FILE: null
 ```
 
 **Type:** character scalar or `null`

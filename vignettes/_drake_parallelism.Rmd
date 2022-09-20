@@ -11,3 +11,5 @@ utilize this important feature, you just need to modify `config/pipeline.yaml` b
     (you might need `BiocManager::install("remotes")`).
   - `{clustermq}` also supports HPC cluster schedulers, see
     [here](https://books.ropensci.org/drake/hpc.html#the-template-argument-for-persistent-workers) for more details.
+
+For a general overview of `{drake}` parallelism see <https://books.ropensci.org/drake/hpc.html>

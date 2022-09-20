@@ -52,26 +52,7 @@ CELL_ANNOTATION_SOURCES_DEFAULTS:
 
 ### Group assignment ##########################################################
 ADDITIONAL_CELL_DATA_FILE: null
-CELL_GROUPINGS:
-  - cluster_int_graph_louvain_annotated:
-      source_column: "cluster_int_graph_louvain"
-      description: "Graph-based clustering (Louvain alg.), annotated clusters"
-      assignments:
-        1: "memory_CD4+"
-        6: "B"
-        7: "memory_CD4+"
-    cluster_int_kmeans_kc_3_renamed:
-      source_column: "cluster_int_kmeans_kc_3"
-      description: "k-means clustering (k = 3), renamed clusters"
-      assignments:
-        1: "kc_1"
-        2: "kc_2"
-    cluster_int_sc3_6_renamed:
-      source_column: "cluster_int_sc3_6"
-      description: "SC3 clustering (k = 6), renamed clusters"
-      assignments:
-        1: "sc3_1"
-        5: "sc3_5"
+CELL_GROUPINGS: null
 ###############################################################################
 
 ### Plots #####################################################################
@@ -85,7 +66,6 @@ INT_CLUSTERING_REPORT_DIMRED_PLOTS_OTHER:
     "total": "Total number of UMI"
     "detected": "Detected number of genes"
     "cluster_quickcluster": "Graph-based clustering for integration diagnostics."
-    "cluster_int_graph_louvain_annotated": null
 ###############################################################################
 
 ### Input files ###############################################################

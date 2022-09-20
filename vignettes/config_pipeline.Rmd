@@ -25,17 +25,6 @@ Parameters starting with `DRAKE_` are generally passed to `drake::make()` or `dr
 # General parameters
 
 ```yaml
-DRAKE_CACHE_DIR: ".drake"
-```
-
-**Type:** character scalar or `null`
-
-A name of directory to store drake's cache in.
-If `null`, the default directory `".drake"` will be used.
-
-***
-
-```yaml
 DRAKE_TARGETS: null
 ```
 
@@ -47,6 +36,17 @@ Example for single-sample pipeline / stage `02_norm_clustering` reports:
 ```yaml
 DRAKE_TARGETS: ["report_norm_clustering", "report_norm_clustering_simple"]
 ```
+
+***
+
+```yaml
+DRAKE_CACHE_DIR: ".drake"
+```
+
+**Type:** character scalar or `null`
+
+A name of directory to store drake's cache in.
+If `null`, the default directory `".drake"` will be used.
 
 ***
 
@@ -123,7 +123,7 @@ Instruct `{drake}` to rebuild targets although they are considered finished.
 ***
 
 ```yaml
-BLAS_N_THREADS: 32
+BLAS_N_THREADS: null
 ```
 
 **Type:** positive integer scalar or `null`
@@ -168,14 +168,10 @@ DRAKE_PARALLELISM: "loop"
 
 **Type:** character scalar (`"loop"` | `"future"` | `"clustermq"`)
 
-Type of `{drake}` paralellism:
+Type of `{drake}` paralellism.
 
-- `"loop"`: sequential processing.
-- `"future"`: use the `{future}` package as backend.
-- `"clustermq"`: use the `{clustermq}` package as backend. This also requires [ZeroMQ](https://zeromq.org/) to be
-  installed on your system.
-
-See <https://books.ropensci.org/drake/hpc.html> for more details.
+```{r, child = "_drake_parallelism.Rmd"}
+```
 
 ***
 
@@ -191,7 +187,7 @@ See <https://mschubert.github.io/clustermq/articles/userguide.html#configuration
 ***
 
 ```yaml
-DRAKE_N_JOBS: 8
+DRAKE_N_JOBS: 4
 ```
 
 **Type:** positive integer scalar
@@ -223,7 +219,7 @@ Only possible when `DRAKE_PARALLELISM` is `"loop"`.
 ***
 
 ```yaml
-N_CORES: 16
+N_CORES: 4
 ```
 
 **Type:** positive integer scalar

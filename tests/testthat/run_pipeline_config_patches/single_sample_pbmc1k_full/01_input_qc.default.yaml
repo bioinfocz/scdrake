@@ -1,3 +1,3 @@
 INPUT_DATA:
   type: "cellranger"
-  path: "data/pbmc1k"
+  path: "../data/pbmc1k"

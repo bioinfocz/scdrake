@@ -3,12 +3,11 @@ INTEGRATION_SOURCES:
       path: "../pbmc1k/.drake"
       path_type: "drake_cache"
       description: "10x Genomics PBMC 1k dataset"
-      hvg_rm_cc_genes: True
-      hvg_cc_genes_var_expl_threshold: 5
+      hvg_rm_cc_genes: False
+      hvg_cc_genes_var_expl_threshold: null
     pbmc3k:
-      path: "../pbmc3k/sce_final_norm_clustering.Rds"
-      path_type: "sce"
+      path: "../pbmc3k/.drake"
+      path_type: "drake_cache"
       description: "10x Genomics PBMC 3k dataset"
       hvg_rm_cc_genes: False
       hvg_cc_genes_var_expl_threshold: null
-SELECTED_MARKERS_FILE: !code system.file("extdata", "selected_markers.csv", package = "scdrake", mustWork = TRUE)

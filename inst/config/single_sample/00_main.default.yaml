@@ -16,5 +16,5 @@ ENSEMBL_SPECIES: "Homo_sapiens"
 
 ### Input and output files ####################################################
 CSS_FILE: "Rmd/common/stylesheet.css"
-BASE_OUT_DIR: "output/single_sample/pbmc1k"
+BASE_OUT_DIR: "output/single_sample"
 ###############################################################################

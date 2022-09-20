@@ -54,21 +54,33 @@
 #'   (logical, env: `SCDRAKE_TEST_RUN_PIPELINE`, default: `FALSE`)
 #'   - If `TRUE`, run pipeline tests (`test-run_pipeline.R`).
 #'     Note that configs will be slightly adjusted compared to the default ones to speedup the computations.
-#' - `scdrake_test_run_pipeline_base_out_dir`
-#'   (character, env: `SCDRAKE_TEST_RUN_PIPELINE_BASE_OUT_DIR`,
-#'   default: `fs::file_temp("scdrake_test_project_") %>% fs::path_abs() %>% as.character()`):
-#'   - Base output directory for pipeline tests.
-#' - `scdrake_test_run_pipeline_single_sample_full`
-#'   (logical, env: `SCDRAKE_TEST_RUN_PIPELINE_SINGLE_SAMPLE_FULL`, default: `FALSE`)
-#' - `scdrake_test_run_pipeline_integration`
-#'   - If `TRUE`, run all targets of the single-sample pipeline for PBMC 1k dataset.
-#'   (logical, env: `SCDRAKE_TEST_RUN_PIPELINE_INTEGRATION`, default: `FALSE`):
-#'   - If `TRUE`, run a shortened single-sample pipeline (target `sce_final_norm_clustering`)
-#'     for a second sample (PBMC 3k), followed by the integration pipeline.
 #' - `scdrake_test_run_pipeline_keep_files`
 #'   (logical, env: `SCDRAKE_TEST_RUN_PIPELINE_KEEP_FILES`, default: `TRUE`):
 #'   - If `TRUE`, keep files created by pipeline tests.
 #'     This is useful for reporting output of the current `scdrake` version.
+#' - `scdrake_test_run_pipeline_base_out_dir`
+#'   (character, env: `SCDRAKE_TEST_RUN_PIPELINE_BASE_OUT_DIR`,
+#'   default: `fs::file_temp("scdrake_test_project_") %>% fs::path_abs() %>% as.character()`):
+#'   - Base output directory for pipeline tests.
+#' - `scdrake_test_run_pipeline_vignette_get_started`
+#'   (logical, env: `SCDRAKE_TEST_RUN_PIPELINE_VIGNETTE_GET_STARTED`, default: `FALSE`)
+#'   - If `TRUE`, run pipeline tests (`test-run_pipeline_vignette.R`) for example data as given in the Get started
+#'     vignette.
+#' - `scdrake_test_run_pipeline_clear_config_patches`
+#'   (logical, env: `SCDRAKE_TEST_RUN_PIPELINE_CLEAR_CONFIG_PATCHES`, default: `TRUE`)
+#'   - If `TRUE`, remove all local config patches in `tests/testthat/run_pipeline_*_config_patches`, i.e. all files
+#'     except `*.default.yaml`.
+#' - `scdrake_test_run_pipeline_single_sample_full`
+#'   (logical, env: `SCDRAKE_TEST_RUN_PIPELINE_SINGLE_SAMPLE_FULL`, default: `FALSE`)
+#' - `scdrake_test_run_pipeline_integration`
+#'   (logical, env: `SCDRAKE_TEST_RUN_PIPELINE_INTEGRATION`, default: `FALSE`):
+#'   - If `TRUE`, run all targets of the single-sample pipeline for PBMC 1k dataset.
+#'   - If `TRUE`, run a shortened single-sample pipeline (target `sce_final_norm_clustering`)
+#'     for a second sample (PBMC 3k), followed by the integration pipeline.
+#' - `scdrake_test_run_pipeline_vignette_integration`
+#'   (logical, env: `SCDRAKE_TEST_RUN_PIPELINE_VIGNETTE_INTEGRATION`, default: `FALSE`):
+#'   The same as `scdrake_test_run_pipeline_integration`, but related to example data used in the Integration guide vignette.
+#'   The only difference is when it's `FALSE`, then `sce_final_norm_clustering` target won't be run for PBMC 3k data.
 #'
 #' @return A named list of options.
 #'
@@ -114,10 +126,20 @@ get_scdrake_default_options <- function() {
       "SCDRAKE_TEST_RUN_PIPELINE",
       default = FALSE, type = "logical", verbose = FALSE
     ),
+    scdrake_test_run_pipeline_keep_files = get_sys_env(
+      "SCDRAKE_TEST_RUN_PIPELINE_KEEP_FILES",
+      default = TRUE, type = "logical", verbose = FALSE
+    ),
     scdrake_test_run_pipeline_base_out_dir = get_sys_env(
       "SCDRAKE_TEST_RUN_PIPELINE_BASE_OUT_DIR",
       default = fs::file_temp("scdrake_test_run_pipeline_output") %>% fs::path_abs() %>% as.character(),
       type = "character",
+      verbose = FALSE
+    ),
+    scdrake_test_run_pipeline_clear_config_patches = get_sys_env(
+      "SCDRAKE_TEST_RUN_PIPELINE_CLEAR_CONFIG_PATCHES",
+      default = TRUE,
+      type = "logical",
       verbose = FALSE
     ),
     scdrake_test_run_pipeline_single_sample_full = get_sys_env(
@@ -130,9 +152,13 @@ get_scdrake_default_options <- function() {
       "SCDRAKE_TEST_RUN_PIPELINE_INTEGRATION",
       default = FALSE, type = "logical", verbose = FALSE
     ),
-    scdrake_test_run_pipeline_keep_files = get_sys_env(
-      "SCDRAKE_TEST_RUN_PIPELINE_KEEP_FILES",
-      default = TRUE, type = "logical", verbose = FALSE
+    scdrake_test_run_pipeline_vignette_get_started = get_sys_env(
+      "SCDRAKE_TEST_RUN_PIPELINE_VIGNETTE_GET_STARTED",
+      default = FALSE, type = "logical", verbose = FALSE
+    ),
+    scdrake_test_run_pipeline_vignette__integration = get_sys_env(
+      "SCDRAKE_TEST_RUN_PIPELINE_VIGNETTE_INTEGRATION",
+      default = FALSE, type = "logical", verbose = FALSE
     )
   )
 }
@@ -149,7 +175,7 @@ get_scdrake_options <- function() {
 
 .onLoad <- function(libname, pkgname) {
   options(get_scdrake_default_options())
-  set_rstudio_drake_cache(getOption("scdrake_cache_dir"))
+  set_rstudio_drake_cache(getOption("scdrake_cache_dir"), verbose = FALSE)
   Sys.setenv(`_R_CHECK_LENGTH_1_CONDITION_` = "true")
 }
 

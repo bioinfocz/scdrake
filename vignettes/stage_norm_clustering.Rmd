@@ -339,7 +339,7 @@ Note: `!code 3:6` will evaluate to `c(5, 6)`.
 ***
 
 ```yaml
-SC3_N_CORES: 8
+SC3_N_CORES: 4
 ```
 
 **Type:** integer scalar
@@ -360,6 +360,8 @@ SC3_DRY: False
 **Type:** logical scalar
 
 If `True`, just generate random cluster assignments (for testing purposes).
+
+***
 
 ## Cell type annotation
 
@@ -498,26 +500,7 @@ The additional data must contain `Barcode` column by which they will be joined w
 ***
 
 ```yaml
-CELL_GROUPINGS:
-  - cluster_graph_louvain_annotated:
-      source_column: "cluster_graph_louvain"
-      description: "Graph-based clustering (Louvain alg.), annotated clusters"
-      assignments:
-        1: "memory_CD4+"
-        6: "B"
-        7: "memory_CD4+"
-    cluster_kmeans_kc_3_renamed:
-      source_column: "cluster_kmeans_kc_3"
-      description: "k-means clustering (k = 3), renamed clusters"
-      assignments:
-        1: "kc_1"
-        2: "kc_2"
-    cluster_sc3_6_renamed:
-      source_column: "cluster_sc3_6"
-      description: "SC3 clustering (k = 6), renamed clusters"
-      assignments:
-        1: "sc3_1"
-        5: "sc3_5"
+CELL_GROUPINGS: null
 ```
 
 **Type:** list of named lists or `null`
@@ -536,16 +519,17 @@ name of new cell grouping (column in `colData()` of the `sce_dimred` target) and
 
 For possible column names for `source_column`, see the `sce_final_norm_clustering` target in the [section](#targets) below.
 
-Let's look at one of the example assignments:
+Let's look at example cell grouping:
 
 ```yaml
-cluster_graph_louvain_annotated:
-  source_column: "cluster_graph_louvain"
-  description: "Graph-based clustering (Louvain alg.), annotated clusters"
-  assignments:
-    1: "memory_CD4+"
-    6: "B"
-    7: "memory_CD4+"
+CELL_GROUPINGS:
+  - cluster_graph_louvain_annotated:
+      source_column: "cluster_graph_louvain"
+      description: "Graph-based clustering (Louvain alg.), annotated clusters"
+      assignments:
+        1: "memory_CD4+"
+        6: "B"
+        7: "memory_CD4+"
 ```
 
 - `cluster_graph_louvain_annotated`: a name of new cell grouping added to `colData()`.
@@ -556,9 +540,6 @@ cluster_graph_louvain_annotated:
 - `assignments`: assignments of the old levels to new ones. That is, level (cluster) `6` will be renamed to `"B"`,
   and levels `1` and `7` will be merged to a new level `"memory_CD4+"`.
   All unspecified levels will be kept as they are.
-
-> NOTE: The example cluster renamings serve as an example for 10x PBMC 1k dataset, but initially on your dataset you
-should use `null` and set renamings after you examine the pipeline results.
 
 ## Dimensionality reduction plots
 
@@ -593,27 +574,26 @@ NORM_CLUSTERING_REPORT_DIMRED_PLOTS_OTHER:
     "doublet_score": "Doublet score"
     "total": "Total number of UMI"
     "detected": "Detected number of genes"
-    "cluster_graph_louvain_annotated": null
 ```
 
 **Type:** list of named lists with character scalars
 
-Names of other variables in `colData()` to plot and color by, displayed in the report.
+Names of other variables in `colData()` to plot dimreds and color by, displayed in the report.
 
 The format is `"variable_name": "description"`, where description will appear in plot title.
 
-Variables defined in the `CELL_GROUPINGS` parameter could have `description` set to `null` -
+Variables defined in the `CELL_GROUPINGS` parameter can have `description` set to `null` -
 their description from `CELL_GROUPINGS` will be used.
 
 ## Input files
 
 ```yaml
-SELECTED_MARKERS_FILE: !code system.file("extdata", "selected_markers.csv", package = "scdrake", mustWork = TRUE)
+SELECTED_MARKERS_FILE: null
 ```
 
 **Type:** character scalar or `null`
 
-A path to CSV file with groups of markers to make plots for. Set to `null` to skip.
+A path to CSV file with groups of markers to make expression dimred plots for. Set to `null` to skip.
 The plots will be created for each of `NORM_CLUSTERING_REPORT_DIMRED_NAMES`.
 
 The format is following: each row defines gene symbols for a group.
@@ -623,8 +603,9 @@ First column is a name of group and second column are gene symbols delimited by 
 
 **Do not use a header!**
 
-The default value returns a path to package-bundled CSV file, but normally you should use
-`SELECTED_MARKERS_FILE: "path/to/file.csv"`.
+An example CSV file for PBMC 1k dataset can be retrieved by
+`system.file("extdata", "selected_markers.csv", package = "scdrake", mustWork = TRUE)` or see
+[here](https://github.com/bioinfocz/scdrake/blob/main/inst/extdata/selected_markers.csv).
 
 ***
 

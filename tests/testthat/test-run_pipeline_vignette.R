@@ -1,9 +1,10 @@
-skip_if(is_false(getOption("scdrake_test_run_pipeline")))
+## -- These are tests for example PBMC data given in the instructions in Get started vignette.
+skip_if(is_false(getOption("scdrake_test_run_pipeline_vignette_get_started")))
 
 if (getOption("scdrake_test_run_pipeline_clear_config_patches")) {
-  ## -- This will delete all files in tests/testthat/run_pipeline_config_patches not matching the "*.default.yaml" pattern.
-  cli_alert_info("Removing local config patches in {.file tests/testthat/run_pipeline_config_patches/}")
-  fs::dir_ls(fs::path(test_path_abs, "run_pipeline_config_patches/"), glob = "*.default.yaml", recurse = TRUE, invert = TRUE, type = "file") %>%
+  ## -- This will delete all files in tests/testthat/run_pipeline_vignette_config_patches not matching the "*.default.yaml" pattern.
+  cli_alert_info("Removing local config patches in {.file tests/testthat/run_pipeline_vignette_config_patches/}")
+  fs::dir_ls(fs::path(test_path_abs, "run_pipeline_vignette_config_patches/"), glob = "*.default.yaml", recurse = TRUE, invert = TRUE, type = "file") %>%
     fs::file_delete()
 }
 
@@ -40,59 +41,41 @@ if (!is_r_build_check) {
   withr::defer(withr::with_dir(package_root, here::i_am("DESCRIPTION")), teardown_env())
 }
 
-data_dir <- fs::path(root_work_dir, "data")
-pbmc1k_data_dir <- fs::path(data_dir, "pbmc1k")
-if (!fs::dir_exists(pbmc1k_data_dir) || is_empty(fs::dir_ls(pbmc1k_data_dir))) {
-  download_pbmc1k(pbmc1k_data_dir, ask = FALSE)
-}
-
-pbmc3k_data_dir <- fs::path(data_dir, "pbmc3k")
-if (!fs::dir_exists(pbmc3k_data_dir) || is_empty(fs::dir_ls(pbmc3k_data_dir))) {
-  download_pbmc3k(pbmc3k_data_dir, ask = FALSE)
-}
-
 pbmc1k_dir <- fs::path(root_work_dir, "pbmc1k")
 try(fs::dir_delete(fs::path(pbmc1k_dir, "config")), silent = TRUE)
-init_project(pbmc1k_dir, use_rstudio = FALSE, ask = FALSE)
+init_project(pbmc1k_dir, use_rstudio = FALSE, ask = FALSE, download_example_data = TRUE)
 withr::local_dir(pbmc1k_dir)
 here::i_am(".here")
 
-## -- A test file for additional cell data.
-additional_cell_data <- data.frame(
-  Barcode = c("AAACCCAAGGAGAGTA-1", "AAACGCTTCAGCCCAG-1", "AAAGAACAGACGACTG-1", "AAAGAACCAATGGCAG-1", "AAAGAACGTCTGCAAT-1"),
-  letters = letters[1:5],
-  cluster_sc3_2 = glue("cluster_{letters[1:5]}"),
-  cluster_sc3_6_custom = glue("cluster_{LETTERS[1:5]}")
-)
-saveRDS(additional_cell_data, "additional_cell_data.Rds")
-
-test_that("the full single-sample pipeline for PBMC 1k dataset finishes", {
-  skip_if(is_false(getOption("scdrake_test_run_pipeline_single_sample_full")))
+test_that("the full single-sample pipeline from the Get started vignette finishes", {
   cli_alert_info("TEST: PBMC 1k full")
 
   .apply_config_patches(
-    patches_dir = fs::path(test_path_abs, "run_pipeline_config_patches/single_sample_pbmc1k_full"),
+    patches_dir = fs::path(test_path_abs, "run_pipeline_vignette_config_patches/single_sample_pbmc1k"),
     analysis_config_dir = getOption("scdrake_single_sample_config_dir")
   )
 
   expect_true(run_single_sample_r())
+
+  sce <- drake::readd(sce_final_input_qc)
+  expect_s4_class(sce, "SingleCellExperiment")
+  p <- scater::plotExpression(sce, "NOC2L", exprs_values = "counts", swap_rownames = "SYMBOL")
+  expect_s3_class(p, "ggplot")
 })
 
-skip_if(is_false(getOption("scdrake_test_run_pipeline_integration")))
-
-test_that("'sce_final_norm_clustering' target in single-sample pipeline for PBMC 1k dataset finishes", {
-  ## -- We can skip this test if full pipeline for PBMC 1k was run -> it also contains the "sce_final_norm_clustering"
-  ## -- target needed for integration.
-  skip_if(is_true(getOption("scdrake_test_run_pipeline_single_sample_full")))
-  cli_alert_info("TEST: PBMC 1k sce_final_norm_clustering")
+## -- This is replicating the vignette part "Modifying parameters and rerunning the pipeline"
+test_that("the modified single-sample pipeline from the Get started vignette finishes", {
+  cli_alert_info("TEST: PBMC 1k modified")
 
   .apply_config_patches(
-    patches_dir = fs::path(test_path_abs, "run_pipeline_config_patches/single_sample_pbmc1k"),
+    patches_dir = fs::path(test_path_abs, "run_pipeline_vignette_config_patches/single_sample_pbmc1k_modified"),
     analysis_config_dir = getOption("scdrake_single_sample_config_dir")
   )
 
   expect_true(run_single_sample_r())
 })
+
+skip_if(is_false(getOption("scdrake_test_run_pipeline_vignette_integration")))
 
 ## -- This is a second dataset used for integration. We only need the "sce_final_norm_clustering" target
 ## -- (this is specified in single_sample_pbmc3k/pipeline.default.yaml patch).
@@ -102,19 +85,14 @@ init_project(pbmc3k_dir, use_rstudio = FALSE, ask = FALSE)
 withr::local_dir(pbmc3k_dir)
 here::i_am(".here")
 
-test_that("'sce_final_norm_clustering' target in single-sample pipeline for PBMC 3k dataset finishes", {
+test_that("'sce_final_norm_clustering' target in single-sample pipeline for PBMC 3k dataset in the Integration guide vignette finishes", {
   cli_alert_info("TEST: PBMC 3k sce_final_norm_clustering")
   .apply_config_patches(
-    patches_dir = fs::path(test_path_abs, "run_pipeline_config_patches/single_sample_pbmc3k"),
+    patches_dir = fs::path(test_path_abs, "run_pipeline_vignette_config_patches/single_sample_pbmc3k"),
     analysis_config_dir = getOption("scdrake_single_sample_config_dir")
   )
 
   expect_true(run_single_sample_r())
-  ## -- To test the integration pipeline's ability to also start from a SCE object.
-  saveRDS(
-    drake::readd(sce_final_norm_clustering),
-    fs::path(pbmc3k_dir, "sce_final_norm_clustering.Rds")
-  )
 })
 
 integration_dir <- fs::path(root_work_dir, "integration")
@@ -125,8 +103,9 @@ here::i_am(".here")
 
 test_that("integration pipeline finishes", {
   cli_alert_info("TEST: integration")
+
   .apply_config_patches(
-    patches_dir = fs::path(test_path_abs, "run_pipeline_config_patches/integration"),
+    patches_dir = fs::path(test_path_abs, "run_pipeline_vignette_config_patches/integration"),
     analysis_config_dir = getOption("scdrake_integration_config_dir")
   )
 
