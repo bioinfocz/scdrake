@@ -7,6 +7,8 @@ updates](https://img.shields.io/badge/NEWS-updates-informational)](NEWS.md)
 vignettes](https://img.shields.io/badge/Documentation%20&%20vignettes-bioinfocz.github.io/scdrake-informational)](https://bioinfocz.github.io/scdrake)
 [![Overview and
 outputs](https://img.shields.io/badge/Overview%20&%20outputs-vignette\(%22pipeline_overview%22\)-informational)](https://bioinfocz.github.io/scdrake/articles/pipeline_overview.html)
+[![Pipeline
+diagram](https://img.shields.io/badge/Pipeline%20diagram-Show-informational)](https://github.com/bioinfocz/scdrake/blob/main/diagrams/pipeline_diagram.pdf)
 ![License](https://img.shields.io/github/license/bioinfocz/scdrake)
 [![Lifecycle:
 experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
@@ -52,6 +54,11 @@ both will benefit from reports and visualizations, and the latter also
 from the possibility to utilize all benefits of `{drake}` for custom
 analyses.
 
+The pipeline structure along with
+[diagrams](https://github.com/bioinfocz/scdrake/blob/main/diagrams/README.md)
+and links to outputs is described in `vignette("pipeline_overview")`
+([link](https://bioinfocz.github.io/scdrake/articles/pipeline_overview.html)).
+
 Huge thanks go to the authors of the [Orchestrating Single-Cell Analysis
 with Bioconductor](https://bioconductor.org/books/release/OSCA) book on
 whose methods and recommendations is `{scdrake}` largely based.
@@ -67,10 +74,9 @@ stable version from GitHub using the following code:
 ``` r
 if (!requireNamespace("BiocManager", quietly = TRUE)) {
   install.packages("BiocManager")
-  BiocManager::install(version = "3.15")
 }
-
-BiocManager::install("bioinfocz/scdrake@v1.3.1")
+BiocManager::install(version = "3.15")
+BiocManager::install("bioinfocz/scdrake@v1.3.2")
 ```
 
 For development version use
@@ -78,9 +84,8 @@ For development version use
 ``` r
 if (!requireNamespace("BiocManager", quietly = TRUE)) {
   install.packages("BiocManager")
-  BiocManager::install(version = "3.15")
 }
-
+BiocManager::install(version = "3.15")
 BiocManager::install("bioinfocz/scdrake")
 ```
 
