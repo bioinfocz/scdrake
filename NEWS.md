@@ -1,4 +1,4 @@
-# development version
+# scdrake 1.3.2
 
 - Simplified default configs, vignettes updated accordingly.
 - Minor updates in some vignettes.
