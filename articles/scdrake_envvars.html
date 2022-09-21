@@ -58,7 +58,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">scdrake</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.3.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.3.2</span>
       </span>
     </div>
 
@@ -126,28 +126,28 @@
     </li>
 <li class="dropdown-header">Single-sample pipeline stages</li>
     <li>
-      <a href="../articles/stage_input_qc.html">Input and quality control stage</a>
+      <a href="../articles/stage_input_qc.html">Input and quality control stage (`01_input_qc`)</a>
     </li>
     <li>
-      <a href="../articles/stage_norm_clustering.html">Normalization and clustering stage</a>
+      <a href="../articles/stage_norm_clustering.html">Normalization and clustering stage (`02_norm_clustering`)</a>
     </li>
     <li class="divider">
     </li>
 <li class="dropdown-header">Integration pipeline stages</li>
     <li>
-      <a href="../articles/stage_integration.html">Integration stage</a>
+      <a href="../articles/stage_integration.html">Integration stage (`01_integration`)</a>
     </li>
     <li>
-      <a href="../articles/stage_int_clustering.html">Post-integration clustering stage</a>
+      <a href="../articles/stage_int_clustering.html">Post-integration clustering stage (`02_int_clustering`)</a>
     </li>
     <li class="divider">
     </li>
 <li class="dropdown-header">Common stages</li>
     <li>
-      <a href="../articles/stage_cluster_markers.html">Cluster markers stage</a>
+      <a href="../articles/stage_cluster_markers.html">Cluster markers stage (`cluster_markers`)</a>
     </li>
     <li>
-      <a href="../articles/stage_contrasts.html">Contrasts stage</a>
+      <a href="../articles/stage_contrasts.html">Contrasts stage (`contrasts`)</a>
     </li>
   </ul>
 </li>
@@ -196,7 +196,7 @@
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Environment variables</h1>
             
-            <h4 data-toc-skip class="date">2022-09-08</h4>
+            <h4 data-toc-skip class="date">2022-09-21</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/bioinfocz/scdrake/blob/mastervignettes/scdrake_envvars.Rmd" class="external-link"><code>vignettes/scdrake_envvars.Rmd</code></a></small>
       <div class="hidden name"><code>scdrake_envvars.Rmd</code></div>
@@ -210,12 +210,12 @@ $(document).ready(function(){
   $('[data-toggle="tooltip"]').tooltip(); 
 });
 </script><hr>
-<p>On <a href="https://github.com/bioinfocz/scdrake" class="external-link">scdrake</a> load or
-<a data-toggle="tooltip" title="(i.e. when you call some function from a package, e.g. `drake::run_single_sample_r()`)">attach</a>,
+<p>On <a href="https://github.com/bioinfocz/scdrake" class="external-link">scdrake</a> load or attach
+(<a data-toggle="tooltip" title="(i.e. when you call some function from a package, e.g. `drake::run_single_sample_r()`)">?</a>),
 several environment variables are read and corresponding
 <code><a href="https://rdrr.io/r/base/options.html" class="external-link">options()</a></code> are set. Those are mainly variables controlling
-paths to config directories. See <code>?scdrake_options</code> for more
-details and list of used environment variables.</p>
+paths to config directories. See <code><a href="../reference/scdrake_options.html">get_scdrake_options()</a></code> for
+more details and list of used environment variables.</p>
 <p>We can take the <code>SCDRAKE_SINGLE_SAMPLE_CONFIG_DIR</code>
 environment variable as an example:</p>
 <ul>

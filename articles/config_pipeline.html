@@ -58,7 +58,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">scdrake</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.3.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.3.2</span>
       </span>
     </div>
 
@@ -126,28 +126,28 @@
     </li>
 <li class="dropdown-header">Single-sample pipeline stages</li>
     <li>
-      <a href="../articles/stage_input_qc.html">Input and quality control stage</a>
+      <a href="../articles/stage_input_qc.html">Input and quality control stage (`01_input_qc`)</a>
     </li>
     <li>
-      <a href="../articles/stage_norm_clustering.html">Normalization and clustering stage</a>
+      <a href="../articles/stage_norm_clustering.html">Normalization and clustering stage (`02_norm_clustering`)</a>
     </li>
     <li class="divider">
     </li>
 <li class="dropdown-header">Integration pipeline stages</li>
     <li>
-      <a href="../articles/stage_integration.html">Integration stage</a>
+      <a href="../articles/stage_integration.html">Integration stage (`01_integration`)</a>
     </li>
     <li>
-      <a href="../articles/stage_int_clustering.html">Post-integration clustering stage</a>
+      <a href="../articles/stage_int_clustering.html">Post-integration clustering stage (`02_int_clustering`)</a>
     </li>
     <li class="divider">
     </li>
 <li class="dropdown-header">Common stages</li>
     <li>
-      <a href="../articles/stage_cluster_markers.html">Cluster markers stage</a>
+      <a href="../articles/stage_cluster_markers.html">Cluster markers stage (`cluster_markers`)</a>
     </li>
     <li>
-      <a href="../articles/stage_contrasts.html">Contrasts stage</a>
+      <a href="../articles/stage_contrasts.html">Contrasts stage (`contrasts`)</a>
     </li>
   </ul>
 </li>
@@ -196,7 +196,7 @@
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Pipeline config</h1>
             
-            <h4 data-toc-skip class="date">2022-09-08</h4>
+            <h4 data-toc-skip class="date">2022-09-21</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/bioinfocz/scdrake/blob/mastervignettes/config_pipeline.Rmd" class="external-link"><code>vignettes/config_pipeline.Rmd</code></a></small>
       <div class="hidden name"><code>config_pipeline.Rmd</code></div>
@@ -221,17 +221,17 @@ generally passed to <code><a href="https://docs.ropensci.org/drake/reference/mak
 <div class="section level2">
 <h2 id="general-parameters">General parameters<a class="anchor" aria-label="anchor" href="#general-parameters"></a>
 </h2>
-<div class="sourceCode" id="cb1"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">DRAKE_CACHE_DIR</span><span class="kw">:</span><span class="at"> </span><span class="st">".drake"</span></span></code></pre></div>
-<p><strong>Type:</strong> character scalar or <code>null</code></p>
-<p>A name of directory to store drake’s cache in. If <code>null</code>,
-the default directory <code>".drake"</code> will be used.</p>
-<hr>
-<div class="sourceCode" id="cb2"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">DRAKE_TARGETS</span><span class="kw">:</span><span class="at"> </span><span class="ch">null</span></span></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">DRAKE_TARGETS</span><span class="kw">:</span><span class="at"> </span><span class="ch">null</span></span></code></pre></div>
 <p><strong>Type:</strong> character vector or <code>null</code></p>
 <p>Array of target names to make. Setting to <code>null</code> will make
 all targets. Example for single-sample pipeline / stage
 <code>02_norm_clustering</code> reports:</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">DRAKE_TARGETS</span><span class="kw">:</span><span class="at"> </span><span class="kw">[</span><span class="st">"report_norm_clustering"</span><span class="kw">,</span><span class="at"> </span><span class="st">"report_norm_clustering_simple"</span><span class="kw">]</span></span></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">DRAKE_TARGETS</span><span class="kw">:</span><span class="at"> </span><span class="kw">[</span><span class="st">"report_norm_clustering"</span><span class="kw">,</span><span class="at"> </span><span class="st">"report_norm_clustering_simple"</span><span class="kw">]</span></span></code></pre></div>
+<hr>
+<div class="sourceCode" id="cb3"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">DRAKE_CACHE_DIR</span><span class="kw">:</span><span class="at"> </span><span class="st">".drake"</span></span></code></pre></div>
+<p><strong>Type:</strong> character scalar or <code>null</code></p>
+<p>A name of directory to store drake’s cache in. If <code>null</code>,
+the default directory <code>".drake"</code> will be used.</p>
 <hr>
 <div class="sourceCode" id="cb4"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">DRAKE_KEEP_GOING</span><span class="kw">:</span><span class="at"> </span><span class="ch">False</span></span></code></pre></div>
 <p><strong>Type:</strong> logical scalar</p>
@@ -286,7 +286,7 @@ considered finished.</p>
 targets specified in <code>DRAKE_TARGETS</code>.</li>
 </ul>
 <hr>
-<div class="sourceCode" id="cb10"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">BLAS_N_THREADS</span><span class="kw">:</span><span class="at"> </span><span class="dv">32</span></span></code></pre></div>
+<div class="sourceCode" id="cb10"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">BLAS_N_THREADS</span><span class="kw">:</span><span class="at"> </span><span class="ch">null</span></span></code></pre></div>
 <p><strong>Type:</strong> positive integer scalar or
 <code>null</code></p>
 <p>A maximum number of threads for BLAS operations, passed to
@@ -320,20 +320,40 @@ set it to <code>null</code> in pipeline config.</p>
 <div class="sourceCode" id="cb13"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">DRAKE_PARALLELISM</span><span class="kw">:</span><span class="at"> </span><span class="st">"loop"</span></span></code></pre></div>
 <p><strong>Type:</strong> character scalar (<code>"loop"</code> |
 <code>"future"</code> | <code>"clustermq"</code>)</p>
-<p>Type of <a href="https://docs.ropensci.org/drake" class="external-link">drake</a> paralellism:</p>
+<p>Type of <a href="https://docs.ropensci.org/drake" class="external-link">drake</a> paralellism.</p>
+<p>Because <a href="https://docs.ropensci.org/drake" class="external-link">drake</a> knows the inner relationships between
+targets in your plan, it also knows which targets are independent of
+each other, and thus, can be run concurrently. This is called
+<em>implicit parallelism</em>, and to fully utilize this important
+feature, you just need to modify <code>config/pipeline.yaml</code> by
+setting <code>DRAKE_PARALLELISM</code> to either:</p>
 <ul>
 <li>
-<code>"loop"</code>: sequential processing.</li>
-<li>
-<code>"future"</code>: use the <a href="https://future.futureverse.org" class="external-link">future</a> package as
-backend.</li>
-<li>
-<code>"clustermq"</code>: use the <a href="https://mschubert.github.io/clustermq/" class="external-link">clustermq</a> package
-as backend. This also requires <a href="https://zeromq.org/" class="external-link">ZeroMQ</a>
-to be installed on your system.</li>
+<code>"future"</code>: uses the <a href="https://future.futureverse.org" class="external-link">future</a> as the
+backend. This backend should work by simply installing the
+<a href="https://future.futureverse.org" class="external-link">future</a> package.
+<ul>
+<li>Install by
+<code>BiocManager::install(c("future", "future.callr"))</code>
+</li>
 </ul>
-<p>See <a href="https://books.ropensci.org/drake/hpc.html" class="external-link uri">https://books.ropensci.org/drake/hpc.html</a> for more
-details.</p>
+</li>
+<li>
+<code>"clustermq"</code>: uses the <a href="https://mschubert.github.io/clustermq/" class="external-link">clustermq</a> as the
+backend. This is faster than <code>"future"</code>, but besides the
+<a href="https://mschubert.github.io/clustermq/" class="external-link">clustermq</a> package it also requires the <a href="https://zeromq.org/" class="external-link">ZeroMQ</a> library to be <a href="https://zeromq.org/download/" class="external-link">installed</a> on your system.
+<ul>
+<li>You need to install a specific <a href="https://mschubert.github.io/clustermq/" class="external-link">clustermq</a> version by
+<code>remotes::install_version("clustermq", version = "0.8.8")</code>
+(you might need <code>BiocManager::install("remotes")</code>).</li>
+<li>
+<a href="https://mschubert.github.io/clustermq/" class="external-link">clustermq</a> also supports HPC cluster schedulers, see
+<a href="https://books.ropensci.org/drake/hpc.html#the-template-argument-for-persistent-workers" class="external-link">here</a>
+for more details.</li>
+</ul>
+</li>
+</ul>
+<p>For a general overview of <a href="https://docs.ropensci.org/drake" class="external-link">drake</a> parallelism see <a href="https://books.ropensci.org/drake/hpc.html" class="external-link uri">https://books.ropensci.org/drake/hpc.html</a></p>
 <hr>
 <div class="sourceCode" id="cb14"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">DRAKE_CLUSTERMQ_SCHEDULER</span><span class="kw">:</span><span class="at"> </span><span class="st">"multicore"</span></span></code></pre></div>
 <p><strong>Type:</strong> character scalar</p>
@@ -341,7 +361,7 @@ details.</p>
 <code>"clustermq"</code>. See <a href="https://mschubert.github.io/clustermq/articles/userguide.html#configuration" class="external-link uri">https://mschubert.github.io/clustermq/articles/userguide.html#configuration</a>
 for possible values.</p>
 <hr>
-<div class="sourceCode" id="cb15"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="fu">DRAKE_N_JOBS</span><span class="kw">:</span><span class="at"> </span><span class="dv">8</span></span></code></pre></div>
+<div class="sourceCode" id="cb15"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="fu">DRAKE_N_JOBS</span><span class="kw">:</span><span class="at"> </span><span class="dv">4</span></span></code></pre></div>
 <p><strong>Type:</strong> positive integer scalar</p>
 <p>A number of parallel jobs for drake.</p>
 <hr>
@@ -356,7 +376,7 @@ preprocessing tasks.</p>
 package. Only possible when <code>DRAKE_PARALLELISM</code> is
 <code>"loop"</code>.</p>
 <hr>
-<div class="sourceCode" id="cb18"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu">N_CORES</span><span class="kw">:</span><span class="at"> </span><span class="dv">16</span></span></code></pre></div>
+<div class="sourceCode" id="cb18"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu">N_CORES</span><span class="kw">:</span><span class="at"> </span><span class="dv">4</span></span></code></pre></div>
 <p><strong>Type:</strong> positive integer scalar</p>
 <p>A number of cores for within-target parallelism.</p>
 <hr>

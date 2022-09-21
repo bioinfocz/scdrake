@@ -58,7 +58,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">scdrake</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.3.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.3.2</span>
       </span>
     </div>
 
@@ -126,28 +126,28 @@
     </li>
 <li class="dropdown-header">Single-sample pipeline stages</li>
     <li>
-      <a href="../articles/stage_input_qc.html">Input and quality control stage</a>
+      <a href="../articles/stage_input_qc.html">Input and quality control stage (`01_input_qc`)</a>
     </li>
     <li>
-      <a href="../articles/stage_norm_clustering.html">Normalization and clustering stage</a>
+      <a href="../articles/stage_norm_clustering.html">Normalization and clustering stage (`02_norm_clustering`)</a>
     </li>
     <li class="divider">
     </li>
 <li class="dropdown-header">Integration pipeline stages</li>
     <li>
-      <a href="../articles/stage_integration.html">Integration stage</a>
+      <a href="../articles/stage_integration.html">Integration stage (`01_integration`)</a>
     </li>
     <li>
-      <a href="../articles/stage_int_clustering.html">Post-integration clustering stage</a>
+      <a href="../articles/stage_int_clustering.html">Post-integration clustering stage (`02_int_clustering`)</a>
     </li>
     <li class="divider">
     </li>
 <li class="dropdown-header">Common stages</li>
     <li>
-      <a href="../articles/stage_cluster_markers.html">Cluster markers stage</a>
+      <a href="../articles/stage_cluster_markers.html">Cluster markers stage (`cluster_markers`)</a>
     </li>
     <li>
-      <a href="../articles/stage_contrasts.html">Contrasts stage</a>
+      <a href="../articles/stage_contrasts.html">Contrasts stage (`contrasts`)</a>
     </li>
   </ul>
 </li>
@@ -196,7 +196,7 @@
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Pipeline overview</h1>
             
-            <h4 data-toc-skip class="date">2022-09-08</h4>
+            <h4 data-toc-skip class="date">2022-09-21</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/bioinfocz/scdrake/blob/mastervignettes/pipeline_overview.Rmd" class="external-link"><code>vignettes/pipeline_overview.Rmd</code></a></small>
       <div class="hidden name"><code>pipeline_overview.Rmd</code></div>
@@ -211,15 +211,23 @@ and second one for integration of multiple samples (which were processed
 by the single-sample pipeline before). As for now, each pipeline
 consists of two subpipelines (referred to as <em>stages</em>), and two
 stages common to both single-sample and integration pipelines.</p>
+<p><a href="https://github.com/bioinfocz/scdrake/blob/main/diagrams/pipeline_overview.pdf" class="external-link"><img src="pipeline_overview.png" alt="A high-level diagram of {scdrake} pipelines."></a></p>
+<p>A more detailed diagram with target structure can be found <a href="https://github.com/bioinfocz/scdrake/blob/main/diagrams/pipeline_overview.pdf" class="external-link">here</a>.</p>
 <p>Each stage has its own config, plus there is a main config for each
 pipeline. You can read more about configs in a separate
 <code><a href="../articles/scdrake_config.html">vignette("scdrake_config")</a></code>. Each stage also outputs a
 report in HTML format with rich graphics.</p>
+<p>Advanced users might be interested in looking into source code of
+<a href="https://github.com/bioinfocz/scdrake" class="external-link">scdrake</a>’s <a href="https://github.com/bioinfocz/scdrake/tree/main/R" class="external-link">plans</a> (files
+named <code>plans_*.R</code>).</p>
 <p>Pipeline steps are mostly based on recommendations given in a great
 book <a href="https://bioconductor.org/books/release/OSCA/" class="external-link">Orchestrating
 Single-Cell Analysis with Bioconductor</a>.</p>
-<p><strong>You can inspect output from the pipeline <a href="https://onco.img.cas.cz/novotnyj/scdrake/" class="external-link">here</a>.</strong> The
-used datasets are:</p>
+<div class="section level2">
+<h2 id="example-pipeline-output">Example pipeline output<a class="anchor" aria-label="anchor" href="#example-pipeline-output"></a>
+</h2>
+<p><strong>You can inspect output from the pipeline <a href="https://onco.img.cas.cz/novotnyj/scdrake/" class="external-link">here</a>.</strong></p>
+<p>The used datasets are:</p>
 <ul>
 <li>
 <a href="https://www.10xgenomics.com/resources/datasets/1-k-pbm-cs-from-a-healthy-donor-v-3-chemistry-3-standard-3-0-0" class="external-link">PBMC
@@ -231,6 +239,7 @@ used datasets are:</p>
 <p><strong>All credits for these datasets go to 10x Genomics.</strong>
 Visit <a href="https://www.10xgenomics.com/resources/datasets" class="external-link uri">https://www.10xgenomics.com/resources/datasets</a> for more
 information.</p>
+</div>
 <div class="section level2">
 <h2 id="single-sample-pipeline">Single-sample pipeline<a class="anchor" aria-label="anchor" href="#single-sample-pipeline"></a>
 </h2>
@@ -261,16 +270,26 @@ scRNA-seq, columns are individual cells; the rest is same.</p>
 <p>An initial stage to read in scRNA-seq data, remove empty droplets
 (optionally), and perform quality control, and cell and gene
 filtering.</p>
-<p>More information about scRNA-seq quality control can be found <a href="https://bioconductor.org/books/release/OSCA.basic/quality-control.html#common-choices-of-qc-metrics" class="external-link">here</a>.</p>
+<p>More information about scRNA-seq quality control can be found <a href="https://bioconductor.org/books/release/OSCA.basic/quality-control.html" class="external-link">here</a>.</p>
 <p>⚙️ Config and targets: <code><a href="../articles/stage_input_qc.html">vignette("stage_input_qc")</a></code></p>
 <p><a href="https://onco.img.cas.cz/novotnyj/scdrake/single_sample/pbmc1k/01_input_qc/01_input_qc.html" class="external-link">📜
-Example report</a></p>
+Example report</a> (<a href="https://github.com/bioinfocz/scdrake/blob/main/tests/testthat/run_pipeline_config_patches/single_sample_pbmc1k_full/01_input_qc.default.yaml" class="external-link">used
+config</a>)</p>
+<p>🪜 Structure</p>
 <ul>
-<li>Reading in feature-barcode matrix.</li>
+<li>Reading in feature-barcode matrix either from:
+<ul>
+<li>
+<code>cellranger</code> output</li>
+<li>
+<code>SingleCellExperiment</code> object</li>
+<li>delimited table</li>
+</ul>
+</li>
 <li>Removal of <a href="https://bioconductor.org/books/release/OSCA.advanced/droplet-processing.html" class="external-link">empty
 droplets</a> (<code><a href="https://rdrr.io/pkg/DropletUtils/man/emptyDrops.html" class="external-link">DropletUtils::emptyDrops()</a></code>) (optional).</li>
 <li>Calculation of per-cell QC metrics
-(<code><a href="https://rdrr.io/pkg/scuttle/man/perCellQCMetrics.html" class="external-link">scater::perCellQCMetrics()</a></code>):
+(<code><a href="https://rdrr.io/pkg/scuttle/man/perCellQCMetrics.html" class="external-link">scater::perCellQCMetrics()</a></code>, <a href="https://bioconductor.org/books/release/OSCA.basic/quality-control.html#common-choices-of-qc-metrics" class="external-link">theory</a>):
 <ul>
 <li>Number of UMI.</li>
 <li>Number of detected genes (non-zero UMI count).</li>
@@ -282,16 +301,16 @@ droplets</a> (<code><a href="https://rdrr.io/pkg/DropletUtils/man/emptyDrops.htm
 <ul>
 <li>Dataset-sensitive filtering, based on the median absolute deviation
 (MAD) from the median value of each QC metric across all cells. For
-“number of UMI” metric, only a lower tail is used.</li>
+“number of UMI” metric, only a lower tail is used (<a href="https://bioconductor.org/books/release/OSCA.basic/quality-control.html#quality-control-outlier" class="external-link">theory</a>.</li>
 <li>Custom filtering, based on fixed thresholds. For “number of UMI”
-metric, both upper and lower bounds are used.</li>
+metric, both upper and lower bounds are used (<a href="https://bioconductor.org/books/release/OSCA.basic/quality-control.html#fixed-qc" class="external-link">theory</a>.</li>
 <li>In both filtering types, violation of only one metric threshold
 leads to removal of a cell. More technically, metric filters are reduced
 by <strong>or</strong> operator.</li>
 </ul>
 </li>
-<li>Gene filtering (optional) based on minimum number of UMI per cell
-and minimum ratio of cells expressing a gene.
+<li>Gene filtering (optional) based on a minimum number of UMI per cell
+and a minimum ratio of cells expressing a gene.
 <ul>
 <li>A gene is considered expressed when number of its UMI across all
 cells is greater than X and at the same time it is expressed in at least
@@ -315,7 +334,9 @@ clustering.</p>
 <p><a href="https://onco.img.cas.cz/novotnyj/scdrake/single_sample/pbmc1k/02_norm_clustering/02_norm_clustering.html" class="external-link">📜
 Example report</a></p>
 <p><a href="https://onco.img.cas.cz/novotnyj/scdrake/single_sample/pbmc1k/02_norm_clustering/02_norm_clustering_simple.html" class="external-link">📜
-Example simplified report</a></p>
+Example simplified report</a> (<a href="https://github.com/bioinfocz/scdrake/blob/main/tests/testthat/run_pipeline_config_patches/single_sample_pbmc1k_full/02_norm_clustering.default.yaml" class="external-link">used
+config</a>)</p>
+<p>🪜 Structure</p>
 <ul>
 <li>Calculation of cell cycle score and assignment of cells to phases
 (G1, G2M, S) using the list of cell cycle genes in
@@ -382,7 +403,7 @@ downstream. There are three methods to select a proper number of PCs:
 point</a>.</li>
 <li>Using the <a href="http://bioconductor.org/books/release/OSCA.advanced/dimensionality-reduction-redux.html#using-the-technical-noise" class="external-link">technical
 noise</a>.</li>
-<li>Using the fixed number of PCs.</li>
+<li>Using a fixed number of PCs.</li>
 </ul>
 </li>
 <li>
@@ -395,10 +416,11 @@ clustering</a> (mutual nearest neighbors) using Louvain and Walktrap
 algorithms.</li>
 <li>
 <a href="https://bioconductor.org/books/release/OSCA.basic/clustering.html#vector-quantization-with-k-means" class="external-link">K-means
-clustering</a> using both custom numbers of K and best K selection.</li>
+clustering</a> using both defined numbers of K and best K
+selection.</li>
 <li>
 <a href="https://bioconductor.org/packages/release/bioc/html/SC3.html" class="external-link">Single-Cell
-Consensus Clustering</a> (SC3) with custom numbers of clusters.</li>
+Consensus Clustering</a> (SC3) with defined numbers of clusters.</li>
 </ul>
 </li>
 <li>Cell type annotation using <a href="https://github.com/LTLA/SingleR" class="external-link">SingleR</a>. More details are
@@ -408,9 +430,6 @@ the underlying method is described <a href="http://bioconductor.org/books/releas
 <li>Reference datasets can be taken from the <a href="https://github.com/LTLA/celldex" class="external-link">celldex</a>
 package or an arbitrary <code>SingleCellExperiment</code> /
 <code>SummarizedExperiment</code> object can be loaded from a file.</li>
-<li>
-<a href="https://github.com/bioinfocz/scdrake" class="external-link">scdrake</a> is using a more recent version of the
-original <a href="https://github.com/LTLA/SingleR" class="external-link">SingleR</a> located <a href="https://github.com/LTLA/SingleR" class="external-link">here</a>.</li>
 </ul>
 </li>
 <li>Assignment of cells to predefined groupings based on existing data.
@@ -464,31 +483,33 @@ method can be integrated.</p>
 chapter</a>.</p>
 <p>⚙️ Config and targets: <code><a href="../articles/stage_integration.html">vignette("stage_integration")</a></code></p>
 <p><a href="https://onco.img.cas.cz/novotnyj/scdrake/integration/01_integration/01_integration.html" class="external-link">📜
-Example report</a></p>
+Example report</a> (<a href="https://github.com/bioinfocz/scdrake/blob/main/tests/testthat/run_pipeline_config_patches/integration/01_integration.default.yaml" class="external-link">used
+config</a>)</p>
+<p>🪜 Structure</p>
 <ul>
 <li>Reading in data from <code>drake</code> caches of multiple
 single-sample pipelines.</li>
 <li>Subsetting to common column and row data, and metadata.</li>
-<li>Combining of HVGs:
+<li>Normalization of each sample for inter-batch sequencing depth
+(<code><a href="https://rdrr.io/pkg/batchelor/man/multiBatchNorm.html" class="external-link">batchelor::multiBatchNorm()</a></code>, <a href="http://bioconductor.org/books/3.15/OSCA.multisample/integrating-datasets.html#slower-setup" class="external-link">theory</a>).</li>
+<li>Combining of HVGs by either (<a href="http://bioconductor.org/books/3.15/OSCA.multisample/integrating-datasets.html#slower-setup" class="external-link">theory</a>):
 <ul>
-<li>Combine HVG metric (gene variance or CV2), then apply top HVGs
-selection as in the single-sample pipeline. All samples must have the
-same HVG metric used before.</li>
-<li>Combine HVGs by their IDs: intersection, union, or take them all
-(without duplicates).</li>
+<li>A HVG metric (gene variance or CV2), then apply top HVGs selection
+as in the single-sample pipeline. All samples must have the same HVG
+metric used before.</li>
+<li>Set operations (without duplicates): intersection, union, or take
+them all.</li>
 </ul>
 </li>
-<li>Normalization of each sample for inter-batch sequencing depth.</li>
 <li>Perform integration using one or more methods:
 <ul>
-<li>Rescaling (<code><a href="https://rdrr.io/pkg/batchelor/man/rescaleBatches.html" class="external-link">batchelor::rescaleBatches()</a></code>): scale counts
-so that the average count within each batch is the same for each
-gene.</li>
-<li>Regression (<code><a href="https://rdrr.io/pkg/batchelor/man/regressBatches.html" class="external-link">batchelor::regressBatches()</a></code>): fit a linear
-model to each gene regress out uninteresting factors of variation,
-returning a matrix of residuals.</li>
-<li>Fast mutual nearest neighbors
-(<code><a href="https://rdrr.io/pkg/batchelor/man/fastMNN.html" class="external-link">batchelor::fastMNN()</a></code>).</li>
+<li>Rescaling (<code><a href="https://rdrr.io/pkg/batchelor/man/rescaleBatches.html" class="external-link">batchelor::rescaleBatches()</a></code>, <a href="http://bioconductor.org/books/3.15/OSCA.multisample/integrating-datasets.html#by-rescaling-the-counts" class="external-link">theory</a>):
+scale counts so that the average count within each batch is the same for
+each gene.</li>
+<li>Regression (<code><a href="https://rdrr.io/pkg/batchelor/man/regressBatches.html" class="external-link">batchelor::regressBatches()</a></code>, <a href="http://bioconductor.org/books/3.15/OSCA.multisample/integrating-datasets.html#by-fitting-a-linear-model" class="external-link">theory</a>):
+fit a linear model to each gene regress out uninteresting factors of
+variation, returning a matrix of residuals.</li>
+<li>Fast mutual nearest neighbors (<code><a href="https://rdrr.io/pkg/batchelor/man/fastMNN.html" class="external-link">batchelor::fastMNN()</a></code>, <a href="http://bioconductor.org/books/3.15/OSCA.multisample/integrating-datasets.html#mnn-correction" class="external-link">theory</a>).</li>
 </ul>
 </li>
 </ul>
@@ -524,14 +545,16 @@ the agreement between clusterings.</li>
 </h3>
 <p>This stage basically reproduces the clustering and cell type
 annotation steps in the <code>02_norm_clustering</code> stage of the
-single-sample pipeline. The only difference is <strong>user selection of
-a final integration method, which will be used downstream.</strong>
-HVGs, reduced dimensions, and selected markers are already computed in
-the previous stage (<code>01_integration</code>).</p>
+single-sample pipeline. The only difference is the <strong>user
+selection of a final integration method which will be used
+downstream.</strong> HVGs, reduced dimensions, and selected markers are
+already computed in the previous stage
+(<code>01_integration</code>).</p>
 <p>⚙️ Config and targets:
 <code><a href="../articles/stage_int_clustering.html">vignette("stage_int_clustering")</a></code></p>
 <p><a href="https://onco.img.cas.cz/novotnyj/scdrake/integration/02_int_clustering/02_int_clustering.html" class="external-link">📜
-Example report</a></p>
+Example report</a> (<a href="https://github.com/bioinfocz/scdrake/blob/main/tests/testthat/run_pipeline_config_patches/integration/02_int_clustering.default.yaml" class="external-link">used
+config</a>)</p>
 <hr>
 </div>
 </div>
@@ -548,9 +571,12 @@ markers (“global markers”).</p>
 <p>⚙️ Config and targets:
 <code><a href="../articles/stage_cluster_markers.html">vignette("stage_cluster_markers")</a></code></p>
 <p><a href="https://onco.img.cas.cz/novotnyj/scdrake/single_sample/pbmc1k/cluster_markers/cluster_markers.html" class="external-link">📜
-Example report for PBMC 1k data</a></p>
+Example report for PBMC 1k data</a> (<a href="https://github.com/bioinfocz/scdrake/blob/main/tests/testthat/run_pipeline_config_patches/single_sample_pbmc1k_full/cluster_markers.default.yaml" class="external-link">used
+config</a>)</p>
 <p><a href="https://onco.img.cas.cz/novotnyj/scdrake/integration/cluster_markers/cluster_markers.html" class="external-link">📜
-Example report for integrated data</a></p>
+Example report for integrated data</a> (<a href="https://github.com/bioinfocz/scdrake/blob/main/tests/testthat/run_pipeline_config_patches/integration/cluster_markers.default.yaml" class="external-link">used
+config</a>)</p>
+<p>🪜 Structure</p>
 <ul>
 <li>
 <a href="https://bioconductor.org/books/release/OSCA.basic/marker-detection.html" class="external-link">Calculation
@@ -592,9 +618,11 @@ related to individual comparisons of levels of cell groupings. Hence
 compared -&gt; they are put <em>in contrast</em>.</p>
 <p>⚙️ Config and targets: <code><a href="../articles/stage_contrasts.html">vignette("stage_contrasts")</a></code></p>
 <p><a href="https://onco.img.cas.cz/novotnyj/scdrake/single_sample/pbmc1k/contrasts/contrasts.html" class="external-link">📜
-Example report for PBMC 1k data</a></p>
+Example report for PBMC 1k data</a> (<a href="https://github.com/bioinfocz/scdrake/blob/main/tests/testthat/run_pipeline_config_patches/single_sample_pbmc1k_full/contrasts.default.yaml" class="external-link">used
+config</a>)</p>
 <p><a href="https://onco.img.cas.cz/novotnyj/scdrake/integration/contrasts/contrasts.html" class="external-link">📜
-Example report for integrated data</a></p>
+Example report for integrated data</a> (<a href="https://github.com/bioinfocz/scdrake/blob/main/tests/testthat/run_pipeline_config_patches/integration/contrasts.default.yaml" class="external-link">used
+config</a>)</p>
 </div>
 </div>
   </div>
