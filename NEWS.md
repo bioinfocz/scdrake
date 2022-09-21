@@ -2,6 +2,7 @@
 
 - Simplified default configs, vignettes updated accordingly.
 - Minor updates in some vignettes.
+- Added pipeline [diagrams](diagrams/README.md).
 
 # scdrake 1.3.1
 

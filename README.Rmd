@@ -16,6 +16,7 @@ knitr::opts_chunk$set(
 [![NEWS: updates](https://img.shields.io/badge/NEWS-updates-informational)](NEWS.md)
 [![Documentation and vignettes](https://img.shields.io/badge/Documentation%20&%20vignettes-bioinfocz.github.io/scdrake-informational)](https://bioinfocz.github.io/scdrake)
 [![Overview and outputs](https://img.shields.io/badge/Overview%20&%20outputs-vignette("pipeline_overview")-informational)](https://bioinfocz.github.io/scdrake/articles/pipeline_overview.html)
+[![Pipeline diagram](https://img.shields.io/badge/Pipeline%20diagram-Show-informational)](https://github.com/bioinfocz/scdrake/blob/main/diagrams/pipeline_diagram.pdf)
 ![License](https://img.shields.io/github/license/bioinfocz/scdrake)
 [![Lifecycle: experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
 [![R-CMD-check-bioc](https://github.com/bioinfocz/scdrake/actions/workflows/check-bioc.yaml/badge.svg?branch=main)](https://github.com/bioinfocz/scdrake/actions/workflows/check-bioc.yaml)
@@ -46,7 +47,8 @@ The main features of the `{scdrake}` pipeline are:
 `{scdrake}` is aimed at both non-technical and bioinformatic public: both will benefit from reports and visualizations,
 and the latter also from the possibility to utilize all benefits of `{drake}` for custom analyses.
 
-The pipeline structure along with diagrams and links to outputs is described in `vignette("pipeline_overview")`
+The pipeline structure along with [diagrams](https://github.com/bioinfocz/scdrake/blob/main/diagrams/README.md)
+and links to outputs is described in `vignette("pipeline_overview")`
 ([link](https://bioinfocz.github.io/scdrake/articles/pipeline_overview.html)).
 
 Huge thanks go to the authors of the
@@ -57,8 +59,8 @@ methods and recommendations is `{scdrake}` largely based.
 
 # Installation instructions
 
-`{scdrake}` is currently not released on [CRAN](https://cran.r-project.org),
-however, you can install its latest stable version from GitHub using the following code:
+`{scdrake}` is currently not released on [CRAN](https://cran.r-project.org), however, you can install its latest
+stable version from GitHub using the following code:
 
 ```{r install_stable, include = FALSE}
 version <- desc::desc(file = "DESCRIPTION")$get_version()

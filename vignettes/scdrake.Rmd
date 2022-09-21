@@ -247,7 +247,9 @@ Each pipeline stage has its own vignette describing its configuration parameters
 At <https://bioinfocz.github.io/scdrake> simply navigate to the top dropdown menu Articles and choose a stage you are
 interested in. Also, in `config/pipeline.yaml` there are commented the summary targets for each stage - HTML reports.
 
-For a more schematic overview of pipelines and stages see `vignette("pipeline_overview")` (also includes a diagram).
+For a more schematic overview of pipelines and stages see `vignette("pipeline_overview")`
+(also includes [diagrams](https://github.com/bioinfocz/scdrake/blob/main/diagrams/README.md)).
+
 Advanced users might be interested in looking into source code of `{scdrake}`'s [plans](https://github.com/bioinfocz/scdrake/tree/main/R)
 (files named `plans_*.R`).
 

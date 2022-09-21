@@ -18,14 +18,24 @@ vignette: >
 (which were processed by the single-sample pipeline before). As for now, each pipeline consists of
 two subpipelines (referred to as *stages*), and two stages common to both single-sample and integration pipelines.
 
+[![A high-level diagram of `{scdrake}` pipelines.](pipeline_overview.png)](https://github.com/bioinfocz/scdrake/blob/main/diagrams/pipeline_overview.pdf)
+
+A more detailed diagram with target structure can be found [here](https://github.com/bioinfocz/scdrake/blob/main/diagrams/pipeline_overview.pdf).
+
 Each stage has its own config, plus there is a main config for each pipeline.
 You can read more about configs in a separate `vignette("scdrake_config")`.
 Each stage also outputs a report in HTML format with rich graphics.
 
+Advanced users might be interested in looking into source code of `{scdrake}`'s [plans](https://github.com/bioinfocz/scdrake/tree/main/R)
+(files named `plans_*.R`).
+
 Pipeline steps are mostly based on recommendations given in a great book
 [Orchestrating Single-Cell Analysis with Bioconductor](https://bioconductor.org/books/release/OSCA/).
 
+# Example pipeline output
+
 **You can inspect output from the pipeline [here](https://onco.img.cas.cz/novotnyj/scdrake/).**
+
 The used datasets are:
 
 - [PBMC 1k](https://www.10xgenomics.com/resources/datasets/1-k-pbm-cs-from-a-healthy-donor-v-3-chemistry-3-standard-3-0-0)
