@@ -1,5 +1,5 @@
 ---
-title: "Input and quality control stage"
+title: "Input and quality control stage (`01_input_qc`)"
 description: "01_input_qc stage of the single-sample pipeline."
 date: "`r Sys.Date()`"
 package: scdrake

@@ -1,5 +1,5 @@
 ---
-title: "Post-integration clustering stage"
+title: "Post-integration clustering stage (`02_int_clustering`)"
 description: "02_int_clustering stage of the integration pipeline."
 date: "`r Sys.Date()`"
 package: scdrake

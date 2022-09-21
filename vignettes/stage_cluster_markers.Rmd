@@ -1,5 +1,5 @@
 ---
-title: "Cluster markers stage"
+title: "Cluster markers stage (`cluster_markers`)"
 date: "`r Sys.Date()`"
 package: scdrake
 output:

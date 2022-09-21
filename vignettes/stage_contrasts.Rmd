@@ -1,5 +1,5 @@
 ---
-title: "Contrasts stage"
+title: "Contrasts stage (`contrasts`)"
 date: "`r Sys.Date()`"
 package: scdrake
 output:

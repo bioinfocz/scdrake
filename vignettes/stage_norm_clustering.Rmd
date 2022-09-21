@@ -1,5 +1,5 @@
 ---
-title: "Normalization and clustering stage"
+title: "Normalization and clustering stage (`02_norm_clustering`)"
 description: "02_norm_clustering stage of the single-sample pipeline."
 date: "`r Sys.Date()`"
 package: scdrake

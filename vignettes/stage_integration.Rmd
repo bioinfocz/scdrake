@@ -1,5 +1,5 @@
 ---
-title: "Integration stage"
+title: "Integration stage (`01_integration`)"
 description: "01_integration stage of the integration pipeline."
 date: "`r Sys.Date()`"
 package: scdrake
