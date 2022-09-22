@@ -17,6 +17,7 @@ on:
       - 'NAMESPACE'
       - '.github/**.md'
       - '.github/workflows/update-docs.yaml'
+      - 'diagrams/**'
   pull_request:
     branches:
       - '**'
@@ -29,6 +30,7 @@ on:
       - 'NAMESPACE'
       - '.github/**.md'
       - '.github/workflows/update-docs.yaml'
+      - 'diagrams/**'
 concurrency:
   group: main
 
