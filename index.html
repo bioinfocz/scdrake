@@ -206,8 +206,8 @@
 <div class="page-header"><h1 id="scdrake">scdrake<a class="anchor" aria-label="anchor" href="#scdrake"></a>
 </h1></div>
 
-<p><code>{scdrake}</code> is a scalable and reproducible pipeline for secondary analysis of droplet-based single-cell RNA-seq data. <code>{scdrake}</code> is an R package built on top of the <a href="https://docs.ropensci.org/drake" class="external-link">drake</a> package, a <a href="https://www.gnu.org/software/make" class="external-link">Make</a>-like pipeline toolkit for <a href="https://www.r-project.org" class="external-link">R language</a>.</p>
-<p>The main features of the <code>{scdrake}</code> pipeline are:</p>
+<p><a href="https://github.com/bioinfocz/scdrake" class="external-link">scdrake</a> is a scalable and reproducible pipeline for secondary analysis of droplet-based single-cell RNA-seq data. <a href="https://github.com/bioinfocz/scdrake" class="external-link">scdrake</a> is an R package built on top of the <a href="https://docs.ropensci.org/drake" class="external-link">drake</a> package, a <a href="https://www.gnu.org/software/make" class="external-link">Make</a>-like pipeline toolkit for <a href="https://www.r-project.org" class="external-link">R language</a>.</p>
+<p>The main features of the <a href="https://github.com/bioinfocz/scdrake" class="external-link">scdrake</a> pipeline are:</p>
 <ul>
 <li>Import of scRNA-seq data: <a href="https://support.10xgenomics.com/single-cell-gene-expression/software/pipelines/latest/what-is-cell-ranger" class="external-link">10x Genomics Cell Ranger</a> output, delimited table, or <code>SingleCellExperiment</code> object.</li>
 <li>Quality control and filtering of cells and genes, removal of empty droplets.</li>
@@ -215,38 +215,42 @@
 <li>Cell type annotation.</li>
 <li>Integration of multiple datasets.</li>
 <li>Computation of cluster markers and differentially expressed genes between clusters (denoted as “contrasts”).</li>
-<li>Rich graphical and HTML outputs based on customizable RMarkdown documents.<ul><li>You can find links to example outputs <a href="https://bioinfocz.github.io/scdrake/articles/pipeline_overview.html">here</a>.</li></ul>
+<li>Rich graphical and HTML outputs based on customizable RMarkdown documents.
+<ul>
+<li>You can find links to example outputs <a href="https://bioinfocz.github.io/scdrake/articles/pipeline_overview.html">here</a>.</li>
+</ul>
 </li>
-<li>Thanks to <a href="https://docs.ropensci.org/drake" class="external-link">drake</a>, the pipeline is highly efficient, scalable and reproducible, and also extendable.<ul>
+<li>Thanks to <a href="https://docs.ropensci.org/drake" class="external-link">drake</a>, the pipeline is highly efficient, scalable and reproducible, and also extendable.
+<ul>
 <li>Want to change some parameter? No problem! Only parts of the pipeline which changed will rerun, while up-to-date ones will be skipped.</li>
 <li>Want to reuse the intermediate results for your own analyses? No problem! The pipeline has smartly defined checkpoints which can be loaded from a <a href="https://docs.ropensci.org/drake" class="external-link">drake</a> cache.</li>
 <li>Want to extend the pipeline? No problem! The pipeline definition is just an R object which can be arbitrarily extended.</li>
 </ul>
 </li>
 </ul>
-<p><code>{scdrake}</code> is aimed at both non-technical and bioinformatic public: both will benefit from reports and visualizations, and the latter also from the possibility to utilize all benefits of <a href="https://docs.ropensci.org/drake" class="external-link">drake</a> for custom analyses.</p>
+<p><a href="https://github.com/bioinfocz/scdrake" class="external-link">scdrake</a> is aimed at both non-technical and bioinformatic public: both will benefit from reports and visualizations, and the latter also from the possibility to utilize all benefits of <a href="https://docs.ropensci.org/drake" class="external-link">drake</a> for custom analyses.</p>
 <p>The pipeline structure along with <a href="https://github.com/bioinfocz/scdrake/blob/main/diagrams/README.md" class="external-link">diagrams</a> and links to outputs is described in <code><a href="articles/pipeline_overview.html">vignette("pipeline_overview")</a></code> (<a href="https://bioinfocz.github.io/scdrake/articles/pipeline_overview.html">link</a>).</p>
-<p>Huge thanks go to the authors of the <a href="https://bioconductor.org/books/release/OSCA" class="external-link">Orchestrating Single-Cell Analysis with Bioconductor</a> book on whose methods and recommendations is <code>{scdrake}</code> largely based.</p>
+<p>Huge thanks go to the authors of the <a href="https://bioconductor.org/books/release/OSCA" class="external-link">Orchestrating Single-Cell Analysis with Bioconductor</a> book on whose methods and recommendations is <a href="https://github.com/bioinfocz/scdrake" class="external-link">scdrake</a> largely based.</p>
 <hr>
 </div>
 <div class="section level1">
 <h1 id="installation-instructions">Installation instructions<a class="anchor" aria-label="anchor" href="#installation-instructions"></a>
 </h1>
-<p><code>{scdrake}</code> is currently not released on <a href="https://cran.r-project.org" class="external-link">CRAN</a>, however, you can install its latest stable version from GitHub using the following code:</p>
+<p><a href="https://github.com/bioinfocz/scdrake" class="external-link">scdrake</a> is currently not released on <a href="https://cran.r-project.org" class="external-link">CRAN</a>, however, you can install its latest stable version from GitHub using the following code:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw">if</span> <span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/ns-load.html" class="external-link">requireNamespace</a></span><span class="op">(</span><span class="st">"BiocManager"</span>, quietly <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"BiocManager"</span><span class="op">)</span></span>
 <span><span class="op">}</span></span>
-<span><span class="fu">BiocManager</span><span class="fu">::</span><span class="fu">install</span><span class="op">(</span>version <span class="op">=</span> <span class="st">"3.15"</span><span class="op">)</span></span>
-<span><span class="fu">BiocManager</span><span class="fu">::</span><span class="fu">install</span><span class="op">(</span><span class="st">"bioinfocz/scdrake@v1.3.2"</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu">BiocManager</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/BiocManager/man/install.html" class="external-link">install</a></span><span class="op">(</span>version <span class="op">=</span> <span class="st">"3.15"</span><span class="op">)</span></span>
+<span><span class="fu">BiocManager</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/BiocManager/man/install.html" class="external-link">install</a></span><span class="op">(</span><span class="st">"bioinfocz/scdrake@v1.3.2"</span><span class="op">)</span></span></code></pre></div>
 <p>For development version use</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw">if</span> <span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/ns-load.html" class="external-link">requireNamespace</a></span><span class="op">(</span><span class="st">"BiocManager"</span>, quietly <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"BiocManager"</span><span class="op">)</span></span>
 <span><span class="op">}</span></span>
-<span><span class="fu">BiocManager</span><span class="fu">::</span><span class="fu">install</span><span class="op">(</span>version <span class="op">=</span> <span class="st">"3.15"</span><span class="op">)</span></span>
-<span><span class="fu">BiocManager</span><span class="fu">::</span><span class="fu">install</span><span class="op">(</span><span class="st">"bioinfocz/scdrake"</span><span class="op">)</span></span></code></pre></div>
-<p>In case you <strong>won’t</strong> be using <code>{scdrake}</code> from within the RStudio, you will need to install <a href="https://pandoc.org/" class="external-link">pandoc</a>, which is used for rendering of HTML reports.</p>
+<span><span class="fu">BiocManager</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/BiocManager/man/install.html" class="external-link">install</a></span><span class="op">(</span>version <span class="op">=</span> <span class="st">"3.15"</span><span class="op">)</span></span>
+<span><span class="fu">BiocManager</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/BiocManager/man/install.html" class="external-link">install</a></span><span class="op">(</span><span class="st">"bioinfocz/scdrake"</span><span class="op">)</span></span></code></pre></div>
+<p>In case you <strong>won’t</strong> be using <a href="https://github.com/bioinfocz/scdrake" class="external-link">scdrake</a> from within the RStudio, you will need to install <a href="https://pandoc.org/" class="external-link">pandoc</a>, which is used for rendering of HTML reports.</p>
 <ul>
 <li>For Ubuntu: <code>sudo apt install pandoc</code>
 </li>
@@ -268,7 +272,7 @@
 <h3 id="macos">MacOS<a class="anchor" aria-label="anchor" href="#macos"></a>
 </h3>
 <p>You can install the required libraries with <a href="https://brew.sh/" class="external-link">Homebrew</a> package manager:</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1"></a><span class="ex">brew</span> install libxml2 imagemagick@6 harfbuzz fribidi libgit2 geos</span></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="ex">brew</span> install libxml2 imagemagick@6 harfbuzz fribidi libgit2 geos</span></code></pre></div>
 <hr>
 </div>
 </div>
@@ -276,20 +280,23 @@
 <h2 id="using-renv-optional">Using <code>renv</code> (optional)<a class="anchor" aria-label="anchor" href="#using-renv-optional"></a>
 </h2>
 <p><a href="https://rstudio.github.io/renv/" class="external-link">renv</a> package allows to install other packages into local, project-specific library, and thus, those won’t interfere with system-wide packages.</p>
-<details><p><summary>▶ Click for details</summary></p>
-<p>Because <code>{scdrake}</code> uses a lot of packages, we also encourage users to use the <a href="https://rstudio.github.io/renv/" class="external-link">renv</a> package, which will install all dependencies to a local, private, project library. In case you have already initialized a new <code>{scdrake}</code> project (as described in <code><a href="articles/scdrake.html">vignette("scdrake")</a></code>) and your working directory is in the project’s root, you can initialize a new <a href="https://rstudio.github.io/renv/" class="external-link">renv</a> private library with</p>
+<details><summary>
+▶ Click for details
+</summary><p>Because <a href="https://github.com/bioinfocz/scdrake" class="external-link">scdrake</a> uses a lot of packages, we also encourage users to use the <a href="https://rstudio.github.io/renv/" class="external-link">renv</a> package, which will install all dependencies to a local, private, project library. In case you have already initialized a new <a href="https://github.com/bioinfocz/scdrake" class="external-link">scdrake</a> project (as described in <code><a href="articles/scdrake.html">vignette("scdrake")</a></code>) and your working directory is in the project’s root, you can initialize a new <a href="https://rstudio.github.io/renv/" class="external-link">renv</a> private library with</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">renv</span><span class="fu">::</span><span class="fu">restore</span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<p>It will use the <code>renv.lock</code> file (which is bundled with <code>{scdrake}</code> package) holding all dependencies and their versions.</p>
-<p>To save time and space, you can also symlink the <code>renv/library</code> directory to multiple <code>{scdrake}</code> projects.</p>
-<p>Alternatively, just install <code>{scdrake}</code> from within the activated renv and all dependencies will be installed to the private library. But keep in mind in that case dependencies will be installed from package’s <code>DESCRIPTION</code> file in which package versions are not specified, and thus the latest (and possibly untested) package versions will be installed.</p></details><hr>
+<p>It will use the <code>renv.lock</code> file (which is bundled with <a href="https://github.com/bioinfocz/scdrake" class="external-link">scdrake</a> package) holding all dependencies and their versions.</p>
+<p>To save time and space, you can also symlink the <code>renv/library</code> directory to multiple <a href="https://github.com/bioinfocz/scdrake" class="external-link">scdrake</a> projects.</p>
+<p>Alternatively, just install <a href="https://github.com/bioinfocz/scdrake" class="external-link">scdrake</a> from within the activated renv and all dependencies will be installed to the private library. But keep in mind in that case dependencies will be installed from package’s <code>DESCRIPTION</code> file in which package versions are not specified, and thus the latest (and possibly untested) package versions will be installed.</p>
+</details><hr>
 </div>
 <div class="section level2">
 <h2 id="vignettes-and-other-readings">Vignettes and other readings<a class="anchor" aria-label="anchor" href="#vignettes-and-other-readings"></a>
 </h2>
 <p>See <a href="https://bioinfocz.github.io/scdrake" class="uri">https://bioinfocz.github.io/scdrake</a> for a documentation website where links to vignettes below become real :-)</p>
 <ul>
-<li>Guides:<ul>
+<li>Guides:
+<ul>
 <li>01 Quick start (single-sample pipeline): <code><a href="articles/scdrake.html">vignette("scdrake")</a></code>
 </li>
 <li>02 Integration pipeline guide: <code><a href="articles/scdrake_integration.html">vignette("scdrake_integration")</a></code>
@@ -297,12 +304,16 @@
 <li>Extending the pipeline: <code><a href="articles/scdrake_extend.html">vignette("scdrake_extend")</a></code>
 </li>
 <li>
-<a href="https://docs.ropensci.org/drake" class="external-link">drake</a> basics: <code><a href="articles/drake_basics.html">vignette("drake_basics")</a></code><ul><li>Or the official <a href="https://docs.ropensci.org/drake" class="external-link">drake</a> book: <a href="https://books.ropensci.org/drake/" class="external-link uri">https://books.ropensci.org/drake/</a>
-</li></ul>
+<a href="https://docs.ropensci.org/drake" class="external-link">drake</a> basics: <code><a href="articles/drake_basics.html">vignette("drake_basics")</a></code>
+<ul>
+<li>Or the official <a href="https://docs.ropensci.org/drake" class="external-link">drake</a> book: <a href="https://books.ropensci.org/drake/" class="external-link uri">https://books.ropensci.org/drake/</a>
 </li>
 </ul>
 </li>
-<li>General information:<ul>
+</ul>
+</li>
+<li>General information:
+<ul>
 <li>Pipeline overview: <code><a href="articles/pipeline_overview.html">vignette("pipeline_overview")</a></code>
 </li>
 <li>FAQ &amp; Howtos: <code><a href="articles/scdrake_faq.html">vignette("scdrake_faq")</a></code>
@@ -315,29 +326,34 @@
 </li>
 </ul>
 </li>
-<li>General configs:<ul>
+<li>General configs:
+<ul>
 <li>Pipeline config: <code><a href="articles/config_pipeline.html">vignette("config_pipeline")</a></code>
 </li>
 <li>Main config: <code><a href="articles/config_main.html">vignette("config_main")</a></code>
 </li>
 </ul>
 </li>
-<li>Targets and config parameters for each stage:<ul>
-<li>Single-sample pipeline:<ul>
+<li>Targets and config parameters for each stage:
+<ul>
+<li>Single-sample pipeline:
+<ul>
 <li>Reading in data, filtering, quality control (<code>01_input_qc</code>): <code><a href="articles/stage_input_qc.html">vignette("stage_input_qc")</a></code>
 </li>
 <li>Normalization, HVG selection, dimensionality reduction, clustering, cell type annotation (<code>02_norm_clustering</code>): <code><a href="articles/stage_norm_clustering.html">vignette("stage_norm_clustering")</a></code>
 </li>
 </ul>
 </li>
-<li>Integration pipeline:<ul>
+<li>Integration pipeline:
+<ul>
 <li>Reading in data and integration (<code>01_integration</code>): <code><a href="articles/stage_integration.html">vignette("stage_integration")</a></code>
 </li>
 <li>Post-integration clustering (<code>02_int_clustering</code>): <code><a href="articles/stage_int_clustering.html">vignette("stage_int_clustering")</a></code>
 </li>
 </ul>
 </li>
-<li>Common:<ul>
+<li>Common:
+<ul>
 <li>Cluster markers stage: <code><a href="articles/stage_cluster_markers.html">vignette("stage_cluster_markers")</a></code>
 </li>
 <li>Contrasts stage: <code><a href="articles/stage_contrasts.html">vignette("stage_contrasts")</a></code>
@@ -347,7 +363,7 @@
 </ul>
 </li>
 </ul>
-<p>We encourage all users to read <a href="https://books.ropensci.org/drake" class="external-link">basics</a> of the <a href="https://docs.ropensci.org/drake" class="external-link">drake</a> package. While it is not necessary to know all <a href="https://docs.ropensci.org/drake" class="external-link">drake</a> internals to successfully run the <code>{scdrake}</code> pipeline, its knowledge is a plus. You can read the minimum basics in <code><a href="articles/drake_basics.html">vignette("drake_basics")</a></code>.</p>
+<p>We encourage all users to read <a href="https://books.ropensci.org/drake" class="external-link">basics</a> of the <a href="https://docs.ropensci.org/drake" class="external-link">drake</a> package. While it is not necessary to know all <a href="https://docs.ropensci.org/drake" class="external-link">drake</a> internals to successfully run the <a href="https://github.com/bioinfocz/scdrake" class="external-link">scdrake</a> pipeline, its knowledge is a plus. You can read the minimum basics in <code><a href="articles/drake_basics.html">vignette("drake_basics")</a></code>.</p>
 <p>Also, the prior knowledge of Bioconductor and its classes (especially the <a href="https://bioconductor.org/packages/release/bioc/html/SingleCellExperiment.html" class="external-link">SingleCellExperiment</a>) is considerable.</p>
 <hr>
 </div>
@@ -357,20 +373,20 @@
 <p>Below is the citation output from using <code>citation("scdrake")</code> in R. Please run this yourself to check for any updates on how to cite <strong>scdrake</strong>.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/utils/citation.html" class="external-link">citation</a></span><span class="op">(</span><span class="st">"scdrake"</span><span class="op">)</span>, bibtex <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
-<div class="sourceCode" id="cb6"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1"></a>To cite package ‘scdrake’ <span class="cf">in</span> publications use<span class="op">:</span></span>
-<span id="cb6-2"><a href="#cb6-2"></a></span>
-<span id="cb6-3"><a href="#cb6-3"></a><span class="st">  </span>Jiri Novotny and Jan <span class="kw">Kubovciak</span> (<span class="dv">2021</span>). scdrake<span class="op">:</span><span class="st"> </span>A Pipeline For 10x Chromium Single<span class="op">-</span>Cell RNA<span class="op">-</span>seq Data Analysis.</span>
-<span id="cb6-4"><a href="#cb6-4"></a>  https<span class="op">:</span><span class="er">//</span>github.com<span class="op">/</span>bioinfocz<span class="op">/</span>scdrake, https<span class="op">:</span><span class="er">//</span>bioinfocz.github.io<span class="op">/</span>scdrake.</span>
-<span id="cb6-5"><a href="#cb6-5"></a></span>
-<span id="cb6-6"><a href="#cb6-6"></a>A BibTeX entry <span class="cf">for</span> LaTeX users is</span>
-<span id="cb6-7"><a href="#cb6-7"></a></span>
-<span id="cb6-8"><a href="#cb6-8"></a>  <span class="op">@</span>Manual{,</span>
-<span id="cb6-9"><a href="#cb6-9"></a>    title =<span class="st"> </span>{scdrake<span class="op">:</span><span class="st"> </span>A Pipeline For 10x Chromium Single<span class="op">-</span>Cell RNA<span class="op">-</span>seq Data Analysis},</span>
-<span id="cb6-10"><a href="#cb6-10"></a>    author =<span class="st"> </span>{Jiri Novotny and Jan Kubovciak},</span>
-<span id="cb6-11"><a href="#cb6-11"></a>    year =<span class="st"> </span>{<span class="dv">2021</span>},</span>
-<span id="cb6-12"><a href="#cb6-12"></a>    note =<span class="st"> </span>{https<span class="op">:</span><span class="er">//</span>github.com<span class="op">/</span>bioinfocz<span class="op">/</span>scdrake, https<span class="op">:</span><span class="er">//</span>bioinfocz.github.io<span class="op">/</span>scdrake},</span>
-<span id="cb6-13"><a href="#cb6-13"></a>  }</span></code></pre></div>
-<p>Please note that the <code>{scdrake}</code> was only made possible thanks to many other R and bioinformatics software authors, which are cited either in the vignettes and/or the paper(s) describing this package.</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>To cite package ‘scdrake’ <span class="cf">in</span> publications use<span class="sc">:</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>  Jiri Novotny and Jan <span class="fu">Kubovciak</span> (<span class="dv">2021</span>). scdrake<span class="sc">:</span> A Pipeline For 10x Chromium Single<span class="sc">-</span>Cell RNA<span class="sc">-</span>seq Data Analysis.</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>  https<span class="sc">:</span><span class="er">//</span>github.com<span class="sc">/</span>bioinfocz<span class="sc">/</span>scdrake, https<span class="sc">:</span><span class="er">//</span>bioinfocz.github.io<span class="sc">/</span>scdrake.</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>A BibTeX entry <span class="cf">for</span> LaTeX users is</span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>  <span class="sc">@</span>Manual{,</span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>    title <span class="ot">=</span> {scdrake<span class="sc">:</span> A Pipeline For 10x Chromium Single<span class="sc">-</span>Cell RNA<span class="sc">-</span>seq Data Analysis},</span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>    author <span class="ot">=</span> {Jiri Novotny and Jan Kubovciak},</span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>    year <span class="ot">=</span> {<span class="dv">2021</span>},</span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>    note <span class="ot">=</span> {https<span class="sc">:</span><span class="er">//</span>github.com<span class="sc">/</span>bioinfocz<span class="sc">/</span>scdrake, https<span class="sc">:</span><span class="er">//</span>bioinfocz.github.io<span class="sc">/</span>scdrake},</span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a>  }</span></code></pre></div>
+<p>Please note that the <a href="https://github.com/bioinfocz/scdrake" class="external-link">scdrake</a> was only made possible thanks to many other R and bioinformatics software authors, which are cited either in the vignettes and/or the paper(s) describing this package.</p>
 </div>
 <div class="section level2">
 <h2 id="help-and-support">Help and support<a class="anchor" aria-label="anchor" href="#help-and-support"></a>
@@ -381,12 +397,12 @@
 <div class="section level2">
 <h2 id="contribution">Contribution<a class="anchor" aria-label="anchor" href="#contribution"></a>
 </h2>
-<p>If you want to contribute to <code>{scdrake}</code>, read the <a href="CONTRIBUTING.html">contribution guide</a>, please. All pull requests are welcome! :slightly_smiling_face:</p>
+<p>If you want to contribute to <a href="https://github.com/bioinfocz/scdrake" class="external-link">scdrake</a>, read the <a href="CONTRIBUTING.html">contribution guide</a>, please. All pull requests are welcome! :slightly_smiling_face:</p>
 </div>
 <div class="section level2">
 <h2 id="code-of-conduct">Code of Conduct<a class="anchor" aria-label="anchor" href="#code-of-conduct"></a>
 </h2>
-<p>Please note that the <code>{scdrake}</code> project is released with a <a href="https://bioinfocz.github.io/scdrake/CODE_OF_CONDUCT.html">Contributor Code of Conduct</a>. By contributing to this project, you agree to abide by its terms.</p>
+<p>Please note that the <a href="https://github.com/bioinfocz/scdrake" class="external-link">scdrake</a> project is released with a <a href="https://bioinfocz.github.io/scdrake/CODE_OF_CONDUCT.html">Contributor Code of Conduct</a>. By contributing to this project, you agree to abide by its terms.</p>
 </div>
 <div class="section level2">
 <h2 id="acknowledgements">Acknowledgements<a class="anchor" aria-label="anchor" href="#acknowledgements"></a>
@@ -400,7 +416,7 @@
 <h3 id="software-and-methods-used-by-scdrake">Software and methods used by <code>{scdrake}</code>
 <a class="anchor" aria-label="anchor" href="#software-and-methods-used-by-scdrake"></a>
 </h3>
-<p>Many things are used by <code>{scdrake}</code>, but these are really worth mentioning:</p>
+<p>Many things are used by <a href="https://github.com/bioinfocz/scdrake" class="external-link">scdrake</a>, but these are really worth mentioning:</p>
 <ul>
 <li>The <a href="https://www.bioconductor.org" class="external-link">Bioconductor</a> ecosystem.</li>
 <li>The <a href="https://bioconductor.org/books/release/OSCA" class="external-link"><em>Orchestrating Single-Cell Analysis with Bioconductor</em></a> book.</li>
@@ -413,7 +429,7 @@
 <h3 id="development-tools">Development tools<a class="anchor" aria-label="anchor" href="#development-tools"></a>
 </h3>
 <ul>
-<li>Continuous code testing is possible thanks to <a href="https://github.com/features/actions" class="external-link">GitHub actions</a> through <a href="https://usethis.r-lib.org" class="external-link">usethis</a>, <a href="https://remotes.r-lib.org" class="external-link">remotes</a>, and <a href="https://r-lib.github.io/rcmdcheck/" class="external-link">rcmdcheck</a>. Customized to use <a href="https://www.bioconductor.org/help/docker" class="external-link">Bioconductor’s docker containers</a> and <del><code>{BiocCheck}</code></del> (in the future, probably).</li>
+<li>Continuous code testing is possible thanks to <a href="https://github.com/features/actions" class="external-link">GitHub actions</a> through <a href="https://usethis.r-lib.org" class="external-link">usethis</a>, <a href="https://remotes.r-lib.org" class="external-link">remotes</a>, and <a href="https://r-lib.github.io/rcmdcheck/" class="external-link">rcmdcheck</a>. Customized to use <a href="https://www.bioconductor.org/help/docker" class="external-link">Bioconductor’s docker containers</a> and <del><a href="https://github.com/Bioconductor/BiocCheck" class="external-link">BiocCheck</a></del> (in the future, probably).</li>
 <li>Code coverage assessment is possible thanks to <a href="https://codecov.io/gh" class="external-link">codecov</a> and <a href="https://covr.r-lib.org" class="external-link">covr</a>.</li>
 <li>The <a href="https://bioinfocz.github.io/scdrake">documentation website</a> is generated by <a href="https://pkgdown.r-lib.org" class="external-link">pkgdown</a>.</li>
 <li>The code is styled automatically thanks to <a href="https://github.com/r-lib/styler" class="external-link">styler</a>.</li>
@@ -490,7 +506,7 @@
 
 <div class="pkgdown">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.9000.</p>
   <p class="preferably">Using <a href="https://preferably.amirmasoudabdol.name/?source=footer" class="external-link">preferably</a> template.</p>
 </div>
 
