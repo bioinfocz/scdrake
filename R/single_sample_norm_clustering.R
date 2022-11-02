@@ -90,16 +90,19 @@ sce_cc_fn <- function(sce_final_input_qc, cc_genes, data = NULL) {
   )
 
   if (is_null(seu_cc)) {
+    seu_cc <- seu
     seu_cc$phase <- NA
     seu_cc$s_score <- NA
     seu_cc$g2m_score <- NA
     ## -- NA minus NA is NA, but let's be explicit here.
     seu_cc$cc_difference <- NA
+    sce_final_input_qc@metadata$cc_phase_failed <- TRUE
   } else {
     seu_cc$phase <- factor(seu_cc$Phase, levels = c("G1", "G2M", "S"))
     seu_cc$s_score <- seu_cc$S.Score
     seu_cc$g2m_score <- seu_cc$G2M.Score
     seu_cc$cc_difference <- seu_cc$s_score - seu_cc$g2m_score
+    sce_final_input_qc@metadata$cc_phase_failed <- FALSE
   }
 
   assert_that(are_equal(rownames(seu_cc@meta.data), colnames(sce_final_input_qc)))
@@ -307,20 +310,26 @@ sce_norm_hvg_fn <- function(sce_norm,
   }
 
   if (hvg_rm_cc_genes) {
-    sce_norm <- sce_remove_cc_genes(
-      sce_norm,
-      var_expl_threshold = hvg_cc_genes_var_expl_threshold,
-      hvg_metric_fit = hvg_metric_fit,
-      hvg_selection_value = hvg_selection_value,
-      hvg_metric = hvg_metric,
-      hvg_selection = hvg_selection
-    ) %>%
-      scater::runPCA(
-        name = "pca_with_cc",
-        subset_row = hvg_ids,
-        BSPARAM = BSPARAM,
-        BPPARAM = BPPARAM
-      )
+    if (sce_norm@metadata$cc_phase_failed) {
+      cli_alert_warning("Cannot remove cell cycle-related genes from HVGs: cell cycle phase could not have been estimated.")
+      sce_norm@metadata$hvg_rm_cc_genes <- FALSE
+      sce_norm <- sce_add_metadata(sce_norm, hvg_ids = hvg_ids)
+    } else {
+      sce_norm <- sce_remove_cc_genes(
+        sce_norm,
+        var_expl_threshold = hvg_cc_genes_var_expl_threshold,
+        hvg_metric_fit = hvg_metric_fit,
+        hvg_selection_value = hvg_selection_value,
+        hvg_metric = hvg_metric,
+        hvg_selection = hvg_selection
+      ) %>%
+        scater::runPCA(
+          name = "pca_with_cc",
+          subset_row = hvg_ids,
+          BSPARAM = BSPARAM,
+          BPPARAM = BPPARAM
+        )
+    }
   } else {
     sce_norm <- sce_add_metadata(sce_norm, hvg_ids = hvg_ids)
   }
@@ -372,6 +381,10 @@ sce_rm_doublets_fn <- function(sce_norm_hvg, doublet_density, max_doublet_score)
 #' @concept single_sample_norm_clustering_fn
 #' @export
 pca_phase_plots_fn <- function(sce_pca) {
+  if (sce_pca@metadata$cc_phase_failed) {
+    return(create_dummy_plot("Cell cycle phases could not be estimated."))
+  }
+
   pca_phase_plots <- list(
     plotReducedDim_mod(sce_pca, "pca", colour_by = "phase", title = "Cell cycle phases")
   )
