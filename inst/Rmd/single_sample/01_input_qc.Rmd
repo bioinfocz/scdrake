@@ -93,7 +93,7 @@ lines(barcode_ranks$rank[o], barcode_ranks$fitted[o], col = "red")
 abline(h = metadata(barcode_ranks)$knee, col = "dodgerblue", lty = 2)
 abline(h = metadata(barcode_ranks)$inflection, col = "forestgreen", lty = 2)
 if (empty_droplets_enabled) {
-  abline(h = empty_droplets_enabled, col = "firebrick", lty = 2)
+  abline(h = cfg$EMPTY_DROPLETS_LOWER, col = "firebrick", lty = 2)
   legend(
     "bottomleft",
     lty = 2,
