@@ -421,6 +421,26 @@ check_scdrake_packages <- function() {
   invisible(NULL)
 }
 
+#' @title Check for `pandoc`'s binary.
+#' @description See the `RSTUDIO_PANDOC` parameter in the `pipeline.yaml` config (`vignette("config_pipeline")`).
+#' @param cache,... Passed to `rmarkdown::find_pandoc()`.
+#' @inheritParams verbose
+#' @return Invisibly `TRUE` if the directory with `pandoc`'s binary exists, `FALSE` otherwise.
+#'
+#' @concept misc_utils
+#' @export
+check_pandoc <- function(cache = FALSE, verbose = TRUE, ...) {
+  pandoc <- rmarkdown::find_pandoc(cache = cache, ...)
+  if (is_null(pandoc$dir)) {
+    verbose %&&% cli_alert_warning(str_line(
+      "Pandoc was not found on your system, so it won't be possible to render the HTML reports. ",
+      'Check the {.field RSTUDIO_PANDOC} parameter in the {.file pipeline.yaml} config (see {.code vignette("config_pipeline")}).'
+    ))
+    return(invisible(FALSE))
+  }
+  return(invisible(TRUE))
+}
+
 #' @title Set `rstudio_drake_cache` option.
 #' @description Value of this option is used internally by `drake` to "loadd target under cursor"
 #' (it can be set in `Tools -> Modify Keyboard Shortcuts`).

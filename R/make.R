@@ -73,6 +73,7 @@ scdrake_make <- function(plan,
 
   if (!is_null(cfg_pipeline$RSTUDIO_PANDOC)) {
     withr::local_envvar(RSTUDIO_PANDOC = cfg_pipeline$RSTUDIO_PANDOC)
+    check_pandoc()
   }
 
   ## -- To fix https://github.com/rstudio/rmarkdown/issues/1632

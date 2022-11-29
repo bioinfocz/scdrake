@@ -140,13 +140,15 @@ RSTUDIO_PANDOC: null
 
 **Type:** character scalar or `null`
 
-Before pipeline is run by `run_single_sample_r()`, `run_single_sample_r()`, `run_integration_r()`, or
-`run_integration()`, the `RSTUDIO_PANDOC` is set: a path to directory with [pandoc](https://pandoc.org/)'s binary.
+A path to directory with [pandoc](https://pandoc.org/)'s binary which is required for rendering of HTML reports.
 
-This is needed if you are running this pipeline outside of RStudio, or the `pandoc` binary is not available in your `PATH`.
-Set to `null` if any condition above does not apply.
+You can ignore this if:
 
-You can also define this variable in `.Renviron` file and set it to `null` in pipeline config.
+- `Scdrake` is run in its Docker container.
+- You are running `scdrake` from RStudio (it has `pandoc` bundled).
+- `pandoc` is available in the `PATH` environment variable. You can check this by calling `system("pandoc -v")`.
+
+In `{rmarkdown}`, the used `pandoc`s binary is then resolved by `rmarkdown::find_pandoc()`.
 
 ***
 

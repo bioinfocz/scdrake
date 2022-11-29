@@ -91,6 +91,8 @@ generate_stage_report <- function(rmd_file,
     knitr::opts_knit$restore()
   })
 
+  assert_that_(check_pandoc())
+
   ## -- Locally allow evaluation of R expressions inside YAML, which is also a part of Rmd files.
   withr::local_options(yaml.eval.expr = TRUE)
 
