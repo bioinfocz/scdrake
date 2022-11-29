@@ -85,12 +85,29 @@ empty_droplets_fn <- function(sce_raw,
                               empty_droplets_enabled = TRUE,
                               BPPARAM = BiocParallel::SerialParam()) {
   if (empty_droplets_enabled) {
-    DropletUtils::emptyDrops(
-      m = counts(sce_raw), lower = empty_droplets_lower, BPPARAM = BPPARAM
+    res <- tryCatch(
+      DropletUtils::emptyDrops(
+        m = counts(sce_raw), lower = empty_droplets_lower, BPPARAM = BPPARAM
+      ),
+      error = function(e) {
+        cli::cli({
+          cli_alert_danger("{.code DropletUtils::emptyDrops()} has failed with the following error message:")
+          cli::cli_blockquote(as.character(e))
+          cli_alert_info(str_line(
+            "The most common reason is too small lower bound of UMIs for empty droplets, i.e. the error message will be ",
+            "'{.emph no counts available to estimate the ambient profile}'. ",
+            "If that happens, check the {.val EMPTY_DROPLETS_LOWER} and {.val EMPTY_DROPLETS_ENABLED} parameters ",
+            "in the {.file 01_input_qc.yaml} config file."
+          ))
+        })
+        cli_abort("{.code empty_droplets_fn()}: Cannot continue.")
+      }
     )
   } else {
-    NULL
+    res <- NULL
   }
+
+  return(res)
 }
 
 #' @title Subset cells in a `SingleCellExperiment` object to non-empty ones and add corresponding statistics.
