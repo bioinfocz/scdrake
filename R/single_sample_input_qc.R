@@ -22,6 +22,14 @@ sce_raw_fn <- function(input_data) {
     msg = "{.field INPUT_DATA$type} or {.field INPUT_DATA$path} is not set, cannot load data."
   )
 
+  assert_that_(
+    fs::file_exists(input_path),
+    msg = str_line(
+      "Cannot find the input file or directory for the {.field 01_input_qc} stage: {.file {input_path}}. ",
+      "Please check the {.file 01_input_qc.yaml} config file."
+    )
+  )
+
   if (input_type == "cellranger") {
     sce_raw <- DropletUtils::read10xCounts(input_path)
     colnames(sce_raw) <- colData(sce_raw)$Barcode
