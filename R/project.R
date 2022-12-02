@@ -122,8 +122,10 @@ init_project <- function(dir = ".",
 
   if (use_rstudio) {
     usethis::create_project(dir, rstudio = TRUE, open = FALSE)
-    fs::dir_delete(fs::path(dir, "R"))
-    fs::file_delete(fs::path(dir, ".gitignore"))
+    if (is_empty(fs::dir_ls(fs::path(dir, "R"), all = TRUE))) {
+      fs::dir_delete(fs::path(dir, "R"))
+    }
+    # fs::file_delete(fs::path(dir, ".gitignore"))
   }
 
   download_yq(verbose = verbose, ask = ask, do_check = TRUE, ...)
