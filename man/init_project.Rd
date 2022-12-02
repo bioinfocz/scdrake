@@ -5,7 +5,7 @@
 \title{Initialize a new \code{scdrake} project.}
 \usage{
 init_project(
-  dir = NULL,
+  dir = ".",
   use_rstudio = TRUE,
   set_active_project = TRUE,
   set_wd = TRUE,
@@ -17,7 +17,7 @@ init_project(
 }
 \arguments{
 \item{dir}{A character scalar: path to directory in which the project will be created.
-If \code{NULL}, the current working directory will be used. Subdirectories will be created recursively.}
+If \code{NULL}, the current working directory will be used (same as the default: \code{"."}). Subdirectories will be created recursively.}
 
 \item{use_rstudio}{A logical scalar: if \code{TRUE}, initiate an RStudio project inside \code{dir}.}
 

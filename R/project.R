@@ -28,7 +28,7 @@ copy_integration_drake_file <- function(dir, ask = TRUE, verbose = getOption("sc
 
 #' @title Initialize a new `scdrake` project.
 #' @param dir A character scalar: path to directory in which the project will be created.
-#' If `NULL`, the current working directory will be used. Subdirectories will be created recursively.
+#' If `NULL`, the current working directory will be used (same as the default: `"."`). Subdirectories will be created recursively.
 #' @param use_rstudio A logical scalar: if `TRUE`, initiate an RStudio project inside `dir`.
 #' @param set_active_project A logical scalar: if `TRUE`, set active project to `dir`.
 #' @param set_wd A logical scalar: if `TRUE`, change the current working directory to `dir`.
@@ -56,7 +56,7 @@ copy_integration_drake_file <- function(dir, ask = TRUE, verbose = getOption("sc
 #' }
 #'
 #' @export
-init_project <- function(dir = NULL,
+init_project <- function(dir = ".",
                          use_rstudio = TRUE,
                          set_active_project = TRUE,
                          set_wd = TRUE,
@@ -66,7 +66,7 @@ init_project <- function(dir = NULL,
                          ...) {
   verbose %&&% cli::cli_h1("Going to initialize a new {.pkg scdrake} project")
 
-  if (is_null(dir)) {
+  if (dir == "." || is_null(dir)) {
     dir_is_wd <- TRUE
     dir <- getwd()
     verbose %&&% cli_alert_info("Using the current working directory: {.file {dir}}")
@@ -149,7 +149,7 @@ init_project <- function(dir = NULL,
     usethis::proj_activate(dir)
   }
 
-  invisible(NULL)
+  return(invisible(NULL))
 }
 
 #' @title Update `scdrake` project files.
@@ -158,7 +158,7 @@ init_project <- function(dir = NULL,
 #' - Initial scripts for [drake::r_make()]: `_drake_single_sample.R` and `_drake_integration.R`
 #' - Update default YAML configs.
 #' @param dir A character scalar: path to `scdrake` project directory.
-#'   If `NULL`, the current working directory will be used.
+#'   If `NULL`, the current working directory will be used (same as the default: `"."`).
 #' @inheritParams pipeline_config_dir
 #' @inheritParams single_sample_config_dir
 #' @inheritParams integration_config_dir
@@ -167,7 +167,7 @@ init_project <- function(dir = NULL,
 #' @return Invisibly `NULL`.
 #'
 #' @export
-update_project <- function(dir = NULL,
+update_project <- function(dir = ".",
                            pipeline_config_dir = getOption("scdrake_pipeline_config_dir"),
                            single_sample_config_dir = getOption("scdrake_single_sample_config_dir"),
                            integration_config_dir = getOption("scdrake_integration_config_dir"),
@@ -181,7 +181,7 @@ update_project <- function(dir = NULL,
     }
   }
 
-  if (is_null(dir)) {
+  if (dir == "." || is_null(dir)) {
     dir <- getwd()
     verbose %&&% cli_alert_info("Project is located in the current working directory: {.file {dir}}")
   } else {

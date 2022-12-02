@@ -5,7 +5,7 @@
 \title{Update \code{scdrake} project files.}
 \usage{
 update_project(
-  dir = NULL,
+  dir = ".",
   pipeline_config_dir = getOption("scdrake_pipeline_config_dir"),
   single_sample_config_dir = getOption("scdrake_single_sample_config_dir"),
   integration_config_dir = getOption("scdrake_integration_config_dir"),
@@ -15,7 +15,7 @@ update_project(
 }
 \arguments{
 \item{dir}{A character scalar: path to \code{scdrake} project directory.
-If \code{NULL}, the current working directory will be used.}
+If \code{NULL}, the current working directory will be used (same as the default: \code{"."}).}
 
 \item{pipeline_config_dir}{A character scalar: path to directory with pipeline config file (\code{pipeline.yaml}).}
 
