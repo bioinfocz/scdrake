@@ -291,8 +291,7 @@ NULL
       "Annotation package {.pkg ANNOTATION_PKG} specified by {.field ANNOTATION_LIST} and {.field ORGANISM} parameters",
       "in {.file 00_main.yaml} config is not installed."
     ))
-    continue <- .confirm_menu(title = "Do you want to install this package?")
-    if (continue == 1L) {
+    if (.confirm_menu(title = "Do you want to install this package?")) {
       cli_alert_info('Calling {.code BiocManager::install("{ANNOTATION_PKG}")}')
       BiocManager::install(ANNOTATION_PKG, update = FALSE)
     }

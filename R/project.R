@@ -3,8 +3,7 @@
 
   if (ask && fs::file_exists(file_dest)) {
     cli_alert_warning("The file {.file {file_dest}} already exists.")
-    continue <- .confirm_menu()
-    if (continue != 1L) {
+    if (!.confirm_menu()) {
       cli_alert_info("Skipping...")
       return(invisible(FALSE))
     }
@@ -83,8 +82,7 @@ init_project <- function(dir = ".",
 
   if (want_continue) {
     cli_alert_warning(msg)
-    continue <- .confirm_menu()
-    if (continue != 1L) {
+    if (!.confirm_menu()) {
       cli_abort("Interrupting the project initialization.")
     }
   }
@@ -177,8 +175,7 @@ update_project <- function(dir = ".",
                            verbose = getOption("scdrake_verbose")) {
   if (ask) {
     cli_alert_warning("Updating the project files may overwrite your modifications.")
-    continue <- .confirm_menu()
-    if (continue != 1L) {
+    if (!.confirm_menu()) {
       cli_abort("Interrupting the project update.")
     }
   }

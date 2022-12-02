@@ -56,7 +56,7 @@ download_pbmc1k <- function(out_dir, ask = TRUE, verbose = getOption("scdrake_ve
   url <- "https://cf.10xgenomics.com/samples/cell-exp/3.0.0/pbmc_1k_v3/pbmc_1k_v3_raw_feature_bc_matrix.tar.gz"
   if (ask) {
     cli_alert_info("Going to download PBMC 1k dataset from 10x Genomics located at {.url {url}}")
-    if (.confirm_menu() != 1L) {
+    if (!.confirm_menu()) {
       cli_abort("Interrupting the download.")
     }
   }
@@ -72,7 +72,7 @@ download_pbmc3k <- function(out_dir, ask = TRUE, verbose = getOption("scdrake_ve
   url <- "https://cf.10xgenomics.com/samples/cell-exp/1.1.0/pbmc3k/pbmc3k_raw_gene_bc_matrices.tar.gz"
   if (ask) {
     cli_alert_info("Going to download PBMC 3k dataset from 10x Genomics located at {.url {url}}")
-    if (.confirm_menu() != 1L) {
+    if (!.confirm_menu()) {
       cli_abort("Interrupting the download.")
     }
   }

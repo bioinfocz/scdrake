@@ -105,11 +105,8 @@ download_yq <- function(url = NULL,
   if (!dry) {
     cli_alert_info("Also, directory {.file {fs::path_dir(destfile)}} will be created if it does not exist.")
 
-    if (ask) {
-      continue <- .confirm_menu()
-      if (continue != 1L) {
-        cli_abort("Interrupting the download.")
-      }
+    if (ask && !.confirm_menu()) {
+      cli_abort("Interrupting the download.")
     }
 
     fs::dir_create(fs::path_dir(destfile), recurse = TRUE)

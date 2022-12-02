@@ -462,9 +462,10 @@ set_rstudio_drake_cache <- function(dir, verbose = TRUE) {
   }
 }
 
-.confirm_menu <- function(choices = c("Yes.", "No"), title = "Do you want to continue?", .choice = 1L) {
+.confirm_menu <- function(choices = c("Yes.", "No."), title = "Do you want to continue?", .choice = TRUE) {
   if (interactive()) {
-    utils::menu(choices, title = title)
+    answer <- utils::menu(choices, title = title)
+    dplyr::if_else(answer == 1L, TRUE, FALSE)
   } else {
     return(.choice)
   }
