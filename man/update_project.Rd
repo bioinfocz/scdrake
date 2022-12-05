@@ -38,6 +38,6 @@ This will \strong{overwrite} project files by the package-bundled ones:
 \itemize{
 \item RMarkdown documents in \verb{Rmd/}
 \item Initial scripts for \code{\link[drake:r_make]{drake::r_make()}}: \verb{_drake_single_sample.R} and \verb{_drake_integration.R}
-\item Update default YAML configs.
+\item Default YAML configs. Their location can be set by \verb{*_config_dir} parameters.
 }
 }

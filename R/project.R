@@ -156,7 +156,7 @@ init_project <- function(dir = ".",
 #' @description This will **overwrite** project files by the package-bundled ones:
 #' - RMarkdown documents in `Rmd/`
 #' - Initial scripts for [drake::r_make()]: `_drake_single_sample.R` and `_drake_integration.R`
-#' - Update default YAML configs.
+#' - Default YAML configs. Their location can be set by `*_config_dir` parameters.
 #' @param dir A character scalar: path to `scdrake` project directory.
 #'   If `NULL`, the current working directory will be used (same as the default: `"."`).
 #' @inheritParams pipeline_config_dir
