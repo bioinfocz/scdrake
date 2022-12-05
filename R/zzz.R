@@ -185,7 +185,7 @@ get_scdrake_options <- function() {
 
 ## -- We need this to fix R CMD CHECK notes on "no visible binding for global variable" caused by functions generating
 ## -- a drake plan.
-globalVariables(c(
+utils::globalVariables(c(
   ## -- drake DSL functions
   c("map", "group", "cross"),
 
