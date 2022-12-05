@@ -360,6 +360,8 @@ SC3 achieves high accuracy and robustness by consistently integrating different 
 *Cluster stability index* shows how stable each cluster is accross the selected range of `k`s.
 The stability index varies between 0 and 1, where 1 means that the same cluster appears in every solution for different `k`.
 
+`r scdrake::format_used_functions(c("SC3::sc3()", "SC3::sc3_plot_cluster_stability()"))`
+
 ```{r, results = "asis"}
 for (k in cfg$SC3_K) {
   cluster_col <- glue::glue("cluster_sc3_{k}")
@@ -368,8 +370,6 @@ for (k in cfg$SC3_K) {
   print(cluster_sc3_stability_plots[[cluster_col]])
 }
 ```
-
-`r scdrake::format_used_functions(c("SC3::sc3()", "SC3::sc3_plot_cluster_stability()"))`
 
 #
 
