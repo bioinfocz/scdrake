@@ -124,7 +124,8 @@ scdrake_make <- function(plan,
     knitr.table.format = "html",
     ## -- To fix a bug with the latest RSQLite and AnnotationDbi packages.
     connectionObserver = NULL,
-    rstudio_drake_cache = drake_cache_object
+    rstudio_drake_cache = drake_cache_object,
+    DT.warn.size = FALSE
   )
 
   verbose %&&% cli::cli_h2("Running the single-sample pipeline")

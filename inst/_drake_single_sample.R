@@ -102,7 +102,8 @@ options(
   knitr.table.format = "html",
   ## -- To fix a bug with the latest RSQLite and AnnotationDbi packages.
   connectionObserver = NULL,
-  rstudio_drake_cache = drake_cache_object
+  rstudio_drake_cache = drake_cache_object,
+  DT.warn.size = FALSE
 )
 
 create_single_sample_dirs(cfg)
