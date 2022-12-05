@@ -95,3 +95,14 @@ glue0c <- function(..., .envir = parent.frame()) {
 catn <- function(...) {
   cat(str_line(...))
 }
+
+#' @title Generate random strings compounded from alphabetical characters by default.
+#' @description This is a wrapper around `stringi::stri_rand_strings()`.
+#' @param n,length,pattern Passed to `stringi::stri_rand_strings()`.
+#' @return A character vector.
+#'
+#' @concept misc_text
+#' @export
+get_random_strings <- function(n, length, pattern = "[A-Za-z]") {
+  stringi::stri_rand_strings(n, length, pattern = pattern)
+}

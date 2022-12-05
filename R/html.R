@@ -271,7 +271,7 @@ create_img_link <- function(href,
 #' @concept misc_html
 #' @export
 cells_per_cluster_table_collapsed_html <- function(df,
-                                                   id = stringi::stri_rand_strings(1, 10),
+                                                   id = get_random_strings(1, 10),
                                                    label = "Show cells per cluster table") {
   catg0(
     '

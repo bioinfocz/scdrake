@@ -6,7 +6,7 @@
 \usage{
 cells_per_cluster_table_collapsed_html(
   df,
-  id = stringi::stri_rand_strings(1, 10),
+  id = get_random_strings(1, 10),
   label = "Show cells per cluster table"
 )
 }
