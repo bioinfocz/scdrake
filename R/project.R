@@ -72,19 +72,22 @@ init_project <- function(dir = ".",
     ## -- This file list could be extended in the future.
     project_files <- fs::path(dir, c("config", "Rmd"))
     want_continue <- any(fs::file_exists(project_files)) && ask
-    msg <- "Some project files already exists: {.file {project_files}}"
+    msg <- cli::cli_fmt(cli_alert_warning("Some project files already exists: {.file {project_files}}"))
   } else {
     dir_is_wd <- FALSE
     dir <- fs::path_abs(dir)
-    want_continue <- fs::dir_exists(dir) && ask
-    msg <- "The project's root directory already exists: {.file {dir}}"
+    if (fs::dir_exists(dir)) {
+      msg <- cli::cli_fmt(cli_alert_warning("The project's root directory already exists: {.file {dir}}"))
+    } else {
+      msg <- cli::cli_fmt(cli_alert_info("The project directory will be created as {.file {fs::path_abs(dir)}}"))
+    }
+    want_continue <- ask
   }
 
-  if (want_continue) {
-    cli_alert_warning(msg)
-    if (!.confirm_menu()) {
-      cli_abort("Interrupting the project initialization.")
-    }
+  cat(msg, sep = "\n")
+
+  if (want_continue && !.confirm_menu()) {
+    cli_abort("Interrupting the project initialization.")
   }
 
   if (!dir_is_wd) {
@@ -119,11 +122,12 @@ init_project <- function(dir = ".",
   }
 
   if (use_rstudio) {
-    usethis::create_project(dir, rstudio = TRUE, open = FALSE)
-    if (is_empty(fs::dir_ls(fs::path(dir, "R"), all = TRUE))) {
-      fs::dir_delete(fs::path(dir, "R"))
-    }
-    # fs::file_delete(fs::path(dir, ".gitignore"))
+    rproj_file <- fs::path(dir, "scdrake.Rproj")
+    render_template <- utils::getFromNamespace("render_template", "usethis")
+    line_ending <- if (.get_os() == "windows") "windows" else "posix"
+    rproj_template <- render_template("template.Rproj", data = list(line_ending = line_ending, is_pkg = FALSE), package = "usethis")
+    writeLines(rproj_template, rproj_file)
+    verbose %&&% cli_alert_success("Writing RStudio project file {.file {rproj_file}}")
   }
 
   download_yq(verbose = verbose, ask = ask, do_check = TRUE, ...)
