@@ -306,18 +306,21 @@ lapply_rows <- function(df, as_scdrake_list = TRUE, return_tibble = TRUE, FUN, .
 #' @param msg A character scalar: additional message to be displayed.
 #' @return `TRUE` if package is installed, `FALSE` otherwise.
 #'
+#' `check_scdrake_packages()` returns `TRUE` if all tested packages are installed and `{SC3}` is installed from
+#' <github.com/gorgitko/SC3>, `FALSE` otherwise.
+#'
 #' @examples
 #' check_pkg_installed("utils")
 #' check_pkg_installed("zzz")
 #' check_qs_installed()
-#' @concept misc_utils
+#' @concept checks
 #' @rdname check_pkg_installed
 #' @export
-check_pkg_installed <- function(pkg, msg = "") {
+check_pkg_installed <- function(pkg, msg = "", verbose = TRUE) {
   pkg_installed <- rlang::is_installed(pkg)
 
   if (!pkg_installed) {
-    cli({
+    verbose %&&% cli({
       cli_alert_warning("Package {.pkg {pkg}} is not installed. {msg}")
       cli_alert_info('Please, consider its installation with\n{.code BiocManager::install("{pkg}")}')
     })
@@ -328,23 +331,23 @@ check_pkg_installed <- function(pkg, msg = "") {
 
 #' @rdname check_pkg_installed
 #' @export
-check_qs_installed <- function() {
+check_qs_installed <- function(verbose = TRUE) {
   check_pkg_installed(
     "qs",
-    "It is used to store intermediate pipeline results, and it is much faster than base R's Rds format."
+    "It is used to store intermediate pipeline results, and it is much faster than base R's Rds format.",
+    verbose = verbose
   )
 }
 
 #' @rdname check_pkg_installed
 #' @export
-check_future_installed <- function() {
-  check_pkg_installed("future", "It is used for drake's parallelism (alternative to {.pkg clustermq}).")
+check_future_installed <- function(verbose = TRUE) {
+  check_pkg_installed("future", "It is used for drake's parallelism (alternative to {.pkg clustermq}).", verbose = verbose)
 }
 
 #' @rdname check_pkg_installed
 #' @export
-check_clustermq_installed <- function() {
-  # check_pkg_installed("clustermq", "It is used for {.pkg drake}'s parallelism.")
+check_clustermq_installed <- function(verbose = TRUE) {
   clustermq_installed <- rlang::is_installed("clustermq")
 
   if (clustermq_installed) {
@@ -354,7 +357,7 @@ check_clustermq_installed <- function() {
   }
 
   if (!clustermq_installed || clustermq_version > "0.8.8") {
-    cli({
+    verbose %&&% cli({
       cli_alert_warning(str_space(
         "Package {.pkg clustermq} used for drake's parallelism (alternative to {.pkg future}) is not installed, or its version",
         "({.field {clustermq_version}}) is different than {.field 0.8.8} and may cause {.pkg drake}'s parallel",
@@ -374,27 +377,29 @@ check_clustermq_installed <- function() {
 
 #' @rdname check_pkg_installed
 #' @export
-check_future.callr_installed <- function() {
-  check_pkg_installed("future.callr", "It is used as a backend for {.pkg drake}'s future parallelism.")
+check_future.callr_installed <- function(verbose = TRUE) {
+  check_pkg_installed("future.callr", "It is used as a backend for {.pkg drake}'s future parallelism.", verbose = verbose)
 }
 
 #' @rdname check_pkg_installed
 #' @export
-check_sc3_version <- function() {
+check_sc3_version <- function(verbose = TRUE) {
   sc3_source <- sessioninfo::package_info(pkgs = "installed") %>%
     dplyr::filter(.data$package == "SC3") %>%
     dplyr::pull(.data$source)
 
   if (is_empty(sc3_source) || !stringr::str_detect(sc3_source, stringr::fixed("gorgitko/SC3"))) {
-    cli_alert_danger(str_space(
-      "The {.pkg SC3} package is not installed from the GitHub repository {.field gorgitko/SC3}",
-      "which has enhanced parallel execution compared to the original Bioconductor version. This can happen when you update",
-      "all packages with {.field BiocManager::install()}."
-    ))
-    cli_alert_info(str_space(
-      "Please, consider installing the modified {.pkg SC3} version with\n",
-      '{.field BiocManager::install("gorgitko/SC3")}'
-    ))
+    verbose %&&% cli::cli({
+      cli_alert_danger(str_space(
+        "The {.pkg SC3} package is not installed from the GitHub repository {.field gorgitko/SC3}",
+        "which has enhanced parallel execution compared to the original Bioconductor version. This can happen when you update",
+        "all packages with {.field BiocManager::install()}."
+      ))
+      cli_alert_info(str_space(
+        "Please, consider installing the modified {.pkg SC3} version with\n",
+        '{.field BiocManager::install("gorgitko/SC3")}'
+      ))
+    })
     return("bioconductor")
   }
 
@@ -407,27 +412,51 @@ check_sc3_version <- function() {
 
 #' @rdname check_pkg_installed
 #' @export
-check_scdrake_packages <- function() {
-  cli::cli_h3("{.pkg scdrake} package checks")
-  check_qs_installed()
-  check_clustermq_installed()
-  check_future_installed()
-  if (!parallelly::supportsMulticore()) {
-    check_future.callr_installed()
-  }
-  check_sc3_version()
-  cli::cli_h3("Done")
+check_scdrake_packages <- function(verbose = TRUE) {
+  statuses <- c()
 
-  invisible(NULL)
+  cli_alert_info("Checking {.package qs} package: {.code check_qs_installed()}")
+  res <- check_qs_installed(verbose = verbose)
+  statuses <- c(statuses, res)
+  if (verbose && res) cli_alert_success("qs") else cli_alert_danger("qs")
+
+  cli_alert_info("Checking {.package clustermq} package: {.code check_clustermq_installed()}")
+  res <- check_clustermq_installed(verbose = verbose)
+  statuses <- c(statuses, res)
+  if (verbose && res) cli_alert_success("clustermq") else cli_alert_danger("clustermq")
+
+  cli_alert_info("Checking {.package future} package: {.code check_future_installed()}")
+  res <- check_future_installed(verbose = verbose)
+  statuses <- c(statuses, res)
+  if (verbose && res) cli_alert_success("future") else cli_alert_danger("future")
+
+  if (!parallelly::supportsMulticore()) {
+    cli_alert_info("Checking {.package future.callr} package: {.code check_future.callr_installed()}")
+    res <- check_future.callr_installed(verbose = verbose)
+    statuses <- c(statuses, res)
+    if (verbose && res) cli_alert_success("future.callr") else cli_alert_danger("future.callr")
+  }
+
+  verbose %&&% cli_alert_info("Checking {.package SC3} package version: {.code check_sc3_version()}")
+  res <- check_sc3_version(verbose = verbose)
+  if (res == "github") {
+    statuses <- c(statuses, TRUE)
+    verbose %&&% cli_alert_success("SC3")
+  } else {
+    statuses <- c(statuses, FALSE)
+    verbose %&&% cli_alert_warning("SC3")
+  }
+
+  return(invisible(all(statuses)))
 }
 
 #' @title Check for `pandoc`'s binary.
 #' @description See the `RSTUDIO_PANDOC` parameter in the `pipeline.yaml` config (`vignette("config_pipeline")`).
 #' @param cache,... Passed to `rmarkdown::find_pandoc()`.
-#' @inheritParams verbose
+#' @inheritParams verbose_
 #' @return Invisibly `TRUE` if the directory with `pandoc`'s binary exists, `FALSE` otherwise.
 #'
-#' @concept misc_utils
+#' @concept checks
 #' @export
 check_pandoc <- function(cache = FALSE, verbose = TRUE, ...) {
   pandoc <- rmarkdown::find_pandoc(cache = cache, ...)
@@ -441,12 +470,45 @@ check_pandoc <- function(cache = FALSE, verbose = TRUE, ...) {
   return(invisible(TRUE))
 }
 
+#' @title Check for selected `scdrake` dependencies.
+#' @description This function will check for:
+#' - Packages that might not be installed by default:
+#'   [qs](`r downlit::href_package("qs")`),
+#'   [clustermq](`r downlit::href_package("clustermq")`),
+#'   [future](`r downlit::href_package("future")`),
+#'   [future.callr](`r downlit::href_package("future.callr")`) (if the system doesn't support forking/multicore),
+#'   [SC3](`r downlit::href_package("SC3")`) (if it is not installed from <github.com/gorgitko/SC3>)
+#' - If [pandoc](https://pandoc.org/) is available.
+#' - If [yq](https://github.com/mikefarah/yq) is available.
+#' @inheritParams verbose_
+#' @return Invisibly `TRUE` if all checks return `TRUE`, `FALSE` otherwise.
+#'
+#' @concept checks
+#' @export
+check_scdrake <- function(verbose = TRUE) {
+  statuses <- c()
+  verbose %&&% cli_alert_info("Calling {.code scdrake::check_scdrake_packages()}")
+  res <- scdrake::check_scdrake_packages(verbose = verbose)
+  statuses <- c(statuses, TRUE)
+
+  verbose %&&% cli_alert_info("Calling {.code scdrake::check_pandoc()}")
+  res <- scdrake::check_pandoc(verbose = verbose)
+  statuses <- c(statuses, TRUE)
+  if (verbose && res) cli_alert_success("pandoc") else cli_alert_danger("pandoc")
+
+  verbose %&&% cli_alert_info("Calling: {.code scdrake::check_yq()}")
+  res <- scdrake::check_yq(verbose = verbose)
+  statuses <- c(statuses, TRUE)
+
+  return(invisible(all(statuses)))
+}
+
 #' @title Set `rstudio_drake_cache` option.
 #' @description Value of this option is used internally by `drake` to "loadd target under cursor"
 #' (it can be set in `Tools -> Modify Keyboard Shortcuts`).
 #' This shortcut will call `loadd(<name of target under cursor>, cache = getOptions("rstudio_drake_cache"))`.
 #' @param dir A character scalar: path to directory with `drake` cache.
-#' @inheritParams verbose
+#' @inheritParams verbose_
 #' @return Invisibly `TRUE` if `dir` exists, `FALSE` otherwise.
 #'
 #' @concept misc_utils

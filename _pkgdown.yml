@@ -92,6 +92,10 @@ reference:
     - has_concept("create_dirs")
     - has_concept("scdrake_make")
 
+  - title: Check for scdrake dependencies
+  - contents:
+    - has_concept("checks")
+
   - title: Get pipeline plans
   - subtitle: Full plans of the single-sample and integration pipelines
   - contents:

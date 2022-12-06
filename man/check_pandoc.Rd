@@ -9,8 +9,7 @@ check_pandoc(cache = FALSE, verbose = TRUE, ...)
 \arguments{
 \item{cache, ...}{Passed to \code{rmarkdown::find_pandoc()}.}
 
-\item{verbose}{A logical scalar: if \code{TRUE}, be verbose.
-The default value is obtained from \code{getOption("scdrake_verbose")}.}
+\item{verbose}{A logical scalar: if \code{TRUE}, be verbose.}
 }
 \value{
 Invisibly \code{TRUE} if the directory with \code{pandoc}'s binary exists, \code{FALSE} otherwise.
@@ -18,4 +17,4 @@ Invisibly \code{TRUE} if the directory with \code{pandoc}'s binary exists, \code
 \description{
 See the \code{RSTUDIO_PANDOC} parameter in the \code{pipeline.yaml} config (\code{vignette("config_pipeline")}).
 }
-\concept{misc_utils}
+\concept{checks}

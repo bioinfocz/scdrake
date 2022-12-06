@@ -10,19 +10,19 @@
 \alias{check_scdrake_packages}
 \title{Check if a package is installed and display an informative message.}
 \usage{
-check_pkg_installed(pkg, msg = "")
+check_pkg_installed(pkg, msg = "", verbose = TRUE)
 
-check_qs_installed()
+check_qs_installed(verbose = TRUE)
 
-check_future_installed()
+check_future_installed(verbose = TRUE)
 
-check_clustermq_installed()
+check_clustermq_installed(verbose = TRUE)
 
-check_future.callr_installed()
+check_future.callr_installed(verbose = TRUE)
 
-check_sc3_version()
+check_sc3_version(verbose = TRUE)
 
-check_scdrake_packages()
+check_scdrake_packages(verbose = TRUE)
 }
 \arguments{
 \item{pkg}{A character scalar: name of package.}
@@ -31,6 +31,9 @@ check_scdrake_packages()
 }
 \value{
 \code{TRUE} if package is installed, \code{FALSE} otherwise.
+
+\code{check_scdrake_packages()} returns \code{TRUE} if all tested packages are installed and \code{{SC3}} is installed from
+<github.com/gorgitko/SC3>, \code{FALSE} otherwise.
 }
 \description{
 Check if a package is installed and display an informative message.
@@ -40,4 +43,4 @@ check_pkg_installed("utils")
 check_pkg_installed("zzz")
 check_qs_installed()
 }
-\concept{misc_utils}
+\concept{checks}

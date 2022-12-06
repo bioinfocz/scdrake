@@ -1,9 +1,13 @@
 ## -- Just some Roxygen documentation helpers.
 
-## -- A common verbose parameter.
+## -- A common verbose parameter for functions using options for the default value.
 #' @param verbose A logical scalar: if `TRUE`, be verbose.
 #'   The default value is obtained from `getOption("scdrake_verbose")`.
 #' @name verbose
+NULL
+
+#' @param verbose A logical scalar: if `TRUE`, be verbose.
+#' @name verbose_
 NULL
 
 #' @param cfg_pipeline A `scdrake_list` object: pipeline config (see [load_pipeline_config()])
