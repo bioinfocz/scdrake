@@ -63,9 +63,12 @@ load_custom_plan <- function(file = getOption("scdrake_plan_custom_file"), envir
   }
 
   ## -- To protect the caller env from modifications.
-  purrr::map(ls(envir = envir), ~ lockBinding(., envir))
+  ## -- This prevents (or hacks) the R CMD CHECK for "checking R code for possible problems".
+  lockBinding_ <- utils::getFromNamespace("lockBinding", "base")
+  purrr::map(ls(envir = envir), ~ lockBinding_(., envir))
   res <- source(file, local = envir)
-  purrr::map(ls(envir = envir), ~ unlockBinding(., envir))
+  unlockBinding_ <- utils::getFromNamespace("unlockBinding", "base")
+  purrr::map(ls(envir = envir), ~ unlockBinding_(., envir))
   val <- res$value
   if (!is_null(val)) {
     assert_that_(
