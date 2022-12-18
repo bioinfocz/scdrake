@@ -1,7 +1,11 @@
 ---
-title: "scdrake | 02 - Post-integration clustering"
-author: "Jiri Novotny, Jan Kubovciak"
-institute: "Laboratory of Genomics and Bioinformatics @ Institute of Molecular Genetics of the ASCR"
+title: "02 - Post-integration clustering"
+author: "Made by the [scdrake pipeline](https://bioinfocz.github.io/scdrake)"
+institute: |
+  Laboratory of Genomics and Bioinformatics
+  Institute of Molecular Genetics of the ASCR
+  https://img.cas.cz
+date: "`r glue::glue('Document generated: {format(Sys.time(), \"%Y-%m-%d %H:%M:%S %Z%z\")}')`"
 output:
   html_document:
     toc: true
@@ -15,7 +19,6 @@ output:
 params:
   css_file: !expr here::here("Rmd/common/stylesheet.css")
   drake_cache_dir: !expr here::here(".drake")
-date: "`r glue::glue('Document generated: {Sys.Date()}')`"
 css: "`r params$css_file`"
 ---
 

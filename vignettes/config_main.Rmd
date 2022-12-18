@@ -1,7 +1,7 @@
 ---
 title: "Main config"
 description: "General parameters used in both single-sample and integration pipelines."
-date: "`r Sys.Date()`"
+date: "`r glue::glue('<sup>Document generated: {format(Sys.time(), \"%Y-%m-%d %H:%M:%S %Z%z</sup>\")}')`"
 package: scdrake
 output:
   BiocStyle::html_document:
@@ -25,6 +25,8 @@ and options named in lowercase are set upon `{scdrake}` load or attach.
 
 Parameters in this config are used throughout all other stages. There are parameters such as project name, path
 to CSS file used to style HTML documents, or path to base output directory.
+
+***
 
 # Project information
 

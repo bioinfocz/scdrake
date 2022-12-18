@@ -1,14 +1,14 @@
 ---
 title: "Input and quality control stage (`01_input_qc`)"
 description: "01_input_qc stage of the single-sample pipeline."
-date: "`r Sys.Date()`"
+date: "`r glue::glue('<sup>Document generated: {format(Sys.time(), \"%Y-%m-%d %H:%M:%S %Z%z</sup>\")}')`"
 package: scdrake
 output:
   BiocStyle::html_document:
     toc: true
     toc_float: true
 vignette: >
-  %\VignetteIndexEntry{Input and quality control stage}
+  %\VignetteIndexEntry{Input and quality control stage (`01_input_qc`)}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}  
 ---
@@ -25,6 +25,8 @@ several `{scdrake}` functions.
 Target for this stage's report: `report_input_qc`
 
 You can make this target by setting `DRAKE_TARGETS: ["report_input_qc"]` in `pipeline.yaml` config file.
+
+***
 
 # Config parameters
 

@@ -106,3 +106,35 @@ catn <- function(...) {
 get_random_strings <- function(n, length, pattern = "[A-Za-z]") {
   stringi::stri_rand_strings(n, length, pattern = pattern)
 }
+
+#' @title Format a shell command as a Markdown codeblock.
+#' @param lines A character vector: command lines.
+#' @return A character vector.
+#'
+#' @concept misc_text
+#' @export
+format_shell_command <- function(lines, language = "bash") {
+  if (length(lines) > 1) {
+    ## -- Which lines to append "\" to.
+    to_wrap_lines_i <- seq_len(length(lines) - 1)
+    ## -- Which lines to indent.
+    to_indent_lines_i <- seq(2, length(lines))
+
+    lines <- purrr::map2_chr(seq_len(length(lines)), lines, function(i, line) {
+      if (i %in% to_wrap_lines_i) {
+        line <- glue0c("{line} \\")
+      }
+
+      if (i %in% to_indent_lines_i) {
+        line <- glue0c("  {line}")
+      }
+
+      return(line)
+    }) %>%
+      paste(collapse = "\n")
+  }
+
+  lines <- glue0c("```{language}\n{lines}\n```")
+
+  return(lines)
+}

@@ -1,3 +1,5 @@
+cli::cli_h1("{.file tests/testthat/test-config.R}")
+
 project_dir <- fs::file_temp("scdrake_test_project_") %>%
   fs::path_abs() %>%
   as.character()
@@ -46,7 +48,7 @@ test_that("parameters in a YAML file starting with '!code ' are evaluated", {
   expect_error(load_config(yaml_test_3_file))
 })
 
-test_that("default single-sample configs could be loaded", {
+test_that("default single-sample configs can be loaded", {
   withr::local_dir(project_dir)
 
   cfg_pipeline <- load_pipeline_config()
@@ -58,7 +60,7 @@ test_that("default single-sample configs could be loaded", {
   }
 })
 
-test_that("default integration configs could be loaded", {
+test_that("default integration configs can be loaded", {
   withr::local_dir(project_dir)
 
   cfg_pipeline <- load_pipeline_config()

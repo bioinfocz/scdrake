@@ -813,15 +813,15 @@ get_int_method_description <- function(int_method_name = c("uncorrected", "resca
 
   if (int_method_name == "uncorrected") {
     header <- "Uncorrected (`multiBatchNorm()`)"
-    description <- str_c(
+    description <- str_space(
       "Data were rescaled to adjust for differences in sequencing depth between samples.",
-      "These data will be used for differential expression analysis.",
-      sep = " "
+      "These data will be used for identification of cluster markers (stage `cluster_markers`) and",
+      "differential expression analysis (stage `contrasts`)."
     )
     fn_link <- downlit::downlit_md_string("`batchelor::multiBatchNorm()`") %>% stringr::str_trim()
   } else if (int_method_name == "rescaling") {
     header <- "Rescaling (`rescaleBatches()`)"
-    description <- str_c(
+    description <- str_space(
       "We use the `rescaleBatches()` function from the batchelor package to remove the batch effect.",
       "This is roughly equivalent to applying a linear regression to the log-expression values per gene,",
       "with some adjustments to improve performance and efficiency. For each gene, the mean expression in",
@@ -829,13 +829,12 @@ get_int_method_description <- function(int_method_name = c("uncorrected", "resca
       "We deliberately choose to scale all expression values down as this mitigates differences in variance",
       "when batches lie at different positions on the mean-variance trend.",
       "(Specifically, the shrinkage effect of the pseudo-count is greater for smaller counts,",
-      "suppressing any differences in variance across batches.)",
-      sep = " "
+      "suppressing any differences in variance across batches.)"
     )
     fn_link <- downlit::downlit_md_string("`batchelor::rescaleBatches()`") %>% stringr::str_trim()
   } else if (int_method_name == "regression") {
     header <- "Linear regression (`regressBatches()`)"
-    description <- str_c(
+    description <- str_space(
       "Batch effects in bulk RNA sequencing studies are commonly removed with linear regression.",
       "This involves fitting a linear model to each gene's expression profile,",
       "setting the undesirable batch term to zero and recomputing the observations sans the batch effect,",
@@ -850,13 +849,12 @@ get_int_method_description <- function(int_method_name = c("uncorrected", "resca
       "linear regression is the most statistically efficient as it uses information from all cells",
       "to compute the common batch vector.) Linear modelling can also accommodate situations where",
       "the composition is known a priori by including the cell type as a factor in the linear model,",
-      "but this situation is even less common.",
-      sep = " "
+      "but this situation is even less common."
     )
     fn_link <- downlit::downlit_md_string("`batchelor::regressBatches()`") %>% stringr::str_trim()
   } else if (int_method_name == "mnn") {
     header <- "Mutual nearest neighbors (`fastMNN()`)"
-    description <- str_c(
+    description <- str_space(
       "Mutual nearest neighbours (MNN) are pairs of cells from different batches that belong in each",
       "other's set of nearest neighbours. The reasoning is that MNN pairs represent cells from the same",
       "biological state prior to the application of a batch effect - see Haghverdi et al. (2018)",
@@ -868,8 +866,7 @@ get_int_method_description <- function(int_method_name = c("uncorrected", "resca
       "Instead, the key assumption of MNN-based approaches is that the batch effect is orthogonal to the biology",
       "in high-dimensional expression space. Violations reduce the effectiveness and accuracy of the correction,",
       "with the most common case arising from variations in the direction of the batch effect between clusters.",
-      "Nonetheless, the assumption is usually reasonable as a random vector is very likely to be orthogonal in high-dimensional space.",
-      sep = " "
+      "Nonetheless, the assumption is usually reasonable as a random vector is very likely to be orthogonal in high-dimensional space."
     )
     fn_link <- downlit::downlit_md_string("`batchelor::fastMNN()`") %>% stringr::str_trim()
   }

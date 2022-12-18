@@ -1,6 +1,6 @@
 ---
 title: "01 Get started"
-date: "`r Sys.Date()`"
+date: "`r glue::glue('<sup>Document generated: {format(Sys.time(), \"%Y-%m-%d %H:%M:%S %Z%z</sup>\")}')`"
 author:
   - name: Jiri Novotny
     affiliation: Institute of Molecular Genetics of the Czech Academy of Sciences
@@ -16,87 +16,157 @@ output:
 vignette: >
   %\VignetteIndexEntry{01 Get started}
   %\VignetteEngine{knitr::rmarkdown}
-  %\VignetteEncoding{UTF-8}  
+  %\VignetteEncoding{UTF-8}
 ---
 
-```{r, include = FALSE}
-## -- We will initialize a scdrake project in temporary directory, but the user will do it in home.
-tmp_dir <- tempfile()
-scdrake::init_project(tmp_dir, set_active_project = FALSE, set_wd = FALSE, ask = FALSE, download_example_data = TRUE)
+``` {r, echo = FALSE}
+knitr::opts_chunk$set(eval = FALSE)
 ```
 
-***
+```{r, eval = TRUE, include = FALSE}
+## -- We will initialize a scdrake project in temporary directory, but the user will do it in home.
+tmp_dir <- tempfile()
+scdrake::init_project(
+  tmp_dir, set_active_project = FALSE, set_wd = FALSE, ask = FALSE, download_example_data = TRUE
+)
+```
 
-# Quick start guide
+## Quick start guide
 
 In this guide you will see how to quickly setup `{scdrake}` and run the first stage (`01_input_qc`) of its single-sample
 pipeline using the provided example data. Once you familiarize yourself with `{scdrake}` basics, you can continue with
 guide for the integration pipeline in `vignette("scdrake_integration")`.
 
-# The three steps
+If possible, we will show how to follow the steps from within the R and through the command line interface (CLI), see
+`vignette("scdrake_cli")` for a short overview.
 
-After [installation](index.html#installation-instructions), you basically need the three steps described below
+We **strongly recommend** to use the `{scdrake}`'s Docker image as it is well tested. If you are not familiar with
+Docker, please, refer to `vignette("scdrake_docker")`. We assume that the container has a shared directory mounted as
+`/home/rstudio/scdrake_projects`, as described in the aforementioned vignette.
+
+Note to the CLI: although you can specify the project directory using the `-d / --dir` parameter, we rather recommend
+to always use it as the current working directory before you issue `scdrake` commands. Below in the examples you will
+notice that the `-d` parameter is never used.
+
+***
+
+## The three steps
+
+After [installation](../index.html#installation-instructions), you basically need the three steps described below
 to run the `{scdrake}` pipeline.
 
-## Step 1: initialize a new project
+### Step 1: initialize a new project {.tabset}
 
 `{scdrake}` is a project-based package, so the first step is to initialize a new project.
 *Project* simply means a directory in which the analysis of your data will take place. That also means:
 
 - Your current working directory is set to the project directory.
-- Whenever you specify file paths, you specify them relative to the project directory (e.g. `output/plots/figure1.pdf`).
+- Whenever you specify file paths in config files, you do so relative to the project directory (e.g. `output/plots/figure1.pdf`).
   This way your project is **transferable** between different computers and data locations.
 
-Now we initialize a new `{scdrake}` project directory. First we load the `{scdrake}` package,
-and then call the `init_project()` function:
+Now we initialize a new `{scdrake}` project directory.
 
-```{r, eval = FALSE}
+#### In R
+
+First we load the `{scdrake}` package, and then call the `init_project()` function:
+
+```{r}
 library(scdrake)
-init_project("~/scdrake_single_sample_example", download_example_data = TRUE)
+init_project("~/scdrake_projects/pbmc1k", download_example_data = TRUE)
 ```
+
+#### On command line
+
+```bash
+mkdir ~/scdrake_projects/pbmc1k
+cd ~/scdrake_projects/pbmc1k
+scdrake --download-example-data init-project
+```
+
+#### On command line (Docker)
+
+We assume that the container has a shared directory mounted as `/home/rstudio/scdrake_projects`,
+as described in `vignette("scdrake_docker")`.
+
+```bash
+mkdir ~/scdrake_projects/pbmc1k
+cd ~/scdrake_projects/pbmc1k
+docker exec -it -u rstudio -w /home/rstudio/scdrake_projects/pbmc1k <CONTAINER ID or NAME> \
+  scdrake --download-example-data init-project
+```
+
+### {-}
 
 This will:
 
-- Create a new project directory named `scdrake_single_sample_example` in your home.
-- Switch your current working directory to project's directory.
+- Create a new project directory named `pbmc1k` in `/home/<user>/scdrake_projects`.
 - Copy all files, which are bundled with the `{scdrake}` package: default YAML configs, Rmd files, R scripts etc.
 - Download (if needed) the [yq tool](https://github.com/mikefarah/yq) used to manipulate YAML files.
 - Create a new RStudio project (`.RProj`) file and set it as the active project (can be disabled).
-- Download the example dataset (10X Genomics PBMC).
+- Download the example dataset (10x Genomics PBMC).
+- (For R) Switch your current R working directory to project's directory and if you are using RStudio, also
+  switch the active project.
 
 > Important: whenever you will be running the `{scdrake}` pipeline, make sure your working directory is set to the project's root.
 
 Let's inspect files in the project directory:
 
-```{r, eval = FALSE}
+### {.tabset}
+
+#### In R
+
+```{r}
 fs::dir_tree(all = TRUE)
 ```
 
-```{r, echo = FALSE}
+#### On command line
+
+If you have the `tree` tool installed (`sudo apt install tree` to fix it):
+
+```bash
+tree
+```
+
+Otherwise:
+
+```bash
+Rscript -e 'fs::dir_tree("~/scdrake_projects/pbmc1k")'
+```
+
+#### On command line (Docker)
+
+```bash
+docker exec -it -u rstudio -w /home/rstudio/scdrake_projects/pbmc1k <CONTAINER ID or NAME> \
+  Rscript -e 'fs::dir_tree()'
+```
+
+### {-}
+
+```{r, eval = TRUE, echo = FALSE}
 fs::dir_tree(tmp_dir, all = TRUE)
 ```
 
 The most important files and directories are:
 
-- `Rmd/`: RMarkdown files used for reporting of pipeline results. You can edit them according to your needs,
-  but keep in mind that they will be overwritten by package-bundled ones whenever you call `update_project()`.
 - `config/`: configuration files in YAML format. The default configuration files (`*.default.yaml`) are bundled with
   the package and used to supply new parameters to local configs (`*.yaml`) when such events appear.
   See `vignette("scdrake_config")` for more details.
+- `Rmd/`: RMarkdown files used for reporting of pipeline results. You can edit them according to your needs,
+  but keep in mind that they will be overwritten by package-bundled ones whenever you call `update_project()`.
 - `_drake_integration.R`, `_drake_single_sample.R`: entry scripts for `{drake}` when pipeline is executed through
-  `drake::r_make()` (the most reproducible way to run the pipeline).
+  `run_single_sample_r()` or `run_integration_r()` (the most reproducible way to run the pipeline).
 - `plan_custom.R`: here you can define your own `{drake}` pipeline (plan) to extend `{scdrake}`.
   More on this topic in `vignette("scdrake_extend")`.
 - `example_data/`: example datasets. Those are raw feature-barcode matrices output by
   [cellranger](https://support.10xgenomics.com/single-cell-gene-expression/software/pipelines/latest/what-is-cell-ranger).
-- `scdrake_single_sample_example.Rproj`: RStudio project file. If you open this file in RStudio, your working directory
+- `scdrake.Rproj`: RStudio project file. If you open this file in RStudio, your working directory
   will be automatically set to project's root directory.
 
 ***
 
-## Step 2: modify the configuration files
+### Step 2: modify the configuration files
 
-The configuration files for all subpipelines (stages) are stored in the `config/` directory.
+The configuration files for all subpipelines (called *stages*) are stored in the `config/` directory.
 At this time we only need to modify a single parameter to run the first stage (`01_input_qc`) of the single-sample pipeline.
 
 To do so, open `config/single_sample/01_input_qc.yaml` and set value of `path` inside `INPUT_DATA` to
@@ -114,14 +184,7 @@ unless otherwise stated.
 
 ***
 
-## Step 3: run the single-sample pipeline
-
-Before we run the pipeline, we only need one last step, and that is installation of the annotation package for human genome
-(because our example data come from human samples):
-
-```{r, eval = FALSE}
-BiocManager::install("org.Hs.eg.db")
-```
+### Step 3: run the single-sample pipeline {.tabset}
 
 By default, only the final target `report_input_qc` (and all targets it depends on) of the input and QC stage
 (`01_input_qc`) will be made, that is, a HTML report. This is specified by `DRAKE_TARGETS` parameter in
@@ -130,9 +193,26 @@ to identify other targets which can be made.
 
 Now we can run the single-sample pipeline for the PBMC 1k dataset:
 
-```{r, eval = FALSE}
+#### In R
+
+```{r}
 run_single_sample_r()
 ```
+
+#### On command line
+
+```bash
+scdrake --pipeline-type single_sample run
+```
+
+#### On command line (Docker)
+
+```bash
+docker exec -it -u rstudio -w /home/rstudio/scdrake_projects/pbmc1k <CONTAINER ID or NAME> \
+  scdrake --pipeline-type single_sample run
+```
+
+### {-}
 
 The output is saved in `output/single_sample` directory, as specified by `BASE_OUT_DIR` in
 `config/single_sample/00_main.yaml`. You can find the final report of the `01_input_qc` stage in
@@ -147,7 +227,7 @@ read the section [below](#before-you-analyse-your-own-data) about important step
 
 ***
 
-# Before you analyse your own data
+## Before you analyse your own data
 
 The default config files are designed to work with provided example data and contain parameters which are used to
 test/showcase various features of the pipeline. Hence, some parameters are example data-specific, and might lead to
@@ -159,7 +239,7 @@ the first time (but it doesn't mean you shouldn't use them later). All parameter
 respective stages.
 
 <details>
-  <summary>&#9654; Show important parameters</summary>
+  <summary>Show important parameters</summary>
 
 ### Main config (`00_main.yaml`) {.unlisted}
 
@@ -203,14 +283,14 @@ respective stages.
 
 ***
 
-# Retrieving intermediate results (targets)
+## Retrieving intermediate results (targets)
 
 In `{drake}`'s terminology, a pipeline is called *plan*, and is composed of *targets*. When a target is finished,
 its value (object) is saved to cache (the directory `.drake` by default). The cache has two main purposes:
 
 - If a target is not changed, its value is loaded from the cache. *Change* involves e.g. target's definition (code) or
   change in upstream targets on which the target depends. This way `{drake}` is able to skip computation of finished
-  targets and greatly enhance the running time. More details [here](https://books.ropensci.org/drake/triggers.html).
+  targets and greatly enhance the runtime. More details [here](https://books.ropensci.org/drake/triggers.html).
 - Users also have access to the cache, and so you can load any finished target into your R session.
 
 Users can access the cache via two `{drake}`'s functions:
@@ -220,7 +300,7 @@ Users can access the cache via two `{drake}`'s functions:
 
 Let's try it and load the filtered `SingleCellExperiment` object:
 
-```{r, eval = FALSE}
+```{r}
 drake::loadd(sce_final_input_qc)
 ```
 
@@ -229,19 +309,19 @@ Value of the target `sce_final_input_qc` was loaded as a variable of the same na
 
 Similarly, we can load this target to a variable of our choice:
 
-```{r, eval = FALSE}
+```{r}
 sce <- drake::readd(sce_final_input_qc)
 ```
 
 And work further with the loaded object, e.g.
 
-```{r, eval = FALSE}
+```{r}
 scater::plotExpression(sce, "NOC2L", exprs_values = "counts", swap_rownames = "SYMBOL")
 ```
 
 ***
 
-# How to know which targets you can load and what each parameter do?
+## How to know which targets you can load and what each parameter do?
 
 Each pipeline stage has its own vignette describing its configuration parameters and also the most important targets.
 At <https://bioinfocz.github.io/scdrake> simply navigate to the top dropdown menu Articles and choose a stage you are
@@ -255,7 +335,7 @@ Advanced users might be interested in looking into source code of `{scdrake}`'s 
 
 ***
 
-# Modifying parameters and rerunning the pipeline
+## Modifying parameters and rerunning the pipeline
 
 Optionally, to further demonstrate the `{drake}`'s ability to skip finished targets, let's assume you decided to be
 more benevolent and used less strict values for custom cell filtering in `config/single_sample/01_input_qc.yaml`:
@@ -269,38 +349,57 @@ MAX_MITO_RATIO: 0.3
 INPUT_QC_BASE_OUT_DIR: "01_input_qc_benevolent"
 ```
 
-After `run_single_sample_r()` you can see the most time-consuming targets `sce_raw` and `empty_droplets` were skipped.
+After repeating the Step 3 above you can see the most time-consuming targets `sce_raw` and `empty_droplets` were skipped.
 Also, we simply output the HTML report for new parameters into a different directory, and so we can easily compare it
 with the previous report.
 
 ***
 
-# Running the pipeline in parallel mode
+## Running the pipeline in parallel mode
 
-```{r, child = "_drake_parallelism.Rmd"}
+```{r, eval = TRUE, child = "_drake_parallelism.Rmd"}
 ```
 
 ***
 
-# Updating the project files
+### Updating the project files {.tabset}
 
-When a new version of `{scdrake}` is released, you can update your project with
+When a new version of `{scdrake}` is released, you can update your project with (assuming your working directory
+is in a `{scdrake}` project's root):
 
-```{r, eval = FALSE}
+#### In R
+
+```{r}
 update_project()
 ```
+
+#### On command line
+
+```bash
+scdrake update-project
+```
+
+#### On command line (Docker)
+
+```bash
+docker exec -it -u rstudio -w /path/to/scdrake/project <CONTAINER ID or NAME> \
+  scdrake update-project
+```
+
+### {-}
 
 This will **overwrite** project files by the package-bundled ones:
 
 - RMarkdown documents in `Rmd/`.
-- Initial scripts for `drake::r_make()`: `_drake_single_sample.R` and `_drake_integration.R`.
+- Initial scripts for `run_single_sample_r()` and `run_integration_r()` (wrappers around `drake::r_make()`):
+  `_drake_single_sample.R` and `_drake_integration.R`.
 - Default YAML configs in `config/` (`*.default.yaml`).
 
 By default, you will be asked if you want to continue, as you might lose your local modifications.
 
 ***
 
-# Going further
+## Going further
 
 Now you should know the `{scdrake}` basics:
 
@@ -312,32 +411,8 @@ For the integration pipeline you might be interested in its guide in `vignette("
 
 For the full insight into `{scdrake}` you can also read the following vignettes:
 
-- Guides:
-  - 01 Quick start (single-sample pipeline): `vignette("scdrake")`
-  - 02 Integration pipeline guide: `vignette("scdrake_integration")`
-  - Extending the pipeline: `vignette("scdrake_extend")`
-  - `{drake}` basics: `vignette("drake_basics")`
-    - Or the official `{drake}` book: <https://books.ropensci.org/drake/>
-- General information:
-  - Pipeline overview: `vignette("pipeline_overview")`
-  - FAQ & Howtos: `vignette("scdrake_faq")`
-  - Config files: `vignette("scdrake_config")`
-  - Cluster markers: `vignette("cluster_markers")`
-  - Environment variables: `vignette("scdrake_envvars")`
-- General configs:
-    - Pipeline config: `vignette("config_pipeline")`
-    - Main config: `vignette("config_main")`
-- Targets and config parameters for each stage:
-  - Single-sample pipeline:
-    - Reading in data, filtering, quality control (stage `01_input_qc`): `vignette("stage_input_qc")`
-    - Normalization, HVG selection, dimensionality reduction, clustering, cell type annotation (stage `02_norm_clustering`):
-      `vignette("stage_norm_clustering")`
-  - Integration pipeline:
-    - Reading in data and integration (stage `01_integration`): `vignette("stage_integration")`
-    - Post-integration clustering (stage `02_int_clustering`): `vignette("stage_int_clustering")`
-  - Common:
-    - Cluster markers stage: `vignette("stage_cluster_markers")`
-    - Contrasts stage: `vignette("stage_contrasts")`
+```{r, eval = TRUE, child = "_vignette_signpost.Rmd"}
+```
 
 ```{r, include = FALSE}
 ## -- This is a cleanup after the vignette is built.

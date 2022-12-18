@@ -28,8 +28,6 @@ scdrake_make <- function(plan,
                          log_worker = TRUE,
                          options = list(),
                          ...) {
-  check_scdrake_packages()
-
   if (is_null(cfg_pipeline)) {
     cfg_pipeline <- load_pipeline_config()
   }
@@ -73,7 +71,6 @@ scdrake_make <- function(plan,
 
   if (!is_null(cfg_pipeline$RSTUDIO_PANDOC)) {
     withr::local_envvar(RSTUDIO_PANDOC = cfg_pipeline$RSTUDIO_PANDOC)
-    check_pandoc()
   }
 
   ## -- To fix https://github.com/rstudio/rmarkdown/issues/1632
@@ -99,14 +96,14 @@ scdrake_make <- function(plan,
     }
 
     if (drake_rebuild == "all") {
-      str_line(
-        "{.field DRAKE_REBUILD} is {.val 'all'} -> ",
+      str_space(
+        "{.field DRAKE_REBUILD} is {.val 'all'} ->",
         "the pipeline will be run from scratch."
       ) %>% cli_alert_info()
       drake_trigger <- drake::trigger(condition = TRUE)
     } else if (drake_rebuild == "current") {
-      str_line(
-        "{.field DRAKE_REBUILD} is {.val 'current'} -> ",
+      str_space(
+        "{.field DRAKE_REBUILD} is {.val 'current'} ->",
         "calling {.code drake::clean({dput(cfg_pipeline$DRAKE_TARGETS)}, path = {DRAKE_CACHE_DIR})}"
       ) %>%
         cli_alert_info()
@@ -128,22 +125,23 @@ scdrake_make <- function(plan,
     DT.warn.size = FALSE
   )
 
-  verbose %&&% cli::cli_h2("Running the single-sample pipeline")
-  verbose %&&% cli({
-    if (!is_null(cfg_main)) {
-      cli_alert_info("BASE OUTPUT DIRECTORY: {cfg_main$BASE_OUT_DIR}")
-    }
+  check_scdrake()
 
-    if (is_null(cfg_pipeline$DRAKE_TARGETS)) {
-      cli_alert_info("TARGETS: NULL (= all)")
-    } else {
-      cli_alert_info("TARGETS:")
-      cli::cli_ul(cfg_pipeline$DRAKE_TARGETS)
-    }
+  cli::cli_h2("Running the single-sample pipeline")
+  cli_alert_info("WORKING DIRECTORY: {.file {getwd()}}")
+  if (!is_null(cfg_main)) {
+    cli_alert_info("BASE OUTPUT DIRECTORY: {.file {cfg_main$BASE_OUT_DIR}}")
+  }
 
-    cli_alert_info("OUTDATED TARGETS:")
-    cli::cli_ul(drake::outdated(plan = plan, targets = cfg_pipeline$DRAKE_TARGETS, cache = drake_cache_object))
-  })
+  if (is_null(cfg_pipeline$DRAKE_TARGETS)) {
+    cli_alert_info("TARGETS: NULL (= all)")
+  } else {
+    cli_alert_info("TARGETS:")
+    cli::cli_ul(cfg_pipeline$DRAKE_TARGETS)
+  }
+
+  cli_alert_info("OUTDATED TARGETS:")
+  cli::cli_ul(drake::outdated(plan = plan, targets = cfg_pipeline$DRAKE_TARGETS, cache = drake_cache_object))
 
   packages <- c("HDF5Array", "ensembldb", rev(.packages()))
 

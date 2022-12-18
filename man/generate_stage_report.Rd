@@ -55,7 +55,7 @@ If you are currently working within a \code{scdrake} project, you can review the
 This is a list of Rmd files currently bundled with the \code{scdrake} package:
 
 \if{html}{\out{<div class="sourceCode r">}}\preformatted{fs::dir_tree(system.file("Rmd", package = "scdrake"))
-#> /mnt/foibe3/Users/novotnyj/projects/bioinfocz/scdrake/inst/Rmd
+#> /home/rstudio/scdrake/inst/Rmd
 #> +-- common
 #> |   +-- _footer.Rmd
 #> |   +-- _header.Rmd

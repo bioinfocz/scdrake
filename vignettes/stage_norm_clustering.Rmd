@@ -1,14 +1,14 @@
 ---
 title: "Normalization and clustering stage (`02_norm_clustering`)"
 description: "02_norm_clustering stage of the single-sample pipeline."
-date: "`r Sys.Date()`"
+date: "`r glue::glue('<sup>Document generated: {format(Sys.time(), \"%Y-%m-%d %H:%M:%S %Z%z</sup>\")}')`"
 package: scdrake
 output:
   BiocStyle::html_document:
     toc: true
     toc_float: true
 vignette: >
-  %\VignetteIndexEntry{Normalization and clustering stage}
+  %\VignetteIndexEntry{Normalization and clustering stage (`02_norm_clustering`)}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}  
 ---

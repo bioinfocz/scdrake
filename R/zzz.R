@@ -1,6 +1,7 @@
 #' @title Options used by `scdrake`.
 #' @description `get_scdrake_default_options()` returns a list of default `scdrake` options passed to
 #' `options()` during the package load.
+#' @inheritParams verbose_
 #'
 #' @details
 #' Most of the options are obtained from environment variables named in UPPERCASE,
@@ -45,50 +46,13 @@
 #'     That means other path-specifying options (e.g. `scdrake_pipeline_config_dir`) and config parameters will become
 #'     relative to `scdrake_project_root` - **use at your own risk**!
 #'
-#' Some of the options are internal, used for unit tests:
-#'
-#' - `scdrake_test_download_yq`
-#'   (logical, env: `SCDRAKE_TEST_DOWNLOAD_YQ`, default: `FALSE`)
-#'   - If `TRUE`, run tests for `yq` tool (`test-yq.R`).
-#' - `scdrake_test_run_pipeline`
-#'   (logical, env: `SCDRAKE_TEST_RUN_PIPELINE`, default: `FALSE`)
-#'   - If `TRUE`, run pipeline tests (`test-run_pipeline.R`).
-#'     Note that configs will be slightly adjusted compared to the default ones to speedup the computations.
-#' - `scdrake_test_run_pipeline_keep_files`
-#'   (logical, env: `SCDRAKE_TEST_RUN_PIPELINE_KEEP_FILES`, default: `TRUE`):
-#'   - If `TRUE`, keep files created by pipeline tests.
-#'     This is useful for reporting output of the current `scdrake` version.
-#' - `scdrake_test_run_pipeline_base_out_dir`
-#'   (character, env: `SCDRAKE_TEST_RUN_PIPELINE_BASE_OUT_DIR`,
-#'   default: `fs::file_temp("scdrake_test_project_") %>% fs::path_abs() %>% as.character()`):
-#'   - Base output directory for pipeline tests.
-#' - `scdrake_test_run_pipeline_vignette_get_started`
-#'   (logical, env: `SCDRAKE_TEST_RUN_PIPELINE_VIGNETTE_GET_STARTED`, default: `FALSE`)
-#'   - If `TRUE`, run pipeline tests (`test-run_pipeline_vignette.R`) for example data as given in the Get started
-#'     vignette.
-#' - `scdrake_test_run_pipeline_clear_config_patches`
-#'   (logical, env: `SCDRAKE_TEST_RUN_PIPELINE_CLEAR_CONFIG_PATCHES`, default: `TRUE`)
-#'   - If `TRUE`, remove all local config patches in `tests/testthat/run_pipeline_*_config_patches`, i.e. all files
-#'     except `*.default.yaml`.
-#' - `scdrake_test_run_pipeline_single_sample_full`
-#'   (logical, env: `SCDRAKE_TEST_RUN_PIPELINE_SINGLE_SAMPLE_FULL`, default: `FALSE`)
-#' - `scdrake_test_run_pipeline_integration`
-#'   (logical, env: `SCDRAKE_TEST_RUN_PIPELINE_INTEGRATION`, default: `FALSE`):
-#'   - If `TRUE`, run all targets of the single-sample pipeline for PBMC 1k dataset.
-#'   - If `TRUE`, run a shortened single-sample pipeline (target `sce_final_norm_clustering`)
-#'     for a second sample (PBMC 3k), followed by the integration pipeline.
-#' - `scdrake_test_run_pipeline_vignette_integration`
-#'   (logical, env: `SCDRAKE_TEST_RUN_PIPELINE_VIGNETTE_INTEGRATION`, default: `FALSE`):
-#'   The same as `scdrake_test_run_pipeline_integration`, but related to example data used in the Integration guide vignette.
-#'   The only difference is when it's `FALSE`, then `sce_final_norm_clustering` target won't be run for PBMC 3k data.
-#'
 #' @return A named list of options.
 #'
 #' @concept scdrake_options
 #' @rdname scdrake_options
 #' @export
-get_scdrake_default_options <- function() {
-  withr::local_options(scdrake_verbose = TRUE)
+get_scdrake_default_options <- function(verbose = TRUE) {
+  withr::local_options(scdrake_verbose = verbose)
   scdrake_yq_binary <- Sys.which("yq")
   scdrake_yq_binary <- dplyr::if_else(scdrake_yq_binary == "", get_yq_default_path(), scdrake_yq_binary)
 
@@ -115,50 +79,6 @@ get_scdrake_default_options <- function() {
     scdrake_project_root = get_sys_env(
       "SCDRAKE_PROJECT_ROOT",
       default = "."
-    ),
-
-    ## -- Internal options, mostly for unit tests.
-    scdrake_test_download_yq = get_sys_env(
-      "SCDRAKE_TEST_DOWNLOAD_YQ",
-      default = TRUE, type = "logical", verbose = FALSE
-    ),
-    scdrake_test_run_pipeline = get_sys_env(
-      "SCDRAKE_TEST_RUN_PIPELINE",
-      default = FALSE, type = "logical", verbose = FALSE
-    ),
-    scdrake_test_run_pipeline_keep_files = get_sys_env(
-      "SCDRAKE_TEST_RUN_PIPELINE_KEEP_FILES",
-      default = TRUE, type = "logical", verbose = FALSE
-    ),
-    scdrake_test_run_pipeline_base_out_dir = get_sys_env(
-      "SCDRAKE_TEST_RUN_PIPELINE_BASE_OUT_DIR",
-      default = fs::file_temp("scdrake_test_run_pipeline_output") %>% fs::path_abs() %>% as.character(),
-      type = "character",
-      verbose = FALSE
-    ),
-    scdrake_test_run_pipeline_clear_config_patches = get_sys_env(
-      "SCDRAKE_TEST_RUN_PIPELINE_CLEAR_CONFIG_PATCHES",
-      default = TRUE,
-      type = "logical",
-      verbose = FALSE
-    ),
-    scdrake_test_run_pipeline_single_sample_full = get_sys_env(
-      "SCDRAKE_TEST_RUN_PIPELINE_SINGLE_SAMPLE_FULL",
-      default = FALSE,
-      type = "logical",
-      verbose = FALSE
-    ),
-    scdrake_test_run_pipeline_integration = get_sys_env(
-      "SCDRAKE_TEST_RUN_PIPELINE_INTEGRATION",
-      default = FALSE, type = "logical", verbose = FALSE
-    ),
-    scdrake_test_run_pipeline_vignette_get_started = get_sys_env(
-      "SCDRAKE_TEST_RUN_PIPELINE_VIGNETTE_GET_STARTED",
-      default = FALSE, type = "logical", verbose = FALSE
-    ),
-    scdrake_test_run_pipeline_vignette__integration = get_sys_env(
-      "SCDRAKE_TEST_RUN_PIPELINE_VIGNETTE_INTEGRATION",
-      default = FALSE, type = "logical", verbose = FALSE
     )
   )
 }
@@ -173,14 +93,20 @@ get_scdrake_options <- function() {
   options()[stringr::str_detect(names(options()), "^scdrake_")]
 }
 
+.get_verbosity <- function() {
+  Sys.getenv("SCDRAKE_VERBOSE") %in% c("", "TRUE")
+}
+
 .onLoad <- function(libname, pkgname) {
-  options(get_scdrake_default_options())
+  options(get_scdrake_default_options(verbose = .get_verbosity()))
   set_rstudio_drake_cache(getOption("scdrake_cache_dir"), verbose = FALSE)
   Sys.setenv(`_R_CHECK_LENGTH_1_CONDITION_` = "true")
 }
 
 .onAttach <- function(libname, pkgname) {
-  packageStartupMessage(cli(cli::cli_h1("Welcome to {.pkg scdrake}!")))
+  if (.get_verbosity()) {
+    packageStartupMessage(cli(cli::cli_h1("Welcome to {.pkg scdrake}!")))
+  }
 }
 
 ## -- We need this to fix R CMD CHECK notes on "no visible binding for global variable" caused by functions generating

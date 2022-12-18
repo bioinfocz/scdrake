@@ -1,3 +1,5 @@
+cli::cli_h1("{.file tests/testthat/test-generics.R}")
+
 l <- scdrake_list(list(a = 1, b = 2, c = NULL))
 
 test_that("scdrake_list object is of the list type", {

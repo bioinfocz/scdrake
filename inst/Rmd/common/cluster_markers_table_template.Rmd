@@ -1,4 +1,10 @@
 ---
+author: "Made by the [scdrake pipeline](https://bioinfocz.github.io/scdrake)"
+institute: |
+  Laboratory of Genomics and Bioinformatics
+  Institute of Molecular Genetics of the ASCR
+  https://img.cas.cz
+date: "`r glue::glue('Document generated: {format(Sys.time(), \"%Y-%m-%d %H:%M:%S %Z%z\")}')`"
 output:
   html_document:
     toc: false

@@ -24,8 +24,8 @@ sce_raw_fn <- function(input_data) {
 
   assert_that_(
     fs::file_exists(input_path),
-    msg = str_line(
-      "Cannot find the input file or directory for the {.field 01_input_qc} stage: {.file {input_path}}. ",
+    msg = str_space(
+      "Cannot find the input file or directory for the {.field 01_input_qc} stage: {.file {input_path}}.",
       "Please check the {.file 01_input_qc.yaml} config file."
     )
   )
@@ -93,10 +93,10 @@ empty_droplets_fn <- function(sce_raw,
         cli::cli({
           cli_alert_danger("{.code DropletUtils::emptyDrops()} has failed with the following error message:")
           cli::cli_blockquote(as.character(e))
-          cli_alert_info(str_line(
-            "The most common reason is too small lower bound of UMIs for empty droplets, i.e. the error message will be ",
-            "'{.emph no counts available to estimate the ambient profile}'. ",
-            "If that happens, check the {.val EMPTY_DROPLETS_LOWER} and {.val EMPTY_DROPLETS_ENABLED} parameters ",
+          cli_alert_info(str_space(
+            "The most common reason is too small lower bound of UMIs for empty droplets, i.e. the error message will be",
+            "'{.emph no counts available to estimate the ambient profile}'.",
+            "If that happens, check the {.val EMPTY_DROPLETS_LOWER} and {.val EMPTY_DROPLETS_ENABLED} parameters",
             "in the {.file 01_input_qc.yaml} config file."
           ))
         })

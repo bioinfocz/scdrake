@@ -1,3 +1,16 @@
+# scdrake 1.4.0
+
+- `scdrake` has been ported to a Docker image and this is now the recommended usage.
+  - See `vignette("scdrake_docker")`.
+- A command line interface was implemented. It wraps several main `scdrake` functions.
+  - See `vignette("scdrake_cli")`.
+- `run_single_sample()` and `run_integration()` are now soft-deprecated.
+- Several bugs have been fixed.
+- Text/visual/user-experience refinements.
+- Dev changes:
+  - `dev/run_check.R` and `dev/run_tests.R` (former `run_pipeline_tests.R`) now uses R-based CLI and are run through `Rscript`.
+  - `deps.Dockerfile` will install `scdrake` with all dependencies from `DESCRIPTION`.
+
 # scdrake 1.3.2
 
 - Simplified default configs, vignettes updated accordingly.

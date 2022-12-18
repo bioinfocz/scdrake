@@ -28,6 +28,8 @@ check_scdrake_packages(verbose = TRUE)
 \item{pkg}{A character scalar: name of package.}
 
 \item{msg}{A character scalar: additional message to be displayed.}
+
+\item{verbose}{A logical scalar: if \code{TRUE}, be verbose.}
 }
 \value{
 \code{TRUE} if package is installed, \code{FALSE} otherwise.

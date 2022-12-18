@@ -1,0 +1,268 @@
+---
+title: "Using the Docker image"
+date: "`r glue::glue('<sup>Document generated: {format(Sys.time(), \"%Y-%m-%d %H:%M:%S %Z%z</sup>\")}')`"
+package: scdrake
+output:
+  BiocStyle::html_document:
+    toc: true
+    toc_float: true
+vignette: >
+  %\VignetteIndexEntry{Using the Docker image}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}  
+---
+
+```{r, child = "_version.Rmd"}
+```
+
+***
+
+[Docker](https://www.docker.com/) ([wiki](https://en.wikipedia.org/wiki/Docker_(software))) is a software for running
+isolated *containers* which are based on *images*. You can think of them as small, isolated operating systems.
+
+The [Bioconductor's page for Docker](https://bioconductor.org/help/docker/) provides itself a nice introduction to
+Docker and its usage for R, and we recommend to read it through.
+In this vignette, we will mainly give practical examples related to `{scdrake}`.
+
+***
+
+# Obtaining the Docker image
+
+A Docker image based on the [official Bioconductor image](https://bioconductor.org/help/docker/)
+(version `r LATEST_STABLE_VERSION_DOCKER_BIOC`) is available. This is the most handy and reproducible way how to use
+`{scdrake}` as all the dependencies are already installed and their version is fixed.
+In addition, the parent Bioconductor image comes bundled with RStudio Server.
+
+You can pull the Docker image with the latest stable `{scdrake}` version using
+
+```{r docker_stable, include = FALSE}
+out <- scdrake::format_shell_command(glue::glue("docker pull bioinfocz/scdrake:{LATEST_STABLE_VERSION}-bioc{LATEST_STABLE_VERSION_DOCKER_BIOC}"))
+```
+
+`r knitr::knit(text = out)`
+
+or list available versions in [our Docker Hub repository](https://hub.docker.com/r/bioinfocz/scdrake/tags).
+
+For the latest development version use
+
+```{r docker_latest, include = FALSE}
+out <- scdrake::format_shell_command(glue::glue("docker pull bioinfocz/scdrake:latest-bioc{LATEST_STABLE_VERSION_DOCKER_BIOC}"))
+```
+
+`r knitr::knit(text = out)`
+
+***
+
+# Running the image
+
+The `{scdrake}`'s image is based on the [Bioconductor's image](https://bioconductor.org/help/docker/)
+which is in turn based on the [Rocker Project's](https://rocker-project.org/images/versioned/rstudio.html)
+image (`rocker/rstudio`). Thanks to it, the `{scdrake}`'s image comes bundled with RStudio Server.
+
+Docker allows to mount local (host) directories to containers. We recommend to create a local directory in
+which individual `{scdrake}` projects (and other files, if needed) will lie. This way you won't lose data when
+a container is destroyed. Let's create such shared directory in your home directory and switch to it:
+
+```bash
+mkdir ~/scdrake_projects
+cd ~/scdrake_projects
+```
+
+## Running with RStudio Server
+
+[RStudio Server](https://posit.co/products/open-source/rstudio-server/) is a comfortable IDE for R.
+You can run the image including an RStudio instance using:
+
+```{r docker_run_rstudio, include = FALSE}
+out <- scdrake::format_shell_command(c(
+  "docker run -d",
+  "-v $(pwd):/home/rstudio/scdrake_projects",
+  "-p 8787:8787",
+  "-e USERID=$(id -u)",
+  "-e GROUPID=$(id -g)",
+  "-e PASSWORD=1234",
+  glue::glue("scdrake:{LATEST_STABLE_VERSION}-bioc{LATEST_STABLE_VERSION_DOCKER_BIOC}")
+))
+out2 <- glue::glue("`scdrake:{LATEST_STABLE_VERSION}-bioc{LATEST_STABLE_VERSION_DOCKER_BIOC}`")
+```
+
+`r knitr::knit(text = out)`
+
+Let's decompose the command above:
+
+- `docker run`: run image as a container.
+- `-d`: run in detached ("background") mode.
+- `-v $(pwd):/home/rstudio/scdrake_projects`: mount the current working directory on the host machine as
+  `/home/rstudio/scdrake_projects` inside the container.
+- `-p 8787:8787`: expose port `8787` in container as port `8787` on localhost.
+- `-e USERID=$(id -u) -e GROUPID=$(id -g)`: change ownership of `/home/rstudio` in the container to the ID and group ID
+  of the current host user. This is important as it sustains the correct file ownership, i.e. when you write to
+  `/home/rstudio/scdrake_projects` from within the container, you actually write to the host filesystem and you do so
+  as the proper user/group.
+- `-e PASSWORD=1234`: password for RStudio Server (and the username is `rstudio`).
+- `r out2`:
+  repository and tag of the image to be run.
+
+The `-e VAR=VALUE` arguments are used to set environment variables inside the container. You can check those for the
+parent `rocker/rstudio` image [here](https://rocker-project.org/images/versioned/rstudio.html#environment-variables).
+
+An image can have a default command which is executed on container run. For our image, it's a script `/init` which
+starts RStudio Server.
+
+Now you can check that the container is running:
+
+```bash
+docker ps
+```
+
+You should see something as
+
+```
+CONTAINER ID   IMAGE                            COMMAND   CREATED        STATUS        PORTS                                       NAMES
+d47b4d265052   scdrake:1.4.0-bioc3.15           "/init"   24 hours ago   Up 24 hours   0.0.0.0:8787->8787/tcp, :::8787->8787/tcp   condescending_payne
+```
+
+Values in the `CONTAINER ID` and `NAMES` columns can be then used to reference the running container.
+
+You can see that we have exposed port `8787`. What it is useful for? Well, it allows us to connect to RStudio Server,
+which is running on port 8787 inside the container. Now you can just open your browser, navigate to `localhost:8787`
+and login as `rstudio` with password `1234`.
+
+TIP: if you are using a remote server which you can SSH into and it allows SSH tunneling, then you can forward the
+exposed port to your host:
+
+```bash
+ssh -NL 8787:localhost:8787 user@server
+```
+
+Now you can start using `{scdrake}` from the RStudio, or read below for alternative ways.
+
+## Run the image without RStudio Server
+
+If you just want to run the image detached without RStudio Server, use
+
+```{r docker_run_detached, include = FALSE}
+out <- scdrake::format_shell_command(c(
+  "docker run -d",
+  "-u rstudio",
+  "-v $(pwd):/home/rstudio/scdrake_projects",
+  glue::glue("scdrake:{LATEST_STABLE_VERSION}-bioc{LATEST_STABLE_VERSION_DOCKER_BIOC}"),
+  "sleep infinity"
+))
+```
+
+`r knitr::knit(text = out)`
+
+***
+
+# Issuing commands in the running container
+
+You can start `bash` or `R` process inside the container and attach to it using
+
+```bash
+docker exec -it -u rstudio <CONTAINER ID or NAME> bash
+docker exec -it -u rstudio <CONTAINER ID or NAME> R
+```
+
+- `docker exec`: executes a command in a **running** container.
+- `-i`: interactive.
+- `-d`: allocate a pseudo-TTY.
+
+***
+
+# Problems with filesystem permissions {.tabset}
+
+In the first example, when we run the image including RStudio Server, we specified
+`-e USERID=$(id -u) -e GROUPID=$(id -g)`, and so ownership of `/home/rstudio` was changed to match the host user\*.
+Then when you write to the shared directory `/home/rstudio/scdrake_projects`, you are basically doing that as the host user.
+
+*<sup>\* This is actually not a feature of Docker, but the `rocker/rstudio` image which uses those environment
+variables to run the `/rocker_scripts/init_userconf.sh` which manages the ownership.</sup>*
+
+By default, `rstudio` user in the container has ID of 1000 which is commonly used for the default user in most
+Linux distributions. You can check it yourself on your host by executing `id -u`. If it is 1000, then you can safely
+skip the instructions below.
+
+***
+
+So when you don't want to run RStudio Server and your host user ID is not 1000, you have to take care of ownership
+by yourself. There are several ways how to accomplish that. You can also read about this problem
+[here](https://www.fullstaq.com/knowledge-hub/blogs/docker-and-the-host-filesystem-owner-matching-problem) or
+[here](https://vsupalov.com/docker-shared-permissions/).
+
+## Modify the user and group ID in the container
+
+The `rocker/rstudio` parent image already comes with a script which can add or modify user information
+(it is actually run when you start the container including RStudio Server).
+
+```bash
+docker exec \
+  -e USERID=$(id -u) -e GROUPID=$(id -g) \
+  <CONTAINER ID or NAME> \
+  bash /rocker_scripts/init_userconf.sh
+```
+
+Note that this just changes ID and group of the `rstudio` user, so later don't forget to run commands as this user,
+i.e. `docker exec -u rstudio ...`
+
+## "Chowning" (tedious)
+
+If you have root privileges on the host, you can just change ownership each time you write to the shared directory
+from the container:
+
+```bash
+sudo chown -R $(id -u):$(id -g) scdrake_projects
+```
+
+***
+
+# Issuing `{scdrake}` commands through its command line interface (CLI)
+
+We now assume that the `{scdrake}` container is running and the shared directory is mounted in
+`/home/rstudio/scdrake_projects`. The `{scdrake}` commands can be easily issued through its CLI
+(see `vignette("scdrake_cli")`):
+
+```bash
+docker exec -it -u rstudio <CONTAINER ID or NAME> \
+  scdrake -h
+```
+
+The usual workflow can be similar to the following:
+
+1. Initialize a new project:
+
+```bash
+docker exec -it -u rstudio -w /home/rstudio/scdrake_projects <CONTAINER ID or NAME> \
+  scdrake -d my_first_project init-project
+```
+
+2. Modify the configs on your host in `my_first_project/config/`
+
+3. Run the pipeline:
+
+```bash
+docker exec -it -u rstudio -w /home/rstudio/scdrake_projects/my_first_project <CONTAINER ID or NAME> \
+  scdrake --pipeline-type single_sample run
+```
+
+***
+
+# Create a command alias
+
+To reduce typing/copy-pasting a bit, you can create a command alias in your shell, here for `bash`:
+
+```bash
+alias scdrake_docker="docker exec -it -u rstudio <CONTAINER ID or NAME> scdrake"
+```
+
+And then use this alias as e.g.
+
+```bash
+scdrake_docker -d /home/rstudio/scdrake_projects/my_first_project --pipeline-type single_sample run
+```
+
+Notice that we are using the `-d` parameter as the alias doesn't contain the `-w` parameter which instructs Docker
+to execute the command in a working directory.
+
+Finally, you can put the alias permanently inside your `~/.bashrc` file. Just don't forget to change
+`<CONTAINER ID or NAME>` when you start a new container :)

@@ -1,0 +1,87 @@
+---
+title: "Command line interface"
+date: "`r glue::glue('<sup>Document generated: {format(Sys.time(), \"%Y-%m-%d %H:%M:%S %Z%z</sup>\")}')`"
+package: scdrake
+output:
+  BiocStyle::html_document:
+    toc: true
+    toc_float: true
+vignette: >
+  %\VignetteIndexEntry{Command line interface}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+***
+
+A simple command line interface (CLI) for `{scdrake}` is available. It is already installed in the Docker image,
+otherwise it can be installed with
+
+```r
+scdrake::install_cli()
+```
+
+See the above function's help page for possible parameters. By default, the CLI is installed in user's home as
+`~/.local/bin/scdrake`.
+
+# Using the CLI
+
+You can display the help message by running `scdrake` or `scdrake -h`.
+
+The CLI offers several commands which wrap the most frequently used `{scdrake}` functions.
+Some options and flags are command-specific.
+
+The usage is:
+
+```bash
+scdrake [OPTIONS/FLAGS] <COMMAND>
+```
+
+Current commands are listed below.
+
+## &lt;init-project&gt;
+
+Initializes a new `{scdrake}` project, by default in the current working directory. It will also download example data
+if you specify the `--download-example-data` tag.
+
+Wraps `init_project()`.
+
+## &lt;run&gt;
+
+Runs a pipeline according to `--pipeline-type` parameter which can be currently `single_sample` or `integration`.
+
+Wraps `run_single_sample_r()` and `run_integration_r()`.
+
+## &lt;update-project&gt;
+
+Updates the project files, by default in the current working directory.
+
+Wraps `update_project()`.
+
+## &lt;download-example-data&gt;
+
+Downloads example data: PBMC 1k and 3k from 10x Genomics.
+
+Wraps `download_pbmc1k()` and `download_pbmc3k()`.
+
+## &lt;check&gt;
+
+Checks for `{scdrake}` dependencies.
+
+Wraps `check_scdrake()`.
+
+***
+
+# Technical notes
+
+The CLI actually consists of two scripts:
+
+- `scdrake` is a shell script which forwards parameters to <code>r \-\-interactive -t path/to/scdrake.R ...</code>
+  - `r` is called [littler](https://eddelbuettel.github.io/littler/) and it is basically a more friendly and robust
+    alternative to `Rscript`.
+- `scdrake.R` is the R part of the CLI and parses command line arguments using the
+  [argparser](https://bitbucket.org/djhshih/argparser) package.
+  - We need to run this script interactively, but that can be only achieved with <code>r \-\-interactive</code> and in that case
+    we cannot use the shebang line (`#!/usr/bin/env r --interactive`) because then the script
+    [doesn't accept additional parameters](https://stackoverflow.com/questions/4303128/how-to-use-multiple-arguments-for-awk-with-a-shebang-i-e).
+    That's why we are using the intermediate shell script.

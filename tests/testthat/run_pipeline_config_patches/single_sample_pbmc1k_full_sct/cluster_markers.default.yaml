@@ -1,0 +1,49 @@
+CLUSTER_MARKERS_SOURCES_DEFAULTS:
+  COMMON_PARAMS:
+    PLOT_DIMREDS: ["umap"]
+    BLOCK_COLUMN: null
+  PARAMS_T:
+    LFC_DIRECTION: "up"
+    LFC_TEST: 0
+    PVAL_TYPE: "any"
+    MIN_PROP: null
+    STD_LFC: False
+    TOP_N_HEATMAP: 3
+    TOP_N_WT_HEATMAP: "top"
+    TOP_N_PLOT: 3
+    TOP_N_WT_PLOT: "top"
+  PARAMS_WILCOX:
+    LFC_DIRECTION: "up"
+    LFC_TEST: 0
+    PVAL_TYPE: "any"
+    MIN_PROP: null
+    STD_LFC: null
+    TOP_N_HEATMAP: 3
+    TOP_N_WT_HEATMAP: "top"
+    TOP_N_PLOT: 3
+    TOP_N_WT_PLOT: "top"
+  PARAMS_BINOM:
+    LFC_DIRECTION: "up"
+    LFC_TEST: 0
+    PVAL_TYPE: "any"
+    MIN_PROP: null
+    STD_LFC: null
+    TOP_N_HEATMAP: 3
+    TOP_N_WT_HEATMAP: "top"
+    TOP_N_PLOT: 3
+    TOP_N_WT_PLOT: "top"
+CLUSTER_MARKERS_SOURCES:
+  - markers_cluster_kmeans_kc_4:
+      source_column: "cluster_kmeans_kc_4"
+      description: "Cluster markers for k-means clustering (k = 4)"
+      common_params:
+        plot_dimreds: ["umap", "pca"]
+      params_t:
+        pval_type: "some"
+        top_n_wt_heatmap: "fdr"
+        top_n_wt_plot: "fdr"
+    markers_cluster_kmeans_kc_3_cc_block:
+      source_column: "cluster_kmeans_kc_3_renamed"
+      description: "Cluster markers for k-means clustering (k = 3) with blocking on cell cycle phase"
+      common_params:
+        block_column: "phase"

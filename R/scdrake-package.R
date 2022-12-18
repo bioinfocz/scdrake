@@ -40,3 +40,9 @@
 ## usethis namespace: start
 ## usethis namespace: end
 NULL
+
+#' @title Matching CLI version for this package version.
+#'
+#' @concept cli
+#' @export
+SCDRAKE_CLI_VERSION <- "1.0.0"

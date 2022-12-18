@@ -9,8 +9,7 @@ set_rstudio_drake_cache(dir, verbose = TRUE)
 \arguments{
 \item{dir}{A character scalar: path to directory with \code{drake} cache.}
 
-\item{verbose}{A logical scalar: if \code{TRUE}, be verbose.
-The default value is obtained from \code{getOption("scdrake_verbose")}.}
+\item{verbose}{A logical scalar: if \code{TRUE}, be verbose.}
 }
 \value{
 Invisibly \code{TRUE} if \code{dir} exists, \code{FALSE} otherwise.

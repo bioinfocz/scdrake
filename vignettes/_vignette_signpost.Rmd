@@ -1,0 +1,28 @@
+- Guides:
+  - Using the Docker image: `vignette("scdrake_docker")`
+  - 01 Quick start (single-sample pipeline): `vignette("scdrake")`
+  - 02 Integration pipeline guide: `vignette("scdrake_integration")`
+  - Extending the pipeline: `vignette("scdrake_extend")`
+  - `{drake}` basics: `vignette("drake_basics")`
+    - Or the official `{drake}` book: <https://books.ropensci.org/drake/>
+- General information:
+  - Pipeline overview: `vignette("pipeline_overview")`
+  - FAQ & Howtos: `vignette("scdrake_faq")`
+  - Command line interface (CLI): `vignette("scdrake_cli")`
+  - Config files: `vignette("scdrake_config")`
+  - Cluster markers: `vignette("cluster_markers")`
+  - Environment variables: `vignette("scdrake_envvars")`
+- General configs:
+    - Pipeline config: `vignette("config_pipeline")`
+    - Main config: `vignette("config_main")`
+- Targets and config parameters for each stage:
+  - Single-sample pipeline:
+    - Reading in data, filtering, quality control (stage `01_input_qc`): `vignette("stage_input_qc")`
+    - Normalization, HVG selection, dimensionality reduction, clustering, cell type annotation (stage `02_norm_clustering`):
+      `vignette("stage_norm_clustering")`
+  - Integration pipeline:
+    - Reading in data and integration (stage `01_integration`): `vignette("stage_integration")`
+    - Post-integration clustering (stage `02_int_clustering`): `vignette("stage_int_clustering")`
+  - Common:
+    - Cluster markers stage: `vignette("stage_cluster_markers")`
+    - Contrasts stage: `vignette("stage_contrasts")`

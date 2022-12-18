@@ -38,7 +38,8 @@ cell_annotation_params_fn <- function(cell_annotation_sources, biomart_dataset =
       }
 
       cell_ont <- dplyr::if_else(label_column == "label.ont", "nonna", "all")
-      reference_se <- reference_se(ensembl = TRUE, cell.ont = cell_ont)
+      ## -- Without loading the ensembldb package the following error appears: 'require("ensembldb") failed'
+      reference_se <- withr::with_package("ensembldb", reference_se(ensembl = TRUE, cell.ont = cell_ont))
     } else if (reference_type == "file") {
       assert_that_(
         fs::file_exists(reference),

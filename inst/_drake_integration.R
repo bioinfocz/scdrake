@@ -1,14 +1,21 @@
+cli::cli_h1("Begin {.file _drake_integration.R}")
+
 library(conflicted)
 library(rlang)
 conflict_prefer("is_null", "rlang")
 library(cli)
 library(here)
+library(magrittr)
+conflict_prefer("not", "magrittr")
 
-if (Sys.getenv("SCDRAKE_TEST_RUN_PIPELINE") == "TRUE") {
-  cli_alert_info("Running in test mode ({.envvar SCDRAKE_TEST_RUN_PIPELINE} is {.code TRUE}).")
-  scdrake_pkg_dir <- Sys.getenv("SCDRAKE_PKG_DIR")
+cli_alert_info("WORKING DIRECTORY: {.file {getwd()}}")
+cli_alert_info("R LIBRARY PATHS ({.code .libPaths()}): {.file {paste0(.libPaths(), collapse = ':')}}")
+
+scdrake_pkg_dir <- Sys.getenv("SCDRAKE_PKG_DIR", NA)
+
+if (!is.na(scdrake_pkg_dir) && scdrake_pkg_dir != "") {
+  cli_alert_info("Loading {.pkg scdrake} from {.file {scdrake_pkg_dir}} (as set by the {.envvar SCDRAKE_PKG_DIR} environment variable).")
   devtools::load_all(scdrake_pkg_dir, export_all = FALSE)
-  cli_alert_success("Loaded {.pkg scdrake} package from {.file {scdrake_pkg_dir}}")
 } else {
   library(scdrake)
 }
@@ -17,8 +24,6 @@ conflict_prefer("is_true", "rlang")
 
 here::i_am(".here")
 verbose <- getOption("scdrake_verbose")
-
-check_scdrake_packages()
 
 update_pipeline_config()
 update_integration_configs()
@@ -78,14 +83,14 @@ if (is_scalar_character(drake_rebuild)) {
   }
 
   if (drake_rebuild == "all") {
-    str_line(
-      "{.field DRAKE_REBUILD} is {.val 'all'} -> ",
+    str_space(
+      "{.field DRAKE_REBUILD} is {.val 'all'} ->",
       "the pipeline will be run from scratch."
     ) %>% cli_alert_info()
     drake_trigger <- drake::trigger(condition = TRUE)
   } else if (drake_rebuild == "current") {
-    str_line(
-      "{.field DRAKE_REBUILD} is {.val 'current'} -> ",
+    str_space(
+      "{.field DRAKE_REBUILD} is {.val 'current'} ->",
       "calling {.code drake::clean({dput(cfg_pipeline$DRAKE_TARGETS)}, path = {DRAKE_CACHE_DIR})}"
     ) %>%
       cli_alert_info()
@@ -116,17 +121,16 @@ if (!rlang::is_null(plan_custom)) {
   plan <- drake::bind_plans(plan, plan_custom)
 }
 
-verbose %&&% cli::cli_h2("Running the integration pipeline")
-verbose %&&% cli({
-  cli_alert_info("BASE OUTPUT DIRECTORY: {cfg$main$BASE_OUT_DIR}")
+check_scdrake()
 
-  if (is.null(cfg_pipeline$DRAKE_TARGETS)) {
-    cli_alert_info("TARGETS: NULL (= all)")
-  } else {
-    cli_alert_info("TARGETS:")
-    cli::cli_ul(cfg_pipeline$DRAKE_TARGETS)
-  }
-})
+cli::cli_h2("Running the integration pipeline")
+cli_alert_info("BASE OUTPUT DIRECTORY: {.file {cfg$main$BASE_OUT_DIR}}")
+if (is.null(cfg_pipeline$DRAKE_TARGETS)) {
+  cli_alert_info("TARGETS: NULL (= all)")
+} else {
+  cli_alert_info("TARGETS:")
+  cli::cli_ul(cfg_pipeline$DRAKE_TARGETS)
+}
 
 packages <- c("HDF5Array", "ensembldb", rev(.packages()))
 

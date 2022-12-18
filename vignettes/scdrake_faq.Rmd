@@ -1,13 +1,6 @@
 ---
 title: "FAQ & Howtos"
-date: "`r Sys.Date()`"
-author:
-  - name: Jiri Novotny
-    affiliation: Institute of Molecular Genetics of the Czech Academy of Sciences
-    email: jiri.novotny@img.cas.cz
-  - name: Jan Kubovciak
-    affiliation: Institute of Molecular Genetics of the Czech Academy of Sciences
-    email: jan.kubovciak@img.cas.cz
+date: "`r glue::glue('<sup>Document generated: {format(Sys.time(), \"%Y-%m-%d %H:%M:%S %Z%z</sup>\")}')`"
 package: scdrake
 output:
   BiocStyle::html_document:
@@ -30,15 +23,14 @@ retrofit `{targets}`.** New projects should use `{targets}` because it is friend
 
 # I have some installation problems
 
-The most common cause are missing shared libraries. Please, refer to
-[instructions](../index.html#installation-failed) in README.
+If you are not using the Docker image, the most common cause of installation errors are missing shared libraries.
 
-If those are unsuccessful, feel free to [open a new issue](https://github.com/bioinfocz/scdrake/issues).
+Feel free to [open a new issue](https://github.com/bioinfocz/scdrake/issues).
 
 # The pipeline is failing for my data
 
 First make sure you have read the [Before you analyse your own data](scdrake.html#before-you-analyse-your-own-data) in the
-Quick start vignette (`vignette("scdrake")`).
+Get Started vignette (`vignette("scdrake")`).
 
 If the problem persists, feel free to [open a new issue](https://github.com/bioinfocz/scdrake/issues) or start a
 [discussion](https://github.com/bioinfocz/scdrake/discussions).
@@ -56,7 +48,7 @@ This can be simply done by changing the appropriate parameters in config files:
 - Each stage in each pipeline type has it's own base directory created under `BASE_OUT_DIR`.
   For example, `INPUT_QC_BASE_OUT_DIR` in `config/single_sample/01_input_qc.yaml`.
 
-# I want to use different cache directory
+# I want to use a different cache directory
 
 This is controlled by `DRAKE_CACHE_DIR` in `config/pipeline.yaml`.
 
@@ -129,7 +121,7 @@ NORMALIZATION_TYPE: "none"
 The `my_cell_types` column can be now used for different purposes, e.g. for cluster markers detection, differential
 expression (stage `contrasts`) or visualization.
 
-The same can be done for input data for the integration pipeline. Please, refer to the `INTEGRATION_SOURCES` parameter
+The same can be done for input data in the integration pipeline. Please, refer to the `INTEGRATION_SOURCES` parameter
 in `vignette("stage_integration")`.
 
 # A target is not getting built

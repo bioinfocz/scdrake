@@ -42,3 +42,39 @@
 
   invisible(NULL)
 }
+
+#' @concept internal
+.run_cli <- function(command = "scdrake",
+                     args = character(),
+                     error_on_status = FALSE,
+                     echo_cmd = TRUE,
+                     echo = TRUE,
+                     scdrake_pkg_dir = Sys.getenv("SCDRAKE_PKG_DIR", ""),
+                     cli_verbose = FALSE,
+                     verbose = FALSE,
+                     ...) {
+  if (!is_empty(scdrake_pkg_dir) && scdrake_pkg_dir != "") {
+    args <- c("--scdrake-pkg-dir", scdrake_pkg_dir, args)
+  } else {
+    cli_alert_warning("{.code .run_cli()}: {.envvar SCDRAKE_PKG_DIR} is not set")
+  }
+
+  if (!cli_verbose) {
+    args <- c(args, "--quiet")
+  }
+
+  args <- c(args, "--no-ask")
+
+  res <- processx::run(command = command, args = args, error_on_status = error_on_status, echo_cmd = echo_cmd, echo = echo, ...)
+  if (res$status > 0) {
+    cli_alert_danger("The command has finished with exit code {.val {res$status}}")
+    if (verbose) {
+      cli_alert_info("STDOUT:")
+      message(res$stdout)
+      cli_alert_info("STDERR:")
+      message(res$stderr)
+    }
+  }
+
+  return(res)
+}

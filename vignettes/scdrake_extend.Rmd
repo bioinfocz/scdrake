@@ -1,6 +1,6 @@
 ---
 title: "Extending the pipeline"
-date: "`r Sys.Date()`"
+date: "`r glue::glue('<sup>Document generated: {format(Sys.time(), \"%Y-%m-%d %H:%M:%S %Z%z</sup>\")}')`"
 package: scdrake
 output:
   BiocStyle::html_document:
@@ -13,7 +13,7 @@ vignette: >
 ---
 
 In this vignette we will reuse the project initialized within the Quick start guide (`vignette("scdrake")`) that should
-live in `~/scdrake_single_sample_example`.
+live in `~/scdrake_projects/pbmc1k`.
 
 ***
 
@@ -178,6 +178,7 @@ Another possibility is to reuse the machinery responsible for rendering of stage
 title: "`r params$title`"
 author: "Your name"
 institute: "Your institute"
+date: "`r glue::glue('Document generated: {format(Sys.time(), \"%Y-%m-%d %H:%M:%S %Z%z\")}')`"
 output:
   html_document:
     toc: true
@@ -192,7 +193,6 @@ params:
   css_file: !expr here::here("Rmd/common/stylesheet.css")
   drake_cache_dir: !expr here::here(".drake")
   title: "Your title"
-date: "`r glue::glue('Document generated: {Sys.Date()}')`"
 css: "`r params$css_file`"
 ---
 
@@ -216,7 +216,7 @@ parameters to the Rmd document. For the Rmd document above, we would call this f
 
 ```{r, eval = FALSE}
 generate_stage_report(
-  ## -- We assume the document is saved here.
+  ## -- We assume that the document is saved here.
   "Rmd/my_report.Rmd",
   "output/my_report.html",
   params = list(title = "My report")

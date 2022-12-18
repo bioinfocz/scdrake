@@ -132,13 +132,16 @@ init_project <- function(dir = ".",
 
   download_yq(verbose = verbose, ask = ask, do_check = TRUE, ...)
 
-  verbose %&&% cli_alert_info("Updating configs.")
-  update_configs(
-    pipeline_config_dir = fs::path(dir, "config"),
-    single_sample_config_dir = fs::path(dir, "config/single_sample"),
-    integration_config_dir = fs::path(dir, "config/integration"),
-    force = FALSE,
-    verbose = verbose
+  verbose %&&% cli_alert_info("Creating local configs.")
+  withr::with_dir(
+    dir,
+    update_configs(
+      pipeline_config_dir = "config",
+      single_sample_config_dir = "config/single_sample",
+      integration_config_dir = "config/integration",
+      force = TRUE,
+      verbose = verbose
+    )
   )
 
   if (download_example_data) {
@@ -150,7 +153,11 @@ init_project <- function(dir = ".",
   verbose %&&% cli::cli_h1("Done!")
 
   if (use_rstudio && set_active_project) {
-    usethis::proj_activate(dir)
+    if (verbose) {
+      usethis::proj_activate(dir)
+    } else {
+      suppressMessages(usethis::proj_activate(dir))
+    }
   }
 
   return(invisible(NULL))
@@ -217,12 +224,15 @@ update_project <- function(dir = ".",
   fs::file_copy(system.file("plan_custom.R", package = "scdrake", mustWork = TRUE), plan_custom_new_file, overwrite = TRUE)
   verbose %&&% cli_alert_success("Copied the {.file plan_custom.R} file.")
 
-  update_configs(
-    pipeline_config_dir = pipeline_config_dir,
-    single_sample_config_dir = single_sample_config_dir,
-    integration_config_dir = integration_config_dir,
-    force = FALSE,
-    verbose = verbose
+  withr::with_dir(
+    dir,
+    update_configs(
+      pipeline_config_dir = pipeline_config_dir,
+      single_sample_config_dir = single_sample_config_dir,
+      integration_config_dir = integration_config_dir,
+      force = FALSE,
+      verbose = verbose
+    )
   )
 
   return(invisible(NULL))

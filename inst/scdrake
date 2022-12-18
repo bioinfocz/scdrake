@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+
+## -- This is a simple shell wrapper for scdrake's R CLI.
+## -- We need to run littler with --interactive, but when #!/usr/bin/env is used, it is not possible to pass additional parameters.
+
+if ! [ -x "$(command -v r)" ]; then
+  echo "Error: command 'r' not found."
+  echo "The R package littler is needed to run the scdrake CLI, but it was not found in your PATH. You can install littler with:"
+  echo "Rscript -e 'install.packages(\"littler\")'"
+  exit
+fi
+
+SCRIPT_DIR=$( cd -- "$( dirname -- $( realpath "${BASH_SOURCE[0]}" ) )" &> /dev/null && pwd )
+export R_LIBS_SITE_=/usr/local/lib/R/site-library
+exec r --interactive -L /usr/local/lib/R/site-library -t $SCRIPT_DIR/scdrake.R "$@"

@@ -1,0 +1,47 @@
+CONTRASTS_SOURCES_DEFAULTS:
+  COMMON_PARAMS:
+    PLOT_DIMREDS: ["umap"]
+    BLOCK_COLUMN: null
+  PARAMS_T:
+    LFC_TEST: 0
+    STD_LFC: False
+    TOP_N_HEATMAP: 3
+    TOP_N_WT_HEATMAP: "fdr"
+    TOP_N_PLOT: 3
+    TOP_N_WT_PLOT: "fdr"
+  PARAMS_WILCOX:
+    LFC_TEST: 0
+    STD_LFC: null
+    TOP_N_HEATMAP: 3
+    TOP_N_WT_HEATMAP: "fdr"
+    TOP_N_PLOT: 3
+    TOP_N_WT_PLOT: "fdr"
+  PARAMS_BINOM:
+    LFC_TEST: 0
+    STD_LFC: null
+    TOP_N_HEATMAP: 3
+    TOP_N_WT_HEATMAP: "fdr"
+    TOP_N_PLOT: 3
+    TOP_N_WT_PLOT: "fdr"
+CONTRASTS_SOURCES:
+  - dea_cluster_louvain_annotated:
+      source_column: "cluster_graph_louvain_annotated"
+      description: "DEA of some groups in graph-based clustering clustering (Louvain alg.)"
+      common_params:
+        plot_dimreds: ["umap", "pca"]
+      params_t:
+        lfc_test: 1
+      contrasts:
+        - target: "memory_CD4+"
+          reference: "B"
+        - target: "3"
+          reference: "4"
+          name: "cl3_vs_cl4"
+    dea_cluster_kmeans_kc_3_cc_block:
+      source_column: "cluster_kmeans_kc_3_renamed"
+      description: "DEA of all groups in k-means clustering (k = 3) with blocking on cell cycle phase"
+      common_params:
+        block_column: "phase"
+      params_wilcox:
+        top_n_heatmap: 20
+      contrasts: "all"

@@ -11,6 +11,8 @@ knitr::opts_chunk$set(echo = FALSE, warning = FALSE, message = FALSE)
 Below you can find commands to install the required libraries for different Linux distributions and their releases.
 If you are not sure which release are you using, check contents of the `/etc/os-release` file.
 
+**Don't forget to update the package database of your package manager.** E.g. for Ubuntu: `sudo apt update`
+
 ```{r libs_prepare}
 suppressPackageStartupMessages(library(magrittr))
 dists <- remotes:::supported_os_versions()

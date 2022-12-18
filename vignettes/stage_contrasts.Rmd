@@ -1,6 +1,6 @@
 ---
 title: "Contrasts stage (`contrasts`)"
-date: "`r Sys.Date()`"
+date: "`r glue::glue('<sup>Document generated: {format(Sys.time(), \"%Y-%m-%d %H:%M:%S %Z%z</sup>\")}')`"
 package: scdrake
 output:
   BiocStyle::html_document:
@@ -24,8 +24,9 @@ is read from environment variables:
 - `SCDRAKE_INTEGRATION_CONFIG_DIR` for the integration pipeline.
 
 and options named in lowercase are set upon `{scdrake}` load or attach. Then the actual directory used depends on
-whether you run `run_single_sample()` or `run_integration()`, or `scdrake_r_make()` with `_drake_single_sample.R` or
-`_drake_integration.R`.
+whether you run `run_single_sample()` / `run_single_sample_r()` or `run_integration()` / `run_integration_r()`.
+
+***
 
 # Config parameters
 

@@ -1,7 +1,7 @@
 ---
 title: "Pipeline config"
 description: "Runtime parameters."
-date: "`r Sys.Date()`"
+date: "`r glue::glue('<sup>Document generated: {format(Sys.time(), \"%Y-%m-%d %H:%M:%S %Z%z</sup>\")}')`"
 package: scdrake
 output:
   BiocStyle::html_document:
@@ -21,6 +21,8 @@ This option is used as the default argument value in several `{scdrake}` functio
 
 Pipeline parameters don't have impact on analysis (except `SEED`, but that should be reproducibly treated by `{drake}`).
 Parameters starting with `DRAKE_` are generally passed to `drake::make()` or `drake::drake_config()`.
+
+***
 
 # General parameters
 

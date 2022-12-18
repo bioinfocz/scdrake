@@ -7,7 +7,7 @@
 check_yq(
   yq_binary = getOption("scdrake_yq_binary"),
   repair_executable = TRUE,
-  verbose = getOption("scdrake_verbose")
+  verbose = TRUE
 )
 }
 \arguments{

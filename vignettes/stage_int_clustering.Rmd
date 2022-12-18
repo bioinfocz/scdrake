@@ -1,14 +1,14 @@
 ---
 title: "Post-integration clustering stage (`02_int_clustering`)"
 description: "02_int_clustering stage of the integration pipeline."
-date: "`r Sys.Date()`"
+date: "`r glue::glue('<sup>Document generated: {format(Sys.time(), \"%Y-%m-%d %H:%M:%S %Z%z</sup>\")}')`"
 package: scdrake
 output:
   BiocStyle::html_document:
     toc: true
     toc_float: true
 vignette: >
-  %\VignetteIndexEntry{Post-integration clustering stage}
+  %\VignetteIndexEntry{Post-integration clustering stage (`02_int_clustering`)}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}  
 ---

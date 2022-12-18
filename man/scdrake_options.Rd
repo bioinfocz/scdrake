@@ -5,9 +5,12 @@
 \alias{get_scdrake_options}
 \title{Options used by \code{scdrake}.}
 \usage{
-get_scdrake_default_options()
+get_scdrake_default_options(verbose = TRUE)
 
 get_scdrake_options()
+}
+\arguments{
+\item{verbose}{A logical scalar: if \code{TRUE}, be verbose.}
 }
 \value{
 A named list of options.
@@ -77,58 +80,6 @@ change the working directory before pipeline is run in e.g. \code{run_single_sam
 That means other path-specifying options (e.g. \code{scdrake_pipeline_config_dir}) and config parameters will become
 relative to \code{scdrake_project_root} - \strong{use at your own risk}!
 }
-}
-
-Some of the options are internal, used for unit tests:
-\itemize{
-\item \code{scdrake_test_download_yq}
-(logical, env: \code{SCDRAKE_TEST_DOWNLOAD_YQ}, default: \code{FALSE})
-\itemize{
-\item If \code{TRUE}, run tests for \code{yq} tool (\code{test-yq.R}).
-}
-\item \code{scdrake_test_run_pipeline}
-(logical, env: \code{SCDRAKE_TEST_RUN_PIPELINE}, default: \code{FALSE})
-\itemize{
-\item If \code{TRUE}, run pipeline tests (\code{test-run_pipeline.R}).
-Note that configs will be slightly adjusted compared to the default ones to speedup the computations.
-}
-\item \code{scdrake_test_run_pipeline_keep_files}
-(logical, env: \code{SCDRAKE_TEST_RUN_PIPELINE_KEEP_FILES}, default: \code{TRUE}):
-\itemize{
-\item If \code{TRUE}, keep files created by pipeline tests.
-This is useful for reporting output of the current \code{scdrake} version.
-}
-\item \code{scdrake_test_run_pipeline_base_out_dir}
-(character, env: \code{SCDRAKE_TEST_RUN_PIPELINE_BASE_OUT_DIR},
-default: \code{fs::file_temp("scdrake_test_project_") \%>\% fs::path_abs() \%>\% as.character()}):
-\itemize{
-\item Base output directory for pipeline tests.
-}
-\item \code{scdrake_test_run_pipeline_vignette_get_started}
-(logical, env: \code{SCDRAKE_TEST_RUN_PIPELINE_VIGNETTE_GET_STARTED}, default: \code{FALSE})
-\itemize{
-\item If \code{TRUE}, run pipeline tests (\code{test-run_pipeline_vignette.R}) for example data as given in the Get started
-vignette.
-}
-\item \code{scdrake_test_run_pipeline_clear_config_patches}
-(logical, env: \code{SCDRAKE_TEST_RUN_PIPELINE_CLEAR_CONFIG_PATCHES}, default: \code{TRUE})
-\itemize{
-\item If \code{TRUE}, remove all local config patches in \verb{tests/testthat/run_pipeline_*_config_patches}, i.e. all files
-except \verb{*.default.yaml}.
-}
-\item \code{scdrake_test_run_pipeline_single_sample_full}
-(logical, env: \code{SCDRAKE_TEST_RUN_PIPELINE_SINGLE_SAMPLE_FULL}, default: \code{FALSE})
-\item \code{scdrake_test_run_pipeline_integration}
-(logical, env: \code{SCDRAKE_TEST_RUN_PIPELINE_INTEGRATION}, default: \code{FALSE}):
-\itemize{
-\item If \code{TRUE}, run all targets of the single-sample pipeline for PBMC 1k dataset.
-\item If \code{TRUE}, run a shortened single-sample pipeline (target \code{sce_final_norm_clustering})
-for a second sample (PBMC 3k), followed by the integration pipeline.
-}
-\item \code{scdrake_test_run_pipeline_vignette_integration}
-(logical, env: \code{SCDRAKE_TEST_RUN_PIPELINE_VIGNETTE_INTEGRATION}, default: \code{FALSE}):
-The same as \code{scdrake_test_run_pipeline_integration}, but related to example data used in the Integration guide vignette.
-The only difference is when it's \code{FALSE}, then \code{sce_final_norm_clustering} target won't be run for PBMC 3k data.
 }
 }
 \concept{scdrake_options}

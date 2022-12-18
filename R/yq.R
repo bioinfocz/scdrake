@@ -37,7 +37,7 @@ download_yq <- function(url = NULL,
   if (!overwrite && fs::file_exists(destfile)) {
     cli_alert_info("{.file {destfile}} exists and {.code overwrite = FALSE} -> skipping the download")
     if (do_check) {
-      check_yq(yq_binary = destfile, repair_executable = TRUE, verbose = TRUE)
+      check_yq(yq_binary = destfile, repair_executable = TRUE, verbose = verbose)
     }
 
     if (set_as_default) {
@@ -118,7 +118,7 @@ download_yq <- function(url = NULL,
     }
 
     if (do_check) {
-      check_yq(yq_binary = destfile, repair_executable = FALSE, verbose = TRUE)
+      check_yq(yq_binary = destfile, repair_executable = FALSE, verbose = verbose)
     }
   }
 
@@ -171,7 +171,7 @@ get_yq_default_path <- function() {
 #' @export
 check_yq <- function(yq_binary = getOption("scdrake_yq_binary"),
                      repair_executable = TRUE,
-                     verbose = getOption("scdrake_verbose")) {
+                     verbose = TRUE) {
   err_message <- c(
     "The {.code yq} tool was not found. You can:",
     i = str_space(

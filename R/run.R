@@ -62,6 +62,7 @@ create_integration_dirs <- function(cfg) {
 #' is called and sources `"_drake_single_sample.R"` or `"_drake_integration.R"` scripts in a fresh new R session.
 #' Those scripts are entry points for `drake`. See [scdrake_r_make()] for more details.
 #'
+#' (Soft-deprecated since `scdrake` 1.4.0)
 #' The second way is to run pipeline in the current R session via [run_single_sample()] or [run_integration()],
 #' which is a shortcut for:
 #'
@@ -143,6 +144,11 @@ run_pipeline <- function(selected_pipeline_config_dir,
                          verbose = getOption("scdrake_verbose"),
                          .dry = FALSE,
                          ...) {
+  cli_alert_warning(str_line(
+    "{.code run_single_sample()} and {.code run_integration()} are soft-deprecated since {.pkg scdrake} 1.4.0. ",
+    "Use, please, {.code run_single_sample_r()} and {.code run_integration_r()} instead."
+  ))
+
   pipeline_type <- arg_match(pipeline_type)
 
   ## -- Temporarily change the working directory if different from project_root

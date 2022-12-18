@@ -1,5 +1,6 @@
 template:
   package: preferably
+  bootstrap: 5
   params:
     ganalytics: "281550496"
     toggle: manual
@@ -32,6 +33,7 @@ articles:
   - title: Guides
     navbar: Guides
     contents:
+    - scdrake_docker
     - scdrake_integration
     - scdrake_extend
     - drake_basics
@@ -41,6 +43,7 @@ articles:
     contents:
     - pipeline_overview
     - scdrake_faq
+    - scdrake_cli
     - cluster_markers
     - scdrake_config
     - scdrake_envvars
@@ -69,6 +72,11 @@ articles:
     - stage_cluster_markers
     - stage_contrasts
 reference:
+  - title: Command line interface
+    desc: Install or check the command line interface.
+  - contents:
+    - has_concept("cli")
+
   - title: Project
     desc: Initialize or update a `scdrake` project.
   - contents:

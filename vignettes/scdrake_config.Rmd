@@ -1,7 +1,7 @@
 ---
 title: "scdrake config internals"
 description: "How YAML config files are used in `scdrake`"
-date: "`r Sys.Date()`"
+date: "`r glue::glue('<sup>Document generated: {format(Sys.time(), \"%Y-%m-%d %H:%M:%S %Z%z</sup>\")}')`"
 package: scdrake
 output:
   BiocStyle::html_document:
@@ -31,7 +31,7 @@ Default and local configs are named `*.default.yaml` and `*.yaml`, respectively.
 
 Config files are separated according to general parameters and each pipeline's main stage
 (quality control, normalization, etc.), but for consistency are always read all at once
-(by default if you run e.g. `run_single_sample()` or `drake::r_make("_drake_single_sample.R")`).
+(by default if you run e.g. `run_single_sample()` or `run_single_sample_r()`).
 
 All paths in configs must be relative to project root, or absolute (not recommended), unless otherwise stated.
 

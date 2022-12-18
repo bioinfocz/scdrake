@@ -304,6 +304,7 @@ lapply_rows <- function(df, as_scdrake_list = TRUE, return_tibble = TRUE, FUN, .
 #' @title Check if a package is installed and display an informative message.
 #' @param pkg A character scalar: name of package.
 #' @param msg A character scalar: additional message to be displayed.
+#' @inheritParams verbose_
 #' @return `TRUE` if package is installed, `FALSE` otherwise.
 #'
 #' `check_scdrake_packages()` returns `TRUE` if all tested packages are installed and `{SC3}` is installed from
@@ -410,34 +411,46 @@ check_sc3_version <- function(verbose = TRUE) {
   return("github")
 }
 
+.check_msg <- function(res, msg, verbose) {
+  if (verbose) {
+    if (res) {
+      cli_alert_success(msg)
+    } else {
+      cli_alert_danger(msg)
+    }
+  }
+
+  return(invisible(NULL))
+}
+
 #' @rdname check_pkg_installed
 #' @export
 check_scdrake_packages <- function(verbose = TRUE) {
   statuses <- c()
 
-  cli_alert_info("Checking {.package qs} package: {.code check_qs_installed()}")
+  verbose %&&% cli_alert_info("Checking {.pkg qs} package: {.code check_qs_installed()}")
   res <- check_qs_installed(verbose = verbose)
   statuses <- c(statuses, res)
-  if (verbose && res) cli_alert_success("qs") else cli_alert_danger("qs")
+  .check_msg(res, "qs", verbose)
 
-  cli_alert_info("Checking {.package clustermq} package: {.code check_clustermq_installed()}")
+  verbose %&&% cli_alert_info("Checking {.pkg clustermq} package: {.code check_clustermq_installed()}")
   res <- check_clustermq_installed(verbose = verbose)
   statuses <- c(statuses, res)
-  if (verbose && res) cli_alert_success("clustermq") else cli_alert_danger("clustermq")
+  .check_msg(res, "clustermq", verbose)
 
-  cli_alert_info("Checking {.package future} package: {.code check_future_installed()}")
+  verbose %&&% cli_alert_info("Checking {.pkg future} package: {.code check_future_installed()}")
   res <- check_future_installed(verbose = verbose)
   statuses <- c(statuses, res)
-  if (verbose && res) cli_alert_success("future") else cli_alert_danger("future")
+  .check_msg(res, "future", verbose)
 
   if (!parallelly::supportsMulticore()) {
-    cli_alert_info("Checking {.package future.callr} package: {.code check_future.callr_installed()}")
+    cli_alert_info("Checking {.pkg future.callr} package: {.code check_future.callr_installed()}")
     res <- check_future.callr_installed(verbose = verbose)
     statuses <- c(statuses, res)
-    if (verbose && res) cli_alert_success("future.callr") else cli_alert_danger("future.callr")
+    .check_msg(res, "future.callr", verbose)
   }
 
-  verbose %&&% cli_alert_info("Checking {.package SC3} package version: {.code check_sc3_version()}")
+  verbose %&&% cli_alert_info("Checking {.pkg SC3} package version: {.code check_sc3_version()}")
   res <- check_sc3_version(verbose = verbose)
   if (res == "github") {
     statuses <- c(statuses, TRUE)
@@ -461,8 +474,8 @@ check_scdrake_packages <- function(verbose = TRUE) {
 check_pandoc <- function(cache = FALSE, verbose = TRUE, ...) {
   pandoc <- rmarkdown::find_pandoc(cache = cache, ...)
   if (is_null(pandoc$dir)) {
-    verbose %&&% cli_alert_warning(str_line(
-      "Pandoc was not found on your system, so it won't be possible to render the HTML reports. ",
+    verbose %&&% cli_alert_warning(str_space(
+      "Pandoc was not found on your system, so it won't be possible to render the HTML reports.",
       'Check the {.field RSTUDIO_PANDOC} parameter in the {.file pipeline.yaml} config (see {.code vignette("config_pipeline")}).'
     ))
     return(invisible(FALSE))
@@ -488,16 +501,16 @@ check_pandoc <- function(cache = FALSE, verbose = TRUE, ...) {
 check_scdrake <- function(verbose = TRUE) {
   statuses <- c()
   verbose %&&% cli_alert_info("Calling {.code scdrake::check_scdrake_packages()}")
-  res <- scdrake::check_scdrake_packages(verbose = verbose)
+  res <- check_scdrake_packages(verbose = verbose)
   statuses <- c(statuses, TRUE)
 
-  verbose %&&% cli_alert_info("Calling {.code scdrake::check_pandoc()}")
-  res <- scdrake::check_pandoc(verbose = verbose)
+  verbose %&&% cli_alert_info("Checking pandoc: {.code scdrake::check_pandoc()}")
+  res <- check_pandoc(verbose = verbose)
   statuses <- c(statuses, TRUE)
-  if (verbose && res) cli_alert_success("pandoc") else cli_alert_danger("pandoc")
+  .check_msg(res, "pandoc", verbose)
 
-  verbose %&&% cli_alert_info("Calling: {.code scdrake::check_yq()}")
-  res <- scdrake::check_yq(verbose = verbose)
+  verbose %&&% cli_alert_info("Checking yq: {.code scdrake::check_yq()}")
+  res <- check_yq(verbose = verbose)
   statuses <- c(statuses, TRUE)
 
   return(invisible(all(statuses)))
@@ -640,4 +653,124 @@ create_dummy_plot <- function(label) {
   ggplot() +
     ggplot2::theme_void() +
     ggplot2::geom_text(aes(x = 0, y = 0, label = label))
+}
+
+#' @title Install or check the command line interface scripts.
+#' @description The scripts (`scdrake` shell script and `scdrake.R`) are bundled with the `scdrake` package and their paths can
+#' be retrieved with:
+#' ```r
+#' system.file("scdrake", package = "scdrake", mustWork = TRUE)
+#' system.file("scdrake.R", package = "scdrake", mustWork = TRUE)
+#' ```
+#'
+#' `check_cli()` is checking the presence of the `scdrake` CLI script in the `PATH` environment variable, and
+#' whether the command `$ scdrake -h` finishes successfully.
+#' @param dir A character scalar: path to directory where scripts will be copied to.
+#'   If `NULL`, the path will be determined based on `type`.
+#' @param type A character scalar:
+#'   - For `"user"`: install into the user's home directory under `.local/bin`
+#'   - For `"system"`: install into `/usr/local/bin`
+#' @param ask A logical scalar: if `TRUE`, ask before copying.
+#' @inheritParams verbose_
+#' @param .dry A logical scalar: if `TRUE`, don't copy the files and just return output paths.
+#' @return `install_cli()`: invisibly a character vector of length two: paths to installed files.
+#'
+#' `check_cli()`: invisibly `TRUE` when the checks are successful, `FALSE` otherwise.
+#'
+#' @concept cli
+#' @rdname cli
+#' @export
+install_cli <- function(dir = NULL, type = c("user", "system"), ask = TRUE, verbose = TRUE, .dry = FALSE) {
+  type <- arg_match(type)
+
+  if (is_null(dir)) {
+    if (type == "user") {
+      dir <- fs::path(fs::path_home(), ".local/bin/")
+    } else {
+      dir <- "/usr/local/bin"
+    }
+  }
+
+  out_sh_file <- fs::path(dir, "scdrake")
+
+  if (fs::file_exists(out_sh_file)) {
+    cli_alert_warning("The shell CLI script already exists ({.file {out_sh_file}}).")
+    if (ask && !.confirm_menu()) {
+      cli_abort("Interrupting.")
+    }
+  }
+
+  out_rscript_file <- fs::path(dir, "scdrake.R")
+
+  if (fs::file_exists(out_rscript_file)) {
+    cli_alert_warning("The R CLI script already exists ({.file {out_rscript_file}}).")
+    if (ask && !.confirm_menu()) {
+      cli_abort("Interrupting.")
+    }
+  }
+
+  if (ask) {
+    cli_alert_info("The CLI scripts will be installed as: {.file {out_sh_file}}, {.file {out_rscript_file}}")
+    if (!.confirm_menu()) {
+      cli_abort("Interrupting.")
+    }
+  }
+
+  if (!.dry) {
+    fs::dir_create(fs::path_dir(out_sh_file))
+    fs::file_copy(system.file("scdrake", package = "scdrake", mustWork = TRUE), dir, overwrite = TRUE)
+    fs::file_copy(system.file("scdrake.R", package = "scdrake", mustWork = TRUE), dir, overwrite = TRUE)
+    fs::file_chmod(out_sh_file, "+x")
+    fs::file_chmod(out_rscript_file, "+x")
+  }
+
+  verbose %&&% cli_alert_success("CLI was successfully installed to {.file {dir}}")
+
+  return(invisible(as.character(c(out_sh_file, out_rscript_file))))
+}
+
+#' @concept cli
+#' @rdname cli
+#' @export
+check_cli <- function(verbose = TRUE) {
+  res <- Sys.which("scdrake")
+  if (res == "") {
+    cli_alert_danger(str_space(
+      "The {.val scdrake} command was not found. You have either not installed the CLI scripts with",
+      "{.code scdrake::install_cli()} or the directory with the CLI scripts is not present in the {.envvar PATH}",
+      "environment variable. Current value of {.envvar PATH} is:"
+    ))
+    message(Sys.getenv("PATH"))
+    return(FALSE)
+  }
+  verbose %&&% cli_alert_info("Trying {.code $ scdrake -h}")
+  res <- processx::run(command = "scdrake", args = "-h", error_on_status = FALSE)
+  status <- !as.logical(res$status)
+  if (status) {
+    verbose %&&% cli_alert_success("CLI is working")
+  } else {
+    cli_alert_danger("There was some problem - the command has finished with status {.val {res$status}}")
+    cli_alert_info("STDOUT:")
+    message(res$stdout)
+    cli_alert_info("STDERR:")
+    message(res$stderr)
+  }
+
+  return(invisible(status))
+}
+
+#' @title Get a path to the temporary directory according to the OS.
+#' @description Source: <https://stackoverflow.com/questions/16474696/read-system-tmp-dir-in-r>
+#'
+#' @concept misc_utils
+#' @export
+get_tmp_dir <- function() {
+  tm <- Sys.getenv(c("TMPDIR", "TMP", "TEMP"))
+  d <- which(file.info(tm)$isdir & file.access(tm, 2) == 0)
+  if (length(d) > 0)
+    tm[[d[1]]]
+  else if (.Platform$OS.type == "windows")
+    Sys.getenv("R_USER")
+  else
+    "/tmp"
 }

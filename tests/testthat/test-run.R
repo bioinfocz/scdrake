@@ -1,3 +1,5 @@
+cli::cli_h1("{.file tests/testthat/test-run.R}")
+
 project_dir <- fs::file_temp("scdrake_test_project_") %>%
   fs::path_abs() %>%
   as.character()

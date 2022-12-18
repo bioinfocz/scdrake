@@ -1,9 +1,11 @@
+cli::cli_h1("{.file tests/testthat/test-yq.R}")
+
 withr::local_options(list(
   scdrake_verbose = FALSE
 ))
 
 test_that("yq tool's binary is successfully downloaded or reused", {
-  skip_if(is_false(getOption("scdrake_test_download_yq")))
+  skip_if(!test_env_vars$SCDRAKE_TEST_DOWNLOAD_YQ)
   skip_on_bioc()
   skip_on_cran()
 

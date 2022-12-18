@@ -1,7 +1,11 @@
 ---
-title: "scdrake | 01 - Data load and QC"
-author: "Jiri Novotny, Jan Kubovciak"
-institute: "Laboratory of Genomics and Bioinformatics @ Institute of Molecular Genetics of the ASCR"
+title: "01 - Data load and QC"
+author: "Made by the [scdrake pipeline](https://bioinfocz.github.io/scdrake)"
+institute: |
+  Laboratory of Genomics and Bioinformatics
+  Institute of Molecular Genetics of the ASCR
+  https://img.cas.cz
+date: "`r glue::glue('Document generated: {format(Sys.time(), \"%Y-%m-%d %H:%M:%S %Z%z\")}')`"
 output:
   html_document:
     toc: true
@@ -15,7 +19,6 @@ output:
 params:
   css_file: !expr here::here("Rmd/common/stylesheet.css")
   drake_cache_dir: !expr here::here(".drake")
-date: "`r glue::glue('Document generated: {Sys.Date()}')`"
 css: "`r params$css_file`"
 ---
 
@@ -51,13 +54,17 @@ filtering_type <- ifelse(cfg$SAVE_DATASET_SENSITIVE_FILTERING, "dataset-sensitiv
 ```{r, results = "asis"}
 if (input_type == "cellranger") {
   scdrake::md_header("Input data: 10x Genomics Cell Ranger data", 1)
-  cat("The feature-barcode matrix was imported from Cell Ranger output (the official quantification tool from 10x Genomics).")
+  cat(str_space(
+    "The feature-barcode matrix was imported from",
+    "[Cell Ranger](https://support.10xgenomics.com/single-cell-gene-expression/software/pipelines/latest/what-is-cell-ranger)",
+    "output (the official quantification tool from 10x Genomics)."
+  ))
 } else if (input_type == "table") {
   scdrake::md_header("Input data: delimited text (table)", 1)
-  cat("The feature-barcode matrix was imported from delimited file.")
+  cat("The feature-barcode matrix was imported from a delimited file.")
 } else if (input_type == "sce") {
   scdrake::md_header("Input data: `SingleCellExperiment` object", 1)
-  cat("The object holding experimental data (feature-barcode matrix, gene annotation etc.) was imported from Rds file.")
+  cat("The object holding experimental data (feature-barcode matrix, gene annotation etc.) was imported from a Rds file.")
 }
 ```
 

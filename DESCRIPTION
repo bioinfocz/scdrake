@@ -1,7 +1,7 @@
 Package: scdrake
 Type: Package
 Title: A pipeline for droplet-based single-cell RNA-seq data secondary analysis implemented in the drake Make-like toolkit for R language
-Version: 1.3.2
+Version: 1.4.0
 Authors@R:
     c(
       person(
@@ -26,13 +26,13 @@ Description:
     All main parts are accompanied by rich graphical outputs and HTML reports
     (RMarkdown). Thanks to the drake package, the pipeline is highly reproducible, scalable and efficient, provides easy
     access to all intermediate results, and can be arbitrarily extended as pipeline definitions are abstracted as
-    R objects.
+    R objects. A command line interface is available to perform the most important actions directly in shell terminal.
 License: MIT + file LICENSE
 URL: https://github.com/bioinfocz/scdrake, https://bioinfocz.github.io/scdrake
 BugReports: https://github.com/bioinfocz/scdrake/issues
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.2.1
+RoxygenNote: 7.2.2
 VignetteBuilder: knitr
 biocViews:
     Transcription,
@@ -43,6 +43,7 @@ biocViews:
     Clustering
 Imports:
     AnnotationDbi,
+    argparser,
     assertthat,
     batchelor,
     BiocGenerics,
@@ -71,6 +72,7 @@ Imports:
     here,
     htmltools,
     knitr,
+    littler,
     igraph,
     janitor,
     kableExtra,
@@ -103,6 +105,7 @@ Imports:
     SummarizedExperiment,
     tibble,
     tidyr,
+    tidyselect (== 1.1.2),
     usethis,
     utils,
     withr,
@@ -111,7 +114,7 @@ Remotes:
     gorgitko/SC3
 Suggests:
     BiocStyle,
-    clustermq (>= 0.8.8),
+    clustermq (== 0.8.8),
     covr,
     emoji,
     future,
@@ -119,6 +122,7 @@ Suggests:
     org.Hs.eg.db,
     pkgdown,
     preferably,
+    processx,
     testthat (>= 3.0.0)
 Config/testthat/edition: 3
 Config/testthat/start-first: project
