@@ -1,6 +1,6 @@
 pandoc: '2.18'
-pkgdown: 2.0.6.9000
-pkgdown_sha: 956f076f661eb2de9413f64ea24a580cf444466d
+pkgdown: 2.0.7.9000
+pkgdown_sha: c354aa7e5ea1f9936692494c28c89e5bdd31fc68
 articles:
   cluster_markers: cluster_markers.html
   config_main: config_main.html
@@ -8,7 +8,9 @@ articles:
   drake_basics: drake_basics.html
   pipeline_overview: pipeline_overview.html
   scdrake: scdrake.html
+  scdrake_cli: scdrake_cli.html
   scdrake_config: scdrake_config.html
+  scdrake_docker: scdrake_docker.html
   scdrake_envvars: scdrake_envvars.html
   scdrake_extend: scdrake_extend.html
   scdrake_faq: scdrake_faq.html
@@ -19,7 +21,7 @@ articles:
   stage_int_clustering: stage_int_clustering.html
   stage_integration: stage_integration.html
   stage_norm_clustering: stage_norm_clustering.html
-last_built: 2022-09-27T14:43Z
+last_built: 2022-12-18T21:06Z
 urls:
   reference: https://bioinfocz.github.io/scdrake/reference
   article: https://bioinfocz.github.io/scdrake/articles

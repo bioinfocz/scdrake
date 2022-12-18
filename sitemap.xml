@@ -13,6 +13,9 @@
     <loc>https://bioinfocz.github.io/scdrake/LICENSE-text.html</loc>
   </url>
   <url>
+    <loc>https://bioinfocz.github.io/scdrake/TODO.html</loc>
+  </url>
+  <url>
     <loc>https://bioinfocz.github.io/scdrake/articles/cluster_markers.html</loc>
   </url>
   <url>
@@ -34,7 +37,13 @@
     <loc>https://bioinfocz.github.io/scdrake/articles/scdrake.html</loc>
   </url>
   <url>
+    <loc>https://bioinfocz.github.io/scdrake/articles/scdrake_cli.html</loc>
+  </url>
+  <url>
     <loc>https://bioinfocz.github.io/scdrake/articles/scdrake_config.html</loc>
+  </url>
+  <url>
+    <loc>https://bioinfocz.github.io/scdrake/articles/scdrake_docker.html</loc>
   </url>
   <url>
     <loc>https://bioinfocz.github.io/scdrake/articles/scdrake_envvars.html</loc>
@@ -74,6 +83,9 @@
   </url>
   <url>
     <loc>https://bioinfocz.github.io/scdrake/news/index.html</loc>
+  </url>
+  <url>
+    <loc>https://bioinfocz.github.io/scdrake/reference/SCDRAKE_CLI_VERSION.html</loc>
   </url>
   <url>
     <loc>https://bioinfocz.github.io/scdrake/reference/add_item_to_list.html</loc>
@@ -124,10 +136,19 @@
     <loc>https://bioinfocz.github.io/scdrake/reference/cells_per_cluster_table_collapsed_html.html</loc>
   </url>
   <url>
+    <loc>https://bioinfocz.github.io/scdrake/reference/check_pandoc.html</loc>
+  </url>
+  <url>
     <loc>https://bioinfocz.github.io/scdrake/reference/check_pkg_installed.html</loc>
   </url>
   <url>
+    <loc>https://bioinfocz.github.io/scdrake/reference/check_scdrake.html</loc>
+  </url>
+  <url>
     <loc>https://bioinfocz.github.io/scdrake/reference/check_yq.html</loc>
+  </url>
+  <url>
+    <loc>https://bioinfocz.github.io/scdrake/reference/cli.html</loc>
   </url>
   <url>
     <loc>https://bioinfocz.github.io/scdrake/reference/cluster_kmeans_kc_fn.html</loc>
@@ -232,6 +253,9 @@
     <loc>https://bioinfocz.github.io/scdrake/reference/filter_nulls.html</loc>
   </url>
   <url>
+    <loc>https://bioinfocz.github.io/scdrake/reference/format_shell_command.html</loc>
+  </url>
+  <url>
     <loc>https://bioinfocz.github.io/scdrake/reference/format_used_functions.html</loc>
   </url>
   <url>
@@ -259,6 +283,9 @@
     <loc>https://bioinfocz.github.io/scdrake/reference/get_plan.html</loc>
   </url>
   <url>
+    <loc>https://bioinfocz.github.io/scdrake/reference/get_random_strings.html</loc>
+  </url>
+  <url>
     <loc>https://bioinfocz.github.io/scdrake/reference/get_subplan_common.html</loc>
   </url>
   <url>
@@ -269,6 +296,9 @@
   </url>
   <url>
     <loc>https://bioinfocz.github.io/scdrake/reference/get_sys_env.html</loc>
+  </url>
+  <url>
+    <loc>https://bioinfocz.github.io/scdrake/reference/get_tmp_dir.html</loc>
   </url>
   <url>
     <loc>https://bioinfocz.github.io/scdrake/reference/get_top_hvgs.html</loc>
