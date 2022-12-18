@@ -80,11 +80,14 @@ available. This is the most handy and reproducible way how to use
 version is fixed. In addition, the parent Bioconductor image comes
 bundled with RStudio Server.
 
+More information can be found in `vignette("scdrake_docker")` (we
+recommend to go through even if you are an experienced Docker user).
+
 You can pull the Docker image with the latest stable `{scdrake}` version
 using
 
 ``` bash
-docker pull bioinfocz/scdrake:v1.4.0-bioc3.15
+docker pull bioinfocz/scdrake:1.4.0-bioc3.15
 ```
 
 or list available versions in [our Docker Hub
@@ -160,7 +163,7 @@ for `{scdrake}` and you can use it to install all dependencies by
 
 ``` r
 ## -- This is a lockfile for the latest stable version of scdrake.
-download.file("https://raw.githubusercontent.com/bioinfocz/scdrake/vv1.4.0/renv.lock")
+download.file("https://raw.githubusercontent.com/bioinfocz/scdrake/v1.4.0/renv.lock")
 ## -- You can increase the number of CPU cores to speed up the installation.
 options(Ncpus = 2)
 renv::restore(lockfile = "renv.lock", repos = BiocManager::repositories())
@@ -180,7 +183,7 @@ installed).
 
 ``` r
 remotes::install_github(
-  "bioinfocz/scdrake@v1.4.0",
+  "bioinfocz/scdrake@1.4.0",
   dependencies = FALSE, upgrade = FALSE,
   keep_source = TRUE, build_vignettes = TRUE,
   repos = BiocManager::repositories()
@@ -198,9 +201,9 @@ scdrake::install_cli()
 ```
 
 CLI should be now accessible as a `scdrake` command. By default, the CLI
-will be installed into `~/.local/bin`, which is usually present in the
-`PATH` environment variable. In case it isn’t, just add to your
-`~/.bashrc`: `PATH="${HOME}/.local/bin:${PATH}"`
+is installed into `~/.local/bin`, which is usually present in the `PATH`
+environment variable. In case it isn’t, just add to your `~/.bashrc`:
+`PATH="${HOME}/.local/bin:${PATH}"`
 
 **Every time you will be using the CLI make sure your current working
 directory is inside an `{renv}` project.** You can read the reasons
@@ -211,12 +214,17 @@ below.
 Show details
 </summary>
 
-You might notice that the per-project library and this CLI are now
-“disconnected” and if you install `{scdrake}` and its CLI within
+You might notice that a per-project `{renv}` library and an installed
+CLI are “disconnected” and if you install `{scdrake}` and its CLI within
 multiple projects (`{renv}` libraries), then the CLI scripts in
-`~/.local/bin` will be overwritten each time. To overcome this
-situation, there is a built-in guard: the version of the CLI must match
-the version of the bundled CLI scripts inside the installed `{scdrake}`
+`~/.local/bin` will be overwritten each time. But when you run the
+`scdrake` command inside an `{renv}` project, the `renv` directory is
+automatically detected and the `{renv}` library is activated by
+`renv::load()`, so the proper, locally installed `{scdrake}` package is
+then used.
+
+Also, there is a built-in guard: the version of the CLI must match the
+version of the bundled CLI scripts inside the installed `{scdrake}`
 package. Anyway, we think changes in the CLI won’t be very frequent, so
 this shouldn’t be a problem most of the time.
 
@@ -373,5 +381,3 @@ mentioning:
     `{roxygen2}`.
 
 This package was developed using `{biocthis}`.
-
-<sup>\[Page generated on 2022-12-15 16:52:48 UTC+0000\]</sup>
