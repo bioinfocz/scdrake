@@ -87,16 +87,16 @@ You can pull the Docker image with the latest stable `{scdrake}` version
 using
 
 ``` bash
-docker pull bioinfocz/scdrake:1.4.0-bioc3.15
+docker pull jirinovo/scdrake:1.4.0-bioc3.15
 ```
 
 or list available versions in [our Docker Hub
-repository](https://hub.docker.com/r/bioinfocz/scdrake/tags).
+repository](https://hub.docker.com/r/jirinovo/scdrake/tags).
 
 For the latest development version use
 
 ``` bash
-docker pull bioinfocz/scdrake:latest-bioc3.15
+docker pull jirinovo/scdrake:latest-bioc3.15
 ```
 
 ## Installing `{scdrake}` manually

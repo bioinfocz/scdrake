@@ -36,17 +36,17 @@ In addition, the parent Bioconductor image comes bundled with RStudio Server.
 You can pull the Docker image with the latest stable `{scdrake}` version using
 
 ```{r docker_stable, include = FALSE}
-out <- scdrake::format_shell_command(glue::glue("docker pull bioinfocz/scdrake:{LATEST_STABLE_VERSION}-bioc{LATEST_STABLE_VERSION_DOCKER_BIOC}"))
+out <- scdrake::format_shell_command(glue::glue("docker pull jirinovo/scdrake:{LATEST_STABLE_VERSION}-bioc{LATEST_STABLE_VERSION_DOCKER_BIOC}"))
 ```
 
 `r knitr::knit(text = out)`
 
-or list available versions in [our Docker Hub repository](https://hub.docker.com/r/bioinfocz/scdrake/tags).
+or list available versions in [our Docker Hub repository](https://hub.docker.com/r/jirinovo/scdrake/tags).
 
 For the latest development version use
 
 ```{r docker_latest, include = FALSE}
-out <- scdrake::format_shell_command(glue::glue("docker pull bioinfocz/scdrake:latest-bioc{LATEST_STABLE_VERSION_DOCKER_BIOC}"))
+out <- scdrake::format_shell_command(glue::glue("docker pull jirinovo/scdrake:latest-bioc{LATEST_STABLE_VERSION_DOCKER_BIOC}"))
 ```
 
 `r knitr::knit(text = out)`
