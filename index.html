@@ -195,8 +195,9 @@
 <h2 id="using-a-docker-image-recommended">Using a Docker image (<strong>recommended</strong>)<a class="anchor" aria-label="anchor" href="#using-a-docker-image-recommended"></a>
 </h2>
 <p>A Docker image based on the <a href="https://bioconductor.org/help/docker/" class="external-link">official Bioconductor image</a> (version 3.15) is available. This is the most handy and reproducible way how to use <a href="https://github.com/bioinfocz/scdrake" class="external-link">scdrake</a> as all the dependencies are already installed and their version is fixed. In addition, the parent Bioconductor image comes bundled with RStudio Server.</p>
+<p>More information can be found in <code><a href="articles/scdrake_docker.html">vignette("scdrake_docker")</a></code> (we recommend to go through even if you are an experienced Docker user).</p>
 <p>You can pull the Docker image with the latest stable <a href="https://github.com/bioinfocz/scdrake" class="external-link">scdrake</a> version using</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> pull bioinfocz/scdrake:v1.4.0-bioc3.15</span></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> pull bioinfocz/scdrake:1.4.0-bioc3.15</span></code></pre></div>
 <p>or list available versions in <a href="https://hub.docker.com/r/bioinfocz/scdrake/tags" class="external-link">our Docker Hub repository</a>.</p>
 <p>For the latest development version use</p>
 <div class="sourceCode" id="cb2"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> pull bioinfocz/scdrake:latest-bioc3.15</span></code></pre></div>
@@ -256,7 +257,7 @@ Click for details
 <p><a href="https://rstudio.github.io/renv/" class="external-link">renv</a> also allows to export the current installed versions of R packages (and other things) into a lockfile. Such lockfile is available for <a href="https://github.com/bioinfocz/scdrake" class="external-link">scdrake</a> and you can use it to install all dependencies by</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## -- This is a lockfile for the latest stable version of scdrake.</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/utils/download.file.html" class="external-link">download.file</a></span><span class="op">(</span><span class="st">"https://raw.githubusercontent.com/bioinfocz/scdrake/vv1.4.0/renv.lock"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/download.file.html" class="external-link">download.file</a></span><span class="op">(</span><span class="st">"https://raw.githubusercontent.com/bioinfocz/scdrake/1.4.0/renv.lock"</span><span class="op">)</span></span>
 <span><span class="co">## -- You can increase the number of CPU cores to speed up the installation.</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">options</a></span><span class="op">(</span>Ncpus <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span>
 <span><span class="fu">renv</span><span class="fu">::</span><span class="fu"><a href="https://rstudio.github.io/renv/reference/restore.html" class="external-link">restore</a></span><span class="op">(</span>lockfile <span class="op">=</span> <span class="st">"renv.lock"</span>, repos <span class="op">=</span> <span class="fu">BiocManager</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/BiocManager/man/repositories.html" class="external-link">repositories</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
@@ -270,7 +271,7 @@ Click for details
 <p>Now we can finally install the <a href="https://github.com/bioinfocz/scdrake" class="external-link">scdrake</a> package, but using a non-standard approach - without its dependencies (which are already installed).</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">remotes</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html" class="external-link">install_github</a></span><span class="op">(</span></span>
-<span>  <span class="st">"bioinfocz/scdrake@v1.4.0"</span>,</span>
+<span>  <span class="st">"bioinfocz/scdrake@1.4.0"</span>,</span>
 <span>  dependencies <span class="op">=</span> <span class="cn">FALSE</span>, upgrade <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  keep_source <span class="op">=</span> <span class="cn">TRUE</span>, build_vignettes <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  repos <span class="op">=</span> <span class="fu">BiocManager</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/BiocManager/man/repositories.html" class="external-link">repositories</a></span><span class="op">(</span><span class="op">)</span></span>
@@ -283,11 +284,12 @@ Click for details
 <p>Optionally, you can install <a href="https://github.com/bioinfocz/scdrake" class="external-link">scdrake</a>’s CLI scripts with</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">scdrake</span><span class="fu">::</span><span class="fu"><a href="reference/cli.html">install_cli</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<p>CLI should be now accessible as a <code>scdrake</code> command. By default, the CLI will be installed into <code>~/.local/bin</code>, which is usually present in the <code>PATH</code> environment variable. In case it isn’t, just add to your <code>~/.bashrc</code>: <code>PATH="${HOME}/.local/bin:${PATH}"</code></p>
+<p>CLI should be now accessible as a <code>scdrake</code> command. By default, the CLI is installed into <code>~/.local/bin</code>, which is usually present in the <code>PATH</code> environment variable. In case it isn’t, just add to your <code>~/.bashrc</code>: <code>PATH="${HOME}/.local/bin:${PATH}"</code></p>
 <p><strong>Every time you will be using the CLI make sure your current working directory is inside an <a href="https://rstudio.github.io/renv/" class="external-link">renv</a> project.</strong> You can read the reasons below.</p>
 <details><summary>
 Show details
-</summary><p>You might notice that the per-project library and this CLI are now “disconnected” and if you install <a href="https://github.com/bioinfocz/scdrake" class="external-link">scdrake</a> and its CLI within multiple projects (<a href="https://rstudio.github.io/renv/" class="external-link">renv</a> libraries), then the CLI scripts in <code>~/.local/bin</code> will be overwritten each time. To overcome this situation, there is a built-in guard: the version of the CLI must match the version of the bundled CLI scripts inside the installed <a href="https://github.com/bioinfocz/scdrake" class="external-link">scdrake</a> package. Anyway, we think changes in the CLI won’t be very frequent, so this shouldn’t be a problem most of the time.</p>
+</summary><p>You might notice that a per-project <a href="https://rstudio.github.io/renv/" class="external-link">renv</a> library and an installed CLI are “disconnected” and if you install <a href="https://github.com/bioinfocz/scdrake" class="external-link">scdrake</a> and its CLI within multiple projects (<a href="https://rstudio.github.io/renv/" class="external-link">renv</a> libraries), then the CLI scripts in <code>~/.local/bin</code> will be overwritten each time. But when you run the <code>scdrake</code> command inside an <a href="https://rstudio.github.io/renv/" class="external-link">renv</a> project, the <code>renv</code> directory is automatically detected and the <a href="https://rstudio.github.io/renv/" class="external-link">renv</a> library is activated by <code><a href="https://rstudio.github.io/renv/reference/load.html" class="external-link">renv::load()</a></code>, so the proper, locally installed <a href="https://github.com/bioinfocz/scdrake" class="external-link">scdrake</a> package is then used.</p>
+<p>Also, there is a built-in guard: the version of the CLI must match the version of the bundled CLI scripts inside the installed <a href="https://github.com/bioinfocz/scdrake" class="external-link">scdrake</a> package. Anyway, we think changes in the CLI won’t be very frequent, so this shouldn’t be a problem most of the time.</p>
 </details><blockquote>
 <p>TIP: To save time and space, you can symlink the <code>renv/library</code> directory to multiple <a href="https://github.com/bioinfocz/scdrake" class="external-link">scdrake</a> projects.</p>
 </blockquote>
@@ -445,7 +447,6 @@ Show details
 <li>The documentation is formatted thanks to <a href="https://devtools.r-lib.org/" class="external-link">devtools</a> and <a href="https://roxygen2.r-lib.org/" class="external-link">roxygen2</a>.</li>
 </ul>
 <p>This package was developed using <code>{biocthis}</code>.</p>
-<p><sup>[Page generated on 2022-12-15 16:52:48 UTC+0000]</sup></p>
 </div>
 </div>
 </div>
