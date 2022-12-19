@@ -197,10 +197,10 @@
 <p>A Docker image based on the <a href="https://bioconductor.org/help/docker/" class="external-link">official Bioconductor image</a> (version 3.15) is available. This is the most handy and reproducible way how to use <a href="https://github.com/bioinfocz/scdrake" class="external-link">scdrake</a> as all the dependencies are already installed and their version is fixed. In addition, the parent Bioconductor image comes bundled with RStudio Server.</p>
 <p>More information can be found in <code><a href="articles/scdrake_docker.html">vignette("scdrake_docker")</a></code> (we recommend to go through even if you are an experienced Docker user).</p>
 <p>You can pull the Docker image with the latest stable <a href="https://github.com/bioinfocz/scdrake" class="external-link">scdrake</a> version using</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> pull bioinfocz/scdrake:1.4.0-bioc3.15</span></code></pre></div>
-<p>or list available versions in <a href="https://hub.docker.com/r/bioinfocz/scdrake/tags" class="external-link">our Docker Hub repository</a>.</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> pull jirinovo/scdrake:1.4.0-bioc3.15</span></code></pre></div>
+<p>or list available versions in <a href="https://hub.docker.com/r/jirinovo/scdrake/tags" class="external-link">our Docker Hub repository</a>.</p>
 <p>For the latest development version use</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> pull bioinfocz/scdrake:latest-bioc3.15</span></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> pull jirinovo/scdrake:latest-bioc3.15</span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="installing-scdrake-manually">Installing <code>{scdrake}</code> manually<a class="anchor" aria-label="anchor" href="#installing-scdrake-manually"></a>
@@ -257,7 +257,7 @@ Click for details
 <p><a href="https://rstudio.github.io/renv/" class="external-link">renv</a> also allows to export the current installed versions of R packages (and other things) into a lockfile. Such lockfile is available for <a href="https://github.com/bioinfocz/scdrake" class="external-link">scdrake</a> and you can use it to install all dependencies by</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## -- This is a lockfile for the latest stable version of scdrake.</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/utils/download.file.html" class="external-link">download.file</a></span><span class="op">(</span><span class="st">"https://raw.githubusercontent.com/bioinfocz/scdrake/1.4.0/renv.lock"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/download.file.html" class="external-link">download.file</a></span><span class="op">(</span><span class="st">"https://raw.githubusercontent.com/bioinfocz/scdrake/v1.4.0/renv.lock"</span><span class="op">)</span></span>
 <span><span class="co">## -- You can increase the number of CPU cores to speed up the installation.</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">options</a></span><span class="op">(</span>Ncpus <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span>
 <span><span class="fu">renv</span><span class="fu">::</span><span class="fu"><a href="https://rstudio.github.io/renv/reference/restore.html" class="external-link">restore</a></span><span class="op">(</span>lockfile <span class="op">=</span> <span class="st">"renv.lock"</span>, repos <span class="op">=</span> <span class="fu">BiocManager</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/BiocManager/man/repositories.html" class="external-link">repositories</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
