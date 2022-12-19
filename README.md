@@ -163,7 +163,7 @@ for `{scdrake}` and you can use it to install all dependencies by
 
 ``` r
 ## -- This is a lockfile for the latest stable version of scdrake.
-download.file("https://raw.githubusercontent.com/bioinfocz/scdrake/v1.4.0/renv.lock")
+download.file("https://raw.githubusercontent.com/bioinfocz/scdrake/1.4.0/renv.lock")
 ## -- You can increase the number of CPU cores to speed up the installation.
 options(Ncpus = 2)
 renv::restore(lockfile = "renv.lock", repos = BiocManager::repositories())

@@ -155,7 +155,7 @@ out <- c(
   "\n",
   "```r",
   "## -- This is a lockfile for the latest stable version of scdrake.",
-  glue::glue('download.file("https://raw.githubusercontent.com/bioinfocz/scdrake/v{LATEST_STABLE_VERSION}/renv.lock")'),
+  glue::glue('download.file("https://raw.githubusercontent.com/bioinfocz/scdrake/{LATEST_STABLE_VERSION}/renv.lock")'),
   "## -- You can increase the number of CPU cores to speed up the installation.",
   "options(Ncpus = 2)",
   'renv::restore(lockfile = "renv.lock", repos = BiocManager::repositories())',
