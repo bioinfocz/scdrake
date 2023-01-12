@@ -98,15 +98,17 @@ Don't wait for `{drake}` to discover locked cache after pipeline is run and unlo
 ***
 
 ```yaml
-DRAKE_FORMAT: "qs"
+DRAKE_FORMAT: "rds"
 ```
 
 **Type:** character scalar
 
 A file format used to store intermediate results in `DRAKE_CACHE_DIR`.
-See <https://books.ropensci.org/drake/plans.html#special-data-formats-for-targets> for details.
+See <https://books.ropensci.org/drake/plans.html#special-data-formats-for-targets> for more details.
 
-In case of problems with `qs` use `rds` which is slower, but the most compatible.
+By default, R's `Rds` format is used (see `?saveRds`), but we recommend to use `DRAKE_FORMAT: "qs"`
+(see <https://github.com/traversc/qs>) which offers better performance, but sometimes doesn't work correctly
+(`drake` throws untraceable errors).
 
 ***
 

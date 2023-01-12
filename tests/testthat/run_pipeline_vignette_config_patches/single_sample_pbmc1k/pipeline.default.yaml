@@ -1,2 +1,3 @@
 DRAKE_TARGETS: null
 DRAKE_PARALLELISM: "clustermq"
+DRAKE_FORMAT: "qs"

@@ -362,6 +362,16 @@ with the previous report.
 
 ***
 
+## Using an alternative storage format (`qs`)
+
+By default, R's `Rds` format is used (see `?saveRds`) to save intermediate results to `{drake}`s cache,
+but instead, we recommend to use `DRAKE_FORMAT: "qs"` (see <https://github.com/traversc/qs>) in `config/pipeline.yaml`
+that offers better performance, but sometimes doesn't work correctly (`drake` throws untraceable errors).
+
+See <https://books.ropensci.org/drake/plans.html#special-data-formats-for-targets> for more details.
+
+***
+
 ### Updating the project files {.tabset}
 
 When a new version of `{scdrake}` is released, you can update your project with (assuming your working directory
