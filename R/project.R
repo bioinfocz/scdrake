@@ -124,7 +124,7 @@ init_project <- function(dir = ".",
   if (use_rstudio) {
     rproj_file <- fs::path(dir, "scdrake.Rproj")
     render_template <- utils::getFromNamespace("render_template", "usethis")
-    line_ending <- if (.get_os() == "windows") "windows" else "posix"
+    line_ending <- if (.get_os() == "windows") "Windows" else "Posix"
     rproj_template <- render_template("template.Rproj", data = list(line_ending = line_ending, is_pkg = FALSE), package = "usethis")
     writeLines(rproj_template, rproj_file)
     verbose %&&% cli_alert_success("Writing RStudio project file {.file {rproj_file}}")
