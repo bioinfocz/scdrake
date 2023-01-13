@@ -81,7 +81,7 @@ You can pull the Docker image with the latest stable `{scdrake}` version using
 out <- c(
   "\n",
   "```bash",
-  glue::glue("docker pull jirinovo/scdrake:{LATEST_STABLE_VERSION}-bioc{LATEST_STABLE_VERSION_DOCKER_BIOC}"),
+  glue::glue("docker pull {DOCKER_IMAGE_STABLE}"),
   "```",
   "\n"
 )
@@ -93,9 +93,32 @@ or list available versions in [our Docker Hub repository](https://hub.docker.com
 
 For the latest development version use
 
-```bash
-docker pull jirinovo/scdrake:latest-bioc3.15
+```{r docker_arm64, include = FALSE}
+out <- c(
+  "\n",
+  "```bash",
+  glue::glue("docker pull {DOCKER_IMAGE_LATEST}"),
+  "```",
+  "\n"
+)
 ```
+
+`r paste(knitr::knit(text = out), collapse = "\n")`
+
+**Note for Mac users with M1 chipsets**: you can use the `arm64` version of the image:
+
+```{r docker_latest, include = FALSE}
+out <- c(
+  "\n",
+  "```",
+  glue::glue("docker pull {DOCKER_IMAGE_STABLE_ARM64}"),
+  glue::glue("docker pull {DOCKER_IMAGE_LATEST_ARM64}"),
+  "```",
+  "\n"
+)
+```
+
+`r paste(knitr::knit(text = out), collapse = "\n")`
 
 ## Installing `{scdrake}` manually
 
@@ -206,7 +229,7 @@ scdrake::install_cli()
 
 CLI should be now accessible as a `scdrake` command. By default, the CLI is installed into `~/.local/bin`,
 which is usually present in the `PATH` environment variable. In case it isn't, just add to your
-`~/.bashrc`: `PATH="${HOME}/.local/bin:${PATH}"`
+`~/.bashrc`: `export PATH="${HOME}/.local/bin:${PATH}"`
 
 **Every time you will be using the CLI make sure your current working directory is inside an `{renv}` project.**
 You can read the reasons below.
