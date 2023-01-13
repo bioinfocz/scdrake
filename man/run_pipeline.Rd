@@ -74,6 +74,7 @@ The first, reproducible way is via \code{\link[=run_single_sample_r]{run_single_
 is called and sources \code{"_drake_single_sample.R"} or \code{"_drake_integration.R"} scripts in a fresh new R session.
 Those scripts are entry points for \code{drake}. See \code{\link[=scdrake_r_make]{scdrake_r_make()}} for more details.
 
+(Soft-deprecated since \code{scdrake} 1.4.0)
 The second way is to run pipeline in the current R session via \code{\link[=run_single_sample]{run_single_sample()}} or \code{\link[=run_integration]{run_integration()}},
 which is a shortcut for:
 \itemize{

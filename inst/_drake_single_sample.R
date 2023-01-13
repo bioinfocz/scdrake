@@ -147,11 +147,11 @@ drake::drake_config(
   prework = prework,
   trigger = drake_trigger,
   seed = cfg_pipeline$SEED,
-  caching = "worker",
+  caching = cfg_pipeline$DRAKE_CACHING,
   keep_going = cfg_pipeline$DRAKE_KEEP_GOING,
-  memory_strategy = "speed",
+  memory_strategy = cfg_pipeline$DRAKE_MEMORY_STRATEGY,
   lock_envir = cfg_pipeline$DRAKE_LOCK_ENVIR,
-  log_build_times = FALSE,
+  log_build_times = cfg_pipeline$DRAKE_LOG_BUILD_TIMES,
   format = cfg_pipeline$DRAKE_FORMAT,
   log_worker = TRUE
 )

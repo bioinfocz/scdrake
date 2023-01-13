@@ -9,8 +9,7 @@
 #' @param cfg_main A `scdrake_list` object: main config (see [load_config])
 #'   obtained from `00_main.yaml` file located in single-sample or integration config directory.
 #' @inheritParams verbose
-#' @param memory_strategy,caching,prework,log_build_times,log_worker,... Passed to [drake::make()]
-#'   or [drake::r_make()]. `prework` must be a character scalar.
+#' @param prework,log_worker,... Passed to [drake::make()]. `prework` must be a character scalar.
 #' @param options A list: additional [base::options()] to be set (locally).
 #' @return Invisibly `TRUE` if plan execution finishes without errors.
 #'
@@ -21,10 +20,7 @@ scdrake_make <- function(plan,
                          cfg_pipeline = NULL,
                          cfg_main = NULL,
                          verbose = getOption("scdrake_verbose"),
-                         memory_strategy = "speed",
-                         caching = "worker",
                          prework = "",
-                         log_build_times = FALSE,
                          log_worker = TRUE,
                          options = list(),
                          ...) {
@@ -158,11 +154,11 @@ scdrake_make <- function(plan,
     prework = prework,
     trigger = drake_trigger,
     seed = cfg_pipeline$SEED,
-    caching = caching,
+    caching = cfg_pipeline$DRAKE_CACHING,
     keep_going = cfg_pipeline$DRAKE_KEEP_GOING,
-    memory_strategy = memory_strategy,
+    memory_strategy = cfg_pipeline$DRAKE_MEMORY_STRATEGY,
     lock_envir = cfg_pipeline$DRAKE_LOCK_ENVIR,
-    log_build_times = log_build_times,
+    log_build_times = cfg_pipeline$DRAKE_LOG_BUILD_TIMES,
     format = cfg_pipeline$DRAKE_FORMAT,
     log_worker = log_worker,
     ...

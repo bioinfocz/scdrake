@@ -10,10 +10,7 @@ scdrake_make(
   cfg_pipeline = NULL,
   cfg_main = NULL,
   verbose = getOption("scdrake_verbose"),
-  memory_strategy = "speed",
-  caching = "worker",
   prework = "",
-  log_build_times = FALSE,
   log_worker = TRUE,
   options = list(),
   ...
@@ -34,8 +31,7 @@ obtained from \verb{00_main.yaml} file located in single-sample or integration c
 \item{verbose}{A logical scalar: if \code{TRUE}, be verbose.
 The default value is obtained from \code{getOption("scdrake_verbose")}.}
 
-\item{memory_strategy, caching, prework, log_build_times, log_worker, ...}{Passed to \code{\link[drake:make]{drake::make()}}
-or \code{\link[drake:r_make]{drake::r_make()}}. \code{prework} must be a character scalar.}
+\item{prework, log_worker, ...}{Passed to \code{\link[drake:make]{drake::make()}}. \code{prework} must be a character scalar.}
 
 \item{options}{A list: additional \code{\link[base:options]{base::options()}} to be set (locally).}
 

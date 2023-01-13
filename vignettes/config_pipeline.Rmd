@@ -116,13 +116,46 @@ By default, R's `Rds` format is used (see `?saveRds`), but we recommend to use `
 DRAKE_REBUILD: null
 ```
 
-**Type:** character scalar (`all` | `current`) or `null`
+**Type:** character scalar (`"all"` | `"current"`) or `null`
 
 Instruct `{drake}` to rebuild targets although they are considered finished.
 
 - For `"all"`, the pipeline is run from scratch (`drake::trigger(condition = TRUE)` is passed as `trigger` argument to
   `drake::make()` or `drake::drake_config()`).
 - For `"current"`, `drake::clean()` is run for targets specified in `DRAKE_TARGETS`.
+
+***
+
+```yaml
+DRAKE_CACHING: "worker"
+```
+
+**Type:** character scalar (`"worker"` | `"main"`)
+
+How to collect data from parallel workers. See the `caching` parameter in `drake::drake_config()`.
+
+***
+
+```yaml
+DRAKE_MEMORY_STRATEGY: "speed"
+```
+
+**Type:** character scalar (`"speed"` | `"autoclean"` | `"preclean"` | `"lookahead"` | `"unload"` | `"none"`)
+
+How to manage target objects in memory during runtime. See the `memory_strategy` parameter in `drake::drake_config()`.
+
+You can consider `"autoclean"`, `"preclean"` or `"lookahead"` to conserve memory, but at the expense of speed.
+
+***
+
+```yaml
+DRAKE_LOG_BUILD_TIMES: False
+```
+
+**Type:** logical scalar
+
+Whether to record build times for targets. Mac users may notice a 20% speedup in `drake::make()` with
+`DRAKE_LOG_BUILD_TIMES: False`.
 
 ***
 
