@@ -20,6 +20,8 @@ ENV BIOCONDUCTOR_VERSION=$BIOCONDUCTOR_VERSION
 ARG BIOCONDUCTOR_PATCH=0
 ARG BIOCONDUCTOR_DOCKER_VERSION=${BIOCONDUCTOR_VERSION}.${BIOCONDUCTOR_PATCH}
 
+ARG SCDRAKE_VERSION=1.4.0
+
 LABEL name="jirinovo/scdrake" \
     version=$SCDRAKE_VERSION \
     bioconductor_version=$BIOCONDUCTOR_VERSION \
@@ -214,8 +216,6 @@ ENV LIBSBML_CFLAGS="-I/usr/include"
 ENV LIBSBML_LIBS="-lsbml"
 
 ## -- scdrake stuff
-ARG SCDRAKE_VERSION=1.4.0
-
 ## -- https://github.com/bioinfocz/scdrake/blob/main/required_libs_linux.md -> Ubuntu 20.04
 RUN apt-get update && apt-get install -y --no-install-recommends \
     libglpk-dev \
@@ -295,6 +295,7 @@ RUN ccache --clear
 
 RUN Rscript -e "scdrake::install_cli(type = 'system', ask = FALSE)"
 
+ENV MAKE="make"
 ENV SCDRAKE_DOCKER TRUE
 
 ## -- This will start RStudio.

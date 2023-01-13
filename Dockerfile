@@ -55,6 +55,8 @@ RUN ln -s /usr/local/bin/yq /home/rstudio/.local/bin/yq
 ENV RENV_VERSION 0.16.0
 RUN R -e "BiocManager::install('rstudio/renv@${RENV_VERSION}')"
 ARG R_PKG_INSTALL_NCPUS=1
+ARG R_PKG_INSTALL_MAKE_NCPUS=1
+ENV MAKE="make -j${R_PKG_INSTALL_MAKE_NCPUS}"
 RUN Rscript -e "\
   options(Ncpus = ${R_PKG_INSTALL_NCPUS});\
   ## -- For Rhtslib this error appears during renv::restore(): '/usr/bin/tar: Unexpected EOF in archive'\
@@ -90,6 +92,7 @@ RUN find /usr/local/lib/R/site-library/*/libs/ -name \*.so | xargs strip -s -p
 
 RUN Rscript -e "scdrake::install_cli(type = 'system', ask = FALSE)"
 
+ENV MAKE="make"
 ENV SCDRAKE_DOCKER TRUE
 
 ## -- This will start RStudio.
