@@ -85,6 +85,9 @@ RUN Rscript -e "\
   );\
   "
 
+## -- Strip shared libraries, see https://github.com/rocker-org/rocker-versioned2/issues/340
+RUN find /usr/local/lib/R/site-library/*/libs/ -name \*.so | xargs strip -s -p
+
 RUN Rscript -e "scdrake::install_cli(type = 'system', ask = FALSE)"
 
 ENV SCDRAKE_DOCKER TRUE
