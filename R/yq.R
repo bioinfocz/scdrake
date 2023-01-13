@@ -1,19 +1,20 @@
 #' @title Download the binary of the `yq` tool (version 3.4.1).
 #' @description This function has side-effects by default, see the `set_as_default` argument.
 #'
-#' @param url An URL from which binary will be downloaded.
+#' @param url A character scalar: URL from which binary will be downloaded.
 #' If `NULL`, it will be created from `os`, `arch`, and `yq_version`.
-#' @param os A character scalar specifying the current OS (`"linux"`, `"windows"`, or `"darwin"` for macOS).
+#' @param os A character scalar: specifies the current OS (`"linux"`, `"windows"`, or `"darwin"` for macOS).
 #' If `NULL`, it will be determined from `.Platform$OS.type`.
-#' @param arch A character scalar specifying the current CPU architecture (`32` or `64`).
-#' If `NULL`, it will be determined from `.Machine$sizeof.pointer` (`4 -> 32`, `8 -> 64`).
-#' @param yq_version A character scalar of `yq` tool version.
-#' @param destfile A character scalar specifying the destination file.
-#' @param set_as_default If `TRUE`, set `options(scdrake_yq_binary = destfile)`.
-#' @param do_check If `TRUE`, functionality of the downloaded (or present) `yq` binary will be checked.
+#' @param arch A character scalar: specifies the current CPU architecture (`32`, `64`, or `"arm64"`).
+#' If `NULL`, it will be determined from `.Machine$sizeof.pointer` (`4 -> 32`, `8 -> 64`) or from [R.version] for
+#' `"arm64"` (which is identified as `"aarch64"` for Apple's M1 chipsets).
+#' @param yq_version A character scalar: `yq` tool version.
+#' @param destfile A character scalar: destination file.
+#' @param set_as_default A logical scalar: if `TRUE`, set `options(scdrake_yq_binary = destfile)`.
+#' @param do_check A logical scalar: if `TRUE`, functionality of the downloaded (or present) `yq` binary will be checked.
 #' @param ask A logical scalar: if `TRUE`, ask before `yq` binary is downloaded.
 #' @param dry A logical scalar: if `TRUE`, do not download the `yq` binary and just return its URL.
-#' @param overwrite If `TRUE`, overwrite the existing `yq` binary if exists.
+#' @param overwrite A logical scalar: if `TRUE`, overwrite the existing `yq` binary if exists.
 #' @inheritParams verbose
 #' @return A character scalar of length two: `destfile` and URL to `yq` binary.
 #' Note that on Windows platform, if `destfile` doesn't contain the `.exe` extension,
@@ -55,38 +56,45 @@ download_yq <- function(url = NULL,
   }
 
   if (is_null(url)) {
-    valid_os <- c("linux", "windows", "darwin")
-    assert_that_(
-      os %in% valid_os,
-      msg = "Unsupported os: '{os}'. The valid ones are {str_comma(valid_os)}"
-    )
-
-    valid_arch <- c(32L, 64L)
-    if (is_null(arch)) {
-      pointer_size <- .Machine$sizeof.pointer
-
-      arch <- dplyr::case_when(
-        pointer_size == 4 ~ 32L,
-        pointer_size == 8 ~ 64L,
-        TRUE ~ NA_integer_
+    if (R.version$arch == "aarch64") {
+      os <- "linux"
+      arch <- "arm64"
+      cli_alert_info("Apple arm64 architecture detected, setting {.var os} to {.val linux} and {.var arch} to {.val arm64}.")
+    } else {
+      valid_os <- c("linux", "windows", "darwin")
+      assert_that_(
+        os %in% valid_os,
+        msg = "Unsupported os: '{os}'. The valid ones are {str_comma(valid_os)}"
       )
+
+      valid_arch <- c(32L, 64L)
+      if (is_null(arch)) {
+        pointer_size <- .Machine$sizeof.pointer
+
+        arch <- dplyr::case_when(
+          pointer_size == 4 ~ 32L,
+          pointer_size == 8 ~ 64L,
+          TRUE ~ NA_integer_
+        )
+
+        assert_that_(
+          !is_na(arch),
+          msg = "Cannot determine the arch based on the pointer size ({.code .Machine$sizeof.pointer}): {.val {pointer_size}}"
+        )
+      }
 
       assert_that_(
-        !is_na(arch),
-        msg = "Cannot determine the arch based on the pointer size ({.code .Machine$sizeof.pointer}): {.val {pointer_size}}"
+        arch %in% valid_arch,
+        msg = "Unsupported CPU architecture: {.val {arch}}. The valid ones are {.val {str_comma(valid_arch)}}"
       )
+
+      if (os == "darwin") {
+        assert_that_(arch != "386", msg = "the yq tool is not available for {.val darwin} OS with {.val 386} architecture.")
+      }
+
+      arch <- dplyr::if_else(arch == 32L, "386", "amd64")
     }
 
-    assert_that_(
-      arch %in% valid_arch,
-      msg = "Unsupported CPU architecture: {.val {arch}}. The valid ones are {.val {str_comma(valid_arch)}}"
-    )
-
-    if (os == "darwin") {
-      assert_that_(arch != "386", msg = "the yq tool is not available for {.val darwin} OS with {.val 386} architecture.")
-    }
-
-    arch <- dplyr::if_else(arch == 32L, "386", "amd64")
     url <- glue(
       "https://github.com/mikefarah/yq/releases/download/{yq_version}/yq_{os}_{arch}{exe}",
       exe = dplyr::if_else(os == "windows", ".exe", "")
@@ -120,6 +128,8 @@ download_yq <- function(url = NULL,
     if (do_check) {
       check_yq(yq_binary = destfile, repair_executable = FALSE, verbose = verbose)
     }
+  } else {
+    cli_alert_info("Dry mode, nothing will be actually downloaded.")
   }
 
   return(c(destfile, url))

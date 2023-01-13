@@ -19,26 +19,27 @@ download_yq(
 )
 }
 \arguments{
-\item{url}{An URL from which binary will be downloaded.
+\item{url}{A character scalar: URL from which binary will be downloaded.
 If \code{NULL}, it will be created from \code{os}, \code{arch}, and \code{yq_version}.}
 
-\item{os}{A character scalar specifying the current OS (\code{"linux"}, \code{"windows"}, or \code{"darwin"} for macOS).
+\item{os}{A character scalar: specifies the current OS (\code{"linux"}, \code{"windows"}, or \code{"darwin"} for macOS).
 If \code{NULL}, it will be determined from \code{.Platform$OS.type}.}
 
-\item{arch}{A character scalar specifying the current CPU architecture (\code{32} or \code{64}).
-If \code{NULL}, it will be determined from \code{.Machine$sizeof.pointer} (\code{4 -> 32}, \code{8 -> 64}).}
+\item{arch}{A character scalar: specifies the current CPU architecture (\code{32}, \code{64}, or \code{"arm64"}).
+If \code{NULL}, it will be determined from \code{.Machine$sizeof.pointer} (\code{4 -> 32}, \code{8 -> 64}) or from \link{R.version} for
+\code{"arm64"} (which is identified as \code{"aarch64"} for Apple's M1 chipsets).}
 
-\item{yq_version}{A character scalar of \code{yq} tool version.}
+\item{yq_version}{A character scalar: \code{yq} tool version.}
 
-\item{destfile}{A character scalar specifying the destination file.}
+\item{destfile}{A character scalar: destination file.}
 
-\item{set_as_default}{If \code{TRUE}, set \code{options(scdrake_yq_binary = destfile)}.}
+\item{set_as_default}{A logical scalar: if \code{TRUE}, set \code{options(scdrake_yq_binary = destfile)}.}
 
-\item{do_check}{If \code{TRUE}, functionality of the downloaded (or present) \code{yq} binary will be checked.}
+\item{do_check}{A logical scalar: if \code{TRUE}, functionality of the downloaded (or present) \code{yq} binary will be checked.}
 
 \item{ask}{A logical scalar: if \code{TRUE}, ask before \code{yq} binary is downloaded.}
 
-\item{overwrite}{If \code{TRUE}, overwrite the existing \code{yq} binary if exists.}
+\item{overwrite}{A logical scalar: if \code{TRUE}, overwrite the existing \code{yq} binary if exists.}
 
 \item{dry}{A logical scalar: if \code{TRUE}, do not download the \code{yq} binary and just return its URL.}
 
