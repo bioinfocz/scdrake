@@ -8,7 +8,7 @@
 ARG BIOCONDUCTOR_VERSION=3_15
 FROM bioconductor/bioconductor_docker:RELEASE_$BIOCONDUCTOR_VERSION
 
-ARG SCDRAKE_VERSION=1.4.0
+ARG SCDRAKE_VERSION=1.4.1
 
 LABEL name="bioinfocz/scdrake" \
       version=$SCDRAKE_VERSION \

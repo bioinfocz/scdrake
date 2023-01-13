@@ -87,7 +87,7 @@ You can pull the Docker image with the latest stable `{scdrake}` version
 using
 
 ``` bash
-docker pull jirinovo/scdrake:1.4.0-bioc3.15
+docker pull jirinovo/scdrake:1.4.1-bioc3.15
 ```
 
 or list available versions in [our Docker Hub
@@ -98,6 +98,12 @@ For the latest development version use
 ``` bash
 docker pull jirinovo/scdrake:latest-bioc3.15
 ```
+
+**Note for Mac users with M1 chipsets**: you can use the `arm64` version
+of the image:
+
+    docker pull jirinovo/scdrake:1.4.1-bioc3.15-arm64
+    docker pull jirinovo/scdrake:latest-bioc3.15-arm64
 
 ## Installing `{scdrake}` manually
 
@@ -163,7 +169,7 @@ for `{scdrake}` and you can use it to install all dependencies by
 
 ``` r
 ## -- This is a lockfile for the latest stable version of scdrake.
-download.file("https://raw.githubusercontent.com/bioinfocz/scdrake/1.4.0/renv.lock")
+download.file("https://raw.githubusercontent.com/bioinfocz/scdrake/1.4.1/renv.lock")
 ## -- You can increase the number of CPU cores to speed up the installation.
 options(Ncpus = 2)
 renv::restore(lockfile = "renv.lock", repos = BiocManager::repositories())
@@ -183,7 +189,7 @@ installed).
 
 ``` r
 remotes::install_github(
-  "bioinfocz/scdrake@1.4.0",
+  "bioinfocz/scdrake@1.4.1",
   dependencies = FALSE, upgrade = FALSE,
   keep_source = TRUE, build_vignettes = TRUE,
   repos = BiocManager::repositories()
@@ -203,7 +209,7 @@ scdrake::install_cli()
 CLI should be now accessible as a `scdrake` command. By default, the CLI
 is installed into `~/.local/bin`, which is usually present in the `PATH`
 environment variable. In case it isn’t, just add to your `~/.bashrc`:
-`PATH="${HOME}/.local/bin:${PATH}"`
+`export PATH="${HOME}/.local/bin:${PATH}"`
 
 **Every time you will be using the CLI make sure your current working
 directory is inside an `{renv}` project.** You can read the reasons
