@@ -28,7 +28,7 @@
     
     <a class="navbar-brand me-2" href="index.html">scdrake</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.4.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.4.1</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -125,6 +125,31 @@
 <div class="section level1">
 <h1 id="quick-fixes">Quick fixes<a class="anchor" aria-label="anchor" href="#quick-fixes"></a></h1>
 <ul class="task-list"><li>
+<input type="checkbox" disabled>
+Download <code>yq_linux_arm64</code> for Mac M1.</li>
+<li>
+<input type="checkbox" disabled checked>
+Fix <a href="https://github.com/bioinfocz/scdrake/blob/main/R/project.R#L127" class="external-link uri">https://github.com/bioinfocz/scdrake/blob/main/R/project.R#L127</a>
+</li>
+<li>
+<input type="checkbox" disabled checked>
+Use <code>rds</code> as the default storage format.</li>
+<li>
+<input type="checkbox" disabled>
+More options for drake (e.g. for memory to support low end machines).</li>
+<li>
+<input type="checkbox" disabled checked>
+Rewrite docs for Docker:<ul class="task-list"><li>
+<input type="checkbox" disabled checked>
+Docker Desktop vs. Docker Engine</li>
+<li>
+<input type="checkbox" disabled checked>
+Linux vs. Mac and Windows</li>
+<li>
+<input type="checkbox" disabled checked>
+Running scdrake without starting a detached container (<code>docker run -it -v ...</code>).</li>
+</ul></li>
+<li>
 <input type="checkbox" disabled checked>
 Test with <code>SCTransform</code>.<ul><li>It is failing during tests, don’t know why.</li>
 </ul></li>
@@ -172,17 +197,17 @@ Report 01_input_qc Rmd -&gt; fix line 96: <code>h = cfg$EMPTY_DROPLETS_LOWER</co
 Change <code>.data$var</code> to <code>"var"</code> in tidyverse functions.</li>
 <li>
 <input type="checkbox" disabled>
-Fix compatibility with SingleR 2.0: remove lines 186 and 204 in <code>R/cell_annotation.R</code><ul><li>Not yet - errors in Bioc 3.16</li>
+Fix compatibility with SingleR 2.0: remove lines 186 and 204 in <code>R/cell_annotation.R</code><ul><li>Not yet - errors in Bioc 3.16 (Matrix package).</li>
 </ul></li>
 <li>
 <input type="checkbox" disabled checked>
 Remove exclamation marks from scdrake load messages (env variables) -&gt; change to “i”.</li>
 <li>
-<input type="checkbox" disabled>
+<input type="checkbox" disabled checked>
 Test relative paths for <code><a href="reference/init_project.html">init_project()</a></code>
 </li>
 <li>
-<input type="checkbox" disabled>
+<input type="checkbox" disabled checked>
 More checks of config parameters:<ul class="task-list"><li>
 <input type="checkbox" disabled checked>
 pandoc in $PATH</li>
@@ -194,7 +219,7 @@ input file for 01_input_qc</li>
 <input type="checkbox" disabled checked>
 Catch error in emptyDroplets() and display an info message.</li>
 <li>
-<input type="checkbox" disabled>
+<input type="checkbox" disabled checked>
 CLI R script:<ul class="task-list"><li>
 <input type="checkbox" disabled checked>
 Add <code>SCDRAKE_CLI_VERSION</code> to scdrake package (<code>zzz.R</code>) and check the match inside the script.</li>
@@ -371,7 +396,7 @@ Fix links to vignettes.</li>
 <input type="checkbox" disabled checked>
 In HTML reports, add package prefixes and use <code><a href="https://downlit.r-lib.org/reference/autolink.html" class="external-link">downlit::autolink()</a></code>.</li>
 <li>
-<input type="checkbox" disabled>
+<input type="checkbox" disabled checked>
 Elaborate pipeline diagram.</li>
 <li>
 <input type="checkbox" disabled checked><code>scdrake_extend</code> vignette: using stage report Rmds and generate_stage_report()</li>
@@ -472,8 +497,9 @@ replace <code>clean_tmpfiles()</code> in RMarkdown (possibly causing failures of
 <input type="checkbox" disabled checked>
 use <a href="https://here.r-lib.org/" class="external-link">here</a> package to refer to files relative to project root (important mainly for Rmds, which call <code><a href="https://rdrr.io/r/base/getwd.html" class="external-link">setwd()</a></code> to their locations)</li>
 <li>
-<input type="checkbox" disabled>
-to generated HTMLs, add footer with link to this pipeline</li>
+<input type="checkbox" disabled checked>
+to generated HTMLs, add footer with link to this pipeline<ul><li>Added as subtitle.</li>
+</ul></li>
 <li>
 <input type="checkbox" disabled>
 function to export to <a href="https://github.com/gorgitko/ShinyCell" class="external-link">ShinyCell</a><ul><li>probably not worth to be a target in the pipeline</li>
@@ -554,7 +580,7 @@ SCE object in Rds format</li>
 <input type="checkbox" disabled checked>
 use only one selected type of normalization in plan (scran or sctransform specified in config)</li>
 <li>
-<input type="checkbox" disabled>
+<input type="checkbox" disabled checked>
 save dimred plots in PDF and in Rmd output PNG with link to PDF<ul><li>easier handling of dynamic chunk figure size</li>
 <li>faster Rmd rendering</li>
 <li>handy - people can download PDFs</li>

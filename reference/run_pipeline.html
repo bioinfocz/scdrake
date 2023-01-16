@@ -3,6 +3,7 @@
 The first, reproducible way is via run_single_sample_r() or run_integration_r(). In the end, drake::r_make()
 is called and sources &quot;_drake_single_sample.R&quot; or &quot;_drake_integration.R&quot; scripts in a fresh new R session.
 Those scripts are entry points for drake. See scdrake_r_make() for more details.
+(Soft-deprecated since scdrake 1.4.0)
 The second way is to run pipeline in the current R session via run_single_sample() or run_integration(),
 which is a shortcut for:
 Loading configs: load_pipeline_config(), and load_single_sample_configs() or load_integration_configs().
@@ -32,6 +33,7 @@ respectively, while protecting from side effects (e.g. setting options() etc.) o
 The first, reproducible way is via run_single_sample_r() or run_integration_r(). In the end, drake::r_make()
 is called and sources &quot;_drake_single_sample.R&quot; or &quot;_drake_integration.R&quot; scripts in a fresh new R session.
 Those scripts are entry points for drake. See scdrake_r_make() for more details.
+(Soft-deprecated since scdrake 1.4.0)
 The second way is to run pipeline in the current R session via run_single_sample() or run_integration(),
 which is a shortcut for:
 Loading configs: load_pipeline_config(), and load_single_sample_configs() or load_integration_configs().
@@ -62,7 +64,7 @@ respectively, while protecting from side effects (e.g. setting options() etc.) o
     
     <a class="navbar-brand me-2" href="../index.html">scdrake</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.4.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.4.1</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -158,7 +160,8 @@ respectively, while protecting from side effects (e.g. setting options() etc.) o
 <p>The first, reproducible way is via <code>run_single_sample_r()</code> or <code>run_integration_r()</code>. In the end, <code><a href="https://docs.ropensci.org/drake/reference/r_make.html" class="external-link">drake::r_make()</a></code>
 is called and sources <code>"_drake_single_sample.R"</code> or <code>"_drake_integration.R"</code> scripts in a fresh new R session.
 Those scripts are entry points for <code>drake</code>. See <code><a href="scdrake_make.html">scdrake_r_make()</a></code> for more details.</p>
-<p>The second way is to run pipeline in the current R session via <code>run_single_sample()</code> or <code>run_integration()</code>,
+<p>(Soft-deprecated since <code>scdrake</code> 1.4.0)
+The second way is to run pipeline in the current R session via <code>run_single_sample()</code> or <code>run_integration()</code>,
 which is a shortcut for:</p><ul><li><p>Loading configs: <code><a href="load_config.html">load_pipeline_config()</a></code>, and <code><a href="load_config.html">load_single_sample_configs()</a></code> or <code><a href="load_config.html">load_integration_configs()</a></code>.</p></li>
 <li><p>Obtaining the pipeline plan: <code><a href="get_plan.html">get_single_sample_plan()</a></code> or <code><a href="get_plan.html">get_integration_plan()</a></code>.</p></li>
 <li><p>Creating a basic directory structure (based on paths loaded from config files): <code><a href="create_dirs.html">create_single_sample_dirs()</a></code> or

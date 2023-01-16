@@ -28,7 +28,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">scdrake</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.4.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.4.1</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -143,34 +143,35 @@
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
     <dl><dt>url</dt>
-<dd><p>An URL from which binary will be downloaded.
+<dd><p>A character scalar: URL from which binary will be downloaded.
 If <code>NULL</code>, it will be created from <code>os</code>, <code>arch</code>, and <code>yq_version</code>.</p></dd>
 
 
 <dt>os</dt>
-<dd><p>A character scalar specifying the current OS (<code>"linux"</code>, <code>"windows"</code>, or <code>"darwin"</code> for macOS).
+<dd><p>A character scalar: specifies the current OS (<code>"linux"</code>, <code>"windows"</code>, or <code>"darwin"</code> for macOS).
 If <code>NULL</code>, it will be determined from <code>.Platform$OS.type</code>.</p></dd>
 
 
 <dt>arch</dt>
-<dd><p>A character scalar specifying the current CPU architecture (<code>32</code> or <code>64</code>).
-If <code>NULL</code>, it will be determined from <code>.Machine$sizeof.pointer</code> (<code>4 -&gt; 32</code>, <code>8 -&gt; 64</code>).</p></dd>
+<dd><p>A character scalar: specifies the current CPU architecture (<code>32</code>, <code>64</code>, or <code>"arm64"</code>).
+If <code>NULL</code>, it will be determined from <code>.Machine$sizeof.pointer</code> (<code>4 -&gt; 32</code>, <code>8 -&gt; 64</code>) or from <a href="https://rdrr.io/r/base/Version.html" class="external-link">R.version</a> for
+<code>"arm64"</code> (which is identified as <code>"aarch64"</code> for Apple's M1 chipsets).</p></dd>
 
 
 <dt>yq_version</dt>
-<dd><p>A character scalar of <code>yq</code> tool version.</p></dd>
+<dd><p>A character scalar: <code>yq</code> tool version.</p></dd>
 
 
 <dt>destfile</dt>
-<dd><p>A character scalar specifying the destination file.</p></dd>
+<dd><p>A character scalar: destination file.</p></dd>
 
 
 <dt>set_as_default</dt>
-<dd><p>If <code>TRUE</code>, set <code>options(scdrake_yq_binary = destfile)</code>.</p></dd>
+<dd><p>A logical scalar: if <code>TRUE</code>, set <code>options(scdrake_yq_binary = destfile)</code>.</p></dd>
 
 
 <dt>do_check</dt>
-<dd><p>If <code>TRUE</code>, functionality of the downloaded (or present) <code>yq</code> binary will be checked.</p></dd>
+<dd><p>A logical scalar: if <code>TRUE</code>, functionality of the downloaded (or present) <code>yq</code> binary will be checked.</p></dd>
 
 
 <dt>ask</dt>
@@ -178,7 +179,7 @@ If <code>NULL</code>, it will be determined from <code>.Machine$sizeof.pointer</
 
 
 <dt>overwrite</dt>
-<dd><p>If <code>TRUE</code>, overwrite the existing <code>yq</code> binary if exists.</p></dd>
+<dd><p>A logical scalar: if <code>TRUE</code>, overwrite the existing <code>yq</code> binary if exists.</p></dd>
 
 
 <dt>dry</dt>

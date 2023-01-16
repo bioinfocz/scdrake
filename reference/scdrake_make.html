@@ -62,7 +62,7 @@ option used in load_single_sample_configs(dir = getOption("scdrake_single_sample
     
     <a class="navbar-brand me-2" href="../index.html">scdrake</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.4.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.4.1</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -178,10 +178,7 @@ option used in <code>load_single_sample_configs(dir = getOption("scdrake_single_
 <span>  cfg_pipeline <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  cfg_main <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  verbose <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">getOption</a></span><span class="op">(</span><span class="st">"scdrake_verbose"</span><span class="op">)</span>,</span>
-<span>  memory_strategy <span class="op">=</span> <span class="st">"speed"</span>,</span>
-<span>  caching <span class="op">=</span> <span class="st">"worker"</span>,</span>
 <span>  prework <span class="op">=</span> <span class="st">""</span>,</span>
-<span>  log_build_times <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  log_worker <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  options <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span>,</span>
 <span>  <span class="va">...</span></span>
@@ -212,9 +209,8 @@ obtained from <code>00_main.yaml</code> file located in single-sample or integra
 The default value is obtained from <code>getOption("scdrake_verbose")</code>.</p></dd>
 
 
-<dt>memory_strategy, caching, prework, log_build_times, log_worker, ...</dt>
-<dd><p>Passed to <code><a href="https://docs.ropensci.org/drake/reference/make.html" class="external-link">drake::make()</a></code>
-or <code><a href="https://docs.ropensci.org/drake/reference/r_make.html" class="external-link">drake::r_make()</a></code>. <code>prework</code> must be a character scalar.</p></dd>
+<dt>prework, log_worker, ...</dt>
+<dd><p>Passed to <code><a href="https://docs.ropensci.org/drake/reference/make.html" class="external-link">drake::make()</a></code>. <code>prework</code> must be a character scalar.</p></dd>
 
 
 <dt>options</dt>
