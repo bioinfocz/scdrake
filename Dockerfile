@@ -4,6 +4,8 @@
 ## -- - Install scdrake deps from renv lockfile into global R library.
 ## -- - Install the scdrake package.
 ## -- - Install the CLI scripts.
+## -- You can build the Dockerfile using
+## docker-buildx build --progress plain --platform linux/amd64 --build-arg R_PKG_INSTALL_NCPUS=8 --build-arg R_PKG_INSTALL_MAKE_NCPUS=4 -t jirinovo/scdrake:<version>-bioc3.15 -f Dockerfile
 
 ARG BIOCONDUCTOR_VERSION=3_15
 FROM bioconductor/bioconductor_docker:RELEASE_$BIOCONDUCTOR_VERSION
@@ -56,12 +58,9 @@ ENV RENV_VERSION 0.16.0
 RUN R -e "BiocManager::install('rstudio/renv@${RENV_VERSION}')"
 ARG R_PKG_INSTALL_NCPUS=1
 ARG R_PKG_INSTALL_MAKE_NCPUS=1
-ENV MAKE="make -j${R_PKG_INSTALL_MAKE_NCPUS}"
-RUN Rscript -e "\
-  options(Ncpus = ${R_PKG_INSTALL_NCPUS});\
-  ## -- For Rhtslib this error appears during renv::restore(): '/usr/bin/tar: Unexpected EOF in archive'\
-  BiocManager::install('Rhtslib', update = FALSE, ask = FALSE);\
-  "
+ENV MAKEFLAGS="-j${R_PKG_INSTALL_MAKE_NCPUS}"
+## -- For Rhtslib this error appears during renv::restore(): '/usr/bin/tar: Unexpected EOF in archive'\
+RUN Rscript -e "BiocManager::install(c('Rhtslib', 'Rsamtools'), update = FALSE, ask = FALSE, Ncpus = ${R_PKG_INSTALL_NCPUS})"
 
 COPY renv.lock /
 RUN Rscript -e "\
@@ -92,7 +91,7 @@ RUN find /usr/local/lib/R/site-library/*/libs/ -name \*.so | xargs strip -s -p
 
 RUN Rscript -e "scdrake::install_cli(type = 'system', ask = FALSE)"
 
-ENV MAKE="make"
+ENV MAKEFLAGS=""
 ENV SCDRAKE_DOCKER TRUE
 
 ## -- This will start RStudio.
