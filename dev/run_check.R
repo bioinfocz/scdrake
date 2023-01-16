@@ -1,7 +1,7 @@
 #!/usr/bin/env Rscript
 
 ## -- A wrapper script for devtools::check()
-## -- By default, pipeline tests (including those in CLI test) are skipped as they are disfunctional during R CMD CHECK.
+## -- By default, pipeline tests (including those in CLI test) are skipped as they are dysfunctional during R CMD CHECK.
 
 library(argparser)
 
@@ -22,26 +22,6 @@ run_check <- function(check_dir = NULL,
   if (is.null(check_dir)) {
     check_dir <- fs::file_temp()
   }
-
-  # if (is.null(pkg_tmp_dir)) {
-  #   pkg_tmp_dir <- fs::file_temp("scdrake-")
-  # } else if (isFALSE(pkg_tmp_dir)) {
-  #   pkg_tmp_dir <- "."
-  # }
-
-  # if (fs::path_abs(pkg_tmp_dir) != getwd()) {
-  #   cli::cli_alert_info("Package temp directory: {.file {pkg_tmp_dir}}")
-  #   fs::dir_create(pkg_tmp_dir)
-  #   purrr::map(c("DESCRIPTION", "LICENSE", "NAMESPACE"), ~ fs::file_copy(., pkg_tmp_dir, overwrite = TRUE))
-  #   purrr::map(c("inst", "man", "R", "vignettes"), ~ file.copy(., pkg_tmp_dir, overwrite = TRUE, recursive = TRUE))
-  #   fs::dir_create(fs::path(pkg_tmp_dir, "tests/testthat"))
-  #   fs::file_copy("tests/testthat.R", fs::path(pkg_tmp_dir, "tests"), overwrite = TRUE)
-  #   fs::file_copy(fs::dir_ls("tests/", glob = "*.R"), fs::path(pkg_tmp_dir, "tests/testthat"), overwrite = TRUE)
-  #   purrr::map(
-  #     fs::path("tests/testthat/", c("_snaps", "config_test_files", "run_pipeline_config_patches", "run_pipeline_vignette_config_patches", "yq_test_files")),
-  #     ~ file.copy(., pkg_tmp_dir, overwrite = TRUE, recursive = TRUE)
-  #   )
-  # }
 
   cli::cli_alert_info("Output directory: {.file {check_dir}}")
 
@@ -67,7 +47,6 @@ run_check <- function(check_dir = NULL,
   cli::cli_alert_info("Local environment variables:")
   cli::cli_ul(paste(names(env_vars), env_vars, sep = ": "))
   cli::cli_alert_info("Running {.code devtools::check()}")
-  # withr::with_dir(pkg_tmp_dir, devtools::check(pkg = pkg_tmp_dir, check_dir = check_dir, env_vars = env_vars, ...))
   devtools::check(check_dir = check_dir, env_vars = env_vars, ...)
 }
 
@@ -83,13 +62,6 @@ p <- add_argument(
   default = "/usr/local/lib/R/site-library:/usr/local/lib/R/library",
   short = ""
 )
-# p <- add_argument(
-#   p,
-#   "--pkg-tmp-dir",
-#   "Temporary directory to which package sources will be copied. If '-', use '/tmp/<R tmp dir>/scdrake-<random>' prefix.",
-#   default = ".",
-#   short = ""
-# )
 p <- add_argument(p, "--test-pipeline", "Perform all pipeline tests ('--test-single_sample-full' etc. will be ignored).", flag = TRUE, short = "")
 p <- add_argument(p, "--output-dir-pipeline-tests", "Output directory for pipeline tests (if enabled). If '-', use R temp subdirectory.", default = "-")
 p <- add_argument(p, "--test-yq-download", "Perform the test for yq tool download.", flag = TRUE, short = "")
@@ -115,11 +87,6 @@ if (length(argv) == 0) {
 }
 
 argv <- parse_args(p, argv = argv)
-# pkg_tmp_dir <- argv$pkg_tmp_dir
-#
-# if (pkg_tmp_dir == ".") {
-#   pkg_tmp_dir <- FALSE
-# }
 
 if (argv$output_dir_pipeline_tests == "-" || is.null(argv$output_dir_pipeline_tests)) {
   argv$output_dir_pipeline_tests <- fs::file_temp()
