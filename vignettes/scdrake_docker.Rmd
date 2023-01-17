@@ -36,17 +36,23 @@ In this vignette, we will mainly give practical examples related to `{scdrake}`.
 On a Linux host, there can be different Docker distributions installed:
 
 - [Docker Desktop](https://docs.docker.com/desktop/) (DD)
-    - DD is a more sophisticated suite which runs a Linux virtual machine in which DE is run. DD can be used on Linux hosts,
-    but it is required for Mac and Windows ones. However, on Linux, DD has some differences, of which the one that most
-    affects `{scdrake}`'s ease of use is file sharing (will be discussed later).
+  - DD is a more sophisticated suite which runs a Linux virtual machine in which DE is run. DD can be used on Linux hosts,
+  but it is required for Mac and Windows ones. However, on Linux, DD has some differences, of which the one that most
+  affects `{scdrake}`'s ease of use is file sharing (will be discussed later).
 - [Docker Engine](https://docs.docker.com/engine/) (DE).
-    - DE is the core of Docker that manages containers. It can be used natively on Linux hosts.
-
+  - DE is the core of Docker that manages containers. It can be used natively on Linux hosts.
 
 If you are using a Linux host to run the `{scdrake}` image, we **recommend** to stick with Docker Engine
-(see the [official FAQ](https://docs.docker.com/desktop/faqs/linuxfaqs/) on DD and Linux). Otherwise, in Docker Desktop,
-you won't be able to run RStudio Server. **See [here](https://docs.docker.com/desktop/faqs/linuxfaqs/#context)
-how to quickly switch to DE if you have installed DD.**
+(see the [official FAQ](https://docs.docker.com/desktop/faqs/linuxfaqs/) on DD and Linux).
+
+**See [here](https://docs.docker.com/desktop/faqs/linuxfaqs/#context) how to quickly switch to DE if you have installed DD.**
+
+Otherwise in Docker Desktop:
+
+- You won't be able to run RStudio Server due to problems with file ownership.
+- To sustain the file ownership in the shared directory, you have to execute commands in the container as root.
+  That means you have to omit the `-u rstudio` parameter or use `-u root`. For more details see the note in
+  [Problems with filesystem permissions](#problems-with-filesystem-permissions) below.
 
 ***
 
@@ -236,6 +242,10 @@ out <- scdrake::format_shell_command(c(
 
 `r knitr::knit(text = out)`
 
+Note for Docker Desktop on a Linux host: omit the `-u rstudio` (or use `-u root`) to run the image as root.
+This will mount `/home/rstudio/scdrake_projects` as UID 0 in the container, but UID of the DD user will be used in the
+host directory.
+
 ## Running interactively ("run and forget")
 
 Running the image in detached mode gives us chance e.g. to find out more details about what's wrong in a failed pipeline
@@ -272,6 +282,8 @@ docker exec -it -u rstudio <CONTAINER ID or NAME> R
 - `docker exec`: executes a command in a **running** container.
 - `-i`: interactive.
 - `-d`: allocate a pseudo-TTY.
+
+Note for Docker Desktop on a Linux host: omit the `-u rstudio` (or use `-u root`).
 
 ***
 
@@ -328,8 +340,6 @@ sudo chown -R $(id -u):$(id -g) scdrake_projects
 
 # Issuing `{scdrake}` commands through its command line interface (CLI)
 
-Note for Linux hosts using Docker Desktop: omit the `-u rstudio` parameter.
-
 We now assume that the `{scdrake}` container is running and the shared directory is mounted in
 `/home/rstudio/scdrake_projects`. The `{scdrake}` commands can be easily issued through its CLI
 (see `vignette("scdrake_cli")`):
@@ -357,6 +367,8 @@ docker exec -it -u rstudio -w /home/rstudio/scdrake_projects/my_first_project <C
   scdrake --pipeline-type single_sample run
 ```
 
+Note for Docker Desktop on a Linux host: omit the `-u rstudio` (or use `-u root`).
+
 ***
 
 # Create a command alias
@@ -366,6 +378,8 @@ To reduce typing/copy-pasting a bit, you can create a command alias in your shel
 ```bash
 alias scdrake_docker="docker exec -it -u rstudio <CONTAINER ID or NAME> scdrake"
 ```
+
+Note for Docker Desktop on a Linux host: omit the `-u rstudio` (or use `-u root`).
 
 And then use this alias as e.g.
 
