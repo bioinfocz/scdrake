@@ -53,6 +53,7 @@ RUN mkdir -p /root/.local/bin
 RUN ln -s /usr/local/bin/yq /root/.local/bin/yq
 RUN mkdir -p /home/rstudio/.local/bin
 RUN ln -s /usr/local/bin/yq /home/rstudio/.local/bin/yq
+RUN chown -R rstudio:rstudio /home/rstudio/.local
 
 ENV RENV_VERSION 0.16.0
 RUN R -e "BiocManager::install('rstudio/renv@${RENV_VERSION}')"
