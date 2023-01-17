@@ -148,7 +148,7 @@
       <img src="" class="logo" alt=""><h1>Using the Docker image</h1>
             
             <h4 data-toc-skip class="date"><sup>Document generated:
-2023-01-16 09:31:42 UTC+0000</sup></h4>
+2023-01-17 09:35:09 UTC+0000</sup></h4>
       
       <small class="dont-index">Source: <a href="https://github.com/bioinfocz/scdrake/blob/mastervignettes/scdrake_docker.Rmd" class="external-link"><code>vignettes/scdrake_docker.Rmd</code></a></small>
       <div class="d-none name"><code>scdrake_docker.Rmd</code></div>
@@ -173,13 +173,6 @@ installed:</p>
 <li>
 <a href="https://docs.docker.com/desktop/" class="external-link">Docker Desktop</a> (DD)
 <ul>
-<li>DE is the core of Docker that manages containers. It can be used
-natively on Linux hosts.</li>
-</ul>
-</li>
-<li>
-<a href="https://docs.docker.com/engine/" class="external-link">Docker Engine</a> (DE).
-<ul>
 <li>DD is a more sophisticated suite which runs a Linux virtual machine
 in which DE is run. DD can be used on Linux hosts, but it is required
 for Mac and Windows ones. However, on Linux, DD has some differences, of
@@ -187,13 +180,30 @@ which the one that most affects <a href="https://github.com/bioinfocz/scdrake" c
 file sharing (will be discussed later).</li>
 </ul>
 </li>
+<li>
+<a href="https://docs.docker.com/engine/" class="external-link">Docker Engine</a> (DE).
+<ul>
+<li>DE is the core of Docker that manages containers. It can be used
+natively on Linux hosts.</li>
+</ul>
+</li>
 </ul>
 <p>If you are using a Linux host to run the <a href="https://github.com/bioinfocz/scdrake" class="external-link">scdrake</a>
 image, we <strong>recommend</strong> to stick with Docker Engine (see
 the <a href="https://docs.docker.com/desktop/faqs/linuxfaqs/" class="external-link">official
-FAQ</a> on DD and Linux). Otherwise, in Docker Desktop, you won’t be
-able to run RStudio Server. <strong>See <a href="https://docs.docker.com/desktop/faqs/linuxfaqs/#context" class="external-link">here</a>
+FAQ</a> on DD and Linux).</p>
+<p><strong>See <a href="https://docs.docker.com/desktop/faqs/linuxfaqs/#context" class="external-link">here</a>
 how to quickly switch to DE if you have installed DD.</strong></p>
+<p>Otherwise in Docker Desktop:</p>
+<ul>
+<li>You won’t be able to run RStudio Server due to problems with file
+ownership.</li>
+<li>To sustain the file ownership in the shared directory, you have to
+execute commands in the container as root. That means you have to omit
+the <code>-u rstudio</code> parameter or use <code>-u root</code>. For
+more details see the note in <a href="#problems-with-filesystem-permissions">Problems with filesystem
+permissions</a> below.</li>
+</ul>
 <hr>
 <div class="section level2">
 <h2 id="cheatsheet">Cheatsheet<a class="anchor" aria-label="anchor" href="#cheatsheet"></a>
@@ -369,6 +379,11 @@ use</p>
 <span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">-v</span> <span class="va">$(</span><span class="bu">pwd</span><span class="va">)</span>:/home/rstudio/scdrake_projects <span class="dt">\</span></span>
 <span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>  jirinovo/scdrake:1.4.1-bioc3.15 <span class="dt">\</span></span>
 <span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>  sleep infinity</span></code></pre></div>
+<p>Note for Docker Desktop on a Linux host: omit the
+<code>-u rstudio</code> (or use <code>-u root</code>) to run the image
+as root. This will mount <code>/home/rstudio/scdrake_projects</code> as
+UID 0 in the container, but UID of the DD user will be used in the host
+directory.</p>
 </div>
 <div class="section level3">
 <h3 id="running-interactively-run-and-forget">Running interactively (“run and forget”)<a class="anchor" aria-label="anchor" href="#running-interactively-run-and-forget"></a>
@@ -408,6 +423,8 @@ container and attach to it using</p>
 <li>
 <code>-d</code>: allocate a pseudo-TTY.</li>
 </ul>
+<p>Note for Docker Desktop on a Linux host: omit the
+<code>-u rstudio</code> (or use <code>-u root</code>).</p>
 <hr>
 </div>
 <div class="section level2">
@@ -467,8 +484,6 @@ container:</p>
 <h2 id="issuing-scdrake-commands-through-its-command-line-interface-cli">Issuing <code>{scdrake}</code> commands through its command line
 interface (CLI)<a class="anchor" aria-label="anchor" href="#issuing-scdrake-commands-through-its-command-line-interface-cli"></a>
 </h2>
-<p>Note for Linux hosts using Docker Desktop: omit the
-<code>-u rstudio</code> parameter.</p>
 <p>We now assume that the <a href="https://github.com/bioinfocz/scdrake" class="external-link">scdrake</a> container is running
 and the shared directory is mounted in
 <code>/home/rstudio/scdrake_projects</code>. The <a href="https://github.com/bioinfocz/scdrake" class="external-link">scdrake</a>
@@ -489,6 +504,8 @@ commands can be easily issued through its CLI (see
 </ol>
 <div class="sourceCode" id="cb24"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> exec <span class="at">-it</span> <span class="at">-u</span> rstudio <span class="at">-w</span> /home/rstudio/scdrake_projects/my_first_project <span class="op">&lt;</span>CONTAINER ID or NAME<span class="op">&gt;</span> <span class="dt">\</span></span>
 <span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>  scdrake <span class="at">--pipeline-type</span> single_sample run</span></code></pre></div>
+<p>Note for Docker Desktop on a Linux host: omit the
+<code>-u rstudio</code> (or use <code>-u root</code>).</p>
 <hr>
 </div>
 <div class="section level2">
@@ -497,6 +514,8 @@ commands can be easily issued through its CLI (see
 <p>To reduce typing/copy-pasting a bit, you can create a command alias
 in your shell, here for <code>bash</code>:</p>
 <div class="sourceCode" id="cb25"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="bu">alias</span> scdrake_docker=<span class="st">"docker exec -it -u rstudio &lt;CONTAINER ID or NAME&gt; scdrake"</span></span></code></pre></div>
+<p>Note for Docker Desktop on a Linux host: omit the
+<code>-u rstudio</code> (or use <code>-u root</code>).</p>
 <p>And then use this alias as e.g.</p>
 <div class="sourceCode" id="cb26"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="ex">scdrake_docker</span> <span class="at">-d</span> /home/rstudio/scdrake_projects/my_first_project <span class="at">--pipeline-type</span> single_sample run</span></code></pre></div>
 <p>Notice that we are using the <code>-d</code> parameter as the alias
