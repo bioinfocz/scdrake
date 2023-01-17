@@ -183,7 +183,7 @@ RUN echo "R_LIBS=/usr/local/lib/R/host-site-library:\${R_LIBS}" > /usr/local/lib
 
 ## -- https://stackoverflow.com/questions/36725027/r-package-installation-from-source-using-multiple-cores
 ARG R_PKG_INSTALL_MAKE_NCPUS=1
-ENV MAKE="make -j${R_PKG_INSTALL_MAKE_NCPUS}"
+ENV MAKEFLAGS="-j${R_PKG_INSTALL_MAKE_NCPUS}"
 RUN apt-get update && apt-get install -y --no-install-recommends ccache
 ENV CC="ccache gcc"
 ENV CXX="ccache g++"
@@ -253,22 +253,13 @@ RUN ln -s /usr/local/bin/yq /home/rstudio/.local/bin/yq
 ENV RENV_VERSION 0.16.0
 RUN R -e "BiocManager::install('rstudio/renv@${RENV_VERSION}')"
 
-## -- For Rhtslib this error appears during renv::restore(): '/usr/bin/tar: Unexpected EOF in archive'
-RUN Rscript -e "BiocManager::install('Rhtslib', update = FALSE, ask = FALSE)"
-## -- GenomeInfoDb is also problematic due to bitops.so
-RUN Rscript -e "BiocManager::install('GenomeInfoDb', update = FALSE, ask = FALSE)"
-## -- KEGGREST is also problematic due to png.so
-RUN Rscript -e "BiocManager::install('KEGGREST', update = FALSE, ask = FALSE)"
-RUN Rscript -e "BiocManager::install('bit', update = FALSE, ask = FALSE)"
-RUN Rscript -e "BiocManager::install('AnnotationDbi', update = FALSE, ask = FALSE)"
-
 ARG R_PKG_INSTALL_NCPUS=1
 COPY renv.lock /
 
 RUN Rscript -e "\
-    options(Ncpus = ${R_PKG_INSTALL_NCPUS});\
+    options(Ncpus = ${R_PKG_INSTALL_NCPUS}, renv.config.rspm.enabled = FALSE);\
     renv::consent(TRUE);\
-    renv::restore(lockfile = 'renv.lock', exclude = 'BiocManager', prompt = FALSE);\
+    renv::restore(lockfile = 'renv.lock', exclude = 'BiocManager', prompt = FALSE, repos = BiocManager::repositories());\
     "
 
 RUN mkdir /scdrake_source
@@ -295,7 +286,7 @@ RUN ccache --clear
 
 RUN Rscript -e "scdrake::install_cli(type = 'system', ask = FALSE)"
 
-ENV MAKE="make"
+ENV MAKEFLAGS=""
 ENV SCDRAKE_DOCKER TRUE
 
 ## -- This will start RStudio.
