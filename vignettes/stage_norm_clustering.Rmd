@@ -339,12 +339,13 @@ Note: `!code 3:6` will evaluate to `c(5, 6)`.
 ***
 
 ```yaml
-SC3_N_CORES: 4
+SC3_N_CORES: 1
 ```
 
 **Type:** integer scalar
 
 A number of CPU cores to use for SC3 computation.
+This may lead to out-of-memory errors for a number of cores greater than 1.
 
 Note that `drake` may have problems when the pipeline is run in parallel mode and at the same time a target is using
 a parallel code (*within target parallelism*). For the SC3 computation is recommended to run the pipeline in

@@ -10,7 +10,7 @@ GRAPH_SNN_TYPE: "rank"
 KMEANS_K: !code 3:6
 
 SC3_K: !code 5:6
-SC3_N_CORES: 4
+SC3_N_CORES: 1
 SC3_DRY: False
 ###############################################################################
 
