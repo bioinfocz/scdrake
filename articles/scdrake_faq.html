@@ -148,7 +148,7 @@
       <img src="" class="logo" alt=""><h1>FAQ &amp; Howtos</h1>
             
             <h4 data-toc-skip class="date"><sup>Document generated:
-2023-01-17 09:35:22 UTC+0000</sup></h4>
+2023-01-18 14:15:03 UTC+0000</sup></h4>
       
       <small class="dont-index">Source: <a href="https://github.com/bioinfocz/scdrake/blob/mastervignettes/scdrake_faq.Rmd" class="external-link"><code>vignettes/scdrake_faq.Rmd</code></a></small>
       <div class="d-none name"><code>scdrake_faq.Rmd</code></div>
@@ -188,6 +188,30 @@ issue</a>.</p>
 <p>First make sure you have read the <a href="scdrake.html#before-you-analyse-your-own-data">Before you analyse
 your own data</a> in the Get Started vignette
 (<code><a href="../articles/scdrake.html">vignette("scdrake")</a></code>).</p>
+<p>In case you encounter an error like this one:</p>
+<pre><code>Error in `get_result(output = out, options)`:
+! callr subprocess failed: could not start R, exited with non-zero status, has crashed or was killed
+ℹ See `$stdout` and `$stderr` for standard output and error.
+Type .Last.error to see the more details.</code></pre>
+<p>It means the R process was killed due to insufficient memory or too
+high CPU usage. The former is more usual and here are few tips for
+that:</p>
+<ul>
+<li>In <code>config/pipeline.yaml</code> set
+<code>DRAKE_MEMORY_STRATEGY</code> to either <code>autoclean</code> to
+<code>preclean</code>. This parameter is described in
+<code><a href="../articles/config_pipeline.html">vignette("config_pipeline")</a></code>.
+<ul>
+<li>Alternatively, you can try to run the pipeline again. It can happen
+this time some targets won’t be needed, and so the memory usage will be
+lower.</li>
+</ul>
+</li>
+<li>If you are using Docker Desktop: increase the memory allocation in
+Settings -&gt; Resources -&gt; Advanced</li>
+<li>If you are using Docker Engine: you can look at <a href="https://docs.docker.com/config/containers/resource_constraints/" class="external-link uri">https://docs.docker.com/config/containers/resource_constraints/</a>
+</li>
+</ul>
 <p>If the problem persists, feel free to <a href="https://github.com/bioinfocz/scdrake/issues" class="external-link">open a new issue</a>
 or start a <a href="https://github.com/bioinfocz/scdrake/discussions" class="external-link">discussion</a>.</p>
 </div>
@@ -261,7 +285,7 @@ under <code>BASE_OUT_DIR</code>. For example,
 <a href="https://docs.ropensci.org/drake" class="external-link">drake</a> cache, and can be simply retrieved using the
 <code><a href="https://docs.ropensci.org/drake/reference/readd.html" class="external-link">drake::loadd()</a></code> or <code><a href="https://docs.ropensci.org/drake/reference/readd.html" class="external-link">drake::readd()</a></code>
 functions:</p>
-<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">drake</span><span class="fu">::</span><span class="fu"><a href="https://docs.ropensci.org/drake/reference/readd.html" class="external-link">loadd</a></span><span class="op">(</span><span class="va">name_of_target</span><span class="op">)</span></span>
 <span><span class="co">## -- name_of_target can be either quoted (character) or unquoted (symbol)</span></span>
 <span><span class="va">target</span> <span class="op">&lt;-</span> <span class="fu">drake</span><span class="fu">::</span><span class="fu"><a href="https://docs.ropensci.org/drake/reference/readd.html" class="external-link">readd</a></span><span class="op">(</span><span class="va">name_of_target</span><span class="op">)</span></span></code></pre></div>
@@ -286,7 +310,7 @@ description and usage of these parameters.</p>
 <hr>
 <p>Alternatively, you can reuse a <code>SingleCellExperiment</code>
 object, for example:</p>
-<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">drake</span><span class="fu">::</span><span class="fu"><a href="https://docs.ropensci.org/drake/reference/readd.html" class="external-link">loadd</a></span><span class="op">(</span><span class="va">sce_final_norm_clustering</span><span class="op">)</span></span>
 <span><span class="va">umap</span> <span class="op">&lt;-</span> <span class="fu">reducedDim</span><span class="op">(</span><span class="va">sce_final_norm_clustering</span>, <span class="st">"umap"</span><span class="op">)</span></span>
 <span><span class="va">cell_types</span> <span class="op">&lt;-</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/case_when.html" class="external-link">case_when</a></span><span class="op">(</span></span>
@@ -303,17 +327,17 @@ their UMAP coordinates.</p>
 <code>config/single_sample/01_input_qc.yaml</code> in order to start the
 pipeline from the saved SCE object instead of <code>cellranger</code>
 output:</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">INPUT_DATA</span><span class="kw">:</span></span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">type</span><span class="kw">:</span><span class="at"> </span><span class="st">"sce"</span></span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">path</span><span class="kw">:</span><span class="at"> </span><span class="st">"sce_my_annotation.Rds"</span></span></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">INPUT_DATA</span><span class="kw">:</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">type</span><span class="kw">:</span><span class="at"> </span><span class="st">"sce"</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">path</span><span class="kw">:</span><span class="at"> </span><span class="st">"sce_my_annotation.Rds"</span></span></code></pre></div>
 <p>The <code>sce_final_norm_clustering</code> object is already filtered
 and normalized, so you should skip those procedures:</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">EMPTY_DROPLETS_ENABLED</span><span class="kw">:</span><span class="at"> </span><span class="ch">False</span></span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ENABLE_CELL_FILTERING</span><span class="kw">:</span><span class="at"> </span><span class="ch">False</span></span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="fu">ENABLE_GENE_FILTERING</span><span class="kw">:</span><span class="at"> </span><span class="ch">False</span></span></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">EMPTY_DROPLETS_ENABLED</span><span class="kw">:</span><span class="at"> </span><span class="ch">False</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ENABLE_CELL_FILTERING</span><span class="kw">:</span><span class="at"> </span><span class="ch">False</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="fu">ENABLE_GENE_FILTERING</span><span class="kw">:</span><span class="at"> </span><span class="ch">False</span></span></code></pre></div>
 <p>You can also set to skip the normalization step in
 <code>config/single_sample/02_norm_clustering.yaml</code>:</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">NORMALIZATION_TYPE</span><span class="kw">:</span><span class="at"> </span><span class="st">"none"</span></span></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">NORMALIZATION_TYPE</span><span class="kw">:</span><span class="at"> </span><span class="st">"none"</span></span></code></pre></div>
 <p>The <code>my_cell_types</code> column can be now used for different
 purposes, e.g. for cluster markers detection, differential expression
 (stage <code>contrasts</code>) or visualization.</p>

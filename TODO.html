@@ -126,6 +126,9 @@
 <h1 id="quick-fixes">Quick fixes<a class="anchor" aria-label="anchor" href="#quick-fixes"></a></h1>
 <ul class="task-list"><li>
 <input type="checkbox" disabled checked>
+Set <code>SC3_N_CORES</code> to 1 by default.</li>
+<li>
+<input type="checkbox" disabled checked>
 Download <code>yq_linux_arm64</code> for Mac M1.</li>
 <li>
 <input type="checkbox" disabled checked>
@@ -151,11 +154,23 @@ Running scdrake without starting a detached container (<code>docker run -it -v .
 </ul></li>
 <li>
 <input type="checkbox" disabled checked>
+FAQ docs:<ul class="task-list"><li>
+<input type="checkbox" disabled checked>
+Add notes about:</li>
+</ul><pre><code>Error in `get_result(output = out, options)`:
+! callr subprocess failed: could not start R, exited with non-zero status, has crashed or was killed
+ℹ See `$stdout` and `$stderr` for standard output and error.
+Type .Last.error to see the more details.</code></pre>
+In DD, increase memory (Settings -&gt; Resources).</li>
+<li>
+<input type="checkbox" disabled checked>
 Test with <code>SCTransform</code>.<ul><li>It is failing during tests, don’t know why.</li>
 </ul></li>
 <li>
 <input type="checkbox" disabled>
-Use package version in <code>DESCRIPTION</code> for the latest commit as <code>x.x.9000</code> (until the next release).</li>
+Use package version in <code>DESCRIPTION</code> for the latest commit as <code>x.x.9000</code> (until the next release).<ul><li>This should also trigger <code>pkgdown</code> build of the development version -&gt; <a href="https://pkgdown.r-lib.org/reference/build_site.html?#setting-development-mode" class="external-link uri">https://pkgdown.r-lib.org/reference/build_site.html?#setting-development-mode</a>
+</li>
+</ul></li>
 <li>
 <input type="checkbox" disabled checked>
 Suppress warnings from <code>DT</code>.</li>
@@ -167,7 +182,7 @@ Reorganize <code>inst/</code> into <code>project/</code> etc.</li>
 <input type="checkbox" disabled checked>
 The script will be distributed through a package function <code><a href="reference/cli.html">install_cli()</a></code>.</li>
 </ul></li>
-</ul><div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+</ul><div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">fs</span><span class="fu">::</span><span class="fu"><a href="https://fs.r-lib.org/reference/copy.html" class="external-link">file_copy</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"scdrake"</span>, package <span class="op">=</span> <span class="st">"scdrake"</span>, mustWork <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>, <span class="va">dir</span>, overwrite <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span><span class="fu">fs</span><span class="fu">::</span><span class="fu"><a href="https://fs.r-lib.org/reference/file_chmod.html" class="external-link">file_chmod</a></span><span class="op">(</span><span class="fu">fs</span><span class="fu">::</span><span class="fu"><a href="https://fs.r-lib.org/reference/path.html" class="external-link">path</a></span><span class="op">(</span><span class="va">dir</span>, <span class="st">"scdrake"</span><span class="op">)</span>, <span class="st">"+x"</span><span class="op">)</span></span>
 <span><span class="va">verbose</span> <span class="op"><a href="reference/grapes-and-and-grapes.html">%&amp;&amp;%</a></span> <span class="fu">cli_alert_success</span><span class="op">(</span><span class="st">"Copied the {.file scdrake} script file."</span><span class="op">)</span></span></code></pre></div>
@@ -177,7 +192,7 @@ Lockfile: only store scdrake deps, not scdrake itself.<ul class="task-list"><li>
 <input type="checkbox" disabled>
 Local install as:</li>
 </ul></li>
-</ul><div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+</ul><div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## -- Replace &lt;version&gt; with scdrake version.</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/download.file.html" class="external-link">download.file</a></span><span class="op">(</span><span class="st">"https://raw.githubusercontent.com/bioinfocz/scdrake/&lt;version&gt;/renv.lock"</span><span class="op">)</span></span>
 <span><span class="co">## -- For Rhtslib this error appears during renv::restore(): /usr/bin/tar: Unexpected EOF in archive</span></span>
@@ -252,6 +267,9 @@ Replace all Bioc versions with variable.</li>
 <li>
 <input type="checkbox" disabled checked>
 In <code>scdrake.Rmd</code> use <code>download_example_data = TRUE</code>.</li>
+<li>
+<input type="checkbox" disabled checked>
+Instruct to use WSL2 on Windows.</li>
 </ul></li>
 <li>
 <input type="checkbox" disabled>

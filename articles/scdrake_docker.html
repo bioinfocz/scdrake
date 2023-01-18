@@ -148,7 +148,7 @@
       <img src="" class="logo" alt=""><h1>Using the Docker image</h1>
             
             <h4 data-toc-skip class="date"><sup>Document generated:
-2023-01-17 09:35:09 UTC+0000</sup></h4>
+2023-01-18 14:14:51 UTC+0000</sup></h4>
       
       <small class="dont-index">Source: <a href="https://github.com/bioinfocz/scdrake/blob/mastervignettes/scdrake_docker.Rmd" class="external-link"><code>vignettes/scdrake_docker.Rmd</code></a></small>
       <div class="d-none name"><code>scdrake_docker.Rmd</code></div>
@@ -166,7 +166,12 @@ page for Docker</a> provides itself a nice introduction to Docker and
 its usage for R, and we recommend to read it through. In this vignette,
 we will mainly give practical examples related to
 <a href="https://github.com/bioinfocz/scdrake" class="external-link">scdrake</a>.</p>
-<p><strong>Important notice for Linux hosts</strong></p>
+<div class="section level2">
+<h2 id="platform-specific-notes">Platform-specific notes<a class="anchor" aria-label="anchor" href="#platform-specific-notes"></a>
+</h2>
+<div class="section level3">
+<h3 id="linux-hosts-important">Linux hosts (<em>important</em>)<a class="anchor" aria-label="anchor" href="#linux-hosts-important"></a>
+</h3>
 <p>On a Linux host, there can be different Docker distributions
 installed:</p>
 <ul>
@@ -204,7 +209,17 @@ the <code>-u rstudio</code> parameter or use <code>-u root</code>. For
 more details see the note in <a href="#problems-with-filesystem-permissions">Problems with filesystem
 permissions</a> below.</li>
 </ul>
+</div>
+<div class="section level3">
+<h3 id="windows">Windows<a class="anchor" aria-label="anchor" href="#windows"></a>
+</h3>
+<p>We recommend to use <a href="https://learn.microsoft.com/en-us/windows/wsl/about" class="external-link">WSL2</a> and
+its <a href="https://ubuntu.com/tutorials/install-ubuntu-on-wsl2-on-windows-10#1-overview" class="external-link">Ubuntu
+distribution</a> for Docker Desktop (<a href="https://docs.docker.com/desktop/windows/wsl/" class="external-link">guide</a>) as this
+is successfully tested by us.</p>
 <hr>
+</div>
+</div>
 <div class="section level2">
 <h2 id="cheatsheet">Cheatsheet<a class="anchor" aria-label="anchor" href="#cheatsheet"></a>
 </h2>

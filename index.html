@@ -190,12 +190,11 @@
 <div class="section level1">
 <h1 id="installation-instructions">Installation instructions<a class="anchor" aria-label="anchor" href="#installation-instructions"></a>
 </h1>
-<p>Even though <a href="https://github.com/bioinfocz/scdrake" class="external-link">scdrake</a> is a R package, we don’t recommend to install it as a normal package due to the violation of reproducibility as the latest versions of dependencies will be always installed, which can also break its functionality.</p>
 <div class="section level2">
-<h2 id="using-a-docker-image-recommended">Using a Docker image (<strong>recommended</strong>)<a class="anchor" aria-label="anchor" href="#using-a-docker-image-recommended"></a>
+<h2 id="using-a-docker-image-recommended">Using a Docker image (<em>recommended</em>)<a class="anchor" aria-label="anchor" href="#using-a-docker-image-recommended"></a>
 </h2>
-<p>A Docker image based on the <a href="https://bioconductor.org/help/docker/" class="external-link">official Bioconductor image</a> (version 3.15) is available. This is the most handy and reproducible way how to use <a href="https://github.com/bioinfocz/scdrake" class="external-link">scdrake</a> as all the dependencies are already installed and their version is fixed. In addition, the parent Bioconductor image comes bundled with RStudio Server.</p>
-<p>More information can be found in <code><a href="articles/scdrake_docker.html">vignette("scdrake_docker")</a></code> (we recommend to go through even if you are an experienced Docker user).</p>
+<p>A Docker image based on the <a href="https://bioconductor.org/help/docker/" class="external-link">official Bioconductor image</a> (version 3.15) is available. This is the most handy and reproducible way how to use <a href="https://github.com/bioinfocz/scdrake" class="external-link">scdrake</a> as all the dependencies are already installed and their versions are fixed. In addition, the parent Bioconductor image comes bundled with RStudio Server.</p>
+<p>The complete guide to the usage of <a href="https://github.com/bioinfocz/scdrake" class="external-link">scdrake</a>’s Docker image can be found at <a href="https://bioinfocz.github.io/scdrake/articles/scdrake_docker.html" class="uri">https://bioinfocz.github.io/scdrake/articles/scdrake_docker.html</a>. <strong>We strongly recommend to go through even if you are an experienced Docker user.</strong> Below you can find just the basic command to download the image.</p>
 <p>You can pull the Docker image with the latest stable <a href="https://github.com/bioinfocz/scdrake" class="external-link">scdrake</a> version using</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> pull jirinovo/scdrake:1.4.1-bioc3.15</span></code></pre></div>
 <p>or list available versions in <a href="https://hub.docker.com/r/jirinovo/scdrake/tags" class="external-link">our Docker Hub repository</a>.</p>
@@ -271,7 +270,7 @@ Click for details
 <div class="section level3">
 <h3 id="install-the-scdrake-package">Install the <code>{scdrake}</code> package<a class="anchor" aria-label="anchor" href="#install-the-scdrake-package"></a>
 </h3>
-<p>Now we can finally install the <a href="https://github.com/bioinfocz/scdrake" class="external-link">scdrake</a> package, but using a non-standard approach - without its dependencies (which are already installed).</p>
+<p>Now we can finally install the <a href="https://github.com/bioinfocz/scdrake" class="external-link">scdrake</a> package, but using a non-standard approach - without its dependencies (which are already installed from the lockfile).</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">remotes</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html" class="external-link">install_github</a></span><span class="op">(</span></span>
 <span>  <span class="st">"bioinfocz/scdrake@1.4.1"</span>,</span>
@@ -308,8 +307,7 @@ Show details
 <ul>
 <li>Guides:
 <ul>
-<li>Using the Docker image: <code><a href="articles/scdrake_docker.html">vignette("scdrake_docker")</a></code>
-</li>
+<li>Using the Docker image: <a href="https://bioinfocz.github.io/scdrake/articles/scdrake_docker.html" class="uri">https://bioinfocz.github.io/scdrake/articles/scdrake_docker.html</a> (or <code><a href="articles/scdrake_docker.html">vignette("scdrake_docker")</a></code>)</li>
 <li>01 Quick start (single-sample pipeline): <code><a href="articles/scdrake.html">vignette("scdrake")</a></code>
 </li>
 <li>02 Integration pipeline guide: <code><a href="articles/scdrake_integration.html">vignette("scdrake_integration")</a></code>
