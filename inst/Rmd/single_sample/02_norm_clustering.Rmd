@@ -343,7 +343,7 @@ scdrake::cells_per_cluster_table_collapsed_html(drake::readd(cluster_kmeans_kbes
 
 ### Custom K {.tabset}
 
-- **Custom K (`KMEANS_K`): `r str_comma(cfg$KMEANS_K)`**
+- **Custom K (`KMEANS_K`): `r scdrake::str_comma(cfg$KMEANS_K)`**
 
 ```{r, results = "asis"}
 for (k in cfg$KMEANS_K) {
