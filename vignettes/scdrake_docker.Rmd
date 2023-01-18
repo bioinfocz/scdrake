@@ -31,7 +31,9 @@ The [Bioconductor's page for Docker](https://bioconductor.org/help/docker/) prov
 Docker and its usage for R, and we recommend to read it through.
 In this vignette, we will mainly give practical examples related to `{scdrake}`.
 
-**Important notice for Linux hosts**
+# Platform-specific notes
+
+## Linux hosts (_important_)
 
 On a Linux host, there can be different Docker distributions installed:
 
@@ -53,6 +55,12 @@ Otherwise in Docker Desktop:
 - To sustain the file ownership in the shared directory, you have to execute commands in the container as root.
   That means you have to omit the `-u rstudio` parameter or use `-u root`. For more details see the note in
   [Problems with filesystem permissions](#problems-with-filesystem-permissions) below.
+
+## Windows
+
+We recommend to use [WSL2](https://learn.microsoft.com/en-us/windows/wsl/about) and its
+[Ubuntu distribution](https://ubuntu.com/tutorials/install-ubuntu-on-wsl2-on-windows-10#1-overview) for Docker Desktop
+([guide](https://docs.docker.com/desktop/windows/wsl/)) as this is successfully tested by us.
 
 ***
 

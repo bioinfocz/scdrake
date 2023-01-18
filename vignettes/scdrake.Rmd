@@ -37,16 +37,16 @@ In this guide you will see how to quickly setup `{scdrake}` and run the first st
 pipeline using the provided example data. Once you familiarize yourself with `{scdrake}` basics, you can continue with
 guide for the integration pipeline in `vignette("scdrake_integration")`.
 
-If possible, we will show how to follow the steps from within the R and through the command line interface (CLI), see
-`vignette("scdrake_cli")` for a short overview.
+If possible, we will show how to follow the steps from within the R and through the command line interface (CLI),
+see `vignette("scdrake_cli")` for a short overview.
 
 We **strongly recommend** to use the `{scdrake}`'s Docker image as it is well tested. If you are not familiar with
 Docker, please, refer to `vignette("scdrake_docker")`. We assume that the container has a shared directory mounted as
 `/home/rstudio/scdrake_projects`, as described in the aforementioned vignette.
 
 Note to the CLI: although you can specify the project directory using the `-d / --dir` parameter, we rather recommend
-to always use it as the current working directory before you issue `scdrake` commands. Below in the examples you will
-notice that the `-d` parameter is never used.
+to always be present in the current working directory before you issue `scdrake` commands (this also conforms
+the project-based approach). Below in the examples you will notice that the `-d` parameter is never used.
 
 ***
 

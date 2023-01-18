@@ -66,22 +66,20 @@ whose methods and recommendations is `{scdrake}` largely based.
 
 # Installation instructions
 
-Even though `{scdrake}` is a R package, we don’t recommend to install it
-as a normal package due to the violation of reproducibility as the
-latest versions of dependencies will be always installed, which can also
-break its functionality.
-
-## Using a Docker image (**recommended**)
+## Using a Docker image (*recommended*)
 
 A Docker image based on the [official Bioconductor
 image](https://bioconductor.org/help/docker/) (version 3.15) is
 available. This is the most handy and reproducible way how to use
 `{scdrake}` as all the dependencies are already installed and their
-version is fixed. In addition, the parent Bioconductor image comes
+versions are fixed. In addition, the parent Bioconductor image comes
 bundled with RStudio Server.
 
-More information can be found in `vignette("scdrake_docker")` (we
-recommend to go through even if you are an experienced Docker user).
+The complete guide to the usage of `{scdrake}`’s Docker image can be
+found at
+<https://bioinfocz.github.io/scdrake/articles/scdrake_docker.html>. **We
+strongly recommend to go through even if you are an experienced Docker
+user.** Below you can find just the basic command to download the image.
 
 You can pull the Docker image with the latest stable `{scdrake}` version
 using
@@ -185,7 +183,7 @@ download.file("https://raw.githubusercontent.com/bioinfocz/scdrake/main/renv.loc
 
 Now we can finally install the `{scdrake}` package, but using a
 non-standard approach - without its dependencies (which are already
-installed).
+installed from the lockfile).
 
 ``` r
 remotes::install_github(
@@ -249,7 +247,9 @@ See <https://bioinfocz.github.io/scdrake> for a documentation website
 where links to vignettes below become real :-)
 
 -   Guides:
-    -   Using the Docker image: `vignette("scdrake_docker")`
+    -   Using the Docker image:
+        <https://bioinfocz.github.io/scdrake/articles/scdrake_docker.html>
+        (or `vignette("scdrake_docker")`)
     -   01 Quick start (single-sample pipeline): `vignette("scdrake")`
     -   02 Integration pipeline guide: `vignette("scdrake_integration")`
     -   Extending the pipeline: `vignette("scdrake_extend")`

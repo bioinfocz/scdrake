@@ -32,6 +32,25 @@ Feel free to [open a new issue](https://github.com/bioinfocz/scdrake/issues).
 First make sure you have read the [Before you analyse your own data](scdrake.html#before-you-analyse-your-own-data) in the
 Get Started vignette (`vignette("scdrake")`).
 
+In case you encounter an error like this one:
+
+```
+Error in `get_result(output = out, options)`:
+! callr subprocess failed: could not start R, exited with non-zero status, has crashed or was killed
+ℹ See `$stdout` and `$stderr` for standard output and error.
+Type .Last.error to see the more details.
+```
+
+It means the R process was killed due to insufficient memory or too high CPU usage. The former is more usual and
+here are few tips for that:
+
+- In `config/pipeline.yaml` set `DRAKE_MEMORY_STRATEGY` to either `autoclean` to `preclean`. This parameter is described
+  in `vignette("config_pipeline")`.
+  - Alternatively, you can try to run the pipeline again. It can happen this time some targets won't be needed, and so
+    the memory usage will be lower.
+- If you are using Docker Desktop: increase the memory allocation in Settings -> Resources -> Advanced
+- If you are using Docker Engine: you can look at <https://docs.docker.com/config/containers/resource_constraints/>
+
 If the problem persists, feel free to [open a new issue](https://github.com/bioinfocz/scdrake/issues) or start a
 [discussion](https://github.com/bioinfocz/scdrake/discussions).
 

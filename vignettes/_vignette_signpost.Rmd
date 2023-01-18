@@ -1,5 +1,6 @@
 - Guides:
-  - Using the Docker image: `vignette("scdrake_docker")`
+  - Using the Docker image: <https://bioinfocz.github.io/scdrake/articles/scdrake_docker.html>
+    (or `vignette("scdrake_docker")`)
   - 01 Quick start (single-sample pipeline): `vignette("scdrake")`
   - 02 Integration pipeline guide: `vignette("scdrake_integration")`
   - Extending the pipeline: `vignette("scdrake_extend")`
