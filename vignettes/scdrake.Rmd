@@ -104,8 +104,11 @@ This will:
 - Download (if needed) the [yq tool](https://github.com/mikefarah/yq) used to manipulate YAML files.
 - Create a new RStudio project (`.RProj`) file and set it as the active project (can be disabled).
 - Download the example dataset (10x Genomics PBMC).
-- (For R) Switch your current R working directory to project's directory and if you are using RStudio, also
-  switch the active project.
+- If the project initialization is done from within R:
+  - Your current R working directory is switched to project's directory.
+  - In addition, if you are using RStudio, that will also switch the active project.
+    That means you will see an arrangement of a newly created project (no opened files) and a freshly started R
+    session, **so you have to call `library(scdrake)` again**.
 
 > Important: whenever you will be running the `{scdrake}` pipeline, make sure your working directory is set to the project's root.
 
