@@ -289,7 +289,7 @@ docker exec -it -u rstudio <CONTAINER ID or NAME> R
 
 - `docker exec`: executes a command in a **running** container.
 - `-i`: interactive.
-- `-d`: allocate a pseudo-TTY.
+- `-t`: allocate a pseudo-TTY.
 
 Note for Docker Desktop on a Linux host: omit the `-u rstudio` (or use `-u root`).
 
