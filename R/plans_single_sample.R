@@ -296,7 +296,7 @@ get_norm_clustering_subplan <- function(cfg, cfg_pipeline, cfg_main) {
     ## -- SC3
     sce_sc3 = calc_sc3(
       sce_pca_selected_pcs,
-      sc3_k = !!cfg$SC3_K, sc3_dry = !!cfg$SC3_DRY,
+      sc3_k = !!cfg$SC3_K,
       BPPARAM = ignore(
         BiocParallel::SnowParam(workers = !!cfg$SC3_N_CORES, type = "SOCK", RNGseed = !!cfg_pipeline$SEED, progressbar = TRUE)
       )
@@ -370,7 +370,6 @@ get_norm_clustering_subplan <- function(cfg, cfg_pipeline, cfg_main) {
         dimred_plots_clustering_params = dimred_plots_clustering_params,
         kmeans_k = !!cfg$KMEANS_K,
         sc3_k = !!cfg$SC3_K,
-        sc3_dry = !!cfg$SC3_DRY,
         out_dir = !!cfg$NORM_CLUSTERING_DIMRED_PLOTS_OUT_DIR
       ),
       dynamic = map(dimred_plots_clustering_params)

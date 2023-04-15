@@ -247,44 +247,27 @@ cluster_kmeans_kc_fn <- function(sce_pca, kmeans_k, integration = FALSE) {
 #' @description See [SC3::sc3()] for details.
 #' @param sce_pca A `SingleCellExperiment` object with calculated PCA and known number of selected PCs.
 #' @param sc3_k A numeric vector: numbers of clusters for SC3.
-#' @param sc3_dry A logical scalar: if `TRUE`, SC3 won't be run, but random cell-cluster assignments will be made.
-#'   Used for testing as SC3 is very time-consuming.
 #' @param integration A logical scalar: if `TRUE`, `logcounts()` will be coerced to matrix.
 #' @inheritParams bpparam_
-#' @return
-#' - If `sc3_dry = FALSE`: a `SingleCellExperiment` object as returned from [SC3::sc3()].
-#' - If `sc3_dry = TRUE`: a `SingleCellExperiment` object with random cell-cluster assignments mimicking output from
-#'   [SC3::sc3()].
-#'
-#' The `sc3_dry` item is added to `metadata()` of the returned `SingleCellExperiment` object.
+#' @return A `SingleCellExperiment` object as returned from [SC3::sc3()].
 #'
 #' @concept sc_clustering
 #' @export
-calc_sc3 <- function(sce_pca, sc3_k, sc3_dry = FALSE, integration = FALSE, BPPARAM = BiocParallel::SerialParam()) {
-  if (sc3_dry) {
-    sce_sc3 <- sce_pca
-    for (k in sc3_k) {
-      cluster_col <- glue("sc3_{k}_clusters")
-      colData(sce_sc3)[, cluster_col] <- sample.int(k, ncol(sce_sc3), replace = TRUE)
-    }
-  } else {
-    if (integration && "integrated" %in% assayNames(sce_pca)) {
-      logcounts(sce_pca) <- as.matrix(assay(sce_pca, "integrated"))
-    }
-
-    rowData(sce_pca)$feature_symbol <- rownames(sce_pca)
-    counts(sce_pca) <- as.matrix(counts(sce_pca))
-    logcounts(sce_pca) <- as.matrix(logcounts(sce_pca))
-
-    if (check_sc3_version() == "github") {
-      cli_alert_info("The {.pkg SC3} package version from {.url github.com/gorgitko/SC3} will be used.")
-      sce_sc3 <- SC3::sc3(sce_pca, ks = sc3_k, BPPARAM = BPPARAM)
-    } else {
-      sce_sc3 <- SC3::sc3(sce_pca, ks = sc3_k)
-    }
+calc_sc3 <- function(sce_pca, sc3_k, integration = FALSE, BPPARAM = BiocParallel::SerialParam()) {
+  if (integration && "integrated" %in% assayNames(sce_pca)) {
+    logcounts(sce_pca) <- as.matrix(assay(sce_pca, "integrated"))
   }
 
-  sce_sc3 <- sce_add_metadata(sce_sc3, sc3_dry = sc3_dry)
+  rowData(sce_pca)$feature_symbol <- rownames(sce_pca)
+  counts(sce_pca) <- as.matrix(counts(sce_pca))
+  logcounts(sce_pca) <- as.matrix(logcounts(sce_pca))
+
+  if (check_sc3_version() == "github") {
+    cli_alert_info("The {.pkg SC3} package version from {.url github.com/gorgitko/SC3} will be used.")
+    sce_sc3 <- SC3::sc3(sce_pca, ks = sc3_k, BPPARAM = BPPARAM)
+  } else {
+    sce_sc3 <- SC3::sc3(sce_pca, ks = sc3_k)
+  }
 
   return(sce_sc3)
 }
@@ -317,9 +300,6 @@ cluster_sc3_fn <- function(sce_sc3, sc3_k, integration = FALSE) {
 
 #' @title Create a list of plots with SC3 clustering stability.
 #' @description For more details see [SC3::sc3_plot_cluster_stability()].
-#'
-#' `metadata()` in `sce_sc3` are checked for `sc3_dry` item; if its value is `TRUE`, than SC3 clustering was run
-#' in dry mode, producing random cell-cluster assignments, and thus, blank plots will be produced.
 #' @param sce_sc3 A `SingleCellExperiment` object with calculated SC3 clustering.
 #' @param cluster_sc3 A named list of SC3 cell-cluster assignments, as produced by [cluster_sc3_fn()].
 #' @param sc3_k A numeric vector: numbers of clusters for SC3.
@@ -328,15 +308,9 @@ cluster_sc3_fn <- function(sce_sc3, sc3_k, integration = FALSE) {
 #' @concept sc_clustering
 #' @export
 make_sc3_stability_plots <- function(sce_sc3, cluster_sc3, sc3_k) {
-  sc3_dry <- metadata(sce_sc3)$sc3_dry %||% FALSE
-
   lapply(sc3_k, FUN = function(k) {
-    if (sc3_dry) {
-      p <- create_dummy_plot("SC3 was run in dry mode.")
-    } else {
-      p <- SC3::sc3_plot_cluster_stability(sce_sc3, k = k) +
-        ggtitle("SC3 cluster stability", subtitle = glue("k = {k}"))
-    }
+    p <- SC3::sc3_plot_cluster_stability(sce_sc3, k = k) +
+      ggtitle("SC3 cluster stability", subtitle = glue("k = {k}"))
 
     return(p)
   }) %>% set_names(names(cluster_sc3))

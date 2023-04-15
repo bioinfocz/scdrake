@@ -236,7 +236,7 @@ get_int_clustering_subplan <- function(cfg, cfg_pipeline, cfg_main) {
     ## -- SC3
     sce_int_sc3 = calc_sc3(
       sce_int_final,
-      sc3_k = !!cfg$SC3_K, sc3_dry = !!cfg$SC3_DRY, integration = TRUE,
+      sc3_k = !!cfg$SC3_K, integration = TRUE,
       BPPARAM = ignore(
         BiocParallel::SnowParam(workers = !!cfg$SC3_N_CORES, type = "SOCK", RNGseed = !!cfg_pipeline$SEED, progressbar = TRUE)
       )
@@ -299,7 +299,6 @@ get_int_clustering_subplan <- function(cfg, cfg_pipeline, cfg_main) {
         dimred_plots_clustering_params = dimred_plots_clustering_params,
         kmeans_k = !!cfg$KMEANS_K,
         sc3_k = !!cfg$SC3_K,
-        sc3_dry = !!cfg$SC3_DRY,
         out_dir = !!cfg$INT_CLUSTERING_DIMRED_PLOTS_OUT_DIR,
         integration = TRUE
       ),

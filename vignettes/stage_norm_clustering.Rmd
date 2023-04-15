@@ -355,12 +355,12 @@ Once the `sce_sc3` target is finished, you can switch the parallelism back to `c
 ***
 
 ```yaml
-SC3_DRY: False
+SC3_ENABLED: True
 ```
 
 **Type:** logical scalar
 
-If `True`, just generate random cluster assignments (for testing purposes).
+If `False`, skip SC3 clustering.
 
 ***
 
@@ -775,8 +775,7 @@ assignment of cells to clusters.
 `cluster_sc3_tables`: a list of dataframes, each summarizing assignment of cells to clusters for different `SC3_K`.
 
 `cluster_sc3_stability_plots`: a list of `{ggplot2}` objects, each returned from `make_sc3_stability_plots()`
-(where `SC3::sc3_plot_cluster_stability()` is used internally). If the parameter `SC3_DRY` is `True`, the plots
-will be empty and will contain the text "SC3 was run in dry mode.".
+(where `SC3::sc3_plot_cluster_stability()` is used internally).
 
 ***
 

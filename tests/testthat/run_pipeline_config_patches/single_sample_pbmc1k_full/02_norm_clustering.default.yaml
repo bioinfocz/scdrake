@@ -1,4 +1,4 @@
-SC3_DRY: True
+SC3_ENABLED: False
 CELL_ANNOTATION_SOURCES:
   - human_primary_cell_atlas_main:
       reference_type: "celldex"

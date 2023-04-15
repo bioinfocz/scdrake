@@ -317,8 +317,6 @@ save_selected_markers_plots_files <- function(selected_markers_plots, selected_m
 #'   `02_norm_clustering.yaml` or `02_int_clustering.yaml` config.
 #' @param sc3_k An integer vector: : number of clusters for SC3 clustering. Taken from `SC3_K` parameter in
 #'   `02_norm_clustering.yaml` or `02_int_clustering.yaml` config.
-#' @param sc3_dry A logical scalar: whether SC3 was run in dry mode, that is, random clusters were assigned to cells.
-#'   Taken from `SC3_DRY` parameter in `02_norm_clustering.yaml` or `02_int_clustering.yaml` config.
 #' @param out_dir A character scalar: output directory in which PDF and PNG files will be saved.
 #' @param integration A logical scalar: `TRUE` is used in the integration plan.
 #' @return A tibble. *Output target*: `dimred_plots_clustering`
@@ -329,7 +327,6 @@ dimred_plots_clustering_fn <- function(sce_final_norm_clustering,
                                        dimred_plots_clustering_params,
                                        kmeans_k,
                                        sc3_k,
-                                       sc3_dry,
                                        out_dir = NULL,
                                        integration = FALSE) {
   if (integration) {
@@ -399,13 +396,8 @@ dimred_plots_clustering_fn <- function(sce_final_norm_clustering,
     } else if (clustering_name == "sc3") {
       plot_list <- lapply(sc3_k, FUN = function(k) {
         cluster_col <- glue("{clustering_prefix}_sc3_{k}")
-        if (sc3_dry) {
-          title <- glue("SC3 consensus clustering (DRY MODE) | {dimred_name_upper}")
-          subtitle <- glue("N clusters: {k} (DRY MODE -> RANDOM ASSIGNMENTS)")
-        } else {
-          title <- glue("SC3 consensus clustering | {dimred_name_upper}")
-          subtitle <- glue("N clusters: {k}")
-        }
+        title <- glue("SC3 consensus clustering | {dimred_name_upper}")
+        subtitle <- glue("N clusters: {k}")
 
         plotReducedDim_mod(
           sce_final_norm_clustering,
