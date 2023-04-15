@@ -56,6 +56,11 @@ run_tests <- function(output_dir_pipeline_tests = NULL,
     matching_files <- stringr::str_subset(test_files, filter)
     matching_files <- glue("{{.file tests/testthat/test-{matching_files}.R}}")
   }
+
+  if (rlang::is_empty(matching_files)) {
+    cli::cli_abort("No test files are matching the regexp filter {.val {filter}}")
+  }
+
   cli::cli_alert_info("Matching test files:")
   cli::cli_ul(matching_files)
 
