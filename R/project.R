@@ -64,6 +64,7 @@ init_project <- function(dir = ".",
                          verbose = getOption("scdrake_verbose"),
                          ...) {
   verbose %&&% cli::cli_h1("Going to initialize a new {.pkg scdrake} project")
+  msg <- NULL
 
   if (dir == "." || is_null(dir)) {
     dir_is_wd <- TRUE
@@ -71,8 +72,10 @@ init_project <- function(dir = ".",
     verbose %&&% cli_alert_info("Using the current working directory: {.file {dir}}")
     ## -- This file list could be extended in the future.
     project_files <- fs::path(dir, c("config", "Rmd"))
-    want_continue <- any(fs::file_exists(project_files)) && ask
-    msg <- cli::cli_fmt(cli_alert_warning("Some project files already exists: {.file {project_files}}"))
+    project_files_exist <- fs::file_exists(project_files)
+    if (any(project_files_exist)) {
+      msg <- cli::cli_fmt(cli_alert_warning("Some project files already exists: {.file {project_files[project_files_exist]}}"))
+    }
   } else {
     dir_is_wd <- FALSE
     dir <- fs::path_abs(dir)
@@ -81,12 +84,13 @@ init_project <- function(dir = ".",
     } else {
       msg <- cli::cli_fmt(cli_alert_info("The project directory will be created as {.file {fs::path_abs(dir)}}"))
     }
-    want_continue <- ask
   }
 
-  cat(msg, sep = "\n")
+  if (!is.null(msg)) {
+    cat(msg, sep = "\n")
+  }
 
-  if (want_continue && !.confirm_menu()) {
+  if (ask && !.confirm_menu()) {
     cli_abort("Interrupting the project initialization.")
   }
 
