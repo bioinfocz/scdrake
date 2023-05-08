@@ -7,19 +7,19 @@
 save_selected_markers_plots_files(
   selected_markers_plots,
   selected_markers_out_dir,
-  integration = FALSE
+  is_integration
 )
 }
 \arguments{
-\item{selected_markers_plots}{(\emph{input target}) A tibble: \code{selected_markers_plots} or \code{selected_markers_plots_int_df}}
+\item{selected_markers_plots}{(\emph{input target}) A tibble: \code{selected_markers_plots} or \code{selected_markers_int_plots_df}}
 
 \item{selected_markers_out_dir}{A character scalar: path to base output directory to save plots in.}
 
-\item{integration}{A logical scalar: \code{TRUE} is used in the integration plan.}
+\item{is_integration}{A logical scalar: \code{TRUE} is used in the integration plan.}
 }
 \value{
 A character vector of output files.
-\emph{Output target}: \code{selected_markers_plots_files} or \code{selected_markers_plots_int_files}
+\emph{Output target}: \code{selected_markers_plots_files} or \code{selected_markers_int_plots_files}
 }
 \description{
 Save plots of selected markers.

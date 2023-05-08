@@ -5,7 +5,7 @@
 \alias{get_common_subplan}
 \alias{get_cluster_markers_subplan}
 \alias{get_contrasts_subplan}
-\title{Get a \code{drake} plan common to all pipelines.}
+\title{Get a \code{drake} subplan common to all pipelines.}
 \usage{
 get_common_subplan(
   cfg_pipeline,
@@ -35,11 +35,11 @@ Based on the pipeline type, some targets depend on different targets.}
 \code{\link[drake:drake_plan]{drake::drake_plan()}}
 }
 \description{
-A plan for storing configs and runtime information.
+A subplan for storing configs and runtime information.
 
-A plan for cluster_markers stage.
+A subplan for cluster_markers stage.
 
-A plan for contrasts stage (differential expression).
+A subplan for contrasts stage (differential expression).
 }
 \details{
 The \code{pipeline_type} target is defined in the plan returned from \code{\link[=get_common_subplan]{get_common_subplan()}}.

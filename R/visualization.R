@@ -285,159 +285,80 @@ selected_markers_dimplot <- function(sce,
 }
 
 #' @title Save plots of selected markers.
-#' @param selected_markers_plots (*input target*) A tibble: `selected_markers_plots` or `selected_markers_plots_int_df`
+#' @param selected_markers_plots (*input target*) A tibble: `selected_markers_plots` or `selected_markers_int_plots_df`
 #' @param selected_markers_out_dir A character scalar: path to base output directory to save plots in.
-#' @param integration A logical scalar: `TRUE` is used in the integration plan.
+#' @param is_integration A logical scalar: `TRUE` is used in the integration plan.
 #' @return A character vector of output files.
-#'   *Output target*: `selected_markers_plots_files` or `selected_markers_plots_int_files`
+#'   *Output target*: `selected_markers_plots_files` or `selected_markers_int_plots_files`
 #'
 #' @concept sce_visualization
 #' @export
-save_selected_markers_plots_files <- function(selected_markers_plots, selected_markers_out_dir, integration = FALSE) {
-  res <- lapply_rows(selected_markers_plots, FUN = function(par) {
-    if (integration) {
-      out_file <- fs::path(selected_markers_out_dir, glue("selected_markers_{par$int_rmcc_dimred}.pdf"))
+save_selected_markers_plots_files <- function(selected_markers_plots, selected_markers_out_dir, is_integration) {
+  lapply_rows(selected_markers_plots, FUN = function(par) {
+    if (is_integration) {
+      out_pdf_file <- fs::path(selected_markers_out_dir, glue("selected_markers_{par$int_rmcc_dimred}.pdf"))
     } else {
-      out_file <- fs::path(selected_markers_out_dir, glue("selected_markers_{par$dimred_name}.pdf"))
+      out_pdf_file <- fs::path(selected_markers_out_dir, glue("selected_markers_{par$dimred_name}.pdf"))
     }
 
-    cowplot::save_plot(out_file, par$plot, base_height = 10)
-    par$out_file <- out_file
-    return(par)
+    cowplot::save_plot(out_pdf_file, par$plot, base_height = 10)
+    par$out_pdf_file <- out_pdf_file
+    par
   })
-
-  return(res$out_file)
 }
 
-#' @title Make dimred plots for each clustering method.
-#' @param sce_final_norm_clustering (*input target*) A `SingleCellExperiment` object:
-#'   `sce_final_norm_clustering` or `sce_int_final_clustering` target.
-#' @param dimred_plots_clustering_params (*input target*) A tibble.
-#' @param kmeans_k An integer vector: number of clusters for k-means. Taken from `KMEANS_K` parameter in
-#'   `02_norm_clustering.yaml` or `02_int_clustering.yaml` config.
-#' @param sc3_k An integer vector: : number of clusters for SC3 clustering. Taken from `SC3_K` parameter in
-#'   `02_norm_clustering.yaml` or `02_int_clustering.yaml` config.
+#' @title Make a dimred plot for each clustering and dimred method.
+#' @param sce_dimred A `SingleCellExperiment` object with computed dimreds specified in `dimred_names`.
+#' @param dimred_names A character vector: dimred names to use for plotting.
+#' @param cluster_df A tibble.
 #' @param out_dir A character scalar: output directory in which PDF and PNG files will be saved.
-#' @param integration A logical scalar: `TRUE` is used in the integration plan.
 #' @return A tibble. *Output target*: `dimred_plots_clustering`
 #'
 #' @concept sce_visualization
 #' @export
-dimred_plots_clustering_fn <- function(sce_final_norm_clustering,
-                                       dimred_plots_clustering_params,
-                                       kmeans_k,
-                                       sc3_k,
-                                       out_dir = NULL,
-                                       integration = FALSE) {
-  if (integration) {
-    clustering_prefix <- "cluster_int"
-  } else {
-    clustering_prefix <- "cluster"
-  }
+dimred_plots_clustering_fn <- function(sce_dimred,
+                                       dimred_names,
+                                       cluster_df,
+                                       out_dir = NULL) {
+  cluster_df <- tidyr::crossing(cluster_df, dimred_name = dimred_names)
 
-  res <- lapply_rows(dimred_plots_clustering_params, FUN = function(par) {
+  res <- lapply_rows(cluster_df, FUN = function(par) {
     dimred_name <- par$dimred_name
     dimred_name_upper <- str_to_upper(dimred_name)
-    clustering_name <- par$clustering_name
+    cell_data <- tibble::tibble(x = par$cell_membership)
+    colnames(cell_data) <- par$sce_column
 
-    if (clustering_name == "graph") {
-      plot_list <- list(
-        cluster_graph_walktrap = plotReducedDim_mod(
-          sce_final_norm_clustering,
-          dimred = dimred_name,
-          colour_by = glue("{clustering_prefix}_graph_walktrap"),
-          text_by = glue("{clustering_prefix}_graph_walktrap"),
-          title = glue("Graph-based clustering | {dimred_name_upper}"),
-          subtitle = "Walktrap algorithm",
-          use_default_ggplot_palette = TRUE,
-          legend_title = "Cluster"
-        ),
-        cluster_graph_louvain = plotReducedDim_mod(
-          sce_final_norm_clustering,
-          dimred = dimred_name,
-          colour_by = glue("{clustering_prefix}_graph_louvain"),
-          text_by = glue("{clustering_prefix}_graph_louvain"),
-          title = glue("Graph-based clustering | {dimred_name_upper}"),
-          subtitle = "Louvain algorithm",
-          use_default_ggplot_palette = TRUE,
-          legend_title = "Cluster"
-        )
-      )
-    } else if (clustering_name == "kmeans") {
-      plot_list <- list(
-        cluster_kmeans_kbest = plotReducedDim_mod(
-          sce_final_norm_clustering,
-          dimred = dimred_name,
-          colour_by = glue("{clustering_prefix}_kmeans_kbest"),
-          text_by = glue("{clustering_prefix}_kmeans_kbest"),
-          title = glue("K-means clustering | {dimred_name_upper}"),
-          subtitle = "Best K algorithm",
-          use_default_ggplot_palette = TRUE,
-          legend_title = "Cluster"
-        )
-      )
+    p <- plotReducedDim_mod(
+      sce_add_colData(sce_dimred, cell_data),
+      dimred = dimred_name,
+      colour_by = par$sce_column,
+      text_by = par$sce_column,
+      title = glue("{par$title} | {dimred_name_upper}"),
+      subtitle = par$subtitle,
+      use_default_ggplot_palette = TRUE,
+      legend_title = "Cluster"
+    )
 
-      plot_list_kc <- lapply(kmeans_k, FUN = function(k) {
-        cluster_col <- glue("{clustering_prefix}_kmeans_kc_{k}")
-
-        plotReducedDim_mod(
-          sce_final_norm_clustering,
-          dimred = dimred_name,
-          colour_by = cluster_col,
-          text_by = cluster_col,
-          title = glue("K-means clustering | {dimred_name_upper}"),
-          subtitle = glue("Custom K: {k}"),
-          use_default_ggplot_palette = TRUE,
-          legend_title = "Cluster"
-        )
-      }) %>% set_names(glue("{clustering_prefix}_kmeans_kc_{kmeans_k}"))
-
-      plot_list <- c(plot_list, plot_list_kc)
-    } else if (clustering_name == "sc3") {
-      plot_list <- lapply(sc3_k, FUN = function(k) {
-        cluster_col <- glue("{clustering_prefix}_sc3_{k}")
-        title <- glue("SC3 consensus clustering | {dimred_name_upper}")
-        subtitle <- glue("N clusters: {k}")
-
-        plotReducedDim_mod(
-          sce_final_norm_clustering,
-          dimred = dimred_name,
-          colour_by = cluster_col,
-          text_by = cluster_col,
-          title = title,
-          subtitle = subtitle,
-          use_default_ggplot_palette = TRUE,
-          legend_title = "Cluster"
-        )
-      }) %>% set_names(glue("{clustering_prefix}_sc3_{sc3_k}"))
-    } else {
-      cli_alert_warning("Unknown clustering_name: '{clustering_name}'")
-      plot_list <- list()
-    }
-
-    if (is_null(out_dir) || is_empty(plot_list)) {
+    if (is_null(out_dir)) {
       out_pdf_file <- NA_character_
       out_png_file <- NA_character_
     } else {
-      out_pdf_file <- fs::path(out_dir, glue("{clustering_prefix}_{clustering_name}_{dimred_name}.pdf"))
+      out_pdf_file <- fs::path(out_dir, glue("{par$sce_column}_{dimred_name}.pdf"))
       out_png_file <- out_pdf_file
       fs::path_ext(out_png_file) <- "png"
-    }
 
-    if (!is_null(out_dir) && !is_empty(plot_list)) {
-      names(plot_list) <- glue("{names(plot_list)}_{dimred_name}")
-      save_pdf(plot_list, out_pdf_file, make_thumbnail = FALSE)
+      save_pdf(list(p), out_pdf_file)
       ggplot2::ggsave(
         filename = out_png_file,
-        plot = patchwork::wrap_plots(plot_list, ncol = 2, labels = "AUTO") + patchwork::plot_annotation(tag_levels = "A"),
+        plot = p,
         device = "png",
-        dpi = 150
+        dpi = 300
       )
     }
 
-    par$plot_list <- plot_list
-    par$out_pdf_file <- out_pdf_file
-    par$out_png_file <- out_png_file
+    par$dimred_plot <- list(p)
+    par$dimred_plot_out_pdf_file <- out_pdf_file
+    par$dimred_plot_out_png_file <- out_png_file
 
     return(par)
   })
@@ -445,35 +366,54 @@ dimred_plots_clustering_fn <- function(sce_final_norm_clustering,
   return(res)
 }
 
+#' @title Put clustering dimred plots for different parameters (resolution, `k`) into a single PDF.
+#' @param dimred_plots_clustering (*input target*) A tibble.
+#' @param out_dir A character scalar: output directory in which PDF files will be later saved.
+#' @return A tibble. *Output target*: `dimred_plots_clustering_united_files`
+#'
+#' @concept sce_visualization
+#' @export
+dimred_plots_clustering_united_files_fn <- function(dimred_plots_clustering, out_dir = NULL) {
+  dimred_plots_clustering <- dimred_plots_clustering[[1]]
+  algorithm_category <- dimred_plots_clustering$algorithm_category[1]
+  algorithm <- dimred_plots_clustering$algorithm[1]
+  dimred_name <- dimred_plots_clustering$dimred_name[1]
+
+  if (is_null(out_dir)) {
+    out_pdf_file <- NA_character_
+    out_png_file <- NA_character_
+  } else {
+    if (algorithm_category == algorithm) {
+      out_pdf_file <- fs::path(out_dir, glue("cluster_{algorithm_category}_all_{dimred_name}.pdf"))
+    } else {
+      out_pdf_file <- fs::path(out_dir, glue("cluster_{algorithm_category}_{algorithm}_all_{dimred_name}.pdf"))
+    }
+    save_pdf(dimred_plots_clustering$dimred_plot, out_pdf_file)
+  }
+
+  tibble::tibble(
+    algorithm_category = .env$algorithm_category,
+    algorithm = .env$algorithm,
+    dimred_name = .env$dimred_name,
+    dimred_plot_out_pdf_file = .env$out_pdf_file
+  )
+}
+
 #' @title Make a tibble with parameters for dimred plots of selected variables.
 #' @param dimred_names A character vector: names of dimreds.
 #' @param dimred_plots_other A named list: see `NORM_CLUSTERING_REPORT_DIMRED_PLOTS_OTHER` parameter in
 #'   `02_norm_clustering.yaml` or `02_int_clustering.yaml` config.
-#' @param cell_annotation_params A `tibble`.
 #' @param out_dir A character scalar: output directory in which PDF and PNG files will be later saved.
 #' @return A tibble. *Output target*: `dimred_plots_other_vars_params`
 #'
 #' @concept sce_visualization
 #' @export
-dimred_plots_other_vars_params_fn <- function(dimred_names,
-                                              dimred_plots_other,
-                                              cell_annotation_params,
-                                              out_dir = NULL) {
+dimred_plots_other_vars_params_df_fn <- function(dimred_names, dimred_plots_other, out_dir = NULL) {
   dimred_plots_other <- replace_list_nulls(dimred_plots_other)
   params <- lists_to_tibble(dimred_plots_other) %>%
     dplyr::rename(source_column = name) %>%
     tidyr::crossing(dimred_name = dimred_names) %>%
     dplyr::mutate(type = "other_vars")
-
-  if (!identical(cell_annotation_params, list(NA))) {
-    params_cell_annotation <- tibble::tibble(
-      source_column = glue("{cell_annotation_params$name}_labels") %>% as.character(),
-      label = cell_annotation_params$description
-    ) %>%
-      dplyr::mutate(type = "cell_annotation") %>%
-      tidyr::crossing(dimred_name = unique(params$dimred_name))
-    params <- dplyr::bind_rows(params, params_cell_annotation)
-  }
 
   if (is_null(out_dir)) {
     out_pdf_file <- NA_character_
@@ -497,20 +437,57 @@ dimred_plots_other_vars_params_fn <- function(dimred_names,
   return(params)
 }
 
-#' @title Make a dimred plot of selected variables.
+#' @title Make a tibble with parameters for dimred plots of cell annotation labels.
+#' @param dimred_names A character vector: names of dimreds.
+#' @param cell_annotation_params (*input target*) A tibble.
+#' @param out_dir A character scalar: output directory in which PDF and PNG files will be later saved.
+#' @return A tibble. *Output target*: `dimred_plots_other_vars_params`
+#'
+#' @concept sce_visualization
+#' @export
+dimred_plots_cell_annotation_params_df_fn <- function(dimred_names, cell_annotation_params, out_dir = NULL) {
+  cell_annotation_params <- tibble::tibble(
+    name = .env$cell_annotation_params$name,
+    source_column = glue("{name}_labels") %>% as.character(),
+    label = .env$cell_annotation_params$description
+  ) %>%
+    tidyr::crossing(dimred_name = dimred_names)
+
+  if (is_null(out_dir)) {
+    out_pdf_file <- NA_character_
+    out_png_file <- NA_character_
+  } else {
+    out_pdf_file <- fs::path(
+      out_dir,
+      glue::glue_data(cell_annotation_params, "{source_column}_{dimred_name}.pdf")
+    )
+    out_png_file <- out_pdf_file
+    fs::path_ext(out_png_file) <- "png"
+  }
+
+  cell_annotation_params %>%
+    dplyr::mutate(
+      type = "cell_annotation",
+      label = stringr::str_wrap(.data$label, width = 60),
+      out_pdf_file = .env$out_pdf_file,
+      out_png_file = .env$out_png_file
+    )
+}
+
+#' @title Make dimred plots of selected variables.
 #' @param sce_dimred (*input target*) A `SingleCellExperiment` object. Input target in the integration plan is
-#'   `sce_int_final_clustering`.
-#' @param dimred_plots_other_vars_params (*input target*) A tibble.
+#'   `sce_int_clustering_final`.
+#' @param dimred_plots_params_df (*input target*) A tibble.
 #' @return A tibble. *Output target*: `dimred_plots_other_vars`
 #'
 #' @concept sce_visualization
 #' @export
-dimred_plots_other_vars_fn <- function(sce_dimred, dimred_plots_other_vars_params) {
-  res <- lapply_rows(dimred_plots_other_vars_params, FUN = function(par) {
+dimred_plots_from_params_df <- function(sce_dimred, dimred_plots_params_df) {
+  res <- lapply_rows(dimred_plots_params_df, FUN = function(par) {
     assert_that_(
       par$source_column %in% colnames(colData(sce_dimred)),
       msg = str_space(
-        "{.code dimred_plots_other_vars_params$source_column} {.val {par$source_column}} not found in",
+        "{.code dimred_plots_params_df$source_column} {.val {par$source_column}} not found in",
         "{.code colData(sce_dimred)}. Check {.field DIMRED_PLOTS_OTHER} in {.file single_sample/02_norm_clustering} or",
         "{.file integration/02_int_clustering} config."
       )
@@ -539,13 +516,13 @@ dimred_plots_other_vars_fn <- function(sce_dimred, dimred_plots_other_vars_param
     )
 
     if (!is_na(par$out_pdf_file) && !is_na(par$out_png_file)) {
-      res <- save_pdf(list(p), par$out_pdf_file, make_thumbnail = FALSE)
+      res <- save_pdf(list(p), par$out_pdf_file)
       if (!res$success) {
         p <- res$error_plot
         p$plot_env$label <- glue0c(
           p$plot_env$label,
           str_line(
-            "\ndimred_plots_other_vars_params:",
+            "\ndimred_plots_params_df:",
             "source_column: {par$source_column}",
             "label: {par$label}",
             "dimred_name: {par$dimred_name}"
@@ -562,4 +539,48 @@ dimred_plots_other_vars_fn <- function(sce_dimred, dimred_plots_other_vars_param
 
   names(res$plot) <- glue("{res$source_column}_{res$dimred_name}")
   return(res)
+}
+
+#' @title Plot clustering tree.
+#' @description [clustree::clustree()] is used under the hood.
+#' @param cluster_list A named list of vectors.
+#' @param params A vector of clustering parameters (resolutions, `k`s) in the same order as `cluster_list`.
+#' @param prefix,edge_arrow,highlight_core,... Passed to [clustree::clustree()].
+#' @param title A character scalar: plot title.
+#' @return A `ggplot` object.
+#'
+#' @concept sce_visualization
+#' @export
+plot_clustree <- function(cluster_list, params, prefix, title = deparse(substitute(cluster_list)), edge_arrow = FALSE, highlight_core = TRUE, ...) {
+  assert_that_(length(cluster_list) == length(params))
+  ## -- To fix https://github.com/lazappi/clustree/issues/14
+  ## -- It isn't sufficient to import clustree in NAMESPACE
+  withr::local_package("clustree")
+
+  clustree_list <- cluster_list %>%
+    purrr::map(as.character) %>%
+    set_names(glue("{prefix}{params}")) %>%
+    purrr::map(as.integer)
+
+  # if (length(params) == 1) {
+  #   title <- glue("{title} ({prefix} {params})")
+  # } else {
+  #   title <- glue("{title} ({prefix} {params[1]}-{params[length(params)]})")
+  # }
+
+  clustree(tibble::as_tibble(clustree_list), prefix = prefix, edge_arrow = edge_arrow, highlight_core = highlight_core) +
+    ggplot2::ggtitle(title)
+}
+
+#' @title Save a clustree plot into PDF.
+#' @param p A `ggplot` object.
+#' @param out_file A character scalar: output PDF file.
+#' @param width,height,... Passed to [ggplot2::ggsave()].
+#' @return A character scalar: `out_file`
+#'
+#' @concept sce_visualization
+#' @export
+save_clustree <- function(p, out_file, width = 14, height = 10, ...) {
+  withr::local_package("clustree")
+  ggplot2::ggsave(out_file, p, width = width, height = height, ...)
 }

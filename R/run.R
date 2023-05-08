@@ -18,7 +18,7 @@
 .create_single_sample_dirs <- function(cfg) {
   dirs <- c(
     "INPUT_QC_BASE_OUT_DIR", "NORM_CLUSTERING_BASE_OUT_DIR", "NORM_CLUSTERING_SELECTED_MARKERS_OUT_DIR",
-    "NORM_CLUSTERING_CELL_ANNOTATION_OUT_DIR", "NORM_CLUSTERING_DIMRED_PLOTS_OUT_DIR"
+    "NORM_CLUSTERING_CELL_ANNOTATION_OUT_DIR", "NORM_CLUSTERING_DIMRED_PLOTS_OUT_DIR", "NORM_CLUSTERING_OTHER_PLOTS_OUT_DIR"
   )
   .create_dirs(cfg[dirs])
   invisible(NULL)
@@ -28,7 +28,7 @@
   dirs <- c(
     "INTEGRATION_BASE_OUT_DIR", "INTEGRATION_SELECTED_MARKERS_OUT_DIR",
     "INT_CLUSTERING_BASE_OUT_DIR", "INT_CLUSTERING_CELL_ANNOTATION_OUT_DIR",
-    "INT_CLUSTERING_DIMRED_PLOTS_OUT_DIR"
+    "INT_CLUSTERING_DIMRED_PLOTS_OUT_DIR", "INT_CLUSTERING_OTHER_PLOTS_OUT_DIR"
   )
   .create_dirs(cfg[dirs])
   invisible(NULL)
@@ -79,14 +79,14 @@ create_integration_dirs <- function(cfg) {
 #' (i.e. all environment modifications are limited to function's scope).
 #'
 #' @inheritParams cfg_pipeline_param
-#' @inheritParams pipeline_config_dir
-#' @inheritParams single_sample_config_dir
+#' @inheritParams pipeline_config_dir_param
+#' @inheritParams single_sample_config_dir_param
 #' @param project_root A character scalar: path to directory in which the pipeline will be run,
 #'   i.e. a new working directory. The working directory will be used only temporarily. Default value of the
 #'   `scdrake_project_root` options is the current working directory.
 #' @param do_update_configs A logical scalar: if `TRUE`, run [update_single_sample_configs()] or
 #'   [update_integration_configs()] before loading configs.
-#' @inheritParams verbose
+#' @inheritParams verbose1_param
 #' @param .dry A logical scalar: if `TRUE`, omit the last step in the description and just return `TRUE`.
 #' @param ... Passed to [scdrake_make()] or [scdrake_r_make()].
 #' @return `TRUE` if pipeline finishes successfully.
@@ -113,7 +113,7 @@ run_single_sample <- function(pipeline_config_dir = getOption("scdrake_pipeline_
   )
 }
 
-#' @inheritParams integration_config_dir
+#' @inheritParams integration_config_dir_param
 #'
 #' @rdname run_pipeline
 #' @export

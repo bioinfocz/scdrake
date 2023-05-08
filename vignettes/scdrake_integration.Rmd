@@ -45,7 +45,7 @@ To do so, you just need:
 
 > If you want to significantly save computation time for the sake of quick guide,
 you can omit the calculation of very demanding SC3 clustering.
-To do so, open `config/single_sample/02_norm_clustering.yaml` and set `SC3_ENABLED` to `False`.
+To do so, open `config/single_sample/02_norm_clustering.yaml` and set `CLUSTER_SC3_ENABLED` to `False`.
 
 > If you are interested in the full report of the `02_norm_clustering` stage, you can use
 `["report_norm_clustering", "report_norm_clustering_simple"]` instead (these targets depend on the
@@ -117,7 +117,7 @@ Now we will repeat the steps we have already done for the PBMC 1k sample:
     `"../pbmc1k/example_data/pbmc3k"` (the example data for PBMC 3k has been already downloaded when
     you had initialized the project for PBMC 1k dataset).
   - Open `config/pipeline.yaml` and set `DRAKE_TARGETS` to `["sce_final_norm_clustering"]`.
-  - Optionally to save time, open `config/single_sample/02_norm_clustering.yaml` and set `SC3_ENABLED` to `False`.
+  - Optionally to save time, open `config/single_sample/02_norm_clustering.yaml` and set `CLUSTER_SC3_ENABLED` to `False`.
 
 The config modifications for the second sample are ready, so let's run the pipeline
 (the working directory is `~/scdrake_projects/pbmc3k`):

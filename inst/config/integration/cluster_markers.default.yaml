@@ -35,12 +35,12 @@ CLUSTER_MARKERS_SOURCES_DEFAULTS:
     TOP_N_WT_PLOT: "top"
 
 CLUSTER_MARKERS_SOURCES:
-  - markers_cluster_int_kmeans_kc_4:
-      source_column: "cluster_int_kmeans_kc_4"
-      description: "Cluster markers for k-means clustering (k = 4)"
-    markers_cluster_int_sc3_3:
-      source_column: "cluster_int_sc3_3"
-      description: "Cluster markers for SC3 (k = 3)"
+  - markers_cluster_int_graph_leiden_r0.4:
+      source_column: "cluster_int_graph_leiden_r0.4"
+      description: "Cluster markers for Leiden clustering (r = 0.4)"
+    markers_cluster_int_graph_leiden_r0.8:
+      source_column: "cluster_int_graph_leiden_r0.8"
+      description: "Cluster markers for Leiden clustering (r = 0.8)"
 
 MAKE_CLUSTER_MARKERS_PLOTS: True
 ###############################################################################

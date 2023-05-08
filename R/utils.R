@@ -2,7 +2,7 @@
 #' @param var A character scalar: name of environment variable.
 #' @param default A default value (different from `NULL`) when environment variable is unset (empty string).
 #' @param type A character scalar: to which R type will be the variable coerced.
-#' @inheritParams verbose
+#' @inheritParams verbose1_param
 #' @return A character scalar if the environment variable is set, `default` if not, or empty character scalar when
 #' `default = NULL` and the variable is unset.
 #'
@@ -304,7 +304,7 @@ lapply_rows <- function(df, as_scdrake_list = TRUE, return_tibble = TRUE, FUN, .
 #' @title Check if a package is installed and display an informative message.
 #' @param pkg A character scalar: name of package.
 #' @param msg A character scalar: additional message to be displayed.
-#' @inheritParams verbose_
+#' @inheritParams verbose2_param
 #' @return `TRUE` if package is installed, `FALSE` otherwise.
 #'
 #' `check_scdrake_packages()` returns `TRUE` if all tested packages are installed and `{SC3}` is installed from
@@ -466,7 +466,7 @@ check_scdrake_packages <- function(verbose = TRUE) {
 #' @title Check for `pandoc`'s binary.
 #' @description See the `RSTUDIO_PANDOC` parameter in the `pipeline.yaml` config (`vignette("config_pipeline")`).
 #' @param cache,... Passed to `rmarkdown::find_pandoc()`.
-#' @inheritParams verbose_
+#' @inheritParams verbose2_param
 #' @return Invisibly `TRUE` if the directory with `pandoc`'s binary exists, `FALSE` otherwise.
 #'
 #' @concept checks
@@ -493,7 +493,7 @@ check_pandoc <- function(cache = FALSE, verbose = TRUE, ...) {
 #'   [SC3](`r downlit::href_package("SC3")`) (if it is not installed from <github.com/gorgitko/SC3>)
 #' - If [pandoc](https://pandoc.org/) is available.
 #' - If [yq](https://github.com/mikefarah/yq) is available.
-#' @inheritParams verbose_
+#' @inheritParams verbose2_param
 #' @return Invisibly `TRUE` if all checks return `TRUE`, `FALSE` otherwise.
 #'
 #' @concept checks
@@ -521,7 +521,7 @@ check_scdrake <- function(verbose = TRUE) {
 #' (it can be set in `Tools -> Modify Keyboard Shortcuts`).
 #' This shortcut will call `loadd(<name of target under cursor>, cache = getOptions("rstudio_drake_cache"))`.
 #' @param dir A character scalar: path to directory with `drake` cache.
-#' @inheritParams verbose_
+#' @inheritParams verbose2_param
 #' @return Invisibly `TRUE` if `dir` exists, `FALSE` otherwise.
 #'
 #' @concept misc_utils
@@ -671,7 +671,7 @@ create_dummy_plot <- function(label) {
 #'   - For `"user"`: install into the user's home directory under `.local/bin`
 #'   - For `"system"`: install into `/usr/local/bin`
 #' @param ask A logical scalar: if `TRUE`, ask before copying.
-#' @inheritParams verbose_
+#' @inheritParams verbose2_param
 #' @param .dry A logical scalar: if `TRUE`, don't copy the files and just return output paths.
 #' @return `install_cli()`: invisibly a character vector of length two: paths to installed files.
 #'

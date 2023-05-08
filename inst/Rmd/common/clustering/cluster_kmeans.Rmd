@@ -1,0 +1,37 @@
+## K-means {.tabset}
+
+K-means is a generic clustering algorithm that has been used in many application areas.
+In R, it can be applied via the `stats::kmeans()` function.
+Typically, it is applied to a reduced dimension representation of the expression data
+(most often PCA, because of the interpretability of the low-dimensional distances).
+We need to define the number of clusters in advance.
+
+```{r, results = "asis"}
+kmeans_used_functions <- "stats::kmeans()"
+
+if (cfg$CLUSTER_KMEANS_KBEST_ENABLED) {
+  kmeans_used_functions <- c(kmeans_used_functions, "cluster::clusGap()", "cluster::maxSE()")
+
+  cat(scdrake::str_space(
+    "It is also possible to determine an optimal value of `k`.",
+    "One way to measure the goodness of clustering is to calculate within-cluster sum of squares $W$",
+    "(i.e. sum of distances between each data point and cluster center). The optimal `k` should have clusters with minimal $W$.",
+    "Here, we used a modified [gap statistic method](https://datasciencelab.wordpress.com/tag/gap-statistic/) described in",
+    "[OSCA](https://bioconductor.org/books/3.12/OSCA/clustering.html#base-implementation).\n\n"
+  ))
+  x <- scdrake::create_a_link(cluster_kmeans_kbest_gaps_plot_file, "**PDF with gap statistics**", href_rel_start = fs::path_dir(report_html_file), do_cat = TRUE)
+}
+```
+
+The relationships in cluster abundances under different `k`s are visualized in the `clustree` plot below.
+Stable clusters across different `k`s can be quickly find as straight or little branched vertical lines.
+
+`r scdrake::create_a_link(cluster_kmeans_k_clustree_file, "**PDF with clustree**", href_rel_start = fs::path_dir(report_html_file))`
+
+`r scdrake::format_used_functions(kmeans_used_functions)`
+
+```{r, results = "asis"}
+res <- scdrake::generate_dimred_plots_clustering_section(
+  dimred_plots_clustering_files, dimred_plots_clustering_united_files, "kmeans", c("k", "kbest"), fs::path_dir(report_html_file), 3
+)
+```

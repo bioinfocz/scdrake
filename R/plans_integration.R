@@ -28,6 +28,7 @@ get_integration_subplan <- function(cfg, cfg_pipeline, cfg_main) {
     ## -- Also, some constraints are checked (common normalization method and HVG metrics).
     sce_int_import = target(
       sce_int_import_fn(!!cfg$INTEGRATION_SOURCES, hvg_combination = !!cfg$HVG_COMBINATION_INT),
+
       trigger = trigger(condition = TRUE)
     ),
 
@@ -67,6 +68,7 @@ get_integration_subplan <- function(cfg, cfg_pipeline, cfg_main) {
     ## -- Perform the integrations.
     sce_int_df = target(
       sce_int_df_fn(sce_int_multibatchnorm, integration_params_df, BPPARAM = ignore(BiocParallel::bpparam())),
+
       dynamic = map(integration_params_df)
     ),
 
@@ -87,6 +89,7 @@ get_integration_subplan <- function(cfg, cfg_pipeline, cfg_main) {
       ),
     sce_int_pca_df = target(
       sce_int_pca_df_fn(pca_params_df, BPPARAM = ignore(BiocParallel::bpparam())),
+
       dynamic = map(pca_params_df)
     ),
     sce_int_pca_df_for_report = dplyr::select(sce_int_pca_df, -sce_pca),
@@ -100,10 +103,12 @@ get_integration_subplan <- function(cfg, cfg_pipeline, cfg_main) {
         snn_clustering_method = !!cfg$INTEGRATION_SNN_CLUSTERING_METHOD,
         BPPARAM = ignore(BiocParallel::bpparam())
       ),
+
       dynamic = map(sce_int_pca_df)
     ),
     int_diagnostics_df = target(
       int_diagnostics_df_fn(sce_int_clustering_df, sce_int_raw_snn_clustering),
+
       dynamic = map(sce_int_clustering_df)
     ),
 
@@ -115,6 +120,7 @@ get_integration_subplan <- function(cfg, cfg_pipeline, cfg_main) {
       ),
     sce_int_dimred_df = target(
       sce_int_dimred_df_fn(dimred_params_df, BPPARAM = ignore(BiocParallel::bpparam())),
+
       dynamic = map(dimred_params_df)
     ),
 
@@ -123,6 +129,7 @@ get_integration_subplan <- function(cfg, cfg_pipeline, cfg_main) {
       tidyr::expand_grid(dimred_name = c("pca", "umap", "tsne"), colour_by = c("batch", "phase")),
     sce_int_dimred_plots_df = target(
       sce_int_dimred_plots_df_fn(dimred_plots_params_df),
+
       dynamic = map(dimred_plots_params_df)
     ),
 
@@ -141,48 +148,67 @@ get_integration_subplan <- function(cfg, cfg_pipeline, cfg_main) {
         ),
         drake_cache_dir = !!cfg_pipeline$DRAKE_CACHE_DIR
       ),
+
       format = "file"
     )
   )
 
   ## -- Selected markers plots.
-  if (!is_null(cfg$SELECTED_MARKERS_INT_FILE)) {
+  if (!is_null(cfg$SELECTED_MARKERS_FILE)) {
     plan_selected_markers <- drake::drake_plan(
-      selected_markers_int_df = selected_markers_int_df_fn(file_in(!!cfg$SELECTED_MARKERS_INT_FILE), sce_int_dimred_df),
-      selected_markers_plots_int_by = selected_markers_int_df$int_rmcc_dimred,
-      selected_markers_plots_int_df = target(
-        selected_markers_plots_int_df_fn(
+      selected_markers_int_df = selected_markers_int_df_fn(file_in(!!cfg$SELECTED_MARKERS_FILE), sce_int_dimred_df),
+      selected_markers_int_plots_by = selected_markers_int_df$int_rmcc_dimred,
+      selected_markers_int_plots_df = target(
+        selected_markers_int_plots_df_fn(
           selected_markers_int_df,
           sce_int_dimred_df
         ),
-        dynamic = group(selected_markers_int_df, .by = selected_markers_plots_int_by)
+
+        dynamic = group(selected_markers_int_df, .by = selected_markers_int_plots_by)
       ),
-      selected_markers_plots_int_files = target(
+      selected_markers_int_plots_files = target(
         save_selected_markers_plots_files(
-          selected_markers_plots_int_df,
-          selected_markers_out_dir = !!cfg$INTEGRATION_SELECTED_MARKERS_OUT_DIR, integration = TRUE
+          selected_markers_int_plots_df,
+          selected_markers_out_dir = !!cfg$INTEGRATION_SELECTED_MARKERS_OUT_DIR,
+          is_integration = TRUE
         ),
-        format = "file",
-        dynamic = map(selected_markers_plots_int_df)
+
+        dynamic = map(selected_markers_int_plots_df)
+      ),
+      selected_markers_int_plots_files_out = target(
+        selected_markers_int_plots_files$out_pdf_file,
+
+        format = "file"
       )
     )
   } else {
     plan_selected_markers <- drake::drake_plan(
       selected_markers_int_df = NULL,
-      selected_markers_plots_int_by = NULL,
-      selected_markers_plots_int_df = NULL,
-      selected_markers_plots_int_files = NULL
+      selected_markers_int_plots_by = NULL,
+      selected_markers_int_plots_df = NULL,
+      selected_markers_int_plots_files = NULL
     )
   }
 
   return(drake::bind_plans(plan, plan_selected_markers))
 }
 
-#' @description A plan for 02_int_clustering stage.
+#' @description A plan for 02_int_clustering stage. The following subplans are included:
+#'
+#' - [get_clustering_graph_subplan()], [get_clustering_kmeans_subplan()], [get_clustering_sc3_subplan()]
+#'   - Bound together with [get_clustering_subplan()]
+#' - [get_cell_annotation_subplan()]
+#' - [get_dimred_plots_other_vars_subplan()]
 #' @rdname get_subplan_integration
 #' @export
 get_int_clustering_subplan <- function(cfg, cfg_pipeline, cfg_main) {
-  drake::drake_plan(
+  any_clustering_enabled <- any(
+    cfg$CLUSTER_GRAPH_LOUVAIN_ENABLED, cfg$CLUSTER_GRAPH_WALKTRAP_ENABLED, cfg$CLUSTER_GRAPH_LEIDEN_ENABLED,
+    cfg$CLUSTER_KMEANS_K_ENABLED, cfg$CLUSTER_KMEANS_KBEST_ENABLED,
+    cfg$CLUSTER_SC3_ENABLED
+  )
+
+  plan <- drake::drake_plan(
     ## -- Save config.
     config_int_clustering = !!cfg,
     sce_int_uncorrected = dplyr::filter(sce_int_uncorrected_df, hvg_rm_cc_genes == !!cfg$INTEGRATION_FINAL_METHOD_RM_CC) %>%
@@ -199,70 +225,6 @@ get_int_clustering_subplan <- function(cfg, cfg_pipeline, cfg_main) {
       .[[1]],
     sce_int_final_info = save_object_info(sce_int_final),
 
-    ## -- Graph-based clustering
-    graph_int_k = scran::buildSNNGraph(
-      sce_int_final,
-      k = !!cfg$GRAPH_SNN_N, use.dimred = "pca", type = !!cfg$GRAPH_SNN_TYPE,
-      BPPARAM = ignore(BiocParallel::bpparam())
-    ),
-    cluster_int_graph_walktrap = list(
-      cluster_int_graph_walktrap = igraph::cluster_walktrap(graph_int_k)$membership %>% factor()
-    ),
-    cluster_int_graph_walktrap_n = get_n_clusters(cluster_int_graph_walktrap[[1]]),
-    cluster_int_graph_walktrap_table = cells_per_cluster_table(cluster_int_graph_walktrap[[1]]),
-    cluster_int_graph_louvain = list(
-      cluster_int_graph_louvain = igraph::cluster_louvain(graph_int_k)$membership %>% factor()
-    ),
-    cluster_int_graph_louvain_n = get_n_clusters(cluster_int_graph_louvain[[1]]),
-    cluster_int_graph_louvain_table = cells_per_cluster_table(cluster_int_graph_louvain[[1]]),
-
-    ## -- k-means clustering
-    ## -- Best K
-    kmeans_gaps = cluster::clusGap(reducedDim(sce_int_final, "pca"), kmeans, K.max = 20, nstart = 5, B = 25),
-    kmeans_best_k = cluster::maxSE(kmeans_gaps$Tab[, "gap"], kmeans_gaps$Tab[, "SE.sim"]),
-    kmeans_gaps_plot = make_kmeans_gaps_plot(kmeans_gaps, kmeans_best_k),
-    cluster_int_kmeans_kbest = list(
-      cluster_int_kmeans_kbest = stats::kmeans(
-        reducedDim(sce_int_final, "pca"),
-        centers = kmeans_best_k, nstart = 25, iter.max = 1e3
-      )$cluster %>% factor()
-    ),
-    cluster_int_kmeans_kbest_table = cells_per_cluster_table(cluster_int_kmeans_kbest[[1]]),
-
-    ## -- Custom K
-    cluster_int_kmeans_kc = cluster_kmeans_kc_fn(sce_int_final, kmeans_k = !!cfg$KMEANS_K, integration = TRUE),
-    cluster_int_kmeans_kc_tables = lapply(cluster_int_kmeans_kc, cells_per_cluster_table),
-
-    ## -- SC3
-    sce_int_sc3 = calc_sc3(
-      sce_int_final,
-      sc3_k = !!cfg$SC3_K, integration = TRUE,
-      BPPARAM = ignore(
-        BiocParallel::SnowParam(workers = !!cfg$SC3_N_CORES, type = "SOCK", RNGseed = !!cfg_pipeline$SEED, progressbar = TRUE)
-      )
-    ),
-    cluster_int_sc3 = cluster_sc3_fn(sce_int_sc3, sc3_k = !!cfg$SC3_K, integration = TRUE),
-    cluster_int_sc3_tables = lapply(cluster_int_sc3, cells_per_cluster_table),
-    cluster_int_sc3_stability_plots = make_sc3_stability_plots(sce_int_sc3, cluster_int_sc3, sc3_k = !!cfg$SC3_K),
-
-    ## -- Combine clustering results.
-    clusters_all = c(
-      cluster_int_graph_walktrap, cluster_int_graph_louvain,
-      cluster_int_kmeans_kbest, cluster_int_kmeans_kc,
-      cluster_int_sc3
-    ),
-
-    ## -- Cell annotation.
-    cell_annotation_params = cell_annotation_params_fn(
-      !!cfg$CELL_ANNOTATION_SOURCES
-      # biomart_dataset = !!cfg_main$BIOMART_DATASET
-    ),
-    cell_annotation = target(
-      cell_annotation_fn(cell_annotation_params, sce_int_final, BPPARAM = ignore(BiocParallel::bpparam())),
-      dynamic = map(cell_annotation_params)
-    ),
-    cell_annotation_labels = cell_annotation_labels_fn(cell_annotation),
-
     additional_cell_data = additional_cell_data_fn(file_in(!!cfg$ADDITIONAL_CELL_DATA_FILE)),
     cell_data = cell_data_fn(
       col_data = colData(sce_int_final) %>% as.data.frame(),
@@ -273,67 +235,13 @@ get_int_clustering_subplan <- function(cfg, cfg_pipeline, cfg_main) {
       pipeline_type = "integration"
     ),
 
-    cell_annotation_diagnostic_plots = cell_annotation_diagnostic_plots_fn(
-      cell_annotation = cell_annotation,
-      cell_data = cell_data,
-      sce = sce_int_final,
-      base_out_dir = !!cfg$INT_CLUSTERING_CELL_ANNOTATION_OUT_DIR,
-      cluster_cols_regex = "^cluster_int_"
-    ),
-    cell_annotation_diagnostic_plots_files = target(
-      cell_annotation_diagnostic_plots_files_fn(cell_annotation_diagnostic_plots),
-      dynamic = map(cell_annotation_diagnostic_plots),
-      format = "file"
-    ),
-
-    sce_int_final_clustering = sce_add_cell_data(sce_int_final, cell_data),
-
-    ## -- Dimred plots.
-    dimred_plots_clustering_params = tidyr::crossing(
-      dimred_name = !!cfg$INT_CLUSTERING_REPORT_DIMRED_NAMES,
-      clustering_name = !!cfg$INT_CLUSTERING_REPORT_CLUSTERING_NAMES
-    ),
-    dimred_plots_clustering = target(
-      dimred_plots_clustering_fn(
-        sce_int_final_clustering,
-        dimred_plots_clustering_params = dimred_plots_clustering_params,
-        kmeans_k = !!cfg$KMEANS_K,
-        sc3_k = !!cfg$SC3_K,
-        out_dir = !!cfg$INT_CLUSTERING_DIMRED_PLOTS_OUT_DIR,
-        integration = TRUE
-      ),
-      dynamic = map(dimred_plots_clustering_params)
-    ),
-    dimred_plots_clustering_files = dplyr::select(dimred_plots_clustering, -plot_list),
-    dimred_plots_clustering_files_out = target(
-      c(dimred_plots_clustering_files$out_pdf_file, dimred_plots_clustering_files$out_png_file),
-      format = "file"
-    ),
-    dimred_plots_other_vars_params = dimred_plots_other_vars_params_fn(
-      dimred_names = !!cfg$INT_CLUSTERING_REPORT_DIMRED_NAMES,
-      dimred_plots_other = !!cfg$INT_CLUSTERING_REPORT_DIMRED_PLOTS_OTHER,
-      cell_annotation_params = cell_annotation_params,
-      out_dir = !!cfg$INT_CLUSTERING_DIMRED_PLOTS_OUT_DIR
-    ),
-    dimred_plots_other_vars = target(
-      dimred_plots_other_vars_fn(
-        sce_int_final_clustering,
-        dimred_plots_other_vars_params = dimred_plots_other_vars_params
-      ),
-      dynamic = map(dimred_plots_other_vars_params)
-    ),
-    dimred_plots_other_vars_files = dplyr::select(dimred_plots_other_vars, -plot),
-    dimred_plots_other_vars_files_out = target(
-      c(dimred_plots_other_vars_files$out_pdf_file, dimred_plots_other_vars_files$out_png_file),
-      format = "file"
-    ),
+    sce_int_clustering_final = sce_add_cell_data(sce_int_final, cell_data),
 
     ## -- Selected markers plots for the chosen integration method.
-    selected_markers_plots_int_final = selected_markers_plots_int_final_fn(
-      selected_markers_plots_int_df,
-      selected_markers_plots_int_files,
-      !!cfg$INTEGRATION_FINAL_METHOD,
-      !!cfg$INTEGRATION_FINAL_METHOD_RM_CC
+    selected_markers_int_plots_final = dplyr::filter(
+      selected_markers_int_plots_files,
+      name == !!cfg$INTEGRATION_FINAL_METHOD,
+      hvg_rm_cc_genes == !!cfg$INTEGRATION_FINAL_METHOD_RM_CC
     ),
 
     ## -- HTML report
@@ -348,11 +256,41 @@ get_int_clustering_subplan <- function(cfg, cfg_pipeline, cfg_main) {
         other_deps = list(
           file_in(!!here("Rmd/common/_header.Rmd")),
           file_in(!!here("Rmd/common/_footer.Rmd")),
-          file_in(!!here("Rmd/common/dimred_plots.Rmd"))
+          file_in(!!fs::dir_ls(here("Rmd/common/clustering"), fail = FALSE))
         ),
         drake_cache_dir = !!cfg_pipeline$DRAKE_CACHE_DIR
       ),
       format = "file"
     )
   )
+
+  plan_clustering <- get_clustering_subplan(
+    cfg,
+    sce_clustering_target_name = "sce_int_final",
+    sce_dimred_plots_target_name = "sce_int_final",
+    report_dimred_names = cfg$INT_CLUSTERING_REPORT_DIMRED_NAMES,
+    dimred_plots_out_dir = cfg$INT_CLUSTERING_DIMRED_PLOTS_OUT_DIR,
+    other_plots_out_dir = cfg$INT_CLUSTERING_OTHER_PLOTS_OUT_DIR,
+    is_integration = TRUE,
+    seed = cfg_pipeline$SEED
+  )
+
+  plan_cell_annotation <- get_cell_annotation_subplan(
+    sce_target_name = "sce_int_final",
+    sce_dimred_plots_target_name = "sce_int_clustering_final",
+    cell_annotation_sources = cfg$CELL_ANNOTATION_SOURCES,
+    cell_annotation_out_dir = cfg$INT_CLUSTERING_CELL_ANNOTATION_OUT_DIR,
+    report_dimred_names = cfg$INT_CLUSTERING_REPORT_DIMRED_NAMES,
+    dimred_plots_out_dir = cfg$INT_CLUSTERING_DIMRED_PLOTS_OUT_DIR,
+    do_heatmaps_ = any_clustering_enabled
+  )
+
+  plan_dimred_plots_other_vars <- get_dimred_plots_other_vars_subplan(
+    sce_target_name = "sce_int_clustering_final",
+    report_dimred_plots_other = cfg$INT_CLUSTERING_REPORT_DIMRED_PLOTS_OTHER,
+    report_dimred_names = cfg$INT_CLUSTERING_REPORT_DIMRED_NAMES,
+    dimred_plots_out_dir = cfg$INT_CLUSTERING_DIMRED_PLOTS_OUT_DIR
+  )
+
+  drake::bind_plans(plan, plan_clustering, plan_cell_annotation, plan_dimred_plots_other_vars)
 }

@@ -64,7 +64,7 @@ INTEGRATION_SNN_CLUSTERING_METHOD: "walktrap"
 ###############################################################################
 
 ### Input files ###############################################################
-SELECTED_MARKERS_INT_FILE: null
+SELECTED_MARKERS_FILE: null
 INTEGRATION_REPORT_RMD_FILE: "Rmd/integration/01_integration.Rmd"
 ###############################################################################
 

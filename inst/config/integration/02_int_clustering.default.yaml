@@ -4,30 +4,29 @@ INTEGRATION_FINAL_METHOD_RM_CC: False
 ###############################################################################
 
 ### Graph-based clustering ####################################################
-GRAPH_SNN_N: 10
-GRAPH_SNN_TYPE: "rank"
+CLUSTER_GRAPH_SNN_K: 10
+CLUSTER_GRAPH_SNN_TYPE: "rank"
 
-GRAPH_LOUVAIN_ENABLED: True
-GRAPH_LOUVAIN_RESOLUTIONS: [0.4, 0.8]
+CLUSTER_GRAPH_LEIDEN_ENABLED: True
+CLUSTER_GRAPH_LEIDEN_RESOLUTIONS: [0.2, 0.4, 0.6, 0.8, 1.0]
 
-GRAPH_WALKTRAP_ENABLED: True
-GRAPH_WALKTRAP_RESOLUTIONS: [0.4, 0.8]
+CLUSTER_GRAPH_LOUVAIN_ENABLED: False
+CLUSTER_GRAPH_LOUVAIN_RESOLUTIONS: [0.2, 0.4, 0.6, 0.8, 1.0]
 
-GRAPH_LEIDEN_ENABLED: True
-GRAPH_LEIDEN_RESOLUTIONS: [0.4, 0.8]
+CLUSTER_GRAPH_WALKTRAP_ENABLED: False
 ###############################################################################
 
 ### k-means clustering ########################################################
-KMEANS_K_ENABLED: True
-KMEANS_K: !code 3:6
+CLUSTER_KMEANS_K_ENABLED: False
+CLUSTER_KMEANS_K: !code 3:6
 
-KMEANS_K_BEST_ENABLED: True
+CLUSTER_KMEANS_KBEST_ENABLED: False
 ###############################################################################
 
 ### SC3 clustering ############################################################
-SC3_ENABLED: True
-SC3_K: !code 5:6
-SC3_N_CORES: 1
+CLUSTER_SC3_ENABLED: False
+CLUSTER_SC3_K: !code 5:6
+CLUSTER_SC3_N_CORES: 1
 ###############################################################################
 
 ### Cell type annotation ######################################################
@@ -73,15 +72,13 @@ CELL_GROUPINGS: null
 
 ### Plots #####################################################################
 INT_CLUSTERING_REPORT_DIMRED_NAMES: ["umap", "pca", "tsne"]
-INT_CLUSTERING_REPORT_CLUSTERING_NAMES: ["graph", "kmeans", "sc3"]
-
 INT_CLUSTERING_REPORT_DIMRED_PLOTS_OTHER:
   - "phase": "Cell cycle phases"
     "batch": "Batch of origin"
     "doublet_score": "Doublet score"
     "total": "Total number of UMI"
     "detected": "Detected number of genes"
-    "cluster_quickcluster": "Graph-based clustering for integration diagnostics."
+    "cluster_quickcluster": "Graph-based clustering for integration diagnostics"
 ###############################################################################
 
 ### Input files ###############################################################
@@ -93,6 +90,7 @@ INT_CLUSTERING_BASE_OUT_DIR: "02_int_clustering"
 
 INT_CLUSTERING_DIMRED_PLOTS_OUT_DIR: "dimred_plots"
 INT_CLUSTERING_CELL_ANNOTATION_OUT_DIR: "cell_annotation"
+INT_CLUSTERING_OTHER_PLOTS_OUT_DIR: "other_plots"
 INT_CLUSTERING_REPORT_HTML_FILE: "02_int_clustering.html"
 ###############################################################################
 

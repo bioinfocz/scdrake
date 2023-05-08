@@ -9,7 +9,7 @@
 #' @param patches_dir A character scalar: path to directory with config patches. The files there must be named the same
 #'   as the bundled ones, e.g. `02_norm_clustering.yaml`.
 #' @param analysis_config_dir A character scalar: path to directory with analysis config files.
-#' @inheritParams pipeline_config_dir
+#' @inheritParams pipeline_config_dir_param
 #' @return Invisibly `NULL`.
 #'
 #' @details `pipeline_config_dir` directory will be used if `pipeline.default.yaml` file is present in `patches_dir`.

@@ -170,13 +170,26 @@ get_input_qc_subplan <- function(cfg, cfg_pipeline, cfg_main) {
   )
 }
 
-#' @description  A plan for 02_norm_clustering stage.
+#' @description  A plan for 02_norm_clustering stage. The following subplans are included:
+#'
+#' - [get_clustering_graph_subplan()], [get_clustering_kmeans_subplan()], [get_clustering_sc3_subplan()]
+#'   - Bound together with [get_clustering_subplan()]
+#' - [get_cell_annotation_subplan()]
+#' - [get_dimred_plots_other_vars_subplan()]
 #' @rdname get_subplan_single_sample
 #' @export
 get_norm_clustering_subplan <- function(cfg, cfg_pipeline, cfg_main) {
+  any_clustering_enabled <- any(
+    cfg$CLUSTER_GRAPH_LOUVAIN_ENABLED, cfg$CLUSTER_GRAPH_WALKTRAP_ENABLED, cfg$CLUSTER_GRAPH_LEIDEN_ENABLED,
+    cfg$CLUSTER_KMEANS_K_ENABLED, cfg$CLUSTER_KMEANS_KBEST_ENABLED,
+    cfg$CLUSTER_SC3_ENABLED
+  )
+
   plan <- drake::drake_plan(
     ## -- Save config.
     config_norm_clustering = !!cfg,
+
+    barcodes = colnames(sce_final_input_qc),
 
     ## -- Prepare cell cycle genes.
     cc_genes = cc_genes_fn(
@@ -256,62 +269,6 @@ get_norm_clustering_subplan <- function(cfg, cfg_pipeline, cfg_main) {
       pca_forced_pcs = !!cfg$PCA_FORCED_PCS
     ),
 
-    ## -- Graph-based clustering
-    graph_k = scran::buildSNNGraph(
-      sce_pca_selected_pcs,
-      k = !!cfg$GRAPH_SNN_N, use.dimred = "pca", type = !!cfg$GRAPH_SNN_TYPE,
-      BPPARAM = ignore(BiocParallel::bpparam())
-    ),
-    cluster_graph_walktrap = list(
-      cluster_graph_walktrap = igraph::cluster_walktrap(graph_k)$membership %>% factor()
-    ),
-    cluster_graph_walktrap_n = get_n_clusters(cluster_graph_walktrap[[1]]),
-    cluster_graph_walktrap_table = cells_per_cluster_table(cluster_graph_walktrap[[1]]),
-    cluster_graph_louvain = list(
-      cluster_graph_louvain = igraph::cluster_louvain(graph_k)$membership %>% factor()
-    ),
-    cluster_graph_louvain_n = get_n_clusters(cluster_graph_louvain[[1]]),
-    cluster_graph_louvain_table = cells_per_cluster_table(cluster_graph_louvain[[1]]),
-
-    ## -- k-means clustering
-    ## -- Best K
-    kmeans_gaps = cluster::clusGap(reducedDim(sce_pca_selected_pcs, "pca"), kmeans, K.max = 20, nstart = 5, B = 25),
-    kmeans_best_k = cluster::maxSE(kmeans_gaps$Tab[, "gap"], kmeans_gaps$Tab[, "SE.sim"]),
-    kmeans_gaps_plot = make_kmeans_gaps_plot(kmeans_gaps, kmeans_best_k),
-    cluster_kmeans_kbest = list(
-      cluster_kmeans_kbest = stats::kmeans(
-        reducedDim(sce_pca_selected_pcs, "pca"),
-        centers = kmeans_best_k,
-        nstart = 25,
-        iter.max = 1e3
-      )$cluster %>%
-        factor()
-    ),
-    cluster_kmeans_kbest_table = cells_per_cluster_table(cluster_kmeans_kbest[[1]]),
-
-    ## -- Custom K
-    cluster_kmeans_kc = cluster_kmeans_kc_fn(sce_pca_selected_pcs, kmeans_k = !!cfg$KMEANS_K),
-    cluster_kmeans_kc_tables = lapply(cluster_kmeans_kc, cells_per_cluster_table),
-
-    ## -- SC3
-    sce_sc3 = calc_sc3(
-      sce_pca_selected_pcs,
-      sc3_k = !!cfg$SC3_K,
-      BPPARAM = ignore(
-        BiocParallel::SnowParam(workers = !!cfg$SC3_N_CORES, type = "SOCK", RNGseed = !!cfg_pipeline$SEED, progressbar = TRUE)
-      )
-    ),
-    cluster_sc3 = cluster_sc3_fn(sce_sc3, sc3_k = !!cfg$SC3_K),
-    cluster_sc3_tables = lapply(cluster_sc3, cells_per_cluster_table),
-    cluster_sc3_stability_plots = make_sc3_stability_plots(sce_sc3, cluster_sc3, sc3_k = !!cfg$SC3_K),
-
-    ## -- Combine clustering results.
-    clusters_all = c(
-      cluster_graph_walktrap, cluster_graph_louvain,
-      cluster_kmeans_kbest, cluster_kmeans_kc,
-      cluster_sc3
-    ),
-
     ## -- Compute dimreds.
     sce_dimred = sce_compute_dimreds(
       sce_pca_selected_pcs,
@@ -319,17 +276,6 @@ get_norm_clustering_subplan <- function(cfg, cfg_pipeline, cfg_main) {
       tsne_max_iter = !!cfg$TSNE_MAX_ITER,
       BPPARAM = ignore(BiocParallel::bpparam())
     ),
-
-    ## -- Cell annotation.
-    cell_annotation_params = cell_annotation_params_fn(
-      !!cfg$CELL_ANNOTATION_SOURCES
-      # biomart_dataset = !!cfg_main$BIOMART_DATASET
-    ),
-    cell_annotation = target(
-      cell_annotation_fn(cell_annotation_params, sce_rm_doublets, BPPARAM = ignore(BiocParallel::bpparam())),
-      dynamic = map(cell_annotation_params)
-    ),
-    cell_annotation_labels = cell_annotation_labels_fn(cell_annotation),
 
     additional_cell_data = additional_cell_data_fn(file_in(!!cfg$ADDITIONAL_CELL_DATA_FILE)),
     ## -- Save colData. No new column is added between sce_rm_doublets and sce_dimred and so we can use
@@ -343,60 +289,8 @@ get_norm_clustering_subplan <- function(cfg, cfg_pipeline, cfg_main) {
       pipeline_type = "single_sample"
     ),
 
-    cell_annotation_diagnostic_plots = cell_annotation_diagnostic_plots_fn(
-      cell_annotation = cell_annotation,
-      cell_data = cell_data,
-      sce = sce_rm_doublets,
-      base_out_dir = !!cfg$NORM_CLUSTERING_CELL_ANNOTATION_OUT_DIR,
-      cluster_cols_regex = "^cluster_"
-    ),
-    cell_annotation_diagnostic_plots_files = target(
-      cell_annotation_diagnostic_plots_files_fn(cell_annotation_diagnostic_plots),
-      dynamic = map(cell_annotation_diagnostic_plots),
-      format = "file"
-    ),
-
     ## -- Final SCE object.
     sce_final_norm_clustering = sce_add_cell_data(sce_dimred, cell_data),
-
-    ## -- Dimred plots.
-    dimred_plots_clustering_params = tidyr::crossing(
-      dimred_name = !!cfg$NORM_CLUSTERING_REPORT_DIMRED_NAMES,
-      clustering_name = !!cfg$NORM_CLUSTERING_REPORT_CLUSTERING_NAMES
-    ),
-    dimred_plots_clustering = target(
-      dimred_plots_clustering_fn(
-        sce_final_norm_clustering,
-        dimred_plots_clustering_params = dimred_plots_clustering_params,
-        kmeans_k = !!cfg$KMEANS_K,
-        sc3_k = !!cfg$SC3_K,
-        out_dir = !!cfg$NORM_CLUSTERING_DIMRED_PLOTS_OUT_DIR
-      ),
-      dynamic = map(dimred_plots_clustering_params)
-    ),
-    dimred_plots_clustering_files = dplyr::select(dimred_plots_clustering, -plot_list),
-    dimred_plots_clustering_files_out = target(
-      c(dimred_plots_clustering_files$out_pdf_file, dimred_plots_clustering_files$out_png_file),
-      format = "file"
-    ),
-    dimred_plots_other_vars_params = dimred_plots_other_vars_params_fn(
-      dimred_names = !!cfg$NORM_CLUSTERING_REPORT_DIMRED_NAMES,
-      dimred_plots_other = !!cfg$NORM_CLUSTERING_REPORT_DIMRED_PLOTS_OTHER,
-      cell_annotation_params = cell_annotation_params,
-      out_dir = !!cfg$NORM_CLUSTERING_DIMRED_PLOTS_OUT_DIR
-    ),
-    dimred_plots_other_vars = target(
-      dimred_plots_other_vars_fn(
-        sce_final_norm_clustering,
-        dimred_plots_other_vars_params = dimred_plots_other_vars_params
-      ),
-      dynamic = map(dimred_plots_other_vars_params)
-    ),
-    dimred_plots_other_vars_files = dplyr::select(dimred_plots_other_vars, -plot),
-    dimred_plots_other_vars_files_out = target(
-      c(dimred_plots_other_vars_files$out_pdf_file, dimred_plots_other_vars_files$out_png_file),
-      format = "file"
-    ),
 
     ## -- HTML report
     report_norm_clustering = target(
@@ -410,7 +304,7 @@ get_norm_clustering_subplan <- function(cfg, cfg_pipeline, cfg_main) {
         other_deps = list(
           file_in(!!here("Rmd/common/_header.Rmd")),
           file_in(!!here("Rmd/common/_footer.Rmd")),
-          file_in(!!here("Rmd/common/dimred_plots.Rmd"))
+          file_in(!!fs::dir_ls(here("Rmd/common/clustering"), fail = FALSE))
         ),
         drake_cache_dir = !!cfg_pipeline$DRAKE_CACHE_DIR
       ),
@@ -427,12 +321,40 @@ get_norm_clustering_subplan <- function(cfg, cfg_pipeline, cfg_main) {
         other_deps = list(
           file_in(!!here("Rmd/common/_header.Rmd")),
           file_in(!!here("Rmd/common/_footer.Rmd")),
-          file_in(!!here("Rmd/common/dimred_plots.Rmd"))
+          file_in(!!fs::dir_ls(here("Rmd/common/clustering"), fail = FALSE))
         ),
         drake_cache_dir = !!cfg_pipeline$DRAKE_CACHE_DIR
       ),
       format = "file"
     )
+  )
+
+  plan_clustering <- get_clustering_subplan(
+    cfg,
+    sce_clustering_target_name = "sce_pca_selected_pcs",
+    sce_dimred_plots_target_name = "sce_dimred",
+    report_dimred_names = cfg$NORM_CLUSTERING_REPORT_DIMRED_NAMES,
+    dimred_plots_out_dir = cfg$NORM_CLUSTERING_DIMRED_PLOTS_OUT_DIR,
+    other_plots_out_dir = cfg$NORM_CLUSTERING_OTHER_PLOTS_OUT_DIR,
+    is_integration = FALSE,
+    seed = cfg_pipeline$SEED
+  )
+
+  plan_cell_annotation <- get_cell_annotation_subplan(
+    sce_target_name = "sce_rm_doublets",
+    sce_dimred_plots_target_name = "sce_final_norm_clustering",
+    cell_annotation_sources = cfg$CELL_ANNOTATION_SOURCES,
+    cell_annotation_out_dir = cfg$NORM_CLUSTERING_CELL_ANNOTATION_OUT_DIR,
+    report_dimred_names = cfg$NORM_CLUSTERING_REPORT_DIMRED_NAMES,
+    dimred_plots_out_dir = cfg$NORM_CLUSTERING_DIMRED_PLOTS_OUT_DIR,
+    do_heatmaps_ = any_clustering_enabled
+  )
+
+  plan_dimred_plots_other_vars <- get_dimred_plots_other_vars_subplan(
+    sce_target_name = "sce_final_norm_clustering",
+    report_dimred_plots_other = cfg$NORM_CLUSTERING_REPORT_DIMRED_PLOTS_OTHER,
+    report_dimred_names = cfg$NORM_CLUSTERING_REPORT_DIMRED_NAMES,
+    dimred_plots_out_dir = cfg$NORM_CLUSTERING_DIMRED_PLOTS_OUT_DIR
   )
 
   ## -- Selected markers plots.
@@ -453,10 +375,16 @@ get_norm_clustering_subplan <- function(cfg, cfg_pipeline, cfg_main) {
       selected_markers_plots_files = target(
         save_selected_markers_plots_files(
           selected_markers_plots,
-          selected_markers_out_dir = !!cfg$NORM_CLUSTERING_SELECTED_MARKERS_OUT_DIR
+          selected_markers_out_dir = !!cfg$NORM_CLUSTERING_SELECTED_MARKERS_OUT_DIR,
+          is_integration = FALSE
         ),
-        format = "file",
+
         dynamic = map(selected_markers_plots)
+      ),
+      selected_markers_plots_files_out = target(
+        selected_markers_plots_files$out_pdf_file,
+
+        format = "file"
       )
     )
   } else {
@@ -468,5 +396,5 @@ get_norm_clustering_subplan <- function(cfg, cfg_pipeline, cfg_main) {
     )
   }
 
-  return(drake::bind_plans(plan, plan_selected_markers))
+  drake::bind_plans(plan, plan_clustering, plan_cell_annotation, plan_dimred_plots_other_vars, plan_selected_markers)
 }

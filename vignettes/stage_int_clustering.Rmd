@@ -111,6 +111,9 @@ A path to base output directory for this stage. It will be created under `BASE_O
 ***
 
 ```yaml
+INT_CLUSTERING_DIMRED_PLOTS_OUT_DIR: "dimred_plots"
+INT_CLUSTERING_CELL_ANNOTATION_OUT_DIR: "cell_annotation"
+INT_CLUSTERING_OTHER_PLOTS_OUT_DIR: "other_plots"
 INT_CLUSTERING_REPORT_HTML_FILE: "02_int_clustering.html"
 ```
 
@@ -140,7 +143,7 @@ HTML report target name: `report_int_clustering`
 
 ***
 
-`sce_int_final_clustering`: similar to `sce_final_norm_clustering` in the `02_norm_clustering` stage of the
+`sce_int_clustering_final`: similar to `sce_final_norm_clustering` in the `02_norm_clustering` stage of the
 single-sample pipeline.
 
 ## Targes similar to `02_norm_clustering`
@@ -152,25 +155,4 @@ However, for a full overview, you have to inspect the
 [source code](https://github.com/bioinfocz/scdrake/blob/main/R/plans_integration.R) of the
 `get_int_clustering_subplan()` function.
 
-## Cell clustering
-
-- `clusters_all`
-- `graph_int_k`, `cluster_int_graph_walktrap`, `cluster_int_graph_walktrap_n`, `cluster_int_graph_walktrap_table`,
-  `cluster_int_graph_louvain`, `cluster_int_graph_louvain_n`, `cluster_int_graph_louvain_table`
-- `kmeans_gaps`, `kmeans_best_k`, `cluster_int_kmeans_kbest`, `cluster_int_kmeans_kbest_table`,
-  `cluster_int_kmeans_kc`, `cluster_int_kmeans_kc_tables`
-- `sce_int_sc3`, `cluster_int_sc3`, `cluster_int_sc3_tables`, `cluster_int_sc3_stability_plots`
-
-## Cell type annotation
-
-- `cell_annotation_params`, `cell_annotation`, `cell_annotation_labels`, `cell_annotation_diagnostic_plots`,
-  `cell_annotation_diagnostic_plots_files`
-
-## Plots
-
-- `dimred_plots_clustering`, `dimred_plots_other_vars`
-- `selected_markers_plots_int_final`
-
-## Other targets
-
-- `cell_data`
+`selected_markers_int_plots_final`: selected markers plots for the selected integration method

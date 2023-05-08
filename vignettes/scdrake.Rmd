@@ -263,9 +263,11 @@ respective stages.
 - `HVG_METRIC`
 - `PCA_SELECTION_METHOD`
 - `PCA_FORCED_PCS` (if `PCA_SELECTION_METHOD` is `"forced"`)
-- `KMEANS_K`
-- `SC3_K`
-- `SC3_N_CORES`
+- `CLUSTER_GRAPH_LEIDEN_ENABLED`, `CLUSTER_GRAPH_LEIDEN_RESOLUTIONS`
+- `CLUSTER_GRAPH_LOUVAIN_ENABLED`, `CLUSTER_GRAPH_LOUVAIN_RESOLUTIONS`
+- `CLUSTER_GRAPH_WALKTRAP_ENABLED`
+- `CLUSTER_KMEANS_K_ENABLED`, `CLUSTER_KMEANS_KBEST_ENABLED`, `CLUSTER_KMEANS_K`
+- `CLUSTER_SC3_ENABLED`, `CLUSTER_SC3_K`, `CLUSTER_SC3_N_CORES`
 
 ### Integration / Integration (`01_integration.yaml`) {.unlisted}
 
@@ -273,9 +275,7 @@ respective stages.
 
 ### Integration / Post-integration clustering (`02_int_clustering.yaml`) {.unlisted}
 
-- `KMEANS_K`
-- `SC3_K`
-- `SC3_N_CORES`
+Clustering parameters: same as in the `02_norm_clustering.yaml` config of the single-sample pipeline.
 
 ### Common / Cluster markers and contrasts stages (`cluster_markers.yaml`, `contrasts.yaml`) {.unlisted}
 

@@ -1,6 +1,6 @@
 ## -- Functions to build common drake plans.
 
-#' @title Get a `drake` plan common to all pipelines.
+#' @title Get a `drake` subplan common to all pipelines.
 #' @param cfg A list of parameters for this stage
 #'   (from single-sample or integration config directory, loaded from e.g. `cluster_markers.yaml`, etc.).
 #' @inheritParams cfg_pipeline_param
@@ -14,7 +14,7 @@
 #' @name get_subplan_common
 NULL
 
-#' @description A plan for storing configs and runtime information.
+#' @description A subplan for storing configs and runtime information.
 #'
 #' @param pipeline_type_ A character scalar indicating the type of pipeline.
 #' Based on the pipeline type, some targets depend on different targets.
@@ -36,7 +36,52 @@ get_common_subplan <- function(cfg_pipeline, cfg_main, pipeline_type_ = c("singl
   )
 }
 
-#' @description A plan for cluster_markers stage.
+#' @title Get a subplan for dimensionality reduction plots of selected variables.
+#' @param sce_target_name A character scalar: name of target that stores SCE object, which will be used for plotting.
+#' @param report_dimred_plots_other A character vector: variables in `colData(<sce_target_name>)` to plot.
+#' @param report_dimred_names A character vector: dimred names for plotting (`"pca"`, `"tsne"`, `"umap"`).
+#' @param dimred_plots_out_dir A character scalar: output directory to save PDFs into.
+#' @return [drake::drake_plan()]
+#'
+#' @concept get_subplan_common
+#' @export
+get_dimred_plots_other_vars_subplan <- function(sce_target_name,
+                                                report_dimred_plots_other,
+                                                report_dimred_names,
+                                                dimred_plots_out_dir) {
+  if (!is.null(report_dimred_plots_other)) {
+    plan_dimred_plots_other_vars <- drake::drake_plan(
+      dimred_plots_other_vars_params = dimred_plots_other_vars_params_df_fn(
+        dimred_names = !!report_dimred_names,
+        dimred_plots_other = !!report_dimred_plots_other,
+        out_dir = !!dimred_plots_out_dir
+      ),
+      dimred_plots_other_vars = target(
+        dimred_plots_from_params_df(
+          !!sym(sce_target_name),
+          dimred_plots_params_df = dimred_plots_other_vars_params
+        ),
+        dynamic = map(dimred_plots_other_vars_params)
+      ),
+      dimred_plots_other_vars_files = dplyr::select(dimred_plots_other_vars, -plot),
+      dimred_plots_other_vars_files_out = target(
+        c(dimred_plots_other_vars_files$out_pdf_file, dimred_plots_other_vars_files$out_png_file),
+        format = "file"
+      )
+    )
+  } else {
+    plan_dimred_plots_other_vars <- drake::drake_plan(
+      dimred_plots_other_vars_params = NULL,
+      dimred_plots_other_vars = NULL,
+      dimred_plots_other_vars_files = NULL,
+      dimred_plots_other_vars_files_out = NULL
+    )
+  }
+
+  plan_dimred_plots_other_vars
+}
+
+#' @description A subplan for cluster_markers stage.
 #' @rdname get_subplan_common
 #' @export
 get_cluster_markers_subplan <- function(cfg, cfg_pipeline, cfg_main) {
@@ -45,9 +90,9 @@ get_cluster_markers_subplan <- function(cfg, cfg_pipeline, cfg_main) {
     config_cluster_markers = !!cfg,
 
     ## -- Get SCE object acccording to the pipeline type.
-    sce_dimred_cluster_markers = if (pipeline_type == "single_sample") sce_dimred else sce_int_final_clustering,
-    sce_final_cluster_markers = if (pipeline_type == "single_sample") sce_final_norm_clustering else sce_int_final_clustering,
-    sce_cluster_markers = if (pipeline_type == "single_sample") sce_rm_doublets else sce_int_final_clustering,
+    sce_dimred_cluster_markers = if (pipeline_type == "single_sample") sce_dimred else sce_int_clustering_final,
+    sce_final_cluster_markers = if (pipeline_type == "single_sample") sce_final_norm_clustering else sce_int_clustering_final,
+    sce_cluster_markers = if (pipeline_type == "single_sample") sce_rm_doublets else sce_int_clustering_final,
     cluster_markers_params = cluster_markers_params_fn(!!cfg$CLUSTER_MARKERS_SOURCES, cell_data),
     cluster_markers_test_params = cluster_markers_test_params_fn(cluster_markers_params),
     cluster_markers_heatmap_params = cluster_markers_heatmap_params_fn(cluster_markers_params),
@@ -138,16 +183,18 @@ get_cluster_markers_subplan <- function(cfg, cfg_pipeline, cfg_main) {
   )
 }
 
-#' @description A plan for contrasts stage (differential expression).
+#' @description A subplan for contrasts stage (differential expression).
 #' @rdname get_subplan_common
 #' @export
 get_contrasts_subplan <- function(cfg, cfg_pipeline, cfg_main) {
   drake::drake_plan(
     ## -- Save config.
     config_contrasts = !!cfg,
-    sce_dimred_contrasts = if (pipeline_type == "single_sample") sce_dimred else sce_int_final_clustering,
-    sce_final_contrasts = if (pipeline_type == "single_sample") sce_final_norm_clustering else sce_int_final_clustering,
-    sce_contrasts = if (pipeline_type == "single_sample") sce_rm_doublets else sce_int_final_clustering,
+
+    ## -- Get SCE object acccording to the pipeline type.
+    sce_dimred_contrasts = if (pipeline_type == "single_sample") sce_dimred else sce_int_clustering_final,
+    sce_final_contrasts = if (pipeline_type == "single_sample") sce_final_norm_clustering else sce_int_clustering_final,
+    sce_contrasts = if (pipeline_type == "single_sample") sce_rm_doublets else sce_int_clustering_final,
     contrasts_params = contrasts_params_fn(!!cfg$CONTRASTS_SOURCES, cell_data),
     contrasts_test_params = contrasts_params %>%
       dplyr::distinct(name, test_type, source_column, block_column, test_type, groups, blocks, lfc_test, std_lfc),

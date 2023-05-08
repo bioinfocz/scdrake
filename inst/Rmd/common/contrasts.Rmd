@@ -55,7 +55,7 @@ x <- lapply(names(group_list), function(group_name) {
   scdrake::md_header("Dimred plots", 3, extra = "{.tabset}")
   dimred_plots <- dplyr::distinct(df_group, name, .keep_all = TRUE)$dimred_plots[[1]]
   y <- scdrake::lapply_rows(dimred_plots, FUN = function(par) {
-    scdrake::md_header(str_to_upper(par$plot_dimreds), 4)
+    scdrake::md_header(stringr::str_to_upper(par$plot_dimreds), 4)
     print(par$plot)
   })
 

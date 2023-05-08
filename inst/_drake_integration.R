@@ -123,8 +123,18 @@ if (!rlang::is_null(plan_custom)) {
 
 check_scdrake()
 
-cli::cli_h2("Running the integration pipeline")
+packages <- c("HDF5Array", "ensembldb", rev(.packages()))
+
+if (cfg_pipeline$DRAKE_PARALLELISM == "loop") {
+  cli_alert_info("Running in sequential mode ({.val loop})")
+} else if (cfg_pipeline$DRAKE_PARALLELISM == "future") {
+  cli_alert_info("Running in parallel mode with {cfg_pipeline$DRAKE_N_JOBS} workers (backend: {.val future})")
+} else {
+  cli_alert_info("Running in parallel mode with {cfg_pipeline$DRAKE_N_JOBS} workers (backend: {.val clustermq} / {.val {cfg_pipeline$DRAKE_CLUSTERMQ_SCHEDULER}})")
+}
+
 cli_alert_info("BASE OUTPUT DIRECTORY: {.file {cfg$main$BASE_OUT_DIR}}")
+
 if (is.null(cfg_pipeline$DRAKE_TARGETS)) {
   cli_alert_info("TARGETS: NULL (= all)")
 } else {
@@ -132,7 +142,7 @@ if (is.null(cfg_pipeline$DRAKE_TARGETS)) {
   cli::cli_ul(cfg_pipeline$DRAKE_TARGETS)
 }
 
-packages <- c("HDF5Array", "ensembldb", rev(.packages()))
+cli::cli_h2("Running the integration pipeline")
 
 drake::drake_config(
   plan,

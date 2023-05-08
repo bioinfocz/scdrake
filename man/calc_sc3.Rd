@@ -2,38 +2,26 @@
 % Please edit documentation in R/clustering.R
 \name{calc_sc3}
 \alias{calc_sc3}
-\title{Calculate SC3 clustering.}
+\title{Run SC3 clustering for a specific \code{k}.}
 \usage{
-calc_sc3(
-  sce_pca,
-  sc3_k,
-  sc3_dry = FALSE,
-  integration = FALSE,
-  BPPARAM = BiocParallel::SerialParam()
-)
+calc_sc3(sce_pca, sc3_k, is_integration, BPPARAM = BiocParallel::SerialParam())
 }
 \arguments{
-\item{sce_pca}{A \code{SingleCellExperiment} object with calculated PCA and known number of selected PCs.}
+\item{sce_pca}{A \code{SingleCellExperiment} object with calculated PCA.}
 
-\item{sc3_k}{A numeric vector: numbers of clusters for SC3.}
+\item{sc3_k}{An integer vector: numbers of clusters for SC3.}
 
-\item{sc3_dry}{A logical scalar: if \code{TRUE}, SC3 won't be run, but random cell-cluster assignments will be made.
-Used for testing as SC3 is very time-consuming.}
-
-\item{integration}{A logical scalar: if \code{TRUE}, \code{logcounts()} will be coerced to matrix.}
+\item{is_integration}{A logical scalar: if \code{TRUE}, clusterings will be named as \verb{cluster_int_*}, otherwise \verb{cluster_*}.}
 
 \item{BPPARAM}{A \link[BiocParallel:BiocParallelParam-class]{BiocParallel::BiocParallelParam} object.}
 }
 \value{
-\itemize{
-\item If \code{sc3_dry = FALSE}: a \code{SingleCellExperiment} object as returned from \code{\link[SC3:sc3]{SC3::sc3()}}.
-\item If \code{sc3_dry = TRUE}: a \code{SingleCellExperiment} object with random cell-cluster assignments mimicking output from
-\code{\link[SC3:sc3]{SC3::sc3()}}.
-}
-
-The \code{sc3_dry} item is added to \code{metadata()} of the returned \code{SingleCellExperiment} object.
+A \code{SingleCellExperiment} object as returned from \code{\link[SC3:sc3]{SC3::sc3()}}.
 }
 \description{
-See \code{\link[SC3:sc3]{SC3::sc3()}} for details.
+See \code{\link[SC3:sc3]{SC3::sc3()}} for more details.
+}
+\details{
+If \code{is_integration} is \code{TRUE}, \code{logcounts(sce_pca)} will be coerced to matrix.
 }
 \concept{sc_clustering}

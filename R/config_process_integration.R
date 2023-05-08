@@ -64,8 +64,8 @@
   cfg$INTEGRATION_METHODS <- scdrake_list(INTEGRATION_METHODS)
 
   input_files <- c("INTEGRATION_REPORT_RMD_FILE")
-  if (!is_null(cfg$SELECTED_MARKERS_INT_FILE)) {
-    input_files <- c("SELECTED_MARKERS_INT_FILE", input_files)
+  if (!is_null(cfg$SELECTED_MARKERS_FILE)) {
+    input_files <- c("SELECTED_MARKERS_FILE", input_files)
   }
 
   cfg <- .hereize_paths(cfg, input_files)
@@ -106,7 +106,10 @@
   cfg <- .paths_to_base_dir(
     cfg,
     cfg$INT_CLUSTERING_BASE_OUT_DIR,
-    c("INT_CLUSTERING_CELL_ANNOTATION_OUT_DIR", "INT_CLUSTERING_DIMRED_PLOTS_OUT_DIR", "INT_CLUSTERING_REPORT_HTML_FILE")
+    c(
+      "INT_CLUSTERING_CELL_ANNOTATION_OUT_DIR", "INT_CLUSTERING_DIMRED_PLOTS_OUT_DIR", "INT_CLUSTERING_OTHER_PLOTS_OUT_DIR",
+      "INT_CLUSTERING_REPORT_HTML_FILE"
+    )
   )
 
   return(cfg)

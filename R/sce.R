@@ -15,7 +15,7 @@
 #' @concept sc_sce
 #' @export
 which_genes_regex <- function(sce, regex, colname = "Symbol", ignore_case = TRUE) {
-  stringr::str_which(rowData(sce)[[colname]], regex(regex, ignore_case = ignore_case))
+  stringr::str_which(rowData(sce)[[colname]], stringr::regex(regex, ignore_case = ignore_case))
 }
 
 #' @title Append new columns to `colData` of a `SingleCellExperiment` object.
@@ -290,8 +290,11 @@ cell_data_fn <- function(col_data,
                          pipeline_type = c("single_sample", "integration")) {
   row_names <- rownames(col_data)
   existing_columns <- intersect(colnames(col_data), c(names(clusters_all), names(cell_annotation_labels)))
-  col_data <- col_data[, !colnames(col_data) %in% existing_columns] %>%
-    dplyr::bind_cols(tibble::as_tibble(clusters_all))
+  col_data <- col_data[, !colnames(col_data) %in% existing_columns]
+
+  if (!is_null(clusters_all)) {
+    col_data <- dplyr::bind_cols(col_data, tibble::as_tibble(clusters_all))
+  }
 
   if (!is_null(cell_annotation_labels)) {
     col_data <- dplyr::bind_cols(col_data, tibble::as_tibble(cell_annotation_labels))

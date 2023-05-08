@@ -109,6 +109,7 @@ get_random_strings <- function(n, length, pattern = "[A-Za-z]") {
 
 #' @title Format a shell command as a Markdown codeblock.
 #' @param lines A character vector: command lines.
+#' @param language A character scalar: codeblock language.
 #' @return A character vector.
 #'
 #' @concept misc_text

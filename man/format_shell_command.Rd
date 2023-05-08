@@ -8,6 +8,8 @@ format_shell_command(lines, language = "bash")
 }
 \arguments{
 \item{lines}{A character vector: command lines.}
+
+\item{language}{A character scalar: codeblock language.}
 }
 \value{
 A character vector.

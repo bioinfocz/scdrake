@@ -20,7 +20,7 @@ fs::dir_copy(
 withr::local_dir(project_dir)
 update_configs()
 
-test_that("single-sample plans could be generated", {
+test_that("single-sample plans can be generated", {
   cfg_pipeline <- load_pipeline_config()
   cfg <- load_single_sample_configs(cfg_pipeline = cfg_pipeline)
 
@@ -37,14 +37,14 @@ test_that("single-sample plans could be generated", {
   expect_s3_class(contrasts_plan, "drake_plan")
 })
 
-test_that("a full single-sample plan could be generated", {
+test_that("a full single-sample plan can be generated", {
   cfg_pipeline <- load_pipeline_config()
   cfg <- load_single_sample_configs(cfg_pipeline = cfg_pipeline)
   single_sample_plan <- get_single_sample_plan(cfg, cfg_pipeline)
   expect_s3_class(single_sample_plan, "drake_plan")
 })
 
-test_that("integration plans could be generated", {
+test_that("integration plans can be generated", {
   cfg_pipeline <- load_pipeline_config()
   cfg <- load_integration_configs(cfg_pipeline = cfg_pipeline)
 
@@ -61,7 +61,7 @@ test_that("integration plans could be generated", {
   expect_s3_class(contrasts_plan, "drake_plan")
 })
 
-test_that("a full integration plan could be generated", {
+test_that("a full integration plan can be generated", {
   cfg_pipeline <- load_pipeline_config()
   cfg <- load_integration_configs(cfg_pipeline = cfg_pipeline)
   integration_plan <- get_integration_plan(cfg, cfg_pipeline)

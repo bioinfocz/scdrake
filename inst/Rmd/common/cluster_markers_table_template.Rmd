@@ -9,6 +9,7 @@ output:
   html_document:
     toc: false
     number_sections: false
+    theme: "flatly"
     self_contained: true
     code_download: true
     df_print: "paged"
@@ -72,7 +73,7 @@ other_params <- scdrake::scdrake_list(params$other_params)
 
 ```{r, results = "asis"}
 x <- scdrake::lapply_rows(other_params$dimred_plots, FUN = function(par) {
-  scdrake::md_header(str_to_upper(par$plot_dimreds), 3)
+  scdrake::md_header(stringr::str_to_upper(par$plot_dimreds), 3)
   p <- par$plot
   scdrake::highlight_points(p, column_name = "colour_by", levels = other_params$group_level) %>% print()
 })

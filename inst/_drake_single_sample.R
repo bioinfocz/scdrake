@@ -14,7 +14,7 @@ cli_alert_info("R LIBRARY PATHS ({.code .libPaths()}): {.file {paste0(.libPaths(
 scdrake_pkg_dir <- Sys.getenv("SCDRAKE_PKG_DIR", NA)
 
 if (!is.na(scdrake_pkg_dir) && scdrake_pkg_dir != "") {
-  cli_alert_info("Loading {.pkg scdrake} from {.file {scdrake_pkg_dir}} (as set by the {.envvar SCDRAKE_PKG_DIR} environment variable).")
+  cli_alert_info("Loading {.pkg scdrake} from {.file {scdrake_pkg_dir}} (as set by the {.envvar SCDRAKE_PKG_DIR} environment variable)")
   devtools::load_all(scdrake_pkg_dir, export_all = FALSE)
 } else {
   library(scdrake)
@@ -36,10 +36,10 @@ set.seed(cfg_pipeline$SEED)
 if (cfg_pipeline$DRAKE_PARALLELISM == "future") {
   if (parallelly::supportsMulticore()) {
     future::plan(future::multicore, workers = cfg_pipeline$DRAKE_N_JOBS)
-    cli_alert_info("Using {.code future::multicore} with {cfg_pipeline$DRAKE_N_JOBS} workers.")
+    cli_alert_info("Using {.code future::multicore} with {cfg_pipeline$DRAKE_N_JOBS} workers")
   } else {
     future::plan(future.callr::callr, workers = cfg_pipeline$DRAKE_N_JOBS)
-    cli_alert_info("Using {.code future.callr::callr} (multisession) with {cfg_pipeline$DRAKE_N_JOBS} workers.")
+    cli_alert_info("Using {.code future.callr::callr} (multisession) with {cfg_pipeline$DRAKE_N_JOBS} workers")
   }
 }
 
@@ -85,7 +85,7 @@ if (is_scalar_character(drake_rebuild)) {
   if (drake_rebuild == "all") {
     str_space(
       "{.field DRAKE_REBUILD} is {.val 'all'} ->",
-      "the pipeline will be run from scratch."
+      "the pipeline will be run from scratch"
     ) %>% cli_alert_info()
     drake_trigger <- drake::trigger(condition = TRUE)
   } else if (drake_rebuild == "current") {
@@ -123,8 +123,18 @@ if (!rlang::is_null(plan_custom)) {
 
 check_scdrake()
 
-cli::cli_h2("Running the single-sample pipeline")
+packages <- c("HDF5Array", "ensembldb", rev(.packages()))
+
+if (cfg_pipeline$DRAKE_PARALLELISM == "loop") {
+  cli_alert_info("Running in sequential mode ({.val loop})")
+} else if (cfg_pipeline$DRAKE_PARALLELISM == "future") {
+  cli_alert_info("Running in parallel mode with {cfg_pipeline$DRAKE_N_JOBS} workers (backend: {.val future})")
+} else {
+  cli_alert_info("Running in parallel mode with {cfg_pipeline$DRAKE_N_JOBS} workers (backend: {.val clustermq} / {.val {cfg_pipeline$DRAKE_CLUSTERMQ_SCHEDULER}})")
+}
+
 cli_alert_info("BASE OUTPUT DIRECTORY: {.file {cfg$main$BASE_OUT_DIR}}")
+
 if (is.null(cfg_pipeline$DRAKE_TARGETS)) {
   cli_alert_info("TARGETS: NULL (= all)")
 } else {
@@ -132,7 +142,7 @@ if (is.null(cfg_pipeline$DRAKE_TARGETS)) {
   cli::cli_ul(cfg_pipeline$DRAKE_TARGETS)
 }
 
-packages <- c("HDF5Array", "ensembldb", rev(.packages()))
+cli::cli_h2("Running the single-sample pipeline")
 
 drake::drake_config(
   plan,

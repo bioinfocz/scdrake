@@ -27,7 +27,7 @@
 #' However, this does not work for numeric subscripts.
 #'
 #' @param l A list.
-#' @inheritParams scdrake_list_generics_parameters
+#' @inheritParams scdrake_list_generics_params
 #' @return An object of class `scdrake_list`.
 #'
 #' @examples

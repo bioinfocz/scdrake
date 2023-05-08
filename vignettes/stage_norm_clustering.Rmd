@@ -295,27 +295,96 @@ Parameters for [graph-based clustering](https://bioconductor.org/books/release/O
 ***
 
 ```yaml
-GRAPH_SNN_N: 10
+CLUSTER_GRAPH_SNN_K: 10
 ```
 
 **Type:** positive integer scalar
 
-A number of shared nearest neighbours. Passed as `k` parameter to `bluster::makeSNNGraph()`.
+A number of shared nearest neighbors in graph used for community detection algorithms (graph-based clustering).
+Passed as the `k` parameter to `bluster::makeSNNGraph()`. From the function's help page:
+
+> The choice of k controls the connectivity of the graph and the resolution of community detection algorithms.
+Smaller values of k will generally yield smaller, finer clusters, while increasing k will increase the connectivity of
+the graph and make it more difficult to resolve different communities.
+The value of k can be roughly interpreted as the anticipated size of the smallest subpopulation.
 
 ***
 
 ```yaml
-GRAPH_SNN_TYPE: "rank"
+CLUSTER_GRAPH_SNN_TYPE: "rank"
 ```
 
 **Type:** character scalar (`"rank"` | `"number"` | `"jaccard"`)
 
-A type of weighting scheme to use for shared neighbors. Passed as `type` parameter to `bluster::makeSNNGraph()`.
+A type of weighting scheme to use for shared neighbors. Passed as `type` parameter to `bluster::makeSNNGraph()`
+(see the function's help page for more information).
+
+***
+
+```yaml
+CLUSTER_GRAPH_LEIDEN_ENABLED: True
+```
+
+**Type:** logical scalar
+
+If `True`, enable Leiden community detection algorithm.
+
+***
+
+```yaml
+CLUSTER_GRAPH_LEIDEN_RESOLUTIONS: [0.2, 0.4, 0.6, 0.8, 1.0]
+```
+
+**Type:** numeric vector
+
+Resolutions for Leiden clustering. Lower values result in more coarse-grained clustering, while higher ones to more
+fine-grained structures. Cell-cluster memberships will be named as `cluster_graph_leiden_r{r}` (e.g. in `colData()` of a SCE object).
+
+***
+
+```yaml
+CLUSTER_GRAPH_LOUVAIN_ENABLED: False
+```
+
+**Type:** logical scalar
+
+If `True`, enable Louvain community detection algorithm.
+
+***
+
+```yaml
+CLUSTER_GRAPH_LOUVAIN_RESOLUTIONS: [0.2, 0.4, 0.6, 0.8, 1.0]
+```
+
+**Type:** numeric vector
+
+Resolutions for Louvain clustering. Lower values result in more coarse-grained clustering, while higher ones to more
+fine-grained structures. Cell-cluster memberships will be named as `cluster_graph_louvain_r{r}` (e.g. in `colData()` of a SCE object).
+
+***
+
+```yaml
+CLUSTER_GRAPH_WALKTRAP_ENABLED: False
+```
+
+**Type:** logical scalar
+
+If `True`, enable Walktrap community detection algorithm.
 
 ### k-means clustering
 
 ```yaml
-KMEANS_K: !code 3:6
+CLUSTER_KMEANS_K_ENABLED: False
+```
+
+**Type:** logical scalar
+
+If `True`, enable k-means clustering with selected numbers of clusters (`k`s).
+
+***
+
+```yaml
+CLUSTER_KMEANS_K: !code 3:6
 ```
 
 **Type:** integer vector
@@ -324,22 +393,42 @@ A vector of number of clusters for which to compute k-means.
 
 Note: `!code 3:6` will evaluate to `c(3, 4, 5, 6)`.
 
+***
+
+```yaml
+CLUSTER_KMEANS_KBEST_ENABLED: False
+```
+
+**Type:** logical scalar
+
+If `True`, enable k-means clustering with best `k` based on gap statistics.
+
 ### SC3 clustering
 
 ```yaml
-SC3_K: !code 5:6
+CLUSTER_SC3_ENABLED: False
+```
+
+**Type:** logical scalar
+
+If `True`, enable SC3 with selected numbers of clusters (`k`s).
+
+***
+
+```yaml
+CLUSTER_SC3_K: !code 5:6
 ```
 
 **Type:** integer vector
 
 A vector of number of clusters for which to compute SC3 clustering.
 
-Note: `!code 3:6` will evaluate to `c(5, 6)`.
+Note: `!code 3:6` will evaluate to `c(3, 4, 5, 6)`.
 
 ***
 
 ```yaml
-SC3_N_CORES: 1
+CLUSTER_SC3_N_CORES: 1
 ```
 
 **Type:** integer scalar
@@ -349,13 +438,13 @@ This may lead to out-of-memory errors for a number of cores greater than 1.
 
 Note that `drake` may have problems when the pipeline is run in parallel mode and at the same time a target is using
 a parallel code (*within target parallelism*). For the SC3 computation is recommended to run the pipeline in
-sequential mode (`DRAKE_PARALLELISM: "loop"`) and set `DRAKE_TARGETS: ["sce_sc3"]`.
-Once the `sce_sc3` target is finished, you can switch the parallelism back to `clustermq` or `future`.
+sequential mode (`DRAKE_PARALLELISM: "loop"`) and set `DRAKE_TARGETS: ["cluster_sce_sc3"]`.
+Once the `cluster_sce_sc3` target is finished, you can switch the parallelism back to `clustermq` or `future`.
 
 ***
 
 ```yaml
-SC3_ENABLED: True
+CLUSTER_SC3_ENABLED: False
 ```
 
 **Type:** logical scalar
@@ -524,20 +613,20 @@ Let's look at example cell grouping:
 
 ```yaml
 CELL_GROUPINGS:
-  - cluster_graph_louvain_annotated:
-      source_column: "cluster_graph_louvain"
-      description: "Graph-based clustering (Louvain alg.), annotated clusters"
+  - cluster_graph_leiden_r0.4_annotated:
+      source_column: "cluster_graph_leiden_r0.4"
+      description: "Graph-based clustering (Leiden alg.), annotated clusters"
       assignments:
         1: "memory_CD4+"
         6: "B"
         7: "memory_CD4+"
 ```
 
-- `cluster_graph_louvain_annotated`: a name of new cell grouping added to `colData()`.
-- `source_column: "cluster_graph_louvain"`: a name of column in `colData()` whose level will be used for the
+- `cluster_graph_leiden_r0.4_annotated`: a name of new cell grouping added to `colData()`.
+- `source_column: "cluster_graph_leiden_r0.4"`: a name of column in `colData()` whose level will be used for the
   new assignments.
 - `description: "Graph-based clustering ..."`: a description of the new assignment. If it was not set,
-  the name of the assignment (`cluster_graph_louvain_annotated`) would be used instead.
+  the name of the assignment (`cluster_graph_leiden_r0.4_annotated`) would be used instead.
 - `assignments`: assignments of the old levels to new ones. That is, level (cluster) `6` will be renamed to `"B"`,
   and levels `1` and `7` will be merged to a new level `"memory_CD4+"`.
   All unspecified levels will be kept as they are.
@@ -551,21 +640,6 @@ NORM_CLUSTERING_REPORT_DIMRED_NAMES: ["umap", "pca", "tsne"]
 **Type:** character vector (`"umap"` | `"pca"` | `"tsne"`)
 
 A vector of names of dimensionality reduction methods for which plots in the report will be made.
-
-***
-
-```yaml
-NORM_CLUSTERING_REPORT_CLUSTERING_NAMES: ["graph", "kmeans", "sc3"]
-```
-
-**Type:** character vector (`"graph"` | `"kmeans"` | `"sc3"`)
-
-A vector of names of clustering methods for which plots in each reduced dimension defined in the
-`NORM_CLUSTERING_REPORT_DIMRED_NAMES` parameter will be made and displayed in the report.
-
-- `"graph"`: graph-based clustering, two algorithms: Louvain and Walktrap.
-- `"kmeans"`: k-means clustering, two algorithms: best K and numbers of clusters defined in the `KMEANS_K` parameter.
-- `"sc3"`: SC3 clustering: numbers of cluster defined in the `SC3_K` parameter.
 
 ***
 
@@ -636,6 +710,8 @@ A path to base output directory for this stage. It will be created under `BASE_O
 
 ```yaml
 NORM_CLUSTERING_SELECTED_MARKERS_OUT_DIR: "selected_markers"
+NORM_CLUSTERING_DIMRED_PLOTS_OUT_DIR: "dimred_plots"
+NORM_CLUSTERING_OTHER_PLOTS_OUT_DIR: "other_plots"
 NORM_CLUSTERING_CELL_ANNOTATION_OUT_DIR: "cell_annotation"
 NORM_CLUSTERING_REPORT_HTML_FILE: "02_norm_clustering.html"
 NORM_CLUSTERING_REPORT_SIMPLE_HTML_FILE: "02_norm_clustering_simple.html"
@@ -698,7 +774,7 @@ If the parameter `HVG_RM_CC_GENES` is `True`, `sce_norm_hvg` will also contain a
 ***
 
 `sce_pca`: `sce_rm_doublets` with calculated PCA (50 PCs). Reduced dimensions can be retrieved by
-`SingleCellExperiment::reducedDim(sce_pca, "pca")`.
+`SingleCellExperiment::reducedDim(sce_pca, "pca")`
 
 ***
 
@@ -709,7 +785,7 @@ is added to `metadata()`: `pca_selection_method`, `pca_selected_pcs`.
 ***
 
 `sce_dimred`: `sce_pca_selected_pcs` with calculated t-SNE and UMAP,
-both using the selected number of PCs for calculation.
+both using the selected number of PCs for calculation
 
 ***
 
@@ -719,9 +795,13 @@ added to `colData()`.
 
 The names of columns containing cell clusterings are:
 
-- Graph-based clustering: `cluster_graph_walktrap`, `cluster_graph_louvain`
-- k-means clustering: `cluster_kmeans_kbest`, `cluster_kmeans_kc_<k>` (all Ks from the `KMEANS_K` parameter)
-- SC3 clustering: `cluster_sc3_<k>` (all Ks from the `SC3_K` parameter)
+- Graph-based clustering: `cluster_graph_walktrap`, `cluster_graph_louvain_r<r>` (e.g. `cluster_graph_louvain_r0.4`),
+  `cluster_graph_leiden_r<r>` (e.g. `cluster_graph_leiden_r0.4`)
+  - `<r>` is based on the `CLUSTER_GRAPH_LEIDEN_RESOLUTIONS` and `CLUSTER_GRAPH_LOUVAIN_RESOLUTIONS` parameters
+- k-means clustering: `cluster_kmeans_kbest`, `cluster_kmeans_k<k>` (e.g. `cluster_kmeans_k5`)
+  - `<k>` is based on the `CLUSTER_KMEANS_K` parameter
+- SC3 clustering: `cluster_sc3_<k>` (e.g. `cluster_sc3_k5`)
+  - `<k>` is based on the `CLUSTER_SC3_K` parameter
 
 The names of reduces dimensionality matrices (which can be retrieved by `SingleCellExperiment::reducedDim()`):
 
@@ -729,7 +809,7 @@ The names of reduces dimensionality matrices (which can be retrieved by `SingleC
 - t-SNE: `"tsne"`
 - UMAP: `"umap"`
 
-Or you can view their names with `SingleCellExperiment::reducedDimNames()`.
+Or you can view their names with `SingleCellExperiment::reducedDimNames()`
 
 ## Selection of PCs
 
@@ -744,44 +824,48 @@ number of first PCs for each of the methods.
 
 ### Graph-based clustering
 
-`graph_k`: an `{igraph}` object of shared nearest-neighbor graph, returned from `scran::buildSNNGraph()`.
+`graph_snn`: an `{igraph}` object of shared nearest-neighbor graph, returned from `scran::buildSNNGraph()`
 
-`cluster_graph_walktrap`, `cluster_graph_louvain`: lists with cell clusters returned from `igraph::cluster_walktrap()`
-and `igraph::cluster_louvain()`, respectively. Both functions are using `graph_k` as the input.
+`cluster_graph_leiden`, `cluster_graph_walktrap`, `cluster_graph_louvain`: lists with cell clusters returned from `igraph::cluster_walktrap()`
+and `igraph::cluster_louvain()`, respectively. Both functions are using `graph_snn` as the input
 
-`cluster_graph_walktrap_n`, `cluster_graph_louvain_n`: a number of found clusters.
+`cluster_graph_louvain_df`, `cluster_graph_walktrap_df`, `cluster_graph_leiden_df`: dataframes with graph-based clustering results
 
-`cluster_graph_walktrap_table`, `cluster_graph_louvain_table`: a dataframe summarizing assignment of cells to clusters.
+`cluster_graph_leiden_clustree`, `cluster_graph_louvain_clustree`: `{ggplot2}` objects of `clustree::clustree()` plots
 
 ### k-means
 
-`kmeans_gaps`: a `clusGap` object used to calculate the best K. Returned from `cluster::clusGap()`, to which matrix of
-selected PCs is passed.
+`cluster_kmeans_kbest_gaps`: a `clusGap` object used to calculate the best K. Returned from `cluster::clusGap()`, to which matrix of
+selected PCs is passed
 
-`kmeans_best_k`: the best K for k-means, returned from `cluster::maxSE()`.
+`cluster_kmeans_kbest_k`: the best K for k-means, returned from `cluster::maxSE()`
 
-`cluster_kmeans_kbest`, `cluster_kmeans_kc`: lists with cell clusters returned from `stats::kmeans()`.
-In the former, `kmeans_best_k` is used as the number of clusters. In the latter, Ks from the `KMEANS_K` parameter are used.
+`cluster_kmeans_kbest`, `cluster_kmeans_k`: lists with cell clusters returned from `stats::kmeans()`.
+In the former, `cluster_kmeans_kbest_k` is used as the number of clusters. In the latter, Ks from the `CLUSTER_KMEANS_K` parameter are used.
 
-`cluster_kmeans_kbest_table`, `cluster_kmeans_kc_tables`: a dataframe (or list of them in the latter) summarizing
-assignment of cells to clusters.
+`cluster_kmeans_k_df`, `cluster_kmeans_kbest_df`: dataframes with k-means clustering results
+
+`cluster_kmeans_k_clustree`: `{ggplot2}` object of `clustree::clustree()` plot. If `CLUSTER_KMEANS_KBEST_ENABLED` is `True`,
+it will also contain k-means result with the best `k`.
 
 ### SC3
 
-`sce_sc3`: a `SingleCellExperiment` object returned from `SC3::sc3()`.
+`sce_sc3`: a `SingleCellExperiment` object returned from `SC3::sc3()`
 
-`cluster_sc3`: a list with cell clusters.
+`cluster_sc3`: a list with cell clusters
 
-`cluster_sc3_tables`: a list of dataframes, each summarizing assignment of cells to clusters for different `SC3_K`.
+`cluster_sc3_df`: a dataframe with SC3 clustering results
 
 `cluster_sc3_stability_plots`: a list of `{ggplot2}` objects, each returned from `make_sc3_stability_plots()`
-(where `SC3::sc3_plot_cluster_stability()` is used internally).
+(where `SC3::sc3_plot_cluster_stability()` is used internally)
+
+`cluster_sc3_clustree`: `{ggplot2}` object of `clustree::clustree()` plot
 
 ***
 
 ## Cell type annotation
 
-`cell_annotation_params`: a tibble with parameters parsed from `CELL_ANNOTATION_SOURCES`.
+`cell_annotation_params`: a tibble with parameters parsed from `CELL_ANNOTATION_SOURCES`
 
 `cell_annotation`: `cell_annotation_params` with added `cell_annotation` list column holding outputs (`DataFrame`s)
 from `SingleR::SingleR()`. The structure of those `DataFrame`s is described in `?SingleR::classifySingleR()`.
@@ -790,18 +874,18 @@ from `SingleR::SingleR()`. The structure of those `DataFrame`s is described in `
 
 `cell_annotation_labels`: a named list of character vectors with per-cell label assignments.
 Later added to the `cell_data` target and in turn, to `colData()` of the `sce_final_norm_clustering` and
-`sce_int_final_clustering` (in integration pipeline) targets/objects.
+`sce_int_clustering_final` (in integration pipeline) targets/objects.
 
 By default, there are three vectors with labels for each reference dataset named as:
 
-- `<reference_name>_labels_raw`: "raw" labels. Taken from `first.labels` column of `SingleR::SingleR()` output.
-- `<reference_name>_labels`: fine-tuned labels. Taken from `labels` column of `SingleR::SingleR()` output.
+- `<reference_name>_labels_raw`: "raw" labels. Taken from `first.labels` column of `SingleR::SingleR()` output
+- `<reference_name>_labels`: fine-tuned labels. Taken from `labels` column of `SingleR::SingleR()` output
 - `<reference_name>_labels_pruned`: fine-tuned and pruned labels (contains `NA`s for low quality labels).
   Taken from `pruned.labels` column of `SingleR::SingleR()` output.
 
 Note that you can use names of `cell_annotation_labels`'s items in the `CELL_GROUPINGS` and
 `NORM_CLUSTERING_REPORT_DIMRED_PLOTS_OTHER` parameters, and also use them in `cluster_markers`
-(`CLUSTER_MARKERS_SOURCES`) and `contrasts` (`CONTRASTS_SOURCES`) stages.
+(`CLUSTER_MARKERS_SOURCES`) and `contrasts` (`CONTRASTS_SOURCES`) stages
 
 ***
 
@@ -824,7 +908,7 @@ That means when you make this target, those files will be created.
 
 ## Plots
 
-`hvg_plot`: a `{patchwork}` object with HVG metric statistics (average expression vs. variance).
+`hvg_plot`: a `{patchwork}` object with HVG metric statistics (average expression vs. variance)
 
 ***
 

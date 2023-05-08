@@ -204,7 +204,7 @@ for each integration method:
       searching. If set, the number of nearest neighbors used for the MNN search in each batch is redefined as
       `max(k, prop.k*N)` where `N` is the number of cells in that batch.
     - `cos.norm: True` (logical scalar): if `True`, cosine normalization is performed on the input data prior to PCA.
-    - `ndist: 3` (numeric scalar): a threshold beyond which neighbours are to be ignored when computing correction
+    - `ndist: 3` (numeric scalar): a threshold beyond which neighbors are to be ignored when computing correction
       vectors. Each threshold is defined as a multiple of the number of median distances.
     - `d: 50`
     - `merge.order: null` (integer vector, list of lists, or `null`): a merge order of single-samples.
@@ -253,7 +253,7 @@ A type of MNN clustering algorithm. See `igraph::cluster_walktrap()` and `igraph
 ## Input files
 
 ```yaml
-SELECTED_MARKERS_INT_FILE: null
+SELECTED_MARKERS_FILE: null
 ```
 
 **Type:** character scalar or `null`
@@ -369,5 +369,5 @@ single-samples defined in the `INTEGRATION_SOURCES` parameter has `hvg_rm_cc_gen
 
 ### Selected markers
 
-`selected_markers_plots_int_df`: a tibble with plots of selected markers, similar to `selected_markers_plots`
+`selected_markers_int_plots_df`: a tibble with plots of selected markers, similar to `selected_markers_plots`
 in the `02_norm_clustering` stage of the single-sample pipeline.

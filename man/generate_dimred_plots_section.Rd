@@ -5,43 +5,36 @@
 \title{Generate a section with dimred plots used in some RMarkdown files.}
 \usage{
 generate_dimred_plots_section(
-  dimred_names,
   dimred_plots_other_vars_files,
-  dimred_plots_clustering_files = NULL,
-  clustering_names = NULL,
-  selected_markers = NULL,
-  cell_annotation_diagnostic_plots = NULL,
+  selected_markers_plots_files,
   dimred_plots_rel_start = ".",
   selected_markers_files_rel_start = ".",
-  cell_annotation_diagnostic_plots_rel_start = ".",
   main_header = "Dimensionality reduction",
   main_header_level = 1
 )
 }
 \arguments{
-\item{dimred_names}{A character vector: names of dimreds to output.}
-
 \item{dimred_plots_other_vars_files}{A \code{tibble}.}
 
-\item{dimred_plots_clustering_files}{A \code{tibble} or \code{NULL}.}
+\item{selected_markers_plots_files}{A \code{tibble}.}
 
-\item{clustering_names}{A character vector or \code{NULL}: names of clusterings to output.}
-
-\item{selected_markers}{A \code{tibble} or \code{NULL}.}
-
-\item{cell_annotation_diagnostic_plots}{A \code{tibble} or \code{NULL}.}
-
-\item{dimred_plots_rel_start, selected_markers_files_rel_start, cell_annotation_diagnostic_plots_rel_start}{A character scalar: relative start of path to directory with dimred plots, selected markers or cell annotation
-diagnostic plots PDFs. See the \emph{Relative links} section in \code{\link[=create_a_link]{create_a_link()}}.}
+\item{dimred_plots_rel_start, selected_markers_files_rel_start}{A character scalar: relative start of path to directory with dimred plots or selected markers.
+See the \emph{Relative links} section in \code{\link[=create_a_link]{create_a_link()}}.}
 
 \item{main_header}{A character scalar: text of the main header.}
 
 \item{main_header_level}{A numeric scalar: level of the main header.}
 }
 \value{
-Invisibly \code{NULL}.
+Invisibly \code{NULL}, Markdown elements are directly printed to stdout.
 }
 \description{
-Generate a section with dimred plots used in some RMarkdown files.
+The hierarchy is composed of tabsets:
+\itemize{
+\item Dimred (UMAP, t-SNE, PCA)
+\itemize{
+\item Dimred plots of selected variables
+}
+}
 }
 \concept{misc_html}

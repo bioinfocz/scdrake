@@ -24,9 +24,9 @@ CONTRASTS_SOURCES_DEFAULTS:
     TOP_N_PLOT: 3
     TOP_N_WT_PLOT: "fdr"
 CONTRASTS_SOURCES:
-  - dea_cluster_louvain_annotated:
-      source_column: "cluster_graph_louvain_annotated"
-      description: "DEA of some groups in graph-based clustering clustering (Louvain alg.)"
+  - dea_cluster_graph_leiden_r0.4_annotated:
+      source_column: "cluster_graph_leiden_r0.4_annotated"
+      description: "DEA of some groups in graph-based clustering (Leiden alg. with r = 0.4)"
       common_params:
         plot_dimreds: ["umap", "pca"]
       params_t:
@@ -37,9 +37,9 @@ CONTRASTS_SOURCES:
         - target: "3"
           reference: "4"
           name: "cl3_vs_cl4"
-    dea_cluster_kmeans_kc_3_cc_block:
-      source_column: "cluster_kmeans_kc_3_renamed"
-      description: "DEA of all groups in k-means clustering (k = 3) with blocking on cell cycle phase"
+    dea_all_cluster_graph_leiden_r0.4_annotated:
+      source_column: "cluster_graph_leiden_r0.4_annotated"
+      description: "DEA of all groups in graph-based clustering (Leiden alg. with r = 0.8) with blocking on cell cycle phase"
       common_params:
         block_column: "phase"
       params_wilcox:

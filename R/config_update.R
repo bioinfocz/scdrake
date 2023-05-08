@@ -21,7 +21,7 @@
 #'   default config will be used, otherwise a structure of the local config will be preserved.
 #'   See description for more details.
 #' @param force A logical scalar: if `TRUE`, overwrite local configs with default ones (instead of updating them).
-#' @inheritParams verbose
+#' @inheritParams verbose1_param
 #' @return Invisibly `NULL`.
 #'
 #' @details Internally, the [yq](https://github.com/mikefarah/yq) tool (version 3) is used for merging of YAML files.
@@ -223,7 +223,7 @@ update_integration_configs <- function(dir = getOption("scdrake_integration_conf
 #' @param pipeline_config_dir Passed to `update_pipeline_config()`.
 #' @param single_sample_config_dir Passed to `update_single_sample_configs()`.
 #' @param integration_config_dir Passed to `update_integration_configs()`.
-#' @inheritParams verbose
+#' @inheritParams verbose1_param
 #'
 #' @export
 #' @rdname update_config

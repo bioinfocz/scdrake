@@ -82,8 +82,6 @@ sce_int_import_fn <- function(integration_sources, hvg_combination = c("hvg_metr
         "{.field HVG_COMBINATION} is set to {.val hvg_metric} -> in order to combine HVG metrics (CV2, gene var),",
         "all single samples must be processed with the same {.field HVG_METRIC} parameter",
         "({.val gene_var} or {.val gene_cv2})."
-        # "For {.val sctransform} is not possible to combine HVG metrics, you have to use {.val intersection}",
-        # "or {.val union}."
       )
     )
 
@@ -108,7 +106,7 @@ sce_int_import_fn <- function(integration_sources, hvg_combination = c("hvg_metr
 #' @param snn_clustering_method A character scalar: type of graph clustering method:
 #' - `"walktrap"`: [igraph::cluster_walktrap()]
 #' - `"louvain"`: [igraph::cluster_louvain()]
-#' @inheritParams bpparam_
+#' @inheritParams bpparam_param
 #' @return A list of `SingleCellExperiment` objects. *Output target*: `sce_int_raw_snn_clustering`
 #'
 #' @concept integration_integration_fn
@@ -377,7 +375,7 @@ hvg_int_list_fn <- function(sce_int_multibatchnorm,
 #'   processed by [batchelor::multiBatchNorm()].
 #' @param integration_methods_df (*input target*) A tibble: transformed from `INTEGRATION_METHODS` parameter in
 #'   `01_integration.yaml` config.
-#' @inheritParams bpparam_
+#' @inheritParams bpparam_param
 #' @return A modified `integration_methods_df` tibble with appended integrated `SingleCellExperiment` object.
 #'   *Output target*: `sce_int_df`
 #'
@@ -475,7 +473,7 @@ sce_int_df_fn <- function(sce_int_multibatchnorm, integration_methods_df, BPPARA
 #' @param pca_params_df (*input target*) A tibble: derived from `sce_int_df` and `integration_methods_df` targets.
 #'   PCA parameters are defined for each integration method in `INTEGRATION_METHODS` parameter in
 #'   `01_integration.yaml` config.
-#' @inheritParams bpparam_
+#' @inheritParams bpparam_param
 #' @return A modified `pca_params_df` tibble with appended `SingleCellExperiment` object with computed PCA.
 #'   *Output target*: `sce_int_pca_df`
 #'
@@ -553,7 +551,7 @@ sce_int_pca_df_fn <- function(pca_params_df, BPPARAM = BiocParallel::SerialParam
 #' @param dimred_params_df (*input target*) A tibble: derived from `sce_int_pca_df` and `integration_methods_df` targets.
 #'   Dimred parameters are defined for each integration method in `INTEGRATION_METHODS` parameter
 #'   in `01_integration.yaml` config.
-#' @inheritParams bpparam_
+#' @inheritParams bpparam_param
 #' @return A modified `dimred_params_df` tibble with appended `SingleCellExperiment` object with computed PCA.
 #'   *Output target*: `sce_int_dimred_df`
 #'
@@ -607,7 +605,7 @@ hvg_plot_int_fn <- function(sce_int_uncorrected, ...) {
 #' @title Compute a quick graph-based clustering for each integration method.
 #' @param sce_int_pca_df (*input target*) A tibble.
 #' @param snn_k,snn_type,snn_clustering_method See [sce_int_raw_snn_clustering_fn()].
-#' @inheritParams bpparam_
+#' @inheritParams bpparam_param
 #' @return A modified `sce_int_pca_df` with appended `SingleCellExperiment` object with computed clustering.
 #'   *Output target*: `sce_int_clustering_df`
 #'
@@ -749,17 +747,17 @@ sce_int_dimred_plots_df_fn <- function(dimred_plots_params_df) {
 }
 
 #' @title Prepare parameters for expression plots of selected markers.
-#' @param selected_markers_int_file A character scalar: path to CSV file with marker definitions.
-#'   Defined in `SELECTED_MARKERS_INT_FILE` parameter in `01_integration.yaml` config.
+#' @param selected_markers_file A character scalar: path to CSV file with marker definitions.
+#'   Defined in `SELECTED_MARKERS_FILE` parameter in `01_integration.yaml` config.
 #' @param sce_int_dimred_df (*input target*) A tibble.
 #' @return A modified `sce_int_dimred_df` tibble. *Output target*: `selected_markers_int_df`
 #'
 #' @concept integration_integration_fn
 #' @export
-selected_markers_int_df_fn <- function(selected_markers_int_file, sce_int_dimred_df) {
+selected_markers_int_df_fn <- function(selected_markers_file, sce_int_dimred_df) {
   sce_int_dimred_df <- dplyr::select(sce_int_dimred_df, name, hvg_rm_cc_genes, sce_dimred)
 
-  readr::read_csv(selected_markers_int_file, col_names = c("group", "markers"), col_types = "cc") %>%
+  readr::read_csv(selected_markers_file, col_names = c("group", "markers"), col_types = "cc") %>%
     tidyr::crossing(dplyr::select(sce_int_dimred_df, .data$name, .data$hvg_rm_cc_genes), dimred_name = c("pca", "umap", "tsne")) %>%
     dplyr::mutate(rmcc = dplyr::if_else(.data$hvg_rm_cc_genes, "rmcc", "normcc")) %>%
     tidyr::unite("int_rmcc_dimred", .data$name, .data$rmcc, .data$dimred_name, remove = FALSE) %>%
@@ -769,11 +767,11 @@ selected_markers_int_df_fn <- function(selected_markers_int_file, sce_int_dimred
 #' @title Make expression plots of selected markers.
 #' @param selected_markers_int_df (*input target*) A tibble.
 #' @param sce_int_dimred_df (*input target*) A tibble.
-#' @return A modified `selected_markers_int_df` tibble. *Output target*: `selected_markers_plots_int_df`
+#' @return A modified `selected_markers_int_df` tibble. *Output target*: `selected_markers_int_plots_df`
 #'
 #' @concept integration_integration_fn
 #' @export
-selected_markers_plots_int_df_fn <- function(selected_markers_int_df, sce_int_dimred_df) {
+selected_markers_int_plots_df_fn <- function(selected_markers_int_df, sce_int_dimred_df) {
   sce_dimred <- sce_int_dimred_df %>%
     dplyr::filter(
       .data$name == unique(selected_markers_int_df$name),
@@ -782,7 +780,7 @@ selected_markers_plots_int_df_fn <- function(selected_markers_int_df, sce_int_di
     dplyr::pull(.data$sce_dimred) %>%
     .[[1]]
 
-  selected_markers_plots_int_df <- lapply_rows(selected_markers_int_df, FUN = function(par) {
+  selected_markers_int_plots_df <- lapply_rows(selected_markers_int_df, FUN = function(par) {
     title <- glue("Integration method: '{par$name}'")
     if (par$hvg_rm_cc_genes) {
       title <- glue("{title} (removed cell-cycle related genes from HVGs)")
@@ -799,7 +797,7 @@ selected_markers_plots_int_df_fn <- function(selected_markers_int_df, sce_int_di
     return(par)
   })
 
-  return(selected_markers_plots_int_df)
+  return(selected_markers_int_plots_df)
 }
 
 #' @title Return description for an integration method.
@@ -816,7 +814,8 @@ get_int_method_description <- function(int_method_name = c("uncorrected", "resca
     description <- str_space(
       "Data were rescaled to adjust for differences in sequencing depth between samples.",
       "These data will be used for identification of cluster markers (stage `cluster_markers`) and",
-      "differential expression analysis (stage `contrasts`)."
+      "differential expression analysis (stage `contrasts`).",
+      "\n\nMore details in [OSCA](https://bioconductor.org/books/3.15/OSCA.multisample/integrating-datasets.html#no-correction)"
     )
     fn_link <- downlit::downlit_md_string("`batchelor::multiBatchNorm()`") %>% stringr::str_trim()
   } else if (int_method_name == "rescaling") {
@@ -829,7 +828,8 @@ get_int_method_description <- function(int_method_name = c("uncorrected", "resca
       "We deliberately choose to scale all expression values down as this mitigates differences in variance",
       "when batches lie at different positions on the mean-variance trend.",
       "(Specifically, the shrinkage effect of the pseudo-count is greater for smaller counts,",
-      "suppressing any differences in variance across batches.)"
+      "suppressing any differences in variance across batches.)",
+      "\n\nMore details in [OSCA](https://bioconductor.org/books/3.15/OSCA.multisample/integrating-datasets.html#by-rescaling-the-counts)"
     )
     fn_link <- downlit::downlit_md_string("`batchelor::rescaleBatches()`") %>% stringr::str_trim()
   } else if (int_method_name == "regression") {
@@ -849,14 +849,15 @@ get_int_method_description <- function(int_method_name = c("uncorrected", "resca
       "linear regression is the most statistically efficient as it uses information from all cells",
       "to compute the common batch vector.) Linear modelling can also accommodate situations where",
       "the composition is known a priori by including the cell type as a factor in the linear model,",
-      "but this situation is even less common."
+      "but this situation is even less common.",
+      "\n\nMore details in [OSCA](https://bioconductor.org/books/3.15/OSCA.multisample/integrating-datasets.html#by-fitting-a-linear-model)"
     )
     fn_link <- downlit::downlit_md_string("`batchelor::regressBatches()`") %>% stringr::str_trim()
   } else if (int_method_name == "mnn") {
     header <- "Mutual nearest neighbors (`fastMNN()`)"
     description <- str_space(
-      "Mutual nearest neighbours (MNN) are pairs of cells from different batches that belong in each",
-      "other's set of nearest neighbours. The reasoning is that MNN pairs represent cells from the same",
+      "Mutual nearest neighbors (MNN) are pairs of cells from different batches that belong in each",
+      "other's set of nearest neighbors. The reasoning is that MNN pairs represent cells from the same",
       "biological state prior to the application of a batch effect - see Haghverdi et al. (2018)",
       "for full theoretical details. Thus, the difference between cells in MNN pairs can be used as an",
       "estimate of the batch effect, the subtraction of which yields batch-corrected values.\n\n",
@@ -866,7 +867,8 @@ get_int_method_description <- function(int_method_name = c("uncorrected", "resca
       "Instead, the key assumption of MNN-based approaches is that the batch effect is orthogonal to the biology",
       "in high-dimensional expression space. Violations reduce the effectiveness and accuracy of the correction,",
       "with the most common case arising from variations in the direction of the batch effect between clusters.",
-      "Nonetheless, the assumption is usually reasonable as a random vector is very likely to be orthogonal in high-dimensional space."
+      "Nonetheless, the assumption is usually reasonable as a random vector is very likely to be orthogonal in high-dimensional space.",
+      "\n\nMore details in [OSCA](https://bioconductor.org/books/3.15/OSCA.multisample/integrating-datasets.html#mnn-correction)"
     )
     fn_link <- downlit::downlit_md_string("`batchelor::fastMNN()`") %>% stringr::str_trim()
   }

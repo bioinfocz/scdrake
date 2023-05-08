@@ -32,30 +32,29 @@ TSNE_MAX_ITER: 1000
 ###############################################################################
 
 ### Graph-based clustering ####################################################
-GRAPH_SNN_N: 10
-GRAPH_SNN_TYPE: "rank"
+CLUSTER_GRAPH_SNN_K: 10
+CLUSTER_GRAPH_SNN_TYPE: "rank"
 
-GRAPH_LOUVAIN_ENABLED: True
-GRAPH_LOUVAIN_RESOLUTIONS: [0.4, 0.8]
+CLUSTER_GRAPH_LEIDEN_ENABLED: True
+CLUSTER_GRAPH_LEIDEN_RESOLUTIONS: [0.2, 0.4, 0.6, 0.8, 1.0]
 
-GRAPH_WALKTRAP_ENABLED: True
-GRAPH_WALKTRAP_RESOLUTIONS: [0.4, 0.8]
+CLUSTER_GRAPH_LOUVAIN_ENABLED: False
+CLUSTER_GRAPH_LOUVAIN_RESOLUTIONS: [0.2, 0.4, 0.6, 0.8, 1.0]
 
-GRAPH_LEIDEN_ENABLED: True
-GRAPH_LEIDEN_RESOLUTIONS: [0.4, 0.8]
+CLUSTER_GRAPH_WALKTRAP_ENABLED: False
 ###############################################################################
 
 ### k-means clustering ########################################################
-KMEANS_K_ENABLED: True
-KMEANS_K: !code 3:6
+CLUSTER_KMEANS_K_ENABLED: False
+CLUSTER_KMEANS_K: !code 3:6
 
-KMEANS_K_BEST_ENABLED: True
+CLUSTER_KMEANS_KBEST_ENABLED: False
 ###############################################################################
 
 ### SC3 clustering ############################################################
-SC3_ENABLED: True
-SC3_K: !code 5:6
-SC3_N_CORES: 1
+CLUSTER_SC3_ENABLED: False
+CLUSTER_SC3_K: !code 5:6
+CLUSTER_SC3_N_CORES: 1
 ###############################################################################
 
 ### Cell type annotation ######################################################
@@ -101,8 +100,6 @@ CELL_GROUPINGS: null
 
 ### Dimensionality reduction plots ############################################
 NORM_CLUSTERING_REPORT_DIMRED_NAMES: ["umap", "pca", "tsne"]
-NORM_CLUSTERING_REPORT_CLUSTERING_NAMES: ["graph", "kmeans", "sc3"]
-
 NORM_CLUSTERING_REPORT_DIMRED_PLOTS_OTHER:
   - "phase": "Cell cycle phases"
     "doublet_score": "Doublet score"
@@ -112,6 +109,8 @@ NORM_CLUSTERING_REPORT_DIMRED_PLOTS_OTHER:
 
 ### Input files ###############################################################
 SELECTED_MARKERS_FILE: null
+## -- This is an example file bundled with scdrake
+# SELECTED_MARKERS_FILE: !code system.file("extdata/selected_markers.csv", package = "scdrake", mustWork = TRUE)
 
 NORM_CLUSTERING_REPORT_RMD_FILE: "Rmd/single_sample/02_norm_clustering.Rmd"
 NORM_CLUSTERING_REPORT_SIMPLE_RMD_FILE: "Rmd/single_sample/02_norm_clustering_simple.Rmd"
@@ -123,6 +122,7 @@ NORM_CLUSTERING_BASE_OUT_DIR: "02_norm_clustering"
 NORM_CLUSTERING_SELECTED_MARKERS_OUT_DIR: "selected_markers"
 NORM_CLUSTERING_DIMRED_PLOTS_OUT_DIR: "dimred_plots"
 NORM_CLUSTERING_CELL_ANNOTATION_OUT_DIR: "cell_annotation"
+NORM_CLUSTERING_OTHER_PLOTS_OUT_DIR: "other_plots"
 NORM_CLUSTERING_REPORT_HTML_FILE: "02_norm_clustering.html"
 NORM_CLUSTERING_REPORT_SIMPLE_HTML_FILE: "02_norm_clustering_simple.html"
 ###############################################################################

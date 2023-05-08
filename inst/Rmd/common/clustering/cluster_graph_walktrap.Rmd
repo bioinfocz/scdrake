@@ -1,0 +1,14 @@
+### Walktrap algorithm {.tabset}
+
+Walktrap algorithm uses random walks to find communities in the graph, and it is the
+[default graph-based clustering method](https://bioconductor.org/books/3.15/OSCA.basic/clustering.html#clustering-graph) in `scran`.
+
+Walktrap algorithm is not using resolutions.
+
+`r scdrake::format_used_functions("igraph::cluster_walktrap()")`
+
+```{r, results = "asis"}
+res <- scdrake::generate_dimred_plots_clustering_section(
+  dimred_plots_clustering_files, dimred_plots_clustering_united_files, "graph", "walktrap", fs::path_dir(report_html_file), 4
+)
+```

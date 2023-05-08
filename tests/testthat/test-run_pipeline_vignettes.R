@@ -118,6 +118,6 @@ test_that("integration pipeline finishes", {
     analysis_config_dir = getOption("scdrake_integration_config_dir")
   )
 
-  expect_true(run_integration())
+  expect_true(run_integration_r())
   cli::cli_h2("Done!")
 })

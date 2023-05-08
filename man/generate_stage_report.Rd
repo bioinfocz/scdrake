@@ -55,15 +55,21 @@ If you are currently working within a \code{scdrake} project, you can review the
 This is a list of Rmd files currently bundled with the \code{scdrake} package:
 
 \if{html}{\out{<div class="sourceCode r">}}\preformatted{fs::dir_tree(system.file("Rmd", package = "scdrake"))
-#> /home/rstudio/scdrake/inst/Rmd
+#> /home/rstudio/scdrake_source/inst/Rmd
 #> +-- common
 #> |   +-- _footer.Rmd
 #> |   +-- _header.Rmd
 #> |   +-- cluster_markers.Rmd
 #> |   +-- cluster_markers_table_template.Rmd
+#> |   +-- clustering
+#> |   |   +-- cluster_graph_leiden.Rmd
+#> |   |   +-- cluster_graph_louvain.Rmd
+#> |   |   +-- cluster_graph_walktrap.Rmd
+#> |   |   +-- cluster_kmeans.Rmd
+#> |   |   +-- cluster_sc3.Rmd
+#> |   |   \\-- clustering.Rmd
 #> |   +-- contrasts.Rmd
 #> |   +-- contrasts_table_template.Rmd
-#> |   +-- dimred_plots.Rmd
 #> |   \\-- stylesheet.css
 #> +-- integration
 #> |   +-- 01_integration.Rmd

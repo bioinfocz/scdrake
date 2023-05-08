@@ -32,30 +32,28 @@ drake_cache_dir <- params_$drake_cache_dir
 drake::loadd(
   config_main, config_norm_clustering,
   dimred_plots_clustering_files, dimred_plots_clustering_files_out,
+  dimred_plots_clustering_united_files, dimred_plots_clustering_united_files_out,
+  cluster_graph_louvain_clustree_file, cluster_graph_leiden_clustree_file,
+  cluster_sc3_clustree_file, cluster_sc3_cluster_stability_plots_file,
+  cluster_kmeans_kbest_k, cluster_kmeans_k_clustree_file, cluster_kmeans_kbest_gaps_plot_file,
   dimred_plots_other_vars_files, dimred_plots_other_vars_files_out,
-  selected_markers_plots, selected_markers_plots_files,
+  selected_markers_plots_files, selected_markers_plots_files_out,
+  dimred_plots_cell_annotation_files, dimred_plots_cell_annotation_files_out,
   cell_annotation_diagnostic_plots, cell_annotation_diagnostic_plots_files,
+  dimred_plots_cell_annotation_files, dimred_plots_cell_annotation_files,
 
   path = drake_cache_dir
 )
 
-if (!rlang::is_null(selected_markers_plots)) {
-  selected_markers_plots_final <- dplyr::bind_cols(
-    selected_markers_plots,
-    selected_markers_plots_files = selected_markers_plots_files
-  )
-} else {
-  selected_markers_plots_final <- NULL
-}
 cfg <- config_norm_clustering
 
-## -- Variables for dimred_plots.Rmd child.
-dp_dimred_names <- cfg$NORM_CLUSTERING_REPORT_DIMRED_NAMES
-dp_clustering_names <- cfg$NORM_CLUSTERING_REPORT_CLUSTERING_NAMES
-dp_selected_markers <- selected_markers_plots_final
-dp_selected_markers_files_rel_start <- fs::path_dir(cfg$NORM_CLUSTERING_REPORT_HTML_FILE)
-dp_dimred_plots_files_rel_start <- fs::path_dir(cfg$NORM_CLUSTERING_REPORT_HTML_FILE)
-dp_cell_annotation_diagnostic_plots_rel_start <- fs::path_dir(cfg$NORM_CLUSTERING_REPORT_HTML_FILE)
+report_html_file <- cfg$NORM_CLUSTERING_REPORT_HTML_FILE
+
+any_clustering_enabled <- any(
+  cfg$CLUSTER_GRAPH_LOUVAIN_ENABLED, cfg$CLUSTER_GRAPH_WALKTRAP_ENABLED, cfg$CLUSTER_GRAPH_LEIDEN_ENABLED,
+  cfg$CLUSTER_KMEANS_K_ENABLED, cfg$CLUSTER_KMEANS_KBEST_ENABLED,
+  cfg$CLUSTER_SC3_ENABLED
+)
 ```
 
 ***
@@ -65,7 +63,59 @@ dp_cell_annotation_diagnostic_plots_rel_start <- fs::path_dir(cfg$NORM_CLUSTERIN
 
 ***
 
-```{r, child = here::here("Rmd/common/dimred_plots.Rmd")}
+This is a simplified report without technical details.
+For the full report see [02_norm_clustering.html](02_norm_clustering.html)
+
+***
+
+```{r, results = "asis"}
+if (any_clustering_enabled) {
+  cat(knitr::knit_child(here::here("Rmd/common/clustering/clustering.Rmd"), quiet = TRUE))
+  cat("\n\n#\n\n***\n\n")
+}
+```
+
+```{r, results = "asis"}
+if (!is.null(cfg$NORM_CLUSTERING_REPORT_DIMRED_PLOTS_OTHER)) {
+  res <- scdrake::generate_dimred_plots_section(
+    dimred_plots_other_vars_files = dimred_plots_other_vars_files,
+    selected_markers_plots_files = selected_markers_plots_files,
+    dimred_plots_rel_start = fs::path_dir(cfg$NORM_CLUSTERING_REPORT_HTML_FILE),
+    selected_markers_files_rel_start = fs::path_dir(cfg$NORM_CLUSTERING_REPORT_HTML_FILE),
+    main_header = "Dimensionality reduction plots"
+  )
+
+  cat("\n\n#\n\n***\n\n")
+}
+```
+
+```{r, results = "asis"}
+if (!is.null(cfg$CELL_ANNOTATION_SOURCES)) {
+  cell_annotation_text <- str_space(
+    "We used the [SingleR](https://bioconductor.org/packages/3.15/bioc/html/SingleR.html) package to predict cell types in the dataset.",
+    "Given a reference dataset of samples (single-cell or bulk) with known labels, `SinglerR` assigns those labels to",
+    "new cells from a test dataset based on similarities in their expression profiles.",
+    "You can find more information in the [SingleR book](https://bioconductor.org/books/3.15/SingleRBook/).\n\n",
+    "The used references are shown below in the tabs. Each have several diagnostic plots:\n\n",
+    "- Score heatmaps show distribution of predicted cell types in computed clusters (if any), along with per-cell annotation scores\n",
+    "- Marker heatmaps show genes that are markers for a given cell type in both the reference and current datasets,",
+    "i.e. those markers have driven the decision to label cells by the chosen cell type\n",
+    "- Delta scores show poor-quality or ambiguous assignments based on the per-cell 'delta', i.e., the difference between",
+    "the score for the assigned label and the median across all labels for each cell.",
+    "See [here](https://bioconductor.org/books/3.15/SingleRBook/annotation-diagnostics.html#based-on-the-deltas-across-cells) for more details"
+  )
+
+  res <- scdrake::generate_cell_annotation_plots_section(
+    dimred_plots_cell_annotation_files = dimred_plots_cell_annotation_files,
+    cell_annotation_diagnostic_plots = cell_annotation_diagnostic_plots,
+    dimred_plots_rel_start = fs::path_dir(cfg$NORM_CLUSTERING_REPORT_HTML_FILE),
+    cell_annotation_diagnostic_plots_rel_start = fs::path_dir(cfg$NORM_CLUSTERING_REPORT_HTML_FILE),
+    main_header = "Cell annotation",
+    text = cell_annotation_text
+  )
+
+  cat("\n\n#\n\n***\n\n")
+}
 ```
 
 <details>

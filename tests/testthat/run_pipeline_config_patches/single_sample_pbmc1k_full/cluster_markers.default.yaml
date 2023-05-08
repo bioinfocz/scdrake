@@ -33,17 +33,17 @@ CLUSTER_MARKERS_SOURCES_DEFAULTS:
     TOP_N_PLOT: 3
     TOP_N_WT_PLOT: "top"
 CLUSTER_MARKERS_SOURCES:
-  - markers_cluster_kmeans_kc_4:
-      source_column: "cluster_kmeans_kc_4"
-      description: "Cluster markers for k-means clustering (k = 4)"
+  - markers_cluster_graph_leiden_r0.4:
+      source_column: "cluster_graph_leiden_r0.4"
+      description: "Cluster markers for Leiden clustering (r = 0.4)"
       common_params:
         plot_dimreds: ["umap", "pca"]
       params_t:
         pval_type: "some"
         top_n_wt_heatmap: "fdr"
         top_n_wt_plot: "fdr"
-    markers_cluster_kmeans_kc_3_cc_block:
-      source_column: "cluster_kmeans_kc_3_renamed"
-      description: "Cluster markers for k-means clustering (k = 3) with blocking on cell cycle phase"
+    markers_cluster_graph_leiden_r0.8_phase_block:
+      source_column: "cluster_graph_leiden_r0.8"
+      description: "Cluster markers for Leiden clustering (r = 0.8) with blocking on cell cycle phase"
       common_params:
         block_column: "phase"

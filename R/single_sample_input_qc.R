@@ -74,7 +74,7 @@ sce_raw_fn <- function(input_data) {
 #' @param empty_droplets_lower An integer scalar: lower bound on the total UMI count at or below which all barcodes
 #'   are assumed to correspond to empty droplets. Passed to `DropletUtils::emptyDrops()`.
 #' @param empty_droplets_enabled A logical scalar: if `TRUE`, skip empty droplets calculation and return `NULL`.
-#' @inheritParams bpparam_
+#' @inheritParams bpparam_param
 #' @return A `DataFrame` object (value returned from `DropletUtils::emptyDrops()`) if `empty_droplets_enabled`
 #' is `TRUE`, `NULL` otherwise. *Output target*: `empty_droplets`
 #'

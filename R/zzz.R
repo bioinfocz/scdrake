@@ -1,7 +1,7 @@
 #' @title Options used by `scdrake`.
 #' @description `get_scdrake_default_options()` returns a list of default `scdrake` options passed to
 #' `options()` during the package load.
-#' @inheritParams verbose_
+#' @inheritParams verbose2_param
 #'
 #' @details
 #' Most of the options are obtained from environment variables named in UPPERCASE,
@@ -119,6 +119,12 @@ utils::globalVariables(c(
   codetools::findGlobals(get_common_subplan, merge = FALSE)$variables,
   codetools::findGlobals(get_cluster_markers_subplan, merge = FALSE)$variables,
   codetools::findGlobals(get_contrasts_subplan, merge = FALSE)$variables,
+  codetools::findGlobals(get_cell_annotation_subplan, merge = FALSE)$variables,
+  codetools::findGlobals(get_dimred_plots_other_vars_subplan, merge = FALSE)$variables,
+  codetools::findGlobals(get_clustering_subplan, merge = FALSE)$variables,
+  codetools::findGlobals(get_clustering_graph_subplan, merge = FALSE)$variables,
+  codetools::findGlobals(get_clustering_kmeans_subplan, merge = FALSE)$variables,
+  codetools::findGlobals(get_clustering_sc3_subplan, merge = FALSE)$variables,
 
   ## -- Single-sample plans.
   codetools::findGlobals(get_input_qc_subplan, merge = FALSE)$variables,

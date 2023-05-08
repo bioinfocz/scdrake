@@ -25,20 +25,21 @@ CONTRASTS_SOURCES_DEFAULTS:
     TOP_N_PLOT: 5
     TOP_N_WT_PLOT: "fdr"
 
+## -- The second item shows how to perform DEA of all cluster pairs.
 CONTRASTS_SOURCES:
-  - dea_cluster_graph_louvain:
-      source_column: "cluster_graph_louvain"
-      description: "DEA of some groups in graph-based clustering clustering (Louvain alg.)"
+  - dea_cluster_graph_leiden_r0.8:
+      source_column: "cluster_graph_leiden_r0.8"
+      description: "DEA of some groups in graph-based clustering (Leiden alg. with r = 0.8)"
       contrasts:
         - target: "2"
           reference: "1"
         - target: "3"
           reference: "2"
           name: "cl3_vs_cl4"
-    dea_cluster_kmeans_kc_3:
-      source_column: "cluster_kmeans_kc_3"
-      description: "DEA of all groups in k-means clustering (k = 3)"
-      contrasts: "all"
+    # dea_cluster_graph_leiden_r0.4:
+    #   source_column: "cluster_graph_leiden_r0.4"
+    #   description: "DEA of all groups in graph-based clustering (Leiden alg. with r = 0.4) with blocking on batch"
+    #   contrasts: "all"
 
 MAKE_CONTRASTS_PLOTS: True
 ###############################################################################

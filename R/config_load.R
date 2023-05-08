@@ -13,7 +13,7 @@
 #' @param ... Passed to `load_config()`.
 #'
 #' @details Except `load_pipeline_config()`, you can refer to variables from `pipeline.yaml` and `00_main.yaml` configs
-#' inside individual configs. For example, you can use `SC3_N_CORES: !code DRAKE_N_JOBS` in `02_norm_clustering.yaml`.
+#' inside individual configs. For example, you can use `CLUSTER_SC3_N_CORES: !code DRAKE_N_JOBS` in `02_norm_clustering.yaml`.
 #'
 #' @name load_config
 NULL
@@ -27,7 +27,7 @@ NULL
 #' @param yaml_file A character scalar: path to YAML file.
 #' @param other_variables A list of variables in whose environment the `yaml_file` will be evaluated, see details below.
 #' @param eval_code A logical scalar: if `TRUE`, evaluate code for parameters in the `yaml_file` whose value starts with `!code `.
-#' @inheritParams verbose
+#' @inheritParams verbose1_param
 #' @return A [scdrake_list()] of parameters loaded from the YAML file, or a named list of such lists.
 #'
 #' @section Evaluating code inside YAML files:
@@ -93,7 +93,7 @@ load_config <- function(yaml_file, other_variables = NULL, eval_code = TRUE, ver
     cfg <- rapply(cfg, how = "replace", f = function(val) {
       if (is_scalar_character(val)) {
         val_trim <- stringr::str_trim(val)
-        if (stringr::str_starts(val_trim, fixed("!code "))) {
+        if (stringr::str_starts(val_trim, stringr::fixed("!code "))) {
           code <- stringr::str_remove(val_trim, "^!code\\s")
           tryCatch(
             val <- eval(parse(text = code), envir = yaml_env),

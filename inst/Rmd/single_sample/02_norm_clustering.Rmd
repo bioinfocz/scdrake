@@ -31,11 +31,17 @@ drake_cache_dir <- params_$drake_cache_dir
 
 drake::loadd(
   config_main, config_norm_clustering, doublet_score,
-  cluster_kmeans_kc_tables, cluster_sc3_tables, cluster_sc3_stability_plots,
   dimred_plots_clustering_files, dimred_plots_clustering_files_out,
+  dimred_plots_clustering_united_files, dimred_plots_clustering_united_files_out,
+  cluster_graph_louvain_clustree_file, cluster_graph_leiden_clustree_file,
+  cluster_sc3_clustree_file, cluster_sc3_cluster_stability_plots_file,
+  cluster_kmeans_kbest_k, cluster_kmeans_k_clustree_file, cluster_kmeans_kbest_gaps_plot_file,
   dimred_plots_other_vars_files, dimred_plots_other_vars_files_out,
-  selected_markers_plots, selected_markers_plots_files,
+  selected_markers_plots_files, selected_markers_plots_files_out,
+  dimred_plots_cell_annotation_files, dimred_plots_cell_annotation_files_out,
   cell_annotation_diagnostic_plots, cell_annotation_diagnostic_plots_files,
+  dimred_plots_cell_annotation_files, dimred_plots_cell_annotation_files,
+
   path = drake_cache_dir
 )
 
@@ -50,20 +56,13 @@ normalization_type_sce <- sce_metadata$normalization_type
 hvg_metric <- sce_metadata$hvg_metric
 hvg_selection <- sce_metadata$hvg_selection
 hvg_selection_value <- sce_metadata$hvg_selection_value
+report_html_file <- cfg$NORM_CLUSTERING_REPORT_HTML_FILE
 
-if (!rlang::is_null(selected_markers_plots)) {
-  selected_markers_plots_final <- dplyr::bind_cols(selected_markers_plots, selected_markers_plots_files = selected_markers_plots_files)
-} else {
-  selected_markers_plots_final <- NULL
-}
-
-## -- Variables for dimred_plots.Rmd child.
-dp_dimred_names <- cfg$NORM_CLUSTERING_REPORT_DIMRED_NAMES
-dp_clustering_names <- cfg$NORM_CLUSTERING_REPORT_CLUSTERING_NAMES
-dp_selected_markers <- selected_markers_plots_final
-dp_selected_markers_files_rel_start <- fs::path_dir(cfg$NORM_CLUSTERING_REPORT_HTML_FILE)
-dp_dimred_plots_files_rel_start <- fs::path_dir(cfg$NORM_CLUSTERING_REPORT_HTML_FILE)
-dp_cell_annotation_diagnostic_plots_rel_start <- fs::path_dir(cfg$NORM_CLUSTERING_REPORT_HTML_FILE)
+any_clustering_enabled <- any(
+  cfg$CLUSTER_GRAPH_LOUVAIN_ENABLED, cfg$CLUSTER_GRAPH_WALKTRAP_ENABLED, cfg$CLUSTER_GRAPH_LEIDEN_ENABLED,
+  cfg$CLUSTER_KMEANS_K_ENABLED, cfg$CLUSTER_KMEANS_KBEST_ENABLED,
+  cfg$CLUSTER_SC3_ENABLED
+)
 ```
 
 ***
@@ -87,6 +86,10 @@ cat(drake::readd(sce_final_input_qc_info, path = drake_cache_dir)$str)
 
 Assign each cell a score, based on its expression of G2/M and S phase markers.
 These marker sets should be anticorrelated in their expression levels, and cells expressing neither are likely not cycling and in G1 phase.
+In some cases, cell cycle can be the primary factor determining the cell heterogeneity and effectively masking the differences
+between cell subpopulations we want to study.
+
+You can view the assigned cell cycle phases in the [Dimensionality_reduction_plots](#Dimensionality_reduction_plots) section below.
 
 ```{r, results = "asis"}
 if (!cc_genes_valid) {
@@ -96,9 +99,20 @@ if (!cc_genes_valid) {
 
 `r scdrake::format_used_functions(c("Seurat::cc.genes.updated.2019", "Seurat::CellCycleScoring()"))`
 
+***
+
 # Normalization
 
-Normalization method: "`r normalization_type_sce`"
+Systematic differences in sequencing coverage between libraries are often observed in single-cell RNA sequencing data.
+They typically arise from technical differences in cDNA capture or PCR amplification efficiency across cells,
+attributable to the difficulty of achieving consistent library preparation with minimal starting material.
+Normalization aims to remove these differences such that they do not interfere with comparisons of the expression
+profiles between cells. This ensures that any observed heterogeneity or differential expression within the cell
+population are driven by biology and not technical biases.
+
+More information in [OSCA](https://bioconductor.org/books/3.15/OSCA.basic/normalization.html)
+
+Used normalization method: "`r normalization_type_sce`"
 
 ```{r, results = "asis"}
 if (cfg$NORMALIZATION_TYPE == "none") {
@@ -109,7 +123,8 @@ if (normalization_type_sce == "scran") {
   cat("**`scran`: normalization by deconvolution**\n\n")
   cat(
     "Cell-specific biases are normalized using the `scran::computeSumFactors()` method,",
-    "which implements the deconvolution strategy for scaling normalization (*A. T. Lun, Bach, and Marioni 2016*).",
+    "which implements the deconvolution strategy for scaling normalization",
+    "([*A. T. Lun, Bach, and Marioni 2016*](https://genomebiology.biomedcentral.com/articles/10.1186/s13059-016-0947-7)).",
     "This computes size factors that are used to scale the counts in each cell.",
     "The assumption is that most genes are not differentially expressed (DE) between cells,",
     "such that any differences in expression across the majority of genes represents some technical bias that should be removed."
@@ -121,11 +136,24 @@ if (normalization_type_sce == "scran") {
   scdrake::format_used_functions(used_functions, do_cat = TRUE)
 } else if (normalization_type_sce == "sctransform") {
   cat("**`sctransform`: regularized negative binomial regression to normalize UMI count data.**\n\n")
+  cat("[*Hafemeister & Satija 2019*](https://genomebiology.biomedcentral.com/articles/10.1186/s13059-019-1874-1)\n\n")
   scdrake::format_used_functions("Seurat::SCTransform()", do_cat = TRUE)
 }
 ```
 
+***
+
 # Highly variable genes (HVGs) selection
+
+We often use scRNA-seq data in exploratory analyses to characterize heterogeneity across cells.
+Procedures like clustering and dimensionality reduction compare cells based on their gene expression profiles,
+which involves aggregating per-gene differences into a single (dis)similarity metric between a pair of cells.
+The choice of genes to use in this calculation has a major impact on the behavior of the metric and the performance of
+downstream methods. We want to select genes that contain useful information about the biology of the system while
+removing genes that contain random noise. This aims to preserve interesting biological structure without the variance
+that obscures that structure, and to reduce the size of the data to improve computational efficiency of later steps.
+
+More information in [OSCA](https://bioconductor.org/books/3.15/OSCA.basic/feature-selection.html)
 
 ```{r, results = "asis"}
 scdrake::catg0('**HVG metric: "{hvg_metric}"**\n\n')
@@ -139,7 +167,7 @@ if (hvg_metric == "gene_var") {
   )
 
   scdrake::plot_hvg_fit(sce, "var")
-  scdrake::format_used_functions("scran::modelGeneVar()", do_cat = TRUE)
+  hvg_used_functions <- "scran::modelGeneVar()"
 } else if (hvg_metric == "gene_cv2") {
   var_field <- "ratio"
 
@@ -149,8 +177,9 @@ if (hvg_metric == "gene_var") {
   )
 
   scdrake::plot_hvg_fit(sce, "cv2")
-  scdrake::format_used_functions("scran::modelGeneCV2()", do_cat = TRUE)
+  hvg_used_functions <- "scran::modelGeneCV2()"
 } else if (hvg_metric == "sctransform") {
+  hvg_used_functions <- "Seurat::SCTransform()"
   scdrake::catg0("HVGs (n = {cfg$SCT_N_HVG}) were selected by the `sctransform` method.")
 }
 
@@ -158,9 +187,10 @@ if (cc_genes_valid && !rlang::is_null(sce_metadata$hvg_rm_cc_genes) && sce_metad
   scdrake::catg0(
     "Using the percentage of variance explained by the cell cycle phase in the expression profile for each gene, ",
     "we removed {length(sce_metadata$hvg_rm_cc_genes_ids)} genes with percentage > ",
-    "{sce_metadata$hvg_cc_genes_var_expl_threshold} prior to HVG selection."
+    "{sce_metadata$hvg_cc_genes_var_expl_threshold} prior to HVG selection.\n\n",
+    "This strategy is further explained [here](https://bioconductor.org/books/3.15/OSCA.advanced/cell-cycle-assignment.html#removing-cell-cycle-related-genes)"
   )
-  
+
   phase_variance_explained <- sce_rowData[sce_rowData$is_cc_related, c("ENSEMBL", "SYMBOL", "phase_variance_explained")] %>%
     as.data.frame() %>%
     dplyr::arrange(-phase_variance_explained) %>%
@@ -182,7 +212,7 @@ if (cc_genes_valid && !rlang::is_null(sce_metadata$hvg_rm_cc_genes) && sce_metad
     ggplot2::theme_bw()
   print(p_phase_var_explained)
 
-  scdrake::format_used_functions("scater::getVarianceExplained()", do_cat = TRUE)
+  hvg_used_functions <- c(hvg_used_functions, "scater::getVarianceExplained()")
 }
 
 if (hvg_metric %in% c("gene_var", "gene_cv2")) {
@@ -200,17 +230,13 @@ if (hvg_metric %in% c("gene_var", "gene_cv2")) {
 }
 ```
 
-Variance explained plot:
-
-```{r}
-scater::plotExplanatoryVariables(drake::readd(variance_explained, path = drake_cache_dir))
-```
-
 Plot of HVGs:
 
 ```{r}
 drake::readd(hvg_plot, path = drake_cache_dir)
 ```
+
+`r scdrake::format_used_functions(hvg_used_functions)`
 
 ***
 
@@ -221,7 +247,7 @@ Considering every possible triplet of clusters, the method uses the number of DE
 and the proporion of cells in the cluster to mark clusters as possible doublets.
 
 ```{r, results = "asis"}
-if (normalization_type_sce == "scran" && "cluster_quickcluster" %in% colnames(sce_colData)) {
+if (normalization_type_sce == "scran" && cfg$SCRAN_USE_QUICKCLUSTER) {
   cat("Prior to normalization, quick clustering was performed. We can use those clusters to look at doublet score within them:\n\n")
   boxplot(doublet_score ~ cluster_quickcluster, data = sce_colData)
 }
@@ -243,29 +269,29 @@ if (rlang::is_true(sce_metadata$has_filtered_doublets)) {
 
 ***
 
-# PCA {.tabset}
+# Dimensionality reduction
 
-## PCA plots {.tabset}
+As the name suggests, dimensionality reduction aims to reduce the number of separate dimensions in the data.
+See [this chapter](https://bioconductor.org/books/3.15/OSCA.basic/dimensionality-reduction.html) in OSCA that provides
+an intuitive explanation of the motivation behind, along with basic introduction to PCA, t-SNE and UMAP.
 
-### By cell phase
+## PCA
 
-```{r}
-patchwork::wrap_plots(drake::readd(pca_phase_plots, path = drake_cache_dir), nrow = 1, guides = "collect")
-```
+Principal components analysis (PCA) discovers axes in high-dimensional space that capture the largest amount of variation.
+In case of scRNA-seq, we basically compress multiple features into several dimensions.
+This reduces computational work in downstream analyses like clustering and other DR methods (UMAP and t-SNE),
+as calculations only need to be performed for a few dimensions rather than thousands of genes.
+It also reduces noise by averaging across multiple genes to obtain a more precise representation of the patterns in the data.
 
-### By doublet score
+### PCs selection
 
-```{r}
-drake::readd(pca_doublet_plot, path = drake_cache_dir)
-```
+By definition, the top PCs capture the dominant factors of heterogeneity in the data set.
+In the context of scRNA-seq, our assumption is that biological processes affect multiple genes in a coordinated manner.
+This means that the earlier PCs are likely to represent biological structure as more variation can be captured by
+considering the correlated behavior of many genes. We use the earlier PCs in our downstream analyses, which concentrates
+the biological signal to simultaneously reduce computational work and remove noise.
 
-### By total UMI
-
-```{r}
-drake::readd(pca_total_plot, path = drake_cache_dir)
-```
-
-## PCs selection
+There are several methods how to select the first PCs:
 
 - Elbow point method: a simple heuristic for choosing PCs involves identifying the elbow point in the percentage of
   variance explained by successive PCs. This refers to the "elbow" in the curve of a scree plot as shown.
@@ -281,107 +307,59 @@ drake::readd(pca_selected_pcs_plot, path = drake_cache_dir)
 
 `r scdrake::format_used_functions(c("scater::runPCA()", "PCAtools::findElbowPoint()", "scran::getDenoisedPCs()"))`
 
-***
-
-# Clustering {.tabset}
-
-## Graph-based
-
-Graph-based clustering is commonly used for scRNA-seq, and often shows a good performance.
-
-First, we will use `scran` to generate the shared nearest neighbor graph,
-which will then be subjected to community detection using algorithms implemented in the `igraph` package.
-
-Once the SNN graph is generated, we can use any of the community detection algorithms in `igraph` to find the clusters.
-Here, we illustrate two of these methods; the walktrap algorithm (*Pons and Latapy 2005*) and the Louvain method (*Blondel et al. 2008*).
-We can visualise similarity of both assignments with heatmap and PCA.
-
-```{r}
-pheatmap::pheatmap(table(
-  drake::readd(cluster_graph_walktrap, path = drake_cache_dir)[[1]],
-  drake::readd(cluster_graph_louvain, path = drake_cache_dir)[[1]])
-)
-```
-
-**Walktrap algorithm: found `r drake::readd(cluster_graph_walktrap_n, path = drake_cache_dir)` clusters.**
-
-```{r, results = "asis"}
-scdrake::cells_per_cluster_table_collapsed_html(drake::readd(cluster_graph_walktrap_table, path = drake_cache_dir))
-```
-
-**Louvain algorithm: found `r drake::readd(cluster_graph_louvain_n, path = drake_cache_dir)` clusters.**
-
-```{r, results = "asis"}
-scdrake::cells_per_cluster_table_collapsed_html(drake::readd(cluster_graph_louvain_table, path = drake_cache_dir))
-```
-
-`r scdrake::format_used_functions(c("scran::buildSNNGraph()", "igraph::cluster_walktrap()", "igraph::cluster_louvain()"))`
-
-## k-means
-
-k-means is a generic clustering algorithm that has been used in many application areas.
-In R, it can be applied via the `stats::kmeans()` function.
-Typically, it is applied to a reduced dimension representation of the expression data
-(most often PCA, because of the interpretability of the low-dimensional distances).
-We need to define the number of clusters in advance.
-
-### Best K
-
-Determining the number of clusters from the gap statistics and their standard deviations.
-
-```{r}
-drake::readd(kmeans_gaps_plot, path = drake_cache_dir)
-```
-
-**The best K selected: `r drake::readd(kmeans_best_k, path = drake_cache_dir)`**
-
-```{r, results = "asis"}
-scdrake::cells_per_cluster_table_collapsed_html(drake::readd(cluster_kmeans_kbest_table, path = drake_cache_dir))
-```
-
-`r scdrake::format_used_functions(c("cluster::clusGap()", "cluster::maxSE()", "stats::kmeans()"))`
-
-### Custom K {.tabset}
-
-- **Custom K (`KMEANS_K`): `r scdrake::str_comma(cfg$KMEANS_K)`**
-
-```{r, results = "asis"}
-for (k in cfg$KMEANS_K) {
-  cluster_col <- glue::glue("cluster_kmeans_kc_{k}")
-  scdrake::md_header(glue::glue("k = {k}"), 4)
-  scdrake::cells_per_cluster_table_collapsed_html(cluster_kmeans_kc_tables[[cluster_col]])
-}
-```
-
-`r scdrake::format_used_functions("stats::kmeans()")`
-
-## SC3 {.tabset}
-
-Single-Cell Consensus Clustering (`SC3`) is a tool for unsupervised clustering of scRNA-seq data.
-SC3 achieves high accuracy and robustness by consistently integrating different clustering solutions through a consensus approach.
-
-*Cluster stability index* shows how stable each cluster is accross the selected range of `k`s.
-The stability index varies between 0 and 1, where 1 means that the same cluster appears in every solution for different `k`.
-
-`r scdrake::format_used_functions(c("SC3::sc3()", "SC3::sc3_plot_cluster_stability()"))`
-
-```{r, results = "asis"}
-for (k in cfg$SC3_K) {
-  cluster_col <- glue::glue("cluster_sc3_{k}")
-  scdrake::md_header(glue::glue("k = {k}"), 3)
-  scdrake::cells_per_cluster_table_collapsed_html(cluster_sc3_tables[[cluster_col]])
-  print(cluster_sc3_stability_plots[[cluster_col]])
-}
-```
-
 #
 
 ***
 
-```{r, child = here::here("Rmd/common/dimred_plots.Rmd")}
+```{r, results = "asis"}
+if (any_clustering_enabled) {
+  cat(knitr::knit_child(here::here("Rmd/common/clustering/clustering.Rmd"), quiet = TRUE))
+  cat("\n\n#\n\n***\n\n")
+}
 ```
 
-***
+```{r, results = "asis"}
+if (!is.null(cfg$NORM_CLUSTERING_REPORT_DIMRED_PLOTS_OTHER)) {
+  res <- scdrake::generate_dimred_plots_section(
+    dimred_plots_other_vars_files = dimred_plots_other_vars_files,
+    selected_markers_plots_files = selected_markers_plots_files,
+    dimred_plots_rel_start = fs::path_dir(cfg$NORM_CLUSTERING_REPORT_HTML_FILE),
+    selected_markers_files_rel_start = fs::path_dir(cfg$NORM_CLUSTERING_REPORT_HTML_FILE),
+    main_header = "Dimensionality reduction plots"
+  )
+
+  cat("\n\n#\n\n***\n\n")
+}
+```
+
+```{r, results = "asis"}
+if (!is.null(cfg$CELL_ANNOTATION_SOURCES)) {
+  cell_annotation_text <- str_space(
+    "We used the [SingleR](https://bioconductor.org/packages/3.15/bioc/html/SingleR.html) package to predict cell types in the dataset.",
+    "Given a reference dataset of samples (single-cell or bulk) with known labels, `SinglerR` assigns those labels to",
+    "new cells from a test dataset based on similarities in their expression profiles.",
+    "You can find more information in the [SingleR book](https://bioconductor.org/books/3.15/SingleRBook/).\n\n",
+    "The used references are shown below in the tabs. Each have several diagnostic plots:\n\n",
+    "- Score heatmaps show distribution of predicted cell types in computed clusters (if any), along with per-cell annotation scores\n",
+    "- Marker heatmaps show genes that are markers for a given cell type in both the reference and current datasets,",
+    "i.e. those markers have driven the decision to label cells by the chosen cell type\n",
+    "- Delta scores show poor-quality or ambiguous assignments based on the per-cell 'delta', i.e., the difference between",
+    "the score for the assigned label and the median across all labels for each cell.",
+    "See [here](https://bioconductor.org/books/3.15/SingleRBook/annotation-diagnostics.html#based-on-the-deltas-across-cells) for more details"
+  )
+
+  res <- scdrake::generate_cell_annotation_plots_section(
+    dimred_plots_cell_annotation_files = dimred_plots_cell_annotation_files,
+    cell_annotation_diagnostic_plots = cell_annotation_diagnostic_plots,
+    dimred_plots_rel_start = fs::path_dir(cfg$NORM_CLUSTERING_REPORT_HTML_FILE),
+    cell_annotation_diagnostic_plots_rel_start = fs::path_dir(cfg$NORM_CLUSTERING_REPORT_HTML_FILE),
+    main_header = "Cell annotation",
+    text = cell_annotation_text
+  )
+
+  cat("\n\n#\n\n***\n\n")
+}
+```
 
 <details>
   <summary class="config">Show input parameters</summary>

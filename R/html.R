@@ -146,7 +146,6 @@ render_bootstrap_table <- function(df,
 }
 
 #' @title Generate a Markdown header.
-#'
 #' @param text A character scalar: text of the header.
 #' @param heading A numeric scalar: level of the header, that is, the result will be `"#"` times `heading`.
 #' @param extra A character scalar: content to put after `text`, e.g. `"{.tabset}"` for tabbed heading.
@@ -168,8 +167,8 @@ md_header <- function(text, heading, extra = "", do_cat = TRUE) {
 }
 
 #' @title Generate a HTML link as `<a></a>` or in the form of image as `<a><img /></a>`.
-#' @param href A character scalar: URL.
-#' @param text A character scalar: text of the link.
+#' @param href A character scalar or vector (for `create_img_link()`): URL.
+#' @param text A character scalar or vector (for `create_img_link()`): text of the link.
 #' @param href_rel_start A character scalar: relative start of `href`. See the section *Relative links*.
 #' @param target A character scalar: `target` parameter of `<a>` tag.
 #' @param do_cat A logical scalar: if `TRUE`, print (using `cat()`) the result before returning.
@@ -211,9 +210,10 @@ create_a_link <- function(href, text, href_rel_start = NULL, target = "_blank", 
 
   if (do_cat) {
     cat(out)
+    return(invisible(out))
   }
 
-  return(out)
+  out
 }
 
 #' @param img_src A character scalar: path to image.
@@ -232,7 +232,7 @@ create_img_link <- function(href,
                             target = "_blank",
                             do_cat = FALSE,
                             ...) {
-  purrr::map2_chr(href, img_src, function(href, img_src) {
+  out <- purrr::map2_chr(href, img_src, function(href, img_src) {
     other_param_names <- list(...) %>% names()
     other_param_values <- list(...) %>%
       unlist() %>%
@@ -257,8 +257,14 @@ create_img_link <- function(href,
       cat(out)
     }
 
-    return(out)
+    out
   })
+
+  if (do_cat) {
+    return(invisible(out))
+  }
+
+  out
 }
 
 #' @title Print a HTML of table collapsible by button.
@@ -292,124 +298,237 @@ cells_per_cluster_table_collapsed_html <- function(df,
   invisible(NULL)
 }
 
-#' @title Generate a section with dimred plots used in some RMarkdown files.
-#' @param dimred_names A character vector: names of dimreds to output.
-#' @param dimred_plots_other_vars_files A `tibble`.
-#' @param dimred_plots_clustering_files A `tibble` or `NULL`.
-#' @param clustering_names A character vector or `NULL`: names of clusterings to output.
-#' @param selected_markers A `tibble` or `NULL`.
-#' @param cell_annotation_diagnostic_plots A `tibble` or `NULL`.
-#' @param dimred_plots_rel_start,selected_markers_files_rel_start,cell_annotation_diagnostic_plots_rel_start
-#'   A character scalar: relative start of path to directory with dimred plots, selected markers or cell annotation
-#'   diagnostic plots PDFs. See the *Relative links* section in [create_a_link()].
-#' @param main_header A character scalar: text of the main header.
-#' @param main_header_level A numeric scalar: level of the main header.
-#' @return Invisibly `NULL`.
+#' @title Generate a section of clustering dimensionality reduction plots in an RMarkdown document.
+#' @description The hierarchy is composed of tabsets:
+#'
+#' - Dimred (UMAP, t-SNE, PCA)
+#'   - Clustering parameters (resolution, `k`), if applicable
+#'
+#' @param dimred_plots_clustering_files A `tibble`.
+#' @param dimred_plots_clustering_united_files A `tibble`.
+#' @param algorithm_category,algorithm Character vectors to filter by `dimred_plots_clustering_files` and `dimred_plots_clustering_united_files`.
+#' @param rel_start_dir A character scalar: path to HTML file in which will be links to PDF files.
+#'   See the *Relative links* section in [create_a_link()].
+#' @param header_level An integer scalar: the first header level.
+#' @return Invisibly `NULL`, Markdown elements are directly printed to stdout.
 #'
 #' @concept misc_html
 #' @export
-generate_dimred_plots_section <- function(dimred_names,
-                                          dimred_plots_other_vars_files,
-                                          dimred_plots_clustering_files = NULL,
-                                          clustering_names = NULL,
-                                          selected_markers = NULL,
-                                          cell_annotation_diagnostic_plots = NULL,
+generate_dimred_plots_clustering_section <- function(dimred_plots_clustering_files,
+                                                     dimred_plots_clustering_united_files,
+                                                     algorithm_category,
+                                                     algorithm,
+                                                     rel_start_dir,
+                                                     header_level) {
+  dimred_plots_clustering_files <- dimred_plots_clustering_files %>%
+    dplyr::filter(algorithm_category %in% .env$algorithm_category, algorithm %in% .env$algorithm)
+
+  assert_that_(nrow(dimred_plots_clustering_files) > 0)
+
+  res <- dimred_plots_clustering_files %>%
+    dplyr::group_by(.data$dimred_name) %>%
+    dplyr::group_map(function(data, key) {
+      md_header(str_to_upper(key$dimred_name), header_level, extra = "{.tabset}")
+
+      dimred_plots_clustering_united_files <- dimred_plots_clustering_united_files %>%
+        dplyr::filter(
+          algorithm_category %in% .env$algorithm_category,
+          algorithm %in% .env$algorithm,
+          dimred_name == key$dimred_name
+        )
+
+      n_unique_clusters <- length(unique(data$n_clusters))
+
+      if (n_unique_clusters > 1) {
+        create_a_link(
+          dimred_plots_clustering_united_files$dimred_plot_out_pdf_file,
+          glue("**PDF with all plots**"),
+          href_rel_start = rel_start_dir,
+          do_cat = TRUE
+        )
+      }
+
+      cat("\n\n")
+
+      lapply_rows(data, FUN = function(par) {
+        if (n_unique_clusters > 1) {
+          if (par$algorithm_category == "graph") {
+            md_header(glue("r = {par$resolution}"), header_level + 1)
+          } else {
+            if (par$algorithm == "kbest") {
+              md_header(glue("k = {par$k} (best K)"), header_level + 1)
+            } else {
+              md_header(glue("k = {par$k}"), header_level + 1)
+            }
+          }
+        }
+
+        create_img_link(
+          href = par$dimred_plot_out_pdf_file,
+          img_src = par$dimred_plot_out_png_file,
+          href_rel_start = rel_start_dir,
+          img_width = "500px",
+          do_cat = TRUE
+        )
+
+        cat("\n\n")
+
+        list()
+      })
+    })
+
+  invisible(NULL)
+}
+
+#' @title Generate a section with dimred plots used in some RMarkdown files.
+#' @description The hierarchy is composed of tabsets:
+#'
+#' - Dimred (UMAP, t-SNE, PCA)
+#'   - Dimred plots of selected variables
+#'
+#' @param dimred_plots_other_vars_files A `tibble`.
+#' @param selected_markers_plots_files A `tibble`.
+#' @param dimred_plots_rel_start,selected_markers_files_rel_start
+#'   A character scalar: relative start of path to directory with dimred plots or selected markers.
+#'   See the *Relative links* section in [create_a_link()].
+#' @param main_header A character scalar: text of the main header.
+#' @param main_header_level A numeric scalar: level of the main header.
+#' @return Invisibly `NULL`, Markdown elements are directly printed to stdout.
+#'
+#' @concept misc_html
+#' @export
+generate_dimred_plots_section <- function(dimred_plots_other_vars_files,
+                                          selected_markers_plots_files,
                                           dimred_plots_rel_start = ".",
                                           selected_markers_files_rel_start = ".",
-                                          cell_annotation_diagnostic_plots_rel_start = ".",
                                           main_header = "Dimensionality reduction",
                                           main_header_level = 1) {
   md_header(main_header, main_header_level, extra = "{.tabset}")
   dimred_header_level <- main_header_level + 1
   dimred_subheader_level <- main_header_level + 2
 
-  if (!is_null(cell_annotation_diagnostic_plots)) {
-    cell_annotation_diagnostic_plots <- cell_annotation_diagnostic_plots %>%
-      dplyr::mutate(source_column = glue("{name}_labels")) %>%
-      dplyr::select(source_column, dplyr::ends_with("_out_file"))
+  dimred_plots_other_vars_files %>%
+    dplyr::group_by(.data$dimred_name) %>%
+    dplyr::group_map(function(data, key) {
+      dimred_name <- key$dimred_name
 
-    dimred_plots_other_vars_files <- dimred_plots_other_vars_files %>%
-      dplyr::left_join(cell_annotation_diagnostic_plots, by = "source_column")
-  }
-
-  invisible(lapply(dimred_names, FUN = function(dimred_name) {
-    md_header(glue("{str_to_upper(dimred_name)}"), dimred_header_level, extra = "{.tabset}")
-    if (!is_null(selected_markers)) {
-      selected_markers_filtered <- dplyr::filter(selected_markers, dimred_name == !!dimred_name)
-      selected_markers_plots_files <- selected_markers_filtered$selected_markers_plots_files
-
+      md_header(glue("{str_to_upper(dimred_name)}"), dimred_header_level, extra = "{.tabset}")
       if (!is_null(selected_markers_plots_files)) {
+        selected_markers_plots_files <- dplyr::filter(selected_markers_plots_files, dimred_name == .env$dimred_name)
+
         cat("\n\n")
         create_a_link(
-          selected_markers_plots_files,
+          selected_markers_plots_files$out_pdf_file,
           "**Selected markers PDF**",
           href_rel_start = selected_markers_files_rel_start,
           do_cat = TRUE
         )
         cat("\n\n")
       }
-    }
 
-    if (!is_null(dimred_plots_clustering_files) && !is_null(clustering_names)) {
-      lapply(clustering_names, FUN = function(clustering_name) {
-        md_header(clustering_name, dimred_subheader_level)
-        p <- dplyr::filter(
-          dimred_plots_clustering_files, dimred_name == !!dimred_name, clustering_name == !!clustering_name
-        )
-
+      lapply(purrr::transpose(data), FUN = function(row) {
+        md_header(row$source_column, dimred_subheader_level)
         create_img_link(
-          href = p$out_pdf_file,
-          img_src = p$out_png_file,
+          href = row$out_pdf_file,
+          img_src = row$out_png_file,
           href_rel_start = dimred_plots_rel_start,
           img_width = "500px",
           do_cat = TRUE
         )
       })
-    }
+    })
 
-    dimred_plots_other_filtered <- dplyr::filter(dimred_plots_other_vars_files, dimred_name == !!dimred_name)
+  invisible(NULL)
+}
 
-    lapply(purrr::transpose(dimred_plots_other_filtered), FUN = function(row) {
-      md_header(row$source_column, dimred_subheader_level)
-      if (!is_null(cell_annotation_diagnostic_plots)) {
-        cat("\n\n")
-        create_a_link(
-          row$score_heatmaps_out_file,
-          "Score heatmaps PDF",
-          href_rel_start = cell_annotation_diagnostic_plots_rel_start,
-          do_cat = TRUE
-        )
+#' @title Generate a section with dimred plots used in some RMarkdown files.
+#' @description The hierarchy is composed of tabsets:
+#'
+#' - Selected annotation reference
+#'   - Dimred plots (UMAP, t-SNE, PCA)
+#'
+#' @param dimred_plots_cell_annotation_files A `tibble`.
+#' @param cell_annotation_diagnostic_plots A `tibble` or `NULL`.
+#' @param dimred_plots_rel_start,cell_annotation_diagnostic_plots_rel_start
+#'   A character scalar: relative start of path to directory with dimred plots, selected markers or cell annotation
+#'   diagnostic plots PDFs. See the *Relative links* section in [create_a_link()].
+#' @param main_header A character scalar: text of the main header.
+#' @param main_header_level A numeric scalar: level of the main header.
+#' @param text A character text: additional text to be displayed on top of the section.
+#' @return Invisibly `NULL`.
+#'
+#' @concept misc_html
+#' @export
+generate_cell_annotation_plots_section <- function(dimred_plots_cell_annotation_files,
+                                                   cell_annotation_diagnostic_plots,
+                                                   dimred_plots_rel_start = ".",
+                                                   cell_annotation_diagnostic_plots_rel_start = ".",
+                                                   main_header = "Cell annotation",
+                                                   main_header_level = 1,
+                                                   text = NULL) {
+  md_header(main_header, main_header_level, extra = "{.tabset}")
 
-        cat(" | ")
+  if (!is.null(text)) {
+    cat(text)
+  }
 
-        if (!is_null(row$marker_heatmaps) && !is_na(row$marker_heatmaps)) {
-          create_a_link(
-            row$marker_heatmaps_out_file,
-            "Marker heatmaps PDF",
-            href_rel_start = cell_annotation_diagnostic_plots_rel_start,
-            do_cat = TRUE
-          )
-          cat(" | ")
-        }
+  cell_annotation_source_header_level <- main_header_level + 1
+  dimred_header_level <- cell_annotation_source_header_level + 1
 
-        create_a_link(
-          row$delta_distribution_plot_out_file,
-          "Delta distribution PDF",
-          href_rel_start = cell_annotation_diagnostic_plots_rel_start,
-          do_cat = TRUE
-        )
-        cat("\n\n")
-      }
+  res <- dimred_plots_cell_annotation_files %>%
+    dplyr::group_by(source_column) %>%
+    dplyr::group_map(function(data, key) {
+      name <- data$name[1]
+      label <- data$label[1]
 
-      create_img_link(
-        href = row$out_pdf_file,
-        img_src = row$out_png_file,
-        href_rel_start = dimred_plots_rel_start,
-        img_width = "500px",
+      md_header(name, cell_annotation_source_header_level, extra = "{.tabset}")
+      glue0("\n\n{label}\n\n") %>% cat()
+
+      cell_annotation_diagnostic_plots_filtered <- dplyr::filter(cell_annotation_diagnostic_plots, name == .env$name)
+
+      score_heatmaps_out_file <- cell_annotation_diagnostic_plots_filtered$score_heatmaps_out_file
+      marker_heatmaps_out_file <- cell_annotation_diagnostic_plots_filtered$marker_heatmaps_out_file
+      delta_distribution_plot_out_file <- cell_annotation_diagnostic_plots_filtered$delta_distribution_plot_out_file
+
+      create_a_link(
+        score_heatmaps_out_file,
+        "Score heatmaps PDF",
+        href_rel_start = cell_annotation_diagnostic_plots_rel_start,
         do_cat = TRUE
       )
+
+      cat(" | ")
+
+      if (!is_null(cell_annotation_diagnostic_plots_filtered$marker_heatmaps) && !is_na(cell_annotation_diagnostic_plots_filtered$marker_heatmaps)) {
+        create_a_link(
+          marker_heatmaps_out_file,
+          "Marker heatmaps PDF",
+          href_rel_start = cell_annotation_diagnostic_plots_rel_start,
+          do_cat = TRUE
+        )
+        cat(" | ")
+      }
+
+      create_a_link(
+        delta_distribution_plot_out_file,
+        "Delta distribution PDF",
+        href_rel_start = cell_annotation_diagnostic_plots_rel_start,
+        do_cat = TRUE
+      )
+      cat("\n\n")
+
+      lapply(purrr::transpose(data), FUN = function(row) {
+        md_header(glue("{str_to_upper(row$dimred_name)}"), dimred_header_level, extra = "{.tabset}")
+
+        create_img_link(
+          href = row$out_pdf_file,
+          img_src = row$out_png_file,
+          href_rel_start = dimred_plots_rel_start,
+          img_width = "500px",
+          do_cat = TRUE
+        )
+      })
     })
-  }))
 
   invisible(NULL)
 }

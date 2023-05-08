@@ -64,8 +64,7 @@ here::i_am(".here")
 additional_cell_data <- data.frame(
   Barcode = c("AAACCCAAGGAGAGTA-1", "AAACGCTTCAGCCCAG-1", "AAAGAACAGACGACTG-1", "AAAGAACCAATGGCAG-1", "AAAGAACGTCTGCAAT-1"),
   letters = letters[1:5],
-  cluster_sc3_2 = glue("cluster_{letters[1:5]}"),
-  cluster_sc3_6_custom = glue("cluster_{LETTERS[1:5]}")
+  cluster_sc3_k6_custom = glue("cluster_{LETTERS[1:5]}")
 )
 saveRDS(additional_cell_data, "additional_cell_data.Rds")
 
@@ -171,6 +170,6 @@ test_that("integration pipeline finishes", {
     analysis_config_dir = getOption("scdrake_integration_config_dir")
   )
 
-  expect_true(run_integration())
+  expect_true(run_integration_r())
   cli::cli_h2("Done!")
 })

@@ -15,7 +15,7 @@
 #' @param ask A logical scalar: if `TRUE`, ask before `yq` binary is downloaded.
 #' @param dry A logical scalar: if `TRUE`, do not download the `yq` binary and just return its URL.
 #' @param overwrite A logical scalar: if `TRUE`, overwrite the existing `yq` binary if exists.
-#' @inheritParams verbose
+#' @inheritParams verbose1_param
 #' @return A character scalar of length two: `destfile` and URL to `yq` binary.
 #' Note that on Windows platform, if `destfile` doesn't contain the `.exe` extension,
 #' it will be automatically added.
@@ -161,7 +161,7 @@ get_yq_default_path <- function() {
 #' @title Check the availability and version of the `yq` tool.
 #' @param yq_binary A character scalar: path to the `yq` tool's binary.
 #' @param repair_executable A logical scalar: if `TRUE`, make the binary executable.
-#' @inheritParams verbose
+#' @inheritParams verbose1_param
 #' @return `TRUE` if checks pass.
 #'
 #' @details When R is run from the command line, the `PATH` environment variable is inherited from the current shell
@@ -219,7 +219,7 @@ check_yq <- function(yq_binary = getOption("scdrake_yq_binary"),
 
   yq_version <- system2(yq_binary, "-V", stdout = TRUE)
   assert_that(
-    stringr::str_detect(yq_version, fixed("yq version 3")),
+    stringr::str_detect(yq_version, stringr::fixed("yq version 3")),
     msg = cli({
       cli_alert_danger("The yq tool's version is not 3 ('{yq_version}'). You can:")
       cli::cli_ul(err_message)

@@ -1,5 +1,16 @@
 NORMALIZATION_TYPE: "sctransform"
-SC3_ENABLED: False
+
+CLUSTER_GRAPH_LEIDEN_ENABLED: True
+CLUSTER_GRAPH_LEIDEN_RESOLUTIONS: [0.4, 0.8]
+CLUSTER_GRAPH_LOUVAIN_ENABLED: True
+CLUSTER_GRAPH_LOUVAIN_RESOLUTIONS: [0.4, 0.8]
+CLUSTER_GRAPH_WALKTRAP_ENABLED: True
+CLUSTER_KMEANS_K_ENABLED: True
+CLUSTER_KMEANS_KBEST_ENABLED: True
+CLUSTER_SC3_ENABLED: True
+
+CLUSTER_SC3_N_CORES: 8
+
 CELL_ANNOTATION_SOURCES:
   - human_primary_cell_atlas_main:
       reference_type: "celldex"
@@ -21,32 +32,19 @@ CELL_ANNOTATION_SOURCES:
       train_params:
         genes: "sd"
 CELL_GROUPINGS:
-  - cluster_graph_louvain_annotated:
-      source_column: "cluster_graph_louvain"
-      description: "Graph-based clustering (Louvain alg.), annotated clusters"
+  - cluster_graph_leiden_r0.4_annotated:
+      source_column: "cluster_graph_leiden_r0.4"
+      description: "Graph-based clustering (Leiden alg.), annotated clusters"
       assignments:
         1: "memory_CD4+"
         6: "B"
         7: "memory_CD4+"
-    cluster_kmeans_kc_3_renamed:
-      source_column: "cluster_kmeans_kc_3"
-      description: "k-means clustering (k = 3), renamed clusters"
-      assignments:
-        1: "kc_1"
-        2: "kc_2"
-    cluster_sc3_6_renamed:
-      source_column: "cluster_sc3_6"
-      description: "SC3 clustering (k = 6), renamed clusters"
-      assignments:
-        1: "sc3_1"
-        5: "sc3_5"
 ADDITIONAL_CELL_DATA_FILE: "additional_cell_data.Rds"
 NORM_CLUSTERING_REPORT_DIMRED_PLOTS_OTHER:
   - "phase": "Cell cycle phases"
     "doublet_score": "Doublet score"
     "total": "Total number of UMI"
     "detected": "Detected number of genes"
-    "cluster_graph_louvain_annotated": null
-    "cluster_sc3_2": "From additional cell data."
-    "cluster_sc3_6_custom": "From additional cell data."
+    "cluster_graph_leiden_r0.4_annotated": null
+    "cluster_sc3_k6_custom": "From additional cell data"
 SELECTED_MARKERS_FILE: !code system.file("extdata", "selected_markers.csv", package = "scdrake", mustWork = TRUE)

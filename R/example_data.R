@@ -43,7 +43,7 @@
 #' @param out_dir A character scalar: path to directory to which will be data downloaded and extracted.
 #'   Will be automatically created if it does not exist.
 #' @param ask A logical scalar: if `TRUE`, ask before download.
-#' @inheritParams verbose
+#' @inheritParams verbose1_param
 #' @return A vector of downloaded files (invisibly).
 #'
 #' @concept download_example_data

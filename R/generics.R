@@ -1,7 +1,7 @@
 #' @param x An object of class `scdrake_list`.
 #' @param i A character scalar or vector: name / names of element(s) to extract.
 #' @param check A logical scalar: if `TRUE`, throw an error when non-existing names or subscripts are present.
-#' @name scdrake_list_generics_parameters
+#' @name scdrake_list_generics_params
 NULL
 
 #' @rdname scdrake_list

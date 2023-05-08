@@ -2,41 +2,28 @@
 % Please edit documentation in R/visualization.R
 \name{dimred_plots_clustering_fn}
 \alias{dimred_plots_clustering_fn}
-\title{Make dimred plots for each clustering method.}
+\title{Make a dimred plot for each clustering and dimred method.}
 \usage{
 dimred_plots_clustering_fn(
-  sce_final_norm_clustering,
-  dimred_plots_clustering_params,
-  kmeans_k,
-  sc3_k,
-  sc3_dry,
-  out_dir = NULL,
-  integration = FALSE
+  sce_dimred,
+  dimred_names,
+  cluster_df,
+  out_dir = NULL
 )
 }
 \arguments{
-\item{sce_final_norm_clustering}{(\emph{input target}) A \code{SingleCellExperiment} object:
-\code{sce_final_norm_clustering} or \code{sce_int_final_clustering} target.}
+\item{sce_dimred}{A \code{SingleCellExperiment} object with computed dimreds specified in \code{dimred_names}.}
 
-\item{dimred_plots_clustering_params}{(\emph{input target}) A tibble.}
+\item{dimred_names}{A character vector: dimred names to use for plotting.}
 
-\item{kmeans_k}{An integer vector: number of clusters for k-means. Taken from \code{KMEANS_K} parameter in
-\verb{02_norm_clustering.yaml} or \verb{02_int_clustering.yaml} config.}
-
-\item{sc3_k}{An integer vector: : number of clusters for SC3 clustering. Taken from \code{SC3_K} parameter in
-\verb{02_norm_clustering.yaml} or \verb{02_int_clustering.yaml} config.}
-
-\item{sc3_dry}{A logical scalar: whether SC3 was run in dry mode, that is, random clusters were assigned to cells.
-Taken from \code{SC3_DRY} parameter in \verb{02_norm_clustering.yaml} or \verb{02_int_clustering.yaml} config.}
+\item{cluster_df}{A tibble.}
 
 \item{out_dir}{A character scalar: output directory in which PDF and PNG files will be saved.}
-
-\item{integration}{A logical scalar: \code{TRUE} is used in the integration plan.}
 }
 \value{
 A tibble. \emph{Output target}: \code{dimred_plots_clustering}
 }
 \description{
-Make dimred plots for each clustering method.
+Make a dimred plot for each clustering and dimred method.
 }
 \concept{sce_visualization}

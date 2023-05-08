@@ -4,11 +4,11 @@
 \alias{selected_markers_int_df_fn}
 \title{Prepare parameters for expression plots of selected markers.}
 \usage{
-selected_markers_int_df_fn(selected_markers_int_file, sce_int_dimred_df)
+selected_markers_int_df_fn(selected_markers_file, sce_int_dimred_df)
 }
 \arguments{
-\item{selected_markers_int_file}{A character scalar: path to CSV file with marker definitions.
-Defined in \code{SELECTED_MARKERS_INT_FILE} parameter in \verb{01_integration.yaml} config.}
+\item{selected_markers_file}{A character scalar: path to CSV file with marker definitions.
+Defined in \code{SELECTED_MARKERS_FILE} parameter in \verb{01_integration.yaml} config.}
 
 \item{sce_int_dimred_df}{(\emph{input target}) A tibble.}
 }

@@ -27,9 +27,9 @@ create_img_link(
 )
 }
 \arguments{
-\item{href}{A character scalar: URL.}
+\item{href}{A character scalar or vector (for \code{create_img_link()}): URL.}
 
-\item{text}{A character scalar: text of the link.}
+\item{text}{A character scalar or vector (for \code{create_img_link()}): text of the link.}
 
 \item{href_rel_start}{A character scalar: relative start of \code{href}. See the section \emph{Relative links}.}
 

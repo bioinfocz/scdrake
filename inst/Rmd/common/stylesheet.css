@@ -42,7 +42,8 @@ tbody.td {
   appearance: none;
   display: inline-flex;
   background-color: hsl(220deg 100% 50%);
-  padding: 1ch 1.4ch;
+  padding: 0.5ch 1.4ch;
+  margin-bottom: 1em;
   border-radius: 4px;
   cursor: pointer;
   color: #fff;
@@ -53,7 +54,7 @@ summary.used-functions::-webkit-details-marker {
 }
 
 .used-functions-content {
-  margin-top: 1em;
+  margin-bottom: 1em;
   border: 1px solid;
   padding: 5px;
   padding-bottom: 0;

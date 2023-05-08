@@ -27,6 +27,14 @@ If \code{NULL}, it will be loaded using the path defined in \code{scdrake_pipeli
 \description{
 A plan for 01_integration stage.
 
-A plan for 02_int_clustering stage.
+A plan for 02_int_clustering stage. The following subplans are included:
+\itemize{
+\item \code{\link[=get_clustering_graph_subplan]{get_clustering_graph_subplan()}}, \code{\link[=get_clustering_kmeans_subplan]{get_clustering_kmeans_subplan()}}, \code{\link[=get_clustering_sc3_subplan]{get_clustering_sc3_subplan()}}
+\itemize{
+\item Bound together with \code{\link[=get_clustering_subplan]{get_clustering_subplan()}}
+}
+\item \code{\link[=get_cell_annotation_subplan]{get_cell_annotation_subplan()}}
+\item \code{\link[=get_dimred_plots_other_vars_subplan]{get_dimred_plots_other_vars_subplan()}}
+}
 }
 \concept{get_subplan_integration}

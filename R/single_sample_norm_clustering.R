@@ -152,8 +152,8 @@ sce_norm_fn <- function(sce_cc, norm_type = c("scran", "sctransform", "none"), .
 #' - `"hclust"` uses hierarchical clustering
 #'
 #' See `?scran::quickCluster` for more details.
-#' @inheritParams bsparam_
-#' @inheritParams bpparam_
+#' @inheritParams bsparam_param
+#' @inheritParams bpparam_param
 #'
 #' @rdname sce_norm
 #' @export
@@ -240,8 +240,8 @@ sctransform_normalization <- function(sce,
 #'   `hvg_cc_genes_var_expl_threshold` prior to HVG selection.
 #' @param hvg_cc_genes_var_expl_threshold A numeric scalar: threshold for variance explained.
 #'   Genes exceeding this threshold will be marked as CC-related.
-#' @inheritParams bsparam_
-#' @inheritParams bpparam_
+#' @inheritParams bsparam_param
+#' @inheritParams bpparam_param
 #' @return A modified `sce_norm` object with added HVG data in `metadata()`.
 #'   *Output target*: `sce_norm_hvg`
 #'

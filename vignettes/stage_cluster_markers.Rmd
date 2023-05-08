@@ -113,12 +113,12 @@ markers source in `CLUSTER_MARKERS_SOURCES` (see below).
 
 ```yaml
 CLUSTER_MARKERS_SOURCES:
-  - markers_cluster_int_kmeans_kc_4:
-      source_column: "cluster_int_kmeans_kc_4"
-      description: "Cluster markers for k-means clustering (k = 4)"
-    markers_cluster_int_kmeans_kc_3_batch_block:
-      source_column: "cluster_int_kmeans_kc_3_renamed"
-      description: "Cluster markers for k-means clustering (k = 3) with blocking on batch"
+  - markers_cluster_graph_leiden_r0.4:
+      source_column: "cluster_graph_leiden_r0.4"
+      description: "Cluster markers for Leiden clustering (r = 0.4)"
+    markers_cluster_graph_leiden_r0.8:
+      source_column: "cluster_graph_leiden_r0.8"
+      description: "Cluster markers for Leiden clustering (r = 0.8)"
 ```
 
 **Type:** list of named lists
@@ -128,12 +128,12 @@ You can use any categorical column - results of cell clustering, `phase` (cell c
 by `CELL_GROUPINGS` in `02_norm_clustering.yaml` and `02_int_clustering.yaml`.
 See [clustering targets](#clustering) for a list of clustering names.
 
-Let's examine the first entry (`markers_cluster_int_kmeans_kc_4`):
+Let's examine the first entry (`markers_cluster_graph_leiden_r0.4`):
 
-- `markers_cluster_int_kmeans_kc_4`: name of this comparison. You can use whatever name you want.
-- `source_column: "cluster_int_kmeans_kc_4"` (character scalar):
+- `markers_cluster_graph_leiden_r0.4`: name of this comparison. You can use whatever name you want.
+- `source_column: "cluster_graph_leiden_r0.4"` (character scalar):
   which cell grouping to use for computation of cell markers.
-- `description: "Cluster markers for k-means clustering (k = 4)"` (character scalar):
+- `description: "Cluster markers for Leiden clustering (r = 0.4)"` (character scalar):
   description of this comparison, will appear in reports and plots.
 
 In each entry you can override parameters in `CLUSTER_MARKERS_SOURCES_DEFAULTS` (by using lowercase names).
@@ -141,9 +141,9 @@ For example, let's consider the following scenario:
 
 ```yaml
 CLUSTER_MARKERS_SOURCES:
-  - markers_cluster_kmeans_kc_4:
-      source_column: "cluster_kmeans_kc_4"
-      description: "Cluster markers for k-means clustering (k = 4)"
+  - markers_cluster_graph_leiden_r0.4:
+      source_column: "cluster_graph_leiden_r0.4"
+      description: "Cluster markers for Leiden clustering (r = 0.4)"
       common_params:
         plot_dimreds: ["umap", "pca"]
       params_t:

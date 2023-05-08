@@ -76,7 +76,7 @@ load a specific config group (pipeline, single-sample, integration) and return a
 }
 \details{
 Except \code{load_pipeline_config()}, you can refer to variables from \code{pipeline.yaml} and \verb{00_main.yaml} configs
-inside individual configs. For example, you can use \verb{SC3_N_CORES: !code DRAKE_N_JOBS} in \verb{02_norm_clustering.yaml}.
+inside individual configs. For example, you can use \verb{CLUSTER_SC3_N_CORES: !code DRAKE_N_JOBS} in \verb{02_norm_clustering.yaml}.
 }
 \section{Evaluating code inside YAML files}{
 

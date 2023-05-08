@@ -1,5 +1,9 @@
 ## -- Common functions related to cell clustering.
 
+#' @param is_integration A logical scalar: if `TRUE`, clusterings will be named as `cluster_int_*`, otherwise `cluster_*`.
+#' @name is_integration_param
+NULL
+
 #' @title Calculate PCA of a `SingleCellExperiment` object.
 #' @description
 #' Columns in the resulting PCA matrix will be named as `{name}_1`, `{name}_2`, ... .
@@ -37,10 +41,10 @@ sce_calc_pca <- function(sce,
 
 #' @title Get a number of PCs corresponding to biological variation.
 #' @description This strategy is further described in
-#' [OSCA](https://bioconductor.org/books/release/OSCA.advanced/dimensionality-reduction-redux.html#using-the-technical-noise).
+#' [OSCA](https://bioconductor.org/books/3.15/OSCA.advanced/dimensionality-reduction-redux.html#using-the-technical-noise).
 #' @param sce_pca A `SingleCellExperiment` object with calculated PCA.
-#' @inheritParams bsparam_
-#' @inheritParams bpparam_
+#' @inheritParams bsparam_param
+#' @inheritParams bpparam_param
 #' @return An integer scalar.
 #'
 #' @concept sc_clustering
@@ -161,7 +165,7 @@ make_pca_selected_pcs_plot <- function(pca_percent_var, pca_elbow_pcs, pca_gene_
 #' @param tsne_perp A numeric scalar: t-SNE perplexity.
 #' @param tsne_max_iter A numeric scalar: number of t-SNE iterations.
 #' @param dimred A character scalar: name of matrix in `reducedDim()` used to calculate the dimreds.
-#' @inheritParams bpparam_
+#' @inheritParams bpparam_param
 #' @return A `SingleCellExperiment` object with calculated t-SNE and UMAP dimreds. Column names of matrices of these
 #' dimreds will be named `tsne_<i>` and `umap_<i>`, respectively.
 #'
@@ -198,6 +202,100 @@ sce_compute_dimreds <- function(sce_pca_selected_pcs, tsne_perp, tsne_max_iter, 
   return(sce_dimred)
 }
 
+#' @title Compute shared nearest neighbors (SNN) graph.
+#' @param sce A `SingleCellExperiment` object.
+#' @param snn_k An integer scalar: number of shared nearest neighbors, passed to [scran::buildSNNGraph()]
+#' @param snn_type A character scalar: type of weighting scheme to use for SNN, passed to [scran::buildSNNGraph()]
+#' @param dimred A character scalar: name of matrix in `reducedDim()` used to calculate SNN.
+#' @inheritParams bpparam_param
+#' @return An object of class `igraph`. *Output target*: `graph_snn`
+#'
+#' @concept sc_clustering
+#' @export
+graph_snn_fn <- function(sce, snn_k, snn_type, dimred = "pca", BPPARAM = BiocParallel::SerialParam()) {
+  graph_snn <- scran::buildSNNGraph(
+    sce,
+    k = snn_k,
+    use.dimred = dimred,
+    type = snn_type,
+    BPPARAM = BPPARAM
+  )
+
+  igraph::V(graph_snn)$name <- colnames(sce)
+  graph_snn
+}
+
+#' @title Find clusters in SNN graph using a community detection algorithm and if possible, using a specified resolution.
+#' @param graph_snn (*input target*) An object of class `igraph`.
+#' @inheritParams is_integration_param
+#' @param algorithm A character scalar: community detection algorithm:
+#'
+#' - `louvain`: [igraph::cluster_louvain()]
+#' - `walktrap`: [igraph::cluster_walktrap()]
+#' - `leiden`: [igraph::cluster_leiden()]
+#'
+#' @param resolution A numeric scalar: resolution of the `algorithm` (not used in `walktrap`).
+#'   Higher values result in more fine-grained clusters.
+#' @return A `tibble` whose columns are mostly self-explanatory, except the `data` column, which is of `list` type and
+#' contains an another `tibble` with `community_detection` column holding an object of class `communities` returned from
+#' the used `igraph` clustering function.
+#'
+#' @concept sc_clustering
+#' @export
+run_graph_based_clustering <- function(graph_snn, is_integration, algorithm = c("louvain", "walktrap", "leiden"), resolution = 0.8) {
+  algorithm <- arg_match(algorithm)
+
+  if (algorithm == "louvain") {
+    communities_object <- igraph::cluster_louvain(graph_snn, resolution = resolution)
+  } else if (algorithm == "walktrap") {
+    communities_object <- igraph::cluster_walktrap(graph_snn)
+    resolution <- NA
+  } else {
+    communities_object <- igraph::cluster_leiden(graph_snn, resolution_parameter = resolution)
+  }
+
+  if (is_integration) {
+    clustering_name_prefix <- "cluster_int_graph"
+  } else {
+    clustering_name_prefix <- "cluster_graph"
+  }
+
+  if (all(is.na(resolution))) {
+    clustering_name <- glue("{clustering_name_prefix}_{algorithm}")
+    subtitle <- glue("{stringr::str_to_sentence(algorithm)} algorithm")
+  } else {
+    clustering_name <- glue("{clustering_name_prefix}_{algorithm}_r{resolution}")
+    subtitle <- glue("{stringr::str_to_sentence(algorithm)} algorithm, resolution = {resolution}")
+  }
+
+  cell_membership <- communities_object$membership %>%
+    as.character() %>%
+    factor() %>%
+    set_names(igraph::V(graph_snn)$name)
+  levels(cell_membership) <- stringr::str_sort(unique(cell_membership), numeric = TRUE)
+  n_clusters <- cell_membership %>%
+    unique() %>%
+    length()
+  cluster_table <- cells_per_cluster_table(cell_membership)
+
+  data <- tibble::tibble(
+    communities_object = list(.env$communities_object)
+  )
+
+  tibble::tibble(
+    algorithm_category = "graph",
+    algorithm = .env$algorithm,
+    resolution = .env$resolution,
+    cell_membership = list(.env$cell_membership) %>% set_names(clustering_name),
+    n_clusters = .env$n_clusters,
+    sce_column = .env$clustering_name,
+    title = "Graph-based clustering",
+    subtitle = .env$subtitle,
+    cluster_table = list(.env$cluster_table),
+    data = list(.env$data)
+  )
+}
+
 #' @title Make a plot of k-means gaps.
 #' @description
 #' For more details see [this](https://bioconductor.org/books/3.12/OSCA/clustering.html#base-implementation)
@@ -212,49 +310,81 @@ make_kmeans_gaps_plot <- function(kmeans_gaps, best_k) {
   ggplot(as.data.frame(kmeans_gaps$Tab), aes(x = seq_along(.data$gap), y = .data$gap)) +
     ggplot2::geom_point(size = 4) +
     ggplot2::geom_vline(xintercept = best_k, color = "red") +
-    labs(x = "Number of clusters") +
+    labs(title = glue("K-means best K ({best_k}) gap statistics"), x = "Number of clusters") +
     ggplot2::theme_bw()
 }
 
-#' @title Create a named list of k-means clusters for a selected number of clusters.
-#' @description "kc" = "k custom" :)
-#' @param sce_pca A `SingleCellExperiment` object with calculated PCA and known number of selected PCs.
-#' @param kmeans_k A numeric vector: numbers of clusters for k-means.
-#' @param integration A logical scalar: if `TRUE`, a different names in the returned list will be used.
-#' @return A named list. The names will be:
-#' - For single-sample analysis (`integration = FALSE`): `cluster_kmeans_kc_<k>`
-#' - For integration analysis (`integration = TRUE`): `cluster_int_kmeans_kc_<k>`
-#'
-#' where `<k>` depends on the `kmeans_k` function parameter.
+#' @title Run k-means clustering for a specific `k`.
+#' @param sce A `SingleCellExperiment` object.
+#' @param kmeans_k An integer scalar: number of clusters for k-means.
+#' @inheritParams is_integration_param
+#' @param dimred A character scalar: name of matrix in `reducedDim()` used for k-means.
+#' @param nstart,iter.max Passed to [stats::kmeans()].
+#' @return A `tibble` whose columns are mostly self-explanatory, except the `data` column, which is of `list` type and
+#' contains an another `tibble` with `kmeans_object` column holding an object of class `kmeans` returned from
+#' the [stats::kmeans()] function.
 #'
 #' @concept sc_clustering
 #' @export
-cluster_kmeans_kc_fn <- function(sce_pca, kmeans_k, integration = FALSE) {
-  if (integration) {
-    clustering_names_new <- glue("cluster_int_kmeans_kc_{kmeans_k}")
+run_kmeans_clustering <- function(sce, kmeans_k, is_integration, dimred = "pca", nstart = 25, iter.max = 1000) {
+  kmeans_object <- stats::kmeans(reducedDim(sce, dimred), centers = kmeans_k, nstart = nstart, iter.max = iter.max)
+
+  if (is_integration) {
+    clustering_name <- glue("cluster_int_kmeans_k{kmeans_k}")
   } else {
-    clustering_names_new <- glue("cluster_kmeans_kc_{kmeans_k}")
+    clustering_name <- glue("cluster_kmeans_k{kmeans_k}")
   }
 
-  lapply(kmeans_k, FUN = function(k) {
-    stats::kmeans(reducedDim(sce_pca, "pca"), centers = k, nstart = 25, iter.max = 1e3)$cluster %>%
-      factor()
-  }) %>%
-    set_names(clustering_names_new)
+  cell_membership <- kmeans_object$cluster %>%
+    as.character() %>%
+    factor() %>%
+    set_names(colnames(sce))
+  levels(cell_membership) <- stringr::str_sort(unique(cell_membership), numeric = TRUE)
+  n_clusters <- cell_membership %>%
+    unique() %>%
+    length()
+  cluster_table <- cells_per_cluster_table(cell_membership)
+
+  data <- tibble::tibble(
+    kmeans_object = list(.env$kmeans_object)
+  )
+
+  tibble::tibble(
+    algorithm_category = "kmeans",
+    algorithm = "k",
+    k = .env$kmeans_k,
+    cell_membership = list(.env$cell_membership) %>% set_names(clustering_name),
+    n_clusters = .env$n_clusters,
+    sce_column = .env$clustering_name,
+    title = "K-means clustering",
+    subtitle = glue("k = {kmeans_k}"),
+    cluster_table = list(.env$cluster_table),
+    data = list(.env$data)
+  )
 }
 
-#' @title Calculate SC3 clustering.
-#' @description See [SC3::sc3()] for details.
-#' @param sce_pca A `SingleCellExperiment` object with calculated PCA and known number of selected PCs.
-#' @param sc3_k A numeric vector: numbers of clusters for SC3.
-#' @param integration A logical scalar: if `TRUE`, `logcounts()` will be coerced to matrix.
-#' @inheritParams bpparam_
+cluster_sce_sc3_bpparam_fn <- function(cluster_sc3_n_cores, seed) {
+  if (cluster_sc3_n_cores == 1) {
+    BiocParallel::SerialParam()
+  } else {
+    BiocParallel::SnowParam(workers = cluster_sc3_n_cores, type = "SOCK", RNGseed = seed, progressbar = TRUE)
+  }
+}
+
+#' @title Run SC3 clustering for a specific `k`.
+#' @description See [SC3::sc3()] for more details.
+#' @param sce_pca A `SingleCellExperiment` object with calculated PCA.
+#' @param sc3_k An integer vector: numbers of clusters for SC3.
+#' @inheritParams is_integration_param
+#' @inheritParams bpparam_param
 #' @return A `SingleCellExperiment` object as returned from [SC3::sc3()].
+#'
+#' @details If `is_integration` is `TRUE`, `logcounts(sce_pca)` will be coerced to matrix.
 #'
 #' @concept sc_clustering
 #' @export
-calc_sc3 <- function(sce_pca, sc3_k, integration = FALSE, BPPARAM = BiocParallel::SerialParam()) {
-  if (integration && "integrated" %in% assayNames(sce_pca)) {
+calc_sc3 <- function(sce_pca, sc3_k, is_integration, BPPARAM = BiocParallel::SerialParam()) {
+  if (is_integration && "integrated" %in% assayNames(sce_pca)) {
     logcounts(sce_pca) <- as.matrix(assay(sce_pca, "integrated"))
   }
 
@@ -263,70 +393,84 @@ calc_sc3 <- function(sce_pca, sc3_k, integration = FALSE, BPPARAM = BiocParallel
   logcounts(sce_pca) <- as.matrix(logcounts(sce_pca))
 
   if (check_sc3_version() == "github") {
+    cli_alert_info("SC3: using {.val {BPPARAM$workers}} workers")
     cli_alert_info("The {.pkg SC3} package version from {.url github.com/gorgitko/SC3} will be used.")
     sce_sc3 <- SC3::sc3(sce_pca, ks = sc3_k, BPPARAM = BPPARAM)
   } else {
+    cli_alert_info("SC3: using one worker")
+    cli_alert_info("The original {.pkg SC3} package version from Bioconductor will be used.")
     sce_sc3 <- SC3::sc3(sce_pca, ks = sc3_k)
   }
 
   return(sce_sc3)
 }
 
-#' @title Create a named list of SC3 clusters for a selected number of clusters.
-#' @param sce_sc3 A `SingleCellExperiment` object with calculated SC3 clustering.
+#' @title Create a dataframe of SC3 clusters for a selected number of clusters.
+#' @description This function just extracts cell-cluster membership from the `cluster_sce_sc3` object and generates
+#' a cluster stability plots.
+#' @param cluster_sce_sc3 (*input target*) A `SingleCellExperiment` object with calculated SC3 clustering.
 #' @param sc3_k A numeric vector: numbers of clusters for SC3.
-#' @param integration A logical scalar: if `TRUE`, a different names in the returned list will be used.
-#' @return A named list. The names will be:
-#' - For single-sample analysis (`integration = FALSE`): `cluster_sc3_<k>`
-#' - For integration analysis (`integration = TRUE`): `cluster_int_sc3_<k>`
-#'
-#' where `<k>` depends on the `sc3_k` function parameter.
+#' @inheritParams is_integration_param
+#' @return A `tibble` whose columns are mostly self-explanatory, except the `data` column, which is of `list` type and
+#' contains an another `tibble` with `cluster_stability_plot` column holding a `ggplot` object returned from
+#' [SC3::sc3_plot_cluster_stability()].
 #'
 #' @concept sc_clustering
 #' @export
-cluster_sc3_fn <- function(sce_sc3, sc3_k, integration = FALSE) {
-  cluster_cols <- glue("sc3_{sc3_k}_clusters")
-  if (integration) {
-    clustering_names_new <- glue("cluster_int_sc3_{sc3_k}")
-  } else {
-    clustering_names_new <- glue("cluster_sc3_{sc3_k}")
-  }
+cluster_sc3_df_fn <- function(cluster_sce_sc3, sc3_k, is_integration) {
+  purrr::map_dfr(sc3_k, function(k) {
+    cluster_col <- glue("sc3_{k}_clusters")
 
-  colData(sce_sc3)[, cluster_cols] %>%
-    as.list() %>%
-    set_names(clustering_names_new) %>%
-    purrr::map(factor)
+    if (is_integration) {
+      clustering_name <- glue("cluster_int_sc3_k{k}")
+    } else {
+      clustering_name <- glue("cluster_sc3_k{k}")
+    }
+
+    cell_membership <- colData(cluster_sce_sc3)[, cluster_col, drop = TRUE] %>%
+      as.character() %>%
+      factor() %>%
+      set_names(colnames(cluster_sce_sc3))
+    levels(cell_membership) <- stringr::str_sort(unique(cell_membership), numeric = TRUE)
+    n_clusters <- cell_membership %>%
+      unique() %>%
+      length()
+    cluster_table <- cells_per_cluster_table(cell_membership)
+
+    cluster_stability_plot <- SC3::sc3_plot_cluster_stability(cluster_sce_sc3, k = k) +
+        ggtitle("SC3 cluster stability", subtitle = glue("k = {k}"))
+
+    data <- tibble::tibble(
+      cluster_stability_plot = list(.env$cluster_stability_plot)
+    )
+
+    tibble::tibble(
+      algorithm_category = "sc3",
+      algorithm = "sc3",
+      k = .env$k,
+      cell_membership = list(.env$cell_membership) %>% set_names(clustering_name),
+      n_clusters = .env$n_clusters,
+      sce_column = .env$clustering_name,
+      title = "SC3 clustering",
+      subtitle = glue("k = {k}"),
+      cluster_table = list(.env$cluster_table),
+      data = list(.env$data)
+    )
+  })
 }
 
-#' @title Create a list of plots with SC3 clustering stability.
-#' @description For more details see [SC3::sc3_plot_cluster_stability()].
-#' @param sce_sc3 A `SingleCellExperiment` object with calculated SC3 clustering.
-#' @param cluster_sc3 A named list of SC3 cell-cluster assignments, as produced by [cluster_sc3_fn()].
-#' @param sc3_k A numeric vector: numbers of clusters for SC3.
-#' @return A named list of `ggplot` objects. The names are the same as in the `cluster_sc3` function parameter.
+#' @title Save SC3 cluster stability plots to a single PDF.
+#' @param cluster_sc3_df (*input target*) A `tibble` returned from [cluster_sc3_df_fn()].
+#' @param out_dir A character scalar: output directory.
+#' @inheritParams is_integration_param
+#' @return A character scalar: path to output PDF file. It will be `{out_dir}/cluster_sc3_stability_plots_k{k}.pdf` where `k`
+#' are `k`s joined by `-`.
 #'
 #' @concept sc_clustering
 #' @export
-make_sc3_stability_plots <- function(sce_sc3, cluster_sc3, sc3_k) {
-  lapply(sc3_k, FUN = function(k) {
-    p <- SC3::sc3_plot_cluster_stability(sce_sc3, k = k) +
-      ggtitle("SC3 cluster stability", subtitle = glue("k = {k}"))
-
-    return(p)
-  }) %>% set_names(names(cluster_sc3))
-}
-
-#' @title Get a number of unique clusters.
-#' @param clustering An integer vector.
-#' @return A number of unique clusters.
-#'
-#' @concept sc_clustering
-#' @rdname clustering_helpers
-#' @export
-get_n_clusters <- function(clustering) {
-  clustering %>%
-    unique() %>%
-    length()
+cluster_sc3_cluster_stability_plots_file_fn <- function(cluster_sc3_df, out_dir, is_integration) {
+  out_file <- fs::path(out_dir, glue("cluster_sc3_stability_plots_k{k}.pdf", k = stringr::str_c(cluster_sc3_df$k, collapse = "-")))
+  save_pdf(purrr::map(cluster_sc3_df$data, "cluster_stability_plot") %>% purrr::map(1), out_file)
 }
 
 #' @title Get a frequency table of cell-cluster assignments.

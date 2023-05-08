@@ -5,7 +5,7 @@
 #' @importFrom methods as is
 #' @importFrom magrittr %>% set_rownames set_names
 #' @importFrom glue glue
-#' @importFrom stringr str_c str_to_upper str_subset fixed regex
+#' @importFrom stringr str_c str_to_upper str_subset
 #' @importFrom ggplot2 ggplot aes labs theme ggtitle guides element_text element_blank
 #' @importFrom tibble tibble
 #' @importFrom rlang sym arg_match is_null is_empty is_na is_character is_integer is_list is_na is_scalar_character

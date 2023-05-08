@@ -15,7 +15,7 @@ cluster_markers_params_fn <- function(cluster_markers_sources, cell_data) {
     "top_n_heatmap", "top_n_wt_heatmap", "top_n_plot", "top_n_wt_plot"
   )
 
-  res <- lapply(names(cluster_markers_sources), FUN = function(cluster_marker_source_name) {
+  purrr::map_dfr(names(cluster_markers_sources), function(cluster_marker_source_name) {
     cluster_markers_source <- cluster_markers_sources[[cluster_marker_source_name]]
     common_params <- cluster_markers_source$common_params
     source_column <- cluster_markers_source$source_column
@@ -33,7 +33,7 @@ cluster_markers_params_fn <- function(cluster_markers_sources, cell_data) {
         is.factor(groups) || is_character(groups) || is_integer(groups),
         msg = str_space(
           "Error in cluster_markers config {.field CLUSTER_MARKERS_SOURCES} / {.field {cluster_marker_source_name}}:",
-          "The selected source_column {.val {source_column}} is not of numeric, factor or integer type."
+          "The selected source_column {.val {source_column}} is not of factor, character or integer type."
         )
       )
       params$groups <- list(groups)
@@ -73,9 +73,6 @@ cluster_markers_params_fn <- function(cluster_markers_sources, cell_data) {
 
     return(res_test)
   })
-
-  res <- dplyr::bind_rows(res)
-  return(res)
 }
 
 #' @title Extract columns with certain parameters from cluster markers sources `tibble`.

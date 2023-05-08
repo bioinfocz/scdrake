@@ -40,19 +40,19 @@ The different parameters are below.
 
 ```yaml
 CONTRASTS_SOURCES:
-  - dea_cluster_louvain:
-      source_column: "cluster_graph_louvain"
-      description: "DEA of some groups in graph-based clustering clustering (Louvain alg.)"
-      contrasts:
-        - target: "2"
-          reference: "1"
-        - target: "3"
-          reference: "2"
-          name: "cl3_vs_cl4"
-    dea_cluster_kmeans_kc_3:
-      source_column: "cluster_kmeans_kc_3_renamed"
-      description: "DEA of all groups in k-means clustering (k = 3)"
+  - dea_cluster_int_graph_louvain_r0.4:
+      source_column: "cluster_int_graph_louvain_r0.4"
+      description: "DEA of all groups in graph-based clustering (Louvain alg. with r = 0.4) with blocking on batch"
       contrasts: "all"
+    dea_cluster_int_graph_louvain_r0.8:
+     source_column: "cluster_int_graph_louvain_r0.8"
+     description: "DEA of some groups in graph-based clustering (Louvain alg. with r = 0.8)"
+     contrasts:
+       - target: "2"
+         reference: "1"
+       - target: "3"
+         reference: "2"
+         name: "cl3_vs_cl4"
 ```
 
 **Type:** list of named lists
@@ -60,14 +60,14 @@ CONTRASTS_SOURCES:
 This parameter is similar to `CLUSTER_MARKERS_SOURCES`, but an additional parameter `contrasts` is used.
 It is used to specify which levels in `source_column` will be compared (differential expression).
 
+- If `"all"`, all combinations of levels in `source_column` will be compared.
+  For example, if `source_column` is `"cluster_kmeans_k3"` (k-means with `k = 3`),
+  it contains three levels, and the following comparisons (contrasts) will be made:
+  `1_vs_2`, `1_vs_3`, and `2_vs_3`. Note that it could lead to an excessive amount of comparisons for graph-based clustering.
 - If list of lists, the following character scalar items can/must be set:
   - `target` (required): target level of `source_column`.
   - `reference` (required): reference level of `source_column`.
   - `name` (optional): unique contrast name. If not specified, will be created as `{target}_vs_{reference}`.
-- If `"all"`, all combinations of levels in `source_column` will be compared.
-  For example, if `source_column` is `"cluster_kmeans_kc_3"` (k-means with `k = 3`),
-  it contains three levels, and the following comparisons (contrasts) will be made:
-  `1_vs_2`, `1_vs_3`, and `2_vs_3`.
 
 ***
 

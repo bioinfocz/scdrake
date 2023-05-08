@@ -34,7 +34,7 @@ copy_integration_drake_file <- function(dir, ask = TRUE, verbose = getOption("sc
 #' @param download_example_data A logical scalar: if `TRUE`, download example PBMC 1k and 3k data to `{dir}/example_data`.
 #'   See [download_pbmc1k()] and [download_pbmc3k()] for more details on these datasets.
 #' @param ask A logical scalar: if `TRUE`, do not prompt and overwrite an existing project.
-#' @inheritParams verbose
+#' @inheritParams verbose1_param
 #' @param ... Passed to `download_yq()`.
 #'
 #' @details
@@ -170,11 +170,11 @@ init_project <- function(dir = ".",
 #' - Default YAML configs. Their location can be set by `*_config_dir` parameters.
 #' @param dir A character scalar: path to `scdrake` project directory.
 #'   If `NULL`, the current working directory will be used (same as the default: `"."`).
-#' @inheritParams pipeline_config_dir
-#' @inheritParams single_sample_config_dir
-#' @inheritParams integration_config_dir
+#' @inheritParams pipeline_config_dir_param
+#' @inheritParams single_sample_config_dir_param
+#' @inheritParams integration_config_dir_param
 #' @param ask A logical scalar: if `TRUE`, ask before updating the files.
-#' @inheritParams verbose
+#' @inheritParams verbose1_param
 #' @return Invisibly `NULL`.
 #'
 #' @export

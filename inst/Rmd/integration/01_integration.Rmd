@@ -32,12 +32,12 @@ drake_cache_dir <- params_$drake_cache_dir
 drake::loadd(
   config_main, config_integration, hvg_plots_int_df, single_samples_df,
   common_features_count, hvg_int_list, gene_annotation, int_diagnostics_df, sce_int_pca_df_for_report,
-  sce_int_dimred_plots_df, selected_markers_plots_int_df, selected_markers_plots_int_files,
+  sce_int_dimred_plots_df, selected_markers_int_plots_files, selected_markers_int_plots_files_out,
+
   path = drake_cache_dir
 )
 
 cfg <- config_integration
-selected_markers_plots_int_df$out_file <- selected_markers_plots_int_files
 
 details_template <- scdrake::str_line(
   "\n<details>",
@@ -82,6 +82,8 @@ This improves the quality of the correction by removing one aspect of the techni
 
 # Highly variable genes (HVGs) selection {.tabset}
 
+HVGs identified in individual samples are combined before integration.
+
 ```{r, results = "asis"}
 hvg_int <- hvg_int_list$hvg_int
 hvg_combination <- hvg_int$hvg_combination
@@ -121,7 +123,7 @@ if (hvg_combination == "hvg_metric") {
   scdrake::catg0("HVGs were combined by {hvg_combination} of HVGs within individual samples.\n\n")
 }
 
-invisible(scdrake::lapply_rows(hvg_plots_int_df, FUN = function(par) {
+res <- scdrake::lapply_rows(hvg_plots_int_df, FUN = function(par) {
   if (par$hvg_rm_cc_genes) {
     scdrake::md_header("HVGs with removed CC genes", 2)
   } else {
@@ -131,16 +133,16 @@ invisible(scdrake::lapply_rows(hvg_plots_int_df, FUN = function(par) {
   scdrake::catg0("**Found {length(par$hvg_int$hvg_ids)} HVGs.**\n\n")
   print(par$hvg_plot)
   return(list())
-}))
+})
 ```
 
 #
 
 ```{r, results = "asis"}
 if (hvg_int$hvg_metric == "gene_var") {
-  scdrake::format_used_functions("scran::combineVar()", do_cat = TRUE)
+  res <- scdrake::format_used_functions("scran::combineVar()", do_cat = TRUE)
 } else if (hvg_int$hvg_metric == "gene_cv2") {
-  scdrake::format_used_functions("scran::combineCV2()", do_cat = TRUE)
+  res <- scdrake::format_used_functions("scran::combineCV2()", do_cat = TRUE)
 }
 ```
 
@@ -156,7 +158,7 @@ if (hvg_int$hvg_metric == "gene_var") {
 - Corrected: Use the number of PCs calculated during the integration.
 
 ```{r, results = "asis"}
-invisible(dplyr::group_by(sce_int_pca_df_for_report, name) %>% dplyr::group_map(function(group, key) {
+res <- dplyr::group_by(sce_int_pca_df_for_report, name) %>% dplyr::group_map(function(group, key) {
   int_method_name <- key$name
   int_method_description <- scdrake::get_int_method_description(int_method_name)
   scdrake::md_header(int_method_description$header, 2, extra = "{.tabset}")
@@ -175,7 +177,7 @@ invisible(dplyr::group_by(sce_int_pca_df_for_report, name) %>% dplyr::group_map(
       scdrake::catg0("\n\n**{group$pca_selected_pcs} PCs were selected using the '{group$pca_selection_method}' method.**\n\n")
     }
   )
-}))
+})
 ```
 
 #
@@ -186,8 +188,10 @@ invisible(dplyr::group_by(sce_int_pca_df_for_report, name) %>% dplyr::group_map(
 
 # Integration dimreds {.tabset}
 
+Here you can quickly check how samples overlap after integration.
+
 ```{r, results = "asis"}
-invisible(dplyr::group_by(sce_int_dimred_plots_df, name) %>% dplyr::group_map(function(group, key) {
+res <- dplyr::group_by(sce_int_dimred_plots_df, name) %>% dplyr::group_map(function(group, key) {
   int_method_name <- key$name
 
   int_method_description <- scdrake::get_int_method_description(int_method_name)
@@ -211,12 +215,12 @@ invisible(dplyr::group_by(sce_int_dimred_plots_df, name) %>% dplyr::group_map(fu
     by_dimred <- dplyr::group_by(group, dimred_name)
     dplyr::group_map(by_dimred, function(group, key) {
       dimred_name <- key$dimred_name
-      scdrake::md_header(str_to_upper(dimred_name), 4)
+      scdrake::md_header(stringr::str_to_upper(dimred_name), 4)
 
-      if (!is_null(selected_markers_plots_int_df)) {
-        selected_markers_file <- selected_markers_plots_int_df %>%
-        dplyr::filter(name == int_method_name, hvg_rm_cc_genes == !!hvg_rm_cc_genes, dimred_name == !!dimred_name) %>%
-        dplyr::pull(out_file)
+      if (!is_null(selected_markers_int_plots_files)) {
+        selected_markers_file <- selected_markers_int_plots_files %>%
+          dplyr::filter(name == int_method_name, hvg_rm_cc_genes == !!hvg_rm_cc_genes, dimred_name == !!dimred_name) %>%
+          dplyr::pull(out_pdf_file)
         cat("\n\n")
         scdrake::create_a_link(
           href = selected_markers_file,
@@ -233,7 +237,7 @@ invisible(dplyr::group_by(sce_int_dimred_plots_df, name) %>% dplyr::group_map(fu
       })
     })
   })
-}))
+})
 ```
 
 #
@@ -245,7 +249,7 @@ invisible(dplyr::group_by(sce_int_dimred_plots_df, name) %>% dplyr::group_map(fu
 Graph-based clustering was used for diagnostics below.
 
 ```{r, results = "asis"}
-invisible(dplyr::group_by(int_diagnostics_df, name) %>% dplyr::group_map(function(group, key) {
+res <- dplyr::group_by(int_diagnostics_df, name) %>% dplyr::group_map(function(group, key) {
   int_method_name <- key$name
   int_method_description <- scdrake::get_int_method_description(int_method_name)
   scdrake::md_header(int_method_description$header, 2, extra = "{.tabset}")
@@ -312,7 +316,7 @@ invisible(dplyr::group_by(int_diagnostics_df, name) %>% dplyr::group_map(functio
         cat()
     }
   )
-}))
+})
 ```
 
 # {-}

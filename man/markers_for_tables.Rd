@@ -29,7 +29,7 @@ See \code{cluster_markers_dimred_plots_files} or \code{contrasts_dimred_plots_fi
 Files and subdirectories will be created as:
 \itemize{
 \item \verb{<source_name>/<source_name>_<test_type>_<group_level>.html} for cluster markers.
-Example: \code{markers_cluster_kmeans_kc_4/markers_cluster_kmeans_kc_4_t_1.html}
+Example: \code{markers_cluster_kmeans_k4/markers_cluster_kmeans_k4_t_1.html}
 \item \verb{<source_name>/<source_name>_<test_type>_<target_level>_vs_<reference_level>.html} for contrasts.
 Example: \code{dea_cluster_louvain_annotated/dea_cluster_louvain_annotated_binom_cl3_vs_cl4.html}
 }}

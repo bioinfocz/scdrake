@@ -54,7 +54,7 @@ filtering_type <- ifelse(cfg$SAVE_DATASET_SENSITIVE_FILTERING, "dataset-sensitiv
 ```{r, results = "asis"}
 if (input_type == "cellranger") {
   scdrake::md_header("Input data: 10x Genomics Cell Ranger data", 1)
-  cat(str_space(
+  cat(scdrake::str_space(
     "The feature-barcode matrix was imported from",
     "[Cell Ranger](https://support.10xgenomics.com/single-cell-gene-expression/software/pipelines/latest/what-is-cell-ranger)",
     "output (the official quantification tool from 10x Genomics)."

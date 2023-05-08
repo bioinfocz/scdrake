@@ -22,6 +22,6 @@ An integer scalar.
 }
 \description{
 This strategy is further described in
-\href{https://bioconductor.org/books/release/OSCA.advanced/dimensionality-reduction-redux.html#using-the-technical-noise}{OSCA}.
+\href{https://bioconductor.org/books/3.15/OSCA.advanced/dimensionality-reduction-redux.html#using-the-technical-noise}{OSCA}.
 }
 \concept{sc_clustering}

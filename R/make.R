@@ -8,7 +8,7 @@
 #' @inheritParams cfg_pipeline_param
 #' @param cfg_main A `scdrake_list` object: main config (see [load_config])
 #'   obtained from `00_main.yaml` file located in single-sample or integration config directory.
-#' @inheritParams verbose
+#' @inheritParams verbose1_param
 #' @param prework,log_worker,... Passed to [drake::make()]. `prework` must be a character scalar.
 #' @param options A list: additional [base::options()] to be set (locally).
 #' @return Invisibly `TRUE` if plan execution finishes without errors.
@@ -123,7 +123,8 @@ scdrake_make <- function(plan,
 
   check_scdrake()
 
-  cli::cli_h2("Running the single-sample pipeline")
+  packages <- c("HDF5Array", "ensembldb", rev(.packages()))
+
   cli_alert_info("WORKING DIRECTORY: {.file {getwd()}}")
   if (!is_null(cfg_main)) {
     cli_alert_info("BASE OUTPUT DIRECTORY: {.file {cfg_main$BASE_OUT_DIR}}")
@@ -139,7 +140,7 @@ scdrake_make <- function(plan,
   cli_alert_info("OUTDATED TARGETS:")
   cli::cli_ul(drake::outdated(plan = plan, targets = cfg_pipeline$DRAKE_TARGETS, cache = drake_cache_object))
 
-  packages <- c("HDF5Array", "ensembldb", rev(.packages()))
+  cli::cli_h2("Running the single-sample pipeline")
 
   drake::make(
     plan,
