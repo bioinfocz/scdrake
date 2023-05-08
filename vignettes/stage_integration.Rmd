@@ -164,7 +164,7 @@ for each integration method:
 - `uncorrected`: correction for inter-batch sequencing depth with `batchelor::multiBatchNorm()`.
   This method is required, because it is used for differential expression analysis (cluster markers and contrasts).
   - `pca_selection_method: "forced"` (character scalar: `"forced"` | `"elbow"` | `"technical_noise"`):
-    see the `PCA_SELECTION_METHOD` parameter in `vignette("norm_clustering")`.
+    see the `PCA_SELECTION_METHOD` parameter in `vignette("stage_norm_clustering")`.
   - `pca_forced_pcs: 15` (integer scalar): force this number of selected PCs (if `pca_selection_method` is `"forced"`).
   - `tsne_perp: 20` (numeric scalar): t-SNE perplexity.
   - `tsne_max_iter: 1000` (positive integer scalar): a maximum number of t-SNE iterations.
@@ -258,7 +258,7 @@ SELECTED_MARKERS_FILE: null
 
 **Type:** character scalar or `null`
 
-Similar to the `SELECTED_MARKERS_FILE` parameter in `vignette("norm_clustering")`.
+Similar to the `SELECTED_MARKERS_FILE` parameter in `vignette("stage_norm_clustering")`.
 
 ***
 
