@@ -6,7 +6,7 @@
 \usage{
 .check_integration_methods(
   integration_methods,
-  method_names = c("uncorrected", "rescaling", "regression", "mnn"),
+  method_names = c("uncorrected", "rescaling", "regression", "mnn", "harmony"),
   params = c("pca_selection_method", "pca_forced_pcs", "tsne_perp", "tsne_max_iter")
 )
 }

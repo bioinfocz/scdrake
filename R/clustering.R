@@ -24,16 +24,16 @@ sce_calc_pca <- function(sce,
                          BPPARAM = BiocParallel::SerialParam(),
                          ...) {
   if (is_null(subset_row)) {
-    hvg_ids <- metadata(sce)$hvg_ids
+    subset_row <- metadata(sce)$hvg_ids
 
-    if (is_null(hvg_ids)) {
+    if (is_null(subset_row)) {
       cli_alert_warning("metadata(sce)$hvg_ids in sce object is NULL -> using all features for PCA calculation")
     }
   }
 
   sce_pca <- scater::runPCA(
     sce,
-    name = name, subset_row = hvg_ids, exprs_values = exprs_values, BSPARAM = BSPARAM, BPPARAM = BPPARAM, ...
+    name = name, subset_row = subset_row, exprs_values = exprs_values, BSPARAM = BSPARAM, BPPARAM = BPPARAM, ...
   )
   colnames(reducedDim(sce_pca, name)) <- str_c(name, "_", seq(ncol(reducedDim(sce_pca, name))))
   return(sce_pca)
@@ -165,25 +165,31 @@ make_pca_selected_pcs_plot <- function(pca_percent_var, pca_elbow_pcs, pca_gene_
 #' @param tsne_perp A numeric scalar: t-SNE perplexity.
 #' @param tsne_max_iter A numeric scalar: number of t-SNE iterations.
 #' @param dimred A character scalar: name of matrix in `reducedDim()` used to calculate the dimreds.
+#' @param n_dimred
+#' - A character scalar `"selected_pcs"`: if `dimred` is `"pca"`, then use selected PCs stored in `metadata(sce_pca_selected_pcs)$pca_selected_pcs`
+#' - `NULL`: use all dimensions of `dimred`
+#' - An integer scalar: use first `n_dimred` dimensions of `dimred`
 #' @inheritParams bpparam_param
 #' @return A `SingleCellExperiment` object with calculated t-SNE and UMAP dimreds. Column names of matrices of these
 #' dimreds will be named `tsne_<i>` and `umap_<i>`, respectively.
 #'
 #' @concept sc_clustering
 #' @export
-sce_compute_dimreds <- function(sce_pca_selected_pcs, tsne_perp, tsne_max_iter, dimred = "pca",
+sce_compute_dimreds <- function(sce_pca_selected_pcs, tsne_perp, tsne_max_iter, dimred = "pca", n_dimred = "selected_pcs",
                                 BPPARAM = BiocParallel::SerialParam()) {
-  selected_pcs <- metadata(sce_pca_selected_pcs)$pca_selected_pcs
-  assert_that_(
-    !is_null(selected_pcs),
-    msg = "{.code metadata(sce_pca_selected_pcs)$pca_selected_pcs} is {.code NULL} -> have you run {.code get_pca_selected_pcs()} on this sce object?"
-  )
+  if (dimred == "pca" && n_dimred == "selected_pcs") {
+    n_dimred <- metadata(sce_pca_selected_pcs)$pca_selected_pcs
+    assert_that_(
+      !is_null(n_dimred),
+      msg = "{.code metadata(sce_pca_selected_pcs)$pca_selected_pcs} is {.code NULL} -> have you run {.code get_pca_selected_pcs()} on this sce object?"
+    )
+  }
 
   sce_dimred <- scater::runUMAP(
     sce_pca_selected_pcs,
     name = "umap",
     dimred = dimred,
-    n_dimred = selected_pcs,
+    n_dimred = n_dimred,
     BPPARAM = BPPARAM
   )
   colnames(reducedDim(sce_dimred, "umap")) <- str_c("umap_", seq(ncol(reducedDim(sce_dimred, "umap"))))
@@ -192,7 +198,7 @@ sce_compute_dimreds <- function(sce_pca_selected_pcs, tsne_perp, tsne_max_iter, 
     sce_dimred,
     name = "tsne",
     dimred = dimred,
-    n_dimred = selected_pcs,
+    n_dimred = n_dimred,
     perplexity = tsne_perp,
     max_iter = tsne_max_iter,
     BPPARAM = BPPARAM

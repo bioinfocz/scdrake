@@ -6,7 +6,7 @@
 #'
 #' @concept internal
 .check_integration_methods <- function(integration_methods,
-                                       method_names = c("uncorrected", "rescaling", "regression", "mnn"),
+                                       method_names = c("uncorrected", "rescaling", "regression", "mnn", "harmony"),
                                        params = c("pca_selection_method", "pca_forced_pcs", "tsne_perp", "tsne_max_iter")) {
   integration_methods <- purrr::keep(integration_methods, ~ .$name %in% method_names)
 
@@ -100,6 +100,17 @@
     cfg$CELL_ANNOTATION_SOURCES,
     cfg$CELL_ANNOTATION_SOURCES_DEFAULTS
   )
+
+  possible_integration_methods <- c("rescaling", "regression", "mnn", "harmony")
+  assert_that_(
+    cfg$INTEGRATION_FINAL_METHOD %in% possible_integration_methods,
+    msg = "{.field INTEGRATION_FINAL_METHOD} must be one of {.vals {possible_integration_methods}}"
+  )
+
+  if (cfg$INTEGRATION_FINAL_METHOD == "harmony" && cfg$CLUSTER_SC3_ENABLED) {
+    cli_alert_warning("It is not possible to use SC3 clustering after Harmony integration -> setting {.field CLUSTER_SC3_ENABLED} to {.code FALSE}")
+    cfg$CLUSTER_SC3_ENABLED <- FALSE
+  }
 
   cfg <- .hereize_paths(cfg, "INT_CLUSTERING_REPORT_RMD_FILE")
   cfg <- .paths_to_base_dir(cfg, other_variables$BASE_OUT_DIR, "INT_CLUSTERING_BASE_OUT_DIR")

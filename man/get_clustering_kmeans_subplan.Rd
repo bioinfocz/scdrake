@@ -6,6 +6,7 @@
 \usage{
 get_clustering_kmeans_subplan(
   sce_target_name,
+  dimred,
   cluster_kmeans_k_enabled,
   cluster_kmeans_k,
   cluster_kmeans_kbest_enabled,
@@ -15,6 +16,8 @@ get_clustering_kmeans_subplan(
 }
 \arguments{
 \item{sce_target_name}{A character scalar: name of target representing a SCE object that will be used for k-means clustering.}
+
+\item{dimred}{A character scalar: which \code{reducedDim()} to use for clustering.}
 
 \item{cluster_kmeans_k_enabled, cluster_kmeans_kbest_enabled}{A logical scalar: if \code{FALSE}, disable the selected clustering and set all corresponding targets to \code{NULL}.}
 

@@ -6,6 +6,7 @@
 \usage{
 get_clustering_graph_subplan(
   sce_target_name,
+  dimred,
   cluster_graph_louvain_enabled,
   cluster_graph_louvain_resolutions_,
   cluster_graph_walktrap_enabled,
@@ -19,6 +20,8 @@ get_clustering_graph_subplan(
 }
 \arguments{
 \item{sce_target_name}{A character scalar: name of target representing a SCE object that will be used for SNN graph construction.}
+
+\item{dimred}{A character scalar: which \code{reducedDim()} to use for clustering.}
 
 \item{cluster_graph_louvain_resolutions_, cluster_graph_leiden_resolutions_}{A numeric vector: resolutions to calculate for the
 selected clustering method.}

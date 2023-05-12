@@ -394,27 +394,37 @@ hvg_int_list_fn <- function(sce_int_multibatchnorm,
 #' @export
 sce_int_df_fn <- function(sce_int_multibatchnorm, integration_methods_df, BPPARAM = BiocParallel::SerialParam()) {
   sce_int_df <- lapply_rows(integration_methods_df, FUN = function(par) {
-    integration_params_other <- list()
-    if (par$name == "uncorrected") {
-      int_param_fn <- batchelor::NoCorrectParam
-    } else if (par$name == "rescaling") {
-      int_param_fn <- batchelor::RescaleParam
-    } else if (par$name == "regression") {
-      int_param_fn <- batchelor::RegressParam
-      integration_params_other$BPPARAM <- BPPARAM
-    } else if (par$name == "mnn") {
-      int_param_fn <- batchelor::FastMnnParam
-      integration_params_other$BPPARAM <- BPPARAM
+    if (par$name == "harmony") {
+      sce_int <- do.call(cbind, sce_int_multibatchnorm)
+      sce_int <- sce_calc_pca(sce_int, subset_row = par$hvg_int$hvg_ids, name = "PCA", ncomponents = par$integration_params$dims.use)
+      sce_int <- do.call(harmony::RunHarmony, args = c(list(sce_int, group.by.vars = "batch", reduction.save = "harmony"), par$integration_params))
+      reducedDim(sce_int, "pca") <- reducedDim(sce_int, "PCA")
+      reducedDim(sce_int, "pca_all") <- reducedDim(sce_int, "PCA")
+      reducedDim(sce_int, "PCA") <- NULL
+      int_param <- par$integration_params
     } else {
-      cli_abort("Unknown name of the integration method: {.val {par$name}}")
-    }
+      integration_params_other <- list()
+      if (par$name == "uncorrected") {
+        int_param_fn <- batchelor::NoCorrectParam
+      } else if (par$name == "rescaling") {
+        int_param_fn <- batchelor::RescaleParam
+      } else if (par$name == "regression") {
+        int_param_fn <- batchelor::RegressParam
+        integration_params_other$BPPARAM <- BPPARAM
+      } else if (par$name == "mnn") {
+        int_param_fn <- batchelor::FastMnnParam
+        integration_params_other$BPPARAM <- BPPARAM
+      } else {
+        cli_abort("Unknown name of the integration method: {.val {par$name}}")
+      }
 
-    int_param <- do.call(int_param_fn, args = c(par$integration_params, integration_params_other))
-    sce_int <- batchelor::correctExperiments(
-      sce_int_multibatchnorm,
-      subset.row = par$hvg_int$hvg_ids, correct.all = TRUE, PARAM = int_param
-    )
-    assayNames(sce_int)[1] <- "integrated"
+      int_param <- do.call(int_param_fn, args = c(par$integration_params, integration_params_other))
+      sce_int <- batchelor::correctExperiments(
+        sce_int_multibatchnorm,
+        subset.row = par$hvg_int$hvg_ids, correct.all = TRUE, PARAM = int_param
+      )
+      assayNames(sce_int)[1] <- "integrated"
+    }
 
     single_samples_metadata_df <- tibble(
       sample_name = merge_sce_metadata(sce_int_multibatchnorm, "single_sample_name"),
@@ -484,60 +494,70 @@ sce_int_df_fn <- function(sce_int_multibatchnorm, integration_methods_df, BPPARA
 #' @export
 sce_int_pca_df_fn <- function(pca_params_df, BPPARAM = BiocParallel::SerialParam()) {
   sce_int_pca_df <- lapply_rows(pca_params_df, FUN = function(par) {
-    if (par$pca_selection_method == "corrected") {
-      assert_that_(
-        "corrected" %in% reducedDimNames(par$sce_int),
-        msg = str_space(
-          "{.val corrected} was specified as {.code pca_selection_method} for the integration method",
-          "{.val {par$name}}, but the reduced dim with this name was not found. This {.code pca_selection_method}",
-          "is not possible for this integration method, or {.field d} parameter in {.field integration_params}",
-          "was {.code NA}."
-        )
-      )
-      corrected_pca <- reducedDim(par$sce_int, "corrected")
-      reducedDim(par$sce_int, "pca") <- corrected_pca
-      n_pcs <- ncol(corrected_pca)
-      colnames(reducedDim(par$sce_int, "pca")) <- paste0("pca_", seq(n_pcs))
-      colnames(reducedDim(par$sce_int, "corrected")) <- paste0("corrected_", seq(n_pcs))
-      par$sce_int <- sce_add_metadata(par$sce_int, pca_selection_method = par$pca_selection_method, pca_selected_pcs = n_pcs)
-
-      title <- glue("{n_pcs} PCs were used from multiBatchPCA() calculated during integration.")
-      pca_selected_pcs_plot <- create_dummy_plot(title)
-
+    if (par$name == "harmony") {
       par <- c(par, list(
         sce_pca = par$sce_int, pca_percent_var = NA, pca_elbow_pcs = NA, pca_gene_var_pcs = NA,
-        pca_selected_pcs_plot = pca_selected_pcs_plot, pca_selected_pcs = n_pcs
+        pca_selected_pcs_plot = create_dummy_plot(
+          glue("PCA was computed prior to Harmony integration that\nwas performed on {par$sce_int@metadata$int_param$dims.use} PCs")
+        ),
+        pca_selected_pcs = par$sce_int@metadata$int_param$dims.use
       ))
     } else {
-      sce_pca <- sce_calc_pca(par$sce_int, name = "pca", exprs_values = "integrated", BPPARAM = BPPARAM)
-      pca_percent_var <- attr(reducedDim(sce_pca, "pca"), "percentVar")
-      pca_elbow_pcs <- PCAtools::findElbowPoint(pca_percent_var)
-      pca_gene_var_pcs <- get_pca_gene_var_pcs(sce_pca, BPPARAM = BPPARAM)
+      if (par$pca_selection_method == "corrected") {
+        assert_that_(
+          "corrected" %in% reducedDimNames(par$sce_int),
+          msg = str_space(
+            "{.val corrected} was specified as {.code pca_selection_method} for the integration method",
+            "{.val {par$name}}, but the reduced dim with this name was not found. This {.code pca_selection_method}",
+            "is not possible for this integration method, or {.field d} parameter in {.field integration_params}",
+            "was {.code NA}."
+          )
+        )
+        corrected_pca <- reducedDim(par$sce_int, "corrected")
+        reducedDim(par$sce_int, "pca") <- corrected_pca
+        n_pcs <- ncol(corrected_pca)
+        colnames(reducedDim(par$sce_int, "pca")) <- paste0("pca_", seq(n_pcs))
+        colnames(reducedDim(par$sce_int, "corrected")) <- paste0("corrected_", seq(n_pcs))
+        par$sce_int <- sce_add_metadata(par$sce_int, pca_selection_method = par$pca_selection_method, pca_selected_pcs = n_pcs)
 
-      title <- glue("PCs selection for integration method '{par$name}'")
-      subtitle <- NULL
-      if (par$hvg_rm_cc_genes) {
-        subtitle <- glue("Removed cell-cycle related genes from HVGs.")
+        title <- glue("{n_pcs} PCs were used from multiBatchPCA() calculated during integration.")
+        pca_selected_pcs_plot <- create_dummy_plot(title)
+
+        par <- c(par, list(
+          sce_pca = par$sce_int, pca_percent_var = NA, pca_elbow_pcs = NA, pca_gene_var_pcs = NA,
+          pca_selected_pcs_plot = pca_selected_pcs_plot, pca_selected_pcs = n_pcs
+        ))
+      } else {
+        sce_pca <- sce_calc_pca(par$sce_int, name = "pca", exprs_values = "integrated", BPPARAM = BPPARAM)
+        pca_percent_var <- attr(reducedDim(sce_pca, "pca"), "percentVar")
+        pca_elbow_pcs <- PCAtools::findElbowPoint(pca_percent_var)
+        pca_gene_var_pcs <- get_pca_gene_var_pcs(sce_pca, BPPARAM = BPPARAM)
+
+        title <- glue("PCs selection for integration method '{par$name}'")
+        subtitle <- NULL
+        if (par$hvg_rm_cc_genes) {
+          subtitle <- glue("Removed cell-cycle related genes from HVGs.")
+        }
+        pca_selected_pcs_plot <- make_pca_selected_pcs_plot(
+          pca_percent_var, pca_elbow_pcs, pca_gene_var_pcs,
+          pca_forced_pcs = par$pca_forced_pcs
+        ) +
+          ggtitle(label = title, subtitle = subtitle)
+
+        sce_pca <- get_pca_selected_pcs(
+          sce_pca,
+          pca_elbow_pcs = pca_elbow_pcs,
+          pca_gene_var_pcs = pca_gene_var_pcs,
+          pca_selection_method = par$pca_selection_method,
+          pca_forced_pcs = par$pca_forced_pcs
+        )
+
+        par <- c(par, list(
+          sce_pca = sce_pca, pca_percent_var = pca_percent_var, pca_elbow_pcs = pca_elbow_pcs,
+          pca_gene_var_pcs = pca_gene_var_pcs, pca_selected_pcs_plot = pca_selected_pcs_plot,
+          pca_selected_pcs = metadata(sce_pca)$pca_selected_pcs
+        ))
       }
-      pca_selected_pcs_plot <- make_pca_selected_pcs_plot(
-        pca_percent_var, pca_elbow_pcs, pca_gene_var_pcs,
-        pca_forced_pcs = par$pca_forced_pcs
-      ) +
-        ggtitle(label = title, subtitle = subtitle)
-
-      sce_pca <- get_pca_selected_pcs(
-        sce_pca,
-        pca_elbow_pcs = pca_elbow_pcs,
-        pca_gene_var_pcs = pca_gene_var_pcs,
-        pca_selection_method = par$pca_selection_method,
-        pca_forced_pcs = par$pca_forced_pcs
-      )
-
-      par <- c(par, list(
-        sce_pca = sce_pca, pca_percent_var = pca_percent_var, pca_elbow_pcs = pca_elbow_pcs,
-        pca_gene_var_pcs = pca_gene_var_pcs, pca_selected_pcs_plot = pca_selected_pcs_plot,
-        pca_selected_pcs = metadata(sce_pca)$pca_selected_pcs
-      ))
     }
 
     par$sce_int <- NULL
@@ -559,9 +579,21 @@ sce_int_pca_df_fn <- function(pca_params_df, BPPARAM = BiocParallel::SerialParam
 #' @export
 sce_int_dimred_df_fn <- function(dimred_params_df, BPPARAM = BiocParallel::SerialParam()) {
   sce_int_dimred_df <- lapply_rows(dimred_params_df, FUN = function(par) {
+    if (dimred_params_df$name == "harmony") {
+      dimred <- "harmony"
+      n_dimred <- NULL
+    } else {
+      dimred <- "pca"
+      n_dimred <- "selected_pcs"
+    }
+
     par$sce_dimred <- sce_compute_dimreds(
       par$sce_pca,
-      tsne_perp = par$tsne_perp, tsne_max_iter = par$tsne_max_iter, BPPARAM = BPPARAM
+      tsne_perp = par$tsne_perp,
+      tsne_max_iter = par$tsne_max_iter,
+      dimred = dimred,
+      n_dimred = n_dimred,
+      BPPARAM = BPPARAM
     )
     par$sce_pca <- NULL
 
@@ -603,6 +635,8 @@ hvg_plot_int_fn <- function(sce_int_uncorrected, ...) {
 }
 
 #' @title Compute a quick graph-based clustering for each integration method.
+#' @description For Harmony integration, the `"harmony"` reduced dims are used as an input to [scran::buildSNNGraph()];
+#' otherwise PCA is used.
 #' @param sce_int_pca_df (*input target*) A tibble.
 #' @param snn_k,snn_type,snn_clustering_method See [sce_int_raw_snn_clustering_fn()].
 #' @inheritParams bpparam_param
@@ -621,7 +655,13 @@ sce_int_clustering_df_fn <- function(sce_int_pca_df, snn_k = 10, snn_type = "ran
   snn_clustering_method <- arg_match(snn_clustering_method)
 
   sce_int_clustering_df <- lapply_rows(sce_int_pca_df, FUN = function(par) {
-    snn_graph <- scran::buildSNNGraph(par$sce_pca, k = snn_k, use.dimred = "pca", type = snn_type, BPPARAM = BPPARAM)
+    if (par$name == "harmony") {
+      use_dimred <- "harmony"
+    } else {
+      use_dimred <- "pca"
+    }
+
+    snn_graph <- scran::buildSNNGraph(par$sce_pca, k = snn_k, use.dimred = use_dimred, type = snn_type, BPPARAM = BPPARAM)
     if (snn_clustering_method == "walktrap") {
       clusters <- igraph::cluster_walktrap(snn_graph)
     } else {
@@ -806,7 +846,7 @@ selected_markers_int_plots_df_fn <- function(selected_markers_int_df, sce_int_di
 #'
 #' @concept integration_integration_fn
 #' @export
-get_int_method_description <- function(int_method_name = c("uncorrected", "rescaling", "regression", "mnn")) {
+get_int_method_description <- function(int_method_name = c("uncorrected", "rescaling", "regression", "mnn", "harmony")) {
   int_method_name <- arg_match(int_method_name)
 
   if (int_method_name == "uncorrected") {
@@ -871,6 +911,13 @@ get_int_method_description <- function(int_method_name = c("uncorrected", "resca
       "\n\nMore details in [OSCA](https://bioconductor.org/books/3.15/OSCA.multisample/integrating-datasets.html#mnn-correction)"
     )
     fn_link <- downlit::downlit_md_string("`batchelor::fastMNN()`") %>% stringr::str_trim()
+  } else if (int_method_name == "harmony") {
+    header <- "Harmony"
+    description <- str_space(
+      "Harmony projects cells into a shared embedding in which cells group by cell type rather than dataset-specific conditions.",
+      "\n\nMore details in [Nature Methods](https://www.nature.com/articles/s41592-019-0619-0)"
+    )
+    fn_link <- downlit::downlit_md_string("`harmony::RunHarmony()`") %>% stringr::str_trim()
   }
 
   return(list(header = header, description = description, fn_link = fn_link))

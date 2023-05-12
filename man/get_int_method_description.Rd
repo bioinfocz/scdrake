@@ -5,7 +5,7 @@
 \title{Return description for an integration method.}
 \usage{
 get_int_method_description(
-  int_method_name = c("uncorrected", "rescaling", "regression", "mnn")
+  int_method_name = c("uncorrected", "rescaling", "regression", "mnn", "harmony")
 )
 }
 \arguments{

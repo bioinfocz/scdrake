@@ -8,6 +8,7 @@
 #' See [run_graph_based_clustering()] for more details.
 #'
 #' @param sce_target_name A character scalar: name of target representing a SCE object that will be used for SNN graph construction.
+#' @param dimred A character scalar: which `reducedDim()` to use for clustering.
 #' @param cluster_graph_leiden_enabled,cluster_graph_louvain_enabled,cluster_graph_walktrap_enabled
 #'   A logical scalar: if `FALSE`, disable the selected clustering and set all corresponding targets to `NULL`.
 #' @param cluster_graph_louvain_resolutions_,cluster_graph_leiden_resolutions_ A numeric vector: resolutions to calculate for the
@@ -21,6 +22,7 @@
 #' @concept get_subplan_clustering
 #' @export
 get_clustering_graph_subplan <- function(sce_target_name,
+                                         dimred,
                                          cluster_graph_louvain_enabled,
                                          cluster_graph_louvain_resolutions_,
                                          cluster_graph_walktrap_enabled,
@@ -36,7 +38,7 @@ get_clustering_graph_subplan <- function(sce_target_name,
         !!sym(sce_target_name),
         snn_k = !!cluster_graph_snn_k_,
         snn_type = !!cluster_graph_snn_type_,
-        dimred = "pca",
+        dimred = !!dimred,
         BPPARAM = ignore(BiocParallel::bpparam())
       )
     )
@@ -132,6 +134,7 @@ get_clustering_graph_subplan <- function(sce_target_name,
 #' @title Get a subplan for k-means clustering.
 #' @description Besides k-means for selected number of `k`s, there is also a best `k` algorithm.
 #' @param sce_target_name A character scalar: name of target representing a SCE object that will be used for k-means clustering.
+#' @param dimred A character scalar: which `reducedDim()` to use for clustering.
 #' @param cluster_kmeans_k_enabled,cluster_kmeans_kbest_enabled
 #'   A logical scalar: if `FALSE`, disable the selected clustering and set all corresponding targets to `NULL`.
 #' @param cluster_kmeans_k An integer vector: `k`s for k-means.
@@ -143,6 +146,7 @@ get_clustering_graph_subplan <- function(sce_target_name,
 #' @concept get_subplan_clustering
 #' @export
 get_clustering_kmeans_subplan <- function(sce_target_name,
+                                          dimred,
                                           cluster_kmeans_k_enabled,
                                           cluster_kmeans_k,
                                           cluster_kmeans_kbest_enabled,
@@ -160,7 +164,7 @@ get_clustering_kmeans_subplan <- function(sce_target_name,
     plan_cluster_kmeans_k <- drake::drake_plan(
       cluster_kmeans_k_params = !!cluster_kmeans_k,
       cluster_kmeans_k_df = target(
-        run_kmeans_clustering(!!sym(sce_target_name), kmeans_k = cluster_kmeans_k_params, is_integration = !!is_integration),
+        run_kmeans_clustering(!!sym(sce_target_name), kmeans_k = cluster_kmeans_k_params, is_integration = !!is_integration, dimred = !!dimred),
 
         dynamic = map(cluster_kmeans_k_params)
       ),
@@ -203,7 +207,7 @@ get_clustering_kmeans_subplan <- function(sce_target_name,
 
         format = "file"
       ),
-      cluster_kmeans_kbest_df = run_kmeans_clustering(!!sym(sce_target_name), kmeans_k = cluster_kmeans_kbest_k, is_integration = !!is_integration) %>%
+      cluster_kmeans_kbest_df = run_kmeans_clustering(!!sym(sce_target_name), kmeans_k = cluster_kmeans_kbest_k, is_integration = !!is_integration, dimred = !!dimred) %>%
         dplyr::mutate(algorithm = "kbest", subtitle = glue("Best K, k = {k}"), sce_column = glue("{x}{k}", x = !!kbest_sce_column)),
       cluster_kmeans_kbest = cluster_kmeans_kbest_df$cell_membership
     )
@@ -285,6 +289,7 @@ get_clustering_sc3_subplan <- function(sce_target_name, cluster_sc3_enabled, clu
 #' @param cfg A list of parameters for `02_norm_clustering` or `02_int_clustering` stage.
 #' @param sce_clustering_target_name,sce_dimred_plots_target_name
 #'   A character scalar: name of target representing a SCE object that will be used for SC3 clustering and dimred plots, respectively.
+#' @param dimred A character scalar: which `reducedDim()` to use for clustering. This is only applied to graph-based and k-means clustering.
 #' @param report_dimred_names A character vector: dimreds to use for plotting clustering results.
 #' @param dimred_plots_out_dir,other_plots_out_dir A character scalar: path to output directory to save plots.
 #' @param is_integration A logical scalar: if `TRUE`, clustering results will be named with `cluster_int_*` prefix.
@@ -300,6 +305,7 @@ get_clustering_sc3_subplan <- function(sce_target_name, cluster_sc3_enabled, clu
 get_clustering_subplan <- function(cfg,
                                    sce_clustering_target_name,
                                    sce_dimred_plots_target_name,
+                                   dimred,
                                    report_dimred_names,
                                    dimred_plots_out_dir,
                                    other_plots_out_dir,
@@ -313,6 +319,7 @@ get_clustering_subplan <- function(cfg,
 
   plan_clustering_graph <- get_clustering_graph_subplan(
     sce_target_name = sce_clustering_target_name,
+    dimred = dimred,
     cluster_graph_louvain_enabled = cfg$CLUSTER_GRAPH_LOUVAIN_ENABLED,
     cluster_graph_louvain_resolutions_ = cfg$CLUSTER_GRAPH_LOUVAIN_RESOLUTIONS,
     cluster_graph_walktrap_enabled = cfg$CLUSTER_GRAPH_WALKTRAP_ENABLED,
@@ -325,6 +332,7 @@ get_clustering_subplan <- function(cfg,
   )
   plan_clustering_kmeans <- get_clustering_kmeans_subplan(
     sce_target_name = sce_clustering_target_name,
+    dimred = dimred,
     cluster_kmeans_k_enabled = cfg$CLUSTER_KMEANS_K_ENABLED,
     cluster_kmeans_k = cfg$CLUSTER_KMEANS_K,
     cluster_kmeans_kbest_enabled = cfg$CLUSTER_KMEANS_KBEST_ENABLED,

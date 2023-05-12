@@ -264,10 +264,17 @@ get_int_clustering_subplan <- function(cfg, cfg_pipeline, cfg_main) {
     )
   )
 
+  if (cfg$INTEGRATION_FINAL_METHOD == "harmony") {
+    dimred <- "harmony"
+  } else {
+    dimred <- "pca"
+  }
+
   plan_clustering <- get_clustering_subplan(
     cfg,
     sce_clustering_target_name = "sce_int_final",
     sce_dimred_plots_target_name = "sce_int_final",
+    dimred = dimred,
     report_dimred_names = cfg$INT_CLUSTERING_REPORT_DIMRED_NAMES,
     dimred_plots_out_dir = cfg$INT_CLUSTERING_DIMRED_PLOTS_OUT_DIR,
     other_plots_out_dir = cfg$INT_CLUSTERING_OTHER_PLOTS_OUT_DIR,

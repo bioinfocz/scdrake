@@ -333,6 +333,7 @@ get_norm_clustering_subplan <- function(cfg, cfg_pipeline, cfg_main) {
     cfg,
     sce_clustering_target_name = "sce_pca_selected_pcs",
     sce_dimred_plots_target_name = "sce_dimred",
+    dimred = "pca",
     report_dimred_names = cfg$NORM_CLUSTERING_REPORT_DIMRED_NAMES,
     dimred_plots_out_dir = cfg$NORM_CLUSTERING_DIMRED_PLOTS_OUT_DIR,
     other_plots_out_dir = cfg$NORM_CLUSTERING_OTHER_PLOTS_OUT_DIR,

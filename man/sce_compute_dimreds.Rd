@@ -9,6 +9,7 @@ sce_compute_dimreds(
   tsne_perp,
   tsne_max_iter,
   dimred = "pca",
+  n_dimred = "selected_pcs",
   BPPARAM = BiocParallel::SerialParam()
 )
 }
@@ -20,6 +21,12 @@ sce_compute_dimreds(
 \item{tsne_max_iter}{A numeric scalar: number of t-SNE iterations.}
 
 \item{dimred}{A character scalar: name of matrix in \code{reducedDim()} used to calculate the dimreds.}
+
+\item{n_dimred}{\itemize{
+\item A character scalar \code{"selected_pcs"}: if \code{dimred} is \code{"pca"}, then use selected PCs stored in \code{metadata(sce_pca_selected_pcs)$pca_selected_pcs}
+\item \code{NULL}: use all dimensions of \code{dimred}
+\item An integer scalar: use first \code{n_dimred} dimensions of \code{dimred}
+}}
 
 \item{BPPARAM}{A \link[BiocParallel:BiocParallelParam-class]{BiocParallel::BiocParallelParam} object.}
 }

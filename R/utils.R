@@ -650,6 +650,7 @@ save_pdf <- function(plots, output_file, width = NULL, height = NULL, make_thumb
 #' @concept misc_utils
 #' @export
 create_dummy_plot <- function(label) {
+  label <- force(label)
   ggplot() +
     ggplot2::theme_void() +
     ggplot2::geom_text(aes(x = 0, y = 0, label = label))

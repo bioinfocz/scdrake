@@ -8,6 +8,7 @@ get_clustering_subplan(
   cfg,
   sce_clustering_target_name,
   sce_dimred_plots_target_name,
+  dimred,
   report_dimred_names,
   dimred_plots_out_dir,
   other_plots_out_dir,
@@ -19,6 +20,8 @@ get_clustering_subplan(
 \item{cfg}{A list of parameters for \verb{02_norm_clustering} or \verb{02_int_clustering} stage.}
 
 \item{sce_clustering_target_name, sce_dimred_plots_target_name}{A character scalar: name of target representing a SCE object that will be used for SC3 clustering and dimred plots, respectively.}
+
+\item{dimred}{A character scalar: which \code{reducedDim()} to use for clustering. This is only applied to graph-based and k-means clustering.}
 
 \item{report_dimred_names}{A character vector: dimreds to use for plotting clustering results.}
 

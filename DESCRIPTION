@@ -70,6 +70,7 @@ Imports:
     ggplotify,
     glmGamPoi,
     glue,
+    harmony,
     here,
     htmltools,
     knitr,

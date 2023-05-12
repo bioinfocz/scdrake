@@ -9,6 +9,7 @@
   - Added Leiden algorithm for graph-based clustering.
   - Added multiple resolutions for Leiden and Louvain algorithms.
   - Polished clustering names in `colData()`.
+- Added [Harmony](https://github.com/immunogenomics/harmony) integration.
 
 # scdrake 1.4.1
 

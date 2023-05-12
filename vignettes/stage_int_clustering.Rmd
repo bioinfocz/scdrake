@@ -34,6 +34,8 @@ The following parameters are the same as those in the `02_norm_clustering` stage
 (see `vignette("stage_norm_clustering")`):
 
 - Clustering and cell annotation parameters.
+  - The only exception is `CLUSTER_SC3_ENABLED` that is automatically set to `FALSE` when `INTEGRATION_FINAL_METHOD` is
+    `"harmony"`, because SC3 clustering cannot be performed on reduced dimensions (Harmony does not compute an integrated expression matrix).
 - `CELL_GROUPINGS`
 - `INT_CLUSTERING_REPORT_DIMRED_NAMES`, `INT_CLUSTERING_REPORT_CLUSTERING_NAMES`,
   `INT_CLUSTERING_REPORT_DIMRED_PLOTS_OTHER`
@@ -45,7 +47,7 @@ The following parameters are the same as those in the `02_norm_clustering` stage
 INTEGRATION_FINAL_METHOD: "mnn"
 ```
 
-**Type:** character scalar (`"mnn"` | `"rescaling"` | `"regression"`)
+**Type:** character scalar (`"mnn"` | `"rescaling"` | `"regression"` | `"harmony"`)
 
 A name of the final integration method that will be used for clustering and downstream steps.
 

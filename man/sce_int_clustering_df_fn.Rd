@@ -30,6 +30,7 @@ taken from parameters of the integration method.
 }
 }
 \description{
-Compute a quick graph-based clustering for each integration method.
+For Harmony integration, the \code{"harmony"} reduced dims are used as an input to \code{\link[scran:buildSNNGraph]{scran::buildSNNGraph()}};
+otherwise PCA is used.
 }
 \concept{integration_integration_fn}

@@ -21,6 +21,7 @@ HVG_SELECTION_VALUE_INT: 3000
 ###############################################################################
 
 ### Integration methods #######################################################
+## -- Note: you can leave here only one integration method + "uncorrected" (mandatory)
 INTEGRATION_METHODS:
   - uncorrected:
       pca_selection_method: "forced"
@@ -55,6 +56,23 @@ INTEGRATION_METHODS:
         d: 50
         merge.order: null
         auto.merge: True
+    harmony:
+      pca_selection_method: null
+      pca_forced_pcs: null
+      tsne_perp: 20
+      tsne_max_iter: 1000
+      integration_params:
+        dims.use: 50
+        theta: null
+        lambda: null
+        sigma: 0.1
+        nclust: null
+        tau: 0
+        block.size: 0.05
+        max.iter.harmony: 10
+        max.iter.cluster: 20
+        epsilon.cluster: 0.00001
+        epsilon.harmony: 0.0001
 ###############################################################################
 
 ### Integration diagnostics ###################################################
