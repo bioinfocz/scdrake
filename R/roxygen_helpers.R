@@ -12,8 +12,14 @@ NULL
 
 #' @param cfg_pipeline A `scdrake_list` object: pipeline config (see [load_pipeline_config()])
 #'   obtained from `pipeline.yaml` file located in pipeline config directory.
-#'   If `NULL`, it will be loaded using the path defined in `scdrake_pipeline_config_dir` option.
 #' @name cfg_pipeline_param
+NULL
+
+#' @param cfg_pipeline One of:
+#' - A `scdrake_list` object: pipeline config (see [load_pipeline_config()]) obtained from `pipeline.yaml` file located
+#'   in a pipeline config directory
+#' - `NULL`: the config will be loaded using the path defined in the `scdrake_pipeline_config_dir` option
+#' @name cfg_pipeline_param2
 NULL
 
 #' @param pipeline_config_dir A character scalar: path to directory with pipeline config file (`pipeline.yaml`).

@@ -5,7 +5,7 @@
 #' the `scdrake` pipeline since it is executed in the current R session.
 #' Also note that [create_single_sample_dirs()] or [create_integration_dirs()] must be run before.
 #' @param plan A `drake` plan.
-#' @inheritParams cfg_pipeline_param
+#' @inheritParams cfg_pipeline_param2
 #' @param cfg_main A `scdrake_list` object: main config (see [load_config])
 #'   obtained from `00_main.yaml` file located in single-sample or integration config directory.
 #' @inheritParams verbose1_param

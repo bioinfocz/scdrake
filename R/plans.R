@@ -9,7 +9,7 @@
 #' @param cfg
 #' - For `get_single_sample_plan()`: A list of config lists returned by [load_single_sample_configs()].
 #' - For `get_integration_plan()`: A list of config lists returned by [load_integration_configs()].
-#' @inheritParams cfg_pipeline_param
+#' @inheritParams cfg_pipeline_param2
 #' @return [drake::drake_plan()]
 #'
 #' @name get_plan
