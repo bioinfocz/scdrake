@@ -126,7 +126,8 @@ get_integration_subplan <- function(cfg, cfg_pipeline, cfg_main) {
 
     ## -- Dimred plots colored by batch and CC phase.
     dimred_plots_params_df = dplyr::select(sce_int_dimred_df, name, hvg_rm_cc_genes, sce_dimred) %>%
-      tidyr::expand_grid(dimred_name = c("pca", "umap", "tsne"), colour_by = c("batch", "phase")),
+      tidyr::expand_grid(dimred_name = c("pca", "umap", "tsne"), colour_by = c("batch", "phase")) %>%
+      dplyr::mutate(dimred_name = dplyr::if_else(name == "harmony" & dimred_name == "pca", "harmony", dimred_name)),
     sce_int_dimred_plots_df = target(
       sce_int_dimred_plots_df_fn(dimred_plots_params_df),
 

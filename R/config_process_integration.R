@@ -107,9 +107,19 @@
     msg = "{.field INTEGRATION_FINAL_METHOD} must be one of {.vals {possible_integration_methods}}"
   )
 
-  if (cfg$INTEGRATION_FINAL_METHOD == "harmony" && cfg$CLUSTER_SC3_ENABLED) {
-    cli_alert_warning("It is not possible to use SC3 clustering after Harmony integration -> setting {.field CLUSTER_SC3_ENABLED} to {.code FALSE}")
-    cfg$CLUSTER_SC3_ENABLED <- FALSE
+  if (cfg$INTEGRATION_FINAL_METHOD == "harmony") {
+    if (cfg$CLUSTER_SC3_ENABLED) {
+      cli_alert_warning("It is not possible to use SC3 clustering after Harmony integration -> setting {.field CLUSTER_SC3_ENABLED} to {.code FALSE}")
+      cfg$CLUSTER_SC3_ENABLED <- FALSE
+    }
+
+    if ("pca" %in% cfg$INT_CLUSTERING_REPORT_DIMRED_NAMES) {
+      cli_alert_warning(str_space(
+        "Replacing {.val pca} by {.val harmony} in {.field INT_CLUSTERING_REPORT_DIMRED_NAMES}, because Harmony integration was computed",
+        "using PCA matrix, and thus PCA visualization would display uncorrected data"
+      ))
+      cfg$INT_CLUSTERING_REPORT_DIMRED_NAMES[cfg$INT_CLUSTERING_REPORT_DIMRED_NAMES == "pca"] <- "harmony"
+    }
   }
 
   cfg <- .hereize_paths(cfg, "INT_CLUSTERING_REPORT_RMD_FILE")
