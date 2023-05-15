@@ -11,12 +11,14 @@ sce_raw_fn(input_data)
 \itemize{
 \item \code{type}:
 \itemize{
-\item \code{"cellranger"}: a raw feature-barcode matrix from 10x Genomics \code{cellranger}.
-\item \code{"table"}: a delimited text file (table).
-\item \code{"sce"}: a \code{SingleCellExperiment} object (Rds file).
+\item \code{"cellranger"}: a raw feature-barcode matrix from 10x Genomics \code{cellranger}
+\item \code{"table"}: a delimited text file (table)
+\item \code{"sce"}: a \code{SingleCellExperiment} object (Rds file)
+\item \code{"sce_drake_cache"}: a \code{SingleCellExperiment} object loaded from a \code{drake} cache
 }
-\item \code{path}: a path to input file (or directory in case of \code{type = "cellranger"}).
-\item \code{delimiter}: a field delimiter when \code{type = "table"}.
+\item \code{path}: a path to input file (or directory in case of \code{type = "cellranger"})
+\item \code{delimiter}: a field delimiter when \code{type = "table"}
+\item \code{target_name}: a name of \code{SingleCellExperiment} target when \code{type = "sce_drake_cache"}
 }}
 }
 \value{

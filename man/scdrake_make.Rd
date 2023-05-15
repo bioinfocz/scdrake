@@ -21,9 +21,12 @@ scdrake_r_make(drake_file = NULL, ...)
 \arguments{
 \item{plan}{A \code{drake} plan.}
 
-\item{cfg_pipeline}{A \code{scdrake_list} object: pipeline config (see \code{\link[=load_pipeline_config]{load_pipeline_config()}})
-obtained from \code{pipeline.yaml} file located in pipeline config directory.
-If \code{NULL}, it will be loaded using the path defined in \code{scdrake_pipeline_config_dir} option.}
+\item{cfg_pipeline}{One of:
+\itemize{
+\item A \code{scdrake_list} object: pipeline config (see \code{\link[=load_pipeline_config]{load_pipeline_config()}}) obtained from \code{pipeline.yaml} file located
+in a pipeline config directory
+\item \code{NULL}: the config will be loaded using the path defined in the \code{scdrake_pipeline_config_dir} option
+}}
 
 \item{cfg_main}{A \code{scdrake_list} object: main config (see \link{load_config})
 obtained from \verb{00_main.yaml} file located in single-sample or integration config directory.}

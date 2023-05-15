@@ -13,9 +13,13 @@
 In each list, the first item is a name of YAML file in \code{dir}, the second one is a name in the resulting named list,
 and the third one is a processing function.}
 
-\item{cfg_pipeline}{A \code{scdrake_list} object: pipeline config (see \code{\link[=load_pipeline_config]{load_pipeline_config()}})
-obtained from \code{pipeline.yaml} file located in pipeline config directory.
-If \code{NULL}, it will be loaded using the path defined in \code{scdrake_pipeline_config_dir} option.}
+\item{cfg_pipeline}{One of:
+\itemize{
+\item A \code{scdrake_list} object: pipeline config (see \code{\link[=load_pipeline_config]{load_pipeline_config()}}) obtained from \code{pipeline.yaml} file located
+in a pipeline config directory
+\item \code{NULL}: the config will be loaded using the path defined in the \code{scdrake_pipeline_config_dir} option
+\item A scalar character or \code{fs_path} object: the config is loaded from this path
+}}
 
 \item{process}{A logical scalar: if \code{TRUE}, apply a processing function on its associated config list.}
 

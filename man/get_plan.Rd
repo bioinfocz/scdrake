@@ -16,9 +16,12 @@ get_integration_plan(cfg, cfg_pipeline = NULL)
 \item For \code{get_integration_plan()}: A list of config lists returned by \code{\link[=load_integration_configs]{load_integration_configs()}}.
 }}
 
-\item{cfg_pipeline}{A \code{scdrake_list} object: pipeline config (see \code{\link[=load_pipeline_config]{load_pipeline_config()}})
-obtained from \code{pipeline.yaml} file located in pipeline config directory.
-If \code{NULL}, it will be loaded using the path defined in \code{scdrake_pipeline_config_dir} option.}
+\item{cfg_pipeline}{One of:
+\itemize{
+\item A \code{scdrake_list} object: pipeline config (see \code{\link[=load_pipeline_config]{load_pipeline_config()}}) obtained from \code{pipeline.yaml} file located
+in a pipeline config directory
+\item \code{NULL}: the config will be loaded using the path defined in the \code{scdrake_pipeline_config_dir} option
+}}
 }
 \value{
 \code{\link[drake:drake_plan]{drake::drake_plan()}}

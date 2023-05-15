@@ -15,8 +15,7 @@ get_int_clustering_subplan(cfg, cfg_pipeline, cfg_main)
 (from integration config directory, e.g. loaded from \verb{01_integration.yaml}, etc.).}
 
 \item{cfg_pipeline}{A \code{scdrake_list} object: pipeline config (see \code{\link[=load_pipeline_config]{load_pipeline_config()}})
-obtained from \code{pipeline.yaml} file located in pipeline config directory.
-If \code{NULL}, it will be loaded using the path defined in \code{scdrake_pipeline_config_dir} option.}
+obtained from \code{pipeline.yaml} file located in pipeline config directory.}
 
 \item{cfg_main}{A list of general parameters
 (loaded from \verb{00_main.yaml} from integration config directory).}
