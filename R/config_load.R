@@ -158,6 +158,11 @@ load_pipeline_config <- function(dir = getOption("scdrake_pipeline_config_dir"),
 
 #' @title Load a group of YAML config files.
 #' @param dir A character scalar: path to directory with YAML config files.
+#' @param cfg_pipeline One of:
+#' - A `scdrake_list` object: pipeline config (see [load_pipeline_config()]) obtained from `pipeline.yaml` file located
+#'   in a pipeline config directory
+#' - `NULL`: the config will be loaded using the path defined in the `scdrake_pipeline_config_dir` option
+#' - A scalar character or `fs_path` object: the config is loaded from this path
 #' @inheritParams cfg_pipeline_param
 #' @inheritParams .load_configs
 #' @param ... Passed to [load_pipeline_config()], [load_config()], and [.load_configs()].
@@ -165,8 +170,16 @@ load_pipeline_config <- function(dir = getOption("scdrake_pipeline_config_dir"),
 #'
 #' @concept internal
 .load_config_group <- function(dir, cfg_defs, cfg_pipeline = NULL, process = TRUE, ...) {
-  if (is_null(cfg_pipeline)) {
-    cfg_pipeline <- load_pipeline_config(dir = getOption("scdrake_pipeline_config_dir"), process = process, ...)
+  if (!is(cfg_pipeline, "scdrake_list")) {
+    if (is_null(cfg_pipeline)) {
+      cfg_pipeline_dir <- getOption("scdrake_pipeline_config_dir")
+    } else if (is_scalar_character(cfg_pipeline) || is(cfg_pipeline, "fs_path")) {
+      cfg_pipeline_dir <- cfg_pipeline
+    } else {
+      cli_abort("{.var cfg_pipeline} must be {.code NULL} or scalar character or scalar {.var fs_path} object")
+    }
+
+    cfg_pipeline <- load_pipeline_config(dir = cfg_pipeline_dir, process = process, ...)
   }
 
   cfg_main <- load_config(fs::path(dir, "00_main.yaml"), ...)
