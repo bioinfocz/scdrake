@@ -915,6 +915,9 @@ get_int_method_description <- function(int_method_name = c("uncorrected", "resca
     header <- "Harmony"
     description <- str_space(
       "Harmony projects cells into a shared embedding in which cells group by cell type rather than dataset-specific conditions.",
+      "Harmony takes PCA matrix as the input and calculates new reduced dimensions that are corrected for batch effect",
+      "and subsequently used for downstream steps (UMAP, t-SNE, clustering).",
+      "That is, Harmony does not calculate a corrected expression matrix.",
       "\n\nMore details in [Nature Methods](https://www.nature.com/articles/s41592-019-0619-0)"
     )
     fn_link <- downlit::downlit_md_string("`harmony::RunHarmony()`") %>% stringr::str_trim()
