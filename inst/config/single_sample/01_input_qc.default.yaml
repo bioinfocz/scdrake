@@ -3,6 +3,7 @@ INPUT_DATA:
   type: "cellranger"
   path: "/path/to/dir"
   delimiter: ","
+  target_name: "target_name"
 
 INPUT_QC_REPORT_RMD_FILE: "Rmd/single_sample/01_input_qc.Rmd"
 ###############################################################################

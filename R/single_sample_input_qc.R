@@ -4,11 +4,13 @@
 #' @description For more details see the `INPUT_DATA` parameter in `vignette("stage_input_qc")`.
 #' @param input_data A named list of named lists containing character scalars:
 #'   - `type`:
-#'     - `"cellranger"`: a raw feature-barcode matrix from 10x Genomics `cellranger`.
-#'     - `"table"`: a delimited text file (table).
-#'     - `"sce"`: a `SingleCellExperiment` object (Rds file).
-#'   - `path`: a path to input file (or directory in case of `type = "cellranger"`).
-#'   - `delimiter`: a field delimiter when `type = "table"`.
+#'     - `"cellranger"`: a raw feature-barcode matrix from 10x Genomics `cellranger`
+#'     - `"table"`: a delimited text file (table)
+#'     - `"sce"`: a `SingleCellExperiment` object (Rds file)
+#'     - `"sce_drake_cache"`: a `SingleCellExperiment` object loaded from a `drake` cache
+#'   - `path`: a path to input file (or directory in case of `type = "cellranger"`)
+#'   - `delimiter`: a field delimiter when `type = "table"`
+#'   - `target_name`: a name of `SingleCellExperiment` target when `type = "sce_drake_cache"`
 #' @return A `SingleCellExperiment` object. *Output target*: `sce_raw`
 #'
 #' @concept single_sample_input_qc_fn
@@ -28,6 +30,12 @@ sce_raw_fn <- function(input_data) {
       "Cannot find the input file or directory for the {.field 01_input_qc} stage: {.file {input_path}}.",
       "Please check the {.file 01_input_qc.yaml} config file."
     )
+  )
+
+  possible_input_data_types <- c("cellranger", "table", "sce", "sce_drake_cache")
+  assert_that_(
+    !is_null(input_data$type), input_data$type %in% possible_input_data_types,
+    msg = "{.var input_data$type} must be {.vals possible_input_data_types}. Current value: {.val {input_data$type}}"
   )
 
   if (input_type == "cellranger") {
@@ -53,17 +61,18 @@ sce_raw_fn <- function(input_data) {
     # colData(sce_raw) <- DataFrame(Sample = input_path, Barcode = colnames(sce_raw))
   } else if (input_type == "sce") {
     sce_raw <- readRDS(input_path)
-    assert_that_(
-      is(sce_raw, "SingleCellExperiment"),
-      msg = "Object loaded from {.file {input_path}} is not a {.var SingleCellExperiment} object."
-    )
-    assert_that_(
-      "counts" %in% assayNames(sce_raw),
-      msg = "{.field counts} assay not found in SCE object loaded from {.file {input_path}}"
-    )
-  } else {
-    cli::cli_abort("{.var input_data$type} must be {.field 'cellranger'}, {.field 'table'}, or {.field 'sce'}")
+  } else if (input_type == "sce_drake_cache") {
+    sce_raw <- drake::readd(input_data$target_name, character_only = TRUE, path = input_path)
   }
+
+  assert_that_(
+    is(sce_raw, "SingleCellExperiment"),
+    msg = "Object loaded from {.file {input_path}} is not a {.var SingleCellExperiment} object."
+  )
+  assert_that_(
+    "counts" %in% assayNames(sce_raw),
+    msg = "{.field counts} assay not found in SCE object loaded from {.file {input_path}}"
+  )
 
   return(sce_raw)
 }

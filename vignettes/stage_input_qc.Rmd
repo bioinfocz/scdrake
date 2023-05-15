@@ -37,11 +37,12 @@ INPUT_DATA:
   type: "cellranger"
   path: "/path/to/dir"
   delimiter: ","
+  target_name: "target_name"
 ```
 
 **Type:** list of named character scalars
 
-This parameter is specifying input data type and path. There are three possible types of input data:
+This parameter is specifying input data type and path. There are four possible types of input data:
 
 - `type: "cellranger"`: an output from
   [cellranger](https://support.10xgenomics.com/single-cell-gene-expression/software/pipelines/latest/what-is-cell-ranger),
@@ -55,12 +56,17 @@ This parameter is specifying input data type and path. There are three possible 
   (such that this BC matrix can be retrieved by `counts(sce)`). 
   - Additionaly, you can include whatever you want in `colData()` and use it later (e.g. cell grouping/clusters
     to compute markers or to include batch effect during that).
+- `type: "sce_drake_cache"`: a saved `SingleCellExperiment` in a `drake` cache, e.g. from an another `scdrake` project
 
-- `path: "path/to/dir"`: a path to input file (can be relative to project root directory).
-  For `type: "cellranger"`, this is a path to directory containing the `barcodes.tsv`, `features.tsv`, and `matrix.mtx`
-  files (can be also gzipped having a `.gz` extension).
+- `path: "path/to/file/or/dir"`: a path to input file or directory (can be relative to project root directory).
+  - For `type: "cellranger"`, this is a path to directory containing the `barcodes.tsv`, `features.tsv`, and `matrix.mtx`
+  files (can be also gzipped having a `.gz` extension)
+  - For `type: "sce_drake_cache"`, a path to `drake` cache directory (usually named as `".drake"`)
+  - For `type: "sce"` or `"table"`, a path to Rds or text file
 
 - `delimiter: ","`: used when `type: "table"`. Specifies the field delimiter in the table.
+
+- `target_name: "target_name"`: used when `type: "sce_drake_cache"`. Specified a name of target in `drake` cache, e.g. `"sce_final_input_qc"`
 
 ***
 
