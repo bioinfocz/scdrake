@@ -1,1 +1,595 @@
-<mxfile host="Electron" modified="2022-09-27T14:27:44.599Z" agent="5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/20.3.0 Chrome/104.0.5112.114 Electron/20.1.3 Safari/537.36" etag="VPgaxUEV28V4EFQ0IU6Z" version="20.3.0" type="device"><diagram id="kRLNOENncRnmhNmGzl1d" name="Page-1">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</diagram></mxfile>
+<mxfile host="Electron" modified="2023-05-16T18:23:02.801Z" agent="Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/21.2.8 Chrome/112.0.5615.165 Electron/24.2.0 Safari/537.36" etag="_HHx7PTH4YSQqCm_Z8py" version="21.2.8" type="device">
+  <diagram id="kRLNOENncRnmhNmGzl1d" name="Page-1">
+    <mxGraphModel dx="2074" dy="1202" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="2000" pageHeight="2000" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="OYucTifmdRN6tnTj4TT2-88" value="&lt;font style=&quot;font-size: 14px;&quot;&gt;&lt;b&gt;Stage 02_int_clustering&lt;/b&gt;&lt;br&gt;cell clustering, cell type annotation, visualization&lt;/font&gt;" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#C7F4FF;strokeColor=#66E0FF;verticalAlign=top;" parent="1" vertex="1">
+          <mxGeometry x="590" y="1030" width="470" height="570" as="geometry" />
+        </mxCell>
+        <mxCell id="XZVlYNRyt7zDqL23juJK-51" value="&lt;font style=&quot;font-size: 14px;&quot;&gt;&lt;b&gt;Stage 02_norm_clustering&lt;/b&gt;&lt;br&gt;normalization, highly variable genes selection, dimensionality reduction, cell clustering, cell type annotation, visualization&lt;br&gt;&lt;/font&gt;" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFEF0;strokeColor=#d6b656;verticalAlign=top;spacingLeft=20;" parent="1" vertex="1">
+          <mxGeometry x="40" y="1030" width="490" height="910" as="geometry" />
+        </mxCell>
+        <mxCell id="nj5r_WVCg5K1WdDVYo4t-42" value="" style="rounded=1;whiteSpace=wrap;html=1;labelBackgroundColor=none;strokeColor=default;fontSize=12;fontColor=#000000;fillColor=#DBF7D9;arcSize=6;" parent="1" vertex="1">
+          <mxGeometry x="1660" y="52" width="280" height="330" as="geometry" />
+        </mxCell>
+        <mxCell id="nj5r_WVCg5K1WdDVYo4t-1" value="&lt;font style=&quot;font-size: 14px;&quot;&gt;&lt;b&gt;Stage 01_input_qc&lt;/b&gt;&lt;br&gt;quality control, cell and gene filtering&lt;/font&gt;" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFEF0;strokeColor=#d6b656;verticalAlign=top;" parent="1" vertex="1">
+          <mxGeometry x="40" y="120" width="490" height="870" as="geometry" />
+        </mxCell>
+        <mxCell id="nj5r_WVCg5K1WdDVYo4t-7" value="Input data (one of):&lt;br&gt;&lt;div style=&quot;&quot;&gt;&lt;span style=&quot;background-color: initial;&quot;&gt;- cellranger output&lt;/span&gt;&lt;/div&gt;&lt;div style=&quot;&quot;&gt;&lt;span style=&quot;background-color: initial;&quot;&gt;- &lt;i&gt;SingleCellExperiment&lt;/i&gt; object (as a Rds file&lt;/span&gt;&lt;/div&gt;&lt;div style=&quot;&quot;&gt;&lt;span style=&quot;background-color: initial;&quot;&gt;or from a drake cache)&lt;/span&gt;&lt;/div&gt;&lt;div style=&quot;&quot;&gt;&lt;span style=&quot;background-color: initial;&quot;&gt;- Feature-barcode matrix&amp;nbsp;&lt;/span&gt;&lt;span style=&quot;background-color: initial;&quot;&gt;(delimited table)&lt;/span&gt;&lt;/div&gt;" style="text;html=1;strokeColor=default;fillColor=#E6E6E6;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;spacingLeft=4;" parent="1" vertex="1">
+          <mxGeometry x="156.76" y="170" width="241.25" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="OYucTifmdRN6tnTj4TT2-3" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" parent="1" source="nj5r_WVCg5K1WdDVYo4t-8" target="nj5r_WVCg5K1WdDVYo4t-15" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="OYucTifmdRN6tnTj4TT2-5" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.465;entryY=-0.004;entryDx=0;entryDy=0;entryPerimeter=0;" parent="1" source="nj5r_WVCg5K1WdDVYo4t-8" target="nj5r_WVCg5K1WdDVYo4t-18" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="nj5r_WVCg5K1WdDVYo4t-8" value="sce_raw&lt;font color=&quot;#000000&quot;&gt; (SCE)&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fontColor=#6666FF;fillColor=default;" parent="1" vertex="1">
+          <mxGeometry x="73" y="285" width="120" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="nj5r_WVCg5K1WdDVYo4t-10" value="&lt;font color=&quot;#000000&quot; style=&quot;font-size: 24px;&quot;&gt;Single-sample pipeline&lt;/font&gt;" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontColor=#6666FF;fontSize=24;fontStyle=1" parent="1" vertex="1">
+          <mxGeometry x="40" y="80.6" width="490" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="nj5r_WVCg5K1WdDVYo4t-11" value="&lt;span style=&quot;font-family: Helvetica; font-size: 12px; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-indent: 0px; text-transform: none; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial; float: none; display: inline !important;&quot;&gt;SCE = &lt;/span&gt;&lt;span style=&quot;font-family: Helvetica; font-size: 12px; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-indent: 0px; text-transform: none; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial; float: none; display: inline !important;&quot;&gt;&lt;i&gt;SingleCellExperiment&lt;/i&gt;&lt;/span&gt;&lt;span style=&quot;font-family: Helvetica; font-size: 12px; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-indent: 0px; text-transform: none; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial; float: none; display: inline !important;&quot;&gt; object&lt;br&gt;DF = &lt;/span&gt;&lt;span style=&quot;font-family: Helvetica; font-size: 12px; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-indent: 0px; text-transform: none; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial; float: none; display: inline !important;&quot;&gt;&lt;i&gt;DataFrame&lt;/i&gt;&lt;/span&gt;&lt;span style=&quot;font-family: Helvetica; font-size: 12px; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-indent: 0px; text-transform: none; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial; float: none; display: inline !important;&quot;&gt; object&lt;br&gt;df = &lt;/span&gt;&lt;span style=&quot;font-family: Helvetica; font-size: 12px; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-indent: 0px; text-transform: none; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial; float: none; display: inline !important;&quot;&gt;&lt;i&gt;data.frame&lt;/i&gt;&lt;/span&gt;&lt;span style=&quot;font-family: Helvetica; font-size: 12px; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-indent: 0px; text-transform: none; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial; float: none; display: inline !important;&quot;&gt; or &lt;/span&gt;&lt;span style=&quot;font-family: Helvetica; font-size: 12px; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-indent: 0px; text-transform: none; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial; float: none; display: inline !important;&quot;&gt;&lt;i&gt;tibble&lt;/i&gt;&lt;/span&gt;&lt;span style=&quot;font-family: Helvetica; font-size: 12px; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-indent: 0px; text-transform: none; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial; float: none; display: inline !important;&quot;&gt; object&lt;br&gt;&lt;i style=&quot;text-align: center;&quot;&gt;colData()&lt;/i&gt;&lt;span style=&quot;text-align: center;&quot;&gt;&amp;nbsp;= cell (column) data&lt;br&gt;&lt;/span&gt;&lt;i&gt;rowData()&lt;/i&gt; = gene (row) data&lt;br&gt;CC = cell cycle&lt;br&gt;HVG = highly variable gene&lt;br&gt;PC = principal component&lt;br&gt;dimred = DIMensionality REDuction&lt;br&gt;&lt;/span&gt;" style="text;whiteSpace=wrap;html=1;fontSize=12;strokeColor=default;fillColor=#C7D8FF;labelBackgroundColor=none;fontColor=default;verticalAlign=middle;horizontal=1;align=left;spacingLeft=4;" parent="1" vertex="1">
+          <mxGeometry x="1688" y="231.54" width="224" height="139.46" as="geometry" />
+        </mxCell>
+        <mxCell id="nj5r_WVCg5K1WdDVYo4t-12" value="&lt;span style=&quot;color: rgb(0, 0, 0);&quot;&gt;Supplementary Figure 2:&amp;nbsp;&lt;/span&gt;&lt;font color=&quot;#000000&quot; style=&quot;font-size: 32px;&quot;&gt;Low-level diagram of scdrake pipelines&lt;/font&gt;" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontColor=#6666FF;fontSize=32;fontStyle=1" parent="1" vertex="1">
+          <mxGeometry x="40" y="20" width="1220" height="32" as="geometry" />
+        </mxCell>
+        <mxCell id="nj5r_WVCg5K1WdDVYo4t-13" value="target name&lt;font color=&quot;#000000&quot;&gt; (object type)&lt;br&gt;optional description&lt;br&gt;&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fontColor=#6666FF;fillColor=default;" parent="1" vertex="1">
+          <mxGeometry x="1725" y="96.5" width="150" height="45" as="geometry" />
+        </mxCell>
+        <mxCell id="nj5r_WVCg5K1WdDVYo4t-14" value="&lt;font color=&quot;#000000&quot; style=&quot;font-size: 24px;&quot;&gt;Legend&lt;/font&gt;" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontColor=#6666FF;fontSize=24;fontStyle=1" parent="1" vertex="1">
+          <mxGeometry x="1690" y="59" width="220" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="OYucTifmdRN6tnTj4TT2-4" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=1;entryY=0.5;entryDx=0;entryDy=0;" parent="1" source="nj5r_WVCg5K1WdDVYo4t-15" target="nj5r_WVCg5K1WdDVYo4t-18" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="398" y="360" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="nj5r_WVCg5K1WdDVYo4t-15" value="empty_droplets&lt;font color=&quot;#000000&quot;&gt;&amp;nbsp;(DF)&lt;br&gt;&lt;div style=&quot;&quot;&gt;&lt;span style=&quot;background-color: initial;&quot;&gt;Statistics from DropletUtils::emptyDrops() (optional)&lt;/span&gt;&lt;/div&gt;&lt;/font&gt;" style="rounded=1;html=1;fontColor=#6666FF;fillColor=default;whiteSpace=wrap;spacing=2;spacingLeft=0;align=center;" parent="1" vertex="1">
+          <mxGeometry x="305" y="270" width="185" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="OYucTifmdRN6tnTj4TT2-6" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.138;entryY=-0.013;entryDx=0;entryDy=0;entryPerimeter=0;dashed=1;" parent="1" source="nj5r_WVCg5K1WdDVYo4t-18" target="nj5r_WVCg5K1WdDVYo4t-25" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="96" y="410" />
+              <mxPoint x="96" y="410" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="nj5r_WVCg5K1WdDVYo4t-18" value="sce_valid_cells&lt;font color=&quot;#000000&quot;&gt; (SCE)&lt;br&gt;Removed empty droplets if enabled.&lt;br&gt;&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fontColor=#6666FF;fillColor=default;" parent="1" vertex="1">
+          <mxGeometry x="73" y="335" width="130" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="OYucTifmdRN6tnTj4TT2-7" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0;entryY=0.501;entryDx=0;entryDy=0;entryPerimeter=0;" parent="1" source="nj5r_WVCg5K1WdDVYo4t-25" target="XZVlYNRyt7zDqL23juJK-1" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="290" y="520" />
+              <mxPoint x="290" y="520" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="OYucTifmdRN6tnTj4TT2-8" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;dashed=1;" parent="1" source="nj5r_WVCg5K1WdDVYo4t-25" target="XZVlYNRyt7zDqL23juJK-7" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="198" y="550" />
+              <mxPoint x="398" y="550" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="OYucTifmdRN6tnTj4TT2-9" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.47;entryY=-0.029;entryDx=0;entryDy=0;entryPerimeter=0;dashed=1;" parent="1" source="nj5r_WVCg5K1WdDVYo4t-25" target="XZVlYNRyt7zDqL23juJK-5" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="151" y="560" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="nj5r_WVCg5K1WdDVYo4t-25" value="sce_unfiltered&lt;font color=&quot;#000000&quot;&gt; (SCE)&lt;br&gt;&lt;i&gt;colData()&lt;/i&gt;&amp;nbsp;extended by QC metrics and boolean filters.&lt;br&gt;&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fontColor=#6666FF;fillColor=default;" parent="1" vertex="1">
+          <mxGeometry x="73" y="492.5" width="165" height="55" as="geometry" />
+        </mxCell>
+        <mxCell id="nj5r_WVCg5K1WdDVYo4t-28" value="&lt;div style=&quot;&quot;&gt;&lt;span style=&quot;background-color: initial;&quot;&gt;- Calculation of per-cell QC metrics (total number of UMI, % mitochondrial genes, etc.).&lt;/span&gt;&lt;/div&gt;&lt;div style=&quot;&quot;&gt;&lt;span style=&quot;background-color: initial;&quot;&gt;- Assembly of two cell filters based on QC metrics: by predefined thresholds (&lt;/span&gt;&lt;i style=&quot;background-color: initial;&quot;&gt;custom filters&lt;/i&gt;&lt;span style=&quot;background-color: initial;&quot;&gt;) and by Median Average Deviation (&lt;/span&gt;&lt;i style=&quot;background-color: initial;&quot;&gt;QC filters&lt;/i&gt;&lt;span style=&quot;background-color: initial;&quot;&gt;).&lt;/span&gt;&lt;/div&gt;" style="text;html=1;strokeColor=default;fillColor=#E6E6E6;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;spacingLeft=4;" parent="1" vertex="1">
+          <mxGeometry x="117.38" y="400" width="320" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="nj5r_WVCg5K1WdDVYo4t-32" value="" style="endArrow=classic;html=1;rounded=0;fontSize=24;fontColor=#000000;jumpStyle=none;" parent="1" edge="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="1701" y="167" as="sourcePoint" />
+            <mxPoint x="1756" y="167" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="nj5r_WVCg5K1WdDVYo4t-34" value="&lt;span style=&quot;font-size: 12px;&quot;&gt;target B depends on target A&lt;/span&gt;" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;labelBackgroundColor=none;fontSize=12;fontColor=#000000;" parent="1" vertex="1">
+          <mxGeometry x="1786" y="151.6" width="110" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="nj5r_WVCg5K1WdDVYo4t-36" value="A" style="rounded=1;whiteSpace=wrap;html=1;labelBackgroundColor=none;strokeColor=default;fontSize=12;fontColor=#000000;fillColor=#FFFFFF;" parent="1" vertex="1">
+          <mxGeometry x="1676" y="157" width="20" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="nj5r_WVCg5K1WdDVYo4t-37" value="B" style="rounded=1;whiteSpace=wrap;html=1;labelBackgroundColor=none;strokeColor=default;fontSize=12;fontColor=#000000;fillColor=#FFFFFF;" parent="1" vertex="1">
+          <mxGeometry x="1760" y="157" width="20" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="nj5r_WVCg5K1WdDVYo4t-38" value="" style="endArrow=classic;html=1;rounded=0;fontSize=24;fontColor=#000000;jumpStyle=none;dashed=1;" parent="1" edge="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="1701" y="207.3" as="sourcePoint" />
+            <mxPoint x="1756" y="207.3" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="nj5r_WVCg5K1WdDVYo4t-39" value="&lt;span style=&quot;font-size: 12px;&quot;&gt;target B has also multiple,&lt;br&gt;not shown dependencies&lt;/span&gt;" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;labelBackgroundColor=none;fontSize=12;fontColor=#000000;" parent="1" vertex="1">
+          <mxGeometry x="1786" y="191.3" width="144" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="nj5r_WVCg5K1WdDVYo4t-40" value="A" style="rounded=1;whiteSpace=wrap;html=1;labelBackgroundColor=none;strokeColor=default;fontSize=12;fontColor=#000000;fillColor=#FFFFFF;" parent="1" vertex="1">
+          <mxGeometry x="1676" y="197" width="20" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="nj5r_WVCg5K1WdDVYo4t-41" value="B" style="rounded=1;whiteSpace=wrap;html=1;labelBackgroundColor=none;strokeColor=default;fontSize=12;fontColor=#000000;fillColor=#FFFFFF;" parent="1" vertex="1">
+          <mxGeometry x="1760" y="197" width="20" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="XZVlYNRyt7zDqL23juJK-1" value="sce_unfiltered_plotlist&lt;font color=&quot;#000000&quot;&gt; (list)&lt;br&gt;Plots of QC metrics.&lt;br&gt;&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fontColor=#6666FF;fillColor=default;" parent="1" vertex="1">
+          <mxGeometry x="305" y="500" width="185" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="OYucTifmdRN6tnTj4TT2-13" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" parent="1" source="XZVlYNRyt7zDqL23juJK-3" target="XZVlYNRyt7zDqL23juJK-26" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="XZVlYNRyt7zDqL23juJK-3" value="sce_qc_gene_filter&lt;font color=&quot;#000000&quot;&gt; (logical)&lt;br&gt;Boolean filter for genes (TRUE = discard).&lt;br&gt;&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fontColor=#6666FF;fillColor=default;" parent="1" vertex="1">
+          <mxGeometry x="73" y="645" width="165" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="OYucTifmdRN6tnTj4TT2-11" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" parent="1" source="XZVlYNRyt7zDqL23juJK-5" target="XZVlYNRyt7zDqL23juJK-3" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="_7ywalsgCx7BF0AgiLHg-6" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" parent="1" source="XZVlYNRyt7zDqL23juJK-5" target="XZVlYNRyt7zDqL23juJK-26" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="50" y="590.0000000000001" />
+              <mxPoint x="50" y="762" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="XZVlYNRyt7zDqL23juJK-5" value="sce_qc_filter&lt;font color=&quot;#000000&quot;&gt; (SCE)&lt;br&gt;Filtered by QC filters (MAD).&lt;br&gt;&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fontColor=#6666FF;fillColor=default;" parent="1" vertex="1">
+          <mxGeometry x="73" y="572.5" width="165" height="35" as="geometry" />
+        </mxCell>
+        <mxCell id="OYucTifmdRN6tnTj4TT2-10" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=1;entryY=0.5;entryDx=0;entryDy=0;" parent="1" source="XZVlYNRyt7zDqL23juJK-7" target="XZVlYNRyt7zDqL23juJK-30" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="510" y="590" />
+              <mxPoint x="510" y="770" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="OYucTifmdRN6tnTj4TT2-12" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" parent="1" source="XZVlYNRyt7zDqL23juJK-7" target="XZVlYNRyt7zDqL23juJK-10" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="398" y="630" />
+              <mxPoint x="398" y="630" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="XZVlYNRyt7zDqL23juJK-7" value="sce_custom_filter&lt;font color=&quot;#000000&quot;&gt; (SCE)&lt;br&gt;Filtered by custom filters (thresholds).&lt;br&gt;&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fontColor=#6666FF;fillColor=default;" parent="1" vertex="1">
+          <mxGeometry x="305" y="565" width="185" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="OYucTifmdRN6tnTj4TT2-14" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" parent="1" source="XZVlYNRyt7zDqL23juJK-10" target="XZVlYNRyt7zDqL23juJK-30" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="XZVlYNRyt7zDqL23juJK-10" value="sce_custom_gene_filter&lt;font color=&quot;#000000&quot;&gt; (logical)&lt;br&gt;Boolean filter for genes&lt;br&gt;(TRUE = discard).&lt;br&gt;&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fontColor=#6666FF;fillColor=default;" parent="1" vertex="1">
+          <mxGeometry x="305" y="645" width="185" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="XZVlYNRyt7zDqL23juJK-18" value="" style="verticalLabelPosition=bottom;html=1;verticalAlign=top;strokeWidth=1;align=center;outlineConnect=0;dashed=0;outlineConnect=0;shape=mxgraph.aws3d.file;aspect=fixed;strokeColor=#292929;" parent="1" vertex="1">
+          <mxGeometry x="100" y="170.00000000000003" width="40" height="91.68" as="geometry" />
+        </mxCell>
+        <mxCell id="XZVlYNRyt7zDqL23juJK-19" value="" style="endArrow=classic;html=1;rounded=0;" parent="1" edge="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="110" y="245" as="sourcePoint" />
+            <mxPoint x="109.70999999999998" y="285" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="OYucTifmdRN6tnTj4TT2-16" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.402;entryY=-0.006;entryDx=0;entryDy=0;entryPerimeter=0;dashed=1;" parent="1" source="XZVlYNRyt7zDqL23juJK-26" target="XZVlYNRyt7zDqL23juJK-35" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="XZVlYNRyt7zDqL23juJK-26" value="sce_qc_filter_genes&lt;font color=&quot;#000000&quot;&gt; (SCE)&lt;br&gt;Filtered by QC filters (MAD) and gene filter.&lt;br&gt;&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fontColor=#6666FF;fillColor=default;" parent="1" vertex="1">
+          <mxGeometry x="73" y="735" width="165" height="55" as="geometry" />
+        </mxCell>
+        <mxCell id="OYucTifmdRN6tnTj4TT2-17" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;dashed=1;" parent="1" source="XZVlYNRyt7zDqL23juJK-30" target="XZVlYNRyt7zDqL23juJK-35" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="260" y="765" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="XZVlYNRyt7zDqL23juJK-30" value="sce_custom_filter_genes&lt;font color=&quot;#000000&quot;&gt; (SCE)&lt;br&gt;Filtered by custom filters (thresholds) and gene filter.&lt;br&gt;&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fontColor=#6666FF;fillColor=default;" parent="1" vertex="1">
+          <mxGeometry x="305" y="740" width="185" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="OYucTifmdRN6tnTj4TT2-25" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;strokeWidth=2;" parent="1" source="XZVlYNRyt7zDqL23juJK-35" target="XZVlYNRyt7zDqL23juJK-52" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="175" y="1010" />
+              <mxPoint x="48" y="1010" />
+              <mxPoint x="48" y="1238" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="OYucTifmdRN6tnTj4TT2-26" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=-0.004;entryY=0.582;entryDx=0;entryDy=0;strokeWidth=2;endArrow=classic;endFill=1;entryPerimeter=0;" parent="1" source="XZVlYNRyt7zDqL23juJK-35" target="XZVlYNRyt7zDqL23juJK-63" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="175" y="1010" />
+              <mxPoint x="48" y="1010" />
+              <mxPoint x="48" y="1147" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="XZVlYNRyt7zDqL23juJK-35" value="sce_final_input_qc&lt;font color=&quot;#000000&quot;&gt; (SCE)&lt;br&gt;The final SCE object of this stage. Either based on &lt;/font&gt;sce_qc_filter_genes&lt;font color=&quot;#000000&quot;&gt; or &lt;/font&gt;sce_custom_filter_genes&lt;font color=&quot;#000000&quot;&gt; (depends on config). Added gene annotation to &lt;i&gt;rowData()&lt;/i&gt;.&lt;br&gt;&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fontColor=#6666FF;fillColor=default;" parent="1" vertex="1">
+          <mxGeometry x="73" y="855" width="205" height="100" as="geometry" />
+        </mxCell>
+        <mxCell id="XZVlYNRyt7zDqL23juJK-41" value="report_input_qc&lt;font color=&quot;#000000&quot;&gt; (file)&lt;br&gt;HTML report for this stage.&lt;br&gt;&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fontColor=#6666FF;fillColor=#FFE5F3;" parent="1" vertex="1">
+          <mxGeometry x="330.5" y="915" width="158" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="XZVlYNRyt7zDqL23juJK-45" value="" style="shape=curlyBracket;whiteSpace=wrap;html=1;rounded=1;fillColor=#FFE5F3;rotation=-110;dashed=1;" parent="1" vertex="1">
+          <mxGeometry x="391.45" y="749.06" width="20" height="207.54" as="geometry" />
+        </mxCell>
+        <mxCell id="OYucTifmdRN6tnTj4TT2-28" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;strokeWidth=1;endArrow=classic;endFill=1;" parent="1" source="XZVlYNRyt7zDqL23juJK-52" target="XZVlYNRyt7zDqL23juJK-54" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="XZVlYNRyt7zDqL23juJK-52" value="sce_norm&lt;font color=&quot;#000000&quot;&gt; (SCE)&lt;br&gt;Normalized data by either &lt;i&gt;scran&lt;/i&gt;&amp;nbsp;or &lt;i&gt;SCTransform&lt;/i&gt;&amp;nbsp;(&lt;/font&gt;&lt;span style=&quot;color: rgb(0, 0, 0);&quot;&gt;can be skipped). Added cell cycle phases to &lt;i&gt;colData()&lt;/i&gt;.&lt;/span&gt;&lt;font color=&quot;#000000&quot;&gt;&lt;br&gt;&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fontColor=#6666FF;fillColor=default;" parent="1" vertex="1">
+          <mxGeometry x="73" y="1208" width="210" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="OYucTifmdRN6tnTj4TT2-30" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;dashed=1;strokeWidth=1;endArrow=classic;endFill=1;" parent="1" source="XZVlYNRyt7zDqL23juJK-54" target="XZVlYNRyt7zDqL23juJK-61" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="XZVlYNRyt7zDqL23juJK-54" value="sce_norm_hvg&lt;font color=&quot;#000000&quot;&gt; (SCE)&lt;br&gt;&lt;/font&gt;&lt;font color=&quot;#000000&quot;&gt;Added HVGs. Different strategies for their selection can be used. Optionally, cell cycle-related genes can be removed prior to HVG selection.&lt;br&gt;&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fontColor=#6666FF;fillColor=default;" parent="1" vertex="1">
+          <mxGeometry x="73" y="1298" width="210" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="OYucTifmdRN6tnTj4TT2-31" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;dashed=1;strokeWidth=1;endArrow=classic;endFill=1;" parent="1" source="XZVlYNRyt7zDqL23juJK-61" target="XZVlYNRyt7zDqL23juJK-67" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="OYucTifmdRN6tnTj4TT2-38" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;strokeWidth=1;endArrow=classic;endFill=1;dashed=1;" parent="1" source="XZVlYNRyt7zDqL23juJK-61" target="OYucTifmdRN6tnTj4TT2-37" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="328" y="1438" />
+              <mxPoint x="328" y="1344" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="OYucTifmdRN6tnTj4TT2-46" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.25;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;strokeWidth=1;endArrow=classic;endFill=1;" parent="1" source="XZVlYNRyt7zDqL23juJK-61" target="OYucTifmdRN6tnTj4TT2-44" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="298" y="1425" />
+              <mxPoint x="298" y="1249" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="XZVlYNRyt7zDqL23juJK-61" value="sce_rm_doublets&lt;font color=&quot;#000000&quot;&gt; (SCE)&lt;br&gt;&lt;/font&gt;&lt;font color=&quot;#000000&quot;&gt;Removed doublets (optional). Added doublet score to &lt;i&gt;colData()&lt;/i&gt;.&lt;br&gt;&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fontColor=#6666FF;fillColor=default;" parent="1" vertex="1">
+          <mxGeometry x="73" y="1413" width="210" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="OYucTifmdRN6tnTj4TT2-27" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;strokeWidth=1;endArrow=classic;endFill=1;" parent="1" source="XZVlYNRyt7zDqL23juJK-63" target="XZVlYNRyt7zDqL23juJK-52" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="XZVlYNRyt7zDqL23juJK-63" value="cc_genes&lt;font color=&quot;#000000&quot;&gt; (df)&lt;br&gt;&lt;/font&gt;&lt;font color=&quot;#000000&quot;&gt;Dataframe of annotated cell cycle genes taken from &lt;i&gt;Seurat::cc.genes.updated.2019&lt;/i&gt;&amp;nbsp;and present in the SCE.&lt;br&gt;&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fontColor=#6666FF;fillColor=default;" parent="1" vertex="1">
+          <mxGeometry x="73" y="1100" width="210" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="OYucTifmdRN6tnTj4TT2-32" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;dashed=1;strokeWidth=1;endArrow=classic;endFill=1;" parent="1" source="XZVlYNRyt7zDqL23juJK-67" target="XZVlYNRyt7zDqL23juJK-72" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="OYucTifmdRN6tnTj4TT2-39" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0;entryY=0.75;entryDx=0;entryDy=0;dashed=1;strokeWidth=1;endArrow=classic;endFill=1;" parent="1" source="XZVlYNRyt7zDqL23juJK-67" target="XZVlYNRyt7zDqL23juJK-69" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="328" y="1513" />
+              <mxPoint x="328" y="1491" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="XZVlYNRyt7zDqL23juJK-67" value="sce_pca&lt;font color=&quot;#000000&quot;&gt; (SCE)&lt;br&gt;&lt;/font&gt;&lt;font color=&quot;#000000&quot;&gt;PCA computed and added to &lt;i&gt;reducedDims()&lt;/i&gt;.&lt;br&gt;&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fontColor=#6666FF;fillColor=default;" parent="1" vertex="1">
+          <mxGeometry x="73" y="1488" width="210" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="XZVlYNRyt7zDqL23juJK-69" value="pca_selected_pcs_plot&lt;font color=&quot;#000000&quot;&gt; (ggplot)&lt;br&gt;&lt;/font&gt;&lt;font color=&quot;#000000&quot;&gt;A plot showing variance explained by principal components and thresholds/strategies to select their optimal number for downstream usage.&lt;br&gt;&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fontColor=#6666FF;fillColor=default;" parent="1" vertex="1">
+          <mxGeometry x="344" y="1400" width="160" height="122" as="geometry" />
+        </mxCell>
+        <mxCell id="OYucTifmdRN6tnTj4TT2-34" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;strokeWidth=1;endArrow=classic;endFill=1;" parent="1" source="XZVlYNRyt7zDqL23juJK-72" target="XZVlYNRyt7zDqL23juJK-74" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="XZVlYNRyt7zDqL23juJK-72" value="sce_pca_selected_pcs&lt;font color=&quot;#000000&quot;&gt; (SCE)&lt;br&gt;&lt;/font&gt;&lt;font color=&quot;#000000&quot;&gt;PCA subsetted to selected number of PCs. Multiple selection strategies are available.&lt;br&gt;&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fontColor=#6666FF;fillColor=default;" parent="1" vertex="1">
+          <mxGeometry x="73" y="1563" width="210" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="OYucTifmdRN6tnTj4TT2-42" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;dashed=1;strokeWidth=1;endArrow=classic;endFill=1;" parent="1" source="XZVlYNRyt7zDqL23juJK-74" target="OYucTifmdRN6tnTj4TT2-41" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="XZVlYNRyt7zDqL23juJK-74" value="sce_dimred&lt;font color=&quot;#000000&quot;&gt; (SCE)&lt;br&gt;&lt;/font&gt;&lt;font color=&quot;#000000&quot;&gt;Computed UMAP and tSNE, added to &lt;i&gt;reducedDims()&lt;/i&gt;.&lt;br&gt;&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fontColor=#6666FF;fillColor=default;" parent="1" vertex="1">
+          <mxGeometry x="73" y="1647" width="210" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="OYucTifmdRN6tnTj4TT2-24" value="" style="endArrow=classic;html=1;rounded=0;dashed=1;entryX=0.518;entryY=-0.032;entryDx=0;entryDy=0;entryPerimeter=0;exitX=0.1;exitY=0.5;exitDx=0;exitDy=0;exitPerimeter=0;" parent="1" source="XZVlYNRyt7zDqL23juJK-45" target="XZVlYNRyt7zDqL23juJK-41" edge="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="376.36" y="864" as="sourcePoint" />
+            <mxPoint x="376.36" y="914" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="OYucTifmdRN6tnTj4TT2-45" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;strokeWidth=1;endArrow=classic;endFill=1;" parent="1" source="OYucTifmdRN6tnTj4TT2-37" target="OYucTifmdRN6tnTj4TT2-44" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="_7ywalsgCx7BF0AgiLHg-1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=1.001;entryY=0.588;entryDx=0;entryDy=0;entryPerimeter=0;dashed=1;" parent="1" source="OYucTifmdRN6tnTj4TT2-37" target="OYucTifmdRN6tnTj4TT2-41" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="310" y="1360" />
+              <mxPoint x="310" y="1773" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="OYucTifmdRN6tnTj4TT2-37" value="cell_annotation&lt;font color=&quot;#000000&quot;&gt; (df)&lt;br&gt;&lt;/font&gt;&lt;font color=&quot;#000000&quot;&gt;Cell annotation statistics using defined reference datasets (optional).&lt;br&gt;&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fontColor=#6666FF;fillColor=default;" parent="1" vertex="1">
+          <mxGeometry x="348" y="1312.75" width="160" height="63" as="geometry" />
+        </mxCell>
+        <mxCell id="OYucTifmdRN6tnTj4TT2-49" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;strokeWidth=1;endArrow=classic;endFill=1;dashed=1;" parent="1" target="OYucTifmdRN6tnTj4TT2-47" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="273" y="1750" />
+              <mxPoint x="290" y="1750" />
+              <mxPoint x="290" y="1674" />
+            </Array>
+            <mxPoint x="270" y="1750" as="sourcePoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="OYucTifmdRN6tnTj4TT2-79" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.001;entryY=0.862;entryDx=0;entryDy=0;entryPerimeter=0;dashed=1;strokeWidth=1;fontColor=#000000;endArrow=classic;endFill=1;" parent="1" source="OYucTifmdRN6tnTj4TT2-41" target="OYucTifmdRN6tnTj4TT2-48" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="288" y="1796" />
+              <mxPoint x="288" y="1796" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="OYucTifmdRN6tnTj4TT2-80" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;dashed=1;strokeWidth=1;fontColor=#000000;endArrow=classic;endFill=1;" parent="1" source="OYucTifmdRN6tnTj4TT2-41" target="OYucTifmdRN6tnTj4TT2-78" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="290" y="1750" />
+              <mxPoint x="290" y="1584" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="OYucTifmdRN6tnTj4TT2-41" value="sce_final_norm_clustering&lt;font color=&quot;#000000&quot;&gt; (SCE)&lt;br&gt;&lt;/font&gt;&lt;font color=&quot;#000000&quot;&gt;The final SCE object of this stage. Contains: reduced dimensions, cell clusters (graph-based, k-means, SC3), cell annotation (optional), all other cell data (including user-supplied).&lt;br&gt;&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fontColor=#6666FF;fillColor=default;" parent="1" vertex="1">
+          <mxGeometry x="73" y="1721" width="210" height="89" as="geometry" />
+        </mxCell>
+        <mxCell id="OYucTifmdRN6tnTj4TT2-44" value="cell_annotation_diagnostic_plots&lt;font color=&quot;#000000&quot;&gt; (df)&lt;br&gt;&lt;/font&gt;&lt;font color=&quot;#000000&quot;&gt;Various diagnostic plots (heatmaps, scores etc.) for cell annotation results.&lt;br&gt;&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fontColor=#6666FF;fillColor=default;" parent="1" vertex="1">
+          <mxGeometry x="328" y="1210" width="182" height="78.5" as="geometry" />
+        </mxCell>
+        <mxCell id="OYucTifmdRN6tnTj4TT2-47" value="dimred_plots_clustering&lt;font color=&quot;#000000&quot;&gt; (df)&lt;br&gt;&lt;/font&gt;&lt;font color=&quot;#000000&quot;&gt;Plots of reduced dimensions colored by cluster labels.&lt;br&gt;&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fontColor=#6666FF;fillColor=default;" parent="1" vertex="1">
+          <mxGeometry x="340" y="1649" width="168" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="OYucTifmdRN6tnTj4TT2-48" value="dimred_plots_other_vars&lt;font color=&quot;#000000&quot;&gt; (df)&lt;br&gt;&lt;/font&gt;&lt;font color=&quot;#000000&quot;&gt;Plots of reduced dimensions colored by various cell variables (total UMI, # detected genes, cell cycle phase etc.) + user selection.&lt;br&gt;&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fontColor=#6666FF;fillColor=default;" parent="1" vertex="1">
+          <mxGeometry x="340" y="1710" width="168" height="100" as="geometry" />
+        </mxCell>
+        <mxCell id="OYucTifmdRN6tnTj4TT2-51" value="" style="shape=curlyBracket;whiteSpace=wrap;html=1;rounded=1;rotation=-90;dashed=1;" parent="1" vertex="1">
+          <mxGeometry x="270.05" y="1609.45" width="31.25" height="465.37" as="geometry" />
+        </mxCell>
+        <mxCell id="OYucTifmdRN6tnTj4TT2-52" value="report_norm_clustering&lt;font color=&quot;#000000&quot;&gt; (file)&lt;br&gt;Full HTML report for this stage.&lt;br&gt;&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fontColor=#6666FF;fillColor=#FFE5F3;" parent="1" vertex="1">
+          <mxGeometry x="78" y="1880" width="175.5" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="OYucTifmdRN6tnTj4TT2-53" value="report_norm_clustering_simple&lt;font color=&quot;#000000&quot;&gt; (file)&lt;br&gt;Simplified HTML report for this stage. Includes only dimred and&amp;nbsp;&lt;/font&gt;&lt;span style=&quot;color: rgb(0, 0, 0);&quot;&gt;cell annotation&amp;nbsp;&lt;/span&gt;&lt;font color=&quot;#000000&quot;&gt;plots.&lt;br&gt;&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fontColor=#6666FF;fillColor=#FFE5F3;" parent="1" vertex="1">
+          <mxGeometry x="308" y="1870" width="200" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="OYucTifmdRN6tnTj4TT2-54" value="" style="endArrow=classic;html=1;rounded=0;dashed=1;strokeWidth=1;exitX=0.1;exitY=0.5;exitDx=0;exitDy=0;exitPerimeter=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" parent="1" source="OYucTifmdRN6tnTj4TT2-51" target="OYucTifmdRN6tnTj4TT2-52" edge="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="418" y="1920" as="sourcePoint" />
+            <mxPoint x="468" y="1870" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="OYucTifmdRN6tnTj4TT2-56" value="" style="endArrow=classic;html=1;rounded=0;dashed=1;strokeWidth=1;exitX=0.1;exitY=0.5;exitDx=0;exitDy=0;exitPerimeter=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" parent="1" source="OYucTifmdRN6tnTj4TT2-51" target="OYucTifmdRN6tnTj4TT2-53" edge="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="418" y="1920" as="sourcePoint" />
+            <mxPoint x="468" y="1870" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="OYucTifmdRN6tnTj4TT2-57" value="&lt;font style=&quot;font-size: 14px;&quot;&gt;&lt;b&gt;Stage 01_integration&lt;/b&gt;&lt;br&gt;integration, dimensionality reduction&lt;/font&gt;" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#C7F4FF;strokeColor=#66E0FF;verticalAlign=top;" parent="1" vertex="1">
+          <mxGeometry x="590" y="120" width="470" height="870" as="geometry" />
+        </mxCell>
+        <mxCell id="OYucTifmdRN6tnTj4TT2-58" value="&lt;font color=&quot;#000000&quot; style=&quot;font-size: 24px;&quot;&gt;Integration pipeline&lt;/font&gt;" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontColor=#6666FF;fontSize=24;fontStyle=1" parent="1" vertex="1">
+          <mxGeometry x="590" y="80.6" width="470" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="OYucTifmdRN6tnTj4TT2-59" value="&lt;div style=&quot;&quot;&gt;&lt;span style=&quot;background-color: initial;&quot;&gt;Input data: multiple&amp;nbsp;&lt;/span&gt;&lt;font style=&quot;background-color: initial;&quot; color=&quot;#6666ff&quot;&gt;sce_final_norm_clustering&lt;/font&gt;&lt;span style=&quot;background-color: initial;&quot;&gt;&amp;nbsp;targets (SCE) from the single-sample pipeline runs. Loaded either from drake caches or as Rds files (with e.g. additional cell data).&lt;/span&gt;&lt;/div&gt;" style="text;html=1;strokeColor=default;fillColor=#E6E6E6;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;spacingLeft=4;spacingRight=4;" parent="1" vertex="1">
+          <mxGeometry x="700" y="189.06" width="340" height="50.94" as="geometry" />
+        </mxCell>
+        <mxCell id="OYucTifmdRN6tnTj4TT2-60" value="" style="verticalLabelPosition=bottom;html=1;verticalAlign=top;strokeWidth=1;align=center;outlineConnect=0;dashed=0;outlineConnect=0;shape=mxgraph.aws3d.file;aspect=fixed;strokeColor=#292929;" parent="1" vertex="1">
+          <mxGeometry x="640" y="170.00000000000003" width="40" height="91.68" as="geometry" />
+        </mxCell>
+        <mxCell id="OYucTifmdRN6tnTj4TT2-61" value="" style="endArrow=classic;html=1;rounded=0;entryX=0.152;entryY=-0.007;entryDx=0;entryDy=0;entryPerimeter=0;" parent="1" target="OYucTifmdRN6tnTj4TT2-62" edge="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="651" y="245" as="sourcePoint" />
+            <mxPoint x="650" y="280" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="OYucTifmdRN6tnTj4TT2-69" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;strokeWidth=1;fontColor=#000000;endArrow=classic;endFill=1;dashed=1;" parent="1" source="OYucTifmdRN6tnTj4TT2-62" target="OYucTifmdRN6tnTj4TT2-63" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="OYucTifmdRN6tnTj4TT2-62" value="sce_int_import&lt;font color=&quot;#000000&quot;&gt; (list)&lt;br&gt;&lt;/font&gt;&lt;font color=&quot;#000000&quot;&gt;A list of SCE objects to be integrated.&lt;br&gt;&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fontColor=#6666FF;fillColor=default;" parent="1" vertex="1">
+          <mxGeometry x="620" y="285" width="210" height="35" as="geometry" />
+        </mxCell>
+        <mxCell id="OYucTifmdRN6tnTj4TT2-70" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;dashed=1;strokeWidth=1;fontColor=#000000;endArrow=classic;endFill=1;" parent="1" source="OYucTifmdRN6tnTj4TT2-63" target="OYucTifmdRN6tnTj4TT2-66" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="OYucTifmdRN6tnTj4TT2-63" value="sce_int_multibatchnorm&lt;font color=&quot;#000000&quot;&gt; (list)&lt;br&gt;A list of SCE objects normalized for inter-batch sequencing depth (&lt;i&gt;batchelor::multiBatchNorm()&lt;/i&gt;). This method is later denoted as &quot;uncorrected&quot; and further used for cluster markers detection.&lt;br&gt;&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fontColor=#6666FF;fillColor=default;" parent="1" vertex="1">
+          <mxGeometry x="620" y="351" width="210" height="110" as="geometry" />
+        </mxCell>
+        <mxCell id="OYucTifmdRN6tnTj4TT2-74" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;dashed=1;strokeWidth=1;fontColor=#000000;endArrow=classic;endFill=1;" parent="1" source="OYucTifmdRN6tnTj4TT2-66" target="OYucTifmdRN6tnTj4TT2-67" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="OYucTifmdRN6tnTj4TT2-66" value="sce_int_df&lt;font color=&quot;#000000&quot;&gt; (df)&lt;br&gt;A dataframe of integrated SCE objects by selected methods. Prior selection of HVGs, optionally performed after prior removal of cell cycle-related genes.&lt;br&gt;&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fontColor=#6666FF;fillColor=default;spacingLeft=4;" parent="1" vertex="1">
+          <mxGeometry x="620" y="492" width="210" height="98" as="geometry" />
+        </mxCell>
+        <mxCell id="OYucTifmdRN6tnTj4TT2-110" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0;entryY=0.25;entryDx=0;entryDy=0;dashed=1;strokeWidth=1;fontSize=20;fontColor=#000000;endArrow=classic;endFill=1;" parent="1" source="OYucTifmdRN6tnTj4TT2-67" target="OYucTifmdRN6tnTj4TT2-76" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="600" y="658" />
+              <mxPoint x="600" y="804" />
+              <mxPoint x="620" y="804" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="_7ywalsgCx7BF0AgiLHg-2" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;dashed=1;" parent="1" source="OYucTifmdRN6tnTj4TT2-67" target="OYucTifmdRN6tnTj4TT2-71" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="OYucTifmdRN6tnTj4TT2-67" value="sce_int_pca_df&lt;font color=&quot;#000000&quot;&gt; (df)&lt;br&gt;Computed PCA and selected number of PCs (each integration method can have a different selection strategy).&lt;br&gt;&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fontColor=#6666FF;fillColor=default;" parent="1" vertex="1">
+          <mxGeometry x="620" y="618" width="210" height="75" as="geometry" />
+        </mxCell>
+        <mxCell id="OYucTifmdRN6tnTj4TT2-68" value="int_diagnostics_df&lt;font color=&quot;#000000&quot;&gt; (df)&lt;br&gt;Various integration diagnostics (tables, plots).&lt;br&gt;&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fontColor=#6666FF;fillColor=default;" parent="1" vertex="1">
+          <mxGeometry x="862" y="680" width="178" height="55" as="geometry" />
+        </mxCell>
+        <mxCell id="OYucTifmdRN6tnTj4TT2-73" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;dashed=1;strokeWidth=1;fontColor=#000000;endArrow=classic;endFill=1;" parent="1" source="OYucTifmdRN6tnTj4TT2-71" target="OYucTifmdRN6tnTj4TT2-68" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="OYucTifmdRN6tnTj4TT2-71" value="sce_int_clustering_df&lt;font color=&quot;#000000&quot;&gt; (df)&lt;br&gt;Computed graph-based clustering for integration diagnostics.&lt;br&gt;&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fontColor=#6666FF;fillColor=default;" parent="1" vertex="1">
+          <mxGeometry x="620" y="721.63" width="210" height="48.37" as="geometry" />
+        </mxCell>
+        <mxCell id="OYucTifmdRN6tnTj4TT2-82" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;dashed=1;strokeWidth=1;fontColor=#000000;endArrow=classic;endFill=1;" parent="1" source="OYucTifmdRN6tnTj4TT2-76" target="OYucTifmdRN6tnTj4TT2-81" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="OYucTifmdRN6tnTj4TT2-111" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;dashed=1;strokeWidth=1;fontSize=20;fontColor=#000000;endArrow=classic;endFill=1;" parent="1" source="OYucTifmdRN6tnTj4TT2-76" target="OYucTifmdRN6tnTj4TT2-77" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="DrTMwaxAC77EiMDbTJBz-20" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;dashed=1;strokeWidth=2;" parent="1" source="OYucTifmdRN6tnTj4TT2-76" target="OYucTifmdRN6tnTj4TT2-90" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="600" y="820" />
+              <mxPoint x="600" y="1138" />
+              <mxPoint x="617" y="1138" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="OYucTifmdRN6tnTj4TT2-76" value="sce_int_dimred_df&lt;font color=&quot;#000000&quot;&gt; (df)&lt;br&gt;Computed dimreds (UMAP, tSNE).&lt;br&gt;&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fontColor=#6666FF;fillColor=default;" parent="1" vertex="1">
+          <mxGeometry x="620" y="795" width="210" height="35" as="geometry" />
+        </mxCell>
+        <mxCell id="OYucTifmdRN6tnTj4TT2-77" value="sce_int_dimred_plots_df&lt;font color=&quot;#000000&quot;&gt; (df)&lt;br&gt;Dimred plots of each integrated dataset colored by dataset of origin (batch) and cell cycle phase.&lt;br&gt;&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fontColor=#6666FF;fillColor=default;" parent="1" vertex="1">
+          <mxGeometry x="620" y="855" width="210" height="65" as="geometry" />
+        </mxCell>
+        <mxCell id="OYucTifmdRN6tnTj4TT2-78" value="selected_markers_plots&lt;font color=&quot;#000000&quot;&gt; (df)&lt;br&gt;&lt;/font&gt;&lt;font color=&quot;#000000&quot;&gt;Dimred plots colored by expression of selected markers loaded from a user supplied file (optional).&lt;br&gt;&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fontColor=#6666FF;fillColor=default;" parent="1" vertex="1">
+          <mxGeometry x="344" y="1542.63" width="160" height="82" as="geometry" />
+        </mxCell>
+        <mxCell id="OYucTifmdRN6tnTj4TT2-81" value="selected_markers_int_plots_df&lt;font color=&quot;#000000&quot;&gt; (df)&lt;br&gt;&lt;/font&gt;&lt;font color=&quot;#000000&quot;&gt;Dimred plots colored by expression of selected markers loaded from a user supplied file (optional).&lt;br&gt;&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fontColor=#6666FF;fillColor=default;" parent="1" vertex="1">
+          <mxGeometry x="862" y="763.13" width="178" height="98.75" as="geometry" />
+        </mxCell>
+        <mxCell id="OYucTifmdRN6tnTj4TT2-83" value="report_integration&lt;font color=&quot;#000000&quot;&gt; (file)&lt;br&gt;HTML report for this stage.&lt;br&gt;&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fontColor=#6666FF;fillColor=#FFE5F3;" parent="1" vertex="1">
+          <mxGeometry x="751.72" y="945" width="158" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="OYucTifmdRN6tnTj4TT2-86" value="" style="shape=curlyBracket;whiteSpace=wrap;html=1;rounded=1;fillColor=#FFE5F3;rotation=-90;dashed=1;" parent="1" vertex="1">
+          <mxGeometry x="816.08" y="711.94" width="29.28" height="436.85" as="geometry" />
+        </mxCell>
+        <mxCell id="OYucTifmdRN6tnTj4TT2-89" value="&lt;div style=&quot;&quot;&gt;Based on the configuration, the following integration methods are performed:&lt;/div&gt;&lt;div style=&quot;&quot;&gt;-&amp;nbsp;&lt;span style=&quot;background-color: initial;&quot;&gt;Rescaling (&lt;i&gt;batchelor::rescaleBatches()&lt;/i&gt;)&lt;/span&gt;&lt;/div&gt;&lt;div&gt;- Regression (&lt;i&gt;batchelor::regressBatches()&lt;/i&gt;)&lt;/div&gt;&lt;div&gt;- Fast mutual nearest neighbors (&lt;i&gt;batchelor::fastMNN()&lt;/i&gt;)&lt;/div&gt;&lt;div&gt;- Harmony&lt;br&gt;&lt;/div&gt;&lt;div&gt;(harmony::RunHarmony())&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;If requested, each method is also performed additionally for dataset with removed cell cycle-related genes from HVGs.&lt;/div&gt;" style="text;html=1;strokeColor=default;fillColor=#E6E6E6;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;spacingLeft=4;" parent="1" vertex="1">
+          <mxGeometry x="862" y="380" width="178" height="247.5" as="geometry" />
+        </mxCell>
+        <mxCell id="DrTMwaxAC77EiMDbTJBz-14" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;dashed=1;" parent="1" source="OYucTifmdRN6tnTj4TT2-90" target="OYucTifmdRN6tnTj4TT2-93" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="DrTMwaxAC77EiMDbTJBz-16" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;dashed=1;" parent="1" source="OYucTifmdRN6tnTj4TT2-90" target="OYucTifmdRN6tnTj4TT2-91" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="810" y="1138" />
+              <mxPoint x="810" y="1224" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="OYucTifmdRN6tnTj4TT2-90" value="sce_int_final&lt;font color=&quot;#000000&quot;&gt; (SCE)&lt;br&gt;A final integrated SCE object. The integration method and whether the dataset has removed cell-cycle related genes from HVGs is upon the user preference.&lt;br&gt;&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fontColor=#6666FF;fillColor=default;spacingLeft=2;spacingBottom=0;spacingRight=2;" parent="1" vertex="1">
+          <mxGeometry x="617.5" y="1085" width="185" height="105" as="geometry" />
+        </mxCell>
+        <mxCell id="DrTMwaxAC77EiMDbTJBz-17" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;dashed=1;" parent="1" source="OYucTifmdRN6tnTj4TT2-91" target="OYucTifmdRN6tnTj4TT2-92" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="OYucTifmdRN6tnTj4TT2-91" value="cell_annotation&lt;font color=&quot;#000000&quot;&gt; (df)&lt;br&gt;&lt;/font&gt;&lt;font color=&quot;#000000&quot;&gt;Cell annotation statistics using defined reference datasets (optional).&lt;br&gt;&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fontColor=#6666FF;fillColor=default;spacingLeft=2;spacingRight=2;" parent="1" vertex="1">
+          <mxGeometry x="823.25" y="1194" width="208" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="OYucTifmdRN6tnTj4TT2-92" value="cell_annotation_diagnostic_plots&lt;font color=&quot;#000000&quot;&gt; (df)&lt;br&gt;&lt;/font&gt;&lt;font color=&quot;#000000&quot;&gt;Various diagnostic plots (heatmaps, scores etc.) for cell annotation results.&lt;br&gt;&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fontColor=#6666FF;fillColor=default;spacingLeft=2;spacingRight=2;" parent="1" vertex="1">
+          <mxGeometry x="823.25" y="1280.5" width="208" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="DrTMwaxAC77EiMDbTJBz-15" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;dashed=1;" parent="1" source="OYucTifmdRN6tnTj4TT2-93" target="OYucTifmdRN6tnTj4TT2-100" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="DrTMwaxAC77EiMDbTJBz-18" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;dashed=1;" parent="1" source="OYucTifmdRN6tnTj4TT2-93" target="OYucTifmdRN6tnTj4TT2-99" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="810" y="1282" />
+              <mxPoint x="810" y="1420" />
+              <mxPoint x="823" y="1420" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="OYucTifmdRN6tnTj4TT2-93" value="sce_int_final_clustering&lt;font color=&quot;#000000&quot;&gt; (SCE)&lt;br&gt;&lt;/font&gt;&lt;font color=&quot;#000000&quot;&gt;The final SCE object of this stage. Contains: reduced dimensions, cell clusters (graph-based, k-means, SC3), cell annotation (optional), all other cell data (including user-supplied).&lt;br&gt;&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fontColor=#6666FF;fillColor=default;spacingLeft=2;spacingRight=2;" parent="1" vertex="1">
+          <mxGeometry x="617.5" y="1221" width="185" height="122" as="geometry" />
+        </mxCell>
+        <mxCell id="OYucTifmdRN6tnTj4TT2-99" value="dimred_plots_clustering&lt;font color=&quot;#000000&quot;&gt; (df)&lt;br&gt;&lt;/font&gt;&lt;font color=&quot;#000000&quot;&gt;Plots of reduced dimensions colored by cluster labels.&lt;br&gt;&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fontColor=#6666FF;fillColor=default;" parent="1" vertex="1">
+          <mxGeometry x="823.25" y="1395.88" width="208" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="OYucTifmdRN6tnTj4TT2-100" value="dimred_plots_other_vars&lt;font color=&quot;#000000&quot;&gt; (df)&lt;br&gt;&lt;/font&gt;&lt;font color=&quot;#000000&quot;&gt;Plots of reduced dimensions colored by various cell variables (total UMI, # detected genes, cell cycle phase etc.) + user selection.&lt;br&gt;&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fontColor=#6666FF;fillColor=default;spacingLeft=2;spacingRight=2;" parent="1" vertex="1">
+          <mxGeometry x="617.5" y="1373.75" width="185" height="94.25" as="geometry" />
+        </mxCell>
+        <mxCell id="OYucTifmdRN6tnTj4TT2-104" value="&lt;div style=&quot;&quot;&gt;This stage is similar to 02_norm_clustering stage in the single-sample pipeline, except only cell clustering, cell annotation and visualization is performed here.&lt;/div&gt;" style="text;html=1;strokeColor=default;fillColor=#E6E6E6;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;spacingLeft=4;" parent="1" vertex="1">
+          <mxGeometry x="823.25" y="1085" width="208" height="85" as="geometry" />
+        </mxCell>
+        <mxCell id="OYucTifmdRN6tnTj4TT2-105" value="report_int_clustering&lt;font color=&quot;#000000&quot;&gt; (file)&lt;br&gt;HTML report for this stage.&lt;br&gt;&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fontColor=#6666FF;fillColor=#FFE5F3;" parent="1" vertex="1">
+          <mxGeometry x="747.3" y="1542.63" width="158" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="DrTMwaxAC77EiMDbTJBz-19" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;dashed=1;" parent="1" source="OYucTifmdRN6tnTj4TT2-106" target="OYucTifmdRN6tnTj4TT2-105" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="OYucTifmdRN6tnTj4TT2-106" value="" style="shape=curlyBracket;whiteSpace=wrap;html=1;rounded=1;fillColor=#FFE5F3;rotation=-90;dashed=1;" parent="1" vertex="1">
+          <mxGeometry x="808.8" y="1288.71" width="35" height="420" as="geometry" />
+        </mxCell>
+        <mxCell id="OYucTifmdRN6tnTj4TT2-108" value="&lt;font style=&quot;font-size: 14px;&quot;&gt;&lt;b&gt;Stage cluster_markers&lt;/b&gt;&lt;br&gt;identify global cluster marker genes, i.e. genes that drive the separation of each cell cluster&lt;/font&gt;" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFD1F0;strokeColor=#FF52C5;verticalAlign=top;" parent="1" vertex="1">
+          <mxGeometry x="1120" y="120" width="455" height="450" as="geometry" />
+        </mxCell>
+        <mxCell id="OYucTifmdRN6tnTj4TT2-109" value="&lt;font color=&quot;#000000&quot; style=&quot;&quot;&gt;&lt;font style=&quot;font-size: 24px;&quot;&gt;Common pipelines&lt;/font&gt;&lt;br style=&quot;font-size: 24px;&quot;&gt;&lt;/font&gt;" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontColor=#6666FF;fontSize=24;fontStyle=1" parent="1" vertex="1">
+          <mxGeometry x="1122.5" y="64" width="450" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="OYucTifmdRN6tnTj4TT2-117" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;dashed=1;strokeWidth=2;fontSize=20;fontColor=#6666FF;endArrow=classic;endFill=1;" parent="1" source="OYucTifmdRN6tnTj4TT2-113" target="OYucTifmdRN6tnTj4TT2-115" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="OYucTifmdRN6tnTj4TT2-113" value="sce_cluster_markers&lt;font color=&quot;#000000&quot;&gt; (SCE)&lt;/font&gt;&lt;br&gt;sce_rm_doublets&lt;font color=&quot;#000000&quot;&gt; for the single-sample pipeline, &lt;/font&gt;sce_int_final_clustering&lt;font color=&quot;#000000&quot;&gt; for the integration pipeline.&lt;br&gt;&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fontColor=#6666FF;fillColor=default;" parent="1" vertex="1">
+          <mxGeometry x="1140" y="189.06" width="220" height="60.94" as="geometry" />
+        </mxCell>
+        <mxCell id="OYucTifmdRN6tnTj4TT2-114" value="&lt;div style=&quot;&quot;&gt;The user can define in which categorical variables (clusters, CC phases etc.) to search for markers. For each variable,&amp;nbsp;&lt;/div&gt;&lt;div style=&quot;&quot;&gt;&lt;span style=&quot;background-color: initial;&quot;&gt;three different tests (Student&#39;s t, Wilcoxon, binomial) are calculated&amp;nbsp;&lt;/span&gt;&lt;span style=&quot;background-color: initial;&quot;&gt;for each pairwise comparison of the variable levels. For example, for k-means clustering with k = 3 we have three pairwise comparisons (1 vs. 2, 1 vs. 3, 2 vs. 3) and three different tests for each of them.&lt;/span&gt;&lt;/div&gt;" style="text;html=1;strokeColor=default;fillColor=#E6E6E6;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;spacingLeft=4;" parent="1" vertex="1">
+          <mxGeometry x="1380" y="189.06" width="180" height="215" as="geometry" />
+        </mxCell>
+        <mxCell id="OYucTifmdRN6tnTj4TT2-118" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;dashed=1;strokeWidth=2;fontSize=20;fontColor=#6666FF;endArrow=classic;endFill=1;" parent="1" source="OYucTifmdRN6tnTj4TT2-115" target="OYucTifmdRN6tnTj4TT2-116" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="OYucTifmdRN6tnTj4TT2-115" value="cluster_markers_raw&lt;font color=&quot;#000000&quot;&gt; (df)&lt;/font&gt;&lt;br&gt;&lt;font color=&quot;#000000&quot;&gt;Cluster marker statistics as returned from &lt;i&gt;scran::findMarkers()&lt;/i&gt;.&lt;br&gt;&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fontColor=#6666FF;fillColor=default;" parent="1" vertex="1">
+          <mxGeometry x="1140" y="281.29999999999995" width="220" height="49.7" as="geometry" />
+        </mxCell>
+        <mxCell id="OYucTifmdRN6tnTj4TT2-116" value="cluster_markers_out&lt;font color=&quot;#000000&quot;&gt; (df)&lt;/font&gt;&lt;br&gt;&lt;font color=&quot;#000000&quot;&gt;Polished cluster marker tables.&lt;br&gt;&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fontColor=#6666FF;fillColor=default;" parent="1" vertex="1">
+          <mxGeometry x="1140" y="364.06" width="220" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="OYucTifmdRN6tnTj4TT2-119" value="report_cluster_markers&lt;font color=&quot;#000000&quot;&gt; (file)&lt;br&gt;HTML report for this stage.&lt;br&gt;&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fontColor=#6666FF;fillColor=#FFE5F3;" parent="1" vertex="1">
+          <mxGeometry x="1171" y="485" width="158" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="OYucTifmdRN6tnTj4TT2-122" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;dashed=1;strokeWidth=2;fontSize=20;fontColor=#6666FF;endArrow=classic;endFill=1;" parent="1" source="OYucTifmdRN6tnTj4TT2-120" target="OYucTifmdRN6tnTj4TT2-119" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="OYucTifmdRN6tnTj4TT2-120" value="" style="shape=curlyBracket;whiteSpace=wrap;html=1;rounded=1;fillColor=#FFE5F3;rotation=-90;dashed=1;" parent="1" vertex="1">
+          <mxGeometry x="1235.61" y="315" width="28.79" height="235.59" as="geometry" />
+        </mxCell>
+        <mxCell id="OYucTifmdRN6tnTj4TT2-123" value="&lt;div style=&quot;&quot;&gt;While not shown, &lt;font color=&quot;#6666ff&quot;&gt;report_cluster_markers&lt;/font&gt; also depends on many other targets. For each pairwise test, there is a HTML table with marker statistics, and a heatmap of top N markers.&amp;nbsp;&lt;span style=&quot;background-color: initial;&quot;&gt;Also,&amp;nbsp;&lt;/span&gt;&lt;span style=&quot;background-color: initial;&quot;&gt;a summary plot is generated&lt;/span&gt;&lt;span style=&quot;background-color: initial;&quot;&gt;&amp;nbsp;for each of top N markers.&lt;/span&gt;&lt;/div&gt;" style="text;html=1;strokeColor=default;fillColor=#E6E6E6;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;spacingLeft=4;" parent="1" vertex="1">
+          <mxGeometry x="1380" y="420" width="180" height="140" as="geometry" />
+        </mxCell>
+        <mxCell id="DrTMwaxAC77EiMDbTJBz-1" value="&lt;font style=&quot;font-size: 14px;&quot;&gt;&lt;b&gt;Stage contrasts&lt;/b&gt;&lt;br&gt;differential gene expression between cell clusters&lt;/font&gt;" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFD1F0;strokeColor=#FF52C5;verticalAlign=top;" parent="1" vertex="1">
+          <mxGeometry x="1120" y="610" width="455" height="303.5" as="geometry" />
+        </mxCell>
+        <mxCell id="DrTMwaxAC77EiMDbTJBz-3" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;dashed=1;strokeWidth=2;fontSize=20;fontColor=#6666FF;endArrow=classic;endFill=1;" parent="1" source="DrTMwaxAC77EiMDbTJBz-4" target="DrTMwaxAC77EiMDbTJBz-7" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="DrTMwaxAC77EiMDbTJBz-4" value="sce_contrasts&lt;font color=&quot;#000000&quot;&gt; (SCE)&lt;/font&gt;&lt;br&gt;sce_rm_doublets&lt;font color=&quot;#000000&quot;&gt; for the single-sample pipeline, &lt;/font&gt;sce_int_final_clustering&lt;font color=&quot;#000000&quot;&gt; for the integration pipeline.&lt;br&gt;&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fontColor=#6666FF;fillColor=default;" parent="1" vertex="1">
+          <mxGeometry x="1140" y="679.06" width="220" height="60.94" as="geometry" />
+        </mxCell>
+        <mxCell id="DrTMwaxAC77EiMDbTJBz-5" value="&lt;div style=&quot;&quot;&gt;The contrasts stage is very similar to the cluster_markers stage, except all outputs (heatmaps, tables) are related to individual pairwise comparisons.&lt;/div&gt;" style="text;html=1;strokeColor=default;fillColor=#E6E6E6;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;spacingLeft=4;" parent="1" vertex="1">
+          <mxGeometry x="1380" y="679.06" width="180" height="84.44" as="geometry" />
+        </mxCell>
+        <mxCell id="DrTMwaxAC77EiMDbTJBz-6" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;dashed=1;strokeWidth=2;fontSize=20;fontColor=#6666FF;endArrow=classic;endFill=1;" parent="1" source="DrTMwaxAC77EiMDbTJBz-7" target="DrTMwaxAC77EiMDbTJBz-8" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="DrTMwaxAC77EiMDbTJBz-7" value="contrasts_raw&lt;font color=&quot;#000000&quot;&gt; (df)&lt;/font&gt;&lt;br&gt;&lt;font color=&quot;#000000&quot;&gt;Differential expression (DE) statistics as returned from &lt;i&gt;scran::findMarkers()&lt;/i&gt;.&lt;br&gt;&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fontColor=#6666FF;fillColor=default;" parent="1" vertex="1">
+          <mxGeometry x="1140" y="771.3" width="220" height="49.7" as="geometry" />
+        </mxCell>
+        <mxCell id="DrTMwaxAC77EiMDbTJBz-8" value="contrasts_out&lt;font color=&quot;#000000&quot;&gt; (df)&lt;/font&gt;&lt;br&gt;&lt;font color=&quot;#000000&quot;&gt;Polished DE tables.&lt;br&gt;&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fontColor=#6666FF;fillColor=default;" parent="1" vertex="1">
+          <mxGeometry x="1140" y="854.06" width="220" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="DrTMwaxAC77EiMDbTJBz-9" value="report_contrasts&lt;font color=&quot;#000000&quot;&gt; (file)&lt;br&gt;HTML report for this stage.&lt;br&gt;&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fontColor=#6666FF;fillColor=#FFE5F3;" parent="1" vertex="1">
+          <mxGeometry x="1402" y="808.8300000000002" width="158" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="DrTMwaxAC77EiMDbTJBz-11" value="" style="shape=curlyBracket;whiteSpace=wrap;html=1;rounded=1;fillColor=#FFE5F3;rotation=-180;dashed=1;" parent="1" vertex="1">
+          <mxGeometry x="1370" y="773.5" width="28.79" height="115" as="geometry" />
+        </mxCell>
+        <mxCell id="V3Z19Sr7CIbmZhE3F0cb-1" value="&lt;span style=&quot;color: rgb(0, 0, 0); font-family: Helvetica; font-size: 16px; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-indent: 0px; text-transform: none; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; background-color: rgb(248, 249, 250); text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial; float: none; display: inline !important;&quot;&gt;stages common to both single-sample and integration pipelines&lt;/span&gt;" style="text;whiteSpace=wrap;html=1;fontSize=16;align=center;" parent="1" vertex="1">
+          <mxGeometry x="1117.5" y="86.6" width="460" height="40" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
