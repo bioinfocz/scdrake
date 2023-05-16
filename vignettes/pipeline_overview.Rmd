@@ -30,7 +30,7 @@ Advanced users might be interested in looking into source code of `{scdrake}`'s 
 (files named `plans_*.R`).
 
 Pipeline steps are mostly based on recommendations given in a great book
-[Orchestrating Single-Cell Analysis with Bioconductor](https://bioconductor.org/books/release/OSCA/).
+[Orchestrating Single-Cell Analysis with Bioconductor](https://bioconductor.org/books/3.15/OSCA/).
 
 # Example pipeline output
 
@@ -70,7 +70,7 @@ An initial stage to read in scRNA-seq data, remove empty droplets (optionally), 
 and cell and gene filtering.
 
 More information about scRNA-seq quality control can be found
-[here](https://bioconductor.org/books/release/OSCA.basic/quality-control.html).
+[here](https://bioconductor.org/books/3.15/OSCA.basic/quality-control.html).
 
 `r emoji::emoji("gear")` Config and targets: `vignette("stage_input_qc")`
 
@@ -83,19 +83,19 @@ More information about scRNA-seq quality control can be found
   - `cellranger` output
   - `SingleCellExperiment` object
   - delimited table
-- Removal of [empty droplets](https://bioconductor.org/books/release/OSCA.advanced/droplet-processing.html)
+- Removal of [empty droplets](https://bioconductor.org/books/3.15/OSCA.advanced/droplet-processing.html)
   (`DropletUtils::emptyDrops()`) (optional).
 - Calculation of per-cell QC metrics (`scater::perCellQCMetrics()`,
-  [theory](https://bioconductor.org/books/release/OSCA.basic/quality-control.html#common-choices-of-qc-metrics)):
+  [theory](https://bioconductor.org/books/3.15/OSCA.basic/quality-control.html#common-choices-of-qc-metrics)):
   - Number of UMI.
   - Number of detected genes (non-zero UMI count).
   - Percentage of expressed mitochondrial genes ($\frac {UMI_{mitochondrial}} {UMI_{sum}} * 100$).
 - Two methods for cell filtering (optional):
   - Dataset-sensitive filtering, based on the median absolute deviation (MAD) from the median value of
      each QC metric across all cells. For "number of UMI" metric, only a lower tail is used
-     ([theory](https://bioconductor.org/books/release/OSCA.basic/quality-control.html#quality-control-outlier).
+     ([theory](https://bioconductor.org/books/3.15/OSCA.basic/quality-control.html#quality-control-outlier).
   - Custom filtering, based on fixed thresholds. For "number of UMI" metric, both upper and lower bounds are used
-    ([theory](https://bioconductor.org/books/release/OSCA.basic/quality-control.html#fixed-qc).
+    ([theory](https://bioconductor.org/books/3.15/OSCA.basic/quality-control.html#fixed-qc).
   - In both filtering types, violation of only one metric threshold leads to removal of a cell.
     More technically, metric filters are reduced by **or** operator.
 - Gene filtering (optional) based on a minimum number of UMI per cell and a minimum ratio of cells expressing a gene.
@@ -120,8 +120,8 @@ A stage for normalization, dimensionality reduction, and cell clustering.
 
 - Calculation of cell cycle score and assignment of cells to phases (G1, G2M, S) using the list of cell cycle genes in
   `Seurat::cc.genes.updated.2019` and `Seurat::CellCycleScoring()` function.
-- [Normalization](https://bioconductor.org/books/release/OSCA.basic/normalization.html) of UMI counts by either:
-  - [Normalization by deconvolution](https://bioconductor.org/books/release/OSCA.basic/normalization.html#normalization-by-deconvolution)
+- [Normalization](https://bioconductor.org/books/3.15/OSCA.basic/normalization.html) of UMI counts by either:
+  - [Normalization by deconvolution](https://bioconductor.org/books/3.15/OSCA.basic/normalization.html#normalization-by-deconvolution)
     implemented in the [scran](https://bioconductor.org/packages/release/bioc/html/scran.html) package.
   - Regularized negative binomial regression to normalize UMI count data implemented in the
     [sctransform](https://github.com/ChristophH/sctransform) package and wrapped by the
@@ -129,11 +129,11 @@ A stage for normalization, dimensionality reduction, and cell clustering.
     such as cell cycle score or percentage of mitochondrial genes expression. Note that for cell cycle score,
     a better method seems to be removal of CC-related genes prior to detection of highly variable genes (HVGs, see below).
     `sctransform` also returns a specified number of HVGs.
-- Selection of [highly variable genes](https://bioconductor.org/books/release/OSCA.basic/feature-selection.html) (HVGs):
+- Selection of [highly variable genes](https://bioconductor.org/books/3.15/OSCA.basic/feature-selection.html) (HVGs):
   - HVGs are used downstream for dimensionality reduction and clustering.
   - Three metrics for HVGs are available:
-    - [Gene variance](https://bioconductor.org/books/release/OSCA.basic/feature-selection.html#quantifying-per-gene-variation).
-    - [Coefficient of variation](http://bioconductor.org/books/release/OSCA.advanced/more-hvgs.html#using-the-coefficient-of-variation)
+    - [Gene variance](https://bioconductor.org/books/3.15/OSCA.basic/feature-selection.html#quantifying-per-gene-variation).
+    - [Coefficient of variation](http://bioconductor.org/books/3.15/OSCA.advanced/more-hvgs.html#using-the-coefficient-of-variation)
       (CV2).
     - HVGs obtained from the `sctransform` normalization.
   - Based on the selected one from the first two metrics above, HVGs are selected either by:
@@ -143,25 +143,25 @@ A stage for normalization, dimensionality reduction, and cell clustering.
   - Prior to HVG selection, cell cycle-related genes can be removed.
     We are using a method based on the percentage of variance explained by the cell cycle phase
     in the expression profile for each gene
-    ([details](https://bioconductor.org/books/release/OSCA.advanced/cell-cycle-assignment.html#removing-cell-cycle-related-genes)).
-- Removal of [cell doublets](https://bioconductor.org/books/release/OSCA.advanced/doublet-detection.html)
+    ([details](https://bioconductor.org/books/3.15/OSCA.advanced/cell-cycle-assignment.html#removing-cell-cycle-related-genes)).
+- Removal of [cell doublets](https://bioconductor.org/books/3.15/OSCA.advanced/doublet-detection.html)
   (`scDblFinder::computeDoubletDensity()`).
-- [Calculation of PCA](https://bioconductor.org/books/release/OSCA.basic/dimensionality-reduction.html#principal-components-analysis)
-  and [selection of number of principal components](https://bioconductor.org/books/release/OSCA.basic/dimensionality-reduction.html#choosing-the-number-of-pcs)
+- [Calculation of PCA](https://bioconductor.org/books/3.15/OSCA.basic/dimensionality-reduction.html#principal-components-analysis)
+  and [selection of number of principal components](https://bioconductor.org/books/3.15/OSCA.basic/dimensionality-reduction.html#choosing-the-number-of-pcs)
   (PCs) which will be used downstream. There are three methods to select a proper number of PCs:
-  - Using the [elbow point](http://bioconductor.org/books/release/OSCA.advanced/dimensionality-reduction-redux.html#more-choices-for-the-number-of-pcs).
-  - Using the [technical noise](http://bioconductor.org/books/release/OSCA.advanced/dimensionality-reduction-redux.html#using-the-technical-noise).
+  - Using the [elbow point](http://bioconductor.org/books/3.15/OSCA.advanced/dimensionality-reduction-redux.html#more-choices-for-the-number-of-pcs).
+  - Using the [technical noise](http://bioconductor.org/books/3.15/OSCA.advanced/dimensionality-reduction-redux.html#using-the-technical-noise).
   - Using a fixed number of PCs.
-- [Cell clustering](https://bioconductor.org/books/release/OSCA.basic/clustering.html) using several algorithms:
-  - [Graph-based clustering](https://bioconductor.org/books/release/OSCA.basic/clustering.html#clustering-graph)
+- [Cell clustering](https://bioconductor.org/books/3.15/OSCA.basic/clustering.html) using several algorithms:
+  - [Graph-based clustering](https://bioconductor.org/books/3.15/OSCA.basic/clustering.html#clustering-graph)
     (mutual nearest neighbors) using Louvain and Walktrap algorithms.
-  - [K-means clustering](https://bioconductor.org/books/release/OSCA.basic/clustering.html#vector-quantization-with-k-means)
+  - [K-means clustering](https://bioconductor.org/books/3.15/OSCA.basic/clustering.html#vector-quantization-with-k-means)
     using both defined numbers of K and best K selection.
   - [Single-Cell Consensus Clustering](https://bioconductor.org/packages/release/bioc/html/SC3.html) (SC3) with
     defined numbers of clusters.
 - Cell type annotation using `{SingleR}`. More details are given in the accompanying
-  [book](http://bioconductor.org/books/release/SingleRBook/) and the underlying method is described
-  [here](http://bioconductor.org/books/release/SingleRBook/introduction.html#method-description).
+  [book](http://bioconductor.org/books/3.15/SingleRBook/) and the underlying method is described
+  [here](http://bioconductor.org/books/3.15/SingleRBook/introduction.html#method-description).
   - Reference datasets can be taken from the `{celldex}` package or an arbitrary
     `SingleCellExperiment` / `SummarizedExperiment` object can be loaded from a file.
 - Assignment of cells to predefined groupings based on existing data. That means you can reuse an assignment of cells
@@ -172,10 +172,10 @@ A stage for normalization, dimensionality reduction, and cell clustering.
     - Cluster 2 -> B cells
     - Cluster 3 -> T cells
   - Now you can use this new cell grouping for e.g. plotting of reduced dimensions or calculation of cluster markers.
-- [Dimensionality reduction](https://bioconductor.org/books/release/OSCA.basic/dimensionality-reduction.html#non-linear-methods-for-visualization):
+- [Dimensionality reduction](https://bioconductor.org/books/3.15/OSCA.basic/dimensionality-reduction.html#non-linear-methods-for-visualization):
   - PCA
-  - [t-SNE](https://bioconductor.org/books/release/OSCA.basic/dimensionality-reduction.html#t-stochastic-neighbor-embedding)
-  - [UMAP](https://bioconductor.org/books/release/OSCA.basic/dimensionality-reduction.html#uniform-manifold-approximation-and-projection)
+  - [t-SNE](https://bioconductor.org/books/3.15/OSCA.basic/dimensionality-reduction.html#t-stochastic-neighbor-embedding)
+  - [UMAP](https://bioconductor.org/books/3.15/OSCA.basic/dimensionality-reduction.html#uniform-manifold-approximation-and-projection)
 - Expression plots of selected groups of genes (markers) in reduced dimensions.
 - A simplified report for non-technical audience which contains only dimred plots and selected markers.
 
@@ -191,7 +191,7 @@ Just for clarification, an individual sample is also denoted as *batch*.
 A stage for reading in single-sample data, integration using several methods, and computing reduced dimensions.
 Note that currently only samples which were **all** normalized by `scran` method can be integrated.
 
-More information can be found in this [OSCA chapter](http://bioconductor.org/books/release/OSCA.multisample).
+More information can be found in this [OSCA chapter](http://bioconductor.org/books/3.15/OSCA.multisample).
 
 `r emoji::emoji("gear")` Config and targets: `vignette("stage_integration")`
 
@@ -265,7 +265,7 @@ A stage for calculation, visualization and reporting of cell cluster markers ("g
 
 `r emoji::emoji("ladder")` Structure
 
-- [Calculation of cluster markers](https://bioconductor.org/books/release/OSCA.basic/marker-detection.html):
+- [Calculation of cluster markers](https://bioconductor.org/books/3.15/OSCA.basic/marker-detection.html):
   any categorical grouping of cells can be used, including those manually defined based on the existing groups
   (from e.g. clustering), as described in the `vignette("stage_norm_clustering")`.
   More details about marker computation can be found in `vignette("cluster_markers")`.

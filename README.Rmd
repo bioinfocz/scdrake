@@ -55,7 +55,7 @@ and links to outputs is described in `vignette("pipeline_overview")`
 ([link](https://bioinfocz.github.io/scdrake/articles/pipeline_overview.html)).
 
 Huge thanks go to the authors of the
-[Orchestrating Single-Cell Analysis with Bioconductor](https://bioconductor.org/books/release/OSCA) book on whose
+[Orchestrating Single-Cell Analysis with Bioconductor](https://bioconductor.org/books/3.15/OSCA) book on whose
 methods and recommendations is `{scdrake}` largely based.
 
 ***
@@ -330,7 +330,7 @@ This work was supported by [ELIXIR CZ](https://www.elixir-czech.cz) research inf
 Many things are used by `{scdrake}`, but these are really worth mentioning:
 
 - The [Bioconductor](https://www.bioconductor.org) ecosystem.
-- The [*Orchestrating Single-Cell Analysis with Bioconductor*](https://bioconductor.org/books/release/OSCA) book.
+- The [*Orchestrating Single-Cell Analysis with Bioconductor*](https://bioconductor.org/books/3.15/OSCA) book.
 - The [scran](https://bioconductor.org/packages/release/bioc/html/scran.html),
   [scater](https://bioconductor.org/packages/release/bioc/html/scater.html), and other great packages from
   [Aaron Lun](https://orcid.org/0000-0002-3564-4813) et al.

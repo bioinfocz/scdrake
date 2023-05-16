@@ -118,7 +118,7 @@ HVG_METRIC: "gene_var"
 
 **Type:** character scalar (`"gene_var"` | `"gene_cv2"` | `"sctransform"`)
 
-A metric used to find HVGs. See <https://bioconductor.org/books/release/OSCA.basic/feature-selection.html> for more details.
+A metric used to find HVGs. See <https://bioconductor.org/books/3.15/OSCA.basic/feature-selection.html> for more details.
 
 - `"gene_var"`: variance of the log-counts (`scran::modelGeneVar()`).
 - `"gene_cv2"`: coefficient of variation (`scran::modelGeneCV2()`).
@@ -137,11 +137,11 @@ HVG_SELECTION: "top"
 A HVG selection strategy. Only relevant when the `HVG_METRIC` parameter is `"gene_var"` or `"gene_cv2"`.
 
 - `"top"`: take top X genes according to the metric
-  ([details](https://bioconductor.org/books/release/OSCA.basic/feature-selection.html#hvg-selection)).
+  ([details](https://bioconductor.org/books/3.15/OSCA.basic/feature-selection.html#hvg-selection)).
 - `"significance"`: use a FDR threshold
-  ([details](https://bioconductor.org/books/release/OSCA.advanced/more-hvgs.html#more-hvg-selection-strategies)).
+  ([details](https://bioconductor.org/books/3.15/OSCA.advanced/more-hvgs.html#more-hvg-selection-strategies)).
 - `"threshold"`: use a threshold on minimum value of the metric
-  ([details](https://bioconductor.org/books/release/OSCA.advanced/more-hvgs.html#more-hvg-selection-strategies)).
+  ([details](https://bioconductor.org/books/3.15/OSCA.advanced/more-hvgs.html#more-hvg-selection-strategies)).
 
 For `"top"` and `"threshold"`, `bio` and `ratio` columns are used for `HVG_METRIC` of `"gene_var"` and `"gene_cv2"`,
 respectively. These columns are present in the DataFrame returned from the underlying method
@@ -199,7 +199,7 @@ HVG_RM_CC_GENES: False
 
 Whether to apply a correction for cell cycle prior to HVG selection.
 We implement a cell cycle-related genes removal strategy described
-[here](https://bioconductor.org/books/release/OSCA.advanced/cell-cycle-assignment.html#removing-cell-cycle-related-genes).
+[here](https://bioconductor.org/books/3.15/OSCA.advanced/cell-cycle-assignment.html#removing-cell-cycle-related-genes).
 It is based on the percentage of variance explained by the cell cycle phase in the expression profile for each gene.
 
 Note that when `SCTransform` is used for normalization including cell cycle variables to regress out, than
@@ -246,9 +246,9 @@ A method to select first N principal components (PCs):
 
 - `"forced"`: use the number of PCs specified by the `PCA_FORCED_PCS` parameter.
 - `"elbow"`: use the
-  [elbow point method](https://bioconductor.org/books/release/OSCA.advanced/dimensionality-reduction-redux.html#using-the-elbow-point).
+  [elbow point method](https://bioconductor.org/books/3.15/OSCA.advanced/dimensionality-reduction-redux.html#using-the-elbow-point).
 - `"technical_noise"`: use the
-  [technical noise](https://bioconductor.org/books/release/OSCA.advanced/dimensionality-reduction-redux.html#using-the-technical-noise).
+  [technical noise](https://bioconductor.org/books/3.15/OSCA.advanced/dimensionality-reduction-redux.html#using-the-technical-noise).
 
 ***
 
@@ -262,7 +262,7 @@ If the `PCA_SELECTION_METHOD` parameter is `"forced"`, use this number of first 
 
 ## t-SNE
 
-[t-stochastic neighbor embedding](https://bioconductor.org/books/release/OSCA.basic/dimensionality-reduction.html#t-stochastic-neighbor-embedding)
+[t-stochastic neighbor embedding](https://bioconductor.org/books/3.15/OSCA.basic/dimensionality-reduction.html#t-stochastic-neighbor-embedding)
 
 See `?scater::runTSNE` for the underlying method.
 
@@ -290,7 +290,7 @@ A maximum number of t-SNE iterations.
 
 ### Graph-based clustering
 
-Parameters for [graph-based clustering](https://bioconductor.org/books/release/OSCA.basic/clustering.html#clustering-graph).
+Parameters for [graph-based clustering](https://bioconductor.org/books/3.15/OSCA.basic/clustering.html#clustering-graph).
 
 ***
 
@@ -530,7 +530,7 @@ CELL_ANNOTATION_SOURCES:
 **Type:** list of named lists
 
 Specifies reference dataset(s) to be used for cell type annotation. The method used in `{SingleR}` for training and
-classification is described [here](http://bioconductor.org/books/release/SingleRBook/introduction.html#method-description).
+classification is described [here](http://bioconductor.org/books/3.15/SingleRBook/introduction.html#method-description).
 
 The names of named lists are used to name the reference datasets, e.g. as the prefixes in names of `colData()` columns
 containing per-cell labels.
@@ -893,14 +893,14 @@ Note that you can use names of `cell_annotation_labels`'s items in the `CELL_GRO
 i.e. for each reference dataset:
 
 - `score_heatmaps`: heatmaps of per-cell label scores created for each clustering (as column annotation)
-  ([details](http://bioconductor.org/books/release/SingleRBook/annotation-diagnostics.html#based-on-the-scores-within-cells)).
+  ([details](http://bioconductor.org/books/3.15/SingleRBook/annotation-diagnostics.html#based-on-the-scores-within-cells)).
 - `marker_heatmaps`: `NULL` if `cell_annotation$train_params$de` is not `"de"`, otherwise heatmap for each label
   containing top upregulated markers from pairwise t-tests
-  ([details](http://bioconductor.org/books/release/SingleRBook/annotation-diagnostics.html#based-on-marker-gene-expression)).
+  ([details](http://bioconductor.org/books/3.15/SingleRBook/annotation-diagnostics.html#based-on-marker-gene-expression)).
   Number of top markers is specified in `cell_annotation$diagnostics_params$heatmap_n_top_markers`.
 - `delta_distribution_plot`: violin plots (in one figure / object) of per-cell deltas for each label.
   Deltas are differences between the score for the assigned label and the median across all labels for each cell
-  ([details](http://bioconductor.org/books/release/SingleRBook/annotation-diagnostics.html#based-on-the-deltas-across-cells)).
+  ([details](http://bioconductor.org/books/3.15/SingleRBook/annotation-diagnostics.html#based-on-the-deltas-across-cells)).
 
 `cell_annotation_diagnostic_plots_files`: paths to PDF files of diagnostic plots in `cell_annotation_diagnostic_plots`
 (`score_heatmaps_out_file`, `delta_distribution_plot_out_file`, `marker_heatmaps_out_file`).

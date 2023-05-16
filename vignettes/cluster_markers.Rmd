@@ -15,7 +15,7 @@ vignette: >
 
 ***
 
-Taken from [OSCA](https://bioconductor.org/books/release/OSCA.basic/marker-detection.html), slightly modified:
+Taken from [OSCA](https://bioconductor.org/books/3.15/OSCA.basic/marker-detection.html), slightly modified:
 
 > To interpret our clustering results, we identify the genes that drive separation between clusters.
 > These marker genes allow us to assign biological meaning to each cluster based on their functional annotation.
@@ -41,7 +41,7 @@ For each cell grouping and gene, three distinct, adjustable statistical tests ar
   test the null hypothesis that the proportion of cells expressing a gene is the same between groups.
 
 These tests are performed in a
-[pairwise fashion](https://bioconductor.org/books/release/OSCA.basic/marker-detection.html#scoring-markers-by-pairwise-comparisons)
+[pairwise fashion](https://bioconductor.org/books/3.15/OSCA.basic/marker-detection.html#scoring-markers-by-pairwise-comparisons)
 within each grouping, i.e. each level of the grouping is tested against each other.
 
 Example: three pairwise tests of each type are computed for k-means clustering with $k = 3$:
