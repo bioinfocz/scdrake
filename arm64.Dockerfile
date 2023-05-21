@@ -20,7 +20,9 @@ ENV BIOCONDUCTOR_VERSION=$BIOCONDUCTOR_VERSION
 ARG BIOCONDUCTOR_PATCH=0
 ARG BIOCONDUCTOR_DOCKER_VERSION=${BIOCONDUCTOR_VERSION}.${BIOCONDUCTOR_PATCH}
 
-ARG SCDRAKE_VERSION=1.4.1
+ARG SCDRAKE_VERSION
+RUN test -n "$SCDRAKE_VERSION" || (echo "SCDRAKE_VERSION not set" && false)
+ENV SCDRAKE_VERSION=$SCDRAKE_VERSION
 
 LABEL name="jirinovo/scdrake" \
     version=$SCDRAKE_VERSION \
@@ -194,7 +196,6 @@ ARG BIOCMANAGER_COMMIT=67faa90
 
 RUN Rscript -e "install.packages('remotes', repos = 'https://cran.rstudio.com')"
 RUN Rscript -e "remotes::install_github('Bioconductor/BiocManager@${BIOCMANAGER_COMMIT}', repos = 'https://cran.rstudio.com')"
-# RUN Rscript -e "install.packages('BiocManager', repos = 'https://cran.rstudio.com')"
 RUN Rscript -e "BiocManager::install(version = '${BIOCONDUCTOR_VERSION}', update = TRUE, ask = FALSE)"
 RUN Rscript -e "BiocManager::install('devtools')"
 ## END https://github.com/Bioconductor/bioconductor_docker/blob/master/bioc_scripts/install.R
@@ -244,6 +245,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     qpdf
 
 RUN wget -O /usr/local/bin/yq https://github.com/mikefarah/yq/releases/download/3.4.1/yq_linux_arm64
+RUN test -s "/usr/local/bin/yq" || (echo "yq binary is empty" && false)
 RUN chmod +x /usr/local/bin/yq
 RUN mkdir -p /root/.local/bin
 RUN ln -s /usr/local/bin/yq /root/.local/bin/yq
@@ -251,7 +253,7 @@ RUN mkdir -p /home/rstudio/.local/bin
 RUN ln -s /usr/local/bin/yq /home/rstudio/.local/bin/yq
 RUN chown -R rstudio:rstudio /home/rstudio/.local
 
-ENV RENV_VERSION 0.16.0
+ENV RENV_VERSION=0.16.0
 RUN R -e "BiocManager::install('rstudio/renv@${RENV_VERSION}')"
 
 ARG R_PKG_INSTALL_NCPUS=1
@@ -288,7 +290,7 @@ RUN ccache --clear
 RUN Rscript -e "scdrake::install_cli(type = 'system', ask = FALSE)"
 
 ENV MAKEFLAGS=""
-ENV SCDRAKE_DOCKER TRUE
+ENV SCDRAKE_DOCKER=TRUE
 
 ## -- This will start RStudio.
 CMD ["/init"]
