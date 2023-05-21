@@ -10,7 +10,8 @@
 ARG BIOCONDUCTOR_VERSION=3_15
 FROM bioconductor/bioconductor_docker:RELEASE_$BIOCONDUCTOR_VERSION
 
-ARG SCDRAKE_VERSION=1.4.1
+ARG SCDRAKE_VERSION
+RUN test -n "$SCDRAKE_VERSION" || (echo "SCDRAKE_VERSION not set" && false)
 
 LABEL name="bioinfocz/scdrake" \
       version=$SCDRAKE_VERSION \
@@ -48,6 +49,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
   qpdf
 
 RUN wget -O /usr/local/bin/yq https://github.com/mikefarah/yq/releases/download/3.4.1/yq_linux_amd64
+RUN test -s "/usr/local/bin/yq" || (echo "yq binary is empty" && false)
 RUN chmod +x /usr/local/bin/yq
 RUN mkdir -p /root/.local/bin
 RUN ln -s /usr/local/bin/yq /root/.local/bin/yq
