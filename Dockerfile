@@ -12,6 +12,7 @@ FROM bioconductor/bioconductor_docker:RELEASE_$BIOCONDUCTOR_VERSION
 
 ARG SCDRAKE_VERSION
 RUN test -n "$SCDRAKE_VERSION" || (echo "SCDRAKE_VERSION not set" && false)
+ENV SCDRAKE_VERSION=$SCDRAKE_VERSION
 
 LABEL name="bioinfocz/scdrake" \
       version=$SCDRAKE_VERSION \
