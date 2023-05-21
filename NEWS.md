@@ -11,6 +11,7 @@
   - Polished clustering names in `colData()`.
 - Added [Harmony](https://github.com/immunogenomics/harmony) integration.
 - Allow to load data in the `01_input_qc` stage also as a SCE object from a `{drake}` cache.
+- Subsetting of imported SCE object.
 
 # scdrake 1.4.1
 

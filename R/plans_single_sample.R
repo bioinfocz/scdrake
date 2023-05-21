@@ -21,7 +21,7 @@ get_input_qc_subplan <- function(cfg, cfg_pipeline, cfg_main) {
     config_input_qc = !!cfg,
 
     ## -- Read raw Cell Ranger files.
-    sce_raw = sce_raw_fn(!!cfg$INPUT_DATA),
+    sce_raw = sce_raw_fn(!!cfg$INPUT_DATA, input_data_subset = !!cfg$INPUT_DATA_SUBSET),
     sce_raw_info = save_object_info(sce_raw),
 
     ## -- Calculate barcode ranks (for knee plot).

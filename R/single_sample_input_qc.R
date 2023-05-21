@@ -11,11 +11,16 @@
 #'   - `path`: a path to input file (or directory in case of `type = "cellranger"`)
 #'   - `delimiter`: a field delimiter when `type = "table"`
 #'   - `target_name`: a name of `SingleCellExperiment` target when `type = "sce_drake_cache"`
+#' @param input_data_subset `NULL` or a named list by which subsetting of the imported data will be performed.
+#' The list must contain the following items:
+#' - `subset_by` (character scalar): name of column in `colData()` to use for subsetting
+#' - `values` (vector): values to subset to
+#' - `negate` (logical scalar): if `TRUE`, negate the selection
 #' @return A `SingleCellExperiment` object. *Output target*: `sce_raw`
 #'
 #' @concept single_sample_input_qc_fn
 #' @export
-sce_raw_fn <- function(input_data) {
+sce_raw_fn <- function(input_data, input_data_subset = NULL) {
   input_type <- input_data$type
   input_path <- input_data$path
 
@@ -73,6 +78,24 @@ sce_raw_fn <- function(input_data) {
     "counts" %in% assayNames(sce_raw),
     msg = "{.field counts} assay not found in SCE object loaded from {.file {input_path}}"
   )
+
+  if (!is_null(input_data_subset)) {
+    subset_by <- input_data_subset$subset_by
+    assert_that_(
+      subset_by %in% colnames(colData(sce_raw)),
+      msg = "Cannot subset the SCE object by {.var {subset_by}}: column not found in {.code colData(sce_raw)}"
+    )
+
+    filter <- colData(sce_raw)[[subset_by]] %in% input_data_subset$values
+
+    if (input_data_subset$negate) {
+      filter <- !filter
+    }
+
+    cli_alert_info("Subsetting {.var sce_raw} by {.var {subset_by}}: keeping {sum(filter)} cells")
+
+    sce_raw <- sce_raw[, filter]
+  }
 
   return(sce_raw)
 }

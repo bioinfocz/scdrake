@@ -80,6 +80,25 @@ A path to RMarkdown file used for HTML report of this pipeline stage.
 
 ***
 
+## Subsetting of imported data
+
+```yaml
+INPUT_DATA_SUBSET: null
+## Example of simple subsetting by cluster numbers
+INPUT_DATA_SUBSET:
+  subset_by: "cluster_kmeans_k6"
+  values: ["3", "4"]
+  negate: false
+```
+
+**Type:** `null` (default) or named list
+
+The imported data can be subsetted by a simple selection of values present in a column of cell metadata (`colData()`).
+In the example above, cells assigned to clusters `"3"` and `"4"` of the `cluster_kmeans_k6` columns will be kept.
+You can also negate the selection by specifying `negate: true`.
+
+***
+
 ## Removal of empty droplets
 
 See `?DropletUtils::emptyDrops` for more details.

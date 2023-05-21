@@ -8,6 +8,15 @@ INPUT_DATA:
 INPUT_QC_REPORT_RMD_FILE: "Rmd/single_sample/01_input_qc.Rmd"
 ###############################################################################
 
+### Subset input data (if SingleCellExperiment object is imported) ############
+INPUT_DATA_SUBSET: null
+## Example of simple subsetting by cluster numbers
+# INPUT_DATA_SUBSET:
+#   subset_by: "cluster_kmeans_k6"
+#   values: ["3", "4"]
+#   negate: false
+###############################################################################
+
 ### Removal of empty droplets #################################################
 EMPTY_DROPLETS_ENABLED: True
 EMPTY_DROPLETS_LOWER: 100

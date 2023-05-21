@@ -4,7 +4,7 @@
 \alias{sce_raw_fn}
 \title{Import scRNA-seq data.}
 \usage{
-sce_raw_fn(input_data)
+sce_raw_fn(input_data, input_data_subset = NULL)
 }
 \arguments{
 \item{input_data}{A named list of named lists containing character scalars:
@@ -19,6 +19,14 @@ sce_raw_fn(input_data)
 \item \code{path}: a path to input file (or directory in case of \code{type = "cellranger"})
 \item \code{delimiter}: a field delimiter when \code{type = "table"}
 \item \code{target_name}: a name of \code{SingleCellExperiment} target when \code{type = "sce_drake_cache"}
+}}
+
+\item{input_data_subset}{\code{NULL} or a named list by which subsetting of the imported data will be performed.
+The list must contain the following items:
+\itemize{
+\item \code{subset_by} (character scalar): name of column in \code{colData()} to use for subsetting
+\item \code{values} (vector): values to subset to
+\item \code{negate} (logical scalar): if \code{TRUE}, negate the selection
 }}
 }
 \value{
