@@ -219,6 +219,7 @@ check_yq <- function(yq_binary = getOption("scdrake_yq_binary"),
 
   yq_version <- system2(yq_binary, "-V", stdout = TRUE)
   assert_that(
+    !is_empty(yq_version),
     stringr::str_detect(yq_version, stringr::fixed("yq version 3")),
     msg = cli({
       cli_alert_danger("The yq tool's version is not 3 ('{yq_version}'). You can:")
