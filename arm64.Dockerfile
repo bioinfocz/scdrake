@@ -32,6 +32,11 @@ LABEL name="jirinovo/scdrake" \
     description="Scdrake package wrapped in arm64 Bioconductor docker image." \
     license="MIT"
 
+ARG PROXY_BUILD
+ENV ALL_PROXY=${PROXY_BUILD}
+ENV http_proxy=${PROXY_BUILD}
+ENV https_proxy=${PROXY_BUILD}
+
 ## Do not use binary repositories during container creation
 ## Avoid using binaries produced for older version of same container
 ENV BIOCONDUCTOR_USE_CONTAINER_REPOSITORY=FALSE
@@ -172,12 +177,6 @@ RUN apt-get install -y --no-install-recommends \
     libgdal-dev \
     default-libmysqlclient-dev \
     libmysqlclient-dev
-
-## clean up
-RUN apt-get clean
-RUN apt-get autoremove -y
-RUN apt-get autoclean -y
-RUN rm -rf /var/lib/apt/lists/*
 ## END https://github.com/Bioconductor/bioconductor_docker/blob/master/bioc_scripts/install_bioc_sysdeps.sh
 
 ## Add host-site-library
@@ -244,7 +243,13 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     libtiff-dev \
     qpdf
 
-RUN wget -O /usr/local/bin/yq https://github.com/mikefarah/yq/releases/download/3.4.1/yq_linux_arm64
+## clean up
+RUN apt-get clean
+RUN apt-get autoremove -y
+RUN apt-get autoclean -y
+RUN rm -rf /var/lib/apt/lists/*
+
+RUN curl -L --output /usr/local/bin/yq https://github.com/mikefarah/yq/releases/download/3.4.1/yq_linux_amd64
 RUN test -s "/usr/local/bin/yq" || (echo "yq binary is empty" && false)
 RUN chmod +x /usr/local/bin/yq
 RUN mkdir -p /root/.local/bin
@@ -291,6 +296,11 @@ RUN Rscript -e "scdrake::install_cli(type = 'system', ask = FALSE)"
 
 ENV MAKEFLAGS=""
 ENV SCDRAKE_DOCKER=TRUE
+
+ARG PROXY_IMAGE
+ENV ALL_PROXY=${PROXY_IMAGE}
+ENV http_proxy=${PROXY_IMAGE}
+ENV https_proxy=${PROXY_IMAGE}
 
 ## -- This will start RStudio.
 CMD ["/init"]
