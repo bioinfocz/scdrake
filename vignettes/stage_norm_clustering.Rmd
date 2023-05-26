@@ -15,23 +15,109 @@ vignette: >
 
 ***
 
-For a general overview of this single-sample pipeline stage see `vignette("pipeline_overview")`.
+## {.tabset}
 
-Config for this stage is stored in `02_norm_clustering.yaml` file.
+### Overview
+
+This stage build upon the `01_input_qc` stage and performs perhaps the most important steps in scRNA-seq data analysis:
+normalization, highly variable gene selection, dimensionality reduction, clustering, cell type annotation, and
+visualization.
+
+`r emoji::emoji("gear")` Config file: `config/single_sample/02_norm_clustering.yaml`
+
+`r emoji::emoji("clipboard")` HTML report target (in `config/pipeline.yaml`):
+`DRAKE_TARGETS: ["report_norm_clustering", "report_norm_clustering_simple"]`
+
+[`r emoji::emoji("scroll")` Example report](https://onco.img.cas.cz/novotnyj/scdrake/single_sample/pbmc1k/02_norm_clustering/02_norm_clustering.html)
+([used config](https://github.com/bioinfocz/scdrake/blob/main/tests/testthat/run_pipeline_config_patches/single_sample_pbmc1k_full/02_norm_clustering.default.yaml))
+
+[`r emoji::emoji("scroll")` Example simplified report](https://onco.img.cas.cz/novotnyj/scdrake/single_sample/pbmc1k/02_norm_clustering/02_norm_clustering_simple.html)
+([used config](https://github.com/bioinfocz/scdrake/blob/main/tests/testthat/run_pipeline_config_patches/single_sample_pbmc1k_full/02_norm_clustering.default.yaml))
+
+`r emoji::emoji("ladder")` Structure
+
+- Calculation of cell cycle score and assignment of cells to phases (G1, G2M, S) using the list of cell cycle genes in
+  `Seurat::cc.genes.updated.2019` and `Seurat::CellCycleScoring()` function
+- [Normalization](https://bioconductor.org/books/3.15/OSCA.basic/normalization.html) of UMI counts by either:
+  - [Normalization by deconvolution](https://bioconductor.org/books/3.15/OSCA.basic/normalization.html#normalization-by-deconvolution)
+    implemented in the [scran](https://bioconductor.org/packages/3.15/bioc/html/scran.html) package
+    (`scuttle::computePooledFactors()`, `scuttle::logNormCounts()`)
+  - Regularized negative binomial regression to normalize UMI count data implemented in the
+    [sctransform](https://github.com/ChristophH/sctransform) package and wrapped by the
+    [Seurat](https://satijalab.org/seurat/) package. This method also allows to regress out confounding variables
+    such as cell cycle score or percentage of mitochondrial genes expression. Note that for cell cycle score,
+    a better method seems to be removal of CC-related genes prior to detection of highly variable genes (HVGs, see below).
+    `sctransform` also returns a specified number of HVGs.
+- Selection of [highly variable genes](https://bioconductor.org/books/3.15/OSCA.basic/feature-selection.html) (HVGs):
+  - HVGs are used downstream for dimensionality reduction and clustering
+  - Three metrics for HVGs are available:
+    - [Gene variance](https://bioconductor.org/books/3.15/OSCA.basic/feature-selection.html#quantifying-per-gene-variation)
+    - [Coefficient of variation](http://bioconductor.org/books/3.15/OSCA.advanced/more-hvgs.html#using-the-coefficient-of-variation)
+      (CV2)
+    - HVGs obtained from the `sctransform` normalization
+  - Based on the selected one from the first two metrics above, HVGs are selected either by:
+    - Top N genes based on a metric (e.g. top 1000 genes with the highest variance)
+    - Significance (FDR) threshold
+    - Threshold on a metric value
+  - Prior to HVG selection, cell cycle-related genes can be removed.
+    `{scdrake}` is using a method based on the percentage of variance explained by the cell cycle phase
+    in the expression profile for each gene
+    ([details](https://bioconductor.org/books/3.15/OSCA.advanced/cell-cycle-assignment.html#removing-cell-cycle-related-genes))
+- Removal of [cell doublets](https://bioconductor.org/books/3.15/OSCA.advanced/doublet-detection.html)
+  (`scDblFinder::computeDoubletDensity()`).
+- [Calculation of PCA](https://bioconductor.org/books/3.15/OSCA.basic/dimensionality-reduction.html#principal-components-analysis)
+  and [selection of number of principal components](https://bioconductor.org/books/3.15/OSCA.basic/dimensionality-reduction.html#choosing-the-number-of-pcs)
+  (PCs) which will be used downstream. There are three methods to select a proper number of PCs:
+  - Using the [elbow point](http://bioconductor.org/books/3.15/OSCA.advanced/dimensionality-reduction-redux.html#more-choices-for-the-number-of-pcs)
+  - Using the [technical noise](http://bioconductor.org/books/3.15/OSCA.advanced/dimensionality-reduction-redux.html#using-the-technical-noise)
+  - Using a fixed number of PCs (`forced`)
+- [Cell clustering](https://bioconductor.org/books/3.15/OSCA.basic/clustering.html) using several algorithms:
+  - [Graph-based clustering](https://bioconductor.org/books/3.15/OSCA.basic/clustering.html#clustering-graph)
+    (mutual nearest neighbors) using Leiden, Louvain or Walktrap algorithms.
+    To control for the number of resulting clusters (granularity), multiple resolutions can be specified for the former two algorithms.
+  - [K-means clustering](https://bioconductor.org/books/3.15/OSCA.basic/clustering.html#vector-quantization-with-k-means)
+    using both defined numbers of K and best K selection
+  - [Single-Cell Consensus Clustering](https://bioconductor.org/packages/3.15/bioc/html/SC3.html) (SC3) with
+    defined numbers of clusters
+- Reference-based cell type annotation using `{SingleR}`. More details are given in the accompanying
+  [book](http://bioconductor.org/books/3.15/SingleRBook/) and the underlying method is described
+  [here](http://bioconductor.org/books/3.15/SingleRBook/introduction.html#method-description).
+  - Reference datasets are taken by default from the `{celldex}` package.
+  - Note that the reference datasets included in the `{celldex}` package don't contain every possible cell type and the
+  annotation may bring inaccurate labels for some datasets. Thus, it is also possible to supply `{SingleR}` a custom
+  reference datasets in the form of `{SingleCellExperiment}` or `{SummarizedExperiment}` object.
+  - Plots of annotation diagnostics:
+    - Score heatmaps show distribution of predicted cell types in computed clusters (if any), along with per-cell annotation scores,
+    - Marker heatmaps show genes that are markers for a given cell type in both the reference and current datasets,,
+      i.e. those markers have driven the decision to label cells by the chosen cell type,
+    - Delta scores show poor-quality or ambiguous assignments based on the per-cell 'delta', i.e., the difference between,
+      the score for the assigned label and the median across all labels for each cell.,
+      See [OSCA](https://bioconductor.org/books/3.15/SingleRBook/annotation-diagnostics.html#based-on-the-deltas-across-cells) for more details
+- Assignment of cells to predefined groupings based on existing data. That means you can reuse an assignment of cells
+  from e.g. clustering, and rename or merge its levels (cluster numbers).
+  - Example: you identify a biological meaning of clusters computed by k-means with $k = 3$.
+    You can use this information, and rename and merge the clusters, such that:
+    - Cluster 1 -> T cells
+    - Cluster 2 -> B cells
+    - Cluster 3 -> T cells
+  - Then you can use the new cell grouping for e.g. plotting of reduced dimensions or calculation of cluster markers.
+- [Dimensionality reduction](https://bioconductor.org/books/3.15/OSCA.basic/dimensionality-reduction.html):
+  - [PCA](https://bioconductor.org/books/3.15/OSCA.basic/dimensionality-reduction.html#principal-components-analysis)
+  - [t-SNE](https://bioconductor.org/books/3.15/OSCA.basic/dimensionality-reduction.html#t-stochastic-neighbor-embedding)
+  - [UMAP](https://bioconductor.org/books/3.15/OSCA.basic/dimensionality-reduction.html#uniform-manifold-approximation-and-projection)
+- Expression plots of selected groups of genes (markers) in reduced dimensions
+- A simplified report for non-technical audience which contains only dimred plots, selected markers and cell annotation results
+
+### Config parameters
+
+Config for this stage is stored in the `config/single_sample/02_norm_clustering.yaml` file.
 Directory with this file is read from `SCDRAKE_SINGLE_SAMPLE_CONFIG_DIR` environment variable upon `{scdrake}` load or
 attach, and saved as `scdrake_single_sample_config_dir` option. This option is used as the default argument value in
 several `{scdrake}` functions.
 
-Targets for this stage's report: `report_norm_clustering`, `report_norm_clustering_simple`
-
-You can make these targets by setting `DRAKE_TARGETS: ["report_norm_clustering", "report_norm_clustering_simple]`
-in `pipeline.yaml` config file.
-
 ***
 
-# Config parameters
-
-## Normalization parameters
+#### Normalization parameters
 
 ```yaml
 NORMALIZATION_TYPE: "scran"
@@ -55,7 +141,7 @@ A normalization type:
 
 See `vignette("pipeline_overview")` for more details about normalization methods.
 
-### `scran` normalization parameters
+##### `scran` normalization parameters
 
 These parameters are used when `NORMALIZATION_TYPE` is `"scran"`.
 
@@ -80,7 +166,7 @@ SCRAN_QUICKCLUSTER_METHOD: "igraph"
 A clustering method: `"igraph"` uses graph-based clustering, while `"hclust"` uses hierarchical clustering.
 See `?scran::quickCluster` for more details.
 
-### `sctransform` normalization parameters
+##### `sctransform` normalization parameters
 
 These parameters are used when `NORMALIZATION_TYPE` is `"sctransform"`.
 
@@ -110,7 +196,7 @@ SCT_N_HVG: 3000
 
 A number of top HVGs to return from the `SCTransform` normalization.
 
-## Highly variable genes (HVGs) selection
+#### Highly variable genes (HVGs) selection
 
 ```yaml
 HVG_METRIC: "gene_var"
@@ -189,7 +275,7 @@ HVG_SELECTION: "threshold"
 HVG_SELECTION_VALUE: 1
 ```
 
-### Removal of cell cycle-related genes prior to HVG selection
+#### Removal of cell cycle-related genes prior to HVG selection
 
 ```yaml
 HVG_RM_CC_GENES: False
@@ -216,7 +302,7 @@ HVG_CC_GENES_VAR_EXPL_THRESHOLD: 5
 A threshold on gene cell cycle variance explained, i.e. genes with var. expl. greater than this threshold will be
 marked as cell cycle-related and removed *prior* to selection of HVGs.
 
-## Doublet detection and filtering
+#### Doublet detection and filtering
 
 Doublets are droplets in which multiple cells were captured.
 
@@ -232,9 +318,9 @@ A threshold for doublet score computed by `scDblFinder::computeDoubletDensity()`
 Cells with doublet score greater than the threshold will be removed.
 If `null`, doublets are not removed, but doublet score is still computed.
 
-## Dimensionality reduction
+#### Dimensionality reduction
 
-### PCA
+##### PCA
 
 ```yaml
 PCA_SELECTION_METHOD: "forced"
@@ -260,7 +346,7 @@ PCA_FORCED_PCS: 15
 
 If the `PCA_SELECTION_METHOD` parameter is `"forced"`, use this number of first principal components.
 
-## t-SNE
+##### t-SNE
 
 [t-stochastic neighbor embedding](https://bioconductor.org/books/3.15/OSCA.basic/dimensionality-reduction.html#t-stochastic-neighbor-embedding)
 
@@ -286,9 +372,9 @@ TSNE_MAX_ITER: 1000
 
 A maximum number of t-SNE iterations.
 
-## Clustering
+#### Clustering
 
-### Graph-based clustering
+##### Graph-based clustering
 
 Parameters for [graph-based clustering](https://bioconductor.org/books/3.15/OSCA.basic/clustering.html#clustering-graph).
 
@@ -371,7 +457,7 @@ CLUSTER_GRAPH_WALKTRAP_ENABLED: False
 
 If `True`, enable Walktrap community detection algorithm.
 
-### k-means clustering
+##### k-means clustering
 
 ```yaml
 CLUSTER_KMEANS_K_ENABLED: False
@@ -403,7 +489,7 @@ CLUSTER_KMEANS_KBEST_ENABLED: False
 
 If `True`, enable k-means clustering with best `k` based on gap statistics.
 
-### SC3 clustering
+##### SC3 clustering
 
 ```yaml
 CLUSTER_SC3_ENABLED: False
@@ -453,7 +539,7 @@ If `False`, skip SC3 clustering.
 
 ***
 
-## Cell type annotation
+#### Cell type annotation
 
 ```yaml
 CELL_ANNOTATION_SOURCES_DEFAULTS:
@@ -542,8 +628,8 @@ Each reference dataset must have the following parameters:
 - `reference: "HumanPrimaryCellAtlasData"` (character scalar):
   - If `reference_type: "celldex"`: a name of function to call in the `{celldex}` package. This function must return a
     `SummarizedExperiment` object. See `{celldex}`'s
-    [vignette](https://bioconductor.org/packages/release/data/experiment/vignettes/celldex/inst/doc/userguide.html)
-    for the overview of available datasets.
+    [vignette](https://bioconductor.org/packages/3.15/data/experiment/vignettes/celldex/inst/doc/userguide.html)
+    for an overview of available datasets.
   - If `reference_type: "file"`: a path to Rds file with saved `SingleCellExperiment` or `SummarizedExperiment` object.
     The assay type specified `TRAIN_PARAMS/assay_type` must be present in `assayNames()` of the object.
     The `label_column` must be present in `colData()` of the object.
@@ -570,7 +656,11 @@ will override corresponding parameters in `TRAIN_PARAMS` in `CELL_ANNOTATION_SOU
 
 ***
 
-## Cell grouping assignment
+#### Cell grouping assignment
+
+Using the two parameters below, it is possible to add custom cell metadata or rearrange the current one into new groupings
+(saved as `colData()` columns of the `SingleCellExperiment` object). These groupings can be then referenced in other parameters,
+e.g. `NORM_CLUSTERING_REPORT_DIMRED_PLOTS_OTHER` or in the `cluster_markers` and `contrasts` stages.
 
 ```yaml
 ADDITIONAL_CELL_DATA_FILE: null
@@ -581,8 +671,8 @@ ADDITIONAL_CELL_DATA_FILE: null
 A path to file with additional cell data which will be added to `colData()` of the final SCE object of this stage.
 The additional data will overwrite existing columns (e.g. `cluster_graph_louvain`), but are appended before the
 `CELL_GROUPINGS` below is applied, so you can refer to additional data columns inside `CELL_GROUPINGS`.
-There can be only a subset of barcodes in the additional data - the missing ones will have `NA` set in the resulting data.
-Rownames are not mandatory.
+In the additional data, there can be only cell barcodes that are present after cell filtering in the `01_input_qc` stage -
+the missing ones will have `NA` set in the resulting data. Rownames are not mandatory.
 
 The supported file formats are CSV (comma separated, `.csv` extension) and Rds (dataframe-like objects, `.Rds` extension).
 The additional data must contain `Barcode` column by which they will be joined with the original cell data (`colData()`).
@@ -623,15 +713,15 @@ CELL_GROUPINGS:
 ```
 
 - `cluster_graph_leiden_r0.4_annotated`: a name of new cell grouping added to `colData()`.
-- `source_column: "cluster_graph_leiden_r0.4"`: a name of column in `colData()` whose level will be used for the
-  new assignments.
-- `description: "Graph-based clustering ..."`: a description of the new assignment. If it was not set,
-  the name of the assignment (`cluster_graph_leiden_r0.4_annotated`) would be used instead.
-- `assignments`: assignments of the old levels to new ones. That is, level (cluster) `6` will be renamed to `"B"`,
-  and levels `1` and `7` will be merged to a new level `"memory_CD4+"`.
-  All unspecified levels will be kept as they are.
+  - `source_column: "cluster_graph_leiden_r0.4"`: a name of column in `colData()` whose level will be used for the
+    new assignments.
+  - `description: "Graph-based clustering ..."`: a description of the new assignment. If it was not set,
+    the name of the grouping (`cluster_graph_leiden_r0.4_annotated`) would be used instead.
+  - `assignments`: assignments of the old levels to new ones. That is, level (cluster) `6` will be renamed to `"B"`,
+    and levels `1` and `7` will be merged to a new level `"memory_CD4+"`.
+    All unspecified levels will be kept as they are.
 
-## Dimensionality reduction plots
+#### Dimensionality reduction plots
 
 ```yaml
 NORM_CLUSTERING_REPORT_DIMRED_NAMES: ["umap", "pca", "tsne"]
@@ -660,7 +750,7 @@ The format is `"variable_name": "description"`, where description will appear in
 Variables defined in the `CELL_GROUPINGS` parameter can have `description` set to `null` -
 their description from `CELL_GROUPINGS` will be used.
 
-## Input files
+#### Input files
 
 ```yaml
 SELECTED_MARKERS_FILE: null
@@ -678,9 +768,9 @@ First column is a name of group and second column are gene symbols delimited by 
 
 **Do not use a header!**
 
-An example CSV file for PBMC 1k dataset can be retrieved by
-`system.file("extdata", "selected_markers.csv", package = "scdrake", mustWork = TRUE)` or see
-[here](https://github.com/bioinfocz/scdrake/blob/main/inst/extdata/selected_markers.csv).
+An example CSV file for PBMC 1k dataset is automatically copied to a newly initialized project
+(as `system.file("extdata", "selected_markers.csv", package = "scdrake", mustWork = TRUE)`).
+You can also view this file on GitHub [here](https://github.com/bioinfocz/scdrake/blob/main/inst/extdata/selected_markers.csv).
 
 ***
 
@@ -696,7 +786,7 @@ Paths to RMarkdown files used for HTML reports of this pipeline stage.
 `NORM_CLUSTERING_REPORT_RMD_FILE` is technically more detailed, while `NORM_CLUSTERING_REPORT_SIMPLE_RMD_FILE`
 outputs only the dimensionality reduction plots along with cell annotation.
 
-## Output files
+#### Output files
 
 ```yaml
 NORM_CLUSTERING_BASE_OUT_DIR: "02_norm_clustering"
@@ -721,7 +811,7 @@ NORM_CLUSTERING_REPORT_SIMPLE_HTML_FILE: "02_norm_clustering_simple.html"
 
 Names of files and directories created under `NORM_CLUSTERING_BASE_OUT_DIR`. Subdirectories are not allowed.
 
-## HTML output parameters
+#### HTML output parameters
 
 ```yaml
 NORM_CLUSTERING_KNITR_MESSAGE: False
@@ -733,9 +823,7 @@ NORM_CLUSTERING_KNITR_ECHO: False
 
 These are passed to `knitr::opts_chunk()` and used for rendering of stage's HTML report.
 
-***
-
-# Targets
+### Outputs
 
 Here you can find description of the most important targets for this stage.
 However, for a full overview, you have to inspect the
@@ -744,7 +832,7 @@ However, for a full overview, you have to inspect the
 
 HTML report target names: `report_norm_clustering`, `report_norm_clustering_simple` (only dimred plots)
 
-## `SingleCellExperiment` objects
+#### `SingleCellExperiment` objects
 
 `sce_cc`: a SCE object (the `sce_final_input_qc` target from the `input_qc` stage) with added cell cycle information
 to `colData()`: `phase` (`"G1"`, `"G2m"` or `"S"`), `s_score`, `g2m_score`, `cc_difference` (`s_score` - `g2m_score`).
@@ -811,18 +899,18 @@ The names of reduces dimensionality matrices (which can be retrieved by `SingleC
 
 Or you can view their names with `SingleCellExperiment::reducedDimNames()`
 
-## Selection of PCs
+#### Selection of PCs
 
-`pca_elbow_pcs`, `pca_gene_var_pcs`: a number of selected PCs for elbow point and technical variance methods, respectively.
+`pca_elbow_pcs`, `pca_gene_var_pcs`: a number of selected PCs for elbow point and technical variance methods, respectively
 
 `pca_selected_pcs_plot`: a `{ggplot2}` object showing cummulative variance explained and the selected
-number of first PCs for each of the methods.
+number of first PCs for each of the methods
 
-## Cell clustering
+#### Cell clustering
 
-`clusters_all`: a named list of integer vectors which wraps all clusterings below.
+`clusters_all`: a named list of integer vectors which wraps all clusterings below
 
-### Graph-based clustering
+##### Graph-based clustering
 
 `graph_snn`: an `{igraph}` object of shared nearest-neighbor graph, returned from `scran::buildSNNGraph()`
 
@@ -833,7 +921,7 @@ and `igraph::cluster_louvain()`, respectively. Both functions are using `graph_s
 
 `cluster_graph_leiden_clustree`, `cluster_graph_louvain_clustree`: `{ggplot2}` objects of `clustree::clustree()` plots
 
-### k-means
+##### k-means
 
 `cluster_kmeans_kbest_gaps`: a `clusGap` object used to calculate the best K. Returned from `cluster::clusGap()`, to which matrix of
 selected PCs is passed
@@ -848,7 +936,7 @@ In the former, `cluster_kmeans_kbest_k` is used as the number of clusters. In th
 `cluster_kmeans_k_clustree`: `{ggplot2}` object of `clustree::clustree()` plot. If `CLUSTER_KMEANS_KBEST_ENABLED` is `True`,
 it will also contain k-means result with the best `k`.
 
-### SC3
+##### SC3
 
 `sce_sc3`: a `SingleCellExperiment` object returned from `SC3::sc3()`
 
@@ -863,7 +951,7 @@ it will also contain k-means result with the best `k`.
 
 ***
 
-## Cell type annotation
+#### Cell type annotation
 
 `cell_annotation_params`: a tibble with parameters parsed from `CELL_ANNOTATION_SOURCES`
 
@@ -906,7 +994,7 @@ i.e. for each reference dataset:
 (`score_heatmaps_out_file`, `delta_distribution_plot_out_file`, `marker_heatmaps_out_file`).
 That means when you make this target, those files will be created.
 
-## Plots
+#### Plots
 
 `hvg_plot`: a `{patchwork}` object with HVG metric statistics (average expression vs. variance)
 
@@ -920,22 +1008,29 @@ in the first plot, PCA was computed using HVGs with removed cell cycle-related g
 ***
 
 `pca_doublet_plot`, `pca_total_plot`: a `{ggplot2`} plots of the first two PCs colored by doublet score and total
-number of UMIs, respectively.
+number of UMIs, respectively
 
 ***
 
-`dimred_plots_clustering`: a tibble holding plots of reduced dimensions colored by a clustering.
+`dimred_plots_clustering`: a tibble holding plots of reduced dimensions colored by a clustering
+
+`dimred_plots_clustering_files_out`, `dimred_plots_clustering_united_files`: make this target to export the plots
+(the latter produces a single multipage PDF)
 
 ***
 
 `dimred_plots_other_vars`: a tibble holding plots of reduced dimensions colored by a specified variable,
 as defined by the `NORM_CLUSTERING_REPORT_DIMRED_NAMES` and `NORM_CLUSTERING_REPORT_DIMRED_PLOTS_OTHER` parameters.
 
-### Selected markers
+`dimred_plots_other_vars_files_out`: make this target to export the plots
+
+##### Selected markers
 
 `selected_markers_plots`: a tibble holding selected marker plots (`{patchwork}` objects) for each dimensional
 reduction specified in the `NORM_CLUSTERING_REPORT_DIMRED_NAMES` parameter. Selected markers are read from CSV file
 defined in the `SELECTED_MARKERS_FILE` parameter.
+
+`selected_markers_plots_files_out`: make this target to export the plots
 
 You can also use the underlying function `selected_markers_dimplot()`:
 
@@ -954,9 +1049,9 @@ The `selected_markers_df` tibble can be read from the CSV file with
 selected_markers_df <- readr::read_csv("markers.csv", col_names = c("group", "markers"), col_types = "cc")
 ```
 
-## Other targets
+#### Other targets
 
-`config_norm_clustering`: a list holding parameters for this stage.
+`config_norm_clustering`: a list holding parameters for this stage
 
 ***
 

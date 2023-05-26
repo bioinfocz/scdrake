@@ -35,6 +35,7 @@ articles:
     contents:
     - scdrake_docker
     - scdrake_integration
+    - scdrake_advanced
     - scdrake_extend
     - drake_basics
 
@@ -44,7 +45,6 @@ articles:
     - pipeline_overview
     - scdrake_faq
     - scdrake_cli
-    - cluster_markers
     - scdrake_config
     - scdrake_envvars
 
@@ -111,6 +111,8 @@ reference:
   - subtitle: Subplans common to the single-sample and integration pipelines
   - contents:
     - has_concept("get_subplan_common")
+    - has_concept("get_subplan_clustering")
+    - has_concept("get_subplan_cell_annotation")
   - subtitle: Single-sample pipeline subplans
   - contents:
     - has_concept("get_subplan_single_sample")

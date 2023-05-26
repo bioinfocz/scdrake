@@ -15,22 +15,65 @@ vignette: >
 
 ***
 
-For a general overview of this single-sample pipeline stage see `vignette("pipeline_overview")`.
+## {.tabset}
 
-Config for this stage is stored in `01_input_qc.yaml` file.
-Directory with this file is read from `SCDRAKE_SINGLE_SAMPLE_CONFIG_DIR` environment variable upon `{scdrake}` load or
+### Overview
+
+An initial stage to read in scRNA-seq data, remove empty droplets (optionally), and perform quality control,
+and cell and gene filtering.
+
+More information about scRNA-seq quality control can be found in
+[OSCA](https://bioconductor.org/books/3.15/OSCA.basic/quality-control.html).
+
+`r emoji::emoji("gear")` Config file: `config/single_sample/01_input_qc.yaml`
+
+`r emoji::emoji("clipboard")` HTML report target (in `config/pipeline.yaml`): `DRAKE_TARGETS: ["report_input_qc"]`
+
+[`r emoji::emoji("scroll")` Example report](https://onco.img.cas.cz/novotnyj/scdrake/single_sample/pbmc1k/01_input_qc/01_input_qc.html)
+([used config](https://github.com/bioinfocz/scdrake/blob/main/tests/testthat/run_pipeline_config_patches/single_sample_pbmc1k_full/01_input_qc.default.yaml))
+
+`r emoji::emoji("ladder")` Structure
+
+- Reading in feature-barcode matrix either from:
+  - `cellranger` output
+  - `SingleCellExperiment` object as a Rds file or as a target from an existing `{drake}` cache (i.e. from a different
+    `{scdrake}` project)
+  - Delimited table
+- Subsetting of the imported `SingleCellExperiment` object to cells of interest based on their metadata values,
+  e.g. a set of clusters from a particular clustering method (optional)
+- Removal of [empty droplets](https://bioconductor.org/books/3.15/OSCA.advanced/droplet-processing.html)
+  (`DropletUtils::emptyDrops()`) (optional)
+- Calculation of per-cell QC metrics (`scater::perCellQCMetrics()`,
+  [theory](https://bioconductor.org/books/3.15/OSCA.basic/quality-control.html#common-choices-of-qc-metrics)):
+  - Number of UMI
+  - Number of detected genes (non-zero UMI count)
+  - Percentage of expressed mitochondrial genes ($\frac {UMI_{mitochondrial}} {UMI_{sum}} * 100$)
+- Two methods for cell filtering (optional):
+  - Dataset-sensitive filtering, based on the median absolute deviation (MAD) from the median value of
+     each QC metric across all cells
+     ([theory](https://bioconductor.org/books/3.15/OSCA.basic/quality-control.html#quality-control-outlier)).
+     For "number of UMI" metric, only a lower tail is used.
+  - Custom filtering, based on fixed thresholds. For "number of UMI" metric, both upper and lower bounds are used
+    ([theory](https://bioconductor.org/books/3.15/OSCA.basic/quality-control.html#fixed-qc).
+  - In both filtering types, violation of only one metric threshold leads to removal of a cell.
+    More technically, metric filters are reduced by **or** operator.
+- Gene filtering (optional) based on a minimum number of UMI per cell and a minimum ratio of cells expressing a gene.
+  - A gene is considered expressed when number of its UMI across all cells is greater than X and
+    at the same time it is expressed in at least Y ratio of cells.
+- Plots of QC metrics with visualization of differences between dataset-sensitive and custom filtering
+- Preparation of gene annotation
+- Final selection of either dataset-sensitive or custom filtered dataset. This selection is upon the user.
+
+### Config parameters
+
+Config for this stage is stored in `config/single_sample/01_input_qc.yaml` file.
+Directory with this file is read from the `SCDRAKE_SINGLE_SAMPLE_CONFIG_DIR` environment variable upon `{scdrake}` load or
 attach, and saved as `scdrake_single_sample_config_dir` option. This option is used as the default argument value in
 several `{scdrake}` functions.
 
-Target for this stage's report: `report_input_qc`
-
-You can make this target by setting `DRAKE_TARGETS: ["report_input_qc"]` in `pipeline.yaml` config file.
-
 ***
 
-# Config parameters
-
-## Input files
+#### Input files
 
 ```yaml
 INPUT_DATA:
@@ -47,7 +90,7 @@ This parameter is specifying input data type and path. There are four possible t
 - `type: "cellranger"`: an output from
   [cellranger](https://support.10xgenomics.com/single-cell-gene-expression/software/pipelines/latest/what-is-cell-ranger),
   that is, files of a raw feature-barcode matrix - `barcodes.tsv`, `features.tsv`, and `matrix.mtx`
-  (can be also gzipped having a `.gz` extension). Internally, BC matrix is imported via `DropletUtils::read10xCounts()`.
+  (can be also gzipped having a `.gz` extension). Internally, BC matrix is imported via `DropletUtils::read10xCounts()`
   - You can download example PBMC data from 10x Genomics using the `download_pbmc1k()` and `download_pbmc1k()` functions.
 - `type: "table"`: a delimited file (table) representing a feature-barcode matrix, with an additional column named
   `ENSEMBL` containing Ensembl IDs of features (rows).
@@ -66,7 +109,8 @@ This parameter is specifying input data type and path. There are four possible t
 
 - `delimiter: ","`: used when `type: "table"`. Specifies the field delimiter in the table.
 
-- `target_name: "target_name"`: used when `type: "sce_drake_cache"`. Specified a name of target in `drake` cache, e.g. `"sce_final_input_qc"`
+- `target_name: "target_name"`: used when `type: "sce_drake_cache"`. Specifies a name of target in `drake` cache to be
+  imported, e.g. `"sce_final_input_qc"`
 
 ***
 
@@ -80,7 +124,7 @@ A path to RMarkdown file used for HTML report of this pipeline stage.
 
 ***
 
-## Subsetting of imported data
+#### Subsetting of imported data
 
 ```yaml
 INPUT_DATA_SUBSET: null
@@ -99,7 +143,7 @@ You can also negate the selection by specifying `negate: true`.
 
 ***
 
-## Removal of empty droplets
+#### Removal of empty droplets
 
 See `?DropletUtils::emptyDrops` for more details.
 
@@ -139,12 +183,17 @@ EMPTY_DROPLETS_FDR_THRESHOLD: 0.01
 A threshold for FDR adjusted p-values for null hypothesis that barcode comes from ambient environment.
 In other words, probability that a droplet was empty and contained ambient RNA.
 
-## Cell filtering
+#### Cell filtering
 
 Two types of cell filtering are performed: *dataset-sensitive* (using MAD threshold),
-and *custom* (using custom thresholds). See `vignette("pipeline_overview")` for more details.
+and *custom* (using custom thresholds).
 
 In both filtering types, violation of only one metric threshold leads to removal of a cell.
+
+The choice of cell filtering thresholds depends very much on your dataset. What works for an ordinary high-quality dataset
+might not work well for a low-quality or special dataset with rare cell types.
+The [quality control](https://bioconductor.org/books/3.15/OSCA.basic/quality-control.html) chapter in OSCA gives
+an excellent background to the QC of scRNA-seq data.
 
 ***
 
@@ -172,7 +221,7 @@ If `True`, proceed to other stages with dataset filtered by dataset-sensitive fi
 otherwise with dataset filtered by custom filtering (target `sce_custom_filter_genes`).
 Note that the selected SCE target will be referred to as `sce_final_input_qc` in subsequent stages.
 
-### Dataset-sensitive cell filtering
+##### Dataset-sensitive cell filtering
 
 ```yaml
 MAD_THRESHOLD: 3
@@ -186,6 +235,8 @@ A threshold for maximum MAD (median absolute deviation) for QC cell metrics:
 - Number of detected genes = non-zero UMI count (lower tail).
 - Percentage of expressed mitochondrial genes = $\frac {UMI_{mitochondrial}} {UMI_{sum}} * 100$ (upper tail).
 
+MAD threshold of 3 will retain 99% of non-outlier values that follow a normal distribution.
+
 "Lower tail" means cells having a metric value less than `-MAD_THRESHOLD` MAD will be discarded.
 For "upper tail", it is `+MAD_THRESHOLD` MAD.
 
@@ -194,7 +245,7 @@ Violation of only one metric threshold leads to removal of a cell.
 To disable the dataset-sensitive filtering, set `MAD_THRESHOLD: .inf`.
 That will force passing of each cell as every QC metric will be always lower than positive infinity MAD.
 
-### Custom cell filtering
+##### Custom cell filtering
 
 ```yaml
 MIN_UMI_CF: 1000
@@ -244,7 +295,7 @@ i.e. cells with mitochondrial genes detected in more than (`MAX_MITO_RATIO` * 10
 
 To disable this filter, set `MAX_MITO_RATIO: .inf`
 
-### Gene filtering
+#### Gene filtering
 
 Gene filtering thresholds are applied in both types of cell filtering (after it is performed).
 The filter is computed by the `get_gene_filter()` function as following:
@@ -305,7 +356,7 @@ i.e. genes expressed in less than (`MIN_RATIO_CELLS` * 100)% of cells will be re
 
 ***
 
-## Output files
+#### Output files
 
 ```yaml
 INPUT_QC_BASE_OUT_DIR: "01_input_qc"
@@ -325,7 +376,7 @@ INPUT_QC_REPORT_HTML_FILE: "01_input_qc.html"
 
 A name of HTML report file for this stage. Created in `INPUT_QC_BASE_OUT_DIR`. Subdirectories are not allowed.
 
-## HTML output parameters
+#### HTML output parameters
 
 ```yaml
 INPUT_QC_KNITR_MESSAGE: False
@@ -337,32 +388,37 @@ INPUT_QC_KNITR_ECHO: False
 
 These are passed to `knitr::opts_chunk()` and used for rendering of stage's HTML report.
 
-***
-
-# Targets
+### Outputs
 
 Here you can find description of the most important targets for this stage.
 However, for a full overview, you have to inspect the
 [source code](https://github.com/bioinfocz/scdrake/blob/main/R/plans_single_sample.R) of the
 `get_input_qc_subplan()` function.
 
+Targets can be loaded from the `{drake}` cache (`.drake` directory by default) using the `drake::loadd()` or
+`drake::readd()` functions.
+
 HTML report target name: `report_input_qc`
 
-## `SingleCellExperiment` objects
+#### `SingleCellExperiment` objects
 
-`sce_raw`: an untouched SCE object as loaded from `DropletUtils::read10xCounts()`.
+`sce_raw`: an untouched SCE object as loaded from:
+
+- `DropletUtils::read10xCounts()` (`cellranger` input)
+- `readr::read_delim()` (delimited table input)
+- `SingleCellExperiment` object (Rds file or `{drake}` cache)
 
 ***
 
-`sce_valid_cells`: a SCE object with empty droplets removed.
+`sce_valid_cells`: a SCE object with empty droplets removed
 
 ***
 
 `sce_unfiltered`: `sce_valid_cells` with added columns:
 
-- Columns from the `cell_qc` target containing DataFrame with cell QC metrics.
-- `discard_qc`: dataset-sensitive filter.
-- `discard_custom`: custom filter.
+- Columns from the `cell_qc` target containing DataFrame with cell QC metrics
+- `discard_qc`: dataset-sensitive filter
+- `discard_custom`: custom filter
 
 ***
 
@@ -375,14 +431,14 @@ The latter with filtered genes.
 ***
 
 `sce_selected`: a SCE object selected from either
-`sce_qc_filter_genes` or `sce_custom_filter_genes` - depends on the `SAVE_DATASET_SENSITIVE_FILTERING` parameter.
+`sce_qc_filter_genes` or `sce_custom_filter_genes` - depends on the `SAVE_DATASET_SENSITIVE_FILTERING` parameter
 
 `sce_final_input_qc`: `sce_selected` with added gene annotation (`gene_annotation` target) to `rowData()`.
 This is the final SCE object which will be used in the next stage `norm_clustering`.
 
-## Cell filters
+#### Cell filters
 
-`cell_qc`: a DataFrame with cell QC metrics.
+`cell_qc`: a DataFrame with cell QC metrics
 
 ***
 
@@ -392,9 +448,9 @@ In those, `FALSE` refers to cells **not passing** a filter.
 
 `qc_filters`: a list of named lists with logical values for dataset-sensitive cell filtering:
 
-- `qc_lib` (`total`): low number of UMI (lower tail).
-- `qc_nexprs` (`detected`): low number of detected genes = non-zero UMI count (lower tail).
-- `qc_mito` (`subsets_mito_percent`): high percentage of expressed mitochondrial genes expression (upper tail).
+- `qc_lib` (`total`): low number of UMI (lower tail)
+- `qc_nexprs` (`detected`): low number of detected genes = non-zero UMI count (lower tail)
+- `qc_mito` (`subsets_mito_percent`): high percentage of expressed mitochondrial genes expression (upper tail)
 
 `custom_filters`: a list of named lists with logical values for custom cell filtering:
 
@@ -403,15 +459,15 @@ In those, `FALSE` refers to cells **not passing** a filter.
 - `low_expression` (`detected`): low number of detected genes.
 - `high_mito` (`subsets_mito_percent`): high percentage of expressed mitochondrial genes.
 
-`qc_filter`, `custom_filter`: a summarized filter (by "or" operation) of `qc_filters` and `custom_filters`, respectively.
+`qc_filter`, `custom_filter`: a summarized filter (by "or" operation) of `qc_filters` and `custom_filters`, respectively
 
-## Gene filters
+#### Gene filters
 
 `sce_qc_gene_filter`, `sce_custom_gene_filter`: gene filters (logical vectors) obtained from `get_gene_filter()` for
 SCE objects with cells filtered by dataset-sensitive and custom filter, respectively.
 In those, `FALSE` refers to genes **not passing** the filter.
 
-## Plots
+#### Plots
 
 `sce_unfiltered_plotlist`: a list of various violin plots for cell QC metrics (`{ggplot2}` objects), generated using
 `sce_unfiltered` target. Cells are colored by `discard_qc` column - blue points pass the dataset-sensitive filter,
@@ -420,7 +476,7 @@ while the orange ones do not.
 For example, the following code is used to plot total UMI counts:
 
 ```{r, eval = FALSE}
-plot_colData(
+scdrake::plot_colData(
   sce_unfiltered,
   y = "total",
   colour_by = "discard_qc",
@@ -436,18 +492,18 @@ but in each of them, cells are colored by the other filter. That is, cells in `s
 colored by `discard_custom` column, and thus, showing which cells would be discarded in custom-filtered dataset.
 Vice versa for `sce_custom_filter_genes_plotlist`.
 
-## Other targets
+#### Other targets
 
-`config_input_qc`: a list holding parameters for this stage.
+`config_input_qc`: a list holding parameters for this stage
 
 ***
 
 `barcode_ranks`: a DataFrame with barcode ranks for
 [knee plot](https://bioconductor.org/books/3.15/OSCA.advanced/droplet-processing.html),
-computed by `DropletUtils::barcodeRanks()` on UMI counts from `sce_raw` target.
+computed by `DropletUtils::barcodeRanks()` on UMI counts from `sce_raw` target
 
 `empty_droplets`: a DataFrame of statistics for empty droplets, computed `DropletUtils::emptyDrops()` on UMI counts
-from `sce_raw` target.
+from `sce_raw` target
 
 ***
 
@@ -465,4 +521,4 @@ from `sce_raw` target.
   - For example, *TBCE* has both ENSG00000285053 and ENSG00000284770 ENSEMBL IDs assigned ->
     its symbol is changed to TBCE_ENSG00000285053 and TBCE_ENSG00000284770.
 
-`gene_annotation` can be also retrieved from `rowData(sce_final_input_qc)`.
+`gene_annotation` can be also retrieved from `rowData(sce_final_input_qc)`

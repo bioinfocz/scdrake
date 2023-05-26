@@ -24,14 +24,14 @@ cheatsheets [here](https://lzone.de/cheat-sheet/YAML) and [here](https://learnxi
 is a human-readable format and uses indentation (spaces) for nesting of parameters.
 
 `{scdrake}` is using a concept of default and local configs. Default configs are bundled with the package and copied
-during project initialization, update, and pipeline run (e.g. in `run_single_sample()` or in `_drake_single_sample.R`).
+during project initialization, update, and pipeline run (e.g. in `run_single_sample_r()`).
 Local configs are, as their name suggests, purposed to make modifications to default configs
 (see the section below for how it is actually done).
 Default and local configs are named `*.default.yaml` and `*.yaml`, respectively.
 
 Config files are separated according to general parameters and each pipeline's main stage
 (quality control, normalization, etc.), but for consistency are always read all at once
-(by default if you run e.g. `run_single_sample()` or `run_single_sample_r()`).
+(by default if you run e.g. `run_single_sample_r()`).
 
 All paths in configs must be relative to project root, or absolute (not recommended), unless otherwise stated.
 

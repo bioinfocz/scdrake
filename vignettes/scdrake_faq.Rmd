@@ -145,9 +145,20 @@ in `vignette("stage_integration")`.
 
 # A target is not getting built
 
-It might happen a target (especially RMarkdown one) is not getting built although some changes were introduced.
+It might happen that a target (especially RMarkdown one) is not getting built although some changes were introduced.
 However, you can either:
 
 - Manually invalidate the target in `{drake}` cache using the `drake::clean()` function and
   it will be built from scratch next time you run the pipeline.
 - Use the `DRAKE_REBUILD` parameter in `config/pipeline.yaml` (see `vignette("config_pipeline")`).
+
+# I want to perform subclustering
+
+This can be simply achieved as follows:
+
+- Initiate a new `{scdrake}` project
+- In `config/single_sample/01_input_qc`:
+  - Modify the `INPUT_DATA` parameter such that it loads data from the `{scdrake}` project in which you want to perform subclustering
+  - Modify the `INPUT_DATA_SUBSET` parameter to subset the imported data to selected clusters or other variables of interest
+  - You might consider disabling cell filtering by setting `ENABLE_CELL_FILTERING: false`
+- Run the pipeline as usual

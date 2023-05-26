@@ -22,61 +22,16 @@ In this guide you will see how to integrate two datasets. The *prerequisity* her
 
 - A project initialized within the quick start guide (`vignette("scdrake")`) that should live in the
   `~/scdrake_projects/pbmc1k` directory.
-- You have successfully run the pipeline as described in the third step of the guide.
+- You have successfully run the pipeline for the `report_norm_clustering` or `report_norm_clustering_simple` target(s).
 
 > For Docker we assume that the container has a shared directory mounted as `/home/rstudio/scdrake_projects`,
 as described in `vignette("scdrake_docker")`.
 
 ***
 
-### Perform normalization and clustering for the PBMC 1k sample {.tabset}
-
 The integration pipeline starts with import of `SingleCellExperiment` (SCE) objects from `drake` caches of underlying
 single-sample analyses. These objects are the final ones from the `02_norm_clustering` stage, that is,
 normalized, with known highly variable genes and clusters, and with computed reduced dimensions.
-During the quick start guide, we only run the first `01_input_qc` stage to save time, and therefore,
-we need to run the single-sample pipeline again, but now till the target storing the SCE object needed for the
-integration pipeline.
-
-To do so, you just need:
-
-- To set your working directory to `~/scdrake_projects/pbmc1k` (or to open the RStudio project located there).
-- To edit the `config/pipeline.yaml` file and set `DRAKE_TARGETS` to `["sce_final_norm_clustering"]`.
-
-> If you want to significantly save computation time for the sake of quick guide,
-you can omit the calculation of very demanding SC3 clustering.
-To do so, open `config/single_sample/02_norm_clustering.yaml` and set `CLUSTER_SC3_ENABLED` to `False`.
-
-> If you are interested in the full report of the `02_norm_clustering` stage, you can use
-`["report_norm_clustering", "report_norm_clustering_simple"]` instead (these targets depend on the
-`sce_final_norm_clustering` target so it will be also made).
-
-And now you can run the pipeline:
-
-#### In R
-
-```{r}
-library(scdrake)
-run_single_sample_r()
-```
-
-#### On command line
-
-```bash
-cd ~/scdrake_projects/pbmc1k
-scdrake --pipeline-type single_sample run
-```
-
-#### On command line (Docker)
-
-```bash
-docker exec -it -u rstudio -w /home/rstudio/scdrake_projects/pbmc1k <CONTAINER ID or NAME> \
-  scdrake --pipeline-type single_sample run
-```
-
-### {-}
-
-***
 
 ### Prepare the second sample - PBMC 3k {.tabset}
 
@@ -108,19 +63,29 @@ docker exec -it -u rstudio -w /home/rstudio/scdrake_projects/pbmc3k <CONTAINER I
   scdrake init-project
 ```
 
+#### On command line (Singularity)
+
+```bash
+mkdir -p ~/scdrake_singularity
+cd ~/scdrake_singularity
+mkdir -p home/${USER} scdrake_projects/pbmc3k
+singularity exec -e --no-home \
+    --bind "home/${USER}/:/home/${USER},scdrake_projects/:/home/${USER}/scdrake_projects" \
+    --pwd "/home/${USER}/scdrake_projects/pbmc3k" \
+    path/to/scdrake_image.sif \
+    scdrake init-project
+```
+
 ### {-}
 
-Now we will repeat the steps we have already done for the PBMC 1k sample:
+Now we will repeat the steps we have already done for the PBMC 1k sample. In `~/scdrake_projects/pbmc3k`:
 
-- In `~/scdrake_projects/pbmc3k`:
-  - Open `config/single_sample/01_input_qc.yaml` and set `path` inside `INPUT_DATA` to
-    `"../pbmc1k/example_data/pbmc3k"` (the example data for PBMC 3k has been already downloaded when
-    you had initialized the project for PBMC 1k dataset).
-  - Open `config/pipeline.yaml` and set `DRAKE_TARGETS` to `["sce_final_norm_clustering"]`.
-  - Optionally to save time, open `config/single_sample/02_norm_clustering.yaml` and set `CLUSTER_SC3_ENABLED` to `False`.
+- Open `config/single_sample/01_input_qc.yaml` and set `path` inside `INPUT_DATA` to
+  `"../pbmc1k/example_data/pbmc3k"` (the example data for PBMC 3k has been already downloaded when
+  you had initialized the project for PBMC 1k dataset).
+- Open `config/pipeline.yaml` and set `DRAKE_TARGETS` to `["sce_final_norm_clustering"]`.
 
-The config modifications for the second sample are ready, so let's run the pipeline
-(the working directory is `~/scdrake_projects/pbmc3k`):
+The config modifications for the second sample are ready, so let's run the pipeline:
 
 ### {.tabset}
 
@@ -143,11 +108,28 @@ docker exec -it -u rstudio -w /home/rstudio/scdrake_projects/pbmc3k <CONTAINER I
   scdrake --pipeline-type single_sample run
 ```
 
+#### On command line (Singularity)
+
+```bash
+singularity exec -e --no-home \
+    --bind "home/${USER}/:/home/${USER},scdrake_projects/:/home/${USER}/scdrake_projects" \
+    --pwd "/home/${USER}/scdrake_projects/pbmc3k" \
+    path/to/scdrake_image.sif \
+    scdrake --pipeline-type single_sample run
+```
+
 ### {-}
 
 ***
 
 ### Running the integration pipeline {.tabset}
+
+The configuration file for the integration pipeline is located in `config/integration/01_integration.yaml`
+(see `vignette("stage_integration")`).
+By default, four integration methods are enabled (you can disable them in the `INTEGRATION_METHODS` parameter), plus
+the `uncorrected` method, which is mandatory as it is used later in the `cluster_markers` and `contrasts` stages
+(`uncorrected` just performs batch-specific correction for sequencing depth via `batchelor::multiBatchNorm()`).
+At least one integration method and `uncorrected` must be always enabled.
 
 First, as before for the individual samples, we will also initialize a new `scdrake` project for the integration analysis:
 
@@ -174,9 +156,20 @@ docker exec -it -u rstudio -w /home/rstudio/scdrake_projects/pbmc_integration <C
   scdrake init-project
 ```
 
+#### On command line (Singularity)
+
+```bash
+mkdir -p home/${USER} scdrake_projects/pbmc_integration
+singularity exec -e --no-home \
+    --bind "home/${USER}/:/home/${USER},scdrake_projects/:/home/${USER}/scdrake_projects" \
+    --pwd "/home/${USER}/scdrake_projects/pbmc_integration" \
+    path/to/scdrake_image.sif \
+    scdrake init-project
+```
+
 ### {-}
 
-Assuming your project is opened / working directory is set to the project root, we modify configs for the integration pipeline:
+Now we modify configs for the integration pipeline:
 
 - In `~/scdrake_projects/pbmc_integration`:
   - `config/integration/01_integration.yaml`: set `cache_path` to `../pbmc1k/.drake` and
@@ -184,7 +177,7 @@ Assuming your project is opened / working directory is set to the project root, 
   - `config/pipeline.yaml`: set `DRAKE_TARGETS` to `["report_integration"]`.
     To save time, we only run the final target of the `01_integration` stage.
 
-And now we can run the integration pipeline (the working directory is `~/scdrake_projects/pbmc_integration`):
+And let's run the pipeline.
 
 ### {.tabset}
 
@@ -220,7 +213,16 @@ objects with computed reduced dimensions:
 drake::loadd(sce_int_dimred_df)
 ```
 
-***
+#### Post-integration clustering and cell annotation
 
-You can also try to run the post-integration clustering stage in which the result from one selected integration method
-will be further processed. In `config/pipeline.yaml` just change `DRAKE_TARGETS` to `["report_int_clustering"]`.
+The post-integration clustering stage (see `vignette("stage_int_clustering")`) basically replicates the clustering,
+cell annotation and visualization parts of the `02_norm_clustering` stage of the single-sample pipeline.
+It uses a `SingleCellExperiment` object from a selected integration method specified in the `INTEGRATION_FINAL_METHOD`
+parameter in `config/integration/02_int_clustering.yaml`.
+
+You can also try to run the post-integration clustering stage by setting `DRAKE_TARGETS` to `["report_int_clustering"]`.
+By default, the result from the `mnn` (mutual nearest neighbors) integration method is used.
+
+#### Cluster markers and contrasts stages
+
+The usage of these stages is the same as in the single-sample pipeline.

@@ -15,20 +15,30 @@ vignette: >
 
 ***
 
-For a general overview of this integration pipeline stage see `vignette("pipeline_overview")`.
+## {.tabset}
 
-Config for this stage is stored in `02_int_clustering.yaml` file.
-Directory with this file is read from `SCDRAKE_INTEGRATION_CONFIG_DIR` environment variable upon `{scdrake}` load or
-attach, and saved as `scdrake_integration_config_dir` option. This option is used as the default argument value in
-several `{scdrake}` functions.
+### Overview
 
-Target for this stage's report: `report_int_clustering`
+This stage uses the result from a selected integration method and performs clustering, cell type annotation and
+visualization (similar to the `02_norm_clustering` stage of the single-sample pipeline).
+HVGs, reduced dimensions, and selected markers are already computed in the previous stage (`01_integration`).
 
-You can make this target by setting `DRAKE_TARGETS: ["report_int_clustering"]` in `pipeline.yaml` config file.
+`r emoji::emoji("gear")` Config file: `config/integration/02_int_clustering.yaml`
+
+`r emoji::emoji("clipboard")` HTML report target (in `config/pipeline.yaml`):
+`DRAKE_TARGETS: ["report_int_clustering"]`
+
+[`r emoji::emoji("scroll")` Example report](https://onco.img.cas.cz/novotnyj/scdrake/integration/02_int_clustering/02_int_clustering.html)
+([used config](https://github.com/bioinfocz/scdrake/blob/main/tests/testthat/run_pipeline_config_patches/integration/02_int_clustering.default.yaml))
 
 ***
 
-# Config parameters
+### Config parameters
+
+Config for this stage is stored in the `config/integration/02_int_clustering.yaml` file.
+Directory with this file is read from `SCDRAKE_INTEGRATION_CONFIG_DIR` environment variable upon `{scdrake}` load or
+attach, and saved as `scdrake_integration_config_dir` option. This option is used as the default argument value in
+several `{scdrake}` functions.
 
 The following parameters are the same as those in the `02_norm_clustering` stage of the single-sample pipeline
 (see `vignette("stage_norm_clustering")`):
@@ -41,7 +51,9 @@ The following parameters are the same as those in the `02_norm_clustering` stage
   `INT_CLUSTERING_REPORT_DIMRED_PLOTS_OTHER`
 - `INT_CLUSTERING_KNITR_MESSAGE`, `INT_CLUSTERING_KNITR_WARNING`, `INT_CLUSTERING_KNITR_ECHO`
 
-## Selection of final integration method
+***
+
+#### Selection of final integration method
 
 ```yaml
 INTEGRATION_FINAL_METHOD: "mnn"
@@ -64,7 +76,7 @@ Whether to take the result with removed cell cycle-related genes. This will be a
 `True` is only possible when any of the single-samples in the `INTEGRATION_SOURCES` parameter (`01_integration.yaml`)
 has `hvg_rm_cc_genes` set to `True`.
 
-## Cell grouping assignment
+#### Cell grouping assignment
 
 ```yaml
 ADDITIONAL_CELL_DATA_FILE: null
@@ -90,7 +102,7 @@ Note that rownames are not mandatory.
 
 ```
 
-## Input files
+#### Input files
 
 ```yaml
 INT_CLUSTERING_REPORT_RMD_FILE: "Rmd/integration/02_int_clustering.Rmd"
@@ -100,7 +112,7 @@ INT_CLUSTERING_REPORT_RMD_FILE: "Rmd/integration/02_int_clustering.Rmd"
 
 A path to RMarkdown files used for HTML report of this pipeline stage.
 
-## Output files
+#### Output files
 
 ```yaml
 INT_CLUSTERING_BASE_OUT_DIR: "02_int_clustering"
@@ -123,9 +135,7 @@ INT_CLUSTERING_REPORT_HTML_FILE: "02_int_clustering.html"
 
 Names of files and directories created under `INT_CLUSTERING_BASE_OUT_DIR`. Subdirectories are not allowed.
 
-***
-
-# Targets
+### Outputs
 
 Here you can find description of the most important targets for this stage.
 However, for a full overview, you have to inspect the
@@ -134,7 +144,7 @@ However, for a full overview, you have to inspect the
 
 HTML report target name: `report_int_clustering`
 
-## `SingleCellExperiment` objects
+#### `SingleCellExperiment` objects
 
 `sce_int_uncorrected`: the selected uncorrected SCE object according to the `INTEGRATION_FINAL_METHOD_RM_CC` parameter.
 
@@ -148,7 +158,7 @@ HTML report target name: `report_int_clustering`
 `sce_int_clustering_final`: similar to `sce_final_norm_clustering` in the `02_norm_clustering` stage of the
 single-sample pipeline.
 
-## Targes similar to `02_norm_clustering`
+#### Targes similar to `02_norm_clustering`
 
 These targets are basically the same as those in the `02_norm_clustering` pipeline in the single-sample pipeline
 (see `vignette("stage_norm_clustering")`).

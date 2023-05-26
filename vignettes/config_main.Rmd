@@ -15,13 +15,15 @@ vignette: >
 
 ***
 
-Main config is stored in `00_main.yaml` file. Location of this file is different for the single-sample and integration
-pipelines. As for the [pipeline config](config_pipeline.html), directory with this file is read from environment variables:
+Main config is stored in the `config/single_sample/main.yaml` and `config/integration/main.yaml`
+files (the location of this file is different for the single-sample and integration pipelines).
+As for the [pipeline config](config_pipeline.html), directory with this file is read from environment variables:
 
 - `SCDRAKE_SINGLE_SAMPLE_CONFIG_DIR` for the single-sample pipeline.
 - `SCDRAKE_INTEGRATION_CONFIG_DIR` for the integration pipeline.
 
-and options named in lowercase are set upon `{scdrake}` load or attach.
+Options named in lowercase are set upon `{scdrake}` load or attach. Then the actual directory used depends on
+whether you run `run_single_sample_r()` or `run_integration_r()`.
 
 Parameters in this config are used throughout all other stages. There are parameters such as project name, path
 to CSS file used to style HTML documents, or path to base output directory.
@@ -62,11 +64,11 @@ ANNOTATION_LIST:
 
 **Type:** named list (dictionary) of character scalars
 
-Mapping of organisms to [OrgDb](http://bioconductor.org/packages/release/BiocViews.html#___OrgDb) annotation packages.
+Mapping of organisms to [OrgDb](http://bioconductor.org/packages/3.15/BiocViews.html#___OrgDb) annotation packages.
 The annotation package is selected by matching the `ORGANISM` parameter. If the selected package is not installed,
 you will be asked if you want to install it.
 
-In the [OrgDb](http://bioconductor.org/packages/release/BiocViews.html#___OrgDb) list you can find annotations for
+In the [OrgDb](http://bioconductor.org/packages/3.15/BiocViews.html#___OrgDb) list you can find annotations for
 many other species, e.g. rat. The consequent modification of the config is simple:
 
 ```yaml
@@ -108,7 +110,7 @@ BASE_OUT_DIR: "output"
 
 **Type:** character scalar
 
-A path to base output directory to which each stage's files will be saved (check "Output files" section in stage configs.)
+A path to base output directory to which each stage's files will be saved (check "Output files" section in stage configs).
 
 ***
 

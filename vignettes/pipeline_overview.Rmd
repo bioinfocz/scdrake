@@ -46,249 +46,91 @@ The used datasets are:
 **All credits for these datasets go to 10x Genomics.**
 Visit <https://www.10xgenomics.com/resources/datasets> for more information.
 
-# Single-sample pipeline
+***
 
-This is a pipeline for processing a single-sample, where input is either:
+# Pipelines
 
-- An output from [cellranger](https://support.10xgenomics.com/single-cell-gene-expression/software/pipelines/latest/what-is-cell-ranger),
-  that is, three files of a raw feature-barcode matrix* (`barcodes.tsv`, `features.tsv`, and `matrix.mtx`)
-  These files can be also gzipped having a `.gz` extension.
-- A delimited file (table) representing a feature-barcode matrix, with an additional column named `ENSEMBL` containing
-  Ensembl IDs of features.
-- A saved `SingleCellExperiment` in Rds format (i.e. saved by the `saveRDS()` function).
+## Single-sample pipeline
 
-Input specification is controlled via the `INPUT_DATA` parameter in `01_input_qc` config, and more details can be
-found in `vignette("stage_input_qc")`.
+This is a pipeline for processing a single-sample.
 
-Feature-barcode matrix is similar to count matrix in bulk RNA-seq where columns are samples, rows are genes or
-transcripts (features), and values are numbers of reads or UMIs overlapping the features.
-In scRNA-seq, columns are individual cells; the rest is same.
+### Stages
 
-## Stage `01_input_qc`
-
-An initial stage to read in scRNA-seq data, remove empty droplets (optionally), and perform quality control,
-and cell and gene filtering.
-
-More information about scRNA-seq quality control can be found
-[here](https://bioconductor.org/books/3.15/OSCA.basic/quality-control.html).
-
-`r emoji::emoji("gear")` Config and targets: `vignette("stage_input_qc")`
-
-[`r emoji::emoji("scroll")` Example report](https://onco.img.cas.cz/novotnyj/scdrake/single_sample/pbmc1k/01_input_qc/01_input_qc.html)
-([used config](https://github.com/bioinfocz/scdrake/blob/main/tests/testthat/run_pipeline_config_patches/single_sample_pbmc1k_full/01_input_qc.default.yaml))
-
-`r emoji::emoji("ladder")` Structure
-
-- Reading in feature-barcode matrix either from:
-  - `cellranger` output
-  - `SingleCellExperiment` object
-  - delimited table
-- Removal of [empty droplets](https://bioconductor.org/books/3.15/OSCA.advanced/droplet-processing.html)
-  (`DropletUtils::emptyDrops()`) (optional).
-- Calculation of per-cell QC metrics (`scater::perCellQCMetrics()`,
-  [theory](https://bioconductor.org/books/3.15/OSCA.basic/quality-control.html#common-choices-of-qc-metrics)):
-  - Number of UMI.
-  - Number of detected genes (non-zero UMI count).
-  - Percentage of expressed mitochondrial genes ($\frac {UMI_{mitochondrial}} {UMI_{sum}} * 100$).
-- Two methods for cell filtering (optional):
-  - Dataset-sensitive filtering, based on the median absolute deviation (MAD) from the median value of
-     each QC metric across all cells. For "number of UMI" metric, only a lower tail is used
-     ([theory](https://bioconductor.org/books/3.15/OSCA.basic/quality-control.html#quality-control-outlier).
-  - Custom filtering, based on fixed thresholds. For "number of UMI" metric, both upper and lower bounds are used
-    ([theory](https://bioconductor.org/books/3.15/OSCA.basic/quality-control.html#fixed-qc).
-  - In both filtering types, violation of only one metric threshold leads to removal of a cell.
-    More technically, metric filters are reduced by **or** operator.
-- Gene filtering (optional) based on a minimum number of UMI per cell and a minimum ratio of cells expressing a gene.
-  - A gene is considered expressed when number of its UMI across all cells is greater than X and
-    at the same time it is expressed in at least Y ratio of cells.
-- Plots of QC metrics with visualization of differences between dataset-sensitive and custom filtering.
-- Preparation of gene annotation.
-- Final selection of either dataset-sensitive or custom filtered dataset. This selection is upon the user.
-
-## Stage `02_norm_clustering`
-
-A stage for normalization, dimensionality reduction, and cell clustering.
-
-`r emoji::emoji("gear")` Config and targets: `vignette("stage_norm_clustering")`
-
-[`r emoji::emoji("scroll")` Example report](https://onco.img.cas.cz/novotnyj/scdrake/single_sample/pbmc1k/02_norm_clustering/02_norm_clustering.html)
-
-[`r emoji::emoji("scroll")` Example simplified report](https://onco.img.cas.cz/novotnyj/scdrake/single_sample/pbmc1k/02_norm_clustering/02_norm_clustering_simple.html)
-([used config](https://github.com/bioinfocz/scdrake/blob/main/tests/testthat/run_pipeline_config_patches/single_sample_pbmc1k_full/02_norm_clustering.default.yaml))
-
-`r emoji::emoji("ladder")` Structure
-
-- Calculation of cell cycle score and assignment of cells to phases (G1, G2M, S) using the list of cell cycle genes in
-  `Seurat::cc.genes.updated.2019` and `Seurat::CellCycleScoring()` function.
-- [Normalization](https://bioconductor.org/books/3.15/OSCA.basic/normalization.html) of UMI counts by either:
-  - [Normalization by deconvolution](https://bioconductor.org/books/3.15/OSCA.basic/normalization.html#normalization-by-deconvolution)
-    implemented in the [scran](https://bioconductor.org/packages/release/bioc/html/scran.html) package.
-  - Regularized negative binomial regression to normalize UMI count data implemented in the
-    [sctransform](https://github.com/ChristophH/sctransform) package and wrapped by the
-    [Seurat](https://satijalab.org/seurat/) package. This method also allows to regress out confounding variables
-    such as cell cycle score or percentage of mitochondrial genes expression. Note that for cell cycle score,
-    a better method seems to be removal of CC-related genes prior to detection of highly variable genes (HVGs, see below).
-    `sctransform` also returns a specified number of HVGs.
-- Selection of [highly variable genes](https://bioconductor.org/books/3.15/OSCA.basic/feature-selection.html) (HVGs):
-  - HVGs are used downstream for dimensionality reduction and clustering.
-  - Three metrics for HVGs are available:
-    - [Gene variance](https://bioconductor.org/books/3.15/OSCA.basic/feature-selection.html#quantifying-per-gene-variation).
-    - [Coefficient of variation](http://bioconductor.org/books/3.15/OSCA.advanced/more-hvgs.html#using-the-coefficient-of-variation)
-      (CV2).
-    - HVGs obtained from the `sctransform` normalization.
-  - Based on the selected one from the first two metrics above, HVGs are selected either by:
-    - Top N genes based on a metric (e.g. top 1000 genes with the highest variance).
-    - Significance (FDR) threshold.
-    - Threshold on a metric value.
-  - Prior to HVG selection, cell cycle-related genes can be removed.
-    We are using a method based on the percentage of variance explained by the cell cycle phase
-    in the expression profile for each gene
-    ([details](https://bioconductor.org/books/3.15/OSCA.advanced/cell-cycle-assignment.html#removing-cell-cycle-related-genes)).
-- Removal of [cell doublets](https://bioconductor.org/books/3.15/OSCA.advanced/doublet-detection.html)
-  (`scDblFinder::computeDoubletDensity()`).
-- [Calculation of PCA](https://bioconductor.org/books/3.15/OSCA.basic/dimensionality-reduction.html#principal-components-analysis)
-  and [selection of number of principal components](https://bioconductor.org/books/3.15/OSCA.basic/dimensionality-reduction.html#choosing-the-number-of-pcs)
-  (PCs) which will be used downstream. There are three methods to select a proper number of PCs:
-  - Using the [elbow point](http://bioconductor.org/books/3.15/OSCA.advanced/dimensionality-reduction-redux.html#more-choices-for-the-number-of-pcs).
-  - Using the [technical noise](http://bioconductor.org/books/3.15/OSCA.advanced/dimensionality-reduction-redux.html#using-the-technical-noise).
-  - Using a fixed number of PCs.
-- [Cell clustering](https://bioconductor.org/books/3.15/OSCA.basic/clustering.html) using several algorithms:
-  - [Graph-based clustering](https://bioconductor.org/books/3.15/OSCA.basic/clustering.html#clustering-graph)
-    (mutual nearest neighbors) using Louvain and Walktrap algorithms.
-  - [K-means clustering](https://bioconductor.org/books/3.15/OSCA.basic/clustering.html#vector-quantization-with-k-means)
-    using both defined numbers of K and best K selection.
-  - [Single-Cell Consensus Clustering](https://bioconductor.org/packages/release/bioc/html/SC3.html) (SC3) with
-    defined numbers of clusters.
-- Cell type annotation using `{SingleR}`. More details are given in the accompanying
-  [book](http://bioconductor.org/books/3.15/SingleRBook/) and the underlying method is described
-  [here](http://bioconductor.org/books/3.15/SingleRBook/introduction.html#method-description).
-  - Reference datasets can be taken from the `{celldex}` package or an arbitrary
-    `SingleCellExperiment` / `SummarizedExperiment` object can be loaded from a file.
-- Assignment of cells to predefined groupings based on existing data. That means you can reuse an assignment of cells
-  from e.g. clustering, and rename or merge its levels (cluster numbers).
-  - Example: you identify a biological meaning of clusters computed by k-means with $k = 3$.
-    You can use this information, and rename and merge the clusters, such that:
-    - Cluster 1 -> T cells
-    - Cluster 2 -> B cells
-    - Cluster 3 -> T cells
-  - Now you can use this new cell grouping for e.g. plotting of reduced dimensions or calculation of cluster markers.
-- [Dimensionality reduction](https://bioconductor.org/books/3.15/OSCA.basic/dimensionality-reduction.html#non-linear-methods-for-visualization):
-  - PCA
-  - [t-SNE](https://bioconductor.org/books/3.15/OSCA.basic/dimensionality-reduction.html#t-stochastic-neighbor-embedding)
-  - [UMAP](https://bioconductor.org/books/3.15/OSCA.basic/dimensionality-reduction.html#uniform-manifold-approximation-and-projection)
-- Expression plots of selected groups of genes (markers) in reduced dimensions.
-- A simplified report for non-technical audience which contains only dimred plots and selected markers.
+- Stage `01_input_qc`: reading in data, filtering, quality control -> `vignette("stage_input_qc")`
+- Stage `02_norm_clustering`: normalization, HVG selection, dimensionality reduction, clustering, cell type annotation
+  -> `vignette("stage_norm_clustering")`
 
 ***
 
-# Integration pipeline
+## Integration pipeline
 
 This is a pipeline to integrate multiple samples processed by the single-sample pipeline.
-Just for clarification, an individual sample is also denoted as *batch*.
+Just for clarification, an individual sample is also denoted as a *batch*.
 
-## Stage `01_integration`
+More information can be found in [OSCA](http://bioconductor.org/books/3.15/OSCA.multisample)
 
-A stage for reading in single-sample data, integration using several methods, and computing reduced dimensions.
-Note that currently only samples which were **all** normalized by `scran` method can be integrated.
+### Stages
 
-More information can be found in this [OSCA chapter](http://bioconductor.org/books/3.15/OSCA.multisample).
+- Stage `01_integration`: reading in data and integration -> `vignette("stage_integration")`
+- Stage `02_int_clustering`: post-integration clustering and cell annotation -> `vignette("stage_int_clustering")`
 
-`r emoji::emoji("gear")` Config and targets: `vignette("stage_integration")`
-
-[`r emoji::emoji("scroll")` Example report](https://onco.img.cas.cz/novotnyj/scdrake/integration/01_integration/01_integration.html)
-([used config](https://github.com/bioinfocz/scdrake/blob/main/tests/testthat/run_pipeline_config_patches/integration/01_integration.default.yaml))
-
-`r emoji::emoji("ladder")` Structure
-
-- Reading in data from `drake` caches of multiple single-sample pipelines.
-- Subsetting to common column and row data, and metadata.
-- Normalization of each sample for inter-batch sequencing depth (`batchelor::multiBatchNorm()`,
-  [theory](http://bioconductor.org/books/3.15/OSCA.multisample/integrating-datasets.html#slower-setup)).
-- Combining of HVGs by either ([theory](http://bioconductor.org/books/3.15/OSCA.multisample/integrating-datasets.html#slower-setup)):
-  - A HVG metric (gene variance or CV2), then apply top HVGs selection as in the single-sample pipeline.
-    All samples must have the same HVG metric used before.
-  - Set operations (without duplicates): intersection, union, or take them all.
-- Perform integration using one or more methods:
-  - Rescaling (`batchelor::rescaleBatches()`,
-    [theory](http://bioconductor.org/books/3.15/OSCA.multisample/integrating-datasets.html#by-rescaling-the-counts)):
-    scale counts so that the average count within each batch is the same for each gene.
-  - Regression (`batchelor::regressBatches()`,
-    [theory](http://bioconductor.org/books/3.15/OSCA.multisample/integrating-datasets.html#by-fitting-a-linear-model)):
-    fit a linear model to each gene regress out uninteresting factors of variation, returning a matrix of residuals.
-  - Fast mutual nearest neighbors (`batchelor::fastMNN()`,
-    [theory](http://bioconductor.org/books/3.15/OSCA.multisample/integrating-datasets.html#mnn-correction)).
-
-The steps below are performed for each integration method, plus separately for HVGs with removed cell cycle-related
-genes (if this removal was requested).
-
-- Calculation of PCA and selection of number of principal components (PCs) which will be used downstream.
-  This is similar to what is done in the single-sample pipeline (`02_norm_clustering` stage), but, in this case,
-  the selection of PCs can be configured for each integration method.
-- Dimensionality reduction, which is same as in the single-sample pipeline, but as PCA can be configured for
-  each integration method.
-- Expression plots of selected markers, see single-sample pipeline / stage `02_norm_clustering`.
-- Mutual nearest neighbors (MNN) clustering to assess integration results.
-- Integration diagnostics:
-  - Assignment of cells of each sample to MNN clusters (tables, plots).
-  - [Rand indices](https://en.wikipedia.org/wiki/Rand_index):
-    used to evaluate biological heterogeneity preservation by summarizing the agreement between clusterings.
-
-## Stage `02_int_clustering`
+### Stage `02_int_clustering`
 
 This stage basically reproduces the clustering and cell type annotation steps in the `02_norm_clustering` stage of
-the single-sample pipeline.
-The only difference is the **user selection of a final integration method which will be used downstream.**
+the single-sample pipeline. The only difference is the **user selection of a final integration method which will be used downstream.**
 HVGs, reduced dimensions, and selected markers are already computed in the previous stage (`01_integration`).
-
-`r emoji::emoji("gear")` Config and targets: `vignette("stage_int_clustering")`
-
-[`r emoji::emoji("scroll")` Example report](https://onco.img.cas.cz/novotnyj/scdrake/integration/02_int_clustering/02_int_clustering.html)
-([used config](https://github.com/bioinfocz/scdrake/blob/main/tests/testthat/run_pipeline_config_patches/integration/02_int_clustering.default.yaml))
 
 ***
 
-# Common stages
+## Common stages
 
 Some stages are common to both single-sample and integration pipelines.
 
-## Stage `cluster_markers`
+### Stage `cluster_markers`
 
 A stage for calculation, visualization and reporting of cell cluster markers ("global markers").
 
-`r emoji::emoji("gear")` Config and targets: `vignette("stage_cluster_markers")`
+-> `vignette("stage_cluster_markers")`
 
-[`r emoji::emoji("scroll")` Example report for PBMC 1k data](https://onco.img.cas.cz/novotnyj/scdrake/single_sample/pbmc1k/cluster_markers/cluster_markers.html)
-([used config](https://github.com/bioinfocz/scdrake/blob/main/tests/testthat/run_pipeline_config_patches/single_sample_pbmc1k_full/cluster_markers.default.yaml))
-
-[`r emoji::emoji("scroll")` Example report for integrated data](https://onco.img.cas.cz/novotnyj/scdrake/integration/cluster_markers/cluster_markers.html)
-([used config](https://github.com/bioinfocz/scdrake/blob/main/tests/testthat/run_pipeline_config_patches/integration/cluster_markers.default.yaml))
-
-`r emoji::emoji("ladder")` Structure
-
-- [Calculation of cluster markers](https://bioconductor.org/books/3.15/OSCA.basic/marker-detection.html):
-  any categorical grouping of cells can be used, including those manually defined based on the existing groups
-  (from e.g. clustering), as described in the `vignette("stage_norm_clustering")`.
-  More details about marker computation can be found in `vignette("cluster_markers")`.
-- Generation of heatmaps and plots. To reduce the size of heatmaps and number of plots, you can control a number of top
-  N markers taken by a chosen metric (FDR, LFC, etc.). Only these top N markers will be displayed in heatmaps, and plots
-  made for them. This can be specified for each cell grouping and test type.
-  - Marker plots are composed of:
-    - Two plots of a dimred: one colored by a clustering, and second colored by expression of a marker (feature plot).
-    - A plot of summarized marker expression: proportion of cells expressing a marker, colored by average expression.
-    - A violin plot: expression of a marker in each cluster.
-- Generation of marker tables for each cell grouping and each of its levels.
-
-## Stage `contrasts`
+### Stage `contrasts`
 
 A stage for calculation, visualization and reporting of differentially expressed markers ("contrasts").
 This stage is basically the same as the `cluster_markers` stage, but all output is related to individual comparisons
 of levels of cell groupings. Hence "contrasts", a term known from bulk RNA-seq where sample groups are compared
 -> they are put *in contrast*.
 
-`r emoji::emoji("gear")` Config and targets: `vignette("stage_contrasts")`
+-> `vignette("stage_contrasts")`
 
-[`r emoji::emoji("scroll")` Example report for PBMC 1k data](https://onco.img.cas.cz/novotnyj/scdrake/single_sample/pbmc1k/contrasts/contrasts.html)
-([used config](https://github.com/bioinfocz/scdrake/blob/main/tests/testthat/run_pipeline_config_patches/single_sample_pbmc1k_full/contrasts.default.yaml))
+***
 
-[`r emoji::emoji("scroll")` Example report for integrated data](https://onco.img.cas.cz/novotnyj/scdrake/integration/contrasts/contrasts.html)
-([used config](https://github.com/bioinfocz/scdrake/blob/main/tests/testthat/run_pipeline_config_patches/integration/contrasts.default.yaml))
+# Signpost
+
+- Guides:
+  - Using the Docker image: <https://bioinfocz.github.io/scdrake/articles/scdrake_docker.html>
+    (or `vignette("scdrake_docker")`)
+  - 01 Quick start (single-sample pipeline): `vignette("scdrake")`
+  - 02 Integration pipeline guide: `vignette("scdrake_integration")`
+  - Advanced topics: `vignette("scdrake_advanced")`
+  - Extending the pipeline: `vignette("scdrake_extend")`
+  - `{drake}` basics: `vignette("drake_basics")`
+    - Or the official `{drake}` book: <https://books.ropensci.org/drake/>
+- General information:
+  - Pipeline overview: `vignette("pipeline_overview")`
+  - FAQ & Howtos: `vignette("scdrake_faq")`
+  - Command line interface (CLI): `vignette("scdrake_cli")`
+  - Config files (internals): `vignette("scdrake_config")`
+  - Environment variables: `vignette("scdrake_envvars")`
+- General configs:
+    - Pipeline config -> `vignette("config_pipeline")`
+    - Main config -> `vignette("config_main")`
+- Pipelines and stages:
+  - Single-sample pipeline:
+    - Stage `01_input_qc`: reading in data, filtering, quality control -> `vignette("stage_input_qc")`
+    - Stage `02_norm_clustering`: normalization, HVG selection, dimensionality reduction, clustering, cell type annotation
+      -> `vignette("stage_norm_clustering")`
+  - Integration pipeline:
+    - Stage `01_integration`: reading in data and integration -> `vignette("stage_integration")`
+    - Stage `02_int_clustering`: post-integration clustering and cell annotation -> `vignette("stage_int_clustering")`
+  - Common stages:
+    - Stage `cluster_markers` -> `vignette("stage_cluster_markers")`
+    - Stage `contrasts` (differential expression) -> `vignette("stage_contrasts")`

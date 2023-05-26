@@ -47,8 +47,12 @@ The main features of the `{scdrake}` pipeline are:
     The pipeline has smartly defined checkpoints which can be loaded from a `{drake}` cache.
   - Want to extend the pipeline? No problem! The pipeline definition is just an R object which can be arbitrarily extended.
 
-`{scdrake}` is aimed at both non-technical and bioinformatic public: both will benefit from reports and visualizations,
-and the latter also from the possibility to utilize all benefits of `{drake}` for custom analyses.
+For whom is `{scdrake}` purposed? It is primarily intended for tech-savvy users (bioinformaticians),
+who pass on the results (reports, images) to non-technical persons (biologists).
+At the same time, bioinformaticians can quickly react to biologists’ needs by changing the parameters of the pipeline,
+which then efficiently skips already finished parts. This dialogue between the biologist and the bioinformatician is
+indispensable during scRNA-seq data analysis. `{scdrake}` ensures that this communication is performed in an effective
+and reproducible manner.
 
 The pipeline structure along with [diagrams](https://github.com/bioinfocz/scdrake/blob/main/diagrams/README.md)
 and links to outputs is described in `vignette("pipeline_overview")`
@@ -62,28 +66,30 @@ methods and recommendations is `{scdrake}` largely based.
 
 # Installation instructions
 
-## Using a Docker image (_recommended_)
+## Using a Docker image (recommended)
 
 A Docker image based on the [official Bioconductor image](https://bioconductor.org/help/docker/)
 (version `r LATEST_STABLE_VERSION_DOCKER_BIOC`) is available. This is the most handy and reproducible way how to use
 `{scdrake}` as all the dependencies are already installed and their versions are fixed.
 In addition, the parent Bioconductor image comes bundled with RStudio Server.
 
-The complete guide to the usage of `{scdrake}`'s Docker image can be found at
-<https://bioinfocz.github.io/scdrake/articles/scdrake_docker.html>.
+The complete guide to the usage of `{scdrake}`'s Docker image can be found in the
+[Docker vignette](https://bioinfocz.github.io/scdrake/articles/scdrake_docker.html).
 **We strongly recommend to go through even if you are an experienced Docker user.**
-Below you can find just the basic command to download the image.
+Below you can find just the basic command to download the image and to run a detached container with RStudio in Docker or
+to run `{scdrake}` in Singularity.
+
+You can also run the image in [SingularityCE](https://docs.sylabs.io/guides/latest/user-guide/quick_start.html) (without RStudio) -
+see the Singularity section in the Docker vignette above.
+If the image is already downloaded in the local Docker storage, you can use `singularity pull docker-daemon:<image>`
 
 You can pull the Docker image with the latest stable `{scdrake}` version using
 
 ```{r docker_stable, include = FALSE}
-out <- c(
-  "\n",
-  "```bash",
+out <- scdrake::wrap_code(c(
   glue::glue("docker pull {DOCKER_IMAGE_STABLE}"),
-  "```",
-  "\n"
-)
+  glue::glue("singularity pull docker:{DOCKER_IMAGE_STABLE}")
+))
 ```
 
 `r paste(knitr::knit(text = out), collapse = "\n")`
@@ -93,13 +99,10 @@ or list available versions in [our Docker Hub repository](https://hub.docker.com
 For the latest development version use
 
 ```{r docker_arm64, include = FALSE}
-out <- c(
-  "\n",
-  "```bash",
+out <- scdrake::wrap_code(c(
   glue::glue("docker pull {DOCKER_IMAGE_LATEST}"),
-  "```",
-  "\n"
-)
+  glue::glue("singularity pull docker:{DOCKER_IMAGE_LATEST}")
+))
 ```
 
 `r paste(knitr::knit(text = out), collapse = "\n")`
@@ -107,19 +110,59 @@ out <- c(
 **Note for Mac users with M1 chipsets**: you can use the `arm64` version of the image:
 
 ```{r docker_latest, include = FALSE}
-out <- c(
-  "\n",
-  "```",
+out <- scdrake::wrap_code(c(
   glue::glue("docker pull {DOCKER_IMAGE_STABLE_ARM64}"),
+  glue::glue("singularity pull docker:{DOCKER_IMAGE_STABLE_ARM64}"),
   glue::glue("docker pull {DOCKER_IMAGE_LATEST_ARM64}"),
-  "```",
-  "\n"
-)
+  glue::glue("singularity pull docker:{DOCKER_IMAGE_LATEST_ARM64}")
+))
 ```
 
 `r paste(knitr::knit(text = out), collapse = "\n")`
 
-## Installing `{scdrake}` manually
+### Running the container
+
+For the most common cases of host machines: Linux running Docker Engine, and Windows or MacOS running Docker Desktop.
+
+First make a shared directory that will be mounted to the container:
+
+```bash
+mkdir ~/scdrake_projects
+cd ~/scdrake_projects
+```
+
+And run the image that will expose RStudio Server on port 8787 on your host:
+
+```{r docker_run_rstudio, include = FALSE}
+out_docker_run_rstudio <- scdrake::format_shell_command(c(
+  "docker run -d",
+  "-v $(pwd):/home/rstudio/scdrake_projects",
+  "-p 8787:8787",
+  "-e USERID=$(id -u)",
+  "-e GROUPID=$(id -g)",
+  "-e PASSWORD=1234",
+  DOCKER_IMAGE_STABLE
+))
+```
+
+`r knitr::knit(text = out_docker_run_rstudio)`
+
+For Singularity, also make shared directories and execute the container ("run and forget"):
+
+```bash
+mkdir -p ~/scdrake_singularity
+cd ~/scdrake_singularity
+mkdir -p home/${USER} scdrake_projects
+singularity exec \
+    -e \
+    --no-home \
+    --bind "home/${USER}/:/home/${USER},scdrake_projects/:/home/${USER}/scdrake_projects" \
+    --pwd "/home/${USER}/scdrake_projects" \
+    path/to/scdrake_image.sif \
+    scdrake <args> <command>
+```
+
+## Installing `{scdrake}` manually (not recommended)
 
 <details>
   <summary>Click for details</summary>
@@ -254,6 +297,15 @@ problem most of the time.
 
 ***
 
+## Quickstart
+
+First run the `scdrake` image in Docker or Singularity - see the
+[Docker vignette](https://bioinfocz.github.io/scdrake/articles/scdrake_docker.html)
+
+Then see the initial three steps in the[Get Started vignette](https://bioinfocz.github.io/scdrake/articles/scdrake_docker.html)
+
+***
+
 ## Vignettes and other readings
 
 See <https://bioinfocz.github.io/scdrake> for a documentation website where links to vignettes below become real :-)
@@ -266,7 +318,7 @@ While it is not necessary to know all `{drake}` internals to successfully run th
 its knowledge is a plus. You can read the minimum basics in `vignette("drake_basics")`.
 
 Also, the prior knowledge of Bioconductor and its classes
-(especially the [SingleCellExperiment](https://bioconductor.org/packages/release/bioc/html/SingleCellExperiment.html))
+(especially the [SingleCellExperiment](https://bioconductor.org/packages/3.15/bioc/html/SingleCellExperiment.html))
 is considerable.
 
 ***
@@ -331,8 +383,8 @@ Many things are used by `{scdrake}`, but these are really worth mentioning:
 
 - The [Bioconductor](https://www.bioconductor.org) ecosystem.
 - The [*Orchestrating Single-Cell Analysis with Bioconductor*](https://bioconductor.org/books/3.15/OSCA) book.
-- The [scran](https://bioconductor.org/packages/release/bioc/html/scran.html),
-  [scater](https://bioconductor.org/packages/release/bioc/html/scater.html), and other great packages from
+- The [scran](https://bioconductor.org/packages/3.15/bioc/html/scran.html),
+  [scater](https://bioconductor.org/packages/3.15/bioc/html/scater.html), and other great packages from
   [Aaron Lun](https://orcid.org/0000-0002-3564-4813) et al.
 - The [drake](https://github.com/ropensci/drake) package.
 - The [rmarkdown](https://github.com/rstudio/rmarkdown) package, and other ones from the

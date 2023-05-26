@@ -15,7 +15,7 @@ vignette: >
 
 ***
 
-Pipeline config is stored in `pipeline.yaml` file. Directory with this file is read from `SCDRAKE_PIPELINE_CONFIG_DIR`
+Pipeline config is stored in the `config/pipeline.yaml` file. Directory with this file is read from `SCDRAKE_PIPELINE_CONFIG_DIR`
 environment variable upon `{scdrake}` load or attach, and saved as `scdrake_pipeline_config_dir` option.
 This option is used as the default argument value in several `{scdrake}` functions.
 
@@ -252,7 +252,7 @@ WITHIN_TARGET_PARALLELISM: False
 **Type:** logical scalar
 
 Allow or disable within-target parallelism through
-the [BiocParallel](https://bioconductor.org/packages/release/bioc/html/BiocParallel.html) package.
+the [BiocParallel](https://bioconductor.org/packages/3.15/bioc/html/BiocParallel.html) package.
 Only possible when `DRAKE_PARALLELISM` is `"loop"`.
 
 ***

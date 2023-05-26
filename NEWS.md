@@ -1,4 +1,4 @@
-# scdrake 1.4.1.9000 (dev)
+# scdrake 1.5.0
 
 - Major refactoring:
   - Divided some sections into smaller subplans (e.g. dimred plots or clustering).
@@ -9,9 +9,11 @@
   - Added Leiden algorithm for graph-based clustering.
   - Added multiple resolutions for Leiden and Louvain algorithms.
   - Polished clustering names in `colData()`.
+  - Added [clustree](https://lazappi.github.io/clustree/) to visualize cluster abundances under different `k`s or resolutions.
 - Added [Harmony](https://github.com/immunogenomics/harmony) integration.
 - Allow to load data in the `01_input_qc` stage also as a SCE object from a `{drake}` cache.
-- Subsetting of imported SCE object.
+- Subsetting of imported SCE object in the `01_input_qc` stage.
+- Major refactoring and update of documentation (vignettes).
 
 # scdrake 1.4.1
 

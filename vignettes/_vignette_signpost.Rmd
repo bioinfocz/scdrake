@@ -3,6 +3,7 @@
     (or `vignette("scdrake_docker")`)
   - 01 Quick start (single-sample pipeline): `vignette("scdrake")`
   - 02 Integration pipeline guide: `vignette("scdrake_integration")`
+  - Advanced topics: `vignette("scdrake_advanced")`
   - Extending the pipeline: `vignette("scdrake_extend")`
   - `{drake}` basics: `vignette("drake_basics")`
     - Or the official `{drake}` book: <https://books.ropensci.org/drake/>
@@ -10,20 +11,19 @@
   - Pipeline overview: `vignette("pipeline_overview")`
   - FAQ & Howtos: `vignette("scdrake_faq")`
   - Command line interface (CLI): `vignette("scdrake_cli")`
-  - Config files: `vignette("scdrake_config")`
-  - Cluster markers: `vignette("cluster_markers")`
+  - Config files (internals): `vignette("scdrake_config")`
   - Environment variables: `vignette("scdrake_envvars")`
 - General configs:
-    - Pipeline config: `vignette("config_pipeline")`
-    - Main config: `vignette("config_main")`
-- Targets and config parameters for each stage:
+    - Pipeline config -> `vignette("config_pipeline")`
+    - Main config -> `vignette("config_main")`
+- Pipelines and stages:
   - Single-sample pipeline:
-    - Reading in data, filtering, quality control (stage `01_input_qc`): `vignette("stage_input_qc")`
-    - Normalization, HVG selection, dimensionality reduction, clustering, cell type annotation (stage `02_norm_clustering`):
-      `vignette("stage_norm_clustering")`
+    - Stage `01_input_qc`: reading in data, filtering, quality control -> `vignette("stage_input_qc")`
+    - Stage `02_norm_clustering`: normalization, HVG selection, dimensionality reduction, clustering, cell type annotation
+      -> `vignette("stage_norm_clustering")`
   - Integration pipeline:
-    - Reading in data and integration (stage `01_integration`): `vignette("stage_integration")`
-    - Post-integration clustering (stage `02_int_clustering`): `vignette("stage_int_clustering")`
-  - Common:
-    - Cluster markers stage: `vignette("stage_cluster_markers")`
-    - Contrasts stage: `vignette("stage_contrasts")`
+    - Stage `01_integration`: reading in data and integration -> `vignette("stage_integration")`
+    - Stage `02_int_clustering`: post-integration clustering and cell annotation -> `vignette("stage_int_clustering")`
+  - Common stages:
+    - Stage `cluster_markers` -> `vignette("stage_cluster_markers")`
+    - Stage `contrasts` (differential expression) -> `vignette("stage_contrasts")`

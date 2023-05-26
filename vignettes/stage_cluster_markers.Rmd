@@ -14,23 +14,129 @@ vignette: >
 
 ***
 
-For a general overview of this stage see `vignette("pipeline_overview")`.
+## {.tabset}
 
-Cluster markers config is stored in `cluster_markers.yaml` file. Location of this file is different for the
-single-sample and integration pipelines. As for the [pipeline config](config_pipeline.html), directory with this file
-is read from environment variables:
+### Overview
 
-- `SCDRAKE_SINGLE_SAMPLE_CONFIG_DIR` for the single-sample pipeline.
-- `SCDRAKE_INTEGRATION_CONFIG_DIR` for the integration pipeline.
+A stage for calculation, visualization and reporting of cell cluster markers ("global markers").
+This stage is common to both single-sample and integration pipelines.
 
-and options named in lowercase are set upon `{scdrake}` load or attach. Then the actual directory used depends on
-whether you run `run_single_sample()` / `run_single_sample_r()` or `run_integration()` / `run_integration_r()`.
+`r emoji::emoji("gear")` Config files: `config/single_sample/cluster_markers.yaml`, `config/integration/cluster_markers.yaml`
+
+`r emoji::emoji("clipboard")` HTML report target (in `config/pipeline.yaml`):
+`DRAKE_TARGETS: ["report_cluster_markers"]`
+
+[`r emoji::emoji("scroll")` Example report for PBMC 1k data](https://onco.img.cas.cz/novotnyj/scdrake/single_sample/pbmc1k/cluster_markers/cluster_markers.html)
+([used config](https://github.com/bioinfocz/scdrake/blob/main/tests/testthat/run_pipeline_config_patches/single_sample_pbmc1k_full/cluster_markers.default.yaml))
+
+[`r emoji::emoji("scroll")` Example report for integrated data](https://onco.img.cas.cz/novotnyj/scdrake/integration/cluster_markers/cluster_markers.html)
+([used config](https://github.com/bioinfocz/scdrake/blob/main/tests/testthat/run_pipeline_config_patches/integration/cluster_markers.default.yaml))
+
+`r emoji::emoji("ladder")` Structure
+
+- [Calculation of cluster markers](https://bioconductor.org/books/3.15/OSCA.basic/marker-detection.html):
+  any categorical grouping of cells can be used, including those manually defined based on the existing groups from 
+  clustering (but not only). See below for more details about marker calculation.
+- Generation of heatmaps and plots. To reduce the size of heatmaps and number of plots, you can control a number of top
+  N markers taken by a chosen metric (FDR, LFC, etc.). Only these top N markers will be displayed in heatmaps, and plots
+  made for them. This can be specified for each cell grouping and test type.
+  - Marker plots are composed of:
+    - Two plots of a dimred: one colored by a clustering, and second colored by expression of a marker (feature plot).
+    - A plot of summarized marker expression: proportion of cells expressing a marker, colored by average expression.
+    - A violin plot: expression of a marker in each cluster.
+- Generation of marker tables for each cell grouping and each of its levels.
 
 ***
 
-# Config parameters
+#### Marker calculation and interpretation
 
-## Cluster markers
+Taken from [OSCA](https://bioconductor.org/books/3.15/OSCA.basic/marker-detection.html), slightly modified:
+
+> To interpret our clustering results, we identify the genes that drive separation between clusters.
+> These marker genes allow us to assign biological meaning to each cluster based on their functional annotation.
+> In the most obvious case, the marker genes for each cluster are a priori associated with particular cell types,
+> allowing us to treat the clustering as a proxy for cell type identity. The same principle can be applied to discover
+> more subtle differences between clusters (e.g., changes in activation or differentiation state) based on the behavior
+> of genes in the affected pathways.
+
+> Identification of marker genes is usually based around the retrospective detection of differential expression
+> between clusters. Genes that are more strongly DE are more likely to have caused separate clustering of cells
+> in the first place. Several different statistical tests are available to quantify the differences in expression
+> profiles, and different approaches can be used to consolidate test results into a single ranking of genes for
+> each cluster. These choices parametrize the theoretical differences between the various marker detection strategies.
+
+##### Used statistical tests
+
+For each cell grouping and gene, three distinct, adjustable statistical tests are computed through `scran::findMarkers()`:
+
+- t-test (`scran::pairwiseTTests()`): test for difference in mean expression.
+- [Wilcoxon signed-rank test](https://en.wikipedia.org/wiki/Wilcoxon_signed-rank_test)
+  (`scran::pairwiseWilcox()`): test for difference in median expression (roughly speaking).
+- Binomial test (`scran::pairwiseBinom()`):
+  test the null hypothesis that the proportion of cells expressing a gene is the same between groups.
+
+These tests are performed in a
+[pairwise fashion](https://bioconductor.org/books/3.15/OSCA.basic/marker-detection.html#scoring-markers-by-pairwise-comparisons)
+within each grouping, i.e. each level of the grouping is tested against each other.
+
+Example: three pairwise tests of each type are computed for k-means clustering with $k = 3$:
+
+- Cluster 1 vs. Cluster 2
+- Cluster 1 vs. Cluster 3
+- Cluster 2 vs. Cluster 3
+
+The overall p-values, false discovery rate (FDR) and effect sizes
+(log2 fold change (LFC) for t- and binomial test, and Area Under Curve for Wilcoxon test)
+are calculated for the cell grouping from its all pairwise tests (`scran::combineMarkers()`).
+
+##### Narrowing down the number of cluster markers
+
+A more or less stringent approach can be used to narrow down the number of cluster markers,
+based on results from individual pairwise tests. This will also affect the combined p-value and FDR:
+
+- [Looking for any differences](https://bioconductor.org/books/3.12/OSCA/marker-detection.html#looking-for-any-differences):
+  for each level (cluster) of a grouping, take top markers by p-value from each pairwise test. This will be shown
+  as `Top` column in marker table. Example: the set of all genes with `Top` values of 1 contains the gene with
+  the lowest p-value from each comparison.
+- [Finding cluster-specific markers](https://bioconductor.org/books/3.12/OSCA/marker-detection.html#finding-cluster-specific-markers):
+  a more stringent approach only considering genes that are differentially expressed in all pairwise comparisons
+  involving the cluster of interest. For this purpose is used an intersection-union test where the combined
+  p-value for each gene is the maximum of the p-values from all pairwise comparisons.
+  A gene will only achieve a low combined p-value if it is strongly DE in all comparisons to other clusters.
+- [Balancing stringency and generality](https://bioconductor.org/books/3.12/OSCA/marker-detection.html#balancing-stringency-and-generality):
+  the Holm-Bonferroni correction is applied on pairwise p-values and the middle-most value is taken as the combined
+  p-value. This effectively tests the global null hypothesis that at least 50% of the individual pairwise comparisons
+  exhibit no differential expression.
+
+This can be controlled via the `PVAL_TYPE` parameter.
+
+##### Handling blocking factors
+
+[Blocking factors](https://bioconductor.org/books/3.12/OSCA/marker-detection.html#marker-batch)
+(e.g. batch effect, sex differences, cell cycle phases) can be handled by further nesting.
+For that, each pairwise test is performed separately in each level of the blocking factor.
+Then, p-values from individual levels' tests are combined, and the final combined p-values are obtained by
+the method of choice (see above).
+
+This can be controlled via the `BLOCK_COLUMN` parameter.
+
+***
+
+### Config parameters
+
+Cluster markers config is stored in the `config/single_sample/cluster_markers.yaml` and `config/integration/cluster_markers.yaml`
+files (the location of this file is different for the single-sample and integration pipelines).
+As for the [pipeline config](config_pipeline.html), directory with this file is read from environment variables:
+
+- `SCDRAKE_SINGLE_SAMPLE_CONFIG_DIR` for the single-sample pipeline
+- `SCDRAKE_INTEGRATION_CONFIG_DIR` for the integration pipeline
+
+Options named in lowercase are set upon `{scdrake}` load or attach. Then the actual directory used depends on
+whether you run `run_single_sample_r()` or `run_integration_r()`.
+
+***
+
+#### Cluster markers
 
 ```yaml
 CLUSTER_MARKERS_SOURCES_DEFAULTS:
@@ -87,8 +193,7 @@ markers source in `CLUSTER_MARKERS_SOURCES` (see below).
     - `PVAL_TYPE` (character scalar: `"any"` | `"some"` | `"all"`):
       how p-values are to be combined across pairwise comparisons for a given group/cluster.
       If `"any"`, `top` column will be present in cluster markers tables.
-      By this parameter you can control the stringency of marker detection - see `vignette("cluster_markers")`
-      for more details.
+      By this parameter you can control the stringency of marker detection.
     - `MIN_PROP` (numeric scalar: `<0; 1>`, or `null`):
       the minimum proportion of significant comparisons per gene.
       Defaults to `0.5` when `PVAL_TYPE` is `"some"`, otherwise defaults to zero.
@@ -169,7 +274,7 @@ Set to `False` to skip making of marker plots. In that case, for compatibility r
 
 ***
 
-## Input files
+#### Input files
 
 ```yaml
 CLUSTER_MARKERS_TABLE_TEMPLATE_RMD_FILE: "Rmd/common/cluster_markers_table_template.Rmd"
@@ -182,7 +287,7 @@ Paths to RMarkdown files used for HTML reports of this pipeline stage.
 
 ***
 
-## Output files
+#### Output files
 
 ```yaml
 CLUSTER_MARKERS_BASE_OUT_DIR: "cluster_markers"
@@ -206,19 +311,17 @@ CLUSTER_MARKERS_TABLES_OUT_DIR: "cluster_markers_tables"
 
 Names of files and directories created under `CLUSTER_MARKERS_BASE_OUT_DIR`. Subdirectories are not allowed.
 
-***
-
-# Targets
+### Outputs
 
 Here you can find description of the most important targets for this stage.
 However, for a full overview, you have to inspect the
 [source code](https://github.com/bioinfocz/scdrake/blob/main/R/plans_common.R) of the
 `get_cluster_markers_subplan()` function.
 
-## `SingleCellExperiment` objects
+#### `SingleCellExperiment` objects
 
 `sce_dimred_cluster_markers`, `sce_final_cluster_markers`:
-SCE objects with computed dimensionality reductions. Used for generation of marker plots and heatmaps.
+SCE objects with computed dimensionality reductions. Used for generation of marker plots and heatmaps
 
 `sce_cluster_markers`: Final SCE object with cell clusterings from the `02_norm_clustering`
 (single-sample pipeline) or `02_int_clustering` stage (integration pipeline). Used to compute cluster markers.
@@ -229,17 +332,17 @@ drake::loadd(sce_final_cluster_markers)
 SingleCellExperiment::colData(sce_final_cluster_markers)
 ```
 
-## Tibbles with parameters
+#### Tibbles with parameters
 
-Usually, each row of these tibbles is passed to a function.
+Usually, each row of these tibbles is passed to a function within the `{drake}` plan.
 
-`cluster_markers_params`: all parameters for computation of cluster markers.
+`cluster_markers_params`: all parameters for computation of cluster markers
 
 The following tibbles are derived from `cluster_markers_params`:
 `cluster_markers_test_params`, `cluster_markers_heatmap_params`, `cluster_markers_plot_params`,
 `cluster_markers_dimred_plot_params`
 
-## Tibbles with cluster markers test results
+#### Tibbles with cluster markers test results
 
 `cluster_markers_raw`: this tibble has the same columns as `cluster_markers_test_params`, except the list column
 (`<DataFrame>`) `markers` with test results is added, and each level of `source_column` is expanded to a separate row.
@@ -253,7 +356,7 @@ changes made to the output of the former function.
 ***
 
 `cluster_markers`: same as `cluster_markers_raw`, but for Wilcox tests, combined LFC is added to `DataFrame`s in
-`markers` column.
+`markers` column
 
 ***
 
@@ -262,7 +365,7 @@ changes made to the output of the former function.
 comparisons with all other levels.
 
 `cluster_markers_out`: holds the same data as `cluster_markers_processed`, but `markers` are coerced to dataframes
-and column names are normalized to snake_case.
+and column names are normalized to snake_case
 
 ***
 
@@ -270,7 +373,7 @@ and column names are normalized to snake_case.
 `cluster_markers_plots_top`. Marker tables in `markers` column are in publish-ready forms for HTML output,
 e.g. there are `<a>` links to ENSEMBL or PDF files of marker plots.
 
-## Heatmaps
+#### Heatmaps
 
 `seu_for_cluster_markers_heatmaps`: a `Seurat` object used to generate heatmaps through `marker_heatmap()`
 (a wrapper around `Seurat::DoHeatmap()`). In `scale.data` slot of the `RNA` assay are UMI counts transformed to z-score.
@@ -278,10 +381,10 @@ e.g. there are `<a>` links to ENSEMBL or PDF files of marker plots.
 ***
 
 `cluster_markers_heatmaps_df`: a tibble derived from `cluster_markers_heatmaps_df`, but enriched with cluster markers
-test results.
+test results
 
 Two heatmaps for each row in `cluster_markers_heatmaps_df` are made: one with log2 UMI counts, and second with the
-same values transformed to z-score.
+same values transformed to z-score
 
 For storage reasons, heatmap objects are not saved as R objects, but only exported to PDF.
 However, you can obtain a tibble holding these objects with
@@ -304,7 +407,7 @@ In `heatmaps_tbl`, two list columns are appended to `cluster_markers_heatmaps_df
 
 For more control you can use the `marker_heatmap()` function (of which is `marker_heatmaps_wrapper()` a wrapper).
 
-## Marker plots
+#### Marker plots
 
 `cluster_markers_plots_top`: a tibble with markers for which plots will be made.
 See `?markers_plots_top` for details.
@@ -315,13 +418,13 @@ As for heatmaps, plot objects (`{ggplot2}`, `{patchwork}`) are not saved, but th
 markers_plots_files(sce_dimred_cluster_markers, cluster_markers_plots_top, save = FALSE, return_type = "tibble")
 ```
 
-Similarly, the actual plotting function can be used, see `?marker_plot`.
+Similarly, the actual plotting function can be used, see `?marker_plot`
 
-## Dimensionality reduction plots
+#### Dimensionality reduction plots
 
 `cluster_markers_dimred_plots`: a tibble with dimensionality reduction plots for each of `source_column` in
-the `CLUSTER_MARKERS_SOURCES` parameter and `PLOT_DIMREDS` in `COMMON_PARAMS`.
+the `CLUSTER_MARKERS_SOURCES` parameter and `PLOT_DIMREDS` in `COMMON_PARAMS`
 
-## Other targets
+#### Other targets
 
-`config_cluster_markers`: a list holding parameters for this stage.
+`config_cluster_markers`: a list holding parameters for this stage

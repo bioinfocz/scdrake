@@ -48,10 +48,15 @@ The main features of the `{scdrake}` pipeline are:
     -   Want to extend the pipeline? No problem! The pipeline definition
         is just an R object which can be arbitrarily extended.
 
-`{scdrake}` is aimed at both non-technical and bioinformatic public:
-both will benefit from reports and visualizations, and the latter also
-from the possibility to utilize all benefits of `{drake}` for custom
-analyses.
+For whom is `{scdrake}` purposed? It is primarily intended for
+tech-savvy users (bioinformaticians), who pass on the results (reports,
+images) to non-technical persons (biologists). At the same time,
+bioinformaticians can quickly react to biologists’ needs by changing the
+parameters of the pipeline, which then efficiently skips already
+finished parts. This dialogue between the biologist and the
+bioinformatician is indispensable during scRNA-seq data analysis.
+`{scdrake}` ensures that this communication is performed in an effective
+and reproducible manner.
 
 The pipeline structure along with
 [diagrams](https://github.com/bioinfocz/scdrake/blob/main/diagrams/README.md)
@@ -59,14 +64,14 @@ and links to outputs is described in `vignette("pipeline_overview")`
 ([link](https://bioinfocz.github.io/scdrake/articles/pipeline_overview.html)).
 
 Huge thanks go to the authors of the [Orchestrating Single-Cell Analysis
-with Bioconductor](https://bioconductor.org/books/release/OSCA) book on
+with Bioconductor](https://bioconductor.org/books/3.15/OSCA) book on
 whose methods and recommendations is `{scdrake}` largely based.
 
 ------------------------------------------------------------------------
 
 # Installation instructions
 
-## Using a Docker image (*recommended*)
+## Using a Docker image (recommended)
 
 A Docker image based on the [official Bioconductor
 image](https://bioconductor.org/help/docker/) (version 3.15) is
@@ -76,16 +81,25 @@ versions are fixed. In addition, the parent Bioconductor image comes
 bundled with RStudio Server.
 
 The complete guide to the usage of `{scdrake}`’s Docker image can be
-found at
-<https://bioinfocz.github.io/scdrake/articles/scdrake_docker.html>. **We
-strongly recommend to go through even if you are an experienced Docker
-user.** Below you can find just the basic command to download the image.
+found in the [Docker
+vignette](https://bioinfocz.github.io/scdrake/articles/scdrake_docker.html).
+**We strongly recommend to go through even if you are an experienced
+Docker user.** Below you can find just the basic command to download the
+image and to run a detached container with RStudio in Docker or to run
+`{scdrake}` in Singularity.
+
+You can also run the image in
+[SingularityCE](https://docs.sylabs.io/guides/latest/user-guide/quick_start.html)
+(without RStudio) - see the Singularity section in the Docker vignette
+above. If the image is already downloaded in the local Docker storage,
+you can use `singularity pull docker-daemon:<image>`
 
 You can pull the Docker image with the latest stable `{scdrake}` version
 using
 
 ``` bash
-docker pull jirinovo/scdrake:1.4.1-bioc3.15
+docker pull jirinovo/scdrake:1.5.0-bioc3.15
+singularity pull docker:jirinovo/scdrake:1.5.0-bioc3.15
 ```
 
 or list available versions in [our Docker Hub
@@ -95,15 +109,61 @@ For the latest development version use
 
 ``` bash
 docker pull jirinovo/scdrake:latest-bioc3.15
+singularity pull docker:jirinovo/scdrake:latest-bioc3.15
 ```
 
 **Note for Mac users with M1 chipsets**: you can use the `arm64` version
 of the image:
 
-    docker pull jirinovo/scdrake:1.4.1-bioc3.15-arm64
-    docker pull jirinovo/scdrake:latest-bioc3.15-arm64
+``` bash
+docker pull jirinovo/scdrake:1.5.0-bioc3.15-arm64
+singularity pull docker:jirinovo/scdrake:1.5.0-bioc3.15-arm64
+docker pull jirinovo/scdrake:latest-bioc3.15-arm64
+singularity pull docker:jirinovo/scdrake:latest-bioc3.15-arm64
+```
 
-## Installing `{scdrake}` manually
+### Running the container
+
+For the most common cases of host machines: Linux running Docker Engine,
+and Windows or MacOS running Docker Desktop.
+
+First make a shared directory that will be mounted to the container:
+
+``` bash
+mkdir ~/scdrake_projects
+cd ~/scdrake_projects
+```
+
+And run the image that will expose RStudio Server on port 8787 on your
+host:
+
+``` bash
+docker run -d \
+  -v $(pwd):/home/rstudio/scdrake_projects \
+  -p 8787:8787 \
+  -e USERID=$(id -u) \
+  -e GROUPID=$(id -g) \
+  -e PASSWORD=1234 \
+  jirinovo/scdrake:1.5.0-bioc3.15
+```
+
+For Singularity, also make shared directories and execute the container
+(“run and forget”):
+
+``` bash
+mkdir -p ~/scdrake_singularity
+cd ~/scdrake_singularity
+mkdir -p home/${USER} scdrake_projects
+singularity exec \
+    -e \
+    --no-home \
+    --bind "home/${USER}/:/home/${USER},scdrake_projects/:/home/${USER}/scdrake_projects" \
+    --pwd "/home/${USER}/scdrake_projects" \
+    path/to/scdrake_image.sif \
+    scdrake <args> <command>
+```
+
+## Installing `{scdrake}` manually (not recommended)
 
 <details>
 <summary>
@@ -167,7 +227,7 @@ for `{scdrake}` and you can use it to install all dependencies by
 
 ``` r
 ## -- This is a lockfile for the latest stable version of scdrake.
-download.file("https://raw.githubusercontent.com/bioinfocz/scdrake/1.4.1/renv.lock")
+download.file("https://raw.githubusercontent.com/bioinfocz/scdrake/1.5.0/renv.lock")
 ## -- You can increase the number of CPU cores to speed up the installation.
 options(Ncpus = 2)
 renv::restore(lockfile = "renv.lock", repos = BiocManager::repositories())
@@ -187,7 +247,7 @@ installed from the lockfile).
 
 ``` r
 remotes::install_github(
-  "bioinfocz/scdrake@1.4.1",
+  "bioinfocz/scdrake@1.5.0",
   dependencies = FALSE, upgrade = FALSE,
   keep_source = TRUE, build_vignettes = TRUE,
   repos = BiocManager::repositories()
@@ -241,6 +301,16 @@ this shouldn’t be a problem most of the time.
 
 ------------------------------------------------------------------------
 
+## Quickstart
+
+First run the `scdrake` image in Docker or Singularity - see the [Docker
+vignette](https://bioinfocz.github.io/scdrake/articles/scdrake_docker.html)
+
+Then see the initial three steps in the[Get Started
+vignette](https://bioinfocz.github.io/scdrake/articles/scdrake_docker.html)
+
+------------------------------------------------------------------------
+
 ## Vignettes and other readings
 
 See <https://bioinfocz.github.io/scdrake> for a documentation website
@@ -252,6 +322,7 @@ where links to vignettes below become real :-)
         (or `vignette("scdrake_docker")`)
     -   01 Quick start (single-sample pipeline): `vignette("scdrake")`
     -   02 Integration pipeline guide: `vignette("scdrake_integration")`
+    -   Advanced topics: `vignette("scdrake_advanced")`
     -   Extending the pipeline: `vignette("scdrake_extend")`
     -   `{drake}` basics: `vignette("drake_basics")`
         -   Or the official `{drake}` book:
@@ -260,27 +331,28 @@ where links to vignettes below become real :-)
     -   Pipeline overview: `vignette("pipeline_overview")`
     -   FAQ & Howtos: `vignette("scdrake_faq")`
     -   Command line interface (CLI): `vignette("scdrake_cli")`
-    -   Config files: `vignette("scdrake_config")`
-    -   Cluster markers: `vignette("cluster_markers")`
+    -   Config files (internals): `vignette("scdrake_config")`
     -   Environment variables: `vignette("scdrake_envvars")`
 -   General configs:
-    -   Pipeline config: `vignette("config_pipeline")`
-    -   Main config: `vignette("config_main")`
--   Targets and config parameters for each stage:
+    -   Pipeline config -\> `vignette("config_pipeline")`
+    -   Main config -\> `vignette("config_main")`
+-   Pipelines and stages:
     -   Single-sample pipeline:
-        -   Reading in data, filtering, quality control (stage
-            `01_input_qc`): `vignette("stage_input_qc")`
-        -   Normalization, HVG selection, dimensionality reduction,
-            clustering, cell type annotation (stage
-            `02_norm_clustering`): `vignette("stage_norm_clustering")`
+        -   Stage `01_input_qc`: reading in data, filtering, quality
+            control -\> `vignette("stage_input_qc")`
+        -   Stage `02_norm_clustering`: normalization, HVG selection,
+            dimensionality reduction, clustering, cell type annotation
+            -\> `vignette("stage_norm_clustering")`
     -   Integration pipeline:
-        -   Reading in data and integration (stage `01_integration`):
+        -   Stage `01_integration`: reading in data and integration -\>
             `vignette("stage_integration")`
-        -   Post-integration clustering (stage `02_int_clustering`):
-            `vignette("stage_int_clustering")`
-    -   Common:
-        -   Cluster markers stage: `vignette("stage_cluster_markers")`
-        -   Contrasts stage: `vignette("stage_contrasts")`
+        -   Stage `02_int_clustering`: post-integration clustering and
+            cell annotation -\> `vignette("stage_int_clustering")`
+    -   Common stages:
+        -   Stage `cluster_markers` -\>
+            `vignette("stage_cluster_markers")`
+        -   Stage `contrasts` (differential expression) -\>
+            `vignette("stage_contrasts")`
 
 We encourage all users to read
 [basics](https://books.ropensci.org/drake) of the `{drake}` package.
@@ -290,7 +362,7 @@ can read the minimum basics in `vignette("drake_basics")`.
 
 Also, the prior knowledge of Bioconductor and its classes (especially
 the
-[SingleCellExperiment](https://bioconductor.org/packages/release/bioc/html/SingleCellExperiment.html))
+[SingleCellExperiment](https://bioconductor.org/packages/3.15/bioc/html/SingleCellExperiment.html))
 is considerable.
 
 ------------------------------------------------------------------------
@@ -363,10 +435,10 @@ mentioning:
 
 -   The [Bioconductor](https://www.bioconductor.org) ecosystem.
 -   The [*Orchestrating Single-Cell Analysis with
-    Bioconductor*](https://bioconductor.org/books/release/OSCA) book.
+    Bioconductor*](https://bioconductor.org/books/3.15/OSCA) book.
 -   The
-    [scran](https://bioconductor.org/packages/release/bioc/html/scran.html),
-    [scater](https://bioconductor.org/packages/release/bioc/html/scater.html),
+    [scran](https://bioconductor.org/packages/3.15/bioc/html/scran.html),
+    [scater](https://bioconductor.org/packages/3.15/bioc/html/scater.html),
     and other great packages from [Aaron
     Lun](https://orcid.org/0000-0002-3564-4813) et al.
 -   The [drake](https://github.com/ropensci/drake) package.

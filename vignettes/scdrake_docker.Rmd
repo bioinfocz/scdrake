@@ -20,6 +20,8 @@ out_docker_pull_stable <- scdrake::format_shell_command(glue::glue("docker pull 
 out_docker_pull_stable_arm64 <- scdrake::format_shell_command(glue::glue("docker pull {DOCKER_IMAGE_STABLE_ARM64}"))
 out_docker_pull_latest <- scdrake::format_shell_command(glue::glue("docker pull {DOCKER_IMAGE_LATEST}"))
 out_docker_pull_latest_arm64 <- scdrake::format_shell_command(glue::glue("docker pull {DOCKER_IMAGE_LATEST_ARM64}"))
+
+out_singularity_pull_stable <- scdrake::format_shell_command(glue::glue("singularity pull docker:{DOCKER_IMAGE_STABLE}"))
 ```
 
 ***
@@ -30,6 +32,9 @@ isolated *containers* which are based on *images*. You can think of them as smal
 The [Bioconductor's page for Docker](https://bioconductor.org/help/docker/) provides itself a nice introduction to
 Docker and its usage for R, and we recommend to read it through.
 In this vignette, we will mainly give practical examples related to `{scdrake}`.
+
+You can also run the image in [SingularityCE](https://docs.sylabs.io/guides/latest/user-guide/quick_start.html) (without RStudio) -
+see [Singularity](#singularity) below.
 
 # Platform-specific notes
 
@@ -254,7 +259,7 @@ Note for Docker Desktop on a Linux host: omit the `-u rstudio` (or use `-u root`
 This will mount `/home/rstudio/scdrake_projects` as UID 0 in the container, but UID of the DD user will be used in the
 host directory.
 
-## Running interactively ("run and forget")
+## Running once ("run and forget")
 
 Running the image in detached mode gives us chance e.g. to find out more details about what's wrong in a failed pipeline
 run, or to work interactively in RStudio. However, we can also run the image in a "run and forget" mode where a
@@ -413,3 +418,95 @@ out <- scdrake::format_shell_command(c(
 ```
 
 `r knitr::knit(text = out)`
+
+# Singularity
+
+Singularity is an alternative container runner that does not require root access, so it can be used on e.g. HPCs.
+
+You will probably use Singularity in case you don't have root permissions on the host machine.
+It can be simply installed to the user space e.g. via the [conda](https://docs.conda.io/en/latest/miniconda.html)
+virtual environment/package manager as the [conda-forge/singularity package](https://anaconda.org/conda-forge/singularity).
+
+Docker images can be simply pulled from the Docker Hub similar to `docker pull`:
+
+`r knitr::knit(text = out_singularity_pull_stable)`
+
+The only difference is the usage of `docker:` prefix so Singularity knows where to look for the image.
+If the image is already present in the local Docker storage, you can use `docker-daemon:` instead.
+
+After pulling, Singularity needs to convert the image to the SIF format, and that can take quite a time.
+By default, the SIF file is saved in the current working directory.
+
+## Running the image in Singularity
+
+Here are some key differences compared to Docker:
+
+- By default, Singularity issues commands in the container as the current user. Thus, there are no problems with file ownership.
+- By default, Singularity mounts the host's user `HOME` to the container. While this might be practical in some cases,
+  we rather recommend to mount an empty/different directory to `/home/<user>` in the container.
+- By default, Singularity containers are read only. Thus, you can only write to mounted directories.
+- Although the image also contains RStudio, unfortunately, we were not able to make it functional in Singularity.
+
+First we will create a directory structure. These directories will be mounted to the container.
+Note that we also create a fake home directory - that is because some R packages need to use a cache directory, which
+is located there.
+
+```bash
+mkdir -p ~/scdrake_singularity
+cd ~/scdrake_singularity
+mkdir -p home/${USER} scdrake_projects/pbmc1k
+```
+
+Now we can issue a `{scdrake}` commands through its CLI:
+
+```bash
+singularity exec \
+    -e \
+    --no-home \
+    --bind "home/${USER}/:/home/${USER},scdrake_projects/:/home/${USER}/scdrake_projects" \
+    --pwd "/home/${USER}/scdrake_projects" \
+    path/to/scdrake_image.sif \
+    scdrake <args> <command>
+```
+
+For example, to initialize a new project:
+
+```bash
+singularity exec \
+    -e \
+    --no-home \
+    --bind "home/${USER}/:/home/${USER},scdrake_projects/:/home/${USER}/scdrake_projects" \
+    --pwd "/home/${USER}/scdrake_projects/pbmc1k" \
+    path/to/scdrake_image.sif \
+    scdrake --download-example-data init-project
+```
+
+And to run the pipeline using that project:
+
+```bash
+singularity exec \
+    -e \
+    --no-home \
+    --bind "home/${USER}/:/home/${USER},scdrake_projects/:/home/${USER}/scdrake_projects" \
+    --pwd "/home/${USER}/scdrake_projects/pbmc1k" \
+    path/to/scdrake_image.sif \
+    scdrake --pipeline-type single_sample run
+```
+
+Note that you can also start a bash or R session and use `{scdrake}` within that, e.g.
+
+```bash
+singularity exec \
+    -e \
+    --no-home \
+    --bind "home/${USER}/:/home/${USER},scdrake_projects/:/home/${USER}/scdrake_projects" \
+    --pwd "/home/${USER}/scdrake_projects/pbmc1k" \
+    path/to/scdrake_image.sif \
+    R
+```
+
+and then in R
+
+```{r, eval = FALSE}
+scdrake::run_single_sample_r()
+```

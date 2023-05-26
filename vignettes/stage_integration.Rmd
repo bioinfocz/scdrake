@@ -15,22 +15,68 @@ vignette: >
 
 ***
 
-For a general overview of this integration pipeline stage see `vignette("pipeline_overview")`.
+## {.tabset}
 
-Config for this stage is stored in `01_integration.yaml` file.
+### Overview
+
+This stage imports multiple `SingleCellExperiment` objects and performs integration using one or several methods.
+
+`r emoji::emoji("gear")` Config file: `config/integration/01_integration.yaml`
+
+`r emoji::emoji("clipboard")` HTML report target (in `config/pipeline.yaml`):
+`DRAKE_TARGETS: ["report_integration"]`
+
+[`r emoji::emoji("scroll")` Example report](https://onco.img.cas.cz/novotnyj/scdrake/integration/01_integration/01_integration.html)
+([used config](https://github.com/bioinfocz/scdrake/blob/main/tests/testthat/run_pipeline_config_patches/integration/01_integration.default.yaml))
+
+`r emoji::emoji("ladder")` Structure
+
+- Reading in data from:
+  - `drake` caches of multiple single-sample pipelines
+  - Rds files with `SingleCellExperiment` objects
+- Subsetting to common column and row data, and metadata
+- Normalization of each sample for inter-batch sequencing depth (`batchelor::multiBatchNorm()`,
+  [theory](http://bioconductor.org/books/3.15/OSCA.multisample/integrating-datasets.html#slower-setup))
+- Combining of HVGs by either ([theory](http://bioconductor.org/books/3.15/OSCA.multisample/integrating-datasets.html#slower-setup)):
+  - A HVG metric (gene variance or CV2), then apply top HVGs selection as in the single-sample pipeline.
+    All samples must have the same HVG metric used before.
+  - Set operations (without duplicates): intersection, union, or take them all
+- Perform integration using one or more methods:
+  - Rescaling (`batchelor::rescaleBatches()`,
+    [theory](http://bioconductor.org/books/3.15/OSCA.multisample/integrating-datasets.html#by-rescaling-the-counts)):
+    scale counts so that the average count within each batch is the same for each gene
+  - Regression (`batchelor::regressBatches()`,
+    [theory](http://bioconductor.org/books/3.15/OSCA.multisample/integrating-datasets.html#by-fitting-a-linear-model)):
+    fit a linear model to each gene regress out uninteresting factors of variation, returning a matrix of residuals
+  - Fast mutual nearest neighbors (`batchelor::fastMNN()`,
+    [theory](http://bioconductor.org/books/3.15/OSCA.multisample/integrating-datasets.html#mnn-correction))
+  - [Harmony](https://portals.broadinstitute.org/harmony/index.html)
+
+The steps below are performed for each integration method, plus separately for HVGs with removed cell cycle-related
+genes (if this removal was requested).
+
+- Calculation of PCA and selection of number of principal components (PCs) which will be used downstream.
+  This is similar to what is done in the single-sample pipeline (`02_norm_clustering` stage), but, in this case,
+  the selection of PCs can be configured for each integration method.
+- Dimensionality reduction, which is same as in the single-sample pipeline, but as PCA, it can be configured for
+  each integration method
+- Expression plots of selected markers
+- Mutual nearest neighbors (MNN) clustering to assess integration results
+- Integration diagnostics:
+  - Assignment of cells of each sample to MNN clusters (tables, plots)
+  - [Rand indices](https://en.wikipedia.org/wiki/Rand_index):
+    used to evaluate biological heterogeneity preservation by summarizing the agreement between clusterings
+
+### Config parameters
+
+Config for this stage is stored in the `config/integration/01_integration.yaml` file.
 Directory with this file is read from `SCDRAKE_INTEGRATION_CONFIG_DIR` environment variable upon `{scdrake}` load or
 attach, and saved as `scdrake_integration_config_dir` option. This option is used as the default argument value in
 several `{scdrake}` functions.
 
-Target for this stage's report: `report_integration`
-
-You can make this target by setting `DRAKE_TARGETS: ["report_integration"]` in `pipeline.yaml` config file.
-
 ***
 
-# Config parameters
-
-## Integration sources
+#### Integration sources
 
 ```yaml
 INTEGRATION_SOURCES:
@@ -73,7 +119,7 @@ Currently, there are some limitations of which datasets can be integrated:
 - If the HVG selection in integrated data is based on combined HVG metrics (see the relevant parameters below),
   all single-samples had to use the same HVG metric (`HVG_METRIC` of `"gene_var"` or `"gene_cv2"`).
 
-## Selection of highly variable genes (HVGs)
+#### Selection of highly variable genes (HVGs)
 
 This is done prior to integration, and is same for all methods specified in the `INTEGRATION_METHODS` (see below).
 
@@ -114,7 +160,7 @@ i.e. this selection will be applied to combined HVG metrics.
 These parameters are similar to `HVG_SELECTION` and `HVG_SELECTION_VALUE` in the `02_norm_clustering` stage
 of the single-sample pipeline (see `vignette("stage_norm_clustering")` for more details).
 
-## Integration methods
+#### Integration methods
 
 ```yaml
 INTEGRATION_METHODS:
@@ -256,9 +302,9 @@ for each integration method:
     - `epsilon.cluster: 0.00001`: convergence tolerance for clustering round of Harmony. Set to `-inf` to never stop early.
     - `epsilon.harmony: 0.0001`: convergence tolerance for Harmony. Set to `-inf` to never stop early.
 
-## Integration diagnostics
+#### Integration diagnostics
 
-### Fast MNN clustering
+##### Fast MNN clustering
 
 Used to obtain basic
 [integration diagnostics](http://bioconductor.org/books/3.15/OSCA.multisample/correction-diagnostics.html).
@@ -294,7 +340,7 @@ INTEGRATION_SNN_CLUSTERING_METHOD: "walktrap"
 
 A type of MNN clustering algorithm. See `igraph::cluster_walktrap()` and `igraph::cluster_louvain()` for more details.
 
-## Input files
+#### Input files
 
 ```yaml
 SELECTED_MARKERS_FILE: null
@@ -314,7 +360,7 @@ INTEGRATION_REPORT_RMD_FILE: "Rmd/integration/01_integration.Rmd"
 
 A path to RMarkdown file used for HTML report of this pipeline stage.
 
-## Output files
+#### Output files
 
 ```yaml
 INTEGRATION_BASE_OUT_DIR: "01_integration"
@@ -335,7 +381,7 @@ INTEGRATION_REPORT_HTML_FILE: "01_integration.html"
 
 Names of files and directories created under `INTEGRATION_BASE_OUT_DIR`. Subdirectories are not allowed.
 
-## HTML output parameters
+#### HTML output parameters
 
 ```yaml
 INTEGRATION_KNITR_MESSAGE: False
@@ -347,9 +393,7 @@ INTEGRATION_KNITR_ECHO: False
 
 These are passed to `knitr::opts_chunk()` and used for rendering of stage's HTML report.
 
-***
-
-# Targets
+### Outputs
 
 Here you can find description of the most important targets for this stage.
 However, for a full overview, you have to inspect the
@@ -358,7 +402,7 @@ However, for a full overview, you have to inspect the
 
 HTML report target name: `report_integration`
 
-## `SingleCellExperiment` objects
+#### `SingleCellExperiment` objects
 
 `sce_int_import`: list of imported single-sample SCE objects, as defined in the `INTEGRATION_SOURCES` parameter.
 Because `{drake}` cannot watch for changes in a cache, this target is always rerun.
@@ -367,17 +411,17 @@ Also, some constraints are checked (common normalization method and HVG metrics)
 ***
 
 `sce_int_raw_snn_clustering`: `sce_int_import` with computed fast SNN clustering for each single-sample,
-used for integration diagnostics.
+used for integration diagnostics
 
 ***
 
 `sce_int_processed`: `sce_int_import` subsetted to common colData, and features (rows) and their corresponding
-metadata (`hvg_ids`, `hvg_metric_fit`).
+metadata (`hvg_ids`, `hvg_metric_fit`)
 
 ***
 
 `sce_int_multibatchnorm`: `sce_int_processed` with SCE objects normalized for inter-batch sequencing depth
-(`batchelor::multiBatchNorm()`).
+(`batchelor::multiBatchNorm()`)
 
 ***
 
@@ -390,30 +434,32 @@ reduced dimensions (available in `reducedDims(sce, "harmony")`).
 ***
 
 `sce_int_pca_df`: `sce_int_df` with computed PCA and selected number of PCs. Also includes PC selection statistics
-and plot.
+and plot
 
 ***
 
-`sce_int_clustering_df`: `sce_int_pca_df` with computed MNN clustering used for integration diagnostics.
+`sce_int_clustering_df`: `sce_int_pca_df` with computed MNN clustering used for integration diagnostics
 
 ***
 
-`sce_int_dimred_df`: `sce_int_pca_df` with computed t-SNE and UMAP dimensionality reductions.
+`sce_int_dimred_df`: `sce_int_pca_df` with computed t-SNE and UMAP dimensionality reductions
 
-## Highly variable genes (HVGs) selection
+#### Highly variable genes (HVGs) selection
 
 `hvg_int`, `hvg_int_with_cc`: lists of HVGs and selection parameters. The latter is not `NULL` when any of the
 single-samples defined in the `INTEGRATION_SOURCES` parameter has `hvg_rm_cc_genes` set to `True`.
 
 ***
 
-`hvg_plots_int_df`: a tibble with HVG diagnostic plots.
+`hvg_plots_int_df`: a tibble with HVG diagnostic plots
 
-## Plots
+#### Plots
 
-`sce_int_dimred_plots_df`: a tibble with dimensionality reduction plots.
+`sce_int_dimred_plots_df`: a tibble with dimensionality reduction plots
 
-### Selected markers
+##### Selected markers
 
 `selected_markers_int_plots_df`: a tibble with plots of selected markers, similar to `selected_markers_plots`
-in the `02_norm_clustering` stage of the single-sample pipeline.
+in the `02_norm_clustering` stage of the single-sample pipeline
+
+`selected_markers_plots_files_out`: make this target to export the plots

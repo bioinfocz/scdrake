@@ -43,5 +43,10 @@ Authors:
   \item Jan Kubovciak \email{jan.kubovciak@img.cas.cz}
 }
 
+Other contributors:
+\itemize{
+  \item Michal Kolar \email{kolarmi@img.cas.cz} [funder]
+}
+
 }
 \keyword{internal}

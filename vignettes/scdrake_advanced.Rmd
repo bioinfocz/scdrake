@@ -1,0 +1,95 @@
+---
+title: "Advanced topics"
+date: "`r glue::glue('<sup>Document generated: {format(Sys.time(), \"%Y-%m-%d %H:%M:%S %Z%z</sup>\")}')`"
+package: scdrake
+output:
+  BiocStyle::html_document:
+    toc: true
+    toc_float: true
+vignette: >
+  %\VignetteIndexEntry{Advanced topics}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+``` {r, echo = FALSE}
+knitr::opts_chunk$set(eval = FALSE)
+```
+
+This vignette should serve as a supplement to the Get Started vignette (`vignette("scdrake")`) and
+expects you have finished the initial three steps.
+
+Other "hot" topics and questions can be found in `vignette("scdrake_faq)`
+
+***
+
+## Retrieving intermediate results (targets)
+
+In `{drake}`'s terminology, a pipeline is called *plan*, and is composed of *targets*. When a target is finished,
+its value (object) is saved to cache (the directory `.drake` by default). The cache has two main purposes:
+
+- If a target is not changed, its value is loaded from the cache. *Change* involves e.g. target's definition (code) or
+  change in upstream targets on which the target depends. This way `{drake}` is able to skip computation of finished
+  targets and greatly enhance the runtime. More details [here](https://books.ropensci.org/drake/triggers.html).
+- Users also have access to the cache, and so you can load any finished target into your R session.
+
+Users can access the cache via two `{drake}`'s functions:
+
+- `drake::loadd()` loads target's value to the current session as a variable of the same name.
+- `drake::readd()` returns target's value (so it can be assigned to variable).
+
+Let's try it and load the filtered `SingleCellExperiment` object:
+
+```{r}
+drake::loadd(sce_final_input_qc)
+```
+
+Value of the target `sce_final_input_qc` was loaded as a variable of the same name to your current R session
+(or more precisely, to the global environment).
+
+Similarly, we can load this target to a variable of our choice:
+
+```{r}
+sce <- drake::readd(sce_final_input_qc)
+```
+
+And work further with the loaded object, e.g.
+
+```{r}
+scater::plotExpression(sce, "NOC2L", exprs_values = "counts", swap_rownames = "SYMBOL")
+```
+
+***
+
+## How to dig into `scdrake` plans?
+
+For a more schematic overview of pipelines and stages see `vignette("pipeline_overview")`, where are also
+[diagrams](https://github.com/bioinfocz/scdrake/blob/main/diagrams/README.md).
+
+Advanced users might be interested in looking into source code of `{scdrake}`'s [plans](https://github.com/bioinfocz/scdrake/tree/main/R)
+(files named `plans_*.R`).
+
+***
+
+## Running the pipeline in parallel mode
+
+```{r, eval = TRUE, child = "_drake_parallelism.Rmd"}
+```
+
+***
+
+## Using an alternative storage format (`qs`)
+
+By default, R's `Rds` format is used (see `?saveRds`) to save intermediate results to `{drake}`s cache,
+but instead, we recommend to use `DRAKE_FORMAT: "qs"` (see <https://github.com/traversc/qs>) in `config/pipeline.yaml`
+that offers better performance, but sometimes doesn't work correctly (`drake` throws untraceable errors).
+
+See <https://books.ropensci.org/drake/plans.html#special-data-formats-for-targets> for more details.
+
+***
+
+## Extending the pipeline
+
+See `vignette("scdrake_extend")`, please.
+
+***
