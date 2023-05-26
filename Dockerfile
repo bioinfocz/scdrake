@@ -5,7 +5,9 @@
 ## -- - Install the scdrake package.
 ## -- - Install the CLI scripts.
 ## -- You can build the Dockerfile using
-## docker-buildx build --progress plain --platform linux/amd64 --build-arg R_PKG_INSTALL_NCPUS=8 --build-arg R_PKG_INSTALL_MAKE_NCPUS=4 -t jirinovo/scdrake:<version>-bioc3.15 -f Dockerfile
+## docker-buildx build --progress plain --platform linux/amd64 \
+## --build-arg R_PKG_INSTALL_NCPUS=8 --build-arg R_PKG_INSTALL_MAKE_NCPUS=4 --build-arg SCDRAKE_VERSION=<version> \
+## -t jirinovo/scdrake:<version>-bioc3.15 -f Dockerfile
 
 ARG BIOCONDUCTOR_VERSION=3_15
 FROM bioconductor/bioconductor_docker:RELEASE_$BIOCONDUCTOR_VERSION
@@ -21,6 +23,11 @@ LABEL name="bioinfocz/scdrake" \
       maintainer="jiri.novotny@img.cas.cz" \
       description="Scdrake package wrapped in the Bioconductor docker image." \
       license="MIT"
+
+ARG PROXY_BUILD
+ENV ALL_PROXY=${PROXY_BUILD}
+ENV http_proxy=${PROXY_BUILD}
+ENV https_proxy=${PROXY_BUILD}
 
 ## -- https://github.com/bioinfocz/scdrake/blob/main/required_libs_linux.md -> Ubuntu 20.04
 RUN apt-get update && apt-get install -y --no-install-recommends \
@@ -47,9 +54,16 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
   libharfbuzz-dev \
   libjpeg-dev \
   libtiff-dev \
-  qpdf
+  qpdf \
+  curl
 
-RUN wget -O /usr/local/bin/yq https://github.com/mikefarah/yq/releases/download/3.4.1/yq_linux_amd64
+## clean up
+RUN apt-get clean
+RUN apt-get autoremove -y
+RUN apt-get autoclean -y
+RUN rm -rf /var/lib/apt/lists/*
+
+RUN curl -L --output /usr/local/bin/yq https://github.com/mikefarah/yq/releases/download/3.4.1/yq_linux_amd64
 RUN test -s "/usr/local/bin/yq" || (echo "yq binary is empty" && false)
 RUN chmod +x /usr/local/bin/yq
 RUN mkdir -p /root/.local/bin
@@ -58,7 +72,7 @@ RUN mkdir -p /home/rstudio/.local/bin
 RUN ln -s /usr/local/bin/yq /home/rstudio/.local/bin/yq
 RUN chown -R rstudio:rstudio /home/rstudio/.local
 
-ENV RENV_VERSION 0.16.0
+ENV RENV_VERSION=0.16.0
 RUN R -e "BiocManager::install('rstudio/renv@${RENV_VERSION}')"
 ARG R_PKG_INSTALL_NCPUS=1
 ARG R_PKG_INSTALL_MAKE_NCPUS=1
@@ -66,7 +80,11 @@ ENV MAKEFLAGS="-j${R_PKG_INSTALL_MAKE_NCPUS}"
 ## -- For Rhtslib this error appears during renv::restore(): '/usr/bin/tar: Unexpected EOF in archive'\
 RUN Rscript -e "BiocManager::install(c('Rhtslib', 'Rsamtools'), update = FALSE, ask = FALSE, Ncpus = ${R_PKG_INSTALL_NCPUS})"
 
+## Use Bioconductor binary packages
+ENV BIOCONDUCTOR_USE_CONTAINER_REPOSITORY=TRUE
+
 COPY renv.lock /
+
 RUN Rscript -e "\
   options(Ncpus = ${R_PKG_INSTALL_NCPUS});\
   renv::consent(TRUE);\
@@ -96,7 +114,12 @@ RUN find /usr/local/lib/R/site-library/*/libs/ -name \*.so | xargs strip -s -p
 RUN Rscript -e "scdrake::install_cli(type = 'system', ask = FALSE)"
 
 ENV MAKEFLAGS=""
-ENV SCDRAKE_DOCKER TRUE
+ENV SCDRAKE_DOCKER=TRUE
+
+ARG PROXY_IMAGE
+ENV ALL_PROXY=${PROXY_IMAGE}
+ENV http_proxy=${PROXY_IMAGE}
+ENV https_proxy=${PROXY_IMAGE}
 
 ## -- This will start RStudio.
 CMD ["/init"]
