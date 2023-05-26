@@ -47,4 +47,4 @@ NORM_CLUSTERING_REPORT_DIMRED_PLOTS_OTHER:
     "detected": "Detected number of genes"
     "cluster_graph_leiden_r0.4_annotated": null
     "cluster_sc3_k6_custom": "From additional cell data"
-SELECTED_MARKERS_FILE: !code system.file("extdata", "selected_markers.csv", package = "scdrake", mustWork = TRUE)
+SELECTED_MARKERS_FILE: "selected_markers.csv"

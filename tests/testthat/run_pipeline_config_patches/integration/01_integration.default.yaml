@@ -11,4 +11,4 @@ INTEGRATION_SOURCES:
       description: "10x Genomics PBMC 3k dataset"
       hvg_rm_cc_genes: False
       hvg_cc_genes_var_expl_threshold: null
-SELECTED_MARKERS_FILE: !code system.file("extdata", "selected_markers.csv", package = "scdrake", mustWork = TRUE)
+SELECTED_MARKERS_FILE: "selected_markers.csv"
