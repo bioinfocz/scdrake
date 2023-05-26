@@ -2,19 +2,32 @@
 % Please edit documentation in R/utils_text.R
 \name{format_shell_command}
 \alias{format_shell_command}
+\alias{wrap_code}
+\alias{format_shell_commands}
 \title{Format a shell command as a Markdown codeblock.}
 \usage{
-format_shell_command(lines, language = "bash")
+format_shell_command(lines, language = "bash", wrap = TRUE)
+
+wrap_code(lines, collapse = TRUE, language = "bash")
+
+format_shell_commands(commands, language = "bash", wrap = TRUE)
 }
 \arguments{
-\item{lines}{A character vector: command lines.}
+\item{lines}{A character vector: code lines.}
 
 \item{language}{A character scalar: codeblock language.}
+
+\item{wrap}{A logical scalar: if \code{TRUE}, run \code{wrap_code()} onto the formatted command.}
+
+\item{collapse}{A logical scalar: if \code{TRUE}, collapse the \code{lines} by newline (\verb{\\n}).}
+
+\item{commands}{A list of character vectors with command lines passed into \code{format_shell_command()}.}
 }
 \value{
 A character vector.
 }
 \description{
-Format a shell command as a Markdown codeblock.
+The shell command will be formatted such that each item of \code{lines} is put onto a separate line suffixed
+by \verb{ \\}.
 }
 \concept{misc_text}

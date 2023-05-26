@@ -108,13 +108,17 @@ get_random_strings <- function(n, length, pattern = "[A-Za-z]") {
 }
 
 #' @title Format a shell command as a Markdown codeblock.
+#' @description The shell command will be formatted such that each item of `lines` is put onto a separate line suffixed
+#' by ` \`.
 #' @param lines A character vector: command lines.
 #' @param language A character scalar: codeblock language.
+#' @param wrap A logical scalar: if `TRUE`, run `wrap_code()` onto the formatted command.
 #' @return A character vector.
 #'
+#' @rdname format_shell_command
 #' @concept misc_text
 #' @export
-format_shell_command <- function(lines, language = "bash") {
+format_shell_command <- function(lines, language = "bash", wrap = TRUE) {
   if (length(lines) > 1) {
     ## -- Which lines to append "\" to.
     to_wrap_lines_i <- seq_len(length(lines) - 1)
@@ -135,7 +139,40 @@ format_shell_command <- function(lines, language = "bash") {
       paste(collapse = "\n")
   }
 
-  lines <- glue0c("```{language}\n{lines}\n```")
+  if (wrap) {
+    lines <- wrap_code(lines, language = language)
+  }
 
-  return(lines)
+  lines
+}
+
+#' @title Wrap lines into a Markdown codeblock.
+#' @param lines A character vector: code lines.
+#' @param collapse A logical scalar: if `TRUE`, collapse the `lines` by newline (`\n`).
+#' @param language A character scalar: codeblock language.
+#'
+#' @rdname format_shell_command
+#' @concept misc_text
+#' @export
+wrap_code <- function(lines, collapse = TRUE, language = "bash") {
+  if (collapse) {
+    lines <- paste(lines, collapse = "\n")
+  }
+  glue0c("```{language}\n{lines}\n```")
+}
+
+#' @param commands A list of character vectors with command lines passed into `format_shell_command()`.
+#'
+#' @rdname format_shell_command
+#' @concept misc_text
+#' @export
+format_shell_commands <- function(commands, language = "bash", wrap = TRUE) {
+  res <- purrr::map_chr(commands, format_shell_command, wrap = FALSE) %>%
+    paste(collapse = "\n")
+
+  if (wrap) {
+    res <- wrap_code(res, language = language)
+  }
+
+  res
 }
