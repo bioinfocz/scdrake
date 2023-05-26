@@ -33,7 +33,7 @@ sce_raw_fn <- function(input_data, input_data_subset = NULL) {
     fs::file_exists(input_path),
     msg = str_space(
       "Cannot find the input file or directory for the {.field 01_input_qc} stage: {.file {input_path}}.",
-      "Please check the {.file 01_input_qc.yaml} config file."
+      "Please check the {.field INPUT_DATA} parameter in the {.file 01_input_qc.yaml} config file."
     )
   )
 
