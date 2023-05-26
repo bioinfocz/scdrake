@@ -199,10 +199,14 @@ sctransform_normalization <- function(sce,
                                       seed = 1L,
                                       verbose = TRUE,
                                       ...) {
+  ## -- SCTransform() is sometimes failing for no reason ("subscript out of bounds"), I think this fixes it
+  withr::local_package("Seurat")
+  withr::local_package("sctransform")
+
   seu <- as_seurat(sce, seu_assay = "RNA", add_rowData = TRUE, data = NULL)
   ## -- Prevent within-target future parallelism, it may break drake.
   seu_norm <- with_plan(
-    Seurat::SCTransform(
+    SCTransform(
       seu,
       vars.to.regress = vars_to_regress, variable.features.n = n_hvg, return.only.var.genes = FALSE,
       seed.use = seed, verbose = verbose, method = method
@@ -210,7 +214,7 @@ sctransform_normalization <- function(sce,
     future::sequential
   )
 
-  sce_norm <- Seurat::as.SingleCellExperiment(seu_norm, assay = "SCT")
+  sce_norm <- as.SingleCellExperiment(seu_norm, assay = "SCT")
   mainExpName(sce_norm) <- NULL
 
   ## -- Convert log1p (natural log) to log2
@@ -227,6 +231,7 @@ sctransform_normalization <- function(sce,
     sctransform_vst.out = seu_norm@assays$SCT@misc$vst.out,
     sctransform_model_list = seu_norm@assays$SCT@SCTModel.list
   )
+  metadata(sce_norm) <- c(metadata(sce), metadata(sce_norm))
 
   return(sce_norm)
 }
