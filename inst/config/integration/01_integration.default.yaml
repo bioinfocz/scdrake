@@ -83,6 +83,8 @@ INTEGRATION_SNN_CLUSTERING_METHOD: "walktrap"
 
 ### Input files ###############################################################
 SELECTED_MARKERS_FILE: null
+## -- This is an example file bundled with scdrake and copied to project's root on its initialization
+# SELECTED_MARKERS_FILE: "selected_markers.csv"
 INTEGRATION_REPORT_RMD_FILE: "Rmd/integration/01_integration.Rmd"
 ###############################################################################
 

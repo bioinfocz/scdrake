@@ -109,8 +109,8 @@ NORM_CLUSTERING_REPORT_DIMRED_PLOTS_OTHER:
 
 ### Input files ###############################################################
 SELECTED_MARKERS_FILE: null
-## -- This is an example file bundled with scdrake
-# SELECTED_MARKERS_FILE: !code system.file("extdata/selected_markers.csv", package = "scdrake", mustWork = TRUE)
+## -- This is an example file bundled with scdrake and copied to project's root on its initialization
+# SELECTED_MARKERS_FILE: "selected_markers.csv"
 
 NORM_CLUSTERING_REPORT_RMD_FILE: "Rmd/single_sample/02_norm_clustering.Rmd"
 NORM_CLUSTERING_REPORT_SIMPLE_RMD_FILE: "Rmd/single_sample/02_norm_clustering_simple.Rmd"

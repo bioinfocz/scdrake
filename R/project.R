@@ -119,6 +119,9 @@ init_project <- function(dir = ".",
   fs::file_copy(system.file("plan_custom.R", package = "scdrake", mustWork = TRUE), dir, overwrite = TRUE)
   verbose %&&% cli_alert_success("Copied the {.file plan_custom.R} file.")
 
+  fs::file_copy(system.file("extdata/selected_markers.csv", package = "scdrake", mustWork = TRUE), dir, overwrite = TRUE)
+  verbose %&&% cli_alert_success("Copied the {.file selected_markers.csv} file.")
+
   if (set_wd) {
     verbose %&&% cli_alert_success("Changing the working directory and project's root for {.pkg here} package.")
     setwd(dir)
