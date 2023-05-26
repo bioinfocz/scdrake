@@ -122,14 +122,14 @@ if (cfg$NORMALIZATION_TYPE == "none") {
 if (normalization_type_sce == "scran") {
   cat("**`scran`: normalization by deconvolution**\n\n")
   cat(
-    "Cell-specific biases are normalized using the `scran::computeSumFactors()` method,",
+    "Cell-specific biases are normalized using the `scuttle::computePooledFactors()` method,",
     "which implements the deconvolution strategy for scaling normalization",
     "([*A. T. Lun, Bach, and Marioni 2016*](https://genomebiology.biomedcentral.com/articles/10.1186/s13059-016-0947-7)).",
     "This computes size factors that are used to scale the counts in each cell.",
     "The assumption is that most genes are not differentially expressed (DE) between cells,",
     "such that any differences in expression across the majority of genes represents some technical bias that should be removed."
   )
-  used_functions <- c("scran::computeSumFactors()", "scuttle::logNormCounts()")
+  used_functions <- c("scuttle::computePooledFactors()", "scuttle::logNormCounts()")
   if (cfg$SCRAN_USE_QUICKCLUSTER) {
     used_functions <- c("scran::quickCluster()", used_functions)
   }
@@ -188,7 +188,7 @@ if (cc_genes_valid && !rlang::is_null(sce_metadata$hvg_rm_cc_genes) && sce_metad
     "Using the percentage of variance explained by the cell cycle phase in the expression profile for each gene, ",
     "we removed {length(sce_metadata$hvg_rm_cc_genes_ids)} genes with percentage > ",
     "{sce_metadata$hvg_cc_genes_var_expl_threshold} prior to HVG selection.\n\n",
-    "This strategy is further explained [here](https://bioconductor.org/books/3.15/OSCA.advanced/cell-cycle-assignment.html#removing-cell-cycle-related-genes)"
+    "This strategy is further explained in [OSCA](https://bioconductor.org/books/3.15/OSCA.advanced/cell-cycle-assignment.html#removing-cell-cycle-related-genes)"
   )
 
   phase_variance_explained <- sce_rowData[sce_rowData$is_cc_related, c("ENSEMBL", "SYMBOL", "phase_variance_explained")] %>%
@@ -345,7 +345,7 @@ if (!is.null(cfg$CELL_ANNOTATION_SOURCES)) {
     "i.e. those markers have driven the decision to label cells by the chosen cell type\n",
     "- Delta scores show poor-quality or ambiguous assignments based on the per-cell 'delta', i.e., the difference between",
     "the score for the assigned label and the median across all labels for each cell.",
-    "See [here](https://bioconductor.org/books/3.15/SingleRBook/annotation-diagnostics.html#based-on-the-deltas-across-cells) for more details"
+    "See [OSCA](https://bioconductor.org/books/3.15/SingleRBook/annotation-diagnostics.html#based-on-the-deltas-across-cells) for more details"
   )
 
   res <- scdrake::generate_cell_annotation_plots_section(
