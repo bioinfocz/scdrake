@@ -170,6 +170,8 @@ RUN apt-get install -y --no-install-recommends \
     ocl-icd-opencl-dev
 
 ## Python installations
+RUN curl --output /tmp/PySocks-1.7.1-py3-none-any.whl https://files.pythonhosted.org/packages/8d/59/b4572118e098ac8e46e399a1dd0f2d85403ce8bbaad9ec79373ed6badaf9/PySocks-1.7.1-py3-none-any.whl
+RUN pip3 install /tmp/PySocks-1.7.1-py3-none-any.whl
 RUN pip3 install scikit-learn pandas pyyaml
 
 ## libgdal is needed for sf
