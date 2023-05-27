@@ -73,7 +73,7 @@ contrasts_params_fn <- function(contrasts_sources, cell_data) {
           msg = str_space(
             "Error in contrasts config parameter {.field CONTRASTS_SOURCES} / {.field {contrast_source_name}}:",
             "{.val {target}} or {.val {reference}} level not found in",
-            "{.val {source_column}} column of {.code cell_data}. Valid levels are: {.val str_comma(group_levels)}}"
+            "{.val {source_column}} column of {.code cell_data}. Valid levels are: {.val {str_comma(group_levels)}}"
           )
         )
 
