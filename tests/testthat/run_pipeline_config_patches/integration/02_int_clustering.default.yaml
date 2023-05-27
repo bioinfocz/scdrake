@@ -29,9 +29,9 @@ CELL_ANNOTATION_SOURCES:
         genes: "sd"
 
 CELL_GROUPINGS:
-  - cluster_int_graph_leiden_r0.4_annotated:
-      source_column: "cluster_int_graph_leiden_r0.4"
-      description: "Graph-based clustering (Leiden alg.), annotated clusters"
+  - cluster_int_graph_louvain_r0.4_annotated:
+      source_column: "cluster_int_graph_louvain_r0.4"
+      description: "Graph-based clustering (Louvain alg.), annotated clusters"
       assignments:
         1: "memory_CD4+"
         6: "B"
@@ -44,4 +44,4 @@ INT_CLUSTERING_REPORT_DIMRED_PLOTS_OTHER:
     "total": "Total number of UMI"
     "detected": "Detected number of genes"
     "cluster_quickcluster": "Graph-based clustering for integration diagnostics."
-    "cluster_int_graph_leiden_r0.4_annotated": null
+    "cluster_int_graph_louvain_r0.4_annotated": null

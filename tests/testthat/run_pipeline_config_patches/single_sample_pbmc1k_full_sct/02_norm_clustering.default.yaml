@@ -32,19 +32,19 @@ CELL_ANNOTATION_SOURCES:
       train_params:
         genes: "sd"
 CELL_GROUPINGS:
-  - cluster_graph_leiden_r0.4_annotated:
-      source_column: "cluster_graph_leiden_r0.4"
-      description: "Graph-based clustering (Leiden alg.), annotated clusters"
+  - cluster_graph_louvain_r0.4_annotated:
+      source_column: "cluster_graph_louvain_r0.4"
+      description: "Graph-based clustering (Louvain alg.), annotated clusters"
       assignments:
         1: "memory_CD4+"
-        6: "B"
-        7: "memory_CD4+"
+        2: "B"
+        3: "memory_CD4+"
 ADDITIONAL_CELL_DATA_FILE: "additional_cell_data.Rds"
 NORM_CLUSTERING_REPORT_DIMRED_PLOTS_OTHER:
   - "phase": "Cell cycle phases"
     "doublet_score": "Doublet score"
     "total": "Total number of UMI"
     "detected": "Detected number of genes"
-    "cluster_graph_leiden_r0.4_annotated": null
+    "cluster_graph_louvain_r0.4_annotated": null
     "cluster_sc3_k6_custom": "From additional cell data"
 SELECTED_MARKERS_FILE: "selected_markers.csv"
