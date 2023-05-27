@@ -302,7 +302,7 @@ problem most of the time.
 First run the `scdrake` image in Docker or Singularity - see the
 [Docker vignette](https://bioinfocz.github.io/scdrake/articles/scdrake_docker.html)
 
-Then see the initial three steps in the[Get Started vignette](https://bioinfocz.github.io/scdrake/articles/scdrake_docker.html)
+Then you can go through the [Get Started vignette](https://bioinfocz.github.io/scdrake/articles/scdrake.html)
 
 ***
 
