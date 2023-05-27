@@ -50,7 +50,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">scdrake</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.4.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.5.0</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -77,6 +77,7 @@
     <h6 class="dropdown-header" data-toc-skip>Guides</h6>
     <a class="dropdown-item" href="../articles/scdrake_docker.html">Using the Docker image</a>
     <a class="dropdown-item" href="../articles/scdrake_integration.html">02 Integration pipeline guide</a>
+    <a class="dropdown-item" href="../articles/scdrake_advanced.html">Advanced topics</a>
     <a class="dropdown-item" href="../articles/scdrake_extend.html">Extending the pipeline</a>
     <a class="dropdown-item" href="../articles/drake_basics.html">drake basics</a>
     <div class="dropdown-divider"></div>
@@ -84,7 +85,6 @@
     <a class="dropdown-item" href="../articles/pipeline_overview.html">Pipeline overview</a>
     <a class="dropdown-item" href="../articles/scdrake_faq.html">FAQ &amp; Howtos</a>
     <a class="dropdown-item" href="../articles/scdrake_cli.html">Command line interface</a>
-    <a class="dropdown-item" href="../articles/cluster_markers.html">Cluster markers</a>
     <a class="dropdown-item" href="../articles/scdrake_config.html">scdrake config internals</a>
     <a class="dropdown-item" href="../articles/scdrake_envvars.html">Environment variables</a>
     <div class="dropdown-divider"></div>
@@ -148,7 +148,7 @@
       <img src="" class="logo" alt=""><h1>Normalization and clustering stage (`02_norm_clustering`)</h1>
             
             <h4 data-toc-skip class="date"><sup>Document generated:
-2023-01-30 11:58:19 UTC+0000</sup></h4>
+2023-05-27 08:46:49 UTC+0000</sup></h4>
       
       <small class="dont-index">Source: <a href="https://github.com/bioinfocz/scdrake/blob/mastervignettes/stage_norm_clustering.Rmd" class="external-link"><code>vignettes/stage_norm_clustering.Rmd</code></a></small>
       <div class="d-none name"><code>stage_norm_clustering.Rmd</code></div>
@@ -157,27 +157,197 @@
     
     
 <hr>
-<p>For a general overview of this single-sample pipeline stage see
-<code><a href="../articles/pipeline_overview.html">vignette("pipeline_overview")</a></code>.</p>
-<p>Config for this stage is stored in
-<code>02_norm_clustering.yaml</code> file. Directory with this file is
-read from <code>SCDRAKE_SINGLE_SAMPLE_CONFIG_DIR</code> environment
-variable upon <a href="https://github.com/bioinfocz/scdrake" class="external-link">scdrake</a> load or attach, and saved as
+<div class="section level2 tabset">
+<h2 class="tabset" id="section"></h2>
+
+
+
+<ul class="nav nav-tabs" id="section" role="tablist">
+<li role="presentation" class="nav-item"><button data-bs-toggle="tab" data-bs-target="#overview" id="overview-tab" type="button" role="tab" aria-controls="overview" aria-selected="true" class="active nav-link">Overview</button></li>
+<li role="presentation" class="nav-item"><button data-bs-toggle="tab" data-bs-target="#config-parameters" id="config-parameters-tab" type="button" role="tab" aria-controls="config-parameters" aria-selected="false" class="nav-link">Config parameters</button></li>
+<li role="presentation" class="nav-item"><button data-bs-toggle="tab" data-bs-target="#outputs" id="outputs-tab" type="button" role="tab" aria-controls="outputs" aria-selected="false" class="nav-link">Outputs</button></li>
+</ul>
+<div class="tab-content">
+<div class="active  tab-pane" id="overview" role="tabpanel" aria-labelledby="overview-tab">
+
+<p>This stage build upon the <code>01_input_qc</code> stage and performs
+perhaps the most important steps in scRNA-seq data analysis:
+normalization, highly variable gene selection, dimensionality reduction,
+clustering, cell type annotation, and visualization.</p>
+<p>⚙️ Config file:
+<code>config/single_sample/02_norm_clustering.yaml</code></p>
+<p>📋 HTML report target (in <code>config/pipeline.yaml</code>):
+<code>DRAKE_TARGETS: ["report_norm_clustering", "report_norm_clustering_simple"]</code></p>
+<p><a href="https://onco.img.cas.cz/novotnyj/scdrake/single_sample/pbmc1k/02_norm_clustering/02_norm_clustering.html" class="external-link">📜
+Example report</a> (<a href="https://github.com/bioinfocz/scdrake/blob/main/tests/testthat/run_pipeline_config_patches/single_sample_pbmc1k_full/02_norm_clustering.default.yaml" class="external-link">used
+config</a>)</p>
+<p><a href="https://onco.img.cas.cz/novotnyj/scdrake/single_sample/pbmc1k/02_norm_clustering/02_norm_clustering_simple.html" class="external-link">📜
+Example simplified report</a> (<a href="https://github.com/bioinfocz/scdrake/blob/main/tests/testthat/run_pipeline_config_patches/single_sample_pbmc1k_full/02_norm_clustering.default.yaml" class="external-link">used
+config</a>)</p>
+<p>🪜 Structure</p>
+<ul>
+<li>Calculation of cell cycle score and assignment of cells to phases
+(G1, G2M, S) using the list of cell cycle genes in
+<code><a href="https://satijalab.org/seurat/reference/cc.genes.updated.2019.html" class="external-link">Seurat::cc.genes.updated.2019</a></code> and
+<code><a href="https://satijalab.org/seurat/reference/CellCycleScoring.html" class="external-link">Seurat::CellCycleScoring()</a></code> function</li>
+<li>
+<a href="https://bioconductor.org/books/3.15/OSCA.basic/normalization.html" class="external-link">Normalization</a>
+of UMI counts by either:
+<ul>
+<li>
+<a href="https://bioconductor.org/books/3.15/OSCA.basic/normalization.html#normalization-by-deconvolution" class="external-link">Normalization
+by deconvolution</a> implemented in the <a href="https://bioconductor.org/packages/3.15/bioc/html/scran.html" class="external-link">scran</a>
+package (<code><a href="https://rdrr.io/pkg/scuttle/man/computePooledFactors.html" class="external-link">scuttle::computePooledFactors()</a></code>,
+<code><a href="https://rdrr.io/pkg/scuttle/man/logNormCounts.html" class="external-link">scuttle::logNormCounts()</a></code>)</li>
+<li>Regularized negative binomial regression to normalize UMI count data
+implemented in the <a href="https://github.com/ChristophH/sctransform" class="external-link">sctransform</a> package
+and wrapped by the <a href="https://satijalab.org/seurat/" class="external-link">Seurat</a>
+package. This method also allows to regress out confounding variables
+such as cell cycle score or percentage of mitochondrial genes
+expression. Note that for cell cycle score, a better method seems to be
+removal of CC-related genes prior to detection of highly variable genes
+(HVGs, see below). <code>sctransform</code> also returns a specified
+number of HVGs.</li>
+</ul>
+</li>
+<li>Selection of <a href="https://bioconductor.org/books/3.15/OSCA.basic/feature-selection.html" class="external-link">highly
+variable genes</a> (HVGs):
+<ul>
+<li>HVGs are used downstream for dimensionality reduction and
+clustering</li>
+<li>Three metrics for HVGs are available:
+<ul>
+<li><a href="https://bioconductor.org/books/3.15/OSCA.basic/feature-selection.html#quantifying-per-gene-variation" class="external-link">Gene
+variance</a></li>
+<li>
+<a href="http://bioconductor.org/books/3.15/OSCA.advanced/more-hvgs.html#using-the-coefficient-of-variation" class="external-link">Coefficient
+of variation</a> (CV2)</li>
+<li>HVGs obtained from the <code>sctransform</code> normalization</li>
+</ul>
+</li>
+<li>Based on the selected one from the first two metrics above, HVGs are
+selected either by:
+<ul>
+<li>Top N genes based on a metric (e.g. top 1000 genes with the highest
+variance)</li>
+<li>Significance (FDR) threshold</li>
+<li>Threshold on a metric value</li>
+</ul>
+</li>
+<li>Prior to HVG selection, cell cycle-related genes can be removed.
+<a href="https://github.com/bioinfocz/scdrake" class="external-link">scdrake</a> is using a method based on the percentage of
+variance explained by the cell cycle phase in the expression profile for
+each gene (<a href="https://bioconductor.org/books/3.15/OSCA.advanced/cell-cycle-assignment.html#removing-cell-cycle-related-genes" class="external-link">details</a>)</li>
+</ul>
+</li>
+<li>Removal of <a href="https://bioconductor.org/books/3.15/OSCA.advanced/doublet-detection.html" class="external-link">cell
+doublets</a> (<code><a href="https://rdrr.io/pkg/scDblFinder/man/computeDoubletDensity.html" class="external-link">scDblFinder::computeDoubletDensity()</a></code>).</li>
+<li>
+<a href="https://bioconductor.org/books/3.15/OSCA.basic/dimensionality-reduction.html#principal-components-analysis" class="external-link">Calculation
+of PCA</a> and <a href="https://bioconductor.org/books/3.15/OSCA.basic/dimensionality-reduction.html#choosing-the-number-of-pcs" class="external-link">selection
+of number of principal components</a> (PCs) which will be used
+downstream. There are three methods to select a proper number of PCs:
+<ul>
+<li>Using the <a href="http://bioconductor.org/books/3.15/OSCA.advanced/dimensionality-reduction-redux.html#more-choices-for-the-number-of-pcs" class="external-link">elbow
+point</a>
+</li>
+<li>Using the <a href="http://bioconductor.org/books/3.15/OSCA.advanced/dimensionality-reduction-redux.html#using-the-technical-noise" class="external-link">technical
+noise</a>
+</li>
+<li>Using a fixed number of PCs (<code>forced</code>)</li>
+</ul>
+</li>
+<li>
+<a href="https://bioconductor.org/books/3.15/OSCA.basic/clustering.html" class="external-link">Cell
+clustering</a> using several algorithms:
+<ul>
+<li>
+<a href="https://bioconductor.org/books/3.15/OSCA.basic/clustering.html#clustering-graph" class="external-link">Graph-based
+clustering</a> (mutual nearest neighbors) using Leiden, Louvain or
+Walktrap algorithms. To control for the number of resulting clusters
+(granularity), multiple resolutions can be specified for the former two
+algorithms.</li>
+<li>
+<a href="https://bioconductor.org/books/3.15/OSCA.basic/clustering.html#vector-quantization-with-k-means" class="external-link">K-means
+clustering</a> using both defined numbers of K and best K selection</li>
+<li>
+<a href="https://bioconductor.org/packages/3.15/bioc/html/SC3.html" class="external-link">Single-Cell
+Consensus Clustering</a> (SC3) with defined numbers of clusters</li>
+</ul>
+</li>
+<li>Reference-based cell type annotation using <a href="https://github.com/LTLA/SingleR" class="external-link">SingleR</a>.
+More details are given in the accompanying <a href="http://bioconductor.org/books/3.15/SingleRBook/" class="external-link">book</a> and the
+underlying method is described <a href="http://bioconductor.org/books/3.15/SingleRBook/introduction.html#method-description" class="external-link">here</a>.
+<ul>
+<li>Reference datasets are taken by default from the
+<a href="https://github.com/LTLA/celldex" class="external-link">celldex</a> package.</li>
+<li>Note that the reference datasets included in the
+<a href="https://github.com/LTLA/celldex" class="external-link">celldex</a> package don’t contain every possible cell type
+and the annotation may bring inaccurate labels for some datasets. Thus,
+it is also possible to supply <a href="https://github.com/LTLA/SingleR" class="external-link">SingleR</a> a custom reference
+datasets in the form of <code>{SingleCellExperiment}</code> or
+<a href="https://bioconductor.org/packages/SummarizedExperiment" class="external-link">SummarizedExperiment</a> object.</li>
+<li>Plots of annotation diagnostics:
+<ul>
+<li>Score heatmaps show distribution of predicted cell types in computed
+clusters (if any), along with per-cell annotation scores,</li>
+<li>Marker heatmaps show genes that are markers for a given cell type in
+both the reference and current datasets,, i.e. those markers have driven
+the decision to label cells by the chosen cell type,</li>
+<li>Delta scores show poor-quality or ambiguous assignments based on the
+per-cell ‘delta’, i.e., the difference between, the score for the
+assigned label and the median across all labels for each cell., See <a href="https://bioconductor.org/books/3.15/SingleRBook/annotation-diagnostics.html#based-on-the-deltas-across-cells" class="external-link">OSCA</a>
+for more details</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Assignment of cells to predefined groupings based on existing data.
+That means you can reuse an assignment of cells from e.g. clustering,
+and rename or merge its levels (cluster numbers).
+<ul>
+<li>Example: you identify a biological meaning of clusters computed by
+k-means with <span class="math inline">\(k = 3\)</span>. You can use
+this information, and rename and merge the clusters, such that:
+<ul>
+<li>Cluster 1 -&gt; T cells</li>
+<li>Cluster 2 -&gt; B cells</li>
+<li>Cluster 3 -&gt; T cells</li>
+</ul>
+</li>
+<li>Then you can use the new cell grouping for e.g. plotting of reduced
+dimensions or calculation of cluster markers.</li>
+</ul>
+</li>
+<li>
+<a href="https://bioconductor.org/books/3.15/OSCA.basic/dimensionality-reduction.html" class="external-link">Dimensionality
+reduction</a>:
+<ul>
+<li><a href="https://bioconductor.org/books/3.15/OSCA.basic/dimensionality-reduction.html#principal-components-analysis" class="external-link">PCA</a></li>
+<li><a href="https://bioconductor.org/books/3.15/OSCA.basic/dimensionality-reduction.html#t-stochastic-neighbor-embedding" class="external-link">t-SNE</a></li>
+<li><a href="https://bioconductor.org/books/3.15/OSCA.basic/dimensionality-reduction.html#uniform-manifold-approximation-and-projection" class="external-link">UMAP</a></li>
+</ul>
+</li>
+<li>Expression plots of selected groups of genes (markers) in reduced
+dimensions</li>
+<li>A simplified report for non-technical audience which contains only
+dimred plots, selected markers and cell annotation results</li>
+</ul>
+</div>
+<div class="tab-pane" id="config-parameters" role="tabpanel" aria-labelledby="config-parameters-tab">
+
+<p>Config for this stage is stored in the
+<code>config/single_sample/02_norm_clustering.yaml</code> file.
+Directory with this file is read from
+<code>SCDRAKE_SINGLE_SAMPLE_CONFIG_DIR</code> environment variable upon
+<a href="https://github.com/bioinfocz/scdrake" class="external-link">scdrake</a> load or attach, and saved as
 <code>scdrake_single_sample_config_dir</code> option. This option is
 used as the default argument value in several <a href="https://github.com/bioinfocz/scdrake" class="external-link">scdrake</a>
 functions.</p>
-<p>Targets for this stage’s report: <code>report_norm_clustering</code>,
-<code>report_norm_clustering_simple</code></p>
-<p>You can make these targets by setting
-<code>DRAKE_TARGETS: ["report_norm_clustering", "report_norm_clustering_simple]</code>
-in <code>pipeline.yaml</code> config file.</p>
 <hr>
-<div class="section level2">
-<h2 id="config-parameters">Config parameters<a class="anchor" aria-label="anchor" href="#config-parameters"></a>
-</h2>
-<div class="section level3">
-<h3 id="normalization-parameters">Normalization parameters<a class="anchor" aria-label="anchor" href="#normalization-parameters"></a>
-</h3>
+<div class="section level4">
+<h4 id="normalization-parameters">Normalization parameters<a class="anchor" aria-label="anchor" href="#normalization-parameters"></a>
+</h4>
 <div class="sourceCode" id="cb1"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">NORMALIZATION_TYPE</span><span class="kw">:</span><span class="at"> </span><span class="st">"scran"</span></span></code></pre></div>
 <p><strong>Type:</strong> character scalar (<code>"scran"</code> |
 <code>"sctransform"</code> | <code>"none"</code>)</p>
@@ -210,10 +380,10 @@ which is otherwise hard to achieve within the pipeline.</li>
 </ul>
 <p>See <code><a href="../articles/pipeline_overview.html">vignette("pipeline_overview")</a></code> for more details about
 normalization methods.</p>
-<div class="section level4">
-<h4 id="scran-normalization-parameters">
+<div class="section level5">
+<h5 id="scran-normalization-parameters">
 <code>scran</code> normalization parameters<a class="anchor" aria-label="anchor" href="#scran-normalization-parameters"></a>
-</h4>
+</h5>
 <p>These parameters are used when <code>NORMALIZATION_TYPE</code> is
 <code>"scran"</code>.</p>
 <hr>
@@ -229,10 +399,10 @@ normalization methods.</p>
 clustering, while <code>"hclust"</code> uses hierarchical clustering.
 See <code><a href="https://rdrr.io/pkg/scran/man/quickCluster.html" class="external-link">?scran::quickCluster</a></code> for more details.</p>
 </div>
-<div class="section level4">
-<h4 id="sctransform-normalization-parameters">
+<div class="section level5">
+<h5 id="sctransform-normalization-parameters">
 <code>sctransform</code> normalization parameters<a class="anchor" aria-label="anchor" href="#sctransform-normalization-parameters"></a>
-</h4>
+</h5>
 <p>These parameters are used when <code>NORMALIZATION_TYPE</code> is
 <code>"sctransform"</code>.</p>
 <hr>
@@ -256,13 +426,13 @@ parameters</a>, and the approach is explained in more details in
 normalization.</p>
 </div>
 </div>
-<div class="section level3">
-<h3 id="highly-variable-genes-hvgs-selection">Highly variable genes (HVGs) selection<a class="anchor" aria-label="anchor" href="#highly-variable-genes-hvgs-selection"></a>
-</h3>
+<div class="section level4">
+<h4 id="highly-variable-genes-hvgs-selection">Highly variable genes (HVGs) selection<a class="anchor" aria-label="anchor" href="#highly-variable-genes-hvgs-selection"></a>
+</h4>
 <div class="sourceCode" id="cb6"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">HVG_METRIC</span><span class="kw">:</span><span class="at"> </span><span class="st">"gene_var"</span></span></code></pre></div>
 <p><strong>Type:</strong> character scalar (<code>"gene_var"</code> |
 <code>"gene_cv2"</code> | <code>"sctransform"</code>)</p>
-<p>A metric used to find HVGs. See <a href="https://bioconductor.org/books/release/OSCA.basic/feature-selection.html" class="external-link uri">https://bioconductor.org/books/release/OSCA.basic/feature-selection.html</a>
+<p>A metric used to find HVGs. See <a href="https://bioconductor.org/books/3.15/OSCA.basic/feature-selection.html" class="external-link uri">https://bioconductor.org/books/3.15/OSCA.basic/feature-selection.html</a>
 for more details.</p>
 <ul>
 <li>
@@ -287,12 +457,12 @@ parameter.</li>
 <code>"gene_cv2"</code>.</p>
 <ul>
 <li>
-<code>"top"</code>: take top X genes according to the metric (<a href="https://bioconductor.org/books/release/OSCA.basic/feature-selection.html#hvg-selection" class="external-link">details</a>).</li>
+<code>"top"</code>: take top X genes according to the metric (<a href="https://bioconductor.org/books/3.15/OSCA.basic/feature-selection.html#hvg-selection" class="external-link">details</a>).</li>
 <li>
-<code>"significance"</code>: use a FDR threshold (<a href="https://bioconductor.org/books/release/OSCA.advanced/more-hvgs.html#more-hvg-selection-strategies" class="external-link">details</a>).</li>
+<code>"significance"</code>: use a FDR threshold (<a href="https://bioconductor.org/books/3.15/OSCA.advanced/more-hvgs.html#more-hvg-selection-strategies" class="external-link">details</a>).</li>
 <li>
 <code>"threshold"</code>: use a threshold on minimum value of the
-metric (<a href="https://bioconductor.org/books/release/OSCA.advanced/more-hvgs.html#more-hvg-selection-strategies" class="external-link">details</a>).</li>
+metric (<a href="https://bioconductor.org/books/3.15/OSCA.advanced/more-hvgs.html#more-hvg-selection-strategies" class="external-link">details</a>).</li>
 </ul>
 <p>For <code>"top"</code> and <code>"threshold"</code>, <code>bio</code>
 and <code>ratio</code> columns are used for <code>HVG_METRIC</code> of
@@ -334,13 +504,14 @@ combinations are recommended defaults:</p>
 <div class="sourceCode" id="cb12"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">HVG_METRIC</span><span class="kw">:</span><span class="at"> </span><span class="st">"gene_cv2"</span></span>
 <span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="fu">HVG_SELECTION</span><span class="kw">:</span><span class="at"> </span><span class="st">"threshold"</span></span>
 <span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a><span class="fu">HVG_SELECTION_VALUE</span><span class="kw">:</span><span class="at"> </span><span class="dv">1</span></span></code></pre></div>
+</div>
 <div class="section level4">
 <h4 id="removal-of-cell-cycle-related-genes-prior-to-hvg-selection">Removal of cell cycle-related genes prior to HVG selection<a class="anchor" aria-label="anchor" href="#removal-of-cell-cycle-related-genes-prior-to-hvg-selection"></a>
 </h4>
 <div class="sourceCode" id="cb13"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">HVG_RM_CC_GENES</span><span class="kw">:</span><span class="at"> </span><span class="ch">False</span></span></code></pre></div>
 <p><strong>Type:</strong> logical scalar</p>
 <p>Whether to apply a correction for cell cycle prior to HVG selection.
-We implement a cell cycle-related genes removal strategy described <a href="https://bioconductor.org/books/release/OSCA.advanced/cell-cycle-assignment.html#removing-cell-cycle-related-genes" class="external-link">here</a>.
+We implement a cell cycle-related genes removal strategy described <a href="https://bioconductor.org/books/3.15/OSCA.advanced/cell-cycle-assignment.html#removing-cell-cycle-related-genes" class="external-link">here</a>.
 It is based on the percentage of variance explained by the cell cycle
 phase in the expression profile for each gene.</p>
 <p>Note that when <code>SCTransform</code> is used for normalization
@@ -353,10 +524,9 @@ strategy remain unclear.</p>
 var. expl. greater than this threshold will be marked as cell
 cycle-related and removed <em>prior</em> to selection of HVGs.</p>
 </div>
-</div>
-<div class="section level3">
-<h3 id="doublet-detection-and-filtering">Doublet detection and filtering<a class="anchor" aria-label="anchor" href="#doublet-detection-and-filtering"></a>
-</h3>
+<div class="section level4">
+<h4 id="doublet-detection-and-filtering">Doublet detection and filtering<a class="anchor" aria-label="anchor" href="#doublet-detection-and-filtering"></a>
+</h4>
 <p>Doublets are droplets in which multiple cells were captured.</p>
 <hr>
 <div class="sourceCode" id="cb15"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="fu">MAX_DOUBLET_SCORE</span><span class="kw">:</span><span class="at"> </span><span class="fl">3.5</span></span></code></pre></div>
@@ -367,12 +537,12 @@ cycle-related and removed <em>prior</em> to selection of HVGs.</p>
 score greater than the threshold will be removed. If <code>null</code>,
 doublets are not removed, but doublet score is still computed.</p>
 </div>
-<div class="section level3">
-<h3 id="dimensionality-reduction">Dimensionality reduction<a class="anchor" aria-label="anchor" href="#dimensionality-reduction"></a>
-</h3>
 <div class="section level4">
-<h4 id="pca">PCA<a class="anchor" aria-label="anchor" href="#pca"></a>
+<h4 id="dimensionality-reduction">Dimensionality reduction<a class="anchor" aria-label="anchor" href="#dimensionality-reduction"></a>
 </h4>
+<div class="section level5">
+<h5 id="pca">PCA<a class="anchor" aria-label="anchor" href="#pca"></a>
+</h5>
 <div class="sourceCode" id="cb16"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="fu">PCA_SELECTION_METHOD</span><span class="kw">:</span><span class="at"> </span><span class="st">"forced"</span></span></code></pre></div>
 <p><strong>Type:</strong> character scalar (<code>"forced"</code> |
 <code>"elbow"</code> | <code>"technical_noise"</code>)</p>
@@ -382,10 +552,10 @@ doublets are not removed, but doublet score is still computed.</p>
 <code>"forced"</code>: use the number of PCs specified by the
 <code>PCA_FORCED_PCS</code> parameter.</li>
 <li>
-<code>"elbow"</code>: use the <a href="https://bioconductor.org/books/release/OSCA.advanced/dimensionality-reduction-redux.html#using-the-elbow-point" class="external-link">elbow
+<code>"elbow"</code>: use the <a href="https://bioconductor.org/books/3.15/OSCA.advanced/dimensionality-reduction-redux.html#using-the-elbow-point" class="external-link">elbow
 point method</a>.</li>
 <li>
-<code>"technical_noise"</code>: use the <a href="https://bioconductor.org/books/release/OSCA.advanced/dimensionality-reduction-redux.html#using-the-technical-noise" class="external-link">technical
+<code>"technical_noise"</code>: use the <a href="https://bioconductor.org/books/3.15/OSCA.advanced/dimensionality-reduction-redux.html#using-the-technical-noise" class="external-link">technical
 noise</a>.</li>
 </ul>
 <hr>
@@ -395,11 +565,10 @@ noise</a>.</li>
 <code>"forced"</code>, use this number of first principal
 components.</p>
 </div>
-</div>
-<div class="section level3">
-<h3 id="t-sne">t-SNE<a class="anchor" aria-label="anchor" href="#t-sne"></a>
-</h3>
-<p><a href="https://bioconductor.org/books/release/OSCA.basic/dimensionality-reduction.html#t-stochastic-neighbor-embedding" class="external-link">t-stochastic
+<div class="section level5">
+<h5 id="t-sne">t-SNE<a class="anchor" aria-label="anchor" href="#t-sne"></a>
+</h5>
+<p><a href="https://bioconductor.org/books/3.15/OSCA.basic/dimensionality-reduction.html#t-stochastic-neighbor-embedding" class="external-link">t-stochastic
 neighbor embedding</a></p>
 <p>See <code><a href="https://rdrr.io/pkg/scater/man/runTSNE.html" class="external-link">?scater::runTSNE</a></code> for the underlying method.</p>
 <hr>
@@ -411,46 +580,104 @@ neighbor embedding</a></p>
 <p><strong>Type:</strong> positive integer scalar</p>
 <p>A maximum number of t-SNE iterations.</p>
 </div>
-<div class="section level3">
-<h3 id="clustering">Clustering<a class="anchor" aria-label="anchor" href="#clustering"></a>
-</h3>
+</div>
 <div class="section level4">
-<h4 id="graph-based-clustering">Graph-based clustering<a class="anchor" aria-label="anchor" href="#graph-based-clustering"></a>
+<h4 id="clustering">Clustering<a class="anchor" aria-label="anchor" href="#clustering"></a>
 </h4>
-<p>Parameters for <a href="https://bioconductor.org/books/release/OSCA.basic/clustering.html#clustering-graph" class="external-link">graph-based
+<div class="section level5">
+<h5 id="graph-based-clustering">Graph-based clustering<a class="anchor" aria-label="anchor" href="#graph-based-clustering"></a>
+</h5>
+<p>Parameters for <a href="https://bioconductor.org/books/3.15/OSCA.basic/clustering.html#clustering-graph" class="external-link">graph-based
 clustering</a>.</p>
 <hr>
-<div class="sourceCode" id="cb20"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="fu">GRAPH_SNN_N</span><span class="kw">:</span><span class="at"> </span><span class="dv">10</span></span></code></pre></div>
+<div class="sourceCode" id="cb20"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="fu">CLUSTER_GRAPH_SNN_K</span><span class="kw">:</span><span class="at"> </span><span class="dv">10</span></span></code></pre></div>
 <p><strong>Type:</strong> positive integer scalar</p>
-<p>A number of shared nearest neighbours. Passed as <code>k</code>
-parameter to <code><a href="https://rdrr.io/pkg/bluster/man/makeSNNGraph.html" class="external-link">bluster::makeSNNGraph()</a></code>.</p>
+<p>A number of shared nearest neighbors in graph used for community
+detection algorithms (graph-based clustering). Passed as the
+<code>k</code> parameter to <code><a href="https://rdrr.io/pkg/bluster/man/makeSNNGraph.html" class="external-link">bluster::makeSNNGraph()</a></code>. From
+the function’s help page:</p>
+<blockquote>
+<p>The choice of k controls the connectivity of the graph and the
+resolution of community detection algorithms. Smaller values of k will
+generally yield smaller, finer clusters, while increasing k will
+increase the connectivity of the graph and make it more difficult to
+resolve different communities. The value of k can be roughly interpreted
+as the anticipated size of the smallest subpopulation.</p>
+</blockquote>
 <hr>
-<div class="sourceCode" id="cb21"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="fu">GRAPH_SNN_TYPE</span><span class="kw">:</span><span class="at"> </span><span class="st">"rank"</span></span></code></pre></div>
+<div class="sourceCode" id="cb21"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="fu">CLUSTER_GRAPH_SNN_TYPE</span><span class="kw">:</span><span class="at"> </span><span class="st">"rank"</span></span></code></pre></div>
 <p><strong>Type:</strong> character scalar (<code>"rank"</code> |
 <code>"number"</code> | <code>"jaccard"</code>)</p>
 <p>A type of weighting scheme to use for shared neighbors. Passed as
-<code>type</code> parameter to <code><a href="https://rdrr.io/pkg/bluster/man/makeSNNGraph.html" class="external-link">bluster::makeSNNGraph()</a></code>.</p>
+<code>type</code> parameter to <code><a href="https://rdrr.io/pkg/bluster/man/makeSNNGraph.html" class="external-link">bluster::makeSNNGraph()</a></code> (see
+the function’s help page for more information).</p>
+<hr>
+<div class="sourceCode" id="cb22"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="fu">CLUSTER_GRAPH_LEIDEN_ENABLED</span><span class="kw">:</span><span class="at"> </span><span class="ch">True</span></span></code></pre></div>
+<p><strong>Type:</strong> logical scalar</p>
+<p>If <code>True</code>, enable Leiden community detection
+algorithm.</p>
+<hr>
+<div class="sourceCode" id="cb23"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="fu">CLUSTER_GRAPH_LEIDEN_RESOLUTIONS</span><span class="kw">:</span><span class="at"> </span><span class="kw">[</span><span class="fl">0.2</span><span class="kw">,</span><span class="at"> </span><span class="fl">0.4</span><span class="kw">,</span><span class="at"> </span><span class="fl">0.6</span><span class="kw">,</span><span class="at"> </span><span class="fl">0.8</span><span class="kw">,</span><span class="at"> </span><span class="fl">1.0</span><span class="kw">]</span></span></code></pre></div>
+<p><strong>Type:</strong> numeric vector</p>
+<p>Resolutions for Leiden clustering. Lower values result in more
+coarse-grained clustering, while higher ones to more fine-grained
+structures. Cell-cluster memberships will be named as
+<code>cluster_graph_leiden_r{r}</code> (e.g. in <code>colData()</code>
+of a SCE object).</p>
+<hr>
+<div class="sourceCode" id="cb24"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="fu">CLUSTER_GRAPH_LOUVAIN_ENABLED</span><span class="kw">:</span><span class="at"> </span><span class="ch">False</span></span></code></pre></div>
+<p><strong>Type:</strong> logical scalar</p>
+<p>If <code>True</code>, enable Louvain community detection
+algorithm.</p>
+<hr>
+<div class="sourceCode" id="cb25"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="fu">CLUSTER_GRAPH_LOUVAIN_RESOLUTIONS</span><span class="kw">:</span><span class="at"> </span><span class="kw">[</span><span class="fl">0.2</span><span class="kw">,</span><span class="at"> </span><span class="fl">0.4</span><span class="kw">,</span><span class="at"> </span><span class="fl">0.6</span><span class="kw">,</span><span class="at"> </span><span class="fl">0.8</span><span class="kw">,</span><span class="at"> </span><span class="fl">1.0</span><span class="kw">]</span></span></code></pre></div>
+<p><strong>Type:</strong> numeric vector</p>
+<p>Resolutions for Louvain clustering. Lower values result in more
+coarse-grained clustering, while higher ones to more fine-grained
+structures. Cell-cluster memberships will be named as
+<code>cluster_graph_louvain_r{r}</code> (e.g. in <code>colData()</code>
+of a SCE object).</p>
+<hr>
+<div class="sourceCode" id="cb26"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="fu">CLUSTER_GRAPH_WALKTRAP_ENABLED</span><span class="kw">:</span><span class="at"> </span><span class="ch">False</span></span></code></pre></div>
+<p><strong>Type:</strong> logical scalar</p>
+<p>If <code>True</code>, enable Walktrap community detection
+algorithm.</p>
 </div>
-<div class="section level4">
-<h4 id="k-means-clustering">k-means clustering<a class="anchor" aria-label="anchor" href="#k-means-clustering"></a>
-</h4>
-<div class="sourceCode" id="cb22"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="fu">KMEANS_K</span><span class="kw">:</span><span class="at"> !code 3:6</span></span></code></pre></div>
+<div class="section level5">
+<h5 id="k-means-clustering">k-means clustering<a class="anchor" aria-label="anchor" href="#k-means-clustering"></a>
+</h5>
+<div class="sourceCode" id="cb27"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="fu">CLUSTER_KMEANS_K_ENABLED</span><span class="kw">:</span><span class="at"> </span><span class="ch">False</span></span></code></pre></div>
+<p><strong>Type:</strong> logical scalar</p>
+<p>If <code>True</code>, enable k-means clustering with selected numbers
+of clusters (<code>k</code>s).</p>
+<hr>
+<div class="sourceCode" id="cb28"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="fu">CLUSTER_KMEANS_K</span><span class="kw">:</span><span class="at"> !code 3:6</span></span></code></pre></div>
 <p><strong>Type:</strong> integer vector</p>
 <p>A vector of number of clusters for which to compute k-means.</p>
 <p>Note: <code>!code 3:6</code> will evaluate to
 <code>c(3, 4, 5, 6)</code>.</p>
+<hr>
+<div class="sourceCode" id="cb29"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="fu">CLUSTER_KMEANS_KBEST_ENABLED</span><span class="kw">:</span><span class="at"> </span><span class="ch">False</span></span></code></pre></div>
+<p><strong>Type:</strong> logical scalar</p>
+<p>If <code>True</code>, enable k-means clustering with best
+<code>k</code> based on gap statistics.</p>
 </div>
-<div class="section level4">
-<h4 id="sc3-clustering">SC3 clustering<a class="anchor" aria-label="anchor" href="#sc3-clustering"></a>
-</h4>
-<div class="sourceCode" id="cb23"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="fu">SC3_K</span><span class="kw">:</span><span class="at"> !code 5:6</span></span></code></pre></div>
+<div class="section level5">
+<h5 id="sc3-clustering">SC3 clustering<a class="anchor" aria-label="anchor" href="#sc3-clustering"></a>
+</h5>
+<div class="sourceCode" id="cb30"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="fu">CLUSTER_SC3_ENABLED</span><span class="kw">:</span><span class="at"> </span><span class="ch">False</span></span></code></pre></div>
+<p><strong>Type:</strong> logical scalar</p>
+<p>If <code>True</code>, enable SC3 with selected numbers of clusters
+(<code>k</code>s).</p>
+<hr>
+<div class="sourceCode" id="cb31"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="fu">CLUSTER_SC3_K</span><span class="kw">:</span><span class="at"> !code 5:6</span></span></code></pre></div>
 <p><strong>Type:</strong> integer vector</p>
 <p>A vector of number of clusters for which to compute SC3
 clustering.</p>
 <p>Note: <code>!code 3:6</code> will evaluate to
-<code>c(5, 6)</code>.</p>
+<code>c(3, 4, 5, 6)</code>.</p>
 <hr>
-<div class="sourceCode" id="cb24"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="fu">SC3_N_CORES</span><span class="kw">:</span><span class="at"> </span><span class="dv">1</span></span></code></pre></div>
+<div class="sourceCode" id="cb32"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="fu">CLUSTER_SC3_N_CORES</span><span class="kw">:</span><span class="at"> </span><span class="dv">1</span></span></code></pre></div>
 <p><strong>Type:</strong> integer scalar</p>
 <p>A number of CPU cores to use for SC3 computation. This may lead to
 out-of-memory errors for a number of cores greater than 1.</p>
@@ -459,37 +686,36 @@ run in parallel mode and at the same time a target is using a parallel
 code (<em>within target parallelism</em>). For the SC3 computation is
 recommended to run the pipeline in sequential mode
 (<code>DRAKE_PARALLELISM: "loop"</code>) and set
-<code>DRAKE_TARGETS: ["sce_sc3"]</code>. Once the <code>sce_sc3</code>
-target is finished, you can switch the parallelism back to
-<code>clustermq</code> or <code>future</code>.</p>
+<code>DRAKE_TARGETS: ["cluster_sce_sc3"]</code>. Once the
+<code>cluster_sce_sc3</code> target is finished, you can switch the
+parallelism back to <code>clustermq</code> or <code>future</code>.</p>
 <hr>
-<div class="sourceCode" id="cb25"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="fu">SC3_DRY</span><span class="kw">:</span><span class="at"> </span><span class="ch">False</span></span></code></pre></div>
+<div class="sourceCode" id="cb33"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="fu">CLUSTER_SC3_ENABLED</span><span class="kw">:</span><span class="at"> </span><span class="ch">False</span></span></code></pre></div>
 <p><strong>Type:</strong> logical scalar</p>
-<p>If <code>True</code>, just generate random cluster assignments (for
-testing purposes).</p>
+<p>If <code>False</code>, skip SC3 clustering.</p>
 <hr>
 </div>
 </div>
-<div class="section level3">
-<h3 id="cell-type-annotation">Cell type annotation<a class="anchor" aria-label="anchor" href="#cell-type-annotation"></a>
-</h3>
-<div class="sourceCode" id="cb26"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="fu">CELL_ANNOTATION_SOURCES_DEFAULTS</span><span class="kw">:</span></span>
-<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">TRAIN_PARAMS</span><span class="kw">:</span></span>
-<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">GENES</span><span class="kw">:</span><span class="at"> </span><span class="st">"de"</span></span>
-<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">SD_THRESH</span><span class="kw">:</span><span class="at"> </span><span class="dv">1</span></span>
-<span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">DE_METHOD</span><span class="kw">:</span><span class="at"> </span><span class="st">"classic"</span></span>
-<span id="cb26-6"><a href="#cb26-6" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">DE_N</span><span class="kw">:</span><span class="at"> </span><span class="ch">null</span></span>
-<span id="cb26-7"><a href="#cb26-7" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">ASSAY_TYPE</span><span class="kw">:</span><span class="at"> </span><span class="st">"logcounts"</span></span>
-<span id="cb26-8"><a href="#cb26-8" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">CLASSIFY_PARAMS</span><span class="kw">:</span></span>
-<span id="cb26-9"><a href="#cb26-9" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">QUANTILE</span><span class="kw">:</span><span class="at"> </span><span class="fl">0.8</span></span>
-<span id="cb26-10"><a href="#cb26-10" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">TUNE_THRESH</span><span class="kw">:</span><span class="at"> </span><span class="fl">0.05</span></span>
-<span id="cb26-11"><a href="#cb26-11" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">ASSAY_TYPE</span><span class="kw">:</span><span class="at"> </span><span class="st">"logcounts"</span></span>
-<span id="cb26-12"><a href="#cb26-12" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">PRUNE_SCORE_PARAMS</span><span class="kw">:</span></span>
-<span id="cb26-13"><a href="#cb26-13" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">N_MADS</span><span class="kw">:</span><span class="at"> </span><span class="dv">3</span></span>
-<span id="cb26-14"><a href="#cb26-14" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">MIN_DIFF_MED</span><span class="kw">:</span><span class="at"> </span><span class="fl">-.inf</span></span>
-<span id="cb26-15"><a href="#cb26-15" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">MIN_DIFF_NEXT</span><span class="kw">:</span><span class="at"> </span><span class="dv">0</span></span>
-<span id="cb26-16"><a href="#cb26-16" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">DIAGNOSTICS_PARAMS</span><span class="kw">:</span></span>
-<span id="cb26-17"><a href="#cb26-17" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">HEATMAP_N_TOP_MARKERS</span><span class="kw">:</span><span class="at"> </span><span class="dv">20</span></span></code></pre></div>
+<div class="section level4">
+<h4 id="cell-type-annotation">Cell type annotation<a class="anchor" aria-label="anchor" href="#cell-type-annotation"></a>
+</h4>
+<div class="sourceCode" id="cb34"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="fu">CELL_ANNOTATION_SOURCES_DEFAULTS</span><span class="kw">:</span></span>
+<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">TRAIN_PARAMS</span><span class="kw">:</span></span>
+<span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">GENES</span><span class="kw">:</span><span class="at"> </span><span class="st">"de"</span></span>
+<span id="cb34-4"><a href="#cb34-4" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">SD_THRESH</span><span class="kw">:</span><span class="at"> </span><span class="dv">1</span></span>
+<span id="cb34-5"><a href="#cb34-5" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">DE_METHOD</span><span class="kw">:</span><span class="at"> </span><span class="st">"classic"</span></span>
+<span id="cb34-6"><a href="#cb34-6" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">DE_N</span><span class="kw">:</span><span class="at"> </span><span class="ch">null</span></span>
+<span id="cb34-7"><a href="#cb34-7" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">ASSAY_TYPE</span><span class="kw">:</span><span class="at"> </span><span class="st">"logcounts"</span></span>
+<span id="cb34-8"><a href="#cb34-8" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">CLASSIFY_PARAMS</span><span class="kw">:</span></span>
+<span id="cb34-9"><a href="#cb34-9" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">QUANTILE</span><span class="kw">:</span><span class="at"> </span><span class="fl">0.8</span></span>
+<span id="cb34-10"><a href="#cb34-10" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">TUNE_THRESH</span><span class="kw">:</span><span class="at"> </span><span class="fl">0.05</span></span>
+<span id="cb34-11"><a href="#cb34-11" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">ASSAY_TYPE</span><span class="kw">:</span><span class="at"> </span><span class="st">"logcounts"</span></span>
+<span id="cb34-12"><a href="#cb34-12" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">PRUNE_SCORE_PARAMS</span><span class="kw">:</span></span>
+<span id="cb34-13"><a href="#cb34-13" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">N_MADS</span><span class="kw">:</span><span class="at"> </span><span class="dv">3</span></span>
+<span id="cb34-14"><a href="#cb34-14" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">MIN_DIFF_MED</span><span class="kw">:</span><span class="at"> </span><span class="fl">-.inf</span></span>
+<span id="cb34-15"><a href="#cb34-15" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">MIN_DIFF_NEXT</span><span class="kw">:</span><span class="at"> </span><span class="dv">0</span></span>
+<span id="cb34-16"><a href="#cb34-16" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">DIAGNOSTICS_PARAMS</span><span class="kw">:</span></span>
+<span id="cb34-17"><a href="#cb34-17" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">HEATMAP_N_TOP_MARKERS</span><span class="kw">:</span><span class="at"> </span><span class="dv">20</span></span></code></pre></div>
 <p><strong>Type:</strong> named list (dictionary) of named lists</p>
 <p>Default parameters for computation and reporting of cell type
 annotation. These can be overriden for each of the cell annotation
@@ -574,25 +800,25 @@ computed after classification using the predicted cell labels.</li>
 </li>
 </ul>
 <hr>
-<div class="sourceCode" id="cb27"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="fu">CELL_ANNOTATION_SOURCES</span><span class="kw">:</span></span>
-<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="kw">-</span><span class="at"> </span><span class="fu">human_primary_cell_atlas_main</span><span class="kw">:</span></span>
-<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">reference_type</span><span class="kw">:</span><span class="at"> </span><span class="st">"celldex"</span></span>
-<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">reference</span><span class="kw">:</span><span class="at"> </span><span class="st">"HumanPrimaryCellAtlasData"</span></span>
-<span id="cb27-5"><a href="#cb27-5" aria-hidden="true" tabindex="-1"></a><span class="fu">      description</span><span class="kw">: </span><span class="ch">&gt;</span></span>
-<span id="cb27-6"><a href="#cb27-6" aria-hidden="true" tabindex="-1"></a>        Microarray datasets derived from human primary cells (Mabbott et al. 2013).</span>
-<span id="cb27-7"><a href="#cb27-7" aria-hidden="true" tabindex="-1"></a>        Most of the labels refer to blood subpopulations but cell types from other tissues are also available.</span>
-<span id="cb27-8"><a href="#cb27-8" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">label_column</span><span class="kw">:</span><span class="at"> </span><span class="st">"label.main"</span></span>
-<span id="cb27-9"><a href="#cb27-9" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">label_subsets</span><span class="kw">:</span><span class="at"> </span><span class="kw">[]</span></span>
-<span id="cb27-10"><a href="#cb27-10" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">monaco_immune_fine</span><span class="kw">:</span></span>
-<span id="cb27-11"><a href="#cb27-11" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">reference_type</span><span class="kw">:</span><span class="at"> </span><span class="st">"celldex"</span></span>
-<span id="cb27-12"><a href="#cb27-12" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">reference</span><span class="kw">:</span><span class="at"> </span><span class="st">"MonacoImmuneData"</span></span>
-<span id="cb27-13"><a href="#cb27-13" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">description</span><span class="kw">:</span><span class="at"> </span><span class="st">"This is the human immune reference that best covers all of the bases for a typical PBMC sample."</span></span>
-<span id="cb27-14"><a href="#cb27-14" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">label_column</span><span class="kw">:</span><span class="at"> </span><span class="st">"label.fine"</span></span>
-<span id="cb27-15"><a href="#cb27-15" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">label_subsets</span><span class="kw">:</span><span class="at"> </span><span class="kw">[]</span></span></code></pre></div>
+<div class="sourceCode" id="cb35"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="fu">CELL_ANNOTATION_SOURCES</span><span class="kw">:</span></span>
+<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="kw">-</span><span class="at"> </span><span class="fu">human_primary_cell_atlas_main</span><span class="kw">:</span></span>
+<span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">reference_type</span><span class="kw">:</span><span class="at"> </span><span class="st">"celldex"</span></span>
+<span id="cb35-4"><a href="#cb35-4" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">reference</span><span class="kw">:</span><span class="at"> </span><span class="st">"HumanPrimaryCellAtlasData"</span></span>
+<span id="cb35-5"><a href="#cb35-5" aria-hidden="true" tabindex="-1"></a><span class="fu">      description</span><span class="kw">: </span><span class="ch">&gt;</span></span>
+<span id="cb35-6"><a href="#cb35-6" aria-hidden="true" tabindex="-1"></a>        Microarray datasets derived from human primary cells (Mabbott et al. 2013).</span>
+<span id="cb35-7"><a href="#cb35-7" aria-hidden="true" tabindex="-1"></a>        Most of the labels refer to blood subpopulations but cell types from other tissues are also available.</span>
+<span id="cb35-8"><a href="#cb35-8" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">label_column</span><span class="kw">:</span><span class="at"> </span><span class="st">"label.main"</span></span>
+<span id="cb35-9"><a href="#cb35-9" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">label_subsets</span><span class="kw">:</span><span class="at"> </span><span class="kw">[]</span></span>
+<span id="cb35-10"><a href="#cb35-10" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">monaco_immune_fine</span><span class="kw">:</span></span>
+<span id="cb35-11"><a href="#cb35-11" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">reference_type</span><span class="kw">:</span><span class="at"> </span><span class="st">"celldex"</span></span>
+<span id="cb35-12"><a href="#cb35-12" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">reference</span><span class="kw">:</span><span class="at"> </span><span class="st">"MonacoImmuneData"</span></span>
+<span id="cb35-13"><a href="#cb35-13" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">description</span><span class="kw">:</span><span class="at"> </span><span class="st">"This is the human immune reference that best covers all of the bases for a typical PBMC sample."</span></span>
+<span id="cb35-14"><a href="#cb35-14" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">label_column</span><span class="kw">:</span><span class="at"> </span><span class="st">"label.fine"</span></span>
+<span id="cb35-15"><a href="#cb35-15" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">label_subsets</span><span class="kw">:</span><span class="at"> </span><span class="kw">[]</span></span></code></pre></div>
 <p><strong>Type:</strong> list of named lists</p>
 <p>Specifies reference dataset(s) to be used for cell type annotation.
 The method used in <a href="https://github.com/LTLA/SingleR" class="external-link">SingleR</a> for training and
-classification is described <a href="http://bioconductor.org/books/release/SingleRBook/introduction.html#method-description" class="external-link">here</a>.</p>
+classification is described <a href="http://bioconductor.org/books/3.15/SingleRBook/introduction.html#method-description" class="external-link">here</a>.</p>
 <p>The names of named lists are used to name the reference datasets,
 e.g. as the prefixes in names of <code>colData()</code> columns
 containing per-cell labels. More info about the structure of related
@@ -611,8 +837,8 @@ scalar):
 <li>If <code>reference_type: "celldex"</code>: a name of function to
 call in the <a href="https://github.com/LTLA/celldex" class="external-link">celldex</a> package. This function must return a
 <code>SummarizedExperiment</code> object. See <a href="https://github.com/LTLA/celldex" class="external-link">celldex</a>’s
-<a href="https://bioconductor.org/packages/release/data/experiment/vignettes/celldex/inst/doc/userguide.html" class="external-link">vignette</a>
-for the overview of available datasets.</li>
+<a href="https://bioconductor.org/packages/3.15/data/experiment/vignettes/celldex/inst/doc/userguide.html" class="external-link">vignette</a>
+for an overview of available datasets.</li>
 <li>If <code>reference_type: "file"</code>: a path to Rds file with
 saved <code>SingleCellExperiment</code> or
 <code>SummarizedExperiment</code> object. The assay type specified
@@ -640,29 +866,36 @@ e.g. <code>["T cells", "B cells", "Progenitors"]</code>.</li>
 you can override default parameters in
 <code>CELL_ANNOTATION_SOURCES_DEFAULTS</code> (by using lowercase
 names), e.g.</p>
-<div class="sourceCode" id="cb28"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="fu">CELL_ANNOTATION_SOURCES</span><span class="kw">:</span></span>
-<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="kw">-</span><span class="at"> </span><span class="fu">human_primary_cell_atlas_main</span><span class="kw">:</span></span>
-<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a><span class="at">      ...</span></span>
-<span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">train_params</span><span class="kw">:</span></span>
-<span id="cb28-5"><a href="#cb28-5" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">de_method</span><span class="kw">:</span><span class="at"> </span><span class="st">"wilcox"</span></span>
-<span id="cb28-6"><a href="#cb28-6" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">de_n</span><span class="kw">:</span><span class="at"> </span><span class="dv">30</span></span></code></pre></div>
+<div class="sourceCode" id="cb36"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="fu">CELL_ANNOTATION_SOURCES</span><span class="kw">:</span></span>
+<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="kw">-</span><span class="at"> </span><span class="fu">human_primary_cell_atlas_main</span><span class="kw">:</span></span>
+<span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a><span class="at">      ...</span></span>
+<span id="cb36-4"><a href="#cb36-4" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">train_params</span><span class="kw">:</span></span>
+<span id="cb36-5"><a href="#cb36-5" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">de_method</span><span class="kw">:</span><span class="at"> </span><span class="st">"wilcox"</span></span>
+<span id="cb36-6"><a href="#cb36-6" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">de_n</span><span class="kw">:</span><span class="at"> </span><span class="dv">30</span></span></code></pre></div>
 <p>will override corresponding parameters in <code>TRAIN_PARAMS</code>
 in <code>CELL_ANNOTATION_SOURCES_DEFAULTS</code>.</p>
 <hr>
 </div>
-<div class="section level3">
-<h3 id="cell-grouping-assignment">Cell grouping assignment<a class="anchor" aria-label="anchor" href="#cell-grouping-assignment"></a>
-</h3>
-<div class="sourceCode" id="cb29"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ADDITIONAL_CELL_DATA_FILE</span><span class="kw">:</span><span class="at"> </span><span class="ch">null</span></span></code></pre></div>
+<div class="section level4">
+<h4 id="cell-grouping-assignment">Cell grouping assignment<a class="anchor" aria-label="anchor" href="#cell-grouping-assignment"></a>
+</h4>
+<p>Using the two parameters below, it is possible to add custom cell
+metadata or rearrange the current one into new groupings (saved as
+<code>colData()</code> columns of the <code>SingleCellExperiment</code>
+object). These groupings can be then referenced in other parameters,
+e.g. <code>NORM_CLUSTERING_REPORT_DIMRED_PLOTS_OTHER</code> or in the
+<code>cluster_markers</code> and <code>contrasts</code> stages.</p>
+<div class="sourceCode" id="cb37"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ADDITIONAL_CELL_DATA_FILE</span><span class="kw">:</span><span class="at"> </span><span class="ch">null</span></span></code></pre></div>
 <p><strong>Type:</strong> character scalar or <code>null</code></p>
 <p>A path to file with additional cell data which will be added to
 <code>colData()</code> of the final SCE object of this stage. The
 additional data will overwrite existing columns
 (e.g. <code>cluster_graph_louvain</code>), but are appended before the
 <code>CELL_GROUPINGS</code> below is applied, so you can refer to
-additional data columns inside <code>CELL_GROUPINGS</code>. There can be
-only a subset of barcodes in the additional data - the missing ones will
-have <code>NA</code> set in the resulting data. Rownames are not
+additional data columns inside <code>CELL_GROUPINGS</code>. In the
+additional data, there can be only cell barcodes that are present after
+cell filtering in the <code>01_input_qc</code> stage - the missing ones
+will have <code>NA</code> set in the resulting data. Rownames are not
 mandatory.</p>
 <p>The supported file formats are CSV (comma separated,
 <code>.csv</code> extension) and Rds (dataframe-like objects,
@@ -670,7 +903,7 @@ mandatory.</p>
 <code>Barcode</code> column by which they will be joined with the
 original cell data (<code>colData()</code>).</p>
 <hr>
-<div class="sourceCode" id="cb30"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="fu">CELL_GROUPINGS</span><span class="kw">:</span><span class="at"> </span><span class="ch">null</span></span></code></pre></div>
+<div class="sourceCode" id="cb38"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="fu">CELL_GROUPINGS</span><span class="kw">:</span><span class="at"> </span><span class="ch">null</span></span></code></pre></div>
 <p><strong>Type:</strong> list of named lists or <code>null</code></p>
 <p>This parameter specifies new cell groupings based on existing columns
 (primarily the clustering ones). Each key is a name of new cell grouping
@@ -700,27 +933,28 @@ groupings (columns).</li>
 <p>For possible column names for <code>source_column</code>, see the
 <code>sce_final_norm_clustering</code> target in the <a href="#targets">section</a> below.</p>
 <p>Let’s look at example cell grouping:</p>
-<div class="sourceCode" id="cb31"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="fu">CELL_GROUPINGS</span><span class="kw">:</span></span>
-<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="kw">-</span><span class="at"> </span><span class="fu">cluster_graph_louvain_annotated</span><span class="kw">:</span></span>
-<span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">source_column</span><span class="kw">:</span><span class="at"> </span><span class="st">"cluster_graph_louvain"</span></span>
-<span id="cb31-4"><a href="#cb31-4" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">description</span><span class="kw">:</span><span class="at"> </span><span class="st">"Graph-based clustering (Louvain alg.), annotated clusters"</span></span>
-<span id="cb31-5"><a href="#cb31-5" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">assignments</span><span class="kw">:</span></span>
-<span id="cb31-6"><a href="#cb31-6" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">1</span><span class="kw">:</span><span class="at"> </span><span class="st">"memory_CD4+"</span></span>
-<span id="cb31-7"><a href="#cb31-7" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">6</span><span class="kw">:</span><span class="at"> </span><span class="st">"B"</span></span>
-<span id="cb31-8"><a href="#cb31-8" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">7</span><span class="kw">:</span><span class="at"> </span><span class="st">"memory_CD4+"</span></span></code></pre></div>
+<div class="sourceCode" id="cb39"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a><span class="fu">CELL_GROUPINGS</span><span class="kw">:</span></span>
+<span id="cb39-2"><a href="#cb39-2" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="kw">-</span><span class="at"> </span><span class="fu">cluster_graph_leiden_r0.4_annotated</span><span class="kw">:</span></span>
+<span id="cb39-3"><a href="#cb39-3" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">source_column</span><span class="kw">:</span><span class="at"> </span><span class="st">"cluster_graph_leiden_r0.4"</span></span>
+<span id="cb39-4"><a href="#cb39-4" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">description</span><span class="kw">:</span><span class="at"> </span><span class="st">"Graph-based clustering (Leiden alg.), annotated clusters"</span></span>
+<span id="cb39-5"><a href="#cb39-5" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">assignments</span><span class="kw">:</span></span>
+<span id="cb39-6"><a href="#cb39-6" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">1</span><span class="kw">:</span><span class="at"> </span><span class="st">"memory_CD4+"</span></span>
+<span id="cb39-7"><a href="#cb39-7" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">6</span><span class="kw">:</span><span class="at"> </span><span class="st">"B"</span></span>
+<span id="cb39-8"><a href="#cb39-8" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">7</span><span class="kw">:</span><span class="at"> </span><span class="st">"memory_CD4+"</span></span></code></pre></div>
 <ul>
 <li>
-<code>cluster_graph_louvain_annotated</code>: a name of new cell
-grouping added to <code>colData()</code>.</li>
+<code>cluster_graph_leiden_r0.4_annotated</code>: a name of new cell
+grouping added to <code>colData()</code>.
+<ul>
 <li>
-<code>source_column: "cluster_graph_louvain"</code>: a name of
+<code>source_column: "cluster_graph_leiden_r0.4"</code>: a name of
 column in <code>colData()</code> whose level will be used for the new
 assignments.</li>
 <li>
 <code>description: "Graph-based clustering ..."</code>: a
 description of the new assignment. If it was not set, the name of the
-assignment (<code>cluster_graph_louvain_annotated</code>) would be used
-instead.</li>
+grouping (<code>cluster_graph_leiden_r0.4_annotated</code>) would be
+used instead.</li>
 <li>
 <code>assignments</code>: assignments of the old levels to new ones.
 That is, level (cluster) <code>6</code> will be renamed to
@@ -728,41 +962,23 @@ That is, level (cluster) <code>6</code> will be renamed to
 merged to a new level <code>"memory_CD4+"</code>. All unspecified levels
 will be kept as they are.</li>
 </ul>
+</li>
+</ul>
 </div>
-<div class="section level3">
-<h3 id="dimensionality-reduction-plots">Dimensionality reduction plots<a class="anchor" aria-label="anchor" href="#dimensionality-reduction-plots"></a>
-</h3>
-<div class="sourceCode" id="cb32"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="fu">NORM_CLUSTERING_REPORT_DIMRED_NAMES</span><span class="kw">:</span><span class="at"> </span><span class="kw">[</span><span class="st">"umap"</span><span class="kw">,</span><span class="at"> </span><span class="st">"pca"</span><span class="kw">,</span><span class="at"> </span><span class="st">"tsne"</span><span class="kw">]</span></span></code></pre></div>
+<div class="section level4">
+<h4 id="dimensionality-reduction-plots">Dimensionality reduction plots<a class="anchor" aria-label="anchor" href="#dimensionality-reduction-plots"></a>
+</h4>
+<div class="sourceCode" id="cb40"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a><span class="fu">NORM_CLUSTERING_REPORT_DIMRED_NAMES</span><span class="kw">:</span><span class="at"> </span><span class="kw">[</span><span class="st">"umap"</span><span class="kw">,</span><span class="at"> </span><span class="st">"pca"</span><span class="kw">,</span><span class="at"> </span><span class="st">"tsne"</span><span class="kw">]</span></span></code></pre></div>
 <p><strong>Type:</strong> character vector (<code>"umap"</code> |
 <code>"pca"</code> | <code>"tsne"</code>)</p>
 <p>A vector of names of dimensionality reduction methods for which plots
 in the report will be made.</p>
 <hr>
-<div class="sourceCode" id="cb33"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="fu">NORM_CLUSTERING_REPORT_CLUSTERING_NAMES</span><span class="kw">:</span><span class="at"> </span><span class="kw">[</span><span class="st">"graph"</span><span class="kw">,</span><span class="at"> </span><span class="st">"kmeans"</span><span class="kw">,</span><span class="at"> </span><span class="st">"sc3"</span><span class="kw">]</span></span></code></pre></div>
-<p><strong>Type:</strong> character vector (<code>"graph"</code> |
-<code>"kmeans"</code> | <code>"sc3"</code>)</p>
-<p>A vector of names of clustering methods for which plots in each
-reduced dimension defined in the
-<code>NORM_CLUSTERING_REPORT_DIMRED_NAMES</code> parameter will be made
-and displayed in the report.</p>
-<ul>
-<li>
-<code>"graph"</code>: graph-based clustering, two algorithms:
-Louvain and Walktrap.</li>
-<li>
-<code>"kmeans"</code>: k-means clustering, two algorithms: best K
-and numbers of clusters defined in the <code>KMEANS_K</code>
-parameter.</li>
-<li>
-<code>"sc3"</code>: SC3 clustering: numbers of cluster defined in
-the <code>SC3_K</code> parameter.</li>
-</ul>
-<hr>
-<div class="sourceCode" id="cb34"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="fu">NORM_CLUSTERING_REPORT_DIMRED_PLOTS_OTHER</span><span class="kw">:</span></span>
-<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="kw">-</span><span class="at"> </span><span class="st">"phase"</span><span class="kw">:</span><span class="at"> </span><span class="st">"Cell cycle phases"</span></span>
-<span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">"doublet_score"</span><span class="kw">:</span><span class="at"> </span><span class="st">"Doublet score"</span></span>
-<span id="cb34-4"><a href="#cb34-4" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">"total"</span><span class="kw">:</span><span class="at"> </span><span class="st">"Total number of UMI"</span></span>
-<span id="cb34-5"><a href="#cb34-5" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">"detected"</span><span class="kw">:</span><span class="at"> </span><span class="st">"Detected number of genes"</span></span></code></pre></div>
+<div class="sourceCode" id="cb41"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a><span class="fu">NORM_CLUSTERING_REPORT_DIMRED_PLOTS_OTHER</span><span class="kw">:</span></span>
+<span id="cb41-2"><a href="#cb41-2" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="kw">-</span><span class="at"> </span><span class="st">"phase"</span><span class="kw">:</span><span class="at"> </span><span class="st">"Cell cycle phases"</span></span>
+<span id="cb41-3"><a href="#cb41-3" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">"doublet_score"</span><span class="kw">:</span><span class="at"> </span><span class="st">"Doublet score"</span></span>
+<span id="cb41-4"><a href="#cb41-4" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">"total"</span><span class="kw">:</span><span class="at"> </span><span class="st">"Total number of UMI"</span></span>
+<span id="cb41-5"><a href="#cb41-5" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">"detected"</span><span class="kw">:</span><span class="at"> </span><span class="st">"Detected number of genes"</span></span></code></pre></div>
 <p><strong>Type:</strong> list of named lists with character scalars</p>
 <p>Names of other variables in <code>colData()</code> to plot dimreds
 and color by, displayed in the report.</p>
@@ -772,10 +988,10 @@ description will appear in plot title.</p>
 have <code>description</code> set to <code>null</code> - their
 description from <code>CELL_GROUPINGS</code> will be used.</p>
 </div>
-<div class="section level3">
-<h3 id="input-files">Input files<a class="anchor" aria-label="anchor" href="#input-files"></a>
-</h3>
-<div class="sourceCode" id="cb35"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="fu">SELECTED_MARKERS_FILE</span><span class="kw">:</span><span class="at"> </span><span class="ch">null</span></span></code></pre></div>
+<div class="section level4">
+<h4 id="input-files">Input files<a class="anchor" aria-label="anchor" href="#input-files"></a>
+</h4>
+<div class="sourceCode" id="cb42"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a><span class="fu">SELECTED_MARKERS_FILE</span><span class="kw">:</span><span class="at"> </span><span class="ch">null</span></span></code></pre></div>
 <p><strong>Type:</strong> character scalar or <code>null</code></p>
 <p>A path to CSV file with groups of markers to make expression dimred
 plots for. Set to <code>null</code> to skip. The plots will be created
@@ -785,12 +1001,13 @@ First column is a name of group and second column are gene symbols
 delimited by “:”. Example:</p>
 <p><code>Naive_CD4+_T,IL7R:CCR7</code></p>
 <p><strong>Do not use a header!</strong></p>
-<p>An example CSV file for PBMC 1k dataset can be retrieved by
-<code>system.file("extdata", "selected_markers.csv", package = "scdrake", mustWork = TRUE)</code>
-or see <a href="https://github.com/bioinfocz/scdrake/blob/main/inst/extdata/selected_markers.csv" class="external-link">here</a>.</p>
+<p>An example CSV file for PBMC 1k dataset is automatically copied to a
+newly initialized project (as
+<code>system.file("extdata", "selected_markers.csv", package = "scdrake", mustWork = TRUE)</code>).
+You can also view this file on GitHub <a href="https://github.com/bioinfocz/scdrake/blob/main/inst/extdata/selected_markers.csv" class="external-link">here</a>.</p>
 <hr>
-<div class="sourceCode" id="cb36"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="fu">NORM_CLUSTERING_REPORT_RMD_FILE</span><span class="kw">:</span><span class="at"> </span><span class="st">"Rmd/single_sample/02_norm_clustering.Rmd"</span></span>
-<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a><span class="fu">NORM_CLUSTERING_REPORT_SIMPLE_RMD_FILE</span><span class="kw">:</span><span class="at"> </span><span class="st">"Rmd/single_sample/02_norm_clustering_simple.Rmd"</span></span></code></pre></div>
+<div class="sourceCode" id="cb43"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a><span class="fu">NORM_CLUSTERING_REPORT_RMD_FILE</span><span class="kw">:</span><span class="at"> </span><span class="st">"Rmd/single_sample/02_norm_clustering.Rmd"</span></span>
+<span id="cb43-2"><a href="#cb43-2" aria-hidden="true" tabindex="-1"></a><span class="fu">NORM_CLUSTERING_REPORT_SIMPLE_RMD_FILE</span><span class="kw">:</span><span class="at"> </span><span class="st">"Rmd/single_sample/02_norm_clustering_simple.Rmd"</span></span></code></pre></div>
 <p><strong>Type:</strong> character scalar</p>
 <p>Paths to RMarkdown files used for HTML reports of this pipeline
 stage.</p>
@@ -799,49 +1016,49 @@ detailed, while <code>NORM_CLUSTERING_REPORT_SIMPLE_RMD_FILE</code>
 outputs only the dimensionality reduction plots along with cell
 annotation.</p>
 </div>
-<div class="section level3">
-<h3 id="output-files">Output files<a class="anchor" aria-label="anchor" href="#output-files"></a>
-</h3>
-<div class="sourceCode" id="cb37"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="fu">NORM_CLUSTERING_BASE_OUT_DIR</span><span class="kw">:</span><span class="at"> </span><span class="st">"02_norm_clustering"</span></span></code></pre></div>
+<div class="section level4">
+<h4 id="output-files">Output files<a class="anchor" aria-label="anchor" href="#output-files"></a>
+</h4>
+<div class="sourceCode" id="cb44"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a><span class="fu">NORM_CLUSTERING_BASE_OUT_DIR</span><span class="kw">:</span><span class="at"> </span><span class="st">"02_norm_clustering"</span></span></code></pre></div>
 <p><strong>Type:</strong> character scalar</p>
 <p>A path to base output directory for this stage. It will be created
 under <code>BASE_OUT_DIR</code> specified in <code>00_main.yaml</code>
 config.</p>
 <hr>
-<div class="sourceCode" id="cb38"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="fu">NORM_CLUSTERING_SELECTED_MARKERS_OUT_DIR</span><span class="kw">:</span><span class="at"> </span><span class="st">"selected_markers"</span></span>
-<span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a><span class="fu">NORM_CLUSTERING_CELL_ANNOTATION_OUT_DIR</span><span class="kw">:</span><span class="at"> </span><span class="st">"cell_annotation"</span></span>
-<span id="cb38-3"><a href="#cb38-3" aria-hidden="true" tabindex="-1"></a><span class="fu">NORM_CLUSTERING_REPORT_HTML_FILE</span><span class="kw">:</span><span class="at"> </span><span class="st">"02_norm_clustering.html"</span></span>
-<span id="cb38-4"><a href="#cb38-4" aria-hidden="true" tabindex="-1"></a><span class="fu">NORM_CLUSTERING_REPORT_SIMPLE_HTML_FILE</span><span class="kw">:</span><span class="at"> </span><span class="st">"02_norm_clustering_simple.html"</span></span></code></pre></div>
+<div class="sourceCode" id="cb45"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a><span class="fu">NORM_CLUSTERING_SELECTED_MARKERS_OUT_DIR</span><span class="kw">:</span><span class="at"> </span><span class="st">"selected_markers"</span></span>
+<span id="cb45-2"><a href="#cb45-2" aria-hidden="true" tabindex="-1"></a><span class="fu">NORM_CLUSTERING_DIMRED_PLOTS_OUT_DIR</span><span class="kw">:</span><span class="at"> </span><span class="st">"dimred_plots"</span></span>
+<span id="cb45-3"><a href="#cb45-3" aria-hidden="true" tabindex="-1"></a><span class="fu">NORM_CLUSTERING_OTHER_PLOTS_OUT_DIR</span><span class="kw">:</span><span class="at"> </span><span class="st">"other_plots"</span></span>
+<span id="cb45-4"><a href="#cb45-4" aria-hidden="true" tabindex="-1"></a><span class="fu">NORM_CLUSTERING_CELL_ANNOTATION_OUT_DIR</span><span class="kw">:</span><span class="at"> </span><span class="st">"cell_annotation"</span></span>
+<span id="cb45-5"><a href="#cb45-5" aria-hidden="true" tabindex="-1"></a><span class="fu">NORM_CLUSTERING_REPORT_HTML_FILE</span><span class="kw">:</span><span class="at"> </span><span class="st">"02_norm_clustering.html"</span></span>
+<span id="cb45-6"><a href="#cb45-6" aria-hidden="true" tabindex="-1"></a><span class="fu">NORM_CLUSTERING_REPORT_SIMPLE_HTML_FILE</span><span class="kw">:</span><span class="at"> </span><span class="st">"02_norm_clustering_simple.html"</span></span></code></pre></div>
 <p><strong>Type:</strong> character scalar</p>
 <p>Names of files and directories created under
 <code>NORM_CLUSTERING_BASE_OUT_DIR</code>. Subdirectories are not
 allowed.</p>
 </div>
-<div class="section level3">
-<h3 id="html-output-parameters">HTML output parameters<a class="anchor" aria-label="anchor" href="#html-output-parameters"></a>
-</h3>
-<div class="sourceCode" id="cb39"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a><span class="fu">NORM_CLUSTERING_KNITR_MESSAGE</span><span class="kw">:</span><span class="at"> </span><span class="ch">False</span></span>
-<span id="cb39-2"><a href="#cb39-2" aria-hidden="true" tabindex="-1"></a><span class="fu">NORM_CLUSTERING_KNITR_WARNING</span><span class="kw">:</span><span class="at"> </span><span class="ch">False</span></span>
-<span id="cb39-3"><a href="#cb39-3" aria-hidden="true" tabindex="-1"></a><span class="fu">NORM_CLUSTERING_KNITR_ECHO</span><span class="kw">:</span><span class="at"> </span><span class="ch">False</span></span></code></pre></div>
+<div class="section level4">
+<h4 id="html-output-parameters">HTML output parameters<a class="anchor" aria-label="anchor" href="#html-output-parameters"></a>
+</h4>
+<div class="sourceCode" id="cb46"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a><span class="fu">NORM_CLUSTERING_KNITR_MESSAGE</span><span class="kw">:</span><span class="at"> </span><span class="ch">False</span></span>
+<span id="cb46-2"><a href="#cb46-2" aria-hidden="true" tabindex="-1"></a><span class="fu">NORM_CLUSTERING_KNITR_WARNING</span><span class="kw">:</span><span class="at"> </span><span class="ch">False</span></span>
+<span id="cb46-3"><a href="#cb46-3" aria-hidden="true" tabindex="-1"></a><span class="fu">NORM_CLUSTERING_KNITR_ECHO</span><span class="kw">:</span><span class="at"> </span><span class="ch">False</span></span></code></pre></div>
 <p><strong>Type:</strong> logical scalar</p>
 <p>These are passed to <code><a href="https://rdrr.io/pkg/knitr/man/opts_chunk.html" class="external-link">knitr::opts_chunk()</a></code> and used for
 rendering of stage’s HTML report.</p>
-<hr>
 </div>
 </div>
-<div class="section level2">
-<h2 id="targets">Targets<a class="anchor" aria-label="anchor" href="#targets"></a>
-</h2>
+<div class="tab-pane" id="outputs" role="tabpanel" aria-labelledby="outputs-tab">
+
 <p>Here you can find description of the most important targets for this
 stage. However, for a full overview, you have to inspect the <a href="https://github.com/bioinfocz/scdrake/blob/main/R/plans_single_sample.R" class="external-link">source
 code</a> of the <code>get_input_norm_clustering_subplan()</code>
 function.</p>
 <p>HTML report target names: <code>report_norm_clustering</code>,
 <code>report_norm_clustering_simple</code> (only dimred plots)</p>
-<div class="section level3">
-<h3 id="singlecellexperiment-objects">
+<div class="section level4">
+<h4 id="singlecellexperiment-objects">
 <code>SingleCellExperiment</code> objects<a class="anchor" aria-label="anchor" href="#singlecellexperiment-objects"></a>
-</h3>
+</h4>
 <p><code>sce_cc</code>: a SCE object (the
 <code>sce_final_input_qc</code> target from the <code>input_qc</code>
 stage) with added cell cycle information to <code>colData()</code>:
@@ -887,7 +1104,7 @@ doublets and added information:</p>
 <hr>
 <p><code>sce_pca</code>: <code>sce_rm_doublets</code> with calculated
 PCA (50 PCs). Reduced dimensions can be retrieved by
-<code>SingleCellExperiment::reducedDim(sce_pca, "pca")</code>.</p>
+<code>SingleCellExperiment::reducedDim(sce_pca, "pca")</code></p>
 <hr>
 <p><code>sce_pca_selected_pcs</code>: <code>sce_pca</code> with selected
 number of PCs. Reduced dimensions in <code>pca</code> slot are subsetted
@@ -898,7 +1115,7 @@ to <code>metadata()</code>: <code>pca_selection_method</code>,
 <hr>
 <p><code>sce_dimred</code>: <code>sce_pca_selected_pcs</code> with
 calculated t-SNE and UMAP, both using the selected number of PCs for
-calculation.</p>
+calculation</p>
 <hr>
 <p><code>sce_final_norm_clustering</code>: a final SCE object of this
 stage which will be used in the <code>cluster_markers</code> and
@@ -908,13 +1125,34 @@ stage which will be used in the <code>cluster_markers</code> and
 <p>The names of columns containing cell clusterings are:</p>
 <ul>
 <li>Graph-based clustering: <code>cluster_graph_walktrap</code>,
-<code>cluster_graph_louvain</code>
+<code>cluster_graph_louvain_r&lt;r&gt;</code>
+(e.g. <code>cluster_graph_louvain_r0.4</code>),
+<code>cluster_graph_leiden_r&lt;r&gt;</code>
+(e.g. <code>cluster_graph_leiden_r0.4</code>)
+<ul>
+<li>
+<code>&lt;r&gt;</code> is based on the
+<code>CLUSTER_GRAPH_LEIDEN_RESOLUTIONS</code> and
+<code>CLUSTER_GRAPH_LOUVAIN_RESOLUTIONS</code> parameters</li>
+</ul>
 </li>
 <li>k-means clustering: <code>cluster_kmeans_kbest</code>,
-<code>cluster_kmeans_kc_&lt;k&gt;</code> (all Ks from the
-<code>KMEANS_K</code> parameter)</li>
-<li>SC3 clustering: <code>cluster_sc3_&lt;k&gt;</code> (all Ks from the
-<code>SC3_K</code> parameter)</li>
+<code>cluster_kmeans_k&lt;k&gt;</code>
+(e.g. <code>cluster_kmeans_k5</code>)
+<ul>
+<li>
+<code>&lt;k&gt;</code> is based on the <code>CLUSTER_KMEANS_K</code>
+parameter</li>
+</ul>
+</li>
+<li>SC3 clustering: <code>cluster_sc3_&lt;k&gt;</code>
+(e.g. <code>cluster_sc3_k5</code>)
+<ul>
+<li>
+<code>&lt;k&gt;</code> is based on the <code>CLUSTER_SC3_K</code>
+parameter</li>
+</ul>
+</li>
 </ul>
 <p>The names of reduces dimensionality matrices (which can be retrieved
 by <code><a href="https://rdrr.io/pkg/SingleCellExperiment/man/reducedDims.html" class="external-link">SingleCellExperiment::reducedDim()</a></code>):</p>
@@ -927,80 +1165,87 @@ by <code><a href="https://rdrr.io/pkg/SingleCellExperiment/man/reducedDims.html"
 </li>
 </ul>
 <p>Or you can view their names with
-<code><a href="https://rdrr.io/pkg/SingleCellExperiment/man/reducedDims.html" class="external-link">SingleCellExperiment::reducedDimNames()</a></code>.</p>
+<code><a href="https://rdrr.io/pkg/SingleCellExperiment/man/reducedDims.html" class="external-link">SingleCellExperiment::reducedDimNames()</a></code></p>
 </div>
-<div class="section level3">
-<h3 id="selection-of-pcs">Selection of PCs<a class="anchor" aria-label="anchor" href="#selection-of-pcs"></a>
-</h3>
+<div class="section level4">
+<h4 id="selection-of-pcs">Selection of PCs<a class="anchor" aria-label="anchor" href="#selection-of-pcs"></a>
+</h4>
 <p><code>pca_elbow_pcs</code>, <code>pca_gene_var_pcs</code>: a number
 of selected PCs for elbow point and technical variance methods,
-respectively.</p>
+respectively</p>
 <p><code>pca_selected_pcs_plot</code>: a <a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a> object
 showing cummulative variance explained and the selected number of first
-PCs for each of the methods.</p>
+PCs for each of the methods</p>
 </div>
-<div class="section level3">
-<h3 id="cell-clustering">Cell clustering<a class="anchor" aria-label="anchor" href="#cell-clustering"></a>
-</h3>
+<div class="section level4">
+<h4 id="cell-clustering">Cell clustering<a class="anchor" aria-label="anchor" href="#cell-clustering"></a>
+</h4>
 <p><code>clusters_all</code>: a named list of integer vectors which
-wraps all clusterings below.</p>
-<div class="section level4">
-<h4 id="graph-based-clustering-1">Graph-based clustering<a class="anchor" aria-label="anchor" href="#graph-based-clustering-1"></a>
-</h4>
-<p><code>graph_k</code>: an <a href="https://igraph.org" class="external-link">igraph</a> object of shared
+wraps all clusterings below</p>
+<div class="section level5">
+<h5 id="graph-based-clustering-1">Graph-based clustering<a class="anchor" aria-label="anchor" href="#graph-based-clustering-1"></a>
+</h5>
+<p><code>graph_snn</code>: an <a href="https://igraph.org" class="external-link">igraph</a> object of shared
 nearest-neighbor graph, returned from
-<code><a href="https://rdrr.io/pkg/scran/man/buildSNNGraph.html" class="external-link">scran::buildSNNGraph()</a></code>.</p>
-<p><code>cluster_graph_walktrap</code>,
-<code>cluster_graph_louvain</code>: lists with cell clusters returned
-from <code><a href="https://rdrr.io/pkg/igraph/man/cluster_walktrap.html" class="external-link">igraph::cluster_walktrap()</a></code> and
+<code><a href="https://rdrr.io/pkg/scran/man/buildSNNGraph.html" class="external-link">scran::buildSNNGraph()</a></code></p>
+<p><code>cluster_graph_leiden</code>,
+<code>cluster_graph_walktrap</code>, <code>cluster_graph_louvain</code>:
+lists with cell clusters returned from
+<code><a href="https://rdrr.io/pkg/igraph/man/cluster_walktrap.html" class="external-link">igraph::cluster_walktrap()</a></code> and
 <code><a href="https://rdrr.io/pkg/igraph/man/cluster_louvain.html" class="external-link">igraph::cluster_louvain()</a></code>, respectively. Both functions are
-using <code>graph_k</code> as the input.</p>
-<p><code>cluster_graph_walktrap_n</code>,
-<code>cluster_graph_louvain_n</code>: a number of found clusters.</p>
-<p><code>cluster_graph_walktrap_table</code>,
-<code>cluster_graph_louvain_table</code>: a dataframe summarizing
-assignment of cells to clusters.</p>
+using <code>graph_snn</code> as the input</p>
+<p><code>cluster_graph_louvain_df</code>,
+<code>cluster_graph_walktrap_df</code>,
+<code>cluster_graph_leiden_df</code>: dataframes with graph-based
+clustering results</p>
+<p><code>cluster_graph_leiden_clustree</code>,
+<code>cluster_graph_louvain_clustree</code>: <a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a>
+objects of <code><a href="https://rdrr.io/pkg/clustree/man/clustree.html" class="external-link">clustree::clustree()</a></code> plots</p>
 </div>
-<div class="section level4">
-<h4 id="k-means">k-means<a class="anchor" aria-label="anchor" href="#k-means"></a>
-</h4>
-<p><code>kmeans_gaps</code>: a <code>clusGap</code> object used to
-calculate the best K. Returned from <code><a href="https://rdrr.io/pkg/cluster/man/clusGap.html" class="external-link">cluster::clusGap()</a></code>, to
-which matrix of selected PCs is passed.</p>
-<p><code>kmeans_best_k</code>: the best K for k-means, returned from
-<code><a href="https://rdrr.io/pkg/cluster/man/clusGap.html" class="external-link">cluster::maxSE()</a></code>.</p>
-<p><code>cluster_kmeans_kbest</code>, <code>cluster_kmeans_kc</code>:
+<div class="section level5">
+<h5 id="k-means">k-means<a class="anchor" aria-label="anchor" href="#k-means"></a>
+</h5>
+<p><code>cluster_kmeans_kbest_gaps</code>: a <code>clusGap</code> object
+used to calculate the best K. Returned from
+<code><a href="https://rdrr.io/pkg/cluster/man/clusGap.html" class="external-link">cluster::clusGap()</a></code>, to which matrix of selected PCs is
+passed</p>
+<p><code>cluster_kmeans_kbest_k</code>: the best K for k-means, returned
+from <code><a href="https://rdrr.io/pkg/cluster/man/clusGap.html" class="external-link">cluster::maxSE()</a></code></p>
+<p><code>cluster_kmeans_kbest</code>, <code>cluster_kmeans_k</code>:
 lists with cell clusters returned from <code><a href="https://rdrr.io/r/stats/kmeans.html" class="external-link">stats::kmeans()</a></code>. In
-the former, <code>kmeans_best_k</code> is used as the number of
-clusters. In the latter, Ks from the <code>KMEANS_K</code> parameter are
-used.</p>
-<p><code>cluster_kmeans_kbest_table</code>,
-<code>cluster_kmeans_kc_tables</code>: a dataframe (or list of them in
-the latter) summarizing assignment of cells to clusters.</p>
+the former, <code>cluster_kmeans_kbest_k</code> is used as the number of
+clusters. In the latter, Ks from the <code>CLUSTER_KMEANS_K</code>
+parameter are used.</p>
+<p><code>cluster_kmeans_k_df</code>,
+<code>cluster_kmeans_kbest_df</code>: dataframes with k-means clustering
+results</p>
+<p><code>cluster_kmeans_k_clustree</code>: <a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a> object
+of <code><a href="https://rdrr.io/pkg/clustree/man/clustree.html" class="external-link">clustree::clustree()</a></code> plot. If
+<code>CLUSTER_KMEANS_KBEST_ENABLED</code> is <code>True</code>, it will
+also contain k-means result with the best <code>k</code>.</p>
 </div>
-<div class="section level4">
-<h4 id="sc3">SC3<a class="anchor" aria-label="anchor" href="#sc3"></a>
-</h4>
+<div class="section level5">
+<h5 id="sc3">SC3<a class="anchor" aria-label="anchor" href="#sc3"></a>
+</h5>
 <p><code>sce_sc3</code>: a <code>SingleCellExperiment</code> object
-returned from <code><a href="https://rdrr.io/pkg/SC3/man/sc3.html" class="external-link">SC3::sc3()</a></code>.</p>
-<p><code>cluster_sc3</code>: a list with cell clusters.</p>
-<p><code>cluster_sc3_tables</code>: a list of dataframes, each
-summarizing assignment of cells to clusters for different
-<code>SC3_K</code>.</p>
+returned from <code><a href="https://rdrr.io/pkg/SC3/man/sc3.html" class="external-link">SC3::sc3()</a></code></p>
+<p><code>cluster_sc3</code>: a list with cell clusters</p>
+<p><code>cluster_sc3_df</code>: a dataframe with SC3 clustering
+results</p>
 <p><code>cluster_sc3_stability_plots</code>: a list of
 <a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a> objects, each returned from
-<code><a href="../reference/make_sc3_stability_plots.html">make_sc3_stability_plots()</a></code> (where
-<code><a href="https://rdrr.io/pkg/SC3/man/sc3_plot_cluster_stability.html" class="external-link">SC3::sc3_plot_cluster_stability()</a></code> is used internally). If
-the parameter <code>SC3_DRY</code> is <code>True</code>, the plots will
-be empty and will contain the text “SC3 was run in dry mode.”.</p>
+<code>make_sc3_stability_plots()</code> (where
+<code><a href="https://rdrr.io/pkg/SC3/man/sc3_plot_cluster_stability.html" class="external-link">SC3::sc3_plot_cluster_stability()</a></code> is used internally)</p>
+<p><code>cluster_sc3_clustree</code>: <a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a> object of
+<code><a href="https://rdrr.io/pkg/clustree/man/clustree.html" class="external-link">clustree::clustree()</a></code> plot</p>
 <hr>
 </div>
 </div>
-<div class="section level3">
-<h3 id="cell-type-annotation-1">Cell type annotation<a class="anchor" aria-label="anchor" href="#cell-type-annotation-1"></a>
-</h3>
+<div class="section level4">
+<h4 id="cell-type-annotation-1">Cell type annotation<a class="anchor" aria-label="anchor" href="#cell-type-annotation-1"></a>
+</h4>
 <p><code>cell_annotation_params</code>: a tibble with parameters parsed
-from <code>CELL_ANNOTATION_SOURCES</code>.</p>
+from <code>CELL_ANNOTATION_SOURCES</code></p>
 <p><code>cell_annotation</code>: <code>cell_annotation_params</code>
 with added <code>cell_annotation</code> list column holding outputs
 (<code>DataFrame</code>s) from <code><a href="https://rdrr.io/pkg/SingleR/man/SingleR.html" class="external-link">SingleR::SingleR()</a></code>. The
@@ -1011,7 +1256,7 @@ structure of those <code>DataFrame</code>s is described in
 vectors with per-cell label assignments. Later added to the
 <code>cell_data</code> target and in turn, to <code>colData()</code> of
 the <code>sce_final_norm_clustering</code> and
-<code>sce_int_final_clustering</code> (in integration pipeline)
+<code>sce_int_clustering_final</code> (in integration pipeline)
 targets/objects.</p>
 <p>By default, there are three vectors with labels for each reference
 dataset named as:</p>
@@ -1019,11 +1264,11 @@ dataset named as:</p>
 <li>
 <code>&lt;reference_name&gt;_labels_raw</code>: “raw” labels. Taken
 from <code>first.labels</code> column of <code><a href="https://rdrr.io/pkg/SingleR/man/SingleR.html" class="external-link">SingleR::SingleR()</a></code>
-output.</li>
+output</li>
 <li>
 <code>&lt;reference_name&gt;_labels</code>: fine-tuned labels. Taken
 from <code>labels</code> column of <code><a href="https://rdrr.io/pkg/SingleR/man/SingleR.html" class="external-link">SingleR::SingleR()</a></code>
-output.</li>
+output</li>
 <li>
 <code>&lt;reference_name&gt;_labels_pruned</code>: fine-tuned and
 pruned labels (contains <code>NA</code>s for low quality labels). Taken
@@ -1035,7 +1280,7 @@ items in the <code>CELL_GROUPINGS</code> and
 <code>NORM_CLUSTERING_REPORT_DIMRED_PLOTS_OTHER</code> parameters, and
 also use them in <code>cluster_markers</code>
 (<code>CLUSTER_MARKERS_SOURCES</code>) and <code>contrasts</code>
-(<code>CONTRASTS_SOURCES</code>) stages.</p>
+(<code>CONTRASTS_SOURCES</code>) stages</p>
 <hr>
 <p><code>cell_annotation_diagnostic_plots</code>:
 <code>cell_annotation</code> with added list columns holding diagnostic
@@ -1043,19 +1288,19 @@ plots, i.e. for each reference dataset:</p>
 <ul>
 <li>
 <code>score_heatmaps</code>: heatmaps of per-cell label scores
-created for each clustering (as column annotation) (<a href="http://bioconductor.org/books/release/SingleRBook/annotation-diagnostics.html#based-on-the-scores-within-cells" class="external-link">details</a>).</li>
+created for each clustering (as column annotation) (<a href="http://bioconductor.org/books/3.15/SingleRBook/annotation-diagnostics.html#based-on-the-scores-within-cells" class="external-link">details</a>).</li>
 <li>
 <code>marker_heatmaps</code>: <code>NULL</code> if
 <code>cell_annotation$train_params$de</code> is not <code>"de"</code>,
 otherwise heatmap for each label containing top upregulated markers from
-pairwise t-tests (<a href="http://bioconductor.org/books/release/SingleRBook/annotation-diagnostics.html#based-on-marker-gene-expression" class="external-link">details</a>).
+pairwise t-tests (<a href="http://bioconductor.org/books/3.15/SingleRBook/annotation-diagnostics.html#based-on-marker-gene-expression" class="external-link">details</a>).
 Number of top markers is specified in
 <code>cell_annotation$diagnostics_params$heatmap_n_top_markers</code>.</li>
 <li>
 <code>delta_distribution_plot</code>: violin plots (in one figure /
 object) of per-cell deltas for each label. Deltas are differences
 between the score for the assigned label and the median across all
-labels for each cell (<a href="http://bioconductor.org/books/release/SingleRBook/annotation-diagnostics.html#based-on-the-deltas-across-cells" class="external-link">details</a>).</li>
+labels for each cell (<a href="http://bioconductor.org/books/3.15/SingleRBook/annotation-diagnostics.html#based-on-the-deltas-across-cells" class="external-link">details</a>).</li>
 </ul>
 <p><code>cell_annotation_diagnostic_plots_files</code>: paths to PDF
 files of diagnostic plots in
@@ -1065,11 +1310,11 @@ files of diagnostic plots in
 <code>marker_heatmaps_out_file</code>). That means when you make this
 target, those files will be created.</p>
 </div>
-<div class="section level3">
-<h3 id="plots">Plots<a class="anchor" aria-label="anchor" href="#plots"></a>
-</h3>
+<div class="section level4">
+<h4 id="plots">Plots<a class="anchor" aria-label="anchor" href="#plots"></a>
+</h4>
 <p><code>hvg_plot</code>: a <a href="https://patchwork.data-imaginist.com" class="external-link">patchwork</a> object with HVG
-metric statistics (average expression vs. variance).</p>
+metric statistics (average expression vs. variance)</p>
 <hr>
 <p><code>pca_phase_plots</code>: a list of one or two
 <code>{ggplot2</code>} objects. The first one is a plot of the first two
@@ -1081,26 +1326,33 @@ computed using HVGs with removed cell cycle-related genes.</p>
 <hr>
 <p><code>pca_doublet_plot</code>, <code>pca_total_plot</code>: a
 <code>{ggplot2</code>} plots of the first two PCs colored by doublet
-score and total number of UMIs, respectively.</p>
+score and total number of UMIs, respectively</p>
 <hr>
 <p><code>dimred_plots_clustering</code>: a tibble holding plots of
-reduced dimensions colored by a clustering.</p>
+reduced dimensions colored by a clustering</p>
+<p><code>dimred_plots_clustering_files_out</code>,
+<code>dimred_plots_clustering_united_files</code>: make this target to
+export the plots (the latter produces a single multipage PDF)</p>
 <hr>
 <p><code>dimred_plots_other_vars</code>: a tibble holding plots of
 reduced dimensions colored by a specified variable, as defined by the
 <code>NORM_CLUSTERING_REPORT_DIMRED_NAMES</code> and
 <code>NORM_CLUSTERING_REPORT_DIMRED_PLOTS_OTHER</code> parameters.</p>
-<div class="section level4">
-<h4 id="selected-markers">Selected markers<a class="anchor" aria-label="anchor" href="#selected-markers"></a>
-</h4>
+<p><code>dimred_plots_other_vars_files_out</code>: make this target to
+export the plots</p>
+<div class="section level5">
+<h5 id="selected-markers">Selected markers<a class="anchor" aria-label="anchor" href="#selected-markers"></a>
+</h5>
 <p><code>selected_markers_plots</code>: a tibble holding selected marker
 plots (<a href="https://patchwork.data-imaginist.com" class="external-link">patchwork</a> objects) for each dimensional reduction
 specified in the <code>NORM_CLUSTERING_REPORT_DIMRED_NAMES</code>
 parameter. Selected markers are read from CSV file defined in the
 <code>SELECTED_MARKERS_FILE</code> parameter.</p>
+<p><code>selected_markers_plots_files_out</code>: make this target to
+export the plots</p>
 <p>You can also use the underlying function
 <code><a href="../reference/selected_markers_dimplot.html">selected_markers_dimplot()</a></code>:</p>
-<div class="sourceCode" id="cb40"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb47"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/selected_markers_dimplot.html">selected_markers_dimplot</a></span><span class="op">(</span></span>
 <span>  sce <span class="op">=</span> <span class="va">sce_final_norm_clustering</span>,</span>
 <span>  dimred <span class="op">=</span> <span class="st">"umap"</span>,</span>
@@ -1109,15 +1361,15 @@ parameter. Selected markers are read from CSV file defined in the
 <span><span class="op">)</span></span></code></pre></div>
 <p>The <code>selected_markers_df</code> tibble can be read from the CSV
 file with</p>
-<div class="sourceCode" id="cb41"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb48"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">selected_markers_df</span> <span class="op">&lt;-</span> <span class="fu">readr</span><span class="fu">::</span><span class="fu"><a href="https://readr.tidyverse.org/reference/read_delim.html" class="external-link">read_csv</a></span><span class="op">(</span><span class="st">"markers.csv"</span>, col_names <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"group"</span>, <span class="st">"markers"</span><span class="op">)</span>, col_types <span class="op">=</span> <span class="st">"cc"</span><span class="op">)</span></span></code></pre></div>
 </div>
 </div>
-<div class="section level3">
-<h3 id="other-targets">Other targets<a class="anchor" aria-label="anchor" href="#other-targets"></a>
-</h3>
+<div class="section level4">
+<h4 id="other-targets">Other targets<a class="anchor" aria-label="anchor" href="#other-targets"></a>
+</h4>
 <p><code>config_norm_clustering</code>: a list holding parameters for
-this stage.</p>
+this stage</p>
 <hr>
 <p><code>cc_genes</code>: a dataframe of cell cycle genes, based on
 <code><a href="https://satijalab.org/seurat/reference/cc.genes.updated.2019.html" class="external-link">Seurat::cc.genes.updated.2019</a></code> data. If the
@@ -1132,6 +1384,8 @@ sentence-case (<code>"MKI67"</code> -&gt; <code>"Mki67"</code>).</p>
 defined in the <code>CELL_GROUPINGS</code> parameter.</p>
 </div>
 </div>
+</div>
+</div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
     </nav></aside>
 </div>
@@ -1140,12 +1394,12 @@ defined in the <code>CELL_GROUPINGS</code> parameter.</p>
 
     <footer><div class="copyright">
   <p></p>
-<p>Developed by Jiri Novotny, Jan Kubovciak.</p>
+<p>Developed by Jiri Novotny, Jan Kubovciak, Michal Kolar.</p>
 </div>
 
 <div class="pkgdown">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.7.9000.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
   <p class="preferably">Using <a href="https://preferably.amirmasoudabdol.name/?source=footer" class="external-link">preferably</a> template.</p>
 </div>
 

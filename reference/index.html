@@ -28,7 +28,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">scdrake</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.4.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.5.0</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -54,6 +54,7 @@
     <h6 class="dropdown-header" data-toc-skip>Guides</h6>
     <a class="dropdown-item" href="../articles/scdrake_docker.html">Using the Docker image</a>
     <a class="dropdown-item" href="../articles/scdrake_integration.html">02 Integration pipeline guide</a>
+    <a class="dropdown-item" href="../articles/scdrake_advanced.html">Advanced topics</a>
     <a class="dropdown-item" href="../articles/scdrake_extend.html">Extending the pipeline</a>
     <a class="dropdown-item" href="../articles/drake_basics.html">drake basics</a>
     <div class="dropdown-divider"></div>
@@ -61,7 +62,6 @@
     <a class="dropdown-item" href="../articles/pipeline_overview.html">Pipeline overview</a>
     <a class="dropdown-item" href="../articles/scdrake_faq.html">FAQ &amp; Howtos</a>
     <a class="dropdown-item" href="../articles/scdrake_cli.html">Command line interface</a>
-    <a class="dropdown-item" href="../articles/cluster_markers.html">Cluster markers</a>
     <a class="dropdown-item" href="../articles/scdrake_config.html">scdrake config internals</a>
     <a class="dropdown-item" href="../articles/scdrake_envvars.html">Environment variables</a>
     <div class="dropdown-divider"></div>
@@ -309,9 +309,39 @@
 
       <dl><dt>
           
+          <code><a href="get_dimred_plots_other_vars_subplan.html">get_dimred_plots_other_vars_subplan()</a></code> 
+        </dt>
+        <dd>Get a subplan for dimensionality reduction plots of selected variables.</dd>
+      </dl><dl><dt>
+          
           <code><a href="get_subplan_common.html">get_common_subplan()</a></code> <code><a href="get_subplan_common.html">get_cluster_markers_subplan()</a></code> <code><a href="get_subplan_common.html">get_contrasts_subplan()</a></code> 
         </dt>
-        <dd>Get a <code>drake</code> plan common to all pipelines.</dd>
+        <dd>Get a <code>drake</code> subplan common to all pipelines.</dd>
+      </dl><dl><dt>
+          
+          <code><a href="get_clustering_graph_subplan.html">get_clustering_graph_subplan()</a></code> 
+        </dt>
+        <dd>Get a subplan for graph-based clustering.</dd>
+      </dl><dl><dt>
+          
+          <code><a href="get_clustering_kmeans_subplan.html">get_clustering_kmeans_subplan()</a></code> 
+        </dt>
+        <dd>Get a subplan for k-means clustering.</dd>
+      </dl><dl><dt>
+          
+          <code><a href="get_clustering_sc3_subplan.html">get_clustering_sc3_subplan()</a></code> 
+        </dt>
+        <dd>Get a subplan for SC3 clustering.</dd>
+      </dl><dl><dt>
+          
+          <code><a href="get_clustering_subplan.html">get_clustering_subplan()</a></code> 
+        </dt>
+        <dd>Get subplan for clustering.</dd>
+      </dl><dl><dt>
+          
+          <code><a href="get_cell_annotation_subplan.html">get_cell_annotation_subplan()</a></code> 
+        </dt>
+        <dd>Get a subplan for cell annotation via <code>SingleR</code></dd>
       </dl></div><div class="section level2">
       
       <h3 id="single-sample-pipeline-subplans">Single-sample pipeline subplans<a class="anchor" aria-label="anchor" href="#single-sample-pipeline-subplans"></a></h3>
@@ -585,7 +615,7 @@ metadata (e.g. HVGs).</dd>
         <dd>Prepare parameters for expression plots of selected markers.</dd>
       </dl><dl><dt>
           
-          <code><a href="selected_markers_plots_int_df_fn.html">selected_markers_plots_int_df_fn()</a></code> 
+          <code><a href="selected_markers_int_plots_df_fn.html">selected_markers_int_plots_df_fn()</a></code> 
         </dt>
         <dd>Make expression plots of selected markers.</dd>
       </dl></div><div class="section level2">
@@ -712,7 +742,7 @@ metadata (e.g. HVGs).</dd>
           
           <code><a href="calc_sc3.html">calc_sc3()</a></code> 
         </dt>
-        <dd>Calculate SC3 clustering.</dd>
+        <dd>Run SC3 clustering for a specific <code>k</code>.</dd>
       </dl><dl><dt>
           
           <code><a href="cells_per_cluster_table.html">cells_per_cluster_table()</a></code> <code><a href="cells_per_cluster_table.html">cells_per_cluster_table()</a></code> 
@@ -720,19 +750,14 @@ metadata (e.g. HVGs).</dd>
         <dd>Get a frequency table of cell-cluster assignments.</dd>
       </dl><dl><dt>
           
-          <code><a href="cluster_kmeans_kc_fn.html">cluster_kmeans_kc_fn()</a></code> 
+          <code><a href="cluster_sc3_cluster_stability_plots_file_fn.html">cluster_sc3_cluster_stability_plots_file_fn()</a></code> 
         </dt>
-        <dd>Create a named list of k-means clusters for a selected number of clusters.</dd>
+        <dd>Save SC3 cluster stability plots to a single PDF.</dd>
       </dl><dl><dt>
           
-          <code><a href="cluster_sc3_fn.html">cluster_sc3_fn()</a></code> 
+          <code><a href="cluster_sc3_df_fn.html">cluster_sc3_df_fn()</a></code> 
         </dt>
-        <dd>Create a named list of SC3 clusters for a selected number of clusters.</dd>
-      </dl><dl><dt>
-          
-          <code><a href="clustering_helpers.html">get_n_clusters()</a></code> 
-        </dt>
-        <dd>Get a number of unique clusters.</dd>
+        <dd>Create a dataframe of SC3 clusters for a selected number of clusters.</dd>
       </dl><dl><dt>
           
           <code><a href="get_pca_gene_var_pcs.html">get_pca_gene_var_pcs()</a></code> 
@@ -745,6 +770,11 @@ metadata (e.g. HVGs).</dd>
         <dd>Get a final selection of number of PCs.</dd>
       </dl><dl><dt>
           
+          <code><a href="graph_snn_fn.html">graph_snn_fn()</a></code> 
+        </dt>
+        <dd>Compute shared nearest neighbors (SNN) graph.</dd>
+      </dl><dl><dt>
+          
           <code><a href="make_kmeans_gaps_plot.html">make_kmeans_gaps_plot()</a></code> 
         </dt>
         <dd>Make a plot of k-means gaps.</dd>
@@ -755,9 +785,14 @@ metadata (e.g. HVGs).</dd>
         <dd>Make a plot showing numbers of selected PCs from all strategies.</dd>
       </dl><dl><dt>
           
-          <code><a href="make_sc3_stability_plots.html">make_sc3_stability_plots()</a></code> 
+          <code><a href="run_graph_based_clustering.html">run_graph_based_clustering()</a></code> 
         </dt>
-        <dd>Create a list of plots with SC3 clustering stability.</dd>
+        <dd>Find clusters in SNN graph using a community detection algorithm and if possible, using a specified resolution.</dd>
+      </dl><dl><dt>
+          
+          <code><a href="run_kmeans_clustering.html">run_kmeans_clustering()</a></code> 
+        </dt>
+        <dd>Run k-means clustering for a specific <code>k</code>.</dd>
       </dl><dl><dt>
           
           <code><a href="sce_calc_pca.html">sce_calc_pca()</a></code> 
@@ -996,17 +1031,27 @@ or <code>CONTRASTS_SOURCES</code> (<code>contrasts.yaml</code> config).</dd>
 
       <dl><dt>
           
+          <code><a href="dimred_plots_cell_annotation_params_df_fn.html">dimred_plots_cell_annotation_params_df_fn()</a></code> 
+        </dt>
+        <dd>Make a tibble with parameters for dimred plots of cell annotation labels.</dd>
+      </dl><dl><dt>
+          
           <code><a href="dimred_plots_clustering_fn.html">dimred_plots_clustering_fn()</a></code> 
         </dt>
-        <dd>Make dimred plots for each clustering method.</dd>
+        <dd>Make a dimred plot for each clustering and dimred method.</dd>
       </dl><dl><dt>
           
-          <code><a href="dimred_plots_other_vars_fn.html">dimred_plots_other_vars_fn()</a></code> 
+          <code><a href="dimred_plots_clustering_united_files_fn.html">dimred_plots_clustering_united_files_fn()</a></code> 
         </dt>
-        <dd>Make a dimred plot of selected variables.</dd>
+        <dd>Put clustering dimred plots for different parameters (resolution, <code>k</code>) into a single PDF.</dd>
       </dl><dl><dt>
           
-          <code><a href="dimred_plots_other_vars_params_fn.html">dimred_plots_other_vars_params_fn()</a></code> 
+          <code><a href="dimred_plots_from_params_df.html">dimred_plots_from_params_df()</a></code> 
+        </dt>
+        <dd>Make dimred plots of selected variables.</dd>
+      </dl><dl><dt>
+          
+          <code><a href="dimred_plots_other_vars_params_df_fn.html">dimred_plots_other_vars_params_df_fn()</a></code> 
         </dt>
         <dd>Make a tibble with parameters for dimred plots of selected variables.</dd>
       </dl><dl><dt>
@@ -1021,6 +1066,11 @@ or <code>CONTRASTS_SOURCES</code> (<code>contrasts.yaml</code> config).</dd>
         <dd>A wrapper around <code><a href="https://rdrr.io/pkg/scater/man/plotReducedDim.html" class="external-link">scater::plotReducedDim()</a></code>.</dd>
       </dl><dl><dt>
           
+          <code><a href="plot_clustree.html">plot_clustree()</a></code> 
+        </dt>
+        <dd>Plot clustering tree.</dd>
+      </dl><dl><dt>
+          
           <code><a href="plot_colData.html">plot_colData()</a></code> 
         </dt>
         <dd>A wrapper for <code><a href="https://rdrr.io/pkg/scater/man/plotColData.html" class="external-link">scater::plotColData()</a></code>.</dd>
@@ -1029,6 +1079,11 @@ or <code>CONTRASTS_SOURCES</code> (<code>contrasts.yaml</code> config).</dd>
           <code><a href="plot_vln.html">plot_vln()</a></code> 
         </dt>
         <dd>Make a combined violin-boxplot plot.</dd>
+      </dl><dl><dt>
+          
+          <code><a href="save_clustree.html">save_clustree()</a></code> 
+        </dt>
+        <dd>Save a clustree plot into PDF.</dd>
       </dl><dl><dt>
           
           <code><a href="save_selected_markers_plots_files.html">save_selected_markers_plots_files()</a></code> 
@@ -1068,6 +1123,16 @@ or <code>CONTRASTS_SOURCES</code> (<code>contrasts.yaml</code> config).</dd>
         <dd>Use the <a href="https://downlit.r-lib.org/" class="external-link">downlit</a> package to generate a Markdown list of autolinked functions wrapped inside <code>&lt;details&gt;</code> tags.</dd>
       </dl><dl><dt>
           
+          <code><a href="generate_cell_annotation_plots_section.html">generate_cell_annotation_plots_section()</a></code> 
+        </dt>
+        <dd>Generate a section with dimred plots used in some RMarkdown files.</dd>
+      </dl><dl><dt>
+          
+          <code><a href="generate_dimred_plots_clustering_section.html">generate_dimred_plots_clustering_section()</a></code> 
+        </dt>
+        <dd>Generate a section of clustering dimensionality reduction plots in an RMarkdown document.</dd>
+      </dl><dl><dt>
+          
           <code><a href="generate_dimred_plots_section.html">generate_dimred_plots_section()</a></code> 
         </dt>
         <dd>Generate a section with dimred plots used in some RMarkdown files.</dd>
@@ -1104,7 +1169,7 @@ or <code>CONTRASTS_SOURCES</code> (<code>contrasts.yaml</code> config).</dd>
 
       <dl><dt>
           
-          <code><a href="format_shell_command.html">format_shell_command()</a></code> 
+          <code><a href="format_shell_command.html">format_shell_command()</a></code> <code><a href="format_shell_command.html">wrap_code()</a></code> <code><a href="format_shell_command.html">format_shell_commands()</a></code> 
         </dt>
         <dd>Format a shell command as a Markdown codeblock.</dd>
       </dl><dl><dt>
@@ -1289,11 +1354,11 @@ or <code>CONTRASTS_SOURCES</code> (<code>contrasts.yaml</code> config).</dd>
 
 
     <footer><div class="copyright">
-  <p></p><p>Developed by Jiri Novotny, Jan Kubovciak.</p>
+  <p></p><p>Developed by Jiri Novotny, Jan Kubovciak, Michal Kolar.</p>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.7.9000.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
   <p class="preferably">Using <a href="https://preferably.amirmasoudabdol.name/?source=footer" class="external-link">preferably</a> template.</p>
 </div>
 

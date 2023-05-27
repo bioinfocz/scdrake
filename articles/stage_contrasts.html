@@ -50,7 +50,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">scdrake</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.4.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.5.0</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -77,6 +77,7 @@
     <h6 class="dropdown-header" data-toc-skip>Guides</h6>
     <a class="dropdown-item" href="../articles/scdrake_docker.html">Using the Docker image</a>
     <a class="dropdown-item" href="../articles/scdrake_integration.html">02 Integration pipeline guide</a>
+    <a class="dropdown-item" href="../articles/scdrake_advanced.html">Advanced topics</a>
     <a class="dropdown-item" href="../articles/scdrake_extend.html">Extending the pipeline</a>
     <a class="dropdown-item" href="../articles/drake_basics.html">drake basics</a>
     <div class="dropdown-divider"></div>
@@ -84,7 +85,6 @@
     <a class="dropdown-item" href="../articles/pipeline_overview.html">Pipeline overview</a>
     <a class="dropdown-item" href="../articles/scdrake_faq.html">FAQ &amp; Howtos</a>
     <a class="dropdown-item" href="../articles/scdrake_cli.html">Command line interface</a>
-    <a class="dropdown-item" href="../articles/cluster_markers.html">Cluster markers</a>
     <a class="dropdown-item" href="../articles/scdrake_config.html">scdrake config internals</a>
     <a class="dropdown-item" href="../articles/scdrake_envvars.html">Environment variables</a>
     <div class="dropdown-divider"></div>
@@ -148,7 +148,7 @@
       <img src="" class="logo" alt=""><h1>Contrasts stage (`contrasts`)</h1>
             
             <h4 data-toc-skip class="date"><sup>Document generated:
-2023-01-30 11:58:10 UTC+0000</sup></h4>
+2023-05-27 08:46:41 UTC+0000</sup></h4>
       
       <small class="dont-index">Source: <a href="https://github.com/bioinfocz/scdrake/blob/mastervignettes/stage_contrasts.Rmd" class="external-link"><code>vignettes/stage_contrasts.Rmd</code></a></small>
       <div class="d-none name"><code>stage_contrasts.Rmd</code></div>
@@ -157,13 +157,44 @@
     
     
 <hr>
-<p>For a general overview of this stage see
-<code><a href="../articles/pipeline_overview.html">vignette("pipeline_overview")</a></code>.</p>
-<p>Cluster markers config is stored in <code>contrasts.yaml</code> file.
-Location of this file is different for the single-sample and integration
-pipelines. As for the <a href="config_pipeline.html">pipeline
-config</a>, directory with this file is read from environment
-variables:</p>
+<div class="section level2 tabset">
+<h2 class="tabset" id="section"></h2>
+
+
+
+<ul class="nav nav-tabs" id="section" role="tablist">
+<li role="presentation" class="nav-item"><button data-bs-toggle="tab" data-bs-target="#overview" id="overview-tab" type="button" role="tab" aria-controls="overview" aria-selected="true" class="active nav-link">Overview</button></li>
+<li role="presentation" class="nav-item"><button data-bs-toggle="tab" data-bs-target="#config-parameters" id="config-parameters-tab" type="button" role="tab" aria-controls="config-parameters" aria-selected="false" class="nav-link">Config parameters</button></li>
+<li role="presentation" class="nav-item"><button data-bs-toggle="tab" data-bs-target="#outputs" id="outputs-tab" type="button" role="tab" aria-controls="outputs" aria-selected="false" class="nav-link">Outputs</button></li>
+</ul>
+<div class="tab-content">
+<div class="active  tab-pane" id="overview" role="tabpanel" aria-labelledby="overview-tab">
+
+<p>A stage for calculation, visualization and reporting of
+differentially expressed markers (“contrasts”). This stage is basically
+the same as the <code>cluster_markers</code> stage, but all output is
+related to individual comparisons of levels of cell groupings. Hence
+“contrasts”, a term known from bulk RNA-seq where sample groups are
+compared -&gt; they are put <em>in contrast</em>.</p>
+<p>⚙️ Config files: <code>config/single_sample/contrasts.yaml</code>,
+<code>config/integration/contrasts.yaml</code></p>
+<p>📋 HTML report target (in <code>config/pipeline.yaml</code>):
+<code>DRAKE_TARGETS: ["report_contrasts"]</code></p>
+<p><a href="https://onco.img.cas.cz/novotnyj/scdrake/single_sample/pbmc1k/contrasts/contrasts.html" class="external-link">📜
+Example report for PBMC 1k data</a> (<a href="https://github.com/bioinfocz/scdrake/blob/main/tests/testthat/run_pipeline_config_patches/single_sample_pbmc1k_full/contrasts.default.yaml" class="external-link">used
+config</a>)</p>
+<p><a href="https://onco.img.cas.cz/novotnyj/scdrake/integration/contrasts/contrasts.html" class="external-link">📜
+Example report for integrated data</a> (<a href="https://github.com/bioinfocz/scdrake/blob/main/tests/testthat/run_pipeline_config_patches/integration/contrasts.default.yaml" class="external-link">used
+config</a>)</p>
+</div>
+<div class="tab-pane" id="config-parameters" role="tabpanel" aria-labelledby="config-parameters-tab">
+
+<p>Cluster markers config is stored in the
+<code>config/single_sample/contrasts.yaml</code> and
+<code>config/integration/contrasts.yaml</code> files (the location of
+this file is different for the single-sample and integration pipelines).
+As for the <a href="config_pipeline.html">pipeline config</a>, directory
+with this file is read from environment variables:</p>
 <ul>
 <li>
 <code>SCDRAKE_SINGLE_SAMPLE_CONFIG_DIR</code> for the single-sample
@@ -172,15 +203,10 @@ pipeline.</li>
 <code>SCDRAKE_INTEGRATION_CONFIG_DIR</code> for the integration
 pipeline.</li>
 </ul>
-<p>and options named in lowercase are set upon <a href="https://github.com/bioinfocz/scdrake" class="external-link">scdrake</a>
-load or attach. Then the actual directory used depends on whether you
-run <code><a href="../reference/run_pipeline.html">run_single_sample()</a></code> /
-<code><a href="../reference/run_pipeline.html">run_single_sample_r()</a></code> or <code><a href="../reference/run_pipeline.html">run_integration()</a></code> /
+<p>Options named in lowercase are set upon <a href="https://github.com/bioinfocz/scdrake" class="external-link">scdrake</a> load
+or attach. Then the actual directory used depends on whether you run
+<code><a href="../reference/run_pipeline.html">run_single_sample_r()</a></code> or
 <code><a href="../reference/run_pipeline.html">run_integration_r()</a></code>.</p>
-<hr>
-<div class="section level2">
-<h2 id="config-parameters">Config parameters<a class="anchor" aria-label="anchor" href="#config-parameters"></a>
-</h2>
 <p>Parameters for this stage are almost identical to those for
 <code>cluster_markers</code> stage (see
 <code><a href="../articles/stage_cluster_markers.html">vignette("stage_cluster_markers")</a></code>). You just need to
@@ -189,25 +215,32 @@ parameter names 🙂</p>
 <p>The different parameters are below.</p>
 <hr>
 <div class="sourceCode" id="cb1"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">CONTRASTS_SOURCES</span><span class="kw">:</span></span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="kw">-</span><span class="at"> </span><span class="fu">dea_cluster_louvain</span><span class="kw">:</span></span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">source_column</span><span class="kw">:</span><span class="at"> </span><span class="st">"cluster_graph_louvain"</span></span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">description</span><span class="kw">:</span><span class="at"> </span><span class="st">"DEA of some groups in graph-based clustering clustering (Louvain alg.)"</span></span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">contrasts</span><span class="kw">:</span></span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="kw">-</span><span class="at"> </span><span class="fu">target</span><span class="kw">:</span><span class="at"> </span><span class="st">"2"</span></span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="at">          </span><span class="fu">reference</span><span class="kw">:</span><span class="at"> </span><span class="st">"1"</span></span>
-<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="kw">-</span><span class="at"> </span><span class="fu">target</span><span class="kw">:</span><span class="at"> </span><span class="st">"3"</span></span>
-<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="at">          </span><span class="fu">reference</span><span class="kw">:</span><span class="at"> </span><span class="st">"2"</span></span>
-<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="at">          </span><span class="fu">name</span><span class="kw">:</span><span class="at"> </span><span class="st">"cl3_vs_cl4"</span></span>
-<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">dea_cluster_kmeans_kc_3</span><span class="kw">:</span></span>
-<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">source_column</span><span class="kw">:</span><span class="at"> </span><span class="st">"cluster_kmeans_kc_3_renamed"</span></span>
-<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">description</span><span class="kw">:</span><span class="at"> </span><span class="st">"DEA of all groups in k-means clustering (k = 3)"</span></span>
-<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">contrasts</span><span class="kw">:</span><span class="at"> </span><span class="st">"all"</span></span></code></pre></div>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="kw">-</span><span class="at"> </span><span class="fu">dea_cluster_int_graph_louvain_r0.4</span><span class="kw">:</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">source_column</span><span class="kw">:</span><span class="at"> </span><span class="st">"cluster_int_graph_louvain_r0.4"</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">description</span><span class="kw">:</span><span class="at"> </span><span class="st">"DEA of all groups in graph-based clustering (Louvain alg. with r = 0.4) with blocking on batch"</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">contrasts</span><span class="kw">:</span><span class="at"> </span><span class="st">"all"</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">dea_cluster_int_graph_louvain_r0.8</span><span class="kw">:</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="at">     </span><span class="fu">source_column</span><span class="kw">:</span><span class="at"> </span><span class="st">"cluster_int_graph_louvain_r0.8"</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="at">     </span><span class="fu">description</span><span class="kw">:</span><span class="at"> </span><span class="st">"DEA of some groups in graph-based clustering (Louvain alg. with r = 0.8)"</span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="at">     </span><span class="fu">contrasts</span><span class="kw">:</span></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="at">       </span><span class="kw">-</span><span class="at"> </span><span class="fu">target</span><span class="kw">:</span><span class="at"> </span><span class="st">"2"</span></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a><span class="at">         </span><span class="fu">reference</span><span class="kw">:</span><span class="at"> </span><span class="st">"1"</span></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a><span class="at">       </span><span class="kw">-</span><span class="at"> </span><span class="fu">target</span><span class="kw">:</span><span class="at"> </span><span class="st">"3"</span></span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a><span class="at">         </span><span class="fu">reference</span><span class="kw">:</span><span class="at"> </span><span class="st">"2"</span></span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a><span class="at">         </span><span class="fu">name</span><span class="kw">:</span><span class="at"> </span><span class="st">"cl3_vs_cl4"</span></span></code></pre></div>
 <p><strong>Type:</strong> list of named lists</p>
 <p>This parameter is similar to <code>CLUSTER_MARKERS_SOURCES</code>,
 but an additional parameter <code>contrasts</code> is used. It is used
 to specify which levels in <code>source_column</code> will be compared
 (differential expression).</p>
 <ul>
+<li>If <code>"all"</code>, all combinations of levels in
+<code>source_column</code> will be compared. For example, if
+<code>source_column</code> is <code>"cluster_kmeans_k3"</code> (k-means
+with <code>k = 3</code>), it contains three levels, and the following
+comparisons (contrasts) will be made: <code>1_vs_2</code>,
+<code>1_vs_3</code>, and <code>2_vs_3</code>. Note that it could lead to
+an excessive amount of comparisons for graph-based clustering.</li>
 <li>If list of lists, the following character scalar items can/must be
 set:
 <ul>
@@ -222,12 +255,6 @@ set:
 specified, will be created as <code>{target}_vs_{reference}</code>.</li>
 </ul>
 </li>
-<li>If <code>"all"</code>, all combinations of levels in
-<code>source_column</code> will be compared. For example, if
-<code>source_column</code> is <code>"cluster_kmeans_kc_3"</code>
-(k-means with <code>k = 3</code>), it contains three levels, and the
-following comparisons (contrasts) will be made: <code>1_vs_2</code>,
-<code>1_vs_3</code>, and <code>2_vs_3</code>.</li>
 </ul>
 <hr>
 <p><code>CONTRASTS_SOURCES_DEFAULTS</code></p>
@@ -244,9 +271,8 @@ values are used for them internally:</p>
 </ul>
 <hr>
 </div>
-<div class="section level2">
-<h2 id="targets">Targets<a class="anchor" aria-label="anchor" href="#targets"></a>
-</h2>
+<div class="tab-pane" id="outputs" role="tabpanel" aria-labelledby="outputs-tab">
+
 <p>Here you can find description of the most important targets for this
 stage. However, for a full overview, you have to inspect the <a href="https://github.com/bioinfocz/scdrake/blob/main/R/plans_common.R" class="external-link">source
 code</a> of the <code><a href="../reference/get_subplan_common.html">get_contrasts_subplan()</a></code> function.</p>
@@ -255,24 +281,24 @@ those in the stage <code>cluster_markers</code> after replacing
 <code>cluster_markers</code> with <code>contrasts</code> (with few
 exceptions, see below). Please, refer to
 <code><a href="../articles/stage_cluster_markers.html">vignette("stage_cluster_markers")</a></code>.</p>
-<div class="section level3">
-<h3 id="singlecellexperiment-objects-sce">
+<div class="section level4">
+<h4 id="singlecellexperiment-objects-sce">
 <code>SingleCellExperiment</code> objects (SCE)<a class="anchor" aria-label="anchor" href="#singlecellexperiment-objects-sce"></a>
-</h3>
+</h4>
 <p><code>sce_dimred_contrasts</code>, <code>sce_final_contrasts</code>,
 <code>sce_contrasts</code></p>
 </div>
-<div class="section level3">
-<h3 id="tibbles-with-parameters">Tibbles with parameters<a class="anchor" aria-label="anchor" href="#tibbles-with-parameters"></a>
-</h3>
+<div class="section level4">
+<h4 id="tibbles-with-parameters">Tibbles with parameters<a class="anchor" aria-label="anchor" href="#tibbles-with-parameters"></a>
+</h4>
 <p><code>contrasts_params</code>, <code>contrasts_test_params</code>,
 <code>contrasts_heatmap_params</code>,
 <code>contrasts_plot_params</code>,
 <code>contrasts_dimred_plot_params</code></p>
 </div>
-<div class="section level3">
-<h3 id="tibbles-with-cluster-markers-contrasts-test-results">Tibbles with cluster markers (contrasts) test results<a class="anchor" aria-label="anchor" href="#tibbles-with-cluster-markers-contrasts-test-results"></a>
-</h3>
+<div class="section level4">
+<h4 id="tibbles-with-cluster-markers-contrasts-test-results">Tibbles with cluster markers (contrasts) test results<a class="anchor" aria-label="anchor" href="#tibbles-with-cluster-markers-contrasts-test-results"></a>
+</h4>
 <p><code>contrasts_raw</code>: a tibble, same as
 <code>cluster_markers_raw</code>. Used to extract results for contrasts
 of interest.</p>
@@ -289,29 +315,31 @@ normalized to snake_case.</p>
 <p><code>contrasts_for_tables</code>: same as
 <code>contrasts_out</code>, but <code>markers</code> dataframes are
 prepared for HTML output. See <code>cluster_markers_for_tables</code> in
-<code><a href="../articles/cluster_markers.html">vignette("cluster_markers")</a></code>.</p>
+<code><a href="../articles/stage_cluster_markers.html">vignette("stage_cluster_markers")</a></code>.</p>
 </div>
-<div class="section level3">
-<h3 id="heatmaps">Heatmaps<a class="anchor" aria-label="anchor" href="#heatmaps"></a>
-</h3>
+<div class="section level4">
+<h4 id="heatmaps">Heatmaps<a class="anchor" aria-label="anchor" href="#heatmaps"></a>
+</h4>
 <p><code>seu_for_contrasts_heatmaps</code>,
 <code>contrasts_heatmaps_df</code></p>
 </div>
-<div class="section level3">
-<h3 id="marker-plots">Marker plots<a class="anchor" aria-label="anchor" href="#marker-plots"></a>
-</h3>
+<div class="section level4">
+<h4 id="marker-plots">Marker plots<a class="anchor" aria-label="anchor" href="#marker-plots"></a>
+</h4>
 <p><code>contrasts_plots_top</code></p>
 </div>
-<div class="section level3">
-<h3 id="dimensionality-reduction-plots">Dimensionality reduction plots<a class="anchor" aria-label="anchor" href="#dimensionality-reduction-plots"></a>
-</h3>
+<div class="section level4">
+<h4 id="dimensionality-reduction-plots">Dimensionality reduction plots<a class="anchor" aria-label="anchor" href="#dimensionality-reduction-plots"></a>
+</h4>
 <p><code>contrasts_dimred_plots</code></p>
 </div>
-<div class="section level3">
-<h3 id="other-targets">Other targets<a class="anchor" aria-label="anchor" href="#other-targets"></a>
-</h3>
+<div class="section level4">
+<h4 id="other-targets">Other targets<a class="anchor" aria-label="anchor" href="#other-targets"></a>
+</h4>
 <p><code>config_contrasts</code>: a list holding parameters for this
 stage.</p>
+</div>
+</div>
 </div>
 </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
@@ -322,12 +350,12 @@ stage.</p>
 
     <footer><div class="copyright">
   <p></p>
-<p>Developed by Jiri Novotny, Jan Kubovciak.</p>
+<p>Developed by Jiri Novotny, Jan Kubovciak, Michal Kolar.</p>
 </div>
 
 <div class="pkgdown">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.7.9000.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
   <p class="preferably">Using <a href="https://preferably.amirmasoudabdol.name/?source=footer" class="external-link">preferably</a> template.</p>
 </div>
 

@@ -28,7 +28,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">scdrake</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.4.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.5.0</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -54,6 +54,7 @@
     <h6 class="dropdown-header" data-toc-skip>Guides</h6>
     <a class="dropdown-item" href="../articles/scdrake_docker.html">Using the Docker image</a>
     <a class="dropdown-item" href="../articles/scdrake_integration.html">02 Integration pipeline guide</a>
+    <a class="dropdown-item" href="../articles/scdrake_advanced.html">Advanced topics</a>
     <a class="dropdown-item" href="../articles/scdrake_extend.html">Extending the pipeline</a>
     <a class="dropdown-item" href="../articles/drake_basics.html">drake basics</a>
     <div class="dropdown-divider"></div>
@@ -61,7 +62,6 @@
     <a class="dropdown-item" href="../articles/pipeline_overview.html">Pipeline overview</a>
     <a class="dropdown-item" href="../articles/scdrake_faq.html">FAQ &amp; Howtos</a>
     <a class="dropdown-item" href="../articles/scdrake_cli.html">Command line interface</a>
-    <a class="dropdown-item" href="../articles/cluster_markers.html">Cluster markers</a>
     <a class="dropdown-item" href="../articles/scdrake_config.html">scdrake config internals</a>
     <a class="dropdown-item" href="../articles/scdrake_envvars.html">Environment variables</a>
     <div class="dropdown-divider"></div>
@@ -197,15 +197,21 @@ which are not loaded (<code><a href="https://docs.ropensci.org/drake/reference/r
     <p>If you are currently working within a <code>scdrake</code> project, you can review the Rmd files in the <code>Rmd/</code> directory.</p>
 <p>This is a list of Rmd files currently bundled with the <code>scdrake</code> package:</p>
 <p></p><div class="sourceCode r"><pre><code><span><span class="fu">fs</span><span class="fu">::</span><span class="fu"><a href="https://fs.r-lib.org/reference/dir_tree.html" class="external-link">dir_tree</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"Rmd"</span>, package <span class="op">=</span> <span class="st">"scdrake"</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="co">#&gt; /home/rstudio/scdrake/inst/Rmd</span></span>
+<span><span class="co">#&gt; /home/rstudio/scdrake_source/inst/Rmd</span></span>
 <span><span class="co">#&gt; +-- common</span></span>
 <span><span class="co">#&gt; |   +-- _footer.Rmd</span></span>
 <span><span class="co">#&gt; |   +-- _header.Rmd</span></span>
 <span><span class="co">#&gt; |   +-- cluster_markers.Rmd</span></span>
 <span><span class="co">#&gt; |   +-- cluster_markers_table_template.Rmd</span></span>
+<span><span class="co">#&gt; |   +-- clustering</span></span>
+<span><span class="co">#&gt; |   |   +-- cluster_graph_leiden.Rmd</span></span>
+<span><span class="co">#&gt; |   |   +-- cluster_graph_louvain.Rmd</span></span>
+<span><span class="co">#&gt; |   |   +-- cluster_graph_walktrap.Rmd</span></span>
+<span><span class="co">#&gt; |   |   +-- cluster_kmeans.Rmd</span></span>
+<span><span class="co">#&gt; |   |   +-- cluster_sc3.Rmd</span></span>
+<span><span class="co">#&gt; |   |   \-- clustering.Rmd</span></span>
 <span><span class="co">#&gt; |   +-- contrasts.Rmd</span></span>
 <span><span class="co">#&gt; |   +-- contrasts_table_template.Rmd</span></span>
-<span><span class="co">#&gt; |   +-- dimred_plots.Rmd</span></span>
 <span><span class="co">#&gt; |   \-- stylesheet.css</span></span>
 <span><span class="co">#&gt; +-- integration</span></span>
 <span><span class="co">#&gt; |   +-- 01_integration.Rmd</span></span>
@@ -274,11 +280,11 @@ because <code>generate_stage_report()</code> also sets some temporary options an
 
 
     <footer><div class="copyright">
-  <p></p><p>Developed by Jiri Novotny, Jan Kubovciak.</p>
+  <p></p><p>Developed by Jiri Novotny, Jan Kubovciak, Michal Kolar.</p>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.7.9000.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
   <p class="preferably">Using <a href="https://preferably.amirmasoudabdol.name/?source=footer" class="external-link">preferably</a> template.</p>
 </div>
 

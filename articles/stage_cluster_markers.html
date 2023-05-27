@@ -50,7 +50,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">scdrake</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.4.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.5.0</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -77,6 +77,7 @@
     <h6 class="dropdown-header" data-toc-skip>Guides</h6>
     <a class="dropdown-item" href="../articles/scdrake_docker.html">Using the Docker image</a>
     <a class="dropdown-item" href="../articles/scdrake_integration.html">02 Integration pipeline guide</a>
+    <a class="dropdown-item" href="../articles/scdrake_advanced.html">Advanced topics</a>
     <a class="dropdown-item" href="../articles/scdrake_extend.html">Extending the pipeline</a>
     <a class="dropdown-item" href="../articles/drake_basics.html">drake basics</a>
     <div class="dropdown-divider"></div>
@@ -84,7 +85,6 @@
     <a class="dropdown-item" href="../articles/pipeline_overview.html">Pipeline overview</a>
     <a class="dropdown-item" href="../articles/scdrake_faq.html">FAQ &amp; Howtos</a>
     <a class="dropdown-item" href="../articles/scdrake_cli.html">Command line interface</a>
-    <a class="dropdown-item" href="../articles/cluster_markers.html">Cluster markers</a>
     <a class="dropdown-item" href="../articles/scdrake_config.html">scdrake config internals</a>
     <a class="dropdown-item" href="../articles/scdrake_envvars.html">Environment variables</a>
     <div class="dropdown-divider"></div>
@@ -148,7 +148,7 @@
       <img src="" class="logo" alt=""><h1>Cluster markers stage (`cluster_markers`)</h1>
             
             <h4 data-toc-skip class="date"><sup>Document generated:
-2023-01-30 11:58:08 UTC+0000</sup></h4>
+2023-05-27 08:46:38 UTC+0000</sup></h4>
       
       <small class="dont-index">Source: <a href="https://github.com/bioinfocz/scdrake/blob/mastervignettes/stage_cluster_markers.Rmd" class="external-link"><code>vignettes/stage_cluster_markers.Rmd</code></a></small>
       <div class="d-none name"><code>stage_cluster_markers.Rmd</code></div>
@@ -157,32 +157,194 @@
     
     
 <hr>
-<p>For a general overview of this stage see
-<code><a href="../articles/pipeline_overview.html">vignette("pipeline_overview")</a></code>.</p>
-<p>Cluster markers config is stored in <code>cluster_markers.yaml</code>
-file. Location of this file is different for the single-sample and
-integration pipelines. As for the <a href="config_pipeline.html">pipeline config</a>, directory with this
-file is read from environment variables:</p>
+<div class="section level2 tabset">
+<h2 class="tabset" id="section"></h2>
+
+
+
+<ul class="nav nav-tabs" id="section" role="tablist">
+<li role="presentation" class="nav-item"><button data-bs-toggle="tab" data-bs-target="#overview" id="overview-tab" type="button" role="tab" aria-controls="overview" aria-selected="true" class="active nav-link">Overview</button></li>
+<li role="presentation" class="nav-item"><button data-bs-toggle="tab" data-bs-target="#config-parameters" id="config-parameters-tab" type="button" role="tab" aria-controls="config-parameters" aria-selected="false" class="nav-link">Config parameters</button></li>
+<li role="presentation" class="nav-item"><button data-bs-toggle="tab" data-bs-target="#outputs" id="outputs-tab" type="button" role="tab" aria-controls="outputs" aria-selected="false" class="nav-link">Outputs</button></li>
+</ul>
+<div class="tab-content">
+<div class="active  tab-pane" id="overview" role="tabpanel" aria-labelledby="overview-tab">
+
+<p>A stage for calculation, visualization and reporting of cell cluster
+markers (“global markers”). This stage is common to both single-sample
+and integration pipelines.</p>
+<p>⚙️ Config files:
+<code>config/single_sample/cluster_markers.yaml</code>,
+<code>config/integration/cluster_markers.yaml</code></p>
+<p>📋 HTML report target (in <code>config/pipeline.yaml</code>):
+<code>DRAKE_TARGETS: ["report_cluster_markers"]</code></p>
+<p><a href="https://onco.img.cas.cz/novotnyj/scdrake/single_sample/pbmc1k/cluster_markers/cluster_markers.html" class="external-link">📜
+Example report for PBMC 1k data</a> (<a href="https://github.com/bioinfocz/scdrake/blob/main/tests/testthat/run_pipeline_config_patches/single_sample_pbmc1k_full/cluster_markers.default.yaml" class="external-link">used
+config</a>)</p>
+<p><a href="https://onco.img.cas.cz/novotnyj/scdrake/integration/cluster_markers/cluster_markers.html" class="external-link">📜
+Example report for integrated data</a> (<a href="https://github.com/bioinfocz/scdrake/blob/main/tests/testthat/run_pipeline_config_patches/integration/cluster_markers.default.yaml" class="external-link">used
+config</a>)</p>
+<p>🪜 Structure</p>
+<ul>
+<li>
+<a href="https://bioconductor.org/books/3.15/OSCA.basic/marker-detection.html" class="external-link">Calculation
+of cluster markers</a>: any categorical grouping of cells can be used,
+including those manually defined based on the existing groups from
+clustering (but not only). See below for more details about marker
+calculation.</li>
+<li>Generation of heatmaps and plots. To reduce the size of heatmaps and
+number of plots, you can control a number of top N markers taken by a
+chosen metric (FDR, LFC, etc.). Only these top N markers will be
+displayed in heatmaps, and plots made for them. This can be specified
+for each cell grouping and test type.
+<ul>
+<li>Marker plots are composed of:
+<ul>
+<li>Two plots of a dimred: one colored by a clustering, and second
+colored by expression of a marker (feature plot).</li>
+<li>A plot of summarized marker expression: proportion of cells
+expressing a marker, colored by average expression.</li>
+<li>A violin plot: expression of a marker in each cluster.</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Generation of marker tables for each cell grouping and each of its
+levels.</li>
+</ul>
+<hr>
+<div class="section level4">
+<h4 id="marker-calculation-and-interpretation">Marker calculation and interpretation<a class="anchor" aria-label="anchor" href="#marker-calculation-and-interpretation"></a>
+</h4>
+<p>Taken from <a href="https://bioconductor.org/books/3.15/OSCA.basic/marker-detection.html" class="external-link">OSCA</a>,
+slightly modified:</p>
+<blockquote>
+<p>To interpret our clustering results, we identify the genes that drive
+separation between clusters. These marker genes allow us to assign
+biological meaning to each cluster based on their functional annotation.
+In the most obvious case, the marker genes for each cluster are a priori
+associated with particular cell types, allowing us to treat the
+clustering as a proxy for cell type identity. The same principle can be
+applied to discover more subtle differences between clusters (e.g.,
+changes in activation or differentiation state) based on the behavior of
+genes in the affected pathways.</p>
+</blockquote>
+<blockquote>
+<p>Identification of marker genes is usually based around the
+retrospective detection of differential expression between clusters.
+Genes that are more strongly DE are more likely to have caused separate
+clustering of cells in the first place. Several different statistical
+tests are available to quantify the differences in expression profiles,
+and different approaches can be used to consolidate test results into a
+single ranking of genes for each cluster. These choices parametrize the
+theoretical differences between the various marker detection
+strategies.</p>
+</blockquote>
+<div class="section level5">
+<h5 id="used-statistical-tests">Used statistical tests<a class="anchor" aria-label="anchor" href="#used-statistical-tests"></a>
+</h5>
+<p>For each cell grouping and gene, three distinct, adjustable
+statistical tests are computed through
+<code><a href="https://rdrr.io/pkg/scran/man/findMarkers.html" class="external-link">scran::findMarkers()</a></code>:</p>
+<ul>
+<li>t-test (<code><a href="https://rdrr.io/pkg/scran/man/pairwiseTTests.html" class="external-link">scran::pairwiseTTests()</a></code>): test for difference
+in mean expression.</li>
+<li>
+<a href="https://en.wikipedia.org/wiki/Wilcoxon_signed-rank_test" class="external-link">Wilcoxon
+signed-rank test</a> (<code><a href="https://rdrr.io/pkg/scran/man/pairwiseWilcox.html" class="external-link">scran::pairwiseWilcox()</a></code>): test for
+difference in median expression (roughly speaking).</li>
+<li>Binomial test (<code><a href="https://rdrr.io/pkg/scran/man/pairwiseBinom.html" class="external-link">scran::pairwiseBinom()</a></code>): test the null
+hypothesis that the proportion of cells expressing a gene is the same
+between groups.</li>
+</ul>
+<p>These tests are performed in a <a href="https://bioconductor.org/books/3.15/OSCA.basic/marker-detection.html#scoring-markers-by-pairwise-comparisons" class="external-link">pairwise
+fashion</a> within each grouping, i.e. each level of the grouping is
+tested against each other.</p>
+<p>Example: three pairwise tests of each type are computed for k-means
+clustering with <span class="math inline">\(k = 3\)</span>:</p>
+<ul>
+<li>Cluster 1 vs. Cluster 2</li>
+<li>Cluster 1 vs. Cluster 3</li>
+<li>Cluster 2 vs. Cluster 3</li>
+</ul>
+<p>The overall p-values, false discovery rate (FDR) and effect sizes
+(log2 fold change (LFC) for t- and binomial test, and Area Under Curve
+for Wilcoxon test) are calculated for the cell grouping from its all
+pairwise tests (<code><a href="https://rdrr.io/pkg/scran/man/combineMarkers.html" class="external-link">scran::combineMarkers()</a></code>).</p>
+</div>
+<div class="section level5">
+<h5 id="narrowing-down-the-number-of-cluster-markers">Narrowing down the number of cluster markers<a class="anchor" aria-label="anchor" href="#narrowing-down-the-number-of-cluster-markers"></a>
+</h5>
+<p>A more or less stringent approach can be used to narrow down the
+number of cluster markers, based on results from individual pairwise
+tests. This will also affect the combined p-value and FDR:</p>
+<ul>
+<li>
+<a href="https://bioconductor.org/books/3.12/OSCA/marker-detection.html#looking-for-any-differences" class="external-link">Looking
+for any differences</a>: for each level (cluster) of a grouping, take
+top markers by p-value from each pairwise test. This will be shown as
+<code>Top</code> column in marker table. Example: the set of all genes
+with <code>Top</code> values of 1 contains the gene with the lowest
+p-value from each comparison.</li>
+<li>
+<a href="https://bioconductor.org/books/3.12/OSCA/marker-detection.html#finding-cluster-specific-markers" class="external-link">Finding
+cluster-specific markers</a>: a more stringent approach only considering
+genes that are differentially expressed in all pairwise comparisons
+involving the cluster of interest. For this purpose is used an
+intersection-union test where the combined p-value for each gene is the
+maximum of the p-values from all pairwise comparisons. A gene will only
+achieve a low combined p-value if it is strongly DE in all comparisons
+to other clusters.</li>
+<li>
+<a href="https://bioconductor.org/books/3.12/OSCA/marker-detection.html#balancing-stringency-and-generality" class="external-link">Balancing
+stringency and generality</a>: the Holm-Bonferroni correction is applied
+on pairwise p-values and the middle-most value is taken as the combined
+p-value. This effectively tests the global null hypothesis that at least
+50% of the individual pairwise comparisons exhibit no differential
+expression.</li>
+</ul>
+<p>This can be controlled via the <code>PVAL_TYPE</code> parameter.</p>
+</div>
+<div class="section level5">
+<h5 id="handling-blocking-factors">Handling blocking factors<a class="anchor" aria-label="anchor" href="#handling-blocking-factors"></a>
+</h5>
+<p><a href="https://bioconductor.org/books/3.12/OSCA/marker-detection.html#marker-batch" class="external-link">Blocking
+factors</a> (e.g. batch effect, sex differences, cell cycle phases) can
+be handled by further nesting. For that, each pairwise test is performed
+separately in each level of the blocking factor. Then, p-values from
+individual levels’ tests are combined, and the final combined p-values
+are obtained by the method of choice (see above).</p>
+<p>This can be controlled via the <code>BLOCK_COLUMN</code>
+parameter.</p>
+<hr>
+</div>
+</div>
+</div>
+<div class="tab-pane" id="config-parameters" role="tabpanel" aria-labelledby="config-parameters-tab">
+
+<p>Cluster markers config is stored in the
+<code>config/single_sample/cluster_markers.yaml</code> and
+<code>config/integration/cluster_markers.yaml</code> files (the location
+of this file is different for the single-sample and integration
+pipelines). As for the <a href="config_pipeline.html">pipeline
+config</a>, directory with this file is read from environment
+variables:</p>
 <ul>
 <li>
 <code>SCDRAKE_SINGLE_SAMPLE_CONFIG_DIR</code> for the single-sample
-pipeline.</li>
+pipeline</li>
 <li>
 <code>SCDRAKE_INTEGRATION_CONFIG_DIR</code> for the integration
-pipeline.</li>
+pipeline</li>
 </ul>
-<p>and options named in lowercase are set upon <a href="https://github.com/bioinfocz/scdrake" class="external-link">scdrake</a>
-load or attach. Then the actual directory used depends on whether you
-run <code><a href="../reference/run_pipeline.html">run_single_sample()</a></code> /
-<code><a href="../reference/run_pipeline.html">run_single_sample_r()</a></code> or <code><a href="../reference/run_pipeline.html">run_integration()</a></code> /
+<p>Options named in lowercase are set upon <a href="https://github.com/bioinfocz/scdrake" class="external-link">scdrake</a> load
+or attach. Then the actual directory used depends on whether you run
+<code><a href="../reference/run_pipeline.html">run_single_sample_r()</a></code> or
 <code><a href="../reference/run_pipeline.html">run_integration_r()</a></code>.</p>
 <hr>
-<div class="section level2">
-<h2 id="config-parameters">Config parameters<a class="anchor" aria-label="anchor" href="#config-parameters"></a>
-</h2>
-<div class="section level3">
-<h3 id="cluster-markers">Cluster markers<a class="anchor" aria-label="anchor" href="#cluster-markers"></a>
-</h3>
+<div class="section level4">
+<h4 id="cluster-markers">Cluster markers<a class="anchor" aria-label="anchor" href="#cluster-markers"></a>
+</h4>
 <div class="sourceCode" id="cb1"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">CLUSTER_MARKERS_SOURCES_DEFAULTS</span><span class="kw">:</span></span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">COMMON_PARAMS</span><span class="kw">:</span></span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">PLOT_DIMREDS</span><span class="kw">:</span><span class="at"> </span><span class="kw">[</span><span class="st">"umap"</span><span class="kw">]</span></span>
@@ -259,8 +421,7 @@ threshold to be tested against.</li>
 combined across pairwise comparisons for a given group/cluster. If
 <code>"any"</code>, <code>top</code> column will be present in cluster
 markers tables. By this parameter you can control the stringency of
-marker detection - see <code><a href="../articles/cluster_markers.html">vignette("cluster_markers")</a></code> for more
-details.</li>
+marker detection.</li>
 <li>
 <code>MIN_PROP</code> (numeric scalar: <code>&lt;0; 1&gt;</code>, or
 <code>null</code>): the minimum proportion of significant comparisons
@@ -314,12 +475,12 @@ markers.
 </ul>
 <hr>
 <div class="sourceCode" id="cb2"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">CLUSTER_MARKERS_SOURCES</span><span class="kw">:</span></span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="kw">-</span><span class="at"> </span><span class="fu">markers_cluster_int_kmeans_kc_4</span><span class="kw">:</span></span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">source_column</span><span class="kw">:</span><span class="at"> </span><span class="st">"cluster_int_kmeans_kc_4"</span></span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">description</span><span class="kw">:</span><span class="at"> </span><span class="st">"Cluster markers for k-means clustering (k = 4)"</span></span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">markers_cluster_int_kmeans_kc_3_batch_block</span><span class="kw">:</span></span>
-<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">source_column</span><span class="kw">:</span><span class="at"> </span><span class="st">"cluster_int_kmeans_kc_3_renamed"</span></span>
-<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">description</span><span class="kw">:</span><span class="at"> </span><span class="st">"Cluster markers for k-means clustering (k = 3) with blocking on batch"</span></span></code></pre></div>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="kw">-</span><span class="at"> </span><span class="fu">markers_cluster_graph_leiden_r0.4</span><span class="kw">:</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">source_column</span><span class="kw">:</span><span class="at"> </span><span class="st">"cluster_graph_leiden_r0.4"</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">description</span><span class="kw">:</span><span class="at"> </span><span class="st">"Cluster markers for Leiden clustering (r = 0.4)"</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">markers_cluster_graph_leiden_r0.8</span><span class="kw">:</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">source_column</span><span class="kw">:</span><span class="at"> </span><span class="st">"cluster_graph_leiden_r0.8"</span></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">description</span><span class="kw">:</span><span class="at"> </span><span class="st">"Cluster markers for Leiden clustering (r = 0.8)"</span></span></code></pre></div>
 <p><strong>Type:</strong> list of named lists</p>
 <p>This parameter is used to specify cell groupings (“sources”) in which
 markers are searched for, and test and output parameters. You can use
@@ -329,17 +490,17 @@ any categorical column - results of cell clustering, <code>phase</code>
 <code>02_int_clustering.yaml</code>. See <a href="#clustering">clustering targets</a> for a list of clustering
 names.</p>
 <p>Let’s examine the first entry
-(<code>markers_cluster_int_kmeans_kc_4</code>):</p>
+(<code>markers_cluster_graph_leiden_r0.4</code>):</p>
 <ul>
 <li>
-<code>markers_cluster_int_kmeans_kc_4</code>: name of this
+<code>markers_cluster_graph_leiden_r0.4</code>: name of this
 comparison. You can use whatever name you want.</li>
 <li>
-<code>source_column: "cluster_int_kmeans_kc_4"</code> (character
+<code>source_column: "cluster_graph_leiden_r0.4"</code> (character
 scalar): which cell grouping to use for computation of cell
 markers.</li>
 <li>
-<code>description: "Cluster markers for k-means clustering (k = 4)"</code>
+<code>description: "Cluster markers for Leiden clustering (r = 0.4)"</code>
 (character scalar): description of this comparison, will appear in
 reports and plots.</li>
 </ul>
@@ -347,9 +508,9 @@ reports and plots.</li>
 <code>CLUSTER_MARKERS_SOURCES_DEFAULTS</code> (by using lowercase
 names). For example, let’s consider the following scenario:</p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">CLUSTER_MARKERS_SOURCES</span><span class="kw">:</span></span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="kw">-</span><span class="at"> </span><span class="fu">markers_cluster_kmeans_kc_4</span><span class="kw">:</span></span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">source_column</span><span class="kw">:</span><span class="at"> </span><span class="st">"cluster_kmeans_kc_4"</span></span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">description</span><span class="kw">:</span><span class="at"> </span><span class="st">"Cluster markers for k-means clustering (k = 4)"</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="kw">-</span><span class="at"> </span><span class="fu">markers_cluster_graph_leiden_r0.4</span><span class="kw">:</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">source_column</span><span class="kw">:</span><span class="at"> </span><span class="st">"cluster_graph_leiden_r0.4"</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">description</span><span class="kw">:</span><span class="at"> </span><span class="st">"Cluster markers for Leiden clustering (r = 0.4)"</span></span>
 <span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">common_params</span><span class="kw">:</span></span>
 <span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">plot_dimreds</span><span class="kw">:</span><span class="at"> </span><span class="kw">[</span><span class="st">"umap"</span><span class="kw">,</span><span class="at"> </span><span class="st">"pca"</span><span class="kw">]</span></span>
 <span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">params_t</span><span class="kw">:</span></span>
@@ -371,9 +532,9 @@ named lists” section in <code><a href="../articles/scdrake_config.html">vignet
 case, for compatibility reasons, empty files will be created.</p>
 <hr>
 </div>
-<div class="section level3">
-<h3 id="input-files">Input files<a class="anchor" aria-label="anchor" href="#input-files"></a>
-</h3>
+<div class="section level4">
+<h4 id="input-files">Input files<a class="anchor" aria-label="anchor" href="#input-files"></a>
+</h4>
 <div class="sourceCode" id="cb5"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">CLUSTER_MARKERS_TABLE_TEMPLATE_RMD_FILE</span><span class="kw">:</span><span class="at"> </span><span class="st">"Rmd/common/cluster_markers_table_template.Rmd"</span></span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="fu">CLUSTER_MARKERS_REPORT_RMD_FILE</span><span class="kw">:</span><span class="at"> </span><span class="st">"Rmd/common/cluster_markers.Rmd"</span></span></code></pre></div>
 <p><strong>Type:</strong> character scalar</p>
@@ -381,9 +542,9 @@ case, for compatibility reasons, empty files will be created.</p>
 stage.</p>
 <hr>
 </div>
-<div class="section level3">
-<h3 id="output-files">Output files<a class="anchor" aria-label="anchor" href="#output-files"></a>
-</h3>
+<div class="section level4">
+<h4 id="output-files">Output files<a class="anchor" aria-label="anchor" href="#output-files"></a>
+</h4>
 <div class="sourceCode" id="cb6"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">CLUSTER_MARKERS_BASE_OUT_DIR</span><span class="kw">:</span><span class="at"> </span><span class="st">"cluster_markers"</span></span></code></pre></div>
 <p><strong>Type:</strong> character scalar</p>
 <p>A path to base output directory for this stage. It will be created
@@ -399,23 +560,21 @@ config.</p>
 <p>Names of files and directories created under
 <code>CLUSTER_MARKERS_BASE_OUT_DIR</code>. Subdirectories are not
 allowed.</p>
-<hr>
 </div>
 </div>
-<div class="section level2">
-<h2 id="targets">Targets<a class="anchor" aria-label="anchor" href="#targets"></a>
-</h2>
+<div class="tab-pane" id="outputs" role="tabpanel" aria-labelledby="outputs-tab">
+
 <p>Here you can find description of the most important targets for this
 stage. However, for a full overview, you have to inspect the <a href="https://github.com/bioinfocz/scdrake/blob/main/R/plans_common.R" class="external-link">source
 code</a> of the <code><a href="../reference/get_subplan_common.html">get_cluster_markers_subplan()</a></code> function.</p>
-<div class="section level3">
-<h3 id="singlecellexperiment-objects">
+<div class="section level4">
+<h4 id="singlecellexperiment-objects">
 <code>SingleCellExperiment</code> objects<a class="anchor" aria-label="anchor" href="#singlecellexperiment-objects"></a>
-</h3>
+</h4>
 <p><code>sce_dimred_cluster_markers</code>,
 <code>sce_final_cluster_markers</code>: SCE objects with computed
 dimensionality reductions. Used for generation of marker plots and
-heatmaps.</p>
+heatmaps</p>
 <p><code>sce_cluster_markers</code>: Final SCE object with cell
 clusterings from the <code>02_norm_clustering</code> (single-sample
 pipeline) or <code>02_int_clustering</code> stage (integration
@@ -425,12 +584,13 @@ groupings which can be used for marker computation:</p>
 <code class="sourceCode R"><span><span class="fu">drake</span><span class="fu">::</span><span class="fu"><a href="https://docs.ropensci.org/drake/reference/readd.html" class="external-link">loadd</a></span><span class="op">(</span><span class="va">sce_final_cluster_markers</span><span class="op">)</span></span>
 <span><span class="fu">SingleCellExperiment</span><span class="fu">::</span><span class="fu">colData</span><span class="op">(</span><span class="va">sce_final_cluster_markers</span><span class="op">)</span></span></code></pre></div>
 </div>
-<div class="section level3">
-<h3 id="tibbles-with-parameters">Tibbles with parameters<a class="anchor" aria-label="anchor" href="#tibbles-with-parameters"></a>
-</h3>
-<p>Usually, each row of these tibbles is passed to a function.</p>
+<div class="section level4">
+<h4 id="tibbles-with-parameters">Tibbles with parameters<a class="anchor" aria-label="anchor" href="#tibbles-with-parameters"></a>
+</h4>
+<p>Usually, each row of these tibbles is passed to a function within the
+<a href="https://docs.ropensci.org/drake" class="external-link">drake</a> plan.</p>
 <p><code>cluster_markers_params</code>: all parameters for computation
-of cluster markers.</p>
+of cluster markers</p>
 <p>The following tibbles are derived from
 <code>cluster_markers_params</code>:
 <code>cluster_markers_test_params</code>,
@@ -438,9 +598,9 @@ of cluster markers.</p>
 <code>cluster_markers_plot_params</code>,
 <code>cluster_markers_dimred_plot_params</code></p>
 </div>
-<div class="section level3">
-<h3 id="tibbles-with-cluster-markers-test-results">Tibbles with cluster markers test results<a class="anchor" aria-label="anchor" href="#tibbles-with-cluster-markers-test-results"></a>
-</h3>
+<div class="section level4">
+<h4 id="tibbles-with-cluster-markers-test-results">Tibbles with cluster markers test results<a class="anchor" aria-label="anchor" href="#tibbles-with-cluster-markers-test-results"></a>
+</h4>
 <p><code>cluster_markers_raw</code>: this tibble has the same columns as
 <code>cluster_markers_test_params</code>, except the list column
 (<code>&lt;DataFrame&gt;</code>) <code>markers</code> with test results
@@ -455,7 +615,7 @@ changes made to the output of the former function.</p>
 <hr>
 <p><code>cluster_markers</code>: same as
 <code>cluster_markers_raw</code>, but for Wilcox tests, combined LFC is
-added to <code>DataFrame</code>s in <code>markers</code> column.</p>
+added to <code>DataFrame</code>s in <code>markers</code> column</p>
 <hr>
 <p><code>cluster_markers_processed</code>: same as
 <code>cluster_markers</code>, but <code>markers</code>
@@ -465,7 +625,7 @@ combined effect sizes. This way you can inspect the effect sizes of
 comparisons with all other levels.</p>
 <p><code>cluster_markers_out</code>: holds the same data as
 <code>cluster_markers_processed</code>, but <code>markers</code> are
-coerced to dataframes and column names are normalized to snake_case.</p>
+coerced to dataframes and column names are normalized to snake_case</p>
 <hr>
 <p><code>cluster_markers_for_tables</code>: a summarized tibble glued
 from <code>cluster_markers_out</code>,
@@ -475,9 +635,9 @@ from <code>cluster_markers_out</code>,
 e.g. there are <code>&lt;a&gt;</code> links to ENSEMBL or PDF files of
 marker plots.</p>
 </div>
-<div class="section level3">
-<h3 id="heatmaps">Heatmaps<a class="anchor" aria-label="anchor" href="#heatmaps"></a>
-</h3>
+<div class="section level4">
+<h4 id="heatmaps">Heatmaps<a class="anchor" aria-label="anchor" href="#heatmaps"></a>
+</h4>
 <p><code>seu_for_cluster_markers_heatmaps</code>: a <code>Seurat</code>
 object used to generate heatmaps through <code><a href="../reference/marker_heatmap.html">marker_heatmap()</a></code>
 (a wrapper around <code><a href="https://satijalab.org/seurat/reference/DoHeatmap.html" class="external-link">Seurat::DoHeatmap()</a></code>). In
@@ -486,10 +646,10 @@ counts transformed to z-score.</p>
 <hr>
 <p><code>cluster_markers_heatmaps_df</code>: a tibble derived from
 <code>cluster_markers_heatmaps_df</code>, but enriched with cluster
-markers test results.</p>
+markers test results</p>
 <p>Two heatmaps for each row in <code>cluster_markers_heatmaps_df</code>
 are made: one with log2 UMI counts, and second with the same values
-transformed to z-score.</p>
+transformed to z-score</p>
 <p>For storage reasons, heatmap objects are not saved as R objects, but
 only exported to PDF. However, you can obtain a tibble holding these
 objects with</p>
@@ -518,9 +678,9 @@ heatmaps (subsetted
 function (of which is <code><a href="../reference/marker_heatmaps_wrapper.html">marker_heatmaps_wrapper()</a></code> a
 wrapper).</p>
 </div>
-<div class="section level3">
-<h3 id="marker-plots">Marker plots<a class="anchor" aria-label="anchor" href="#marker-plots"></a>
-</h3>
+<div class="section level4">
+<h4 id="marker-plots">Marker plots<a class="anchor" aria-label="anchor" href="#marker-plots"></a>
+</h4>
 <p><code>cluster_markers_plots_top</code>: a tibble with markers for
 which plots will be made. See <code><a href="../reference/markers_plots_top.html">?markers_plots_top</a></code> for
 details.</p>
@@ -530,21 +690,23 @@ be used:</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/markers_plots_files.html">markers_plots_files</a></span><span class="op">(</span><span class="va">sce_dimred_cluster_markers</span>, <span class="va">cluster_markers_plots_top</span>, save <span class="op">=</span> <span class="cn">FALSE</span>, return_type <span class="op">=</span> <span class="st">"tibble"</span><span class="op">)</span></span></code></pre></div>
 <p>Similarly, the actual plotting function can be used, see
-<code><a href="../reference/marker_plot.html">?marker_plot</a></code>.</p>
+<code><a href="../reference/marker_plot.html">?marker_plot</a></code></p>
 </div>
-<div class="section level3">
-<h3 id="dimensionality-reduction-plots">Dimensionality reduction plots<a class="anchor" aria-label="anchor" href="#dimensionality-reduction-plots"></a>
-</h3>
+<div class="section level4">
+<h4 id="dimensionality-reduction-plots">Dimensionality reduction plots<a class="anchor" aria-label="anchor" href="#dimensionality-reduction-plots"></a>
+</h4>
 <p><code>cluster_markers_dimred_plots</code>: a tibble with
 dimensionality reduction plots for each of <code>source_column</code> in
 the <code>CLUSTER_MARKERS_SOURCES</code> parameter and
-<code>PLOT_DIMREDS</code> in <code>COMMON_PARAMS</code>.</p>
+<code>PLOT_DIMREDS</code> in <code>COMMON_PARAMS</code></p>
 </div>
-<div class="section level3">
-<h3 id="other-targets">Other targets<a class="anchor" aria-label="anchor" href="#other-targets"></a>
-</h3>
+<div class="section level4">
+<h4 id="other-targets">Other targets<a class="anchor" aria-label="anchor" href="#other-targets"></a>
+</h4>
 <p><code>config_cluster_markers</code>: a list holding parameters for
-this stage.</p>
+this stage</p>
+</div>
+</div>
 </div>
 </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
@@ -555,12 +717,12 @@ this stage.</p>
 
     <footer><div class="copyright">
   <p></p>
-<p>Developed by Jiri Novotny, Jan Kubovciak.</p>
+<p>Developed by Jiri Novotny, Jan Kubovciak, Michal Kolar.</p>
 </div>
 
 <div class="pkgdown">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.7.9000.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
   <p class="preferably">Using <a href="https://preferably.amirmasoudabdol.name/?source=footer" class="external-link">preferably</a> template.</p>
 </div>
 

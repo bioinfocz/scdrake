@@ -16,7 +16,7 @@
     <loc>https://bioinfocz.github.io/scdrake/TODO.html</loc>
   </url>
   <url>
-    <loc>https://bioinfocz.github.io/scdrake/articles/cluster_markers.html</loc>
+    <loc>https://bioinfocz.github.io/scdrake/TODO_revisions.html</loc>
   </url>
   <url>
     <loc>https://bioinfocz.github.io/scdrake/articles/config_main.html</loc>
@@ -35,6 +35,9 @@
   </url>
   <url>
     <loc>https://bioinfocz.github.io/scdrake/articles/scdrake.html</loc>
+  </url>
+  <url>
+    <loc>https://bioinfocz.github.io/scdrake/articles/scdrake_advanced.html</loc>
   </url>
   <url>
     <loc>https://bioinfocz.github.io/scdrake/articles/scdrake_cli.html</loc>
@@ -151,9 +154,6 @@
     <loc>https://bioinfocz.github.io/scdrake/reference/cli.html</loc>
   </url>
   <url>
-    <loc>https://bioinfocz.github.io/scdrake/reference/cluster_kmeans_kc_fn.html</loc>
-  </url>
-  <url>
     <loc>https://bioinfocz.github.io/scdrake/reference/cluster_markers_fn.html</loc>
   </url>
   <url>
@@ -172,10 +172,10 @@
     <loc>https://bioinfocz.github.io/scdrake/reference/cluster_markers_processed_fn.html</loc>
   </url>
   <url>
-    <loc>https://bioinfocz.github.io/scdrake/reference/cluster_sc3_fn.html</loc>
+    <loc>https://bioinfocz.github.io/scdrake/reference/cluster_sc3_cluster_stability_plots_file_fn.html</loc>
   </url>
   <url>
-    <loc>https://bioinfocz.github.io/scdrake/reference/clustering_helpers.html</loc>
+    <loc>https://bioinfocz.github.io/scdrake/reference/cluster_sc3_df_fn.html</loc>
   </url>
   <url>
     <loc>https://bioinfocz.github.io/scdrake/reference/collapse_ensembl_multivals.html</loc>
@@ -202,13 +202,19 @@
     <loc>https://bioinfocz.github.io/scdrake/reference/create_seu_for_heatmaps.html</loc>
   </url>
   <url>
+    <loc>https://bioinfocz.github.io/scdrake/reference/dimred_plots_cell_annotation_params_df_fn.html</loc>
+  </url>
+  <url>
     <loc>https://bioinfocz.github.io/scdrake/reference/dimred_plots_clustering_fn.html</loc>
   </url>
   <url>
-    <loc>https://bioinfocz.github.io/scdrake/reference/dimred_plots_other_vars_fn.html</loc>
+    <loc>https://bioinfocz.github.io/scdrake/reference/dimred_plots_clustering_united_files_fn.html</loc>
   </url>
   <url>
-    <loc>https://bioinfocz.github.io/scdrake/reference/dimred_plots_other_vars_params_fn.html</loc>
+    <loc>https://bioinfocz.github.io/scdrake/reference/dimred_plots_from_params_df.html</loc>
+  </url>
+  <url>
+    <loc>https://bioinfocz.github.io/scdrake/reference/dimred_plots_other_vars_params_df_fn.html</loc>
   </url>
   <url>
     <loc>https://bioinfocz.github.io/scdrake/reference/dot-apply_config_patches.html</loc>
@@ -259,6 +265,12 @@
     <loc>https://bioinfocz.github.io/scdrake/reference/format_used_functions.html</loc>
   </url>
   <url>
+    <loc>https://bioinfocz.github.io/scdrake/reference/generate_cell_annotation_plots_section.html</loc>
+  </url>
+  <url>
+    <loc>https://bioinfocz.github.io/scdrake/reference/generate_dimred_plots_clustering_section.html</loc>
+  </url>
+  <url>
     <loc>https://bioinfocz.github.io/scdrake/reference/generate_dimred_plots_section.html</loc>
   </url>
   <url>
@@ -266,6 +278,24 @@
   </url>
   <url>
     <loc>https://bioinfocz.github.io/scdrake/reference/generate_stage_report.html</loc>
+  </url>
+  <url>
+    <loc>https://bioinfocz.github.io/scdrake/reference/get_cell_annotation_subplan.html</loc>
+  </url>
+  <url>
+    <loc>https://bioinfocz.github.io/scdrake/reference/get_clustering_graph_subplan.html</loc>
+  </url>
+  <url>
+    <loc>https://bioinfocz.github.io/scdrake/reference/get_clustering_kmeans_subplan.html</loc>
+  </url>
+  <url>
+    <loc>https://bioinfocz.github.io/scdrake/reference/get_clustering_sc3_subplan.html</loc>
+  </url>
+  <url>
+    <loc>https://bioinfocz.github.io/scdrake/reference/get_clustering_subplan.html</loc>
+  </url>
+  <url>
+    <loc>https://bioinfocz.github.io/scdrake/reference/get_dimred_plots_other_vars_subplan.html</loc>
   </url>
   <url>
     <loc>https://bioinfocz.github.io/scdrake/reference/get_gene_filter.html</loc>
@@ -308,6 +338,9 @@
   </url>
   <url>
     <loc>https://bioinfocz.github.io/scdrake/reference/grapes-and-and-grapes.html</loc>
+  </url>
+  <url>
+    <loc>https://bioinfocz.github.io/scdrake/reference/graph_snn_fn.html</loc>
   </url>
   <url>
     <loc>https://bioinfocz.github.io/scdrake/reference/highlight_points.html</loc>
@@ -358,9 +391,6 @@
     <loc>https://bioinfocz.github.io/scdrake/reference/make_pca_selected_pcs_plot.html</loc>
   </url>
   <url>
-    <loc>https://bioinfocz.github.io/scdrake/reference/make_sc3_stability_plots.html</loc>
-  </url>
-  <url>
     <loc>https://bioinfocz.github.io/scdrake/reference/marker_heatmap.html</loc>
   </url>
   <url>
@@ -403,6 +433,9 @@
     <loc>https://bioinfocz.github.io/scdrake/reference/plotReducedDim_mod.html</loc>
   </url>
   <url>
+    <loc>https://bioinfocz.github.io/scdrake/reference/plot_clustree.html</loc>
+  </url>
+  <url>
     <loc>https://bioinfocz.github.io/scdrake/reference/plot_colData.html</loc>
   </url>
   <url>
@@ -430,7 +463,16 @@
     <loc>https://bioinfocz.github.io/scdrake/reference/replace_list_nulls.html</loc>
   </url>
   <url>
+    <loc>https://bioinfocz.github.io/scdrake/reference/run_graph_based_clustering.html</loc>
+  </url>
+  <url>
+    <loc>https://bioinfocz.github.io/scdrake/reference/run_kmeans_clustering.html</loc>
+  </url>
+  <url>
     <loc>https://bioinfocz.github.io/scdrake/reference/run_pipeline.html</loc>
+  </url>
+  <url>
+    <loc>https://bioinfocz.github.io/scdrake/reference/save_clustree.html</loc>
   </url>
   <url>
     <loc>https://bioinfocz.github.io/scdrake/reference/save_pdf.html</loc>
@@ -541,10 +583,10 @@
     <loc>https://bioinfocz.github.io/scdrake/reference/selected_markers_int_df_fn.html</loc>
   </url>
   <url>
-    <loc>https://bioinfocz.github.io/scdrake/reference/selected_markers_plots_fn.html</loc>
+    <loc>https://bioinfocz.github.io/scdrake/reference/selected_markers_int_plots_df_fn.html</loc>
   </url>
   <url>
-    <loc>https://bioinfocz.github.io/scdrake/reference/selected_markers_plots_int_df_fn.html</loc>
+    <loc>https://bioinfocz.github.io/scdrake/reference/selected_markers_plots_fn.html</loc>
   </url>
   <url>
     <loc>https://bioinfocz.github.io/scdrake/reference/set_rstudio_drake_cache.html</loc>

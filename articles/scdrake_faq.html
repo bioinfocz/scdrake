@@ -50,7 +50,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">scdrake</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.4.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.5.0</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -77,6 +77,7 @@
     <h6 class="dropdown-header" data-toc-skip>Guides</h6>
     <a class="dropdown-item" href="../articles/scdrake_docker.html">Using the Docker image</a>
     <a class="dropdown-item" href="../articles/scdrake_integration.html">02 Integration pipeline guide</a>
+    <a class="dropdown-item" href="../articles/scdrake_advanced.html">Advanced topics</a>
     <a class="dropdown-item" href="../articles/scdrake_extend.html">Extending the pipeline</a>
     <a class="dropdown-item" href="../articles/drake_basics.html">drake basics</a>
     <div class="dropdown-divider"></div>
@@ -84,7 +85,6 @@
     <a class="dropdown-item" href="../articles/pipeline_overview.html">Pipeline overview</a>
     <a class="dropdown-item" href="../articles/scdrake_faq.html">FAQ &amp; Howtos</a>
     <a class="dropdown-item" href="../articles/scdrake_cli.html">Command line interface</a>
-    <a class="dropdown-item" href="../articles/cluster_markers.html">Cluster markers</a>
     <a class="dropdown-item" href="../articles/scdrake_config.html">scdrake config internals</a>
     <a class="dropdown-item" href="../articles/scdrake_envvars.html">Environment variables</a>
     <div class="dropdown-divider"></div>
@@ -148,7 +148,7 @@
       <img src="" class="logo" alt=""><h1>FAQ &amp; Howtos</h1>
             
             <h4 data-toc-skip class="date"><sup>Document generated:
-2023-01-30 11:58:03 UTC+0000</sup></h4>
+2023-05-27 08:46:33 UTC+0000</sup></h4>
       
       <small class="dont-index">Source: <a href="https://github.com/bioinfocz/scdrake/blob/mastervignettes/scdrake_faq.Rmd" class="external-link"><code>vignettes/scdrake_faq.Rmd</code></a></small>
       <div class="d-none name"><code>scdrake_faq.Rmd</code></div>
@@ -348,8 +348,8 @@ Please, refer to the <code>INTEGRATION_SOURCES</code> parameter in
 <div class="section level2">
 <h2 id="a-target-is-not-getting-built">A target is not getting built<a class="anchor" aria-label="anchor" href="#a-target-is-not-getting-built"></a>
 </h2>
-<p>It might happen a target (especially RMarkdown one) is not getting
-built although some changes were introduced. However, you can
+<p>It might happen that a target (especially RMarkdown one) is not
+getting built although some changes were introduced. However, you can
 either:</p>
 <ul>
 <li>Manually invalidate the target in <a href="https://docs.ropensci.org/drake" class="external-link">drake</a> cache using
@@ -360,6 +360,27 @@ scratch next time you run the pipeline.</li>
 <code><a href="../articles/config_pipeline.html">vignette("config_pipeline")</a></code>).</li>
 </ul>
 </div>
+<div class="section level2">
+<h2 id="i-want-to-perform-subclustering">I want to perform subclustering<a class="anchor" aria-label="anchor" href="#i-want-to-perform-subclustering"></a>
+</h2>
+<p>This can be simply achieved as follows:</p>
+<ul>
+<li>Initiate a new <a href="https://github.com/bioinfocz/scdrake" class="external-link">scdrake</a> project</li>
+<li>In <code>config/single_sample/01_input_qc</code>:
+<ul>
+<li>Modify the <code>INPUT_DATA</code> parameter such that it loads data
+from the <a href="https://github.com/bioinfocz/scdrake" class="external-link">scdrake</a> project in which you want to perform
+subclustering</li>
+<li>Modify the <code>INPUT_DATA_SUBSET</code> parameter to subset the
+imported data to selected clusters or other variables of interest</li>
+<li>You might consider disabling cell filtering by setting
+<code>ENABLE_CELL_FILTERING: false</code>
+</li>
+</ul>
+</li>
+<li>Run the pipeline as usual</li>
+</ul>
+</div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
     </nav></aside>
 </div>
@@ -368,12 +389,12 @@ scratch next time you run the pipeline.</li>
 
     <footer><div class="copyright">
   <p></p>
-<p>Developed by Jiri Novotny, Jan Kubovciak.</p>
+<p>Developed by Jiri Novotny, Jan Kubovciak, Michal Kolar.</p>
 </div>
 
 <div class="pkgdown">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.7.9000.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
   <p class="preferably">Using <a href="https://preferably.amirmasoudabdol.name/?source=footer" class="external-link">preferably</a> template.</p>
 </div>
 

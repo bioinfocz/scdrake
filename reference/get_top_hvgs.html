@@ -30,7 +30,7 @@ See the corresponding section there."><!-- mathjax --><script src="https://cdnjs
     
     <a class="navbar-brand me-2" href="../index.html">scdrake</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.4.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.5.0</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -56,6 +56,7 @@ See the corresponding section there."><!-- mathjax --><script src="https://cdnjs
     <h6 class="dropdown-header" data-toc-skip>Guides</h6>
     <a class="dropdown-item" href="../articles/scdrake_docker.html">Using the Docker image</a>
     <a class="dropdown-item" href="../articles/scdrake_integration.html">02 Integration pipeline guide</a>
+    <a class="dropdown-item" href="../articles/scdrake_advanced.html">Advanced topics</a>
     <a class="dropdown-item" href="../articles/scdrake_extend.html">Extending the pipeline</a>
     <a class="dropdown-item" href="../articles/drake_basics.html">drake basics</a>
     <div class="dropdown-divider"></div>
@@ -63,7 +64,6 @@ See the corresponding section there."><!-- mathjax --><script src="https://cdnjs
     <a class="dropdown-item" href="../articles/pipeline_overview.html">Pipeline overview</a>
     <a class="dropdown-item" href="../articles/scdrake_faq.html">FAQ &amp; Howtos</a>
     <a class="dropdown-item" href="../articles/scdrake_cli.html">Command line interface</a>
-    <a class="dropdown-item" href="../articles/cluster_markers.html">Cluster markers</a>
     <a class="dropdown-item" href="../articles/scdrake_config.html">scdrake config internals</a>
     <a class="dropdown-item" href="../articles/scdrake_envvars.html">Environment variables</a>
     <div class="dropdown-divider"></div>
@@ -161,8 +161,8 @@ For the other metric types, see the <code>hvg_selection</code> and <code>hvg_sel
 <dt>hvg_selection</dt>
 <dd><p>A character scalar: method to use for selection of HVGs.
 This is only relevant when <code>hvg_metric</code> is <code>"gene_var"</code> or <code>"gene_cv2"</code>.
-See <a href="https://bioconductor.org/books/release/OSCA.basic/feature-selection.html#hvg-selection" class="external-link">https://bioconductor.org/books/release/OSCA.basic/feature-selection.html#hvg-selection</a> and
-<a href="https://bioconductor.org/books/release/OSCA.advanced/more-hvgs.html#more-hvg-selection-strategies" class="external-link">https://bioconductor.org/books/release/OSCA.advanced/more-hvgs.html#more-hvg-selection-strategies</a> for more details.</p><ul><li><p><code>"top"</code>: Take top X genes according to a metric.
+See <a href="https://bioconductor.org/books/3.15/OSCA.basic/feature-selection.html#hvg-selection" class="external-link">https://bioconductor.org/books/3.15/OSCA.basic/feature-selection.html#hvg-selection</a> and
+<a href="https://bioconductor.org/books/3.15/OSCA.advanced/more-hvgs.html#more-hvg-selection-strategies" class="external-link">https://bioconductor.org/books/3.15/OSCA.advanced/more-hvgs.html#more-hvg-selection-strategies</a> for more details.</p><ul><li><p><code>"top"</code>: Take top X genes according to a metric.
 <code>"bio"</code> and <code>"ratio"</code> columns are used for <code>hvg_metric</code> <code>"gene_var"</code> and <code>"gene_cv2"</code>, respectively.</p></li>
 <li><p><code>"significance"</code>: Use FDR threshold.</p></li>
 <li><p><code>"threshold"</code>: Use threshold on the minimum value of a metric.
@@ -182,11 +182,11 @@ See <a href="https://bioconductor.org/books/release/OSCA.basic/feature-selection
 
 
     <footer><div class="copyright">
-  <p></p><p>Developed by Jiri Novotny, Jan Kubovciak.</p>
+  <p></p><p>Developed by Jiri Novotny, Jan Kubovciak, Michal Kolar.</p>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.7.9000.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
   <p class="preferably">Using <a href="https://preferably.amirmasoudabdol.name/?source=footer" class="external-link">preferably</a> template.</p>
 </div>
 

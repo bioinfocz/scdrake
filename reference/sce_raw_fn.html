@@ -28,7 +28,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">scdrake</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.4.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.5.0</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -54,6 +54,7 @@
     <h6 class="dropdown-header" data-toc-skip>Guides</h6>
     <a class="dropdown-item" href="../articles/scdrake_docker.html">Using the Docker image</a>
     <a class="dropdown-item" href="../articles/scdrake_integration.html">02 Integration pipeline guide</a>
+    <a class="dropdown-item" href="../articles/scdrake_advanced.html">Advanced topics</a>
     <a class="dropdown-item" href="../articles/scdrake_extend.html">Extending the pipeline</a>
     <a class="dropdown-item" href="../articles/drake_basics.html">drake basics</a>
     <div class="dropdown-divider"></div>
@@ -61,7 +62,6 @@
     <a class="dropdown-item" href="../articles/pipeline_overview.html">Pipeline overview</a>
     <a class="dropdown-item" href="../articles/scdrake_faq.html">FAQ &amp; Howtos</a>
     <a class="dropdown-item" href="../articles/scdrake_cli.html">Command line interface</a>
-    <a class="dropdown-item" href="../articles/cluster_markers.html">Cluster markers</a>
     <a class="dropdown-item" href="../articles/scdrake_config.html">scdrake config internals</a>
     <a class="dropdown-item" href="../articles/scdrake_envvars.html">Environment variables</a>
     <div class="dropdown-divider"></div>
@@ -125,18 +125,28 @@
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">sce_raw_fn</span><span class="op">(</span><span class="va">input_data</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">sce_raw_fn</span><span class="op">(</span><span class="va">input_data</span>, input_data_subset <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
     <dl><dt>input_data</dt>
-<dd><p>A named list of named lists containing character scalars:</p><ul><li><p><code>type</code>:</p><ul><li><p><code>"cellranger"</code>: a raw feature-barcode matrix from 10x Genomics <code>cellranger</code>.</p></li>
-<li><p><code>"table"</code>: a delimited text file (table).</p></li>
-<li><p><code>"sce"</code>: a <code>SingleCellExperiment</code> object (Rds file).</p></li>
+<dd><p>A named list of named lists containing character scalars:</p><ul><li><p><code>type</code>:</p><ul><li><p><code>"cellranger"</code>: a raw feature-barcode matrix from 10x Genomics <code>cellranger</code></p></li>
+<li><p><code>"table"</code>: a delimited text file (table)</p></li>
+<li><p><code>"sce"</code>: a <code>SingleCellExperiment</code> object (Rds file)</p></li>
+<li><p><code>"sce_drake_cache"</code>: a <code>SingleCellExperiment</code> object loaded from a <code>drake</code> cache</p></li>
 </ul></li>
-<li><p><code>path</code>: a path to input file (or directory in case of <code>type = "cellranger"</code>).</p></li>
-<li><p><code>delimiter</code>: a field delimiter when <code>type = "table"</code>.</p></li>
+<li><p><code>path</code>: a path to input file (or directory in case of <code>type = "cellranger"</code>)</p></li>
+<li><p><code>delimiter</code>: a field delimiter when <code>type = "table"</code></p></li>
+<li><p><code>target_name</code>: a name of <code>SingleCellExperiment</code> target when <code>type = "sce_drake_cache"</code></p></li>
+</ul></dd>
+
+
+<dt>input_data_subset</dt>
+<dd><p><code>NULL</code> or a named list by which subsetting of the imported data will be performed.
+The list must contain the following items:</p><ul><li><p><code>subset_by</code> (character scalar): name of column in <code>colData()</code> to use for subsetting</p></li>
+<li><p><code>values</code> (vector): values to subset to</p></li>
+<li><p><code>negate</code> (logical scalar): if <code>TRUE</code>, negate the selection</p></li>
 </ul></dd>
 
 </dl></div>
@@ -154,11 +164,11 @@
 
 
     <footer><div class="copyright">
-  <p></p><p>Developed by Jiri Novotny, Jan Kubovciak.</p>
+  <p></p><p>Developed by Jiri Novotny, Jan Kubovciak, Michal Kolar.</p>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.7.9000.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
   <p class="preferably">Using <a href="https://preferably.amirmasoudabdol.name/?source=footer" class="external-link">preferably</a> template.</p>
 </div>
 

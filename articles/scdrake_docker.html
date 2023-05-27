@@ -50,7 +50,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">scdrake</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.4.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.5.0</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -77,6 +77,7 @@
     <h6 class="dropdown-header" data-toc-skip>Guides</h6>
     <a class="dropdown-item" href="../articles/scdrake_docker.html">Using the Docker image</a>
     <a class="dropdown-item" href="../articles/scdrake_integration.html">02 Integration pipeline guide</a>
+    <a class="dropdown-item" href="../articles/scdrake_advanced.html">Advanced topics</a>
     <a class="dropdown-item" href="../articles/scdrake_extend.html">Extending the pipeline</a>
     <a class="dropdown-item" href="../articles/drake_basics.html">drake basics</a>
     <div class="dropdown-divider"></div>
@@ -84,7 +85,6 @@
     <a class="dropdown-item" href="../articles/pipeline_overview.html">Pipeline overview</a>
     <a class="dropdown-item" href="../articles/scdrake_faq.html">FAQ &amp; Howtos</a>
     <a class="dropdown-item" href="../articles/scdrake_cli.html">Command line interface</a>
-    <a class="dropdown-item" href="../articles/cluster_markers.html">Cluster markers</a>
     <a class="dropdown-item" href="../articles/scdrake_config.html">scdrake config internals</a>
     <a class="dropdown-item" href="../articles/scdrake_envvars.html">Environment variables</a>
     <div class="dropdown-divider"></div>
@@ -148,7 +148,7 @@
       <img src="" class="logo" alt=""><h1>Using the Docker image</h1>
             
             <h4 data-toc-skip class="date"><sup>Document generated:
-2023-01-30 11:57:50 UTC+0000</sup></h4>
+2023-05-27 08:46:21 UTC+0000</sup></h4>
       
       <small class="dont-index">Source: <a href="https://github.com/bioinfocz/scdrake/blob/mastervignettes/scdrake_docker.Rmd" class="external-link"><code>vignettes/scdrake_docker.Rmd</code></a></small>
       <div class="d-none name"><code>scdrake_docker.Rmd</code></div>
@@ -166,6 +166,9 @@ page for Docker</a> provides itself a nice introduction to Docker and
 its usage for R, and we recommend to read it through. In this vignette,
 we will mainly give practical examples related to
 <a href="https://github.com/bioinfocz/scdrake" class="external-link">scdrake</a>.</p>
+<p>You can also run the image in <a href="https://docs.sylabs.io/guides/latest/user-guide/quick_start.html" class="external-link">SingularityCE</a>
+(without RStudio) - see <a href="#singularity">Singularity</a>
+below.</p>
 <div class="section level2">
 <h2 id="platform-specific-notes">Platform-specific notes<a class="anchor" aria-label="anchor" href="#platform-specific-notes"></a>
 </h2>
@@ -234,7 +237,7 @@ Click to show the cheatsheet
 <h4 id="linux-windows-and-amd64-mac">Linux, Windows, and amd64 Mac<a class="anchor" aria-label="anchor" href="#linux-windows-and-amd64-mac"></a>
 </h4>
 <p>Latest stable version:</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> pull jirinovo/scdrake:1.4.1-bioc3.15</span></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> pull jirinovo/scdrake:1.5.0-bioc3.15</span></code></pre></div>
 <p>Latest development version:</p>
 <div class="sourceCode" id="cb2"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> pull jirinovo/scdrake:latest-bioc3.15</span></code></pre></div>
 </div>
@@ -244,7 +247,7 @@ Click to show the cheatsheet
 <p>This is an experimental image based on
 <code>rocker/rstudio:latest-daily</code> image.</p>
 <p>Latest stable version:</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> pull jirinovo/scdrake:1.4.1-bioc3.15-arm64</span></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> pull jirinovo/scdrake:1.5.0-bioc3.15-arm64</span></code></pre></div>
 <p>Latest development version:</p>
 <div class="sourceCode" id="cb4"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> pull jirinovo/scdrake:latest-bioc3.15-arm64</span></code></pre></div>
 </div>
@@ -265,7 +268,7 @@ Click to show the cheatsheet
 <span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">-e</span> USERID=<span class="va">$(</span><span class="fu">id</span> <span class="at">-u</span><span class="va">)</span> <span class="dt">\</span></span>
 <span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">-e</span> GROUPID=<span class="va">$(</span><span class="fu">id</span> <span class="at">-g</span><span class="va">)</span> <span class="dt">\</span></span>
 <span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">-e</span> PASSWORD=1234 <span class="dt">\</span></span>
-<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>  jirinovo/scdrake:1.4.1-bioc3.15</span></code></pre></div>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>  jirinovo/scdrake:1.5.0-bioc3.15</span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="find-the-id-or-name-of-the-running-container">Find the ID or name of the running container<a class="anchor" aria-label="anchor" href="#find-the-id-or-name-of-the-running-container"></a>
@@ -295,7 +298,7 @@ addition, the parent Bioconductor image comes bundled with RStudio
 Server.</p>
 <p>You can pull the Docker image with the latest stable
 <a href="https://github.com/bioinfocz/scdrake" class="external-link">scdrake</a> version using</p>
-<div class="sourceCode" id="cb10"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> pull jirinovo/scdrake:1.4.1-bioc3.15</span></code></pre></div>
+<div class="sourceCode" id="cb10"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> pull jirinovo/scdrake:1.5.0-bioc3.15</span></code></pre></div>
 <p>or list available versions in <a href="https://hub.docker.com/r/jirinovo/scdrake/tags" class="external-link">our Docker Hub
 repository</a>.</p>
 <p>For the latest development version use</p>
@@ -330,7 +333,7 @@ an RStudio instance using:</p>
 <span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">-e</span> USERID=<span class="va">$(</span><span class="fu">id</span> <span class="at">-u</span><span class="va">)</span> <span class="dt">\</span></span>
 <span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">-e</span> GROUPID=<span class="va">$(</span><span class="fu">id</span> <span class="at">-g</span><span class="va">)</span> <span class="dt">\</span></span>
 <span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">-e</span> PASSWORD=1234 <span class="dt">\</span></span>
-<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>  jirinovo/scdrake:1.4.1-bioc3.15</span></code></pre></div>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>  jirinovo/scdrake:1.5.0-bioc3.15</span></code></pre></div>
 <p>Let’s decompose the command above:</p>
 <ul>
 <li>
@@ -392,7 +395,7 @@ use</p>
 <div class="sourceCode" id="cb17"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> run <span class="at">-d</span> <span class="dt">\</span></span>
 <span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">-u</span> rstudio <span class="dt">\</span></span>
 <span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">-v</span> <span class="va">$(</span><span class="bu">pwd</span><span class="va">)</span>:/home/rstudio/scdrake_projects <span class="dt">\</span></span>
-<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>  jirinovo/scdrake:1.4.1-bioc3.15 <span class="dt">\</span></span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>  jirinovo/scdrake:1.5.0-bioc3.15 <span class="dt">\</span></span>
 <span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>  sleep infinity</span></code></pre></div>
 <p>Note for Docker Desktop on a Linux host: omit the
 <code>-u rstudio</code> (or use <code>-u root</code>) to run the image
@@ -401,7 +404,7 @@ UID 0 in the container, but UID of the DD user will be used in the host
 directory.</p>
 </div>
 <div class="section level3">
-<h3 id="running-interactively-run-and-forget">Running interactively (“run and forget”)<a class="anchor" aria-label="anchor" href="#running-interactively-run-and-forget"></a>
+<h3 id="running-once-run-and-forget">Running once (“run and forget”)<a class="anchor" aria-label="anchor" href="#running-once-run-and-forget"></a>
 </h3>
 <p>Running the image in detached mode gives us chance e.g. to find out
 more details about what’s wrong in a failed pipeline run, or to work
@@ -410,7 +413,7 @@ and forget” mode where a container is started, <a href="https://github.com/bio
 run, and finally the container is stopped and removed.</p>
 <div class="sourceCode" id="cb18"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> run <span class="at">-it</span> <span class="at">--rm</span> <span class="dt">\</span></span>
 <span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">-v</span> <span class="va">$(</span><span class="bu">pwd</span><span class="va">)</span>:/home/rstudio/scdrake_projects <span class="dt">\</span></span>
-<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>  jirinovo/scdrake:1.4.1-bioc3.15 <span class="dt">\</span></span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>  jirinovo/scdrake:1.5.0-bioc3.15 <span class="dt">\</span></span>
 <span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>  scdrake ...</span></code></pre></div>
 <p>Note for Linux hosts using Docker Engine: the active user in the
 container will be root and created files will belong to him. If your
@@ -544,8 +547,90 @@ execute the command in a working directory.</p>
 described above:</p>
 <div class="sourceCode" id="cb27"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="bu">alias</span> scdrake_docker=docker run <span class="at">-it</span> <span class="at">--rm</span> <span class="dt">\</span></span>
 <span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">-v</span> <span class="va">$(</span><span class="fu">realpath</span> ~/scdrake_projects<span class="va">)</span>:/home/rstudio/scdrake_projects <span class="dt">\</span></span>
-<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a>  jirinovo/scdrake:1.4.1-bioc3.15 <span class="dt">\</span></span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a>  jirinovo/scdrake:1.5.0-bioc3.15 <span class="dt">\</span></span>
 <span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a>  scdrake</span></code></pre></div>
+</div>
+<div class="section level2">
+<h2 id="singularity">Singularity<a class="anchor" aria-label="anchor" href="#singularity"></a>
+</h2>
+<p>Singularity is an alternative container runner that does not require
+root access, so it can be used on e.g. HPCs.</p>
+<p>You will probably use Singularity in case you don’t have root
+permissions on the host machine. It can be simply installed to the user
+space e.g. via the <a href="https://docs.conda.io/en/latest/miniconda.html" class="external-link">conda</a> virtual
+environment/package manager as the <a href="https://anaconda.org/conda-forge/singularity" class="external-link">conda-forge/singularity
+package</a>.</p>
+<p>Docker images can be simply pulled from the Docker Hub similar to
+<code>docker pull</code>:</p>
+<div class="sourceCode" id="cb28"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="ex">singularity</span> pull docker:jirinovo/scdrake:1.5.0-bioc3.15</span></code></pre></div>
+<p>The only difference is the usage of <code>docker:</code> prefix so
+Singularity knows where to look for the image. If the image is already
+present in the local Docker storage, you can use
+<code>docker-daemon:</code> instead.</p>
+<p>After pulling, Singularity needs to convert the image to the SIF
+format, and that can take quite a time. By default, the SIF file is
+saved in the current working directory.</p>
+<div class="section level3">
+<h3 id="running-the-image-in-singularity">Running the image in Singularity<a class="anchor" aria-label="anchor" href="#running-the-image-in-singularity"></a>
+</h3>
+<p>Here are some key differences compared to Docker:</p>
+<ul>
+<li>By default, Singularity issues commands in the container as the
+current user. Thus, there are no problems with file ownership.</li>
+<li>By default, Singularity mounts the host’s user <code>HOME</code> to
+the container. While this might be practical in some cases, we rather
+recommend to mount an empty/different directory to
+<code>/home/&lt;user&gt;</code> in the container.</li>
+<li>By default, Singularity containers are read only. Thus, you can only
+write to mounted directories.</li>
+<li>Although the image also contains RStudio, unfortunately, we were not
+able to make it functional in Singularity.</li>
+</ul>
+<p>First we will create a directory structure. These directories will be
+mounted to the container. Note that we also create a fake home directory
+- that is because some R packages need to use a cache directory, which
+is located there.</p>
+<div class="sourceCode" id="cb29"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mkdir</span> <span class="at">-p</span> ~/scdrake_singularity</span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> ~/scdrake_singularity</span>
+<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a><span class="fu">mkdir</span> <span class="at">-p</span> home/<span class="va">${USER}</span> scdrake_projects/pbmc1k</span></code></pre></div>
+<p>Now we can issue a <a href="https://github.com/bioinfocz/scdrake" class="external-link">scdrake</a> commands through its
+CLI:</p>
+<div class="sourceCode" id="cb30"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="ex">singularity</span> exec <span class="dt">\</span></span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>    <span class="at">-e</span> <span class="dt">\</span></span>
+<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">--no-home</span> <span class="dt">\</span></span>
+<span id="cb30-4"><a href="#cb30-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">--bind</span> <span class="st">"home/</span><span class="va">${USER}</span><span class="st">/:/home/</span><span class="va">${USER}</span><span class="st">,scdrake_projects/:/home/</span><span class="va">${USER}</span><span class="st">/scdrake_projects"</span> <span class="dt">\</span></span>
+<span id="cb30-5"><a href="#cb30-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">--pwd</span> <span class="st">"/home/</span><span class="va">${USER}</span><span class="st">/scdrake_projects"</span> <span class="dt">\</span></span>
+<span id="cb30-6"><a href="#cb30-6" aria-hidden="true" tabindex="-1"></a>    path/to/scdrake_image.sif <span class="dt">\</span></span>
+<span id="cb30-7"><a href="#cb30-7" aria-hidden="true" tabindex="-1"></a>    scdrake <span class="op">&lt;</span>args<span class="op">&gt;</span> <span class="op">&lt;</span>command<span class="op">&gt;</span></span></code></pre></div>
+<p>For example, to initialize a new project:</p>
+<div class="sourceCode" id="cb31"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="ex">singularity</span> exec <span class="dt">\</span></span>
+<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a>    <span class="at">-e</span> <span class="dt">\</span></span>
+<span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">--no-home</span> <span class="dt">\</span></span>
+<span id="cb31-4"><a href="#cb31-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">--bind</span> <span class="st">"home/</span><span class="va">${USER}</span><span class="st">/:/home/</span><span class="va">${USER}</span><span class="st">,scdrake_projects/:/home/</span><span class="va">${USER}</span><span class="st">/scdrake_projects"</span> <span class="dt">\</span></span>
+<span id="cb31-5"><a href="#cb31-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">--pwd</span> <span class="st">"/home/</span><span class="va">${USER}</span><span class="st">/scdrake_projects/pbmc1k"</span> <span class="dt">\</span></span>
+<span id="cb31-6"><a href="#cb31-6" aria-hidden="true" tabindex="-1"></a>    path/to/scdrake_image.sif <span class="dt">\</span></span>
+<span id="cb31-7"><a href="#cb31-7" aria-hidden="true" tabindex="-1"></a>    scdrake <span class="at">--download-example-data</span> init-project</span></code></pre></div>
+<p>And to run the pipeline using that project:</p>
+<div class="sourceCode" id="cb32"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="ex">singularity</span> exec <span class="dt">\</span></span>
+<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a>    <span class="at">-e</span> <span class="dt">\</span></span>
+<span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">--no-home</span> <span class="dt">\</span></span>
+<span id="cb32-4"><a href="#cb32-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">--bind</span> <span class="st">"home/</span><span class="va">${USER}</span><span class="st">/:/home/</span><span class="va">${USER}</span><span class="st">,scdrake_projects/:/home/</span><span class="va">${USER}</span><span class="st">/scdrake_projects"</span> <span class="dt">\</span></span>
+<span id="cb32-5"><a href="#cb32-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">--pwd</span> <span class="st">"/home/</span><span class="va">${USER}</span><span class="st">/scdrake_projects/pbmc1k"</span> <span class="dt">\</span></span>
+<span id="cb32-6"><a href="#cb32-6" aria-hidden="true" tabindex="-1"></a>    path/to/scdrake_image.sif <span class="dt">\</span></span>
+<span id="cb32-7"><a href="#cb32-7" aria-hidden="true" tabindex="-1"></a>    scdrake <span class="at">--pipeline-type</span> single_sample run</span></code></pre></div>
+<p>Note that you can also start a bash or R session and use
+<a href="https://github.com/bioinfocz/scdrake" class="external-link">scdrake</a> within that, e.g.</p>
+<div class="sourceCode" id="cb33"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="ex">singularity</span> exec <span class="dt">\</span></span>
+<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a>    <span class="at">-e</span> <span class="dt">\</span></span>
+<span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">--no-home</span> <span class="dt">\</span></span>
+<span id="cb33-4"><a href="#cb33-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">--bind</span> <span class="st">"home/</span><span class="va">${USER}</span><span class="st">/:/home/</span><span class="va">${USER}</span><span class="st">,scdrake_projects/:/home/</span><span class="va">${USER}</span><span class="st">/scdrake_projects"</span> <span class="dt">\</span></span>
+<span id="cb33-5"><a href="#cb33-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">--pwd</span> <span class="st">"/home/</span><span class="va">${USER}</span><span class="st">/scdrake_projects/pbmc1k"</span> <span class="dt">\</span></span>
+<span id="cb33-6"><a href="#cb33-6" aria-hidden="true" tabindex="-1"></a>    path/to/scdrake_image.sif <span class="dt">\</span></span>
+<span id="cb33-7"><a href="#cb33-7" aria-hidden="true" tabindex="-1"></a>    R</span></code></pre></div>
+<p>and then in R</p>
+<div class="sourceCode" id="cb34"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu">scdrake</span><span class="fu">::</span><span class="fu"><a href="../reference/run_pipeline.html">run_single_sample_r</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+</div>
 </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
     </nav></aside>
@@ -555,12 +640,12 @@ described above:</p>
 
     <footer><div class="copyright">
   <p></p>
-<p>Developed by Jiri Novotny, Jan Kubovciak.</p>
+<p>Developed by Jiri Novotny, Jan Kubovciak, Michal Kolar.</p>
 </div>
 
 <div class="pkgdown">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.7.9000.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
   <p class="preferably">Using <a href="https://preferably.amirmasoudabdol.name/?source=footer" class="external-link">preferably</a> template.</p>
 </div>
 

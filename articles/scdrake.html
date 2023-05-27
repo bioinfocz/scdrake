@@ -50,7 +50,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">scdrake</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.4.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.5.0</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -77,6 +77,7 @@
     <h6 class="dropdown-header" data-toc-skip>Guides</h6>
     <a class="dropdown-item" href="../articles/scdrake_docker.html">Using the Docker image</a>
     <a class="dropdown-item" href="../articles/scdrake_integration.html">02 Integration pipeline guide</a>
+    <a class="dropdown-item" href="../articles/scdrake_advanced.html">Advanced topics</a>
     <a class="dropdown-item" href="../articles/scdrake_extend.html">Extending the pipeline</a>
     <a class="dropdown-item" href="../articles/drake_basics.html">drake basics</a>
     <div class="dropdown-divider"></div>
@@ -84,7 +85,6 @@
     <a class="dropdown-item" href="../articles/pipeline_overview.html">Pipeline overview</a>
     <a class="dropdown-item" href="../articles/scdrake_faq.html">FAQ &amp; Howtos</a>
     <a class="dropdown-item" href="../articles/scdrake_cli.html">Command line interface</a>
-    <a class="dropdown-item" href="../articles/cluster_markers.html">Cluster markers</a>
     <a class="dropdown-item" href="../articles/scdrake_config.html">scdrake config internals</a>
     <a class="dropdown-item" href="../articles/scdrake_envvars.html">Environment variables</a>
     <div class="dropdown-divider"></div>
@@ -158,9 +158,15 @@ Kubovciak</h4>
       Institute of Molecular Genetics of the Czech Academy of
 Sciences<br><a class="author_email" href="mailto:#"></a><a href="mailto:jan.kubovciak@img.cas.cz" class="email">jan.kubovciak@img.cas.cz</a>
       </address>
+                              <h4 data-toc-skip class="author">Michal
+Kolar</h4>
+            <address class="author_afil">
+      Institute of Molecular Genetics of the Czech Academy of
+Sciences<br><a class="author_email" href="mailto:#"></a><a href="mailto:kolarmi@img.cas.cz" class="email">kolarmi@img.cas.cz</a>
+      </address>
                   
             <h4 data-toc-skip class="date"><sup>Document generated:
-2023-01-30 11:57:22 UTC+0000</sup></h4>
+2023-05-27 08:45:54 UTC+0000</sup></h4>
       
       <small class="dont-index">Source: <a href="https://github.com/bioinfocz/scdrake/blob/mastervignettes/scdrake.Rmd" class="external-link"><code>vignettes/scdrake.Rmd</code></a></small>
       <div class="d-none name"><code>scdrake.Rmd</code></div>
@@ -168,34 +174,32 @@ Sciences<br><a class="author_email" href="mailto:#"></a><a href="mailto:jan.kubo
 
     
     
-<div class="section level2">
-<h2 id="quick-start-guide">Quick start guide<a class="anchor" aria-label="anchor" href="#quick-start-guide"></a>
-</h2>
+<hr>
+<p><a href="https://github.com/bioinfocz/scdrake" class="external-link">scdrake</a> offers two pipelines - one for single-sample,
+and second one for integration of multiple samples (which were processed
+by the single-sample pipeline before). As for now, each pipeline
+consists of two subpipelines (referred to as <em>stages</em>), and two
+stages common to both single-sample and integration pipelines. Details,
+along with graphical structure, are available in
+<code><a href="../articles/pipeline_overview.html">vignette("pipeline_overview")</a></code>.</p>
 <p>In this guide you will see how to quickly setup
 <a href="https://github.com/bioinfocz/scdrake" class="external-link">scdrake</a> and run the first stage
 (<code>01_input_qc</code>) of its single-sample pipeline using the
 provided example data. Once you familiarize yourself with
-<a href="https://github.com/bioinfocz/scdrake" class="external-link">scdrake</a> basics, you can continue with guide for the
-integration pipeline in
+<a href="https://github.com/bioinfocz/scdrake" class="external-link">scdrake</a> basics, we will guide you through the second
+stage of the single-sample pipeline (<code>02_norm_clustering</code>)
+that demonstrates cell clustering and annotation. Later you can continue
+with guide for the integration pipeline in
 <code><a href="../articles/scdrake_integration.html">vignette("scdrake_integration")</a></code>.</p>
-<p>If possible, we will show how to follow the steps from within the R
-and through the command line interface (CLI), see
-<code><a href="../articles/scdrake_cli.html">vignette("scdrake_cli")</a></code> for a short overview.</p>
+<p>If possible, we will show how to follow the steps from within R and
+through the command line interface (CLI, see
+<code><a href="../articles/scdrake_cli.html">vignette("scdrake_cli")</a></code> for a short overview).</p>
 <p>We <strong>strongly recommend</strong> to use the
-<a href="https://github.com/bioinfocz/scdrake" class="external-link">scdrake</a>’s Docker image as it is well tested. If you are
-not familiar with Docker, please, refer to
-<code><a href="../articles/scdrake_docker.html">vignette("scdrake_docker")</a></code>. We assume that the container
-has a shared directory mounted as
-<code>/home/rstudio/scdrake_projects</code>, as described in the
-aforementioned vignette.</p>
-<p>Note to the CLI: although you can specify the project directory using
-the <code>-d / --dir</code> parameter, we rather recommend to always be
-present in the current working directory before you issue
-<code>scdrake</code> commands (this also conforms the project-based
-approach). Below in the examples you will notice that the
-<code>-d</code> parameter is never used.</p>
+<a href="https://github.com/bioinfocz/scdrake" class="external-link">scdrake</a>’s Docker image as it is well tested. Even if you
+are familiar with Docker or Singularity, please, refer to
+<code><a href="../articles/scdrake_docker.html">vignette("scdrake_docker")</a></code> as there are given some critical
+parameters.</p>
 <hr>
-</div>
 <div class="section level2">
 <h2 id="the-three-steps">The three steps<a class="anchor" aria-label="anchor" href="#the-three-steps"></a>
 </h2>
@@ -220,10 +224,12 @@ computers and data locations.</li>
 
 
 
+
 <ul class="nav nav-tabs" id="step-1-initialize-a-new-project" role="tablist">
 <li role="presentation" class="nav-item"><button data-bs-toggle="tab" data-bs-target="#in-r" id="in-r-tab" type="button" role="tab" aria-controls="in-r" aria-selected="true" class="active nav-link">In R</button></li>
 <li role="presentation" class="nav-item"><button data-bs-toggle="tab" data-bs-target="#on-command-line" id="on-command-line-tab" type="button" role="tab" aria-controls="on-command-line" aria-selected="false" class="nav-link">On command line</button></li>
 <li role="presentation" class="nav-item"><button data-bs-toggle="tab" data-bs-target="#on-command-line-docker" id="on-command-line-docker-tab" type="button" role="tab" aria-controls="on-command-line-docker" aria-selected="false" class="nav-link">On command line (Docker)</button></li>
+<li role="presentation" class="nav-item"><button data-bs-toggle="tab" data-bs-target="#on-command-line-singularity" id="on-command-line-singularity-tab" type="button" role="tab" aria-controls="on-command-line-singularity" aria-selected="false" class="nav-link">On command line (Singularity)</button></li>
 </ul>
 <div class="tab-content">
 <div class="active  tab-pane" id="in-r" role="tabpanel" aria-labelledby="in-r-tab">
@@ -242,13 +248,24 @@ computers and data locations.</li>
 </div>
 <div class="tab-pane" id="on-command-line-docker" role="tabpanel" aria-labelledby="on-command-line-docker-tab">
 
-<p>We assume that the container has a shared directory mounted as
-<code>/home/rstudio/scdrake_projects</code>, as described in
-<code><a href="../articles/scdrake_docker.html">vignette("scdrake_docker")</a></code>.</p>
+<p>We assume that you are running a detached container that has a shared
+directory mounted as <code>/home/rstudio/scdrake_projects</code> (as
+described in <code><a href="../articles/scdrake_docker.html">vignette("scdrake_docker")</a></code>).</p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mkdir</span> ~/scdrake_projects/pbmc1k</span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> ~/scdrake_projects/pbmc1k</span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> exec <span class="at">-it</span> <span class="at">-u</span> rstudio <span class="at">-w</span> /home/rstudio/scdrake_projects/pbmc1k <span class="op">&lt;</span>CONTAINER ID or NAME<span class="op">&gt;</span> <span class="dt">\</span></span>
 <span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>  scdrake <span class="at">--download-example-data</span> init-project</span></code></pre></div>
+</div>
+<div class="tab-pane" id="on-command-line-singularity" role="tabpanel" aria-labelledby="on-command-line-singularity-tab">
+
+<div class="sourceCode" id="cb4"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mkdir</span> <span class="at">-p</span> ~/scdrake_singularity</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> ~/scdrake_singularity</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="fu">mkdir</span> <span class="at">-p</span> home/<span class="va">${USER}</span> scdrake_projects/pbmc1k</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="ex">singularity</span> exec <span class="at">-e</span> <span class="at">--no-home</span> <span class="dt">\</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">--bind</span> <span class="st">"home/</span><span class="va">${USER}</span><span class="st">/:/home/</span><span class="va">${USER}</span><span class="st">,scdrake_projects/:/home/</span><span class="va">${USER}</span><span class="st">/scdrake_projects"</span> <span class="dt">\</span></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">--pwd</span> <span class="st">"/home/</span><span class="va">${USER}</span><span class="st">/scdrake_projects/pbmc1k"</span> <span class="dt">\</span></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>    path/to/scdrake_image.sif <span class="dt">\</span></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>    scdrake <span class="at">--download-example-data</span> init-project</span></code></pre></div>
 </div>
 </div>
 </div>
@@ -257,18 +274,19 @@ computers and data locations.</li>
 <p>This will:</p>
 <ul>
 <li>Create a new project directory named <code>pbmc1k</code> in
-<code>/home/&lt;user&gt;/scdrake_projects</code>.</li>
+<code>/home/&lt;user&gt;/scdrake_projects</code>
+</li>
 <li>Copy all files, which are bundled with the <a href="https://github.com/bioinfocz/scdrake" class="external-link">scdrake</a>
-package: default YAML configs, Rmd files, R scripts etc.</li>
+package: default YAML configs, Rmd files, R scripts etc</li>
 <li>Download (if needed) the <a href="https://github.com/mikefarah/yq" class="external-link">yq tool</a> used to manipulate
-YAML files.</li>
+YAML files</li>
 <li>Create a new RStudio project (<code>.RProj</code>) file and set it
-as the active project (can be disabled).</li>
-<li>Download the example dataset (10x Genomics PBMC).</li>
+as the active project (can be disabled)</li>
+<li>Download the example dataset (10x Genomics PBMC)</li>
 <li>If the project initialization is done from within R:
 <ul>
 <li>Your current R working directory is switched to project’s
-directory.</li>
+directory</li>
 <li>In addition, if you are using RStudio, that will also switch the
 active project. That means you will see an arrangement of a newly
 created project (no opened files) and a freshly started R session,
@@ -277,11 +295,14 @@ again</strong>.</li>
 </ul>
 </li>
 </ul>
-<blockquote>
-<p>Important: whenever you will be running the <a href="https://github.com/bioinfocz/scdrake" class="external-link">scdrake</a>
-pipeline, make sure your working directory is set to the project’s
-root.</p>
-</blockquote>
+<p><strong>Important</strong>: whenever you will be running the
+<a href="https://github.com/bioinfocz/scdrake" class="external-link">scdrake</a> pipeline, make sure your working directory is set
+to the project’s root. Although you can specify the project directory in
+CLI using the <code>-d / --dir</code> parameter, we rather recommend to
+always be present in the project’s root directory before you issue
+<a href="https://github.com/bioinfocz/scdrake" class="external-link">scdrake</a> commands (this also conforms the project-based
+approach). You can notice in the examples that the <code>-d</code>
+parameter is never used.</p>
 <p>Let’s inspect files in the project directory:</p>
 </div>
 <div class="section level3 tabset">
@@ -289,35 +310,45 @@ root.</p>
 
 
 
+
 <ul class="nav nav-tabs" id="section-1" role="tablist">
 <li role="presentation" class="nav-item"><button data-bs-toggle="tab" data-bs-target="#in-r-1" id="in-r-1-tab" type="button" role="tab" aria-controls="in-r-1" aria-selected="true" class="active nav-link">In R</button></li>
 <li role="presentation" class="nav-item"><button data-bs-toggle="tab" data-bs-target="#on-command-line-1" id="on-command-line-1-tab" type="button" role="tab" aria-controls="on-command-line-1" aria-selected="false" class="nav-link">On command line</button></li>
 <li role="presentation" class="nav-item"><button data-bs-toggle="tab" data-bs-target="#on-command-line-docker-1" id="on-command-line-docker-1-tab" type="button" role="tab" aria-controls="on-command-line-docker-1" aria-selected="false" class="nav-link">On command line (Docker)</button></li>
+<li role="presentation" class="nav-item"><button data-bs-toggle="tab" data-bs-target="#on-command-line-singularity-1" id="on-command-line-singularity-1-tab" type="button" role="tab" aria-controls="on-command-line-singularity-1" aria-selected="false" class="nav-link">On command line (Singularity)</button></li>
 </ul>
 <div class="tab-content">
 <div class="active  tab-pane" id="in-r-1" role="tabpanel" aria-labelledby="in-r-1-tab">
 
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">fs</span><span class="fu">::</span><span class="fu"><a href="https://fs.r-lib.org/reference/dir_tree.html" class="external-link">dir_tree</a></span><span class="op">(</span>all <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="tab-pane" id="on-command-line-1" role="tabpanel" aria-labelledby="on-command-line-1-tab">
 
 <p>If you have the <code>tree</code> tool installed
 (<code>sudo apt install tree</code> to fix it):</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="ex">tree</span></span></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="ex">tree</span></span></code></pre></div>
 <p>Otherwise:</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="ex">Rscript</span> <span class="at">-e</span> <span class="st">'fs::dir_tree("~/scdrake_projects/pbmc1k")'</span></span></code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="ex">Rscript</span> <span class="at">-e</span> <span class="st">'fs::dir_tree("~/scdrake_projects/pbmc1k")'</span></span></code></pre></div>
 </div>
 <div class="tab-pane" id="on-command-line-docker-1" role="tabpanel" aria-labelledby="on-command-line-docker-1-tab">
 
-<div class="sourceCode" id="cb7"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> exec <span class="at">-it</span> <span class="at">-u</span> rstudio <span class="at">-w</span> /home/rstudio/scdrake_projects/pbmc1k <span class="op">&lt;</span>CONTAINER ID or NAME<span class="op">&gt;</span> <span class="dt">\</span></span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>  Rscript <span class="at">-e</span> <span class="st">'fs::dir_tree()'</span></span></code></pre></div>
+<div class="sourceCode" id="cb8"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> exec <span class="at">-it</span> <span class="at">-u</span> rstudio <span class="at">-w</span> /home/rstudio/scdrake_projects/pbmc1k <span class="op">&lt;</span>CONTAINER ID or NAME<span class="op">&gt;</span> <span class="dt">\</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>  Rscript <span class="at">-e</span> <span class="st">'fs::dir_tree()'</span></span></code></pre></div>
+</div>
+<div class="tab-pane" id="on-command-line-singularity-1" role="tabpanel" aria-labelledby="on-command-line-singularity-1-tab">
+
+<div class="sourceCode" id="cb9"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="ex">singularity</span> exec <span class="at">-e</span> <span class="at">--no-home</span> <span class="dt">\</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>    <span class="at">--bind</span> <span class="st">"home/</span><span class="va">${USER}</span><span class="st">/:/home/</span><span class="va">${USER}</span><span class="st">,scdrake_projects/:/home/</span><span class="va">${USER}</span><span class="st">/scdrake_projects"</span> <span class="dt">\</span></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">--pwd</span> <span class="st">"/home/</span><span class="va">${USER}</span><span class="st">/scdrake_projects/pbmc1k"</span> <span class="dt">\</span></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>    path/to/scdrake_image.sif <span class="dt">\</span></span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>    Rscript <span class="at">-e</span> <span class="st">'fs::dir_tree()'</span></span></code></pre></div>
 </div>
 </div>
 </div>
 <div class="section level3 unnumbered">
 <h3 class="unnumbered" id="section-2"></h3>
-<pre><code><span><span class="co">## <span style="color: #0000BB; font-weight: bold;">/tmp/Rtmpbbvwng/file146636f4602e9</span></span></span>
+<pre><code><span><span class="co">## <span style="color: #0000BB; font-weight: bold;">/tmp/RtmpYeZaCH/fileae042c5eeef0</span></span></span>
 <span><span class="co">## ├── .here</span></span>
 <span><span class="co">## ├── <span style="color: #0000BB; font-weight: bold;">Rmd</span></span></span>
 <span><span class="co">## │   ├── <span style="color: #0000BB; font-weight: bold;">common</span></span></span>
@@ -325,9 +356,15 @@ root.</p>
 <span><span class="co">## │   │   ├── <span style="color: #00BB00;">_header.Rmd</span></span></span>
 <span><span class="co">## │   │   ├── <span style="color: #00BB00;">cluster_markers.Rmd</span></span></span>
 <span><span class="co">## │   │   ├── <span style="color: #00BB00;">cluster_markers_table_template.Rmd</span></span></span>
+<span><span class="co">## │   │   ├── <span style="color: #0000BB; font-weight: bold;">clustering</span></span></span>
+<span><span class="co">## │   │   │   ├── <span style="color: #00BB00;">cluster_graph_leiden.Rmd</span></span></span>
+<span><span class="co">## │   │   │   ├── <span style="color: #00BB00;">cluster_graph_louvain.Rmd</span></span></span>
+<span><span class="co">## │   │   │   ├── <span style="color: #00BB00;">cluster_graph_walktrap.Rmd</span></span></span>
+<span><span class="co">## │   │   │   ├── <span style="color: #00BB00;">cluster_kmeans.Rmd</span></span></span>
+<span><span class="co">## │   │   │   ├── <span style="color: #00BB00;">cluster_sc3.Rmd</span></span></span>
+<span><span class="co">## │   │   │   └── <span style="color: #00BB00;">clustering.Rmd</span></span></span>
 <span><span class="co">## │   │   ├── <span style="color: #00BB00;">contrasts.Rmd</span></span></span>
 <span><span class="co">## │   │   ├── <span style="color: #00BB00;">contrasts_table_template.Rmd</span></span></span>
-<span><span class="co">## │   │   ├── <span style="color: #00BB00;">dimred_plots.Rmd</span></span></span>
 <span><span class="co">## │   │   └── stylesheet.css</span></span>
 <span><span class="co">## │   ├── <span style="color: #0000BB; font-weight: bold;">integration</span></span></span>
 <span><span class="co">## │   │   ├── <span style="color: #00BB00;">01_integration.Rmd</span></span></span>
@@ -380,33 +417,40 @@ root.</p>
 <span><span class="co">## │       └── matrix.mtx</span></span>
 <span><span class="co">## ├── <span style="color: #00BB00;">plan_custom.R</span></span></span>
 <span><span class="co">## ├── renv.lock</span></span>
-<span><span class="co">## └── scdrake.Rproj</span></span></code></pre>
+<span><span class="co">## ├── scdrake.Rproj</span></span>
+<span><span class="co">## └── <span style="color: #00BB00; font-weight: bold;">selected_markers.csv</span></span></span></code></pre>
 <p>The most important files and directories are:</p>
 <ul>
 <li>
-<code>config/</code>: configuration files in YAML format. The
-default configuration files (<code>*.default.yaml</code>) are bundled
-with the package and used to supply new parameters to local configs
-(<code>*.yaml</code>) when such events appear. See
+<code>config/</code>: configuration files in YAML format. Each
+pipeline (single-sample and integration) and stage has its own config
+file, plus there is a general <code>pipeline.yaml</code> file with
+runtime parameters.
+<ul>
+<li>The default configuration files (<code>*.default.yaml</code>) are
+bundled with the package and used to supply new parameters to local
+configs (<code>*.yaml</code>) when such events appear. See
 <code><a href="../articles/scdrake_config.html">vignette("scdrake_config")</a></code> for more details.</li>
+</ul>
+</li>
 <li>
 <code>Rmd/</code>: RMarkdown files used for reporting of pipeline
-results. You can edit them according to your needs, but keep in mind
-that they will be overwritten by package-bundled ones whenever you call
-<code><a href="../reference/update_project.html">update_project()</a></code>.</li>
+results. Each stage has its own report Rmd file and you can edit it
+according to your needs.</li>
 <li>
 <code>_drake_integration.R</code>,
 <code>_drake_single_sample.R</code>: entry scripts for
 <a href="https://docs.ropensci.org/drake" class="external-link">drake</a> when pipeline is executed through
-<code><a href="../reference/run_pipeline.html">run_single_sample_r()</a></code> or <code><a href="../reference/run_pipeline.html">run_integration_r()</a></code>
-(the most reproducible way to run the pipeline).</li>
+<code><a href="../reference/run_pipeline.html">run_single_sample_r()</a></code> or <code><a href="../reference/run_pipeline.html">run_integration_r()</a></code>,
+or CLI</li>
 <li>
 <code>plan_custom.R</code>: here you can define your own
-<a href="https://docs.ropensci.org/drake" class="external-link">drake</a> pipeline (plan) to extend <a href="https://github.com/bioinfocz/scdrake" class="external-link">scdrake</a>.
-More on this topic in <code><a href="../articles/scdrake_extend.html">vignette("scdrake_extend")</a></code>.</li>
+<a href="https://docs.ropensci.org/drake" class="external-link">drake</a> pipeline (plan) to extend <a href="https://github.com/bioinfocz/scdrake" class="external-link">scdrake</a>
+(more on this topic in <code><a href="../articles/scdrake_extend.html">vignette("scdrake_extend")</a></code>)</li>
 <li>
 <code>example_data/</code>: example datasets. Those are raw
-feature-barcode matrices output by <a href="https://support.10xgenomics.com/single-cell-gene-expression/software/pipelines/latest/what-is-cell-ranger" class="external-link">cellranger</a>.</li>
+feature-barcode matrices output by <a href="https://support.10xgenomics.com/single-cell-gene-expression/software/pipelines/latest/what-is-cell-ranger" class="external-link">cellranger</a>
+and provided by 10x Genomics.</li>
 <li>
 <code>scdrake.Rproj</code>: RStudio project file. If you open this
 file in RStudio, your working directory will be automatically set to
@@ -417,19 +461,31 @@ project’s root directory.</li>
 <div class="section level3">
 <h3 id="step-2-modify-the-configuration-files">Step 2: modify the configuration files<a class="anchor" aria-label="anchor" href="#step-2-modify-the-configuration-files"></a>
 </h3>
-<p>The configuration files for all subpipelines (called <em>stages</em>)
-are stored in the <code>config/</code> directory. At this time we only
-need to modify a single parameter to run the first stage
-(<code>01_input_qc</code>) of the single-sample pipeline.</p>
+<p>In this three step guide we are going to run the first stage
+(<code>01_input_qc</code>) of the single-sample pipeline. This stage
+imports scRNA-seq data, computes per-cell quality control metrics (total
+number of UMI, number of detected genes, percentage of expressed
+mitochondrial genes) and performs filtering, which can be either based
+on median absolute deviation (<em>dataset-sensitive filtering</em>,
+default) or custom thresholds (<em>custom filtering</em>). You can read
+more about this stage and its analysis steps, parameters and outputs in
+<code><a href="../articles/stage_input_qc.html">vignette("stage_input_qc")</a></code>.</p>
+<p>The configuration files for all stages are stored in the
+<code>config/</code> directory. At this time we only need to modify a
+single parameter in the config file for the <code>01_input_qc</code>
+stage.</p>
 <p>To do so, open <code>config/single_sample/01_input_qc.yaml</code> and
 set value of <code>path</code> inside <code>INPUT_DATA</code> to
-<code>"example_data/pbmc1k"</code>, such that:</p>
-<div class="sourceCode" id="cb9"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">INPUT_DATA</span><span class="kw">:</span></span>
-<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">type</span><span class="kw">:</span><span class="at"> </span><span class="st">"cellranger"</span></span>
-<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">path</span><span class="kw">:</span><span class="at"> </span><span class="st">"example_data/pbmc1k"</span></span>
-<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">delimiter</span><span class="kw">:</span><span class="at"> </span><span class="st">","</span></span></code></pre></div>
+<code>"example_data/pbmc1k"</code> such that it points to the directory
+with PBMC 1k example dataset, which has been downloaded on project
+initialization:</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">INPUT_DATA</span><span class="kw">:</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">type</span><span class="kw">:</span><span class="at"> </span><span class="st">"cellranger"</span></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">path</span><span class="kw">:</span><span class="at"> </span><span class="st">"example_data/pbmc1k"</span></span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">delimiter</span><span class="kw">:</span><span class="at"> </span><span class="st">","</span></span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">target_name</span><span class="kw">:</span><span class="at"> </span><span class="st">"target_name"</span></span></code></pre></div>
 <blockquote>
-<p>Important: all paths in configs must be relative to the project root
+<p>Important: all paths in configs must be relative to project’s root
 directory, or absolute (<strong>not recommended</strong>), unless
 otherwise stated.</p>
 </blockquote>
@@ -438,14 +494,30 @@ otherwise stated.</p>
 <div class="section level3 tabset">
 <h3 class="tabset" id="step-3-run-the-single-sample-pipeline">Step 3: run the single-sample pipeline<a class="anchor" aria-label="anchor" href="#step-3-run-the-single-sample-pipeline"></a>
 </h3>
-<p>By default, only the final target <code>report_input_qc</code> (and
-all targets it depends on) of the input and QC stage
-(<code>01_input_qc</code>) will be made, that is, a HTML report. This is
-specified by <code>DRAKE_TARGETS</code> parameter in
-<code>config/pipeline.yaml</code>. You can look <a href="#how-to-know-which-targets-you-can-load-and-what-each-parameter-do">below</a>
-for how to identify other targets which can be made.</p>
-<p>Now we can run the single-sample pipeline for the PBMC 1k
-dataset:</p>
+<p>Now we are ready to execute the single-sample pipeline.
+<a href="https://docs.ropensci.org/drake" class="external-link">drake</a> pipelines are composed of individual steps called
+targets. Each target is represented by R expression that returns its
+value (R object). When target is finished, its value is saved into cache
+directory and can be used by other targets or load by the user into the
+current R session.</p>
+<p><a href="https://docs.ropensci.org/drake" class="external-link">drake</a> allows to execute the pipeline such that
+specific targets are made. This is controlled by the
+<code>DRAKE_TARGETS</code> parameter in the
+<code>config/pipeline.yaml</code> file (see
+<code><a href="../articles/config_pipeline.html">vignette("config_pipeline")</a></code>).</p>
+<p>The default value of <code>DRAKE_TARGETS</code> is
+<code>report_input_qc</code>, which represents the final target of the
+<code>01_input_qc</code> stage - a HTML report.</p>
+<p>All files from this stage will be saved under the
+<code>output/single_sample</code> directory. For the report, it is
+<code>output/single_sample/01_input_qc/01_input_qc.html</code>. The
+output directory is specified by the <code>BASE_OUT_DIR</code> parameter
+in <code>config/single_sample/00_main.yaml</code>.</p>
+<p>The <code>00_main.yaml</code> config stores parameters that are
+common to all stages of the single-sample or integration pipeline,
+e.g. titles or organism (see <code><a href="../articles/config_main.html">vignette("config_main")</a></code>).</p>
+<p>Now let’s run the pipeline:</p>
+
 
 
 
@@ -453,262 +525,514 @@ dataset:</p>
 <li role="presentation" class="nav-item"><button data-bs-toggle="tab" data-bs-target="#in-r-2" id="in-r-2-tab" type="button" role="tab" aria-controls="in-r-2" aria-selected="true" class="active nav-link">In R</button></li>
 <li role="presentation" class="nav-item"><button data-bs-toggle="tab" data-bs-target="#on-command-line-2" id="on-command-line-2-tab" type="button" role="tab" aria-controls="on-command-line-2" aria-selected="false" class="nav-link">On command line</button></li>
 <li role="presentation" class="nav-item"><button data-bs-toggle="tab" data-bs-target="#on-command-line-docker-2" id="on-command-line-docker-2-tab" type="button" role="tab" aria-controls="on-command-line-docker-2" aria-selected="false" class="nav-link">On command line (Docker)</button></li>
+<li role="presentation" class="nav-item"><button data-bs-toggle="tab" data-bs-target="#on-command-line-singularity-2" id="on-command-line-singularity-2-tab" type="button" role="tab" aria-controls="on-command-line-singularity-2" aria-selected="false" class="nav-link">On command line (Singularity)</button></li>
 </ul>
 <div class="tab-content">
 <div class="active  tab-pane" id="in-r-2" role="tabpanel" aria-labelledby="in-r-2-tab">
 
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/run_pipeline.html">run_single_sample_r</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="tab-pane" id="on-command-line-2" role="tabpanel" aria-labelledby="on-command-line-2-tab">
 
-<div class="sourceCode" id="cb11"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="ex">scdrake</span> <span class="at">--pipeline-type</span> single_sample run</span></code></pre></div>
+<div class="sourceCode" id="cb13"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="ex">scdrake</span> <span class="at">--pipeline-type</span> single_sample run</span></code></pre></div>
 </div>
 <div class="tab-pane" id="on-command-line-docker-2" role="tabpanel" aria-labelledby="on-command-line-docker-2-tab">
 
-<div class="sourceCode" id="cb12"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> exec <span class="at">-it</span> <span class="at">-u</span> rstudio <span class="at">-w</span> /home/rstudio/scdrake_projects/pbmc1k <span class="op">&lt;</span>CONTAINER ID or NAME<span class="op">&gt;</span> <span class="dt">\</span></span>
-<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>  scdrake <span class="at">--pipeline-type</span> single_sample run</span></code></pre></div>
+<div class="sourceCode" id="cb14"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> exec <span class="at">-it</span> <span class="at">-u</span> rstudio <span class="at">-w</span> /home/rstudio/scdrake_projects/pbmc1k <span class="op">&lt;</span>CONTAINER ID or NAME<span class="op">&gt;</span> <span class="dt">\</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>  scdrake <span class="at">--pipeline-type</span> single_sample run</span></code></pre></div>
+</div>
+<div class="tab-pane" id="on-command-line-singularity-2" role="tabpanel" aria-labelledby="on-command-line-singularity-2-tab">
+
+<div class="sourceCode" id="cb15"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="ex">singularity</span> exec <span class="at">-e</span> <span class="at">--no-home</span> <span class="dt">\</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>    <span class="at">--bind</span> <span class="st">"home/</span><span class="va">${USER}</span><span class="st">/:/home/</span><span class="va">${USER}</span><span class="st">,scdrake_projects/:/home/</span><span class="va">${USER}</span><span class="st">/scdrake_projects"</span> <span class="dt">\</span></span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">--pwd</span> <span class="st">"/home/</span><span class="va">${USER}</span><span class="st">/scdrake_projects/pbmc1k"</span> <span class="dt">\</span></span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>    path/to/scdrake_image.sif <span class="dt">\</span></span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>    scdrake <span class="at">--pipeline-type</span> single_sample run</span></code></pre></div>
 </div>
 </div>
 </div>
 <div class="section level3 unnumbered">
 <h3 class="unnumbered" id="section-3"></h3>
-<p>The output is saved in <code>output/single_sample</code> directory,
-as specified by <code>BASE_OUT_DIR</code> in
-<code>config/single_sample/00_main.yaml</code>. You can find the final
-report of the <code>01_input_qc</code> stage in
-<code>output/single_sample/01_input_qc/01_input_qc.html</code>.</p>
-<p>If you want to run the main target for next stage
-(<code>02_norm_clustering</code>), just open
-<code>config/pipeline.yaml</code> and change <code>DRAKE_TARGETS</code>
-to <code>["report_norm_clustering"]</code> (or comment the current
-<code>DRAKE_TARGETS</code> line and uncomment the predefined one).</p>
-<p>Just note the default config files are meant for the example PBMC
-data, and so before you analyse your own data, you should read the
-section <a href="#before-you-analyse-your-own-data">below</a> about
-important steps before you do so.</p>
+<p>Now you can inspect the HTML report located in
+<code>output/single_sample/01_input_qc/01_input_qc.html</code>. It gives
+you a summary view on the quality of the dataset and shows how each
+filtering type affects the number of cells. The report is mostly
+self-explanatory as it explains all analysis steps that took place and
+their visual outputs.</p>
 <hr>
 </div>
 </div>
 <div class="section level2">
-<h2 id="before-you-analyse-your-own-data">Before you analyse your own data<a class="anchor" aria-label="anchor" href="#before-you-analyse-your-own-data"></a>
+<h2 id="recapitulation">Recapitulation<a class="anchor" aria-label="anchor" href="#recapitulation"></a>
 </h2>
-<p>The default config files are designed to work with provided example
-data and contain parameters which are used to test/showcase various
-features of the pipeline. Hence, some parameters are example
-data-specific, and might lead to pipeline failure when kept as-is for
-your data. Also, some parameters are critical for the analysis outcomes
-and you should be aware of them.</p>
+<p>In the three steps above you have seen the basic functionality of
+<a href="https://github.com/bioinfocz/scdrake" class="external-link">scdrake</a>. We can briefly summarize it:</p>
+<ul>
+<li>Before you begin an analysis, you have to initialize a new project
+directory (Step 1)</li>
+<li>The project directory contains configuration files in YAML format
+that can be edited (Step 2).
+<ul>
+<li>Each stage (e.g. <code>01_input_qc</code>) has its own configuration
+file</li>
+<li>Each pipeline (single-sample and integration) has its own general
+configuration file (<code>00_main.yaml</code>), which is used throughout
+the pipeline’s stages</li>
+<li>Runtime (non-analysis) parameters are set in
+<code>pipeline.yaml</code>
+</li>
+</ul>
+</li>
+<li>Once the parameters are set and data are ready, you can execute the
+pipeline (Step 3)
+<ul>
+<li>Each stage has a final target: a HTML report. However, any
+intermediate target can be specified and made.</li>
+</ul>
+</li>
+</ul>
+<p>Each stage or general config has its own vignette describing analysis
+steps, parameters and outputs (targets - R objects, HTML reports):</p>
+<ul>
+<li>General configs:
+<ul>
+<li>Pipeline config -&gt; <code><a href="../articles/config_pipeline.html">vignette("config_pipeline")</a></code>
+</li>
+<li>Main config -&gt; <code><a href="../articles/config_main.html">vignette("config_main")</a></code>
+</li>
+</ul>
+</li>
+<li>Pipelines and stages:
+<ul>
+<li>Single-sample pipeline:
+<ul>
+<li>Stage <code>01_input_qc</code>: reading in data, filtering, quality
+control -&gt; <code><a href="../articles/stage_input_qc.html">vignette("stage_input_qc")</a></code>
+</li>
+<li>Stage <code>02_norm_clustering</code>: normalization, HVG selection,
+dimensionality reduction, clustering, cell type annotation -&gt;
+<code><a href="../articles/stage_norm_clustering.html">vignette("stage_norm_clustering")</a></code>
+</li>
+</ul>
+</li>
+<li>Integration pipeline:
+<ul>
+<li>Stage <code>01_integration</code>: reading in data and integration
+-&gt; <code><a href="../articles/stage_integration.html">vignette("stage_integration")</a></code>
+</li>
+<li>Stage <code>02_int_clustering</code>: post-integration clustering
+and cell annotation -&gt;
+<code><a href="../articles/stage_int_clustering.html">vignette("stage_int_clustering")</a></code>
+</li>
+</ul>
+</li>
+<li>Common stages:
+<ul>
+<li>Stage <code>cluster_markers</code> -&gt;
+<code><a href="../articles/stage_cluster_markers.html">vignette("stage_cluster_markers")</a></code>
+</li>
+<li>Stage <code>contrasts</code> (differential expression) -&gt;
+<code><a href="../articles/stage_contrasts.html">vignette("stage_contrasts")</a></code>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p>You can navigate these vignettes in the top bar in the Articles
+drop-down menu.</p>
+<p>For the integration pipeline you might be interested in its guide in
+<code><a href="../articles/scdrake_integration.html">vignette("scdrake_integration")</a></code></p>
+<blockquote>
+<p>Note that the default config files are meant for the example PBMC
+data, and so before you analyse your own data, you should read the
+section <a href="#important-before-you-analyse-your-own-data">below</a>
+about important steps before you do so.</p>
+</blockquote>
+<hr>
+</div>
+<div class="section level2">
+<h2 id="modifying-parameters-and-rerunning-the-pipeline">Modifying parameters and rerunning the pipeline<a class="anchor" aria-label="anchor" href="#modifying-parameters-and-rerunning-the-pipeline"></a>
+</h2>
+<p>Let’s practice a bit more with <a href="https://github.com/bioinfocz/scdrake" class="external-link">scdrake</a> and modify a
+cell filtering parameter. This will also demonstrate the
+<a href="https://docs.ropensci.org/drake" class="external-link">drake</a>’s ability to skip finished targets.</p>
+<p>Let’s assume you decided to be more strict in dataset-sensitive cell
+filtering and want to use a MAD threshold of <code>2</code>. At the same
+time, you want to save the report into a different file so it can be
+compared with the previous, more benevolent filtering. Now open
+<code>config/single_sample/01_input_qc.yaml</code> and change:</p>
+<div class="sourceCode" id="cb16"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="fu">MAD_THRESHOLD</span><span class="kw">:</span><span class="at"> </span><span class="dv">2</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="fu">INPUT_QC_BASE_OUT_DIR</span><span class="kw">:</span><span class="at"> </span><span class="st">"01_input_qc_strict"</span></span></code></pre></div>
+<p>After repeating the Step 3 above you can see the most time-consuming
+targets <code>sce_raw</code> and <code>empty_droplets</code> were
+skipped. Also, we simply output the HTML report for the new parameter
+into a different directory
+(<code>output/single_sample/01_input_qc_strict/01_input_qc.html</code>),
+and so we can easily compare it with the previous report. If you open
+the new report, you can see that more cells were filtered out.</p>
+<hr>
+</div>
+<div class="section level2">
+<h2 id="cell-clustering-and-annotation">Cell clustering and annotation<a class="anchor" aria-label="anchor" href="#cell-clustering-and-annotation"></a>
+</h2>
+<p>Now we will look at perhaps the most important outcomes of a
+scRNA-seq data analysis: cell clustering and cell type annotation. These
+particular procedures are implemented in the second stage
+<code>02_norm_clustering</code> of the single-sample pipeline (see
+<code><a href="../articles/stage_norm_clustering.html">vignette("stage_norm_clustering")</a></code>). Clustering and
+annotation is preceded by other necessary steps, most importantly:
+normalization, highly variable genes selection, PCA calculation, and
+dimensionality reduction using principal components (UMAP, t-SNE). A
+similar stage is also available in the integration pipeline:
+<code>02_int_clustering</code> (see
+<code><a href="../articles/stage_int_clustering.html">vignette("stage_int_clustering")</a></code>).</p>
+<p>Initially, we won’t make any changes to the
+<code>config/single_sample/02_norm_clustering.yaml</code> config and
+keep its sensible defaults:</p>
+<ul>
+<li>Normalization by deconvolution
+(<code><a href="https://rdrr.io/pkg/scuttle/man/computePooledFactors.html" class="external-link">scuttle::computePooledFactors()</a></code>)</li>
+<li>Selection of top 1000 highly variable genes based on their
+variance</li>
+<li>Selection of first 15 principal components that will be used in
+downstream steps</li>
+<li>Graph-based clustering using the Leiden algorithm and five different
+resolutions that will result in different number of detected clusters
+(granularity)</li>
+<li>Automatic cell type annotation (<a href="http://bioconductor.org/books/3.15/SingleRBook/" class="external-link">SingleR</a>)
+using two reference datasets: Human Primary Cell Atlas
+(<code><a href="https://rdrr.io/pkg/celldex/man/HumanPrimaryCellAtlasData.html" class="external-link">celldex::HumanPrimaryCellAtlasData()</a></code>) and Monaco Immune
+Data (<code><a href="https://rdrr.io/pkg/celldex/man/MonacoImmuneData.html" class="external-link">celldex::MonacoImmuneData()</a></code>)</li>
+</ul>
+<p>What we need in order to perform the <code>02_norm_clustering</code>
+stage is just to change targets for <a href="https://docs.ropensci.org/drake" class="external-link">drake</a>: open
+<code>config/pipeline.yaml</code> and change <code>DRAKE_TARGETS</code>
+to
+<code>["report_norm_clustering", "report_norm_clustering_simple"]</code></p>
+<p>These targets will make two reports for this stage. The first one
+includes technical details about important analysis steps, while the
+second one is simplified and limited to dimensionality reduction
+plots.</p>
+<p>Now run the pipeline using the familiar command from the Step 3.</p>
+<p>Then you can go through the report located in the
+<code>output/single_sample/02_norm_clustering/02_norm_clustering.html</code>
+file. The report provides all necessary information about the performed
+analysis steps, and graphical outputs, most importantly dimensionality
+reduction plots displaying cell-cluster membership.</p>
+<p>Also, at the end of the report you can find results from the
+automatic cell type annotation. You can see that clusters represents the
+main immune cell types. If you are interested in markers of the
+predicted cell types, you can click on the <em>Marker heatmaps PDF</em>
+link.</p>
+<div class="section level3">
+<h3 id="visualizing-markers-of-interest">Visualizing markers of interest<a class="anchor" aria-label="anchor" href="#visualizing-markers-of-interest"></a>
+</h3>
+<p>In <a href="https://github.com/bioinfocz/scdrake" class="external-link">scdrake</a> there is a convenient way how to visualize
+expression of markers of interest in reduced dimensions. It simply uses
+a CSV file that defines groups of markers given by their symbol. This is
+an example of such CSV file (<code>selected_markers.csv</code>) that is
+bundled with <a href="https://github.com/bioinfocz/scdrake" class="external-link">scdrake</a> and automatically copied to the root
+of a new project on its initialization:</p>
+<pre><code>Naive_CD4+_T,IL7R:CCR7
+Memory_CD4+,IL7R:S100A4
+CD14+_Mono,CD14:LYZ
+B,MS4A1
+CD8+_T,CD8A
+FCGR3A+_Mono,FCGR3A:MS4A7
+NK,GNLY:NKG7
+DC,FCER1A:CST3
+Platelet,PPBP</code></pre>
+<p>The first column specifies a group of markers (cell types in this
+case) and the second column lists the marker symbols separated by colon.
+Note that there is no header.</p>
+<p>To enable usage of this file and subsequent generation of expression
+plots, in <code>config/single_sample/02_norm_clustering.yaml</code>
+simply change <code>SELECTED_MARKERS_FILE</code> to
+<code>"selected_markers.csv"</code></p>
+<p>Now you have two options how to tell <a href="https://github.com/bioinfocz/scdrake" class="external-link">scdrake</a> to make
+the expression plots (PDFs) using the CSV file:</p>
+<ul>
+<li>Rerun the pipeline, i.e. make the
+<code>report_norm_clustering</code> and
+<code>report_norm_clustering_simple</code> targets again as they also
+provide links to generated PDF files (under the Dimensionality reduction
+plots section).</li>
+<li>In <code>config/pipeline.yaml</code> change
+<code>DRAKE_TARGETS</code> to
+<code>["selected_markers_plots_files_out"]</code>. This target outputs
+the PDF files to the
+<code>output/single_sample/selected_markers_plots</code> directory (to
+which the links in the report lead to).</li>
+</ul>
+<p>There are three PDFs with different reduced dimensions (PCA, t-SNE,
+UMAP) and each contains a matrix of expression plots of genes supplied
+in the CSV file.</p>
+</div>
+<div class="section level3">
+<h3 id="assigning-labels-to-clusters">Assigning labels to clusters<a class="anchor" aria-label="anchor" href="#assigning-labels-to-clusters"></a>
+</h3>
+<p>When identities of clusters are known, it is possible to transform
+cluster numbers into more informative cell type names. For that there is
+a handy parameter <code>CELL_GROUPINGS</code> in
+<code>config/single_sample/02_norm_clustering.yaml</code>.</p>
+<p>Let’s say you want to manually annotate some clusters in Leiden
+clustering with resolution <code>0.4</code> and <code>0.6</code>. For
+that you can change the parameter as follows (please, do not search for
+any biological relevance here - the used annotation is solely purposed
+to demonstrate the usage of this parameter):</p>
+<div class="sourceCode" id="cb18"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu">CELL_GROUPINGS</span><span class="kw">:</span></span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="kw">-</span><span class="at"> </span><span class="fu">cluster_graph_leiden_r0.4_annotated</span><span class="kw">:</span></span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">source_column</span><span class="kw">:</span><span class="at"> </span><span class="st">"cluster_graph_leiden_r0.4"</span></span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">description</span><span class="kw">:</span><span class="at"> </span><span class="st">"Graph-based clustering (Leiden alg., r = 0.4), annotated clusters"</span></span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">assignments</span><span class="kw">:</span></span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">1</span><span class="kw">:</span><span class="at"> </span><span class="st">"memory CD4+"</span></span>
+<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">6</span><span class="kw">:</span><span class="at"> </span><span class="st">"B"</span></span>
+<span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">7</span><span class="kw">:</span><span class="at"> </span><span class="st">"memory CD4+"</span></span>
+<span id="cb18-9"><a href="#cb18-9" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">cluster_graph_leiden_r0.6_annotated</span><span class="kw">:</span></span>
+<span id="cb18-10"><a href="#cb18-10" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">source_column</span><span class="kw">:</span><span class="at"> </span><span class="st">"cluster_graph_leiden_r0.6"</span></span>
+<span id="cb18-11"><a href="#cb18-11" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">description</span><span class="kw">:</span><span class="at"> </span><span class="st">"Graph-based clustering (Leiden alg., r = 0.6), annotated clusters"</span></span>
+<span id="cb18-12"><a href="#cb18-12" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">assignments</span><span class="kw">:</span></span>
+<span id="cb18-13"><a href="#cb18-13" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">2</span><span class="kw">:</span><span class="at"> </span><span class="st">"TNK"</span></span>
+<span id="cb18-14"><a href="#cb18-14" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">3</span><span class="kw">:</span><span class="at"> </span><span class="st">"CD4 naive"</span></span></code></pre></div>
+<p>There are two items in the <code>CELL_GROUPINGS</code>, and each of
+them is referencing Leiden clustering with different resolution. The
+first item/grouping has the following structure:</p>
+<ul>
+<li>
+<code>cluster_graph_leiden_r0.4_annotated</code>: a name of new cell
+grouping added
+<ul>
+<li>
+<code>source_column: "cluster_graph_leiden_r0.4"</code>: a name of
+cell metadata column to use for new assignments. This will be usually a
+result from clustering and you can find how clusterings are named in
+<code><a href="../articles/stage_norm_clustering.html">vignette("stage_norm_clustering")</a></code> under the Outputs
+tab.</li>
+<li>
+<code>description: "Graph-based clustering ..."</code>: a
+description of the new assignment. If it was not set, the name of the
+grouping (<code>cluster_graph_leiden_r0.4_annotated</code>) would be
+used instead.</li>
+<li>
+<code>assignments</code>: assignments of the old labels to new ones.
+That is, cluster <code>6</code> will be renamed to <code>"B"</code>, and
+clusters <code>1</code> and <code>7</code> will be merged to a new label
+<code>"memory_CD4+"</code>. All unspecified old labels will be kept as
+they are.</li>
+</ul>
+</li>
+</ul>
+<p>These new cell groupings can be then referenced in other parameters.
+For example, you can add them to the
+<code>NORM_CLUSTERING_REPORT_DIMRED_PLOTS_OTHER</code> list, which
+specifies variables to color by cells in dimensionality reduction
+plots:</p>
+<div class="sourceCode" id="cb19"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="fu">NORM_CLUSTERING_REPORT_DIMRED_PLOTS_OTHER</span><span class="kw">:</span></span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="kw">-</span><span class="at"> </span><span class="st">"phase"</span><span class="kw">:</span><span class="at"> </span><span class="st">"Cell cycle phases"</span></span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">"doublet_score"</span><span class="kw">:</span><span class="at"> </span><span class="st">"Doublet score"</span></span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">"total"</span><span class="kw">:</span><span class="at"> </span><span class="st">"Total number of UMI"</span></span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">"detected"</span><span class="kw">:</span><span class="at"> </span><span class="st">"Detected number of genes"</span></span>
+<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">"cluster_graph_leiden_r0.4_annotated"</span><span class="kw">:</span><span class="at"> </span><span class="ch">null</span></span>
+<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">"cluster_graph_leiden_r0.6_annotated"</span><span class="kw">:</span><span class="at"> </span><span class="ch">null</span></span></code></pre></div>
+<p>For the new groupings we are not specifying the plot titles - those
+are taken from <code>CELL_GROUPINGS</code> from the
+<code>description</code> item.</p>
+<p>Again, there are two options how to generate the plots:</p>
+<ul>
+<li>In <code>config/pipeline.yaml</code> change
+<code>DRAKE_TARGETS</code> to <code>report_norm_clustering</code> or
+<code>report_norm_clustering_simple</code>, and rerun the pipeline.
+After that you can see the new plots under the Dimensionality reduction
+plots section in the report.</li>
+<li>Just make the PDF files: use
+<code>["dimred_plots_other_vars_files_out"]</code> for
+<code>DRAKE_TARGETS</code>. The files will be saved in the
+<code>output/single_sample/dimred_plots</code> directory and named as
+<code>cluster_graph_leiden_r0.4_annotated_&lt;dimred_name&gt;</code>
+etc. (and again, those files are referenced from the report).</li>
+</ul>
+<p>It is also possible to assign custom cell metadata from a CSV file -
+see the <code>ADDITIONAL_CELL_DATA_FILE</code> parameter in
+<code><a href="../articles/stage_norm_clustering.html">vignette("stage_norm_clustering")</a></code> or “I want to manually
+annotate cells” section in <code><a href="../articles/scdrake_faq.html">vignette("scdrake_faq")</a></code>.</p>
+<p>Note that <code>CELL_GROUPINGS</code> and
+<code>ADDITIONAL_CELL_DATA_FILE</code> are also available in the
+<code>02_int_clustering</code> stage of the integration pipeline.</p>
+</div>
+<div class="section level3">
+<h3 id="calculation-of-marker-genes">Calculation of marker genes<a class="anchor" aria-label="anchor" href="#calculation-of-marker-genes"></a>
+</h3>
+<p>Besides the visualization of marker genes of interest, one can also
+calculate statistical tests to discover markers that drive the
+separation of cells into clusters. We won’t go into details here; see
+<code><a href="../articles/stage_cluster_markers.html">vignette("stage_cluster_markers")</a></code> that describes the
+<code>cluster_markers</code> stage, which is available for both
+single-sample and integration pipelines.</p>
+<p>It is also possible to perform differential gene expression between
+clusters (or in general, groups of cells) through the
+<code>contrasts</code> stage (see
+<code><a href="../articles/stage_contrasts.html">vignette("stage_contrasts")</a></code>).</p>
+<p>Note that in these stages you can reference cell groupings that were
+defined in the <code>CELL_GROUPINGS</code> parameter.</p>
+<hr>
+</div>
+</div>
+<div class="section level2">
+<h2 id="important-before-you-analyse-your-own-data">Important: before you analyse your own data<a class="anchor" aria-label="anchor" href="#important-before-you-analyse-your-own-data"></a>
+</h2>
+<p>The default config files are designed to work with the provided
+example data. The parameters mostly default to arguments in underlying
+functions in packages that are called by <a href="https://github.com/bioinfocz/scdrake" class="external-link">scdrake</a> or are
+set according to common/best analysis practices (e.g. those described in
+<a href="https://bioconductor.org/books/3.15/OSCA/" class="external-link">OSCA</a>). Anyway,
+it is worth saying that:</p>
+<ul>
+<li>Some parameters are critical and the pipeline will fail immediately
+when they are wrongly set or kept with the default value
+(e.g. <code>INPUT_DATA</code>)</li>
+<li>As not all scRNA-seq datasets are the same, some parameters could
+need an adjustment (e.g. low-quality datasets might need more strict
+cell filtering)</li>
+</ul>
 <p>Below you can find important parameters which you should review
-before you run the pipeline on your data for the first time (but it
-doesn’t mean you shouldn’t use them later). All parameters are
-documented in vignettes for their respective stages.</p>
-<details><summary>
-Show important parameters
-</summary><div class="section level3 unlisted">
+before you run the pipeline on your data for the first time. <strong>All
+parameters are documented in vignettes for their respective stages or
+general configs.</strong></p>
+<div class="section level3 unlisted">
+<h3 class="unlisted" id="pipeline-config-pipeline-yaml">Pipeline config (<code>pipeline.yaml</code>)<a class="anchor" aria-label="anchor" href="#pipeline-config-pipeline-yaml"></a>
+</h3>
+<p>-&gt; <code><a href="../articles/config_pipeline.html">vignette("config_pipeline")</a></code></p>
+<ul>
+<li>
+<code>DRAKE_TARGETS</code>: what targets you want to make</li>
+</ul>
+</div>
+<div class="section level3 unlisted">
 <h3 class="unlisted" id="main-config-00_main-yaml">Main config (<code>00_main.yaml</code>)<a class="anchor" aria-label="anchor" href="#main-config-00_main-yaml"></a>
 </h3>
+<p>-&gt; <code><a href="../articles/config_main.html">vignette("config_main")</a></code></p>
 <ul>
-<li><code>ORGANISM</code></li>
-<li><code>ANNOTATION_LIST</code></li>
-<li><code>ENSEMBL_SPECIES</code></li>
-<li><code>BASE_OUT_DIR</code></li>
+<li>
+<code>ORGANISM</code>, <code>ANNOTATION_LIST</code>: an organism
+name to match a proper annotation package defined in
+<code>ANNOTATION_LIST</code>
+</li>
+<li>
+<code>ENSEMBL_SPECIES</code>: an ENSEMBL species name used to build
+links to Ensembl genes website</li>
+<li>
+<code>BASE_OUT_DIR</code>: a path to base output directory to which
+each stage’s files will be saved</li>
 </ul>
 </div>
 <div class="section level3 unlisted">
 <h3 class="unlisted" id="single-sample-input-qc-stage-01_input_qc-yaml">Single-sample / Input QC stage
 (<code>01_input_qc.yaml</code>)<a class="anchor" aria-label="anchor" href="#single-sample-input-qc-stage-01_input_qc-yaml"></a>
 </h3>
+<p>-&gt; <code><a href="../articles/stage_input_qc.html">vignette("stage_input_qc")</a></code></p>
 <ul>
-<li><code>INPUT_DATA</code></li>
-<li><code>EMPTY_DROPLETS_ENABLED</code></li>
-<li><code>SAVE_DATASET_SENSITIVE_FILTERING</code></li>
+<li>
+<code>INPUT_DATA</code>: specifies the type and location of input
+data</li>
+<li>
+<code>EMPTY_DROPLETS_ENABLED</code>: enable/disable removal of empty
+droplets</li>
+<li>
+<code>SAVE_DATASET_SENSITIVE_FILTERING</code>: enable
+dataset-sensitive or custom thresholds cell filtering</li>
 </ul>
 </div>
 <div class="section level3 unlisted">
 <h3 class="unlisted" id="single-sample-normalization-and-clustering-stage-02_norm_clustering-yaml">Single-sample / Normalization and clustering stage
 (<code>02_norm_clustering.yaml</code>)<a class="anchor" aria-label="anchor" href="#single-sample-normalization-and-clustering-stage-02_norm_clustering-yaml"></a>
 </h3>
+<p>-&gt; <code><a href="../articles/stage_norm_clustering.html">vignette("stage_norm_clustering")</a></code></p>
 <ul>
-<li><code>NORMALIZATION_TYPE</code></li>
-<li><code>HVG_METRIC</code></li>
-<li><code>PCA_SELECTION_METHOD</code></li>
 <li>
-<code>PCA_FORCED_PCS</code> (if <code>PCA_SELECTION_METHOD</code> is
-<code>"forced"</code>)</li>
-<li><code>KMEANS_K</code></li>
-<li><code>SC3_K</code></li>
-<li><code>SC3_N_CORES</code></li>
+<code>NORMALIZATION_TYPE</code>: normalization of UMI/counts either
+by <code>{scuttle}</code> (<code>{scran}</code>) or
+<a href="https://github.com/satijalab/sctransform" class="external-link">sctransform</a> (<a href="https://satijalab.org/seurat" class="external-link">Seurat</a>)</li>
+<li>
+<code>HVG_METRIC</code>, <code>HVG_SELECTION</code>,
+<code>HVG_SELECTION_VALUE</code>: how to select highly variable
+genes</li>
+<li>
+<code>PCA_SELECTION_METHOD</code>, <code>PCA_FORCED_PCS</code> (if
+<code>PCA_SELECTION_METHOD</code> is <code>"forced"</code>): how to
+select the number of first principal components</li>
+<li>Enable/disable clustering algorithms and set their resolutions or
+numbers of clusters to cluster for:
+<ul>
+<li>
+<code>CLUSTER_GRAPH_LEIDEN_ENABLED</code>,
+<code>CLUSTER_GRAPH_LEIDEN_RESOLUTIONS</code>
+</li>
+<li>
+<code>CLUSTER_GRAPH_LOUVAIN_ENABLED</code>,
+<code>CLUSTER_GRAPH_LOUVAIN_RESOLUTIONS</code>
+</li>
+<li><code>CLUSTER_GRAPH_WALKTRAP_ENABLED</code></li>
+<li>
+<code>CLUSTER_KMEANS_K_ENABLED</code>,
+<code>CLUSTER_KMEANS_KBEST_ENABLED</code>,
+<code>CLUSTER_KMEANS_K</code>
+</li>
+<li>
+<code>CLUSTER_SC3_ENABLED</code>, <code>CLUSTER_SC3_K</code>,
+<code>CLUSTER_SC3_N_CORES</code>
+</li>
+</ul>
+</li>
 </ul>
 </div>
 <div class="section level3 unlisted">
-<h3 class="unlisted" id="integration-integration-01_integration-yaml">Integration / Integration
-(<code>01_integration.yaml</code>)<a class="anchor" aria-label="anchor" href="#integration-integration-01_integration-yaml"></a>
+<h3 class="unlisted" id="integration-integration-stage-01_integration-yaml">Integration / Integration stage
+(<code>01_integration.yaml</code>)<a class="anchor" aria-label="anchor" href="#integration-integration-stage-01_integration-yaml"></a>
 </h3>
+<p>-&gt; <code><a href="../articles/stage_integration.html">vignette("stage_integration")</a></code></p>
 <ul>
-<li><code>INTEGRATION_SOURCES</code></li>
+<li>
+<code>INTEGRATION_SOURCES</code>: similar to the
+<code>INPUT_DATA</code> parameter, specify types and paths to datasets
+to be integrated</li>
 </ul>
 </div>
 <div class="section level3 unlisted">
-<h3 class="unlisted" id="integration-post-integration-clustering-02_int_clustering-yaml">Integration / Post-integration clustering
-(<code>02_int_clustering.yaml</code>)<a class="anchor" aria-label="anchor" href="#integration-post-integration-clustering-02_int_clustering-yaml"></a>
+<h3 class="unlisted" id="integration-post-integration-clustering-stage-02_int_clustering-yaml">Integration / Post-integration clustering stage
+(<code>02_int_clustering.yaml</code>)<a class="anchor" aria-label="anchor" href="#integration-post-integration-clustering-stage-02_int_clustering-yaml"></a>
 </h3>
+<p>-&gt; <code><a href="../articles/stage_int_clustering.html">vignette("stage_int_clustering")</a></code></p>
 <ul>
-<li><code>KMEANS_K</code></li>
-<li><code>SC3_K</code></li>
-<li><code>SC3_N_CORES</code></li>
+<li>Clustering parameters: same as in the
+<code>02_norm_clustering.yaml</code> config of the single-sample
+pipeline</li>
 </ul>
 </div>
 <div class="section level3 unlisted">
 <h3 class="unlisted" id="common-cluster-markers-and-contrasts-stages-cluster_markers-yaml-contrasts-yaml">Common / Cluster markers and contrasts stages
 (<code>cluster_markers.yaml</code>, <code>contrasts.yaml</code>)<a class="anchor" aria-label="anchor" href="#common-cluster-markers-and-contrasts-stages-cluster_markers-yaml-contrasts-yaml"></a>
 </h3>
-<ul>
-<li><code>CLUSTER_MARKERS_SOURCES</code></li>
-<li><code>CONTRASTS_SOURCES</code></li>
-</ul>
-<hr>
-</div>
-</details>
-</div>
-<div class="section level2">
-<h2 id="retrieving-intermediate-results-targets">Retrieving intermediate results (targets)<a class="anchor" aria-label="anchor" href="#retrieving-intermediate-results-targets"></a>
-</h2>
-<p>In <a href="https://docs.ropensci.org/drake" class="external-link">drake</a>’s terminology, a pipeline is called
-<em>plan</em>, and is composed of <em>targets</em>. When a target is
-finished, its value (object) is saved to cache (the directory
-<code>.drake</code> by default). The cache has two main purposes:</p>
-<ul>
-<li>If a target is not changed, its value is loaded from the cache.
-<em>Change</em> involves e.g. target’s definition (code) or change in
-upstream targets on which the target depends. This way
-<a href="https://docs.ropensci.org/drake" class="external-link">drake</a> is able to skip computation of finished targets and
-greatly enhance the runtime. More details <a href="https://books.ropensci.org/drake/triggers.html" class="external-link">here</a>.</li>
-<li>Users also have access to the cache, and so you can load any
-finished target into your R session.</li>
-</ul>
-<p>Users can access the cache via two <a href="https://docs.ropensci.org/drake" class="external-link">drake</a>’s
-functions:</p>
+<p>-&gt; <code><a href="../articles/stage_cluster_markers.html">vignette("stage_cluster_markers")</a></code>,
+<code><a href="../articles/stage_contrasts.html">vignette("stage_contrasts")</a></code></p>
 <ul>
 <li>
-<code><a href="https://docs.ropensci.org/drake/reference/readd.html" class="external-link">drake::loadd()</a></code> loads target’s value to the current
-session as a variable of the same name.</li>
-<li>
-<code><a href="https://docs.ropensci.org/drake/reference/readd.html" class="external-link">drake::readd()</a></code> returns target’s value (so it can be
-assigned to variable).</li>
+<code>CLUSTER_MARKERS_SOURCES</code>,
+<code>CONTRASTS_SOURCES</code>: for which cell groupings (e.g. clusters
+from a particular clustering algorithm) to calculate markers or
+differential gene expression</li>
 </ul>
-<p>Let’s try it and load the filtered <code>SingleCellExperiment</code>
-object:</p>
-<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu">drake</span><span class="fu">::</span><span class="fu"><a href="https://docs.ropensci.org/drake/reference/readd.html" class="external-link">loadd</a></span><span class="op">(</span><span class="va">sce_final_input_qc</span><span class="op">)</span></span></code></pre></div>
-<p>Value of the target <code>sce_final_input_qc</code> was loaded as a
-variable of the same name to your current R session (or more precisely,
-to the global environment).</p>
-<p>Similarly, we can load this target to a variable of our choice:</p>
-<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">sce</span> <span class="op">&lt;-</span> <span class="fu">drake</span><span class="fu">::</span><span class="fu"><a href="https://docs.ropensci.org/drake/reference/readd.html" class="external-link">readd</a></span><span class="op">(</span><span class="va">sce_final_input_qc</span><span class="op">)</span></span></code></pre></div>
-<p>And work further with the loaded object, e.g.</p>
-<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu">scater</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/scater/man/plotExpression.html" class="external-link">plotExpression</a></span><span class="op">(</span><span class="va">sce</span>, <span class="st">"NOC2L"</span>, exprs_values <span class="op">=</span> <span class="st">"counts"</span>, swap_rownames <span class="op">=</span> <span class="st">"SYMBOL"</span><span class="op">)</span></span></code></pre></div>
 <hr>
 </div>
-<div class="section level2">
-<h2 id="how-to-know-which-targets-you-can-load-and-what-each-parameter-do">How to know which targets you can load and what each parameter
-do?<a class="anchor" aria-label="anchor" href="#how-to-know-which-targets-you-can-load-and-what-each-parameter-do"></a>
-</h2>
-<p>Each pipeline stage has its own vignette describing its configuration
-parameters and also the most important targets. At <a href="https://bioinfocz.github.io/scdrake" class="uri">https://bioinfocz.github.io/scdrake</a> simply navigate to
-the top dropdown menu Articles and choose a stage you are interested in.
-Also, in <code>config/pipeline.yaml</code> there are commented the
-summary targets for each stage - HTML reports.</p>
-<p>For a more schematic overview of pipelines and stages see
-<code><a href="../articles/pipeline_overview.html">vignette("pipeline_overview")</a></code> (also includes <a href="https://github.com/bioinfocz/scdrake/blob/main/diagrams/README.md" class="external-link">diagrams</a>).</p>
-<p>Advanced users might be interested in looking into source code of
-<a href="https://github.com/bioinfocz/scdrake" class="external-link">scdrake</a>’s <a href="https://github.com/bioinfocz/scdrake/tree/main/R" class="external-link">plans</a> (files
-named <code>plans_*.R</code>).</p>
-<hr>
 </div>
-<div class="section level2">
-<h2 id="modifying-parameters-and-rerunning-the-pipeline">Modifying parameters and rerunning the pipeline<a class="anchor" aria-label="anchor" href="#modifying-parameters-and-rerunning-the-pipeline"></a>
+<div class="section level2 tabset">
+<h2 class="tabset" id="updating-the-project-files">Updating the project files<a class="anchor" aria-label="anchor" href="#updating-the-project-files"></a>
 </h2>
-<p>Optionally, to further demonstrate the <a href="https://docs.ropensci.org/drake" class="external-link">drake</a>’s ability
-to skip finished targets, let’s assume you decided to be more benevolent
-and used less strict values for custom cell filtering in
-<code>config/single_sample/01_input_qc.yaml</code>:</p>
-<div class="sourceCode" id="cb16"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="fu">MIN_UMI_CF</span><span class="kw">:</span><span class="at"> </span><span class="dv">500</span></span>
-<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="fu">MAX_UMI_CF</span><span class="kw">:</span><span class="at"> </span><span class="dv">70000</span></span>
-<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a><span class="fu">MIN_FEATURES</span><span class="kw">:</span><span class="at"> </span><span class="dv">500</span></span>
-<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a><span class="fu">MAX_MITO_RATIO</span><span class="kw">:</span><span class="at"> </span><span class="fl">0.3</span></span>
-<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a><span class="fu">INPUT_QC_BASE_OUT_DIR</span><span class="kw">:</span><span class="at"> </span><span class="st">"01_input_qc_benevolent"</span></span></code></pre></div>
-<p>After repeating the Step 3 above you can see the most time-consuming
-targets <code>sce_raw</code> and <code>empty_droplets</code> were
-skipped. Also, we simply output the HTML report for new parameters into
-a different directory, and so we can easily compare it with the previous
-report.</p>
-<hr>
-</div>
-<div class="section level2">
-<h2 id="running-the-pipeline-in-parallel-mode">Running the pipeline in parallel mode<a class="anchor" aria-label="anchor" href="#running-the-pipeline-in-parallel-mode"></a>
-</h2>
-<p>Because <a href="https://docs.ropensci.org/drake" class="external-link">drake</a> knows the inner relationships between
-targets in your plan, it also knows which targets are independent of
-each other, and thus, can be run concurrently. This is called
-<em>implicit parallelism</em>, and to fully utilize this important
-feature, you just need to modify <code>config/pipeline.yaml</code> by
-setting <code>DRAKE_PARALLELISM</code> to either:</p>
-<ul>
-<li>
-<code>"future"</code>: uses the <a href="https://future.futureverse.org" class="external-link">future</a> as the
-backend. This backend should work by simply installing the
-<a href="https://future.futureverse.org" class="external-link">future</a> package.
-<ul>
-<li>Install by
-<code>BiocManager::install(c("future", "future.callr"))</code>
-</li>
-</ul>
-</li>
-<li>
-<code>"clustermq"</code>: uses the <a href="https://github.com/mschubert/clustermq" class="external-link">clustermq</a> as the
-backend. This is faster than <code>"future"</code>, but besides the
-<a href="https://github.com/mschubert/clustermq" class="external-link">clustermq</a> package it also requires the <a href="https://zeromq.org/" class="external-link">ZeroMQ</a> library to be <a href="https://zeromq.org/download/" class="external-link">installed</a> on your system.
-<ul>
-<li>A specific version of the <a href="https://github.com/mschubert/clustermq" class="external-link">clustermq</a> package is needed
-and can be installed with
-<code>remotes::install_version("clustermq", version = "0.8.8")</code>
-(you might need <code>BiocManager::install("remotes")</code>).</li>
-<li>
-<a href="https://github.com/mschubert/clustermq" class="external-link">clustermq</a> also supports HPC cluster schedulers, see
-<a href="https://books.ropensci.org/drake/hpc.html#the-template-argument-for-persistent-workers" class="external-link">here</a>
-for more details.</li>
-</ul>
-</li>
-</ul>
-<p>If you have installed <a href="https://github.com/bioinfocz/scdrake" class="external-link">scdrake</a> from the
-<code>renv.lock</code> file or you are using the Docker image, then
-these two packages above are always installed.</p>
-<p>For a general overview of <a href="https://docs.ropensci.org/drake" class="external-link">drake</a> parallelism see <a href="https://books.ropensci.org/drake/hpc.html" class="external-link uri">https://books.ropensci.org/drake/hpc.html</a></p>
-<hr>
-</div>
-<div class="section level2">
-<h2 id="using-an-alternative-storage-format-qs">Using an alternative storage format (<code>qs</code>)<a class="anchor" aria-label="anchor" href="#using-an-alternative-storage-format-qs"></a>
-</h2>
-<p>By default, R’s <code>Rds</code> format is used (see
-<code>?saveRds</code>) to save intermediate results to
-<a href="https://docs.ropensci.org/drake" class="external-link">drake</a>s cache, but instead, we recommend to use
-<code>DRAKE_FORMAT: "qs"</code> (see <a href="https://github.com/traversc/qs" class="external-link uri">https://github.com/traversc/qs</a>) in
-<code>config/pipeline.yaml</code> that offers better performance, but
-sometimes doesn’t work correctly (<code>drake</code> throws untraceable
-errors).</p>
-<p>See <a href="https://books.ropensci.org/drake/plans.html#special-data-formats-for-targets" class="external-link uri">https://books.ropensci.org/drake/plans.html#special-data-formats-for-targets</a>
-for more details.</p>
-<hr>
-<div class="section level3 tabset">
-<h3 class="tabset" id="updating-the-project-files">Updating the project files<a class="anchor" aria-label="anchor" href="#updating-the-project-files"></a>
-</h3>
 <p>When a new version of <a href="https://github.com/bioinfocz/scdrake" class="external-link">scdrake</a> is released, you can
 update your project with (assuming your working directory is in a
 <a href="https://github.com/bioinfocz/scdrake" class="external-link">scdrake</a> project’s root):</p>
+
 
 
 
@@ -716,41 +1040,51 @@ update your project with (assuming your working directory is in a
 <li role="presentation" class="nav-item"><button data-bs-toggle="tab" data-bs-target="#in-r-3" id="in-r-3-tab" type="button" role="tab" aria-controls="in-r-3" aria-selected="true" class="active nav-link">In R</button></li>
 <li role="presentation" class="nav-item"><button data-bs-toggle="tab" data-bs-target="#on-command-line-3" id="on-command-line-3-tab" type="button" role="tab" aria-controls="on-command-line-3" aria-selected="false" class="nav-link">On command line</button></li>
 <li role="presentation" class="nav-item"><button data-bs-toggle="tab" data-bs-target="#on-command-line-docker-3" id="on-command-line-docker-3-tab" type="button" role="tab" aria-controls="on-command-line-docker-3" aria-selected="false" class="nav-link">On command line (Docker)</button></li>
+<li role="presentation" class="nav-item"><button data-bs-toggle="tab" data-bs-target="#on-command-line-singularity-3" id="on-command-line-singularity-3-tab" type="button" role="tab" aria-controls="on-command-line-singularity-3" aria-selected="false" class="nav-link">On command line (Singularity)</button></li>
 </ul>
 <div class="tab-content">
 <div class="active  tab-pane" id="in-r-3" role="tabpanel" aria-labelledby="in-r-3-tab">
 
-<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/update_project.html">update_project</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="tab-pane" id="on-command-line-3" role="tabpanel" aria-labelledby="on-command-line-3-tab">
 
-<div class="sourceCode" id="cb18"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="ex">scdrake</span> update-project</span></code></pre></div>
+<div class="sourceCode" id="cb21"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="ex">scdrake</span> update-project</span></code></pre></div>
 </div>
 <div class="tab-pane" id="on-command-line-docker-3" role="tabpanel" aria-labelledby="on-command-line-docker-3-tab">
 
-<div class="sourceCode" id="cb19"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> exec <span class="at">-it</span> <span class="at">-u</span> rstudio <span class="at">-w</span> /path/to/scdrake/project <span class="op">&lt;</span>CONTAINER ID or NAME<span class="op">&gt;</span> <span class="dt">\</span></span>
-<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>  scdrake update-project</span></code></pre></div>
+<div class="sourceCode" id="cb22"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> exec <span class="at">-it</span> <span class="at">-u</span> rstudio <span class="at">-w</span> /path/to/scdrake/project <span class="op">&lt;</span>CONTAINER ID or NAME<span class="op">&gt;</span> <span class="dt">\</span></span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>  scdrake update-project</span></code></pre></div>
+</div>
+<div class="tab-pane" id="on-command-line-singularity-3" role="tabpanel" aria-labelledby="on-command-line-singularity-3-tab">
+
+<div class="sourceCode" id="cb23"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="ex">singularity</span> exec <span class="at">-e</span> <span class="at">--no-home</span> <span class="dt">\</span></span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>    <span class="at">--bind</span> <span class="st">"home/</span><span class="va">${USER}</span><span class="st">/:/home/</span><span class="va">${USER}</span><span class="st">,scdrake_projects/:/home/</span><span class="va">${USER}</span><span class="st">/scdrake_projects"</span> <span class="dt">\</span></span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">--pwd</span> <span class="st">"/home/</span><span class="va">${USER}</span><span class="st">/scdrake_projects/project"</span> <span class="dt">\</span></span>
+<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a>    path/to/scdrake_image.sif <span class="dt">\</span></span>
+<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a>    scdrake update-project</span></code></pre></div>
 </div>
 </div>
 </div>
-<div class="section level3 unnumbered">
-<h3 class="unnumbered" id="section-4"></h3>
+<div class="section level2 unnumbered">
+<h2 class="unnumbered" id="section-4"></h2>
 <p>This will <strong>overwrite</strong> project files by the
 package-bundled ones:</p>
 <ul>
-<li>RMarkdown documents in <code>Rmd/</code>.</li>
+<li>RMarkdown documents in <code>Rmd/</code>
+</li>
 <li>Initial scripts for <code><a href="../reference/run_pipeline.html">run_single_sample_r()</a></code> and
 <code><a href="../reference/run_pipeline.html">run_integration_r()</a></code> (wrappers around
 <code><a href="https://docs.ropensci.org/drake/reference/r_make.html" class="external-link">drake::r_make()</a></code>): <code>_drake_single_sample.R</code> and
-<code>_drake_integration.R</code>.</li>
+<code>_drake_integration.R</code>
+</li>
 <li>Default YAML configs in <code>config/</code>
-(<code>*.default.yaml</code>).</li>
+(<code>*.default.yaml</code>)</li>
 </ul>
 <p>By default, you will be asked if you want to continue, as you might
 lose your local modifications.</p>
 <hr>
-</div>
 </div>
 <div class="section level2">
 <h2 id="going-further">Going further<a class="anchor" aria-label="anchor" href="#going-further"></a>
@@ -771,11 +1105,7 @@ the following vignettes:</p>
 <ul>
 <li>Using the Docker image: <a href="https://bioinfocz.github.io/scdrake/articles/scdrake_docker.html" class="uri">https://bioinfocz.github.io/scdrake/articles/scdrake_docker.html</a>
 (or <code><a href="../articles/scdrake_docker.html">vignette("scdrake_docker")</a></code>)</li>
-<li>01 Quick start (single-sample pipeline):
-<code><a href="../articles/scdrake.html">vignette("scdrake")</a></code>
-</li>
-<li>02 Integration pipeline guide:
-<code><a href="../articles/scdrake_integration.html">vignette("scdrake_integration")</a></code>
+<li>Advanced topics: <code><a href="../articles/scdrake_advanced.html">vignette("scdrake_advanced")</a></code>
 </li>
 <li>Extending the pipeline: <code><a href="../articles/scdrake_extend.html">vignette("scdrake_extend")</a></code>
 </li>
@@ -797,57 +1127,15 @@ the following vignettes:</p>
 <li>Command line interface (CLI):
 <code><a href="../articles/scdrake_cli.html">vignette("scdrake_cli")</a></code>
 </li>
-<li>Config files: <code><a href="../articles/scdrake_config.html">vignette("scdrake_config")</a></code>
-</li>
-<li>Cluster markers: <code><a href="../articles/cluster_markers.html">vignette("cluster_markers")</a></code>
+<li>Config files (internals):
+<code><a href="../articles/scdrake_config.html">vignette("scdrake_config")</a></code>
 </li>
 <li>Environment variables: <code><a href="../articles/scdrake_envvars.html">vignette("scdrake_envvars")</a></code>
 </li>
 </ul>
 </li>
-<li>General configs:
-<ul>
-<li>Pipeline config: <code><a href="../articles/config_pipeline.html">vignette("config_pipeline")</a></code>
-</li>
-<li>Main config: <code><a href="../articles/config_main.html">vignette("config_main")</a></code>
-</li>
 </ul>
-</li>
-<li>Targets and config parameters for each stage:
-<ul>
-<li>Single-sample pipeline:
-<ul>
-<li>Reading in data, filtering, quality control (stage
-<code>01_input_qc</code>): <code><a href="../articles/stage_input_qc.html">vignette("stage_input_qc")</a></code>
-</li>
-<li>Normalization, HVG selection, dimensionality reduction, clustering,
-cell type annotation (stage <code>02_norm_clustering</code>):
-<code><a href="../articles/stage_norm_clustering.html">vignette("stage_norm_clustering")</a></code>
-</li>
-</ul>
-</li>
-<li>Integration pipeline:
-<ul>
-<li>Reading in data and integration (stage <code>01_integration</code>):
-<code><a href="../articles/stage_integration.html">vignette("stage_integration")</a></code>
-</li>
-<li>Post-integration clustering (stage <code>02_int_clustering</code>):
-<code><a href="../articles/stage_int_clustering.html">vignette("stage_int_clustering")</a></code>
-</li>
-</ul>
-</li>
-<li>Common:
-<ul>
-<li>Cluster markers stage:
-<code><a href="../articles/stage_cluster_markers.html">vignette("stage_cluster_markers")</a></code>
-</li>
-<li>Contrasts stage: <code><a href="../articles/stage_contrasts.html">vignette("stage_contrasts")</a></code>
-</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
+<hr>
 </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
     </nav></aside>
@@ -857,12 +1145,12 @@ cell type annotation (stage <code>02_norm_clustering</code>):
 
     <footer><div class="copyright">
   <p></p>
-<p>Developed by Jiri Novotny, Jan Kubovciak.</p>
+<p>Developed by Jiri Novotny, Jan Kubovciak, Michal Kolar.</p>
 </div>
 
 <div class="pkgdown">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.7.9000.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
   <p class="preferably">Using <a href="https://preferably.amirmasoudabdol.name/?source=footer" class="external-link">preferably</a> template.</p>
 </div>
 

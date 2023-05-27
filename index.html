@@ -66,7 +66,7 @@
     
     <a class="navbar-brand me-2" href="index.html">scdrake</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.4.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.5.0</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -93,6 +93,7 @@
     <h6 class="dropdown-header" data-toc-skip>Guides</h6>
     <a class="dropdown-item" href="articles/scdrake_docker.html">Using the Docker image</a>
     <a class="dropdown-item" href="articles/scdrake_integration.html">02 Integration pipeline guide</a>
+    <a class="dropdown-item" href="articles/scdrake_advanced.html">Advanced topics</a>
     <a class="dropdown-item" href="articles/scdrake_extend.html">Extending the pipeline</a>
     <a class="dropdown-item" href="articles/drake_basics.html">drake basics</a>
     <div class="dropdown-divider"></div>
@@ -100,7 +101,6 @@
     <a class="dropdown-item" href="articles/pipeline_overview.html">Pipeline overview</a>
     <a class="dropdown-item" href="articles/scdrake_faq.html">FAQ &amp; Howtos</a>
     <a class="dropdown-item" href="articles/scdrake_cli.html">Command line interface</a>
-    <a class="dropdown-item" href="articles/cluster_markers.html">Cluster markers</a>
     <a class="dropdown-item" href="articles/scdrake_config.html">scdrake config internals</a>
     <a class="dropdown-item" href="articles/scdrake_envvars.html">Environment variables</a>
     <div class="dropdown-divider"></div>
@@ -159,7 +159,7 @@
   <main id="main" class="col-md-9"><div class="section level1">
 <div class="page-header"><h1 id="scdrake">scdrake<a class="anchor" aria-label="anchor" href="#scdrake"></a>
 </h1></div>
-<p><a href="NEWS.html"><img src="https://img.shields.io/badge/NEWS-updates-informational" alt="NEWS: updates"></a> <a href="https://bioinfocz.github.io/scdrake"><img src="https://img.shields.io/badge/Documentation%20&amp;%20vignettes-bioinfocz.github.io/scdrake-informational" alt="Documentation and vignettes"></a> <a href="https://bioinfocz.github.io/scdrake/articles/pipeline_overview.html"><img src="https://img.shields.io/badge/Overview%20&amp;%20outputs-vignette(%22pipeline_overview%22)-informational" alt="Overview and outputs"></a> <a href="https://github.com/bioinfocz/scdrake/blob/main/diagrams/README.md" class="external-link"><img src="https://img.shields.io/badge/Pipeline%20diagram-Show-informational" alt="Pipeline diagram"></a> <img src="https://img.shields.io/github/license/bioinfocz/scdrake" alt="License"><a href="https://lifecycle.r-lib.org/articles/stages.html#experimental" class="external-link"><img src="https://img.shields.io/badge/lifecycle-experimental-orange.svg" alt="Lifecycle: experimental"></a> <a href="https://github.com/bioinfocz/scdrake/actions/workflows/check-bioc.yaml" class="external-link"><img src="https://github.com/bioinfocz/scdrake/actions/workflows/check-bioc.yaml/badge.svg?branch=main" alt="R-CMD-check-bioc"></a></p>
+
 <p><a href="https://github.com/bioinfocz/scdrake" class="external-link">scdrake</a> is a scalable and reproducible pipeline for secondary analysis of droplet-based single-cell RNA-seq data. <a href="https://github.com/bioinfocz/scdrake" class="external-link">scdrake</a> is an R package built on top of the <a href="https://docs.ropensci.org/drake" class="external-link">drake</a> package, a <a href="https://www.gnu.org/software/make" class="external-link">Make</a>-like pipeline toolkit for <a href="https://www.r-project.org" class="external-link">R language</a>.</p>
 <p>The main features of the <a href="https://github.com/bioinfocz/scdrake" class="external-link">scdrake</a> pipeline are:</p>
 <ul>
@@ -182,30 +182,62 @@
 </ul>
 </li>
 </ul>
-<p><a href="https://github.com/bioinfocz/scdrake" class="external-link">scdrake</a> is aimed at both non-technical and bioinformatic public: both will benefit from reports and visualizations, and the latter also from the possibility to utilize all benefits of <a href="https://docs.ropensci.org/drake" class="external-link">drake</a> for custom analyses.</p>
+<p>For whom is <a href="https://github.com/bioinfocz/scdrake" class="external-link">scdrake</a> purposed? It is primarily intended for tech-savvy users (bioinformaticians), who pass on the results (reports, images) to non-technical persons (biologists). At the same time, bioinformaticians can quickly react to biologists’ needs by changing the parameters of the pipeline, which then efficiently skips already finished parts. This dialogue between the biologist and the bioinformatician is indispensable during scRNA-seq data analysis. <a href="https://github.com/bioinfocz/scdrake" class="external-link">scdrake</a> ensures that this communication is performed in an effective and reproducible manner.</p>
 <p>The pipeline structure along with <a href="https://github.com/bioinfocz/scdrake/blob/main/diagrams/README.md" class="external-link">diagrams</a> and links to outputs is described in <code><a href="articles/pipeline_overview.html">vignette("pipeline_overview")</a></code> (<a href="https://bioinfocz.github.io/scdrake/articles/pipeline_overview.html">link</a>).</p>
-<p>Huge thanks go to the authors of the <a href="https://bioconductor.org/books/release/OSCA" class="external-link">Orchestrating Single-Cell Analysis with Bioconductor</a> book on whose methods and recommendations is <a href="https://github.com/bioinfocz/scdrake" class="external-link">scdrake</a> largely based.</p>
+<p>Huge thanks go to the authors of the <a href="https://bioconductor.org/books/3.15/OSCA" class="external-link">Orchestrating Single-Cell Analysis with Bioconductor</a> book on whose methods and recommendations is <a href="https://github.com/bioinfocz/scdrake" class="external-link">scdrake</a> largely based.</p>
 <hr>
 </div>
 <div class="section level1">
 <h1 id="installation-instructions">Installation instructions<a class="anchor" aria-label="anchor" href="#installation-instructions"></a>
 </h1>
 <div class="section level2">
-<h2 id="using-a-docker-image-recommended">Using a Docker image (<em>recommended</em>)<a class="anchor" aria-label="anchor" href="#using-a-docker-image-recommended"></a>
+<h2 id="using-a-docker-image-recommended">Using a Docker image (recommended)<a class="anchor" aria-label="anchor" href="#using-a-docker-image-recommended"></a>
 </h2>
 <p>A Docker image based on the <a href="https://bioconductor.org/help/docker/" class="external-link">official Bioconductor image</a> (version 3.15) is available. This is the most handy and reproducible way how to use <a href="https://github.com/bioinfocz/scdrake" class="external-link">scdrake</a> as all the dependencies are already installed and their versions are fixed. In addition, the parent Bioconductor image comes bundled with RStudio Server.</p>
-<p>The complete guide to the usage of <a href="https://github.com/bioinfocz/scdrake" class="external-link">scdrake</a>’s Docker image can be found at <a href="https://bioinfocz.github.io/scdrake/articles/scdrake_docker.html" class="uri">https://bioinfocz.github.io/scdrake/articles/scdrake_docker.html</a>. <strong>We strongly recommend to go through even if you are an experienced Docker user.</strong> Below you can find just the basic command to download the image.</p>
+<p>The complete guide to the usage of <a href="https://github.com/bioinfocz/scdrake" class="external-link">scdrake</a>’s Docker image can be found in the <a href="https://bioinfocz.github.io/scdrake/articles/scdrake_docker.html">Docker vignette</a>. <strong>We strongly recommend to go through even if you are an experienced Docker user.</strong> Below you can find just the basic command to download the image and to run a detached container with RStudio in Docker or to run <a href="https://github.com/bioinfocz/scdrake" class="external-link">scdrake</a> in Singularity.</p>
+<p>You can also run the image in <a href="https://docs.sylabs.io/guides/latest/user-guide/quick_start.html" class="external-link">SingularityCE</a> (without RStudio) - see the Singularity section in the Docker vignette above. If the image is already downloaded in the local Docker storage, you can use <code>singularity pull docker-daemon:&lt;image&gt;</code></p>
 <p>You can pull the Docker image with the latest stable <a href="https://github.com/bioinfocz/scdrake" class="external-link">scdrake</a> version using</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> pull jirinovo/scdrake:1.4.1-bioc3.15</span></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> pull jirinovo/scdrake:1.5.0-bioc3.15</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="ex">singularity</span> pull docker:jirinovo/scdrake:1.5.0-bioc3.15</span></code></pre></div>
 <p>or list available versions in <a href="https://hub.docker.com/r/jirinovo/scdrake/tags" class="external-link">our Docker Hub repository</a>.</p>
 <p>For the latest development version use</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> pull jirinovo/scdrake:latest-bioc3.15</span></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> pull jirinovo/scdrake:latest-bioc3.15</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="ex">singularity</span> pull docker:jirinovo/scdrake:latest-bioc3.15</span></code></pre></div>
 <p><strong>Note for Mac users with M1 chipsets</strong>: you can use the <code>arm64</code> version of the image:</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>docker pull jirinovo<span class="sc">/</span>scdrake<span class="sc">:</span><span class="dv">1</span>.<span class="fl">4.1</span><span class="sc">-</span>bioc3<span class="fl">.15</span><span class="sc">-</span>arm64</span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>docker pull jirinovo<span class="sc">/</span>scdrake<span class="sc">:</span>latest<span class="sc">-</span>bioc3<span class="fl">.15</span><span class="sc">-</span>arm64</span></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> pull jirinovo/scdrake:1.5.0-bioc3.15-arm64</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="ex">singularity</span> pull docker:jirinovo/scdrake:1.5.0-bioc3.15-arm64</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> pull jirinovo/scdrake:latest-bioc3.15-arm64</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="ex">singularity</span> pull docker:jirinovo/scdrake:latest-bioc3.15-arm64</span></code></pre></div>
+<div class="section level3">
+<h3 id="running-the-container">Running the container<a class="anchor" aria-label="anchor" href="#running-the-container"></a>
+</h3>
+<p>For the most common cases of host machines: Linux running Docker Engine, and Windows or MacOS running Docker Desktop.</p>
+<p>First make a shared directory that will be mounted to the container:</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mkdir</span> ~/scdrake_projects</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> ~/scdrake_projects</span></code></pre></div>
+<p>And run the image that will expose RStudio Server on port 8787 on your host:</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> run <span class="at">-d</span> <span class="dt">\</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">-v</span> <span class="va">$(</span><span class="bu">pwd</span><span class="va">)</span>:/home/rstudio/scdrake_projects <span class="dt">\</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">-p</span> 8787:8787 <span class="dt">\</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">-e</span> USERID=<span class="va">$(</span><span class="fu">id</span> <span class="at">-u</span><span class="va">)</span> <span class="dt">\</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">-e</span> GROUPID=<span class="va">$(</span><span class="fu">id</span> <span class="at">-g</span><span class="va">)</span> <span class="dt">\</span></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">-e</span> PASSWORD=1234 <span class="dt">\</span></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>  jirinovo/scdrake:1.5.0-bioc3.15</span></code></pre></div>
+<p>For Singularity, also make shared directories and execute the container (“run and forget”):</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mkdir</span> <span class="at">-p</span> ~/scdrake_singularity</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> ~/scdrake_singularity</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="fu">mkdir</span> <span class="at">-p</span> home/<span class="va">${USER}</span> scdrake_projects</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="ex">singularity</span> exec <span class="dt">\</span></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">-e</span> <span class="dt">\</span></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">--no-home</span> <span class="dt">\</span></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">--bind</span> <span class="st">"home/</span><span class="va">${USER}</span><span class="st">/:/home/</span><span class="va">${USER}</span><span class="st">,scdrake_projects/:/home/</span><span class="va">${USER}</span><span class="st">/scdrake_projects"</span> <span class="dt">\</span></span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">--pwd</span> <span class="st">"/home/</span><span class="va">${USER}</span><span class="st">/scdrake_projects"</span> <span class="dt">\</span></span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>    path/to/scdrake_image.sif <span class="dt">\</span></span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>    scdrake <span class="op">&lt;</span>args<span class="op">&gt;</span> <span class="op">&lt;</span>command<span class="op">&gt;</span></span></code></pre></div>
+</div>
 </div>
 <div class="section level2">
-<h2 id="installing-scdrake-manually">Installing <code>{scdrake}</code> manually<a class="anchor" aria-label="anchor" href="#installing-scdrake-manually"></a>
+<h2 id="installing-scdrake-manually-not-recommended">Installing <code>{scdrake}</code> manually (not recommended)<a class="anchor" aria-label="anchor" href="#installing-scdrake-manually-not-recommended"></a>
 </h2>
 <details><summary>
 Click for details
@@ -229,14 +261,14 @@ Click for details
 <a class="anchor" aria-label="anchor" href="#install-renv"></a>
 </h3>
 <p><a href="https://rstudio.github.io/renv/" class="external-link"><code>{renv}</code></a> is an R package for management of local R libraries. It is intended to be used on a per-project basis, i.e. each project should use its own library of R packages.</p>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"renv"</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="initialize-a-new-renv-library">Initialize a new <code>{renv}</code> library<a class="anchor" aria-label="anchor" href="#initialize-a-new-renv-library"></a>
 </h3>
 <p>Switch to directory where you will analyze data and initialize a new <a href="https://rstudio.github.io/renv/" class="external-link">renv</a> library:</p>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">renv</span><span class="fu">::</span><span class="fu"><a href="https://rstudio.github.io/renv/reference/consent.html" class="external-link">consent</a></span><span class="op">(</span><span class="cn">TRUE</span><span class="op">)</span></span>
 <span><span class="fu">renv</span><span class="fu">::</span><span class="fu"><a href="https://rstudio.github.io/renv/reference/init.html" class="external-link">init</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <p>Now exit and run again R. You should see a message that renv library has been activated.</p>
@@ -244,36 +276,36 @@ Click for details
 <div class="section level3">
 <h3 id="install-biocmanager">Install BiocManager<a class="anchor" aria-label="anchor" href="#install-biocmanager"></a>
 </h3>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">renv</span><span class="fu">::</span><span class="fu"><a href="https://rstudio.github.io/renv/reference/install.html" class="external-link">install</a></span><span class="op">(</span><span class="st">"BiocManager"</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="install-bioconductor-315">Install Bioconductor 3.15<a class="anchor" aria-label="anchor" href="#install-bioconductor-315"></a>
 </h3>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">BiocManager</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/BiocManager/man/install.html" class="external-link">install</a></span><span class="op">(</span>version <span class="op">=</span> <span class="st">"3.15"</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="restore-scdrake-dependencies-from-lockfile">Restore <code>{scdrake}</code> dependencies from lockfile<a class="anchor" aria-label="anchor" href="#restore-scdrake-dependencies-from-lockfile"></a>
 </h3>
 <p><a href="https://rstudio.github.io/renv/" class="external-link">renv</a> also allows to export the current installed versions of R packages (and other things) into a lockfile. Such lockfile is available for <a href="https://github.com/bioinfocz/scdrake" class="external-link">scdrake</a> and you can use it to install all dependencies by</p>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## -- This is a lockfile for the latest stable version of scdrake.</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/utils/download.file.html" class="external-link">download.file</a></span><span class="op">(</span><span class="st">"https://raw.githubusercontent.com/bioinfocz/scdrake/1.4.1/renv.lock"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/download.file.html" class="external-link">download.file</a></span><span class="op">(</span><span class="st">"https://raw.githubusercontent.com/bioinfocz/scdrake/1.5.0/renv.lock"</span><span class="op">)</span></span>
 <span><span class="co">## -- You can increase the number of CPU cores to speed up the installation.</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">options</a></span><span class="op">(</span>Ncpus <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span>
 <span><span class="fu">renv</span><span class="fu">::</span><span class="fu"><a href="https://rstudio.github.io/renv/reference/restore.html" class="external-link">restore</a></span><span class="op">(</span>lockfile <span class="op">=</span> <span class="st">"renv.lock"</span>, repos <span class="op">=</span> <span class="fu">BiocManager</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/BiocManager/man/repositories.html" class="external-link">repositories</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p>For the lockfile for the latest development version use</p>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/download.file.html" class="external-link">download.file</a></span><span class="op">(</span><span class="st">"https://raw.githubusercontent.com/bioinfocz/scdrake/main/renv.lock"</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="install-the-scdrake-package">Install the <code>{scdrake}</code> package<a class="anchor" aria-label="anchor" href="#install-the-scdrake-package"></a>
 </h3>
 <p>Now we can finally install the <a href="https://github.com/bioinfocz/scdrake" class="external-link">scdrake</a> package, but using a non-standard approach - without its dependencies (which are already installed from the lockfile).</p>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">remotes</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html" class="external-link">install_github</a></span><span class="op">(</span></span>
-<span>  <span class="st">"bioinfocz/scdrake@1.4.1"</span>,</span>
+<span>  <span class="st">"bioinfocz/scdrake@1.5.0"</span>,</span>
 <span>  dependencies <span class="op">=</span> <span class="cn">FALSE</span>, upgrade <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  keep_source <span class="op">=</span> <span class="cn">TRUE</span>, build_vignettes <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  repos <span class="op">=</span> <span class="fu">BiocManager</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/BiocManager/man/repositories.html" class="external-link">repositories</a></span><span class="op">(</span><span class="op">)</span></span>
@@ -284,7 +316,7 @@ Click for details
 <h3 id="install-the-command-line-interface-cli">Install the command line interface (CLI)<a class="anchor" aria-label="anchor" href="#install-the-command-line-interface-cli"></a>
 </h3>
 <p>Optionally, you can install <a href="https://github.com/bioinfocz/scdrake" class="external-link">scdrake</a>’s CLI scripts with</p>
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">scdrake</span><span class="fu">::</span><span class="fu"><a href="reference/cli.html">install_cli</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <p>CLI should be now accessible as a <code>scdrake</code> command. By default, the CLI is installed into <code>~/.local/bin</code>, which is usually present in the <code>PATH</code> environment variable. In case it isn’t, just add to your <code>~/.bashrc</code>: <code>export PATH="${HOME}/.local/bin:${PATH}"</code></p>
 <p><strong>Every time you will be using the CLI make sure your current working directory is inside an <a href="https://rstudio.github.io/renv/" class="external-link">renv</a> project.</strong> You can read the reasons below.</p>
@@ -301,6 +333,13 @@ Show details
 </details>
 </div>
 <div class="section level2">
+<h2 id="quickstart">Quickstart<a class="anchor" aria-label="anchor" href="#quickstart"></a>
+</h2>
+<p>First run the <code>scdrake</code> image in Docker or Singularity - see the <a href="https://bioinfocz.github.io/scdrake/articles/scdrake_docker.html">Docker vignette</a></p>
+<p>Then see the initial three steps in the<a href="https://bioinfocz.github.io/scdrake/articles/scdrake_docker.html">Get Started vignette</a></p>
+<hr>
+</div>
+<div class="section level2">
 <h2 id="vignettes-and-other-readings">Vignettes and other readings<a class="anchor" aria-label="anchor" href="#vignettes-and-other-readings"></a>
 </h2>
 <p>See <a href="https://bioinfocz.github.io/scdrake" class="uri">https://bioinfocz.github.io/scdrake</a> for a documentation website where links to vignettes below become real :-)</p>
@@ -311,6 +350,8 @@ Show details
 <li>01 Quick start (single-sample pipeline): <code><a href="articles/scdrake.html">vignette("scdrake")</a></code>
 </li>
 <li>02 Integration pipeline guide: <code><a href="articles/scdrake_integration.html">vignette("scdrake_integration")</a></code>
+</li>
+<li>Advanced topics: <code><a href="articles/scdrake_advanced.html">vignette("scdrake_advanced")</a></code>
 </li>
 <li>Extending the pipeline: <code><a href="articles/scdrake_extend.html">vignette("scdrake_extend")</a></code>
 </li>
@@ -331,9 +372,7 @@ Show details
 </li>
 <li>Command line interface (CLI): <code><a href="articles/scdrake_cli.html">vignette("scdrake_cli")</a></code>
 </li>
-<li>Config files: <code><a href="articles/scdrake_config.html">vignette("scdrake_config")</a></code>
-</li>
-<li>Cluster markers: <code><a href="articles/cluster_markers.html">vignette("cluster_markers")</a></code>
+<li>Config files (internals): <code><a href="articles/scdrake_config.html">vignette("scdrake_config")</a></code>
 </li>
 <li>Environment variables: <code><a href="articles/scdrake_envvars.html">vignette("scdrake_envvars")</a></code>
 </li>
@@ -341,35 +380,35 @@ Show details
 </li>
 <li>General configs:
 <ul>
-<li>Pipeline config: <code><a href="articles/config_pipeline.html">vignette("config_pipeline")</a></code>
+<li>Pipeline config -&gt; <code><a href="articles/config_pipeline.html">vignette("config_pipeline")</a></code>
 </li>
-<li>Main config: <code><a href="articles/config_main.html">vignette("config_main")</a></code>
+<li>Main config -&gt; <code><a href="articles/config_main.html">vignette("config_main")</a></code>
 </li>
 </ul>
 </li>
-<li>Targets and config parameters for each stage:
+<li>Pipelines and stages:
 <ul>
 <li>Single-sample pipeline:
 <ul>
-<li>Reading in data, filtering, quality control (stage <code>01_input_qc</code>): <code><a href="articles/stage_input_qc.html">vignette("stage_input_qc")</a></code>
+<li>Stage <code>01_input_qc</code>: reading in data, filtering, quality control -&gt; <code><a href="articles/stage_input_qc.html">vignette("stage_input_qc")</a></code>
 </li>
-<li>Normalization, HVG selection, dimensionality reduction, clustering, cell type annotation (stage <code>02_norm_clustering</code>): <code><a href="articles/stage_norm_clustering.html">vignette("stage_norm_clustering")</a></code>
+<li>Stage <code>02_norm_clustering</code>: normalization, HVG selection, dimensionality reduction, clustering, cell type annotation -&gt; <code><a href="articles/stage_norm_clustering.html">vignette("stage_norm_clustering")</a></code>
 </li>
 </ul>
 </li>
 <li>Integration pipeline:
 <ul>
-<li>Reading in data and integration (stage <code>01_integration</code>): <code><a href="articles/stage_integration.html">vignette("stage_integration")</a></code>
+<li>Stage <code>01_integration</code>: reading in data and integration -&gt; <code><a href="articles/stage_integration.html">vignette("stage_integration")</a></code>
 </li>
-<li>Post-integration clustering (stage <code>02_int_clustering</code>): <code><a href="articles/stage_int_clustering.html">vignette("stage_int_clustering")</a></code>
+<li>Stage <code>02_int_clustering</code>: post-integration clustering and cell annotation -&gt; <code><a href="articles/stage_int_clustering.html">vignette("stage_int_clustering")</a></code>
 </li>
 </ul>
 </li>
-<li>Common:
+<li>Common stages:
 <ul>
-<li>Cluster markers stage: <code><a href="articles/stage_cluster_markers.html">vignette("stage_cluster_markers")</a></code>
+<li>Stage <code>cluster_markers</code> -&gt; <code><a href="articles/stage_cluster_markers.html">vignette("stage_cluster_markers")</a></code>
 </li>
-<li>Contrasts stage: <code><a href="articles/stage_contrasts.html">vignette("stage_contrasts")</a></code>
+<li>Stage <code>contrasts</code> (differential expression) -&gt; <code><a href="articles/stage_contrasts.html">vignette("stage_contrasts")</a></code>
 </li>
 </ul>
 </li>
@@ -377,28 +416,28 @@ Show details
 </li>
 </ul>
 <p>We encourage all users to read <a href="https://books.ropensci.org/drake" class="external-link">basics</a> of the <a href="https://docs.ropensci.org/drake" class="external-link">drake</a> package. While it is not necessary to know all <a href="https://docs.ropensci.org/drake" class="external-link">drake</a> internals to successfully run the <a href="https://github.com/bioinfocz/scdrake" class="external-link">scdrake</a> pipeline, its knowledge is a plus. You can read the minimum basics in <code><a href="articles/drake_basics.html">vignette("drake_basics")</a></code>.</p>
-<p>Also, the prior knowledge of Bioconductor and its classes (especially the <a href="https://bioconductor.org/packages/release/bioc/html/SingleCellExperiment.html" class="external-link">SingleCellExperiment</a>) is considerable.</p>
+<p>Also, the prior knowledge of Bioconductor and its classes (especially the <a href="https://bioconductor.org/packages/3.15/bioc/html/SingleCellExperiment.html" class="external-link">SingleCellExperiment</a>) is considerable.</p>
 <hr>
 </div>
 <div class="section level2">
 <h2 id="citation">Citation<a class="anchor" aria-label="anchor" href="#citation"></a>
 </h2>
 <p>Below is the citation output from using <code>citation("scdrake")</code> in R. Please run this yourself to check for any updates on how to cite <strong>scdrake</strong>.</p>
-<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/utils/citation.html" class="external-link">citation</a></span><span class="op">(</span><span class="st">"scdrake"</span><span class="op">)</span>, bibtex <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
-<div class="sourceCode" id="cb13"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>To cite package ‘scdrake’ <span class="cf">in</span> publications use<span class="sc">:</span></span>
-<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>  Jiri Novotny and Jan <span class="fu">Kubovciak</span> (<span class="dv">2021</span>). scdrake<span class="sc">:</span> A Pipeline For 10x Chromium Single<span class="sc">-</span>Cell RNA<span class="sc">-</span>seq Data Analysis.</span>
-<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>  https<span class="sc">:</span><span class="er">//</span>github.com<span class="sc">/</span>bioinfocz<span class="sc">/</span>scdrake, https<span class="sc">:</span><span class="er">//</span>bioinfocz.github.io<span class="sc">/</span>scdrake.</span>
-<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>A BibTeX entry <span class="cf">for</span> LaTeX users is</span>
-<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a>  <span class="sc">@</span>Manual{,</span>
-<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a>    title <span class="ot">=</span> {scdrake<span class="sc">:</span> A Pipeline For 10x Chromium Single<span class="sc">-</span>Cell RNA<span class="sc">-</span>seq Data Analysis},</span>
-<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a>    author <span class="ot">=</span> {Jiri Novotny and Jan Kubovciak},</span>
-<span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a>    year <span class="ot">=</span> {<span class="dv">2021</span>},</span>
-<span id="cb13-12"><a href="#cb13-12" aria-hidden="true" tabindex="-1"></a>    note <span class="ot">=</span> {https<span class="sc">:</span><span class="er">//</span>github.com<span class="sc">/</span>bioinfocz<span class="sc">/</span>scdrake, https<span class="sc">:</span><span class="er">//</span>bioinfocz.github.io<span class="sc">/</span>scdrake},</span>
-<span id="cb13-13"><a href="#cb13-13" aria-hidden="true" tabindex="-1"></a>  }</span></code></pre></div>
+<div class="sourceCode" id="cb16"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>To cite package ‘scdrake’ <span class="cf">in</span> publications use<span class="sc">:</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>  Jiri Novotny and Jan <span class="fu">Kubovciak</span> (<span class="dv">2021</span>). scdrake<span class="sc">:</span> A Pipeline For 10x Chromium Single<span class="sc">-</span>Cell RNA<span class="sc">-</span>seq Data Analysis.</span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>  https<span class="sc">:</span><span class="er">//</span>github.com<span class="sc">/</span>bioinfocz<span class="sc">/</span>scdrake, https<span class="sc">:</span><span class="er">//</span>bioinfocz.github.io<span class="sc">/</span>scdrake.</span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a>A BibTeX entry <span class="cf">for</span> LaTeX users is</span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a>  <span class="sc">@</span>Manual{,</span>
+<span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a>    title <span class="ot">=</span> {scdrake<span class="sc">:</span> A Pipeline For 10x Chromium Single<span class="sc">-</span>Cell RNA<span class="sc">-</span>seq Data Analysis},</span>
+<span id="cb16-10"><a href="#cb16-10" aria-hidden="true" tabindex="-1"></a>    author <span class="ot">=</span> {Jiri Novotny and Jan Kubovciak},</span>
+<span id="cb16-11"><a href="#cb16-11" aria-hidden="true" tabindex="-1"></a>    year <span class="ot">=</span> {<span class="dv">2021</span>},</span>
+<span id="cb16-12"><a href="#cb16-12" aria-hidden="true" tabindex="-1"></a>    note <span class="ot">=</span> {https<span class="sc">:</span><span class="er">//</span>github.com<span class="sc">/</span>bioinfocz<span class="sc">/</span>scdrake, https<span class="sc">:</span><span class="er">//</span>bioinfocz.github.io<span class="sc">/</span>scdrake},</span>
+<span id="cb16-13"><a href="#cb16-13" aria-hidden="true" tabindex="-1"></a>  }</span></code></pre></div>
 <p>Please note that the <a href="https://github.com/bioinfocz/scdrake" class="external-link">scdrake</a> was only made possible thanks to many other R and bioinformatics software authors, which are cited either in the vignettes and/or the paper(s) describing this package.</p>
 </div>
 <div class="section level2">
@@ -432,8 +471,8 @@ Show details
 <p>Many things are used by <a href="https://github.com/bioinfocz/scdrake" class="external-link">scdrake</a>, but these are really worth mentioning:</p>
 <ul>
 <li>The <a href="https://www.bioconductor.org" class="external-link">Bioconductor</a> ecosystem.</li>
-<li>The <a href="https://bioconductor.org/books/release/OSCA" class="external-link"><em>Orchestrating Single-Cell Analysis with Bioconductor</em></a> book.</li>
-<li>The <a href="https://bioconductor.org/packages/release/bioc/html/scran.html" class="external-link">scran</a>, <a href="https://bioconductor.org/packages/release/bioc/html/scater.html" class="external-link">scater</a>, and other great packages from <a href="https://orcid.org/0000-0002-3564-4813" class="external-link">Aaron Lun</a> et al.</li>
+<li>The <a href="https://bioconductor.org/books/3.15/OSCA" class="external-link"><em>Orchestrating Single-Cell Analysis with Bioconductor</em></a> book.</li>
+<li>The <a href="https://bioconductor.org/packages/3.15/bioc/html/scran.html" class="external-link">scran</a>, <a href="https://bioconductor.org/packages/3.15/bioc/html/scater.html" class="external-link">scater</a>, and other great packages from <a href="https://orcid.org/0000-0002-3564-4813" class="external-link">Aaron Lun</a> et al.</li>
 <li>The <a href="https://github.com/ropensci/drake" class="external-link">drake</a> package.</li>
 <li>The <a href="https://github.com/rstudio/rmarkdown" class="external-link">rmarkdown</a> package, and other ones from the <a href="https://www.tidyverse.org" class="external-link">tidyverse</a> ecosystem.</li>
 </ul>
@@ -489,10 +528,21 @@ Show details
 <ul class="list-unstyled">
 <li>Jiri Novotny <br><small class="roles"> Author, maintainer </small> <a href="https://orcid.org/0000-0003-1338-638X" target="orcid.widget" aria-label="ORCID" class="external-link"><span class="fab fa-orcid orcid" aria-hidden="true"></span></a> </li>
 <li>Jan Kubovciak <br><small class="roles"> Author </small>  </li>
+<li>Michal Kolar <br><small class="roles"> Funder </small>  </li>
 </ul>
 </div>
 
-
+<div class="dev-status">
+<h2 data-toc-skip>Dev status</h2>
+<ul class="list-unstyled">
+<li><a href="NEWS.html"><img src="https://img.shields.io/badge/NEWS-updates-informational" alt="NEWS: updates"></a></li>
+<li><a href="https://bioinfocz.github.io/scdrake"><img src="https://img.shields.io/badge/Documentation%20&amp;%20vignettes-bioinfocz.github.io/scdrake-informational" alt="Documentation and vignettes"></a></li>
+<li><a href="https://bioinfocz.github.io/scdrake/articles/pipeline_overview.html"><img src="https://img.shields.io/badge/Overview%20&amp;%20outputs-vignette(%22pipeline_overview%22)-informational" alt="Overview and outputs"></a></li>
+<li><a href="https://github.com/bioinfocz/scdrake/blob/main/diagrams/README.md" class="external-link"><img src="https://img.shields.io/badge/Pipeline%20diagram-Show-informational" alt="Pipeline diagram"></a></li>
+<li><a href="https://lifecycle.r-lib.org/articles/stages.html#experimental" class="external-link"><img src="https://img.shields.io/badge/lifecycle-experimental-orange.svg" alt="Lifecycle: experimental"></a></li>
+<li><a href="https://github.com/bioinfocz/scdrake/actions/workflows/check-bioc.yaml" class="external-link"><img src="https://github.com/bioinfocz/scdrake/actions/workflows/check-bioc.yaml/badge.svg?branch=main" alt="R-CMD-check-bioc"></a></li>
+</ul>
+</div>
 
   </aside>
 </div>
@@ -500,12 +550,12 @@ Show details
 
     <footer><div class="copyright">
   <p></p>
-<p>Developed by Jiri Novotny, Jan Kubovciak.</p>
+<p>Developed by Jiri Novotny, Jan Kubovciak, Michal Kolar.</p>
 </div>
 
 <div class="pkgdown">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.7.9000.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
   <p class="preferably">Using <a href="https://preferably.amirmasoudabdol.name/?source=footer" class="external-link">preferably</a> template.</p>
 </div>
 

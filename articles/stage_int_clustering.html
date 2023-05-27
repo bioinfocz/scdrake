@@ -50,7 +50,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">scdrake</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.4.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.5.0</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -77,6 +77,7 @@
     <h6 class="dropdown-header" data-toc-skip>Guides</h6>
     <a class="dropdown-item" href="../articles/scdrake_docker.html">Using the Docker image</a>
     <a class="dropdown-item" href="../articles/scdrake_integration.html">02 Integration pipeline guide</a>
+    <a class="dropdown-item" href="../articles/scdrake_advanced.html">Advanced topics</a>
     <a class="dropdown-item" href="../articles/scdrake_extend.html">Extending the pipeline</a>
     <a class="dropdown-item" href="../articles/drake_basics.html">drake basics</a>
     <div class="dropdown-divider"></div>
@@ -84,7 +85,6 @@
     <a class="dropdown-item" href="../articles/pipeline_overview.html">Pipeline overview</a>
     <a class="dropdown-item" href="../articles/scdrake_faq.html">FAQ &amp; Howtos</a>
     <a class="dropdown-item" href="../articles/scdrake_cli.html">Command line interface</a>
-    <a class="dropdown-item" href="../articles/cluster_markers.html">Cluster markers</a>
     <a class="dropdown-item" href="../articles/scdrake_config.html">scdrake config internals</a>
     <a class="dropdown-item" href="../articles/scdrake_envvars.html">Environment variables</a>
     <div class="dropdown-divider"></div>
@@ -148,7 +148,7 @@
       <img src="" class="logo" alt=""><h1>Post-integration clustering stage (`02_int_clustering`)</h1>
             
             <h4 data-toc-skip class="date"><sup>Document generated:
-2023-01-30 11:58:15 UTC+0000</sup></h4>
+2023-05-27 08:46:45 UTC+0000</sup></h4>
       
       <small class="dont-index">Source: <a href="https://github.com/bioinfocz/scdrake/blob/mastervignettes/stage_int_clustering.Rmd" class="external-link"><code>vignettes/stage_int_clustering.Rmd</code></a></small>
       <div class="d-none name"><code>stage_int_clustering.Rmd</code></div>
@@ -157,29 +157,55 @@
     
     
 <hr>
-<p>For a general overview of this integration pipeline stage see
-<code><a href="../articles/pipeline_overview.html">vignette("pipeline_overview")</a></code>.</p>
-<p>Config for this stage is stored in
-<code>02_int_clustering.yaml</code> file. Directory with this file is
-read from <code>SCDRAKE_INTEGRATION_CONFIG_DIR</code> environment
-variable upon <a href="https://github.com/bioinfocz/scdrake" class="external-link">scdrake</a> load or attach, and saved as
-<code>scdrake_integration_config_dir</code> option. This option is used
-as the default argument value in several <a href="https://github.com/bioinfocz/scdrake" class="external-link">scdrake</a>
-functions.</p>
-<p>Target for this stage’s report:
-<code>report_int_clustering</code></p>
-<p>You can make this target by setting
-<code>DRAKE_TARGETS: ["report_int_clustering"]</code> in
-<code>pipeline.yaml</code> config file.</p>
+<div class="section level2 tabset">
+<h2 class="tabset" id="section"></h2>
+
+
+
+<ul class="nav nav-tabs" id="section" role="tablist">
+<li role="presentation" class="nav-item"><button data-bs-toggle="tab" data-bs-target="#overview" id="overview-tab" type="button" role="tab" aria-controls="overview" aria-selected="true" class="active nav-link">Overview</button></li>
+<li role="presentation" class="nav-item"><button data-bs-toggle="tab" data-bs-target="#config-parameters" id="config-parameters-tab" type="button" role="tab" aria-controls="config-parameters" aria-selected="false" class="nav-link">Config parameters</button></li>
+<li role="presentation" class="nav-item"><button data-bs-toggle="tab" data-bs-target="#outputs" id="outputs-tab" type="button" role="tab" aria-controls="outputs" aria-selected="false" class="nav-link">Outputs</button></li>
+</ul>
+<div class="tab-content">
+<div class="active  tab-pane" id="overview" role="tabpanel" aria-labelledby="overview-tab">
+
+<p>This stage uses the result from a selected integration method and
+performs clustering, cell type annotation and visualization (similar to
+the <code>02_norm_clustering</code> stage of the single-sample
+pipeline). HVGs, reduced dimensions, and selected markers are already
+computed in the previous stage (<code>01_integration</code>).</p>
+<p>⚙️ Config file:
+<code>config/integration/02_int_clustering.yaml</code></p>
+<p>📋 HTML report target (in <code>config/pipeline.yaml</code>):
+<code>DRAKE_TARGETS: ["report_int_clustering"]</code></p>
+<p><a href="https://onco.img.cas.cz/novotnyj/scdrake/integration/02_int_clustering/02_int_clustering.html" class="external-link">📜
+Example report</a> (<a href="https://github.com/bioinfocz/scdrake/blob/main/tests/testthat/run_pipeline_config_patches/integration/02_int_clustering.default.yaml" class="external-link">used
+config</a>)</p>
 <hr>
-<div class="section level2">
-<h2 id="config-parameters">Config parameters<a class="anchor" aria-label="anchor" href="#config-parameters"></a>
-</h2>
+</div>
+<div class="tab-pane" id="config-parameters" role="tabpanel" aria-labelledby="config-parameters-tab">
+
+<p>Config for this stage is stored in the
+<code>config/integration/02_int_clustering.yaml</code> file. Directory
+with this file is read from <code>SCDRAKE_INTEGRATION_CONFIG_DIR</code>
+environment variable upon <a href="https://github.com/bioinfocz/scdrake" class="external-link">scdrake</a> load or attach, and
+saved as <code>scdrake_integration_config_dir</code> option. This option
+is used as the default argument value in several <a href="https://github.com/bioinfocz/scdrake" class="external-link">scdrake</a>
+functions.</p>
 <p>The following parameters are the same as those in the
 <code>02_norm_clustering</code> stage of the single-sample pipeline (see
 <code><a href="../articles/stage_norm_clustering.html">vignette("stage_norm_clustering")</a></code>):</p>
 <ul>
-<li>Clustering and cell annotation parameters.</li>
+<li>Clustering and cell annotation parameters.
+<ul>
+<li>The only exception is <code>CLUSTER_SC3_ENABLED</code> that is
+automatically set to <code>FALSE</code> when
+<code>INTEGRATION_FINAL_METHOD</code> is <code>"harmony"</code>, because
+SC3 clustering cannot be performed on reduced dimensions (Harmony does
+not compute an integrated expression matrix).</li>
+</ul>
+</li>
 <li><code>CELL_GROUPINGS</code></li>
 <li>
 <code>INT_CLUSTERING_REPORT_DIMRED_NAMES</code>,
@@ -192,12 +218,14 @@ functions.</p>
 <code>INT_CLUSTERING_KNITR_ECHO</code>
 </li>
 </ul>
-<div class="section level3">
-<h3 id="selection-of-final-integration-method">Selection of final integration method<a class="anchor" aria-label="anchor" href="#selection-of-final-integration-method"></a>
-</h3>
+<hr>
+<div class="section level4">
+<h4 id="selection-of-final-integration-method">Selection of final integration method<a class="anchor" aria-label="anchor" href="#selection-of-final-integration-method"></a>
+</h4>
 <div class="sourceCode" id="cb1"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">INTEGRATION_FINAL_METHOD</span><span class="kw">:</span><span class="at"> </span><span class="st">"mnn"</span></span></code></pre></div>
 <p><strong>Type:</strong> character scalar (<code>"mnn"</code> |
-<code>"rescaling"</code> | <code>"regression"</code>)</p>
+<code>"rescaling"</code> | <code>"regression"</code> |
+<code>"harmony"</code>)</p>
 <p>A name of the final integration method that will be used for
 clustering and downstream steps.</p>
 <hr>
@@ -210,9 +238,9 @@ any of the single-samples in the <code>INTEGRATION_SOURCES</code>
 parameter (<code>01_integration.yaml</code>) has
 <code>hvg_rm_cc_genes</code> set to <code>True</code>.</p>
 </div>
-<div class="section level3">
-<h3 id="cell-grouping-assignment">Cell grouping assignment<a class="anchor" aria-label="anchor" href="#cell-grouping-assignment"></a>
-</h3>
+<div class="section level4">
+<h4 id="cell-grouping-assignment">Cell grouping assignment<a class="anchor" aria-label="anchor" href="#cell-grouping-assignment"></a>
+</h4>
 <div class="sourceCode" id="cb3"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ADDITIONAL_CELL_DATA_FILE</span><span class="kw">:</span><span class="at"> </span><span class="ch">null</span></span></code></pre></div>
 <p><strong>Type:</strong> character scalar or <code>null</code></p>
 <p>Same as in the <code>02_norm_clustering</code> stage of the
@@ -234,42 +262,43 @@ AAACCCAGTTTGTTGG-1-pbmc3k AAACCCAGTTTGTTGG-1   pbmc3k    2
 Note that rownames are not mandatory.
 </code></pre>
 </div>
-<div class="section level3">
-<h3 id="input-files">Input files<a class="anchor" aria-label="anchor" href="#input-files"></a>
-</h3>
+<div class="section level4">
+<h4 id="input-files">Input files<a class="anchor" aria-label="anchor" href="#input-files"></a>
+</h4>
 <div class="sourceCode" id="cb5"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">INT_CLUSTERING_REPORT_RMD_FILE</span><span class="kw">:</span><span class="at"> </span><span class="st">"Rmd/integration/02_int_clustering.Rmd"</span></span></code></pre></div>
 <p><strong>Type:</strong> character scalar</p>
 <p>A path to RMarkdown files used for HTML report of this pipeline
 stage.</p>
 </div>
-<div class="section level3">
-<h3 id="output-files">Output files<a class="anchor" aria-label="anchor" href="#output-files"></a>
-</h3>
+<div class="section level4">
+<h4 id="output-files">Output files<a class="anchor" aria-label="anchor" href="#output-files"></a>
+</h4>
 <div class="sourceCode" id="cb6"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">INT_CLUSTERING_BASE_OUT_DIR</span><span class="kw">:</span><span class="at"> </span><span class="st">"02_int_clustering"</span></span></code></pre></div>
 <p><strong>Type:</strong> character scalar</p>
 <p>A path to base output directory for this stage. It will be created
 under <code>BASE_OUT_DIR</code> specified in <code>00_main.yaml</code>
 config.</p>
 <hr>
-<div class="sourceCode" id="cb7"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">INT_CLUSTERING_REPORT_HTML_FILE</span><span class="kw">:</span><span class="at"> </span><span class="st">"02_int_clustering.html"</span></span></code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">INT_CLUSTERING_DIMRED_PLOTS_OUT_DIR</span><span class="kw">:</span><span class="at"> </span><span class="st">"dimred_plots"</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="fu">INT_CLUSTERING_CELL_ANNOTATION_OUT_DIR</span><span class="kw">:</span><span class="at"> </span><span class="st">"cell_annotation"</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="fu">INT_CLUSTERING_OTHER_PLOTS_OUT_DIR</span><span class="kw">:</span><span class="at"> </span><span class="st">"other_plots"</span></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="fu">INT_CLUSTERING_REPORT_HTML_FILE</span><span class="kw">:</span><span class="at"> </span><span class="st">"02_int_clustering.html"</span></span></code></pre></div>
 <p><strong>Type:</strong> character scalar</p>
 <p>Names of files and directories created under
 <code>INT_CLUSTERING_BASE_OUT_DIR</code>. Subdirectories are not
 allowed.</p>
-<hr>
 </div>
 </div>
-<div class="section level2">
-<h2 id="targets">Targets<a class="anchor" aria-label="anchor" href="#targets"></a>
-</h2>
+<div class="tab-pane" id="outputs" role="tabpanel" aria-labelledby="outputs-tab">
+
 <p>Here you can find description of the most important targets for this
 stage. However, for a full overview, you have to inspect the <a href="https://github.com/bioinfocz/scdrake/blob/main/R/plans_integration.R" class="external-link">source
 code</a> of the <code><a href="../reference/get_subplan_integration.html">get_int_clustering_subplan()</a></code> function.</p>
 <p>HTML report target name: <code>report_int_clustering</code></p>
-<div class="section level3">
-<h3 id="singlecellexperiment-objects">
+<div class="section level4">
+<h4 id="singlecellexperiment-objects">
 <code>SingleCellExperiment</code> objects<a class="anchor" aria-label="anchor" href="#singlecellexperiment-objects"></a>
-</h3>
+</h4>
 <p><code>sce_int_uncorrected</code>: the selected uncorrected SCE object
 according to the <code>INTEGRATION_FINAL_METHOD_RM_CC</code>
 parameter.</p>
@@ -278,75 +307,22 @@ parameter.</p>
 according to the <code>INTEGRATION_FINAL_METHOD</code> and
 <code>INTEGRATION_FINAL_METHOD_RM_CC</code> parameters.</p>
 <hr>
-<p><code>sce_int_final_clustering</code>: similar to
+<p><code>sce_int_clustering_final</code>: similar to
 <code>sce_final_norm_clustering</code> in the
 <code>02_norm_clustering</code> stage of the single-sample pipeline.</p>
 </div>
-<div class="section level3">
-<h3 id="targes-similar-to-02_norm_clustering">Targes similar to <code>02_norm_clustering</code><a class="anchor" aria-label="anchor" href="#targes-similar-to-02_norm_clustering"></a>
-</h3>
+<div class="section level4">
+<h4 id="targes-similar-to-02_norm_clustering">Targes similar to <code>02_norm_clustering</code><a class="anchor" aria-label="anchor" href="#targes-similar-to-02_norm_clustering"></a>
+</h4>
 <p>These targets are basically the same as those in the
 <code>02_norm_clustering</code> pipeline in the single-sample pipeline
 (see <code><a href="../articles/stage_norm_clustering.html">vignette("stage_norm_clustering")</a></code>).</p>
 <p>However, for a full overview, you have to inspect the <a href="https://github.com/bioinfocz/scdrake/blob/main/R/plans_integration.R" class="external-link">source
 code</a> of the <code><a href="../reference/get_subplan_integration.html">get_int_clustering_subplan()</a></code> function.</p>
+<p><code>selected_markers_int_plots_final</code>: selected markers plots
+for the selected integration method</p>
 </div>
-<div class="section level3">
-<h3 id="cell-clustering">Cell clustering<a class="anchor" aria-label="anchor" href="#cell-clustering"></a>
-</h3>
-<ul>
-<li><code>clusters_all</code></li>
-<li>
-<code>graph_int_k</code>, <code>cluster_int_graph_walktrap</code>,
-<code>cluster_int_graph_walktrap_n</code>,
-<code>cluster_int_graph_walktrap_table</code>,
-<code>cluster_int_graph_louvain</code>,
-<code>cluster_int_graph_louvain_n</code>,
-<code>cluster_int_graph_louvain_table</code>
-</li>
-<li>
-<code>kmeans_gaps</code>, <code>kmeans_best_k</code>,
-<code>cluster_int_kmeans_kbest</code>,
-<code>cluster_int_kmeans_kbest_table</code>,
-<code>cluster_int_kmeans_kc</code>,
-<code>cluster_int_kmeans_kc_tables</code>
-</li>
-<li>
-<code>sce_int_sc3</code>, <code>cluster_int_sc3</code>,
-<code>cluster_int_sc3_tables</code>,
-<code>cluster_int_sc3_stability_plots</code>
-</li>
-</ul>
 </div>
-<div class="section level3">
-<h3 id="cell-type-annotation">Cell type annotation<a class="anchor" aria-label="anchor" href="#cell-type-annotation"></a>
-</h3>
-<ul>
-<li>
-<code>cell_annotation_params</code>, <code>cell_annotation</code>,
-<code>cell_annotation_labels</code>,
-<code>cell_annotation_diagnostic_plots</code>,
-<code>cell_annotation_diagnostic_plots_files</code>
-</li>
-</ul>
-</div>
-<div class="section level3">
-<h3 id="plots">Plots<a class="anchor" aria-label="anchor" href="#plots"></a>
-</h3>
-<ul>
-<li>
-<code>dimred_plots_clustering</code>,
-<code>dimred_plots_other_vars</code>
-</li>
-<li><code>selected_markers_plots_int_final</code></li>
-</ul>
-</div>
-<div class="section level3">
-<h3 id="other-targets">Other targets<a class="anchor" aria-label="anchor" href="#other-targets"></a>
-</h3>
-<ul>
-<li><code>cell_data</code></li>
-</ul>
 </div>
 </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
@@ -357,12 +333,12 @@ code</a> of the <code><a href="../reference/get_subplan_integration.html">get_in
 
     <footer><div class="copyright">
   <p></p>
-<p>Developed by Jiri Novotny, Jan Kubovciak.</p>
+<p>Developed by Jiri Novotny, Jan Kubovciak, Michal Kolar.</p>
 </div>
 
 <div class="pkgdown">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.7.9000.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
   <p class="preferably">Using <a href="https://preferably.amirmasoudabdol.name/?source=footer" class="external-link">preferably</a> template.</p>
 </div>
 

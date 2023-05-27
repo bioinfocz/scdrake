@@ -50,7 +50,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">scdrake</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.4.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.5.0</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -77,6 +77,7 @@
     <h6 class="dropdown-header" data-toc-skip>Guides</h6>
     <a class="dropdown-item" href="../articles/scdrake_docker.html">Using the Docker image</a>
     <a class="dropdown-item" href="../articles/scdrake_integration.html">02 Integration pipeline guide</a>
+    <a class="dropdown-item" href="../articles/scdrake_advanced.html">Advanced topics</a>
     <a class="dropdown-item" href="../articles/scdrake_extend.html">Extending the pipeline</a>
     <a class="dropdown-item" href="../articles/drake_basics.html">drake basics</a>
     <div class="dropdown-divider"></div>
@@ -84,7 +85,6 @@
     <a class="dropdown-item" href="../articles/pipeline_overview.html">Pipeline overview</a>
     <a class="dropdown-item" href="../articles/scdrake_faq.html">FAQ &amp; Howtos</a>
     <a class="dropdown-item" href="../articles/scdrake_cli.html">Command line interface</a>
-    <a class="dropdown-item" href="../articles/cluster_markers.html">Cluster markers</a>
     <a class="dropdown-item" href="../articles/scdrake_config.html">scdrake config internals</a>
     <a class="dropdown-item" href="../articles/scdrake_envvars.html">Environment variables</a>
     <div class="dropdown-divider"></div>
@@ -148,7 +148,7 @@
       <img src="" class="logo" alt=""><h1>02 Integration pipeline guide</h1>
             
             <h4 data-toc-skip class="date"><sup>Document generated:
-2023-01-30 11:58:05 UTC+0000</sup></h4>
+2023-05-27 08:46:36 UTC+0000</sup></h4>
       
       <small class="dont-index">Source: <a href="https://github.com/bioinfocz/scdrake/blob/mastervignettes/scdrake_integration.Rmd" class="external-link"><code>vignettes/scdrake_integration.Rmd</code></a></small>
       <div class="d-none name"><code>scdrake_integration.Rmd</code></div>
@@ -163,8 +163,9 @@
 <li>A project initialized within the quick start guide
 (<code><a href="../articles/scdrake.html">vignette("scdrake")</a></code>) that should live in the
 <code>~/scdrake_projects/pbmc1k</code> directory.</li>
-<li>You have successfully run the pipeline as described in the third
-step of the guide.</li>
+<li>You have successfully run the pipeline for the
+<code>report_norm_clustering</code> or
+<code>report_norm_clustering_simple</code> target(s).</li>
 </ul>
 <blockquote>
 <p>For Docker we assume that the container has a shared directory
@@ -172,75 +173,12 @@ mounted as <code>/home/rstudio/scdrake_projects</code>, as described in
 <code><a href="../articles/scdrake_docker.html">vignette("scdrake_docker")</a></code>.</p>
 </blockquote>
 <hr>
-<div class="section level3 tabset">
-<h3 class="tabset" id="perform-normalization-and-clustering-for-the-pbmc-1k-sample">Perform normalization and clustering for the PBMC 1k
-sample<a class="anchor" aria-label="anchor" href="#perform-normalization-and-clustering-for-the-pbmc-1k-sample"></a>
-</h3>
 <p>The integration pipeline starts with import of
 <code>SingleCellExperiment</code> (SCE) objects from <code>drake</code>
 caches of underlying single-sample analyses. These objects are the final
 ones from the <code>02_norm_clustering</code> stage, that is,
 normalized, with known highly variable genes and clusters, and with
-computed reduced dimensions. During the quick start guide, we only run
-the first <code>01_input_qc</code> stage to save time, and therefore, we
-need to run the single-sample pipeline again, but now till the target
-storing the SCE object needed for the integration pipeline.</p>
-<p>To do so, you just need:</p>
-<ul>
-<li>To set your working directory to
-<code>~/scdrake_projects/pbmc1k</code> (or to open the RStudio project
-located there).</li>
-<li>To edit the <code>config/pipeline.yaml</code> file and set
-<code>DRAKE_TARGETS</code> to
-<code>["sce_final_norm_clustering"]</code>.</li>
-</ul>
-<blockquote>
-<p>If you want to significantly save computation time for the sake of
-quick guide, you can omit the calculation of very demanding SC3
-clustering (it will be replaced by random cluster assignments). To do
-so, open <code>config/single_sample/02_norm_clustering.yaml</code> and
-set <code>SC3_DRY</code> to <code>True</code>.</p>
-</blockquote>
-<blockquote>
-<p>If you are interested in the full report of the
-<code>02_norm_clustering</code> stage, you can use
-<code>["report_norm_clustering", "report_norm_clustering_simple"]</code>
-instead (these targets depend on the
-<code>sce_final_norm_clustering</code> target so it will be also
-made).</p>
-</blockquote>
-<p>And now you can run the pipeline:</p>
-
-
-
-<ul class="nav nav-tabs" id="perform-normalization-and-clustering-for-the-pbmc-1k-sample" role="tablist">
-<li role="presentation" class="nav-item"><button data-bs-toggle="tab" data-bs-target="#in-r" id="in-r-tab" type="button" role="tab" aria-controls="in-r" aria-selected="true" class="active nav-link">In R</button></li>
-<li role="presentation" class="nav-item"><button data-bs-toggle="tab" data-bs-target="#on-command-line" id="on-command-line-tab" type="button" role="tab" aria-controls="on-command-line" aria-selected="false" class="nav-link">On command line</button></li>
-<li role="presentation" class="nav-item"><button data-bs-toggle="tab" data-bs-target="#on-command-line-docker" id="on-command-line-docker-tab" type="button" role="tab" aria-controls="on-command-line-docker" aria-selected="false" class="nav-link">On command line (Docker)</button></li>
-</ul>
-<div class="tab-content">
-<div class="active  tab-pane" id="in-r" role="tabpanel" aria-labelledby="in-r-tab">
-
-<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/bioinfocz/scdrake" class="external-link">scdrake</a></span><span class="op">)</span></span>
-<span><span class="fu"><a href="../reference/run_pipeline.html">run_single_sample_r</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-</div>
-<div class="tab-pane" id="on-command-line" role="tabpanel" aria-labelledby="on-command-line-tab">
-
-<div class="sourceCode" id="cb2"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> ~/scdrake_projects/pbmc1k</span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="ex">scdrake</span> <span class="at">--pipeline-type</span> single_sample run</span></code></pre></div>
-</div>
-<div class="tab-pane" id="on-command-line-docker" role="tabpanel" aria-labelledby="on-command-line-docker-tab">
-
-<div class="sourceCode" id="cb3"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> exec <span class="at">-it</span> <span class="at">-u</span> rstudio <span class="at">-w</span> /home/rstudio/scdrake_projects/pbmc1k <span class="op">&lt;</span>CONTAINER ID or NAME<span class="op">&gt;</span> <span class="dt">\</span></span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>  scdrake <span class="at">--pipeline-type</span> single_sample run</span></code></pre></div>
-</div>
-</div>
-</div>
-<div class="section level3 unnumbered">
-<h3 class="unnumbered" id="section"></h3>
-<hr>
-</div>
+computed reduced dimensions.</p>
 <div class="section level3 tabset">
 <h3 class="tabset" id="prepare-the-second-sample---pbmc-3k">Prepare the second sample - PBMC 3k<a class="anchor" aria-label="anchor" href="#prepare-the-second-sample---pbmc-3k"></a>
 </h3>
@@ -250,40 +188,51 @@ approach, we will initialize a new <code>scdrake</code> project:</p>
 
 
 
+
 <ul class="nav nav-tabs" id="prepare-the-second-sample---pbmc-3k" role="tablist">
-<li role="presentation" class="nav-item"><button data-bs-toggle="tab" data-bs-target="#in-r-1" id="in-r-1-tab" type="button" role="tab" aria-controls="in-r-1" aria-selected="true" class="active nav-link">In R</button></li>
-<li role="presentation" class="nav-item"><button data-bs-toggle="tab" data-bs-target="#on-command-line-1" id="on-command-line-1-tab" type="button" role="tab" aria-controls="on-command-line-1" aria-selected="false" class="nav-link">On command line</button></li>
-<li role="presentation" class="nav-item"><button data-bs-toggle="tab" data-bs-target="#on-command-line-docker-1" id="on-command-line-docker-1-tab" type="button" role="tab" aria-controls="on-command-line-docker-1" aria-selected="false" class="nav-link">On command line (Docker)</button></li>
+<li role="presentation" class="nav-item"><button data-bs-toggle="tab" data-bs-target="#in-r" id="in-r-tab" type="button" role="tab" aria-controls="in-r" aria-selected="true" class="active nav-link">In R</button></li>
+<li role="presentation" class="nav-item"><button data-bs-toggle="tab" data-bs-target="#on-command-line" id="on-command-line-tab" type="button" role="tab" aria-controls="on-command-line" aria-selected="false" class="nav-link">On command line</button></li>
+<li role="presentation" class="nav-item"><button data-bs-toggle="tab" data-bs-target="#on-command-line-docker" id="on-command-line-docker-tab" type="button" role="tab" aria-controls="on-command-line-docker" aria-selected="false" class="nav-link">On command line (Docker)</button></li>
+<li role="presentation" class="nav-item"><button data-bs-toggle="tab" data-bs-target="#on-command-line-singularity" id="on-command-line-singularity-tab" type="button" role="tab" aria-controls="on-command-line-singularity" aria-selected="false" class="nav-link">On command line (Singularity)</button></li>
 </ul>
 <div class="tab-content">
-<div class="active  tab-pane" id="in-r-1" role="tabpanel" aria-labelledby="in-r-1-tab">
+<div class="active  tab-pane" id="in-r" role="tabpanel" aria-labelledby="in-r-tab">
 
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/init_project.html">init_project</a></span><span class="op">(</span><span class="st">"~/scdrake_projects/pbmc3k"</span><span class="op">)</span></span></code></pre></div>
 <p>If not done automatically, change your RStudio project or switch the
 current working directory to the project’s root.</p>
 </div>
-<div class="tab-pane" id="on-command-line-1" role="tabpanel" aria-labelledby="on-command-line-1-tab">
+<div class="tab-pane" id="on-command-line" role="tabpanel" aria-labelledby="on-command-line-tab">
 
-<div class="sourceCode" id="cb5"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mkdir</span> ~/scdrake_projects/pbmc3k</span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> ~/scdrake_projects/pbmc3k</span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="ex">scdrake</span> init-project</span></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mkdir</span> ~/scdrake_projects/pbmc3k</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> ~/scdrake_projects/pbmc3k</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="ex">scdrake</span> init-project</span></code></pre></div>
 </div>
-<div class="tab-pane" id="on-command-line-docker-1" role="tabpanel" aria-labelledby="on-command-line-docker-1-tab">
+<div class="tab-pane" id="on-command-line-docker" role="tabpanel" aria-labelledby="on-command-line-docker-tab">
 
-<div class="sourceCode" id="cb6"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mkdir</span> ~/scdrake_projects/pbmc3k</span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> ~/scdrake_projects/pbmc3k</span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> exec <span class="at">-it</span> <span class="at">-u</span> rstudio <span class="at">-w</span> /home/rstudio/scdrake_projects/pbmc3k <span class="op">&lt;</span>CONTAINER ID or NAME<span class="op">&gt;</span> <span class="dt">\</span></span>
-<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>  scdrake init-project</span></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mkdir</span> ~/scdrake_projects/pbmc3k</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> ~/scdrake_projects/pbmc3k</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> exec <span class="at">-it</span> <span class="at">-u</span> rstudio <span class="at">-w</span> /home/rstudio/scdrake_projects/pbmc3k <span class="op">&lt;</span>CONTAINER ID or NAME<span class="op">&gt;</span> <span class="dt">\</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>  scdrake init-project</span></code></pre></div>
+</div>
+<div class="tab-pane" id="on-command-line-singularity" role="tabpanel" aria-labelledby="on-command-line-singularity-tab">
+
+<div class="sourceCode" id="cb4"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mkdir</span> <span class="at">-p</span> ~/scdrake_singularity</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> ~/scdrake_singularity</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="fu">mkdir</span> <span class="at">-p</span> home/<span class="va">${USER}</span> scdrake_projects/pbmc3k</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="ex">singularity</span> exec <span class="at">-e</span> <span class="at">--no-home</span> <span class="dt">\</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">--bind</span> <span class="st">"home/</span><span class="va">${USER}</span><span class="st">/:/home/</span><span class="va">${USER}</span><span class="st">,scdrake_projects/:/home/</span><span class="va">${USER}</span><span class="st">/scdrake_projects"</span> <span class="dt">\</span></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">--pwd</span> <span class="st">"/home/</span><span class="va">${USER}</span><span class="st">/scdrake_projects/pbmc3k"</span> <span class="dt">\</span></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>    path/to/scdrake_image.sif <span class="dt">\</span></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>    scdrake init-project</span></code></pre></div>
 </div>
 </div>
 </div>
 <div class="section level3 unnumbered">
-<h3 class="unnumbered" id="section-1"></h3>
+<h3 class="unnumbered" id="section"></h3>
 <p>Now we will repeat the steps we have already done for the PBMC 1k
-sample:</p>
-<ul>
-<li>In <code>~/scdrake_projects/pbmc3k</code>:
+sample. In <code>~/scdrake_projects/pbmc3k</code>:</p>
 <ul>
 <li>Open <code>config/single_sample/01_input_qc.yaml</code> and set
 <code>path</code> inside <code>INPUT_DATA</code> to
@@ -293,85 +242,110 @@ PBMC 1k dataset).</li>
 <li>Open <code>config/pipeline.yaml</code> and set
 <code>DRAKE_TARGETS</code> to
 <code>["sce_final_norm_clustering"]</code>.</li>
-<li>Optionally to save time, open
-<code>config/single_sample/02_norm_clustering.yaml</code> and set
-<code>SC3_DRY</code> to <code>True</code>.</li>
-</ul>
-</li>
 </ul>
 <p>The config modifications for the second sample are ready, so let’s
-run the pipeline (the working directory is
-<code>~/scdrake_projects/pbmc3k</code>):</p>
+run the pipeline:</p>
 </div>
 <div class="section level3 tabset">
-<h3 class="tabset" id="section-2"></h3>
+<h3 class="tabset" id="section-1"></h3>
 
 
 
-<ul class="nav nav-tabs" id="section-2" role="tablist">
-<li role="presentation" class="nav-item"><button data-bs-toggle="tab" data-bs-target="#in-r-2" id="in-r-2-tab" type="button" role="tab" aria-controls="in-r-2" aria-selected="true" class="active nav-link">In R</button></li>
-<li role="presentation" class="nav-item"><button data-bs-toggle="tab" data-bs-target="#on-command-line-2" id="on-command-line-2-tab" type="button" role="tab" aria-controls="on-command-line-2" aria-selected="false" class="nav-link">On command line</button></li>
-<li role="presentation" class="nav-item"><button data-bs-toggle="tab" data-bs-target="#on-command-line-docker-2" id="on-command-line-docker-2-tab" type="button" role="tab" aria-controls="on-command-line-docker-2" aria-selected="false" class="nav-link">On command line (Docker)</button></li>
+
+<ul class="nav nav-tabs" id="section-1" role="tablist">
+<li role="presentation" class="nav-item"><button data-bs-toggle="tab" data-bs-target="#in-r-1" id="in-r-1-tab" type="button" role="tab" aria-controls="in-r-1" aria-selected="true" class="active nav-link">In R</button></li>
+<li role="presentation" class="nav-item"><button data-bs-toggle="tab" data-bs-target="#on-command-line-1" id="on-command-line-1-tab" type="button" role="tab" aria-controls="on-command-line-1" aria-selected="false" class="nav-link">On command line</button></li>
+<li role="presentation" class="nav-item"><button data-bs-toggle="tab" data-bs-target="#on-command-line-docker-1" id="on-command-line-docker-1-tab" type="button" role="tab" aria-controls="on-command-line-docker-1" aria-selected="false" class="nav-link">On command line (Docker)</button></li>
+<li role="presentation" class="nav-item"><button data-bs-toggle="tab" data-bs-target="#on-command-line-singularity-1" id="on-command-line-singularity-1-tab" type="button" role="tab" aria-controls="on-command-line-singularity-1" aria-selected="false" class="nav-link">On command line (Singularity)</button></li>
 </ul>
 <div class="tab-content">
-<div class="active  tab-pane" id="in-r-2" role="tabpanel" aria-labelledby="in-r-2-tab">
+<div class="active  tab-pane" id="in-r-1" role="tabpanel" aria-labelledby="in-r-1-tab">
 
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/run_pipeline.html">run_single_sample_r</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 </div>
-<div class="tab-pane" id="on-command-line-2" role="tabpanel" aria-labelledby="on-command-line-2-tab">
+<div class="tab-pane" id="on-command-line-1" role="tabpanel" aria-labelledby="on-command-line-1-tab">
 
-<div class="sourceCode" id="cb8"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="ex">scdrake</span> <span class="at">--pipeline-type</span> single_sample run</span></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="ex">scdrake</span> <span class="at">--pipeline-type</span> single_sample run</span></code></pre></div>
 </div>
-<div class="tab-pane" id="on-command-line-docker-2" role="tabpanel" aria-labelledby="on-command-line-docker-2-tab">
+<div class="tab-pane" id="on-command-line-docker-1" role="tabpanel" aria-labelledby="on-command-line-docker-1-tab">
 
-<div class="sourceCode" id="cb9"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> exec <span class="at">-it</span> <span class="at">-u</span> rstudio <span class="at">-w</span> /home/rstudio/scdrake_projects/pbmc3k <span class="op">&lt;</span>CONTAINER ID or NAME<span class="op">&gt;</span> <span class="dt">\</span></span>
-<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>  scdrake <span class="at">--pipeline-type</span> single_sample run</span></code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> exec <span class="at">-it</span> <span class="at">-u</span> rstudio <span class="at">-w</span> /home/rstudio/scdrake_projects/pbmc3k <span class="op">&lt;</span>CONTAINER ID or NAME<span class="op">&gt;</span> <span class="dt">\</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>  scdrake <span class="at">--pipeline-type</span> single_sample run</span></code></pre></div>
+</div>
+<div class="tab-pane" id="on-command-line-singularity-1" role="tabpanel" aria-labelledby="on-command-line-singularity-1-tab">
+
+<div class="sourceCode" id="cb8"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="ex">singularity</span> exec <span class="at">-e</span> <span class="at">--no-home</span> <span class="dt">\</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>    <span class="at">--bind</span> <span class="st">"home/</span><span class="va">${USER}</span><span class="st">/:/home/</span><span class="va">${USER}</span><span class="st">,scdrake_projects/:/home/</span><span class="va">${USER}</span><span class="st">/scdrake_projects"</span> <span class="dt">\</span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">--pwd</span> <span class="st">"/home/</span><span class="va">${USER}</span><span class="st">/scdrake_projects/pbmc3k"</span> <span class="dt">\</span></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>    path/to/scdrake_image.sif <span class="dt">\</span></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>    scdrake <span class="at">--pipeline-type</span> single_sample run</span></code></pre></div>
 </div>
 </div>
 </div>
 <div class="section level3 unnumbered">
-<h3 class="unnumbered" id="section-3"></h3>
+<h3 class="unnumbered" id="section-2"></h3>
 <hr>
 </div>
 <div class="section level3 tabset">
 <h3 class="tabset" id="running-the-integration-pipeline">Running the integration pipeline<a class="anchor" aria-label="anchor" href="#running-the-integration-pipeline"></a>
 </h3>
+<p>The configuration file for the integration pipeline is located in
+<code>config/integration/01_integration.yaml</code> (see
+<code><a href="../articles/stage_integration.html">vignette("stage_integration")</a></code>). By default, four
+integration methods are enabled (you can disable them in the
+<code>INTEGRATION_METHODS</code> parameter), plus the
+<code>uncorrected</code> method, which is mandatory as it is used later
+in the <code>cluster_markers</code> and <code>contrasts</code> stages
+(<code>uncorrected</code> just performs batch-specific correction for
+sequencing depth via <code><a href="https://rdrr.io/pkg/batchelor/man/multiBatchNorm.html" class="external-link">batchelor::multiBatchNorm()</a></code>). At least
+one integration method and <code>uncorrected</code> must be always
+enabled.</p>
 <p>First, as before for the individual samples, we will also initialize
 a new <code>scdrake</code> project for the integration analysis:</p>
 
 
 
+
 <ul class="nav nav-tabs" id="running-the-integration-pipeline" role="tablist">
-<li role="presentation" class="nav-item"><button data-bs-toggle="tab" data-bs-target="#in-r-3" id="in-r-3-tab" type="button" role="tab" aria-controls="in-r-3" aria-selected="true" class="active nav-link">In R</button></li>
-<li role="presentation" class="nav-item"><button data-bs-toggle="tab" data-bs-target="#on-command-line-3" id="on-command-line-3-tab" type="button" role="tab" aria-controls="on-command-line-3" aria-selected="false" class="nav-link">On command line</button></li>
-<li role="presentation" class="nav-item"><button data-bs-toggle="tab" data-bs-target="#on-command-line-docker-3" id="on-command-line-docker-3-tab" type="button" role="tab" aria-controls="on-command-line-docker-3" aria-selected="false" class="nav-link">On command line (Docker)</button></li>
+<li role="presentation" class="nav-item"><button data-bs-toggle="tab" data-bs-target="#in-r-2" id="in-r-2-tab" type="button" role="tab" aria-controls="in-r-2" aria-selected="true" class="active nav-link">In R</button></li>
+<li role="presentation" class="nav-item"><button data-bs-toggle="tab" data-bs-target="#on-command-line-2" id="on-command-line-2-tab" type="button" role="tab" aria-controls="on-command-line-2" aria-selected="false" class="nav-link">On command line</button></li>
+<li role="presentation" class="nav-item"><button data-bs-toggle="tab" data-bs-target="#on-command-line-docker-2" id="on-command-line-docker-2-tab" type="button" role="tab" aria-controls="on-command-line-docker-2" aria-selected="false" class="nav-link">On command line (Docker)</button></li>
+<li role="presentation" class="nav-item"><button data-bs-toggle="tab" data-bs-target="#on-command-line-singularity-2" id="on-command-line-singularity-2-tab" type="button" role="tab" aria-controls="on-command-line-singularity-2" aria-selected="false" class="nav-link">On command line (Singularity)</button></li>
 </ul>
 <div class="tab-content">
-<div class="active  tab-pane" id="in-r-3" role="tabpanel" aria-labelledby="in-r-3-tab">
+<div class="active  tab-pane" id="in-r-2" role="tabpanel" aria-labelledby="in-r-2-tab">
 
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/init_project.html">init_project</a></span><span class="op">(</span><span class="st">"~/scdrake_projects/pbmc_integration"</span><span class="op">)</span></span></code></pre></div>
 </div>
-<div class="tab-pane" id="on-command-line-3" role="tabpanel" aria-labelledby="on-command-line-3-tab">
+<div class="tab-pane" id="on-command-line-2" role="tabpanel" aria-labelledby="on-command-line-2-tab">
+
+<div class="sourceCode" id="cb10"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mkdir</span> ~/scdrake_projects/pbmc_integration</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> ~/scdrake_projects/pbmc_integration</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="ex">scdrake</span> init-project</span></code></pre></div>
+</div>
+<div class="tab-pane" id="on-command-line-docker-2" role="tabpanel" aria-labelledby="on-command-line-docker-2-tab">
 
 <div class="sourceCode" id="cb11"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mkdir</span> ~/scdrake_projects/pbmc_integration</span>
 <span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> ~/scdrake_projects/pbmc_integration</span>
-<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a><span class="ex">scdrake</span> init-project</span></code></pre></div>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> exec <span class="at">-it</span> <span class="at">-u</span> rstudio <span class="at">-w</span> /home/rstudio/scdrake_projects/pbmc_integration <span class="op">&lt;</span>CONTAINER ID or NAME<span class="op">&gt;</span> <span class="dt">\</span></span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>  scdrake init-project</span></code></pre></div>
 </div>
-<div class="tab-pane" id="on-command-line-docker-3" role="tabpanel" aria-labelledby="on-command-line-docker-3-tab">
+<div class="tab-pane" id="on-command-line-singularity-2" role="tabpanel" aria-labelledby="on-command-line-singularity-2-tab">
 
-<div class="sourceCode" id="cb12"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mkdir</span> ~/scdrake_projects/pbmc_integration</span>
-<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> ~/scdrake_projects/pbmc_integration</span>
-<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> exec <span class="at">-it</span> <span class="at">-u</span> rstudio <span class="at">-w</span> /home/rstudio/scdrake_projects/pbmc_integration <span class="op">&lt;</span>CONTAINER ID or NAME<span class="op">&gt;</span> <span class="dt">\</span></span>
-<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>  scdrake init-project</span></code></pre></div>
+<div class="sourceCode" id="cb12"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mkdir</span> <span class="at">-p</span> home/<span class="va">${USER}</span> scdrake_projects/pbmc_integration</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="ex">singularity</span> exec <span class="at">-e</span> <span class="at">--no-home</span> <span class="dt">\</span></span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">--bind</span> <span class="st">"home/</span><span class="va">${USER}</span><span class="st">/:/home/</span><span class="va">${USER}</span><span class="st">,scdrake_projects/:/home/</span><span class="va">${USER}</span><span class="st">/scdrake_projects"</span> <span class="dt">\</span></span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">--pwd</span> <span class="st">"/home/</span><span class="va">${USER}</span><span class="st">/scdrake_projects/pbmc_integration"</span> <span class="dt">\</span></span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>    path/to/scdrake_image.sif <span class="dt">\</span></span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>    scdrake init-project</span></code></pre></div>
 </div>
 </div>
 </div>
 <div class="section level3 unnumbered">
-<h3 class="unnumbered" id="section-4"></h3>
-<p>Assuming your project is opened / working directory is set to the
-project root, we modify configs for the integration pipeline:</p>
+<h3 class="unnumbered" id="section-3"></h3>
+<p>Now we modify configs for the integration pipeline:</p>
 <ul>
 <li>In <code>~/scdrake_projects/pbmc_integration</code>:
 <ul>
@@ -387,30 +361,29 @@ target of the <code>01_integration</code> stage.</li>
 </ul>
 </li>
 </ul>
-<p>And now we can run the integration pipeline (the working directory is
-<code>~/scdrake_projects/pbmc_integration</code>):</p>
+<p>And let’s run the pipeline.</p>
 </div>
 <div class="section level3 tabset">
-<h3 class="tabset" id="section-5"></h3>
+<h3 class="tabset" id="section-4"></h3>
 
 
 
-<ul class="nav nav-tabs" id="section-5" role="tablist">
-<li role="presentation" class="nav-item"><button data-bs-toggle="tab" data-bs-target="#in-r-4" id="in-r-4-tab" type="button" role="tab" aria-controls="in-r-4" aria-selected="true" class="active nav-link">In R</button></li>
-<li role="presentation" class="nav-item"><button data-bs-toggle="tab" data-bs-target="#on-command-line-4" id="on-command-line-4-tab" type="button" role="tab" aria-controls="on-command-line-4" aria-selected="false" class="nav-link">On command line</button></li>
-<li role="presentation" class="nav-item"><button data-bs-toggle="tab" data-bs-target="#on-command-line-docker-4" id="on-command-line-docker-4-tab" type="button" role="tab" aria-controls="on-command-line-docker-4" aria-selected="false" class="nav-link">On command line (Docker)</button></li>
+<ul class="nav nav-tabs" id="section-4" role="tablist">
+<li role="presentation" class="nav-item"><button data-bs-toggle="tab" data-bs-target="#in-r-3" id="in-r-3-tab" type="button" role="tab" aria-controls="in-r-3" aria-selected="true" class="active nav-link">In R</button></li>
+<li role="presentation" class="nav-item"><button data-bs-toggle="tab" data-bs-target="#on-command-line-3" id="on-command-line-3-tab" type="button" role="tab" aria-controls="on-command-line-3" aria-selected="false" class="nav-link">On command line</button></li>
+<li role="presentation" class="nav-item"><button data-bs-toggle="tab" data-bs-target="#on-command-line-docker-3" id="on-command-line-docker-3-tab" type="button" role="tab" aria-controls="on-command-line-docker-3" aria-selected="false" class="nav-link">On command line (Docker)</button></li>
 </ul>
 <div class="tab-content">
-<div class="active  tab-pane" id="in-r-4" role="tabpanel" aria-labelledby="in-r-4-tab">
+<div class="active  tab-pane" id="in-r-3" role="tabpanel" aria-labelledby="in-r-3-tab">
 
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/run_pipeline.html">run_integration_r</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 </div>
-<div class="tab-pane" id="on-command-line-4" role="tabpanel" aria-labelledby="on-command-line-4-tab">
+<div class="tab-pane" id="on-command-line-3" role="tabpanel" aria-labelledby="on-command-line-3-tab">
 
 <div class="sourceCode" id="cb14"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="ex">scdrake</span> <span class="at">--pipeline-type</span> integration run</span></code></pre></div>
 </div>
-<div class="tab-pane" id="on-command-line-docker-4" role="tabpanel" aria-labelledby="on-command-line-docker-4-tab">
+<div class="tab-pane" id="on-command-line-docker-3" role="tabpanel" aria-labelledby="on-command-line-docker-3-tab">
 
 <div class="sourceCode" id="cb15"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> exec <span class="at">-it</span> <span class="at">-u</span> rstudio <span class="at">-w</span> /home/rstudio/scdrake_projects/pbmc_integration <span class="op">&lt;</span>CONTAINER ID or NAME<span class="op">&gt;</span> <span class="dt">\</span></span>
 <span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>  scdrake <span class="at">--pipeline-type</span> integration run</span></code></pre></div>
@@ -418,7 +391,7 @@ target of the <code>01_integration</code> stage.</li>
 </div>
 </div>
 <div class="section level3 unnumbered">
-<h3 class="unnumbered" id="section-6"></h3>
+<h3 class="unnumbered" id="section-5"></h3>
 <p>The output is saved in <code>output/integration</code>, as specified
 by <code>BASE_OUT_DIR</code> in
 <code>config/integration/00_main.yaml</code>. For
@@ -430,12 +403,29 @@ by <code>BASE_OUT_DIR</code> in
 dimensions:</p>
 <div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">drake</span><span class="fu">::</span><span class="fu"><a href="https://docs.ropensci.org/drake/reference/readd.html" class="external-link">loadd</a></span><span class="op">(</span><span class="va">sce_int_dimred_df</span><span class="op">)</span></span></code></pre></div>
-<hr>
-<p>You can also try to run the post-integration clustering stage in
-which the result from one selected integration method will be further
-processed. In <code>config/pipeline.yaml</code> just change
-<code>DRAKE_TARGETS</code> to
-<code>["report_int_clustering"]</code>.</p>
+<div class="section level4">
+<h4 id="post-integration-clustering-and-cell-annotation">Post-integration clustering and cell annotation<a class="anchor" aria-label="anchor" href="#post-integration-clustering-and-cell-annotation"></a>
+</h4>
+<p>The post-integration clustering stage (see
+<code><a href="../articles/stage_int_clustering.html">vignette("stage_int_clustering")</a></code>) basically replicates the
+clustering, cell annotation and visualization parts of the
+<code>02_norm_clustering</code> stage of the single-sample pipeline. It
+uses a <code>SingleCellExperiment</code> object from a selected
+integration method specified in the
+<code>INTEGRATION_FINAL_METHOD</code> parameter in
+<code>config/integration/02_int_clustering.yaml</code>.</p>
+<p>You can also try to run the post-integration clustering stage by
+setting <code>DRAKE_TARGETS</code> to
+<code>["report_int_clustering"]</code>. By default, the result from the
+<code>mnn</code> (mutual nearest neighbors) integration method is
+used.</p>
+</div>
+<div class="section level4">
+<h4 id="cluster-markers-and-contrasts-stages">Cluster markers and contrasts stages<a class="anchor" aria-label="anchor" href="#cluster-markers-and-contrasts-stages"></a>
+</h4>
+<p>The usage of these stages is the same as in the single-sample
+pipeline.</p>
+</div>
 </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
     </nav></aside>
@@ -445,12 +435,12 @@ processed. In <code>config/pipeline.yaml</code> just change
 
     <footer><div class="copyright">
   <p></p>
-<p>Developed by Jiri Novotny, Jan Kubovciak.</p>
+<p>Developed by Jiri Novotny, Jan Kubovciak, Michal Kolar.</p>
 </div>
 
 <div class="pkgdown">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.7.9000.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
   <p class="preferably">Using <a href="https://preferably.amirmasoudabdol.name/?source=footer" class="external-link">preferably</a> template.</p>
 </div>
 

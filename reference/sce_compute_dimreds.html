@@ -28,7 +28,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">scdrake</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.4.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.5.0</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -54,6 +54,7 @@
     <h6 class="dropdown-header" data-toc-skip>Guides</h6>
     <a class="dropdown-item" href="../articles/scdrake_docker.html">Using the Docker image</a>
     <a class="dropdown-item" href="../articles/scdrake_integration.html">02 Integration pipeline guide</a>
+    <a class="dropdown-item" href="../articles/scdrake_advanced.html">Advanced topics</a>
     <a class="dropdown-item" href="../articles/scdrake_extend.html">Extending the pipeline</a>
     <a class="dropdown-item" href="../articles/drake_basics.html">drake basics</a>
     <div class="dropdown-divider"></div>
@@ -61,7 +62,6 @@
     <a class="dropdown-item" href="../articles/pipeline_overview.html">Pipeline overview</a>
     <a class="dropdown-item" href="../articles/scdrake_faq.html">FAQ &amp; Howtos</a>
     <a class="dropdown-item" href="../articles/scdrake_cli.html">Command line interface</a>
-    <a class="dropdown-item" href="../articles/cluster_markers.html">Cluster markers</a>
     <a class="dropdown-item" href="../articles/scdrake_config.html">scdrake config internals</a>
     <a class="dropdown-item" href="../articles/scdrake_envvars.html">Environment variables</a>
     <div class="dropdown-divider"></div>
@@ -130,6 +130,7 @@
 <span>  <span class="va">tsne_perp</span>,</span>
 <span>  <span class="va">tsne_max_iter</span>,</span>
 <span>  dimred <span class="op">=</span> <span class="st">"pca"</span>,</span>
+<span>  n_dimred <span class="op">=</span> <span class="st">"selected_pcs"</span>,</span>
 <span>  BPPARAM <span class="op">=</span> <span class="fu">BiocParallel</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/BiocParallel/man/SerialParam-class.html" class="external-link">SerialParam</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
@@ -152,6 +153,13 @@
 <dd><p>A character scalar: name of matrix in <code>reducedDim()</code> used to calculate the dimreds.</p></dd>
 
 
+<dt>n_dimred</dt>
+<dd><ul><li><p>A character scalar <code>"selected_pcs"</code>: if <code>dimred</code> is <code>"pca"</code>, then use selected PCs stored in <code>metadata(sce_pca_selected_pcs)$pca_selected_pcs</code></p></li>
+<li><p><code>NULL</code>: use all dimensions of <code>dimred</code></p></li>
+<li><p>An integer scalar: use first <code>n_dimred</code> dimensions of <code>dimred</code></p></li>
+</ul></dd>
+
+
 <dt>BPPARAM</dt>
 <dd><p>A <a href="https://rdrr.io/pkg/BiocParallel/man/BiocParallelParam-class.html" class="external-link">BiocParallel::BiocParallelParam</a> object.</p></dd>
 
@@ -169,11 +177,11 @@ dimreds will be named <code>tsne_&lt;i&gt;</code> and <code>umap_&lt;i&gt;</code
 
 
     <footer><div class="copyright">
-  <p></p><p>Developed by Jiri Novotny, Jan Kubovciak.</p>
+  <p></p><p>Developed by Jiri Novotny, Jan Kubovciak, Michal Kolar.</p>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.7.9000.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
   <p class="preferably">Using <a href="https://preferably.amirmasoudabdol.name/?source=footer" class="external-link">preferably</a> template.</p>
 </div>
 

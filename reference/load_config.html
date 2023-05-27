@@ -32,7 +32,7 @@ load a specific config group (pipeline, single-sample, integration) and return a
     
     <a class="navbar-brand me-2" href="../index.html">scdrake</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.4.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.5.0</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -58,6 +58,7 @@ load a specific config group (pipeline, single-sample, integration) and return a
     <h6 class="dropdown-header" data-toc-skip>Guides</h6>
     <a class="dropdown-item" href="../articles/scdrake_docker.html">Using the Docker image</a>
     <a class="dropdown-item" href="../articles/scdrake_integration.html">02 Integration pipeline guide</a>
+    <a class="dropdown-item" href="../articles/scdrake_advanced.html">Advanced topics</a>
     <a class="dropdown-item" href="../articles/scdrake_extend.html">Extending the pipeline</a>
     <a class="dropdown-item" href="../articles/drake_basics.html">drake basics</a>
     <div class="dropdown-divider"></div>
@@ -65,7 +66,6 @@ load a specific config group (pipeline, single-sample, integration) and return a
     <a class="dropdown-item" href="../articles/pipeline_overview.html">Pipeline overview</a>
     <a class="dropdown-item" href="../articles/scdrake_faq.html">FAQ &amp; Howtos</a>
     <a class="dropdown-item" href="../articles/scdrake_cli.html">Command line interface</a>
-    <a class="dropdown-item" href="../articles/cluster_markers.html">Cluster markers</a>
     <a class="dropdown-item" href="../articles/scdrake_config.html">scdrake config internals</a>
     <a class="dropdown-item" href="../articles/scdrake_envvars.html">Environment variables</a>
     <div class="dropdown-divider"></div>
@@ -201,8 +201,7 @@ but in some cases could be useful to see the raw config.</p></dd>
 
 <dt>cfg_pipeline</dt>
 <dd><p>A <code>scdrake_list</code> object: pipeline config (see <code>load_pipeline_config()</code>)
-obtained from <code>pipeline.yaml</code> file located in pipeline config directory.
-If <code>NULL</code>, it will be loaded using the path defined in <code>scdrake_pipeline_config_dir</code> option.</p></dd>
+obtained from <code>pipeline.yaml</code> file located in pipeline config directory.</p></dd>
 
 </dl></div>
     <div class="section level2">
@@ -214,7 +213,7 @@ If <code>NULL</code>, it will be loaded using the path defined in <code>scdrake_
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
     <p>Except <code>load_pipeline_config()</code>, you can refer to variables from <code>pipeline.yaml</code> and <code>00_main.yaml</code> configs
-inside individual configs. For example, you can use <code>SC3_N_CORES: !code DRAKE_N_JOBS</code> in <code>02_norm_clustering.yaml</code>.</p>
+inside individual configs. For example, you can use <code>CLUSTER_SC3_N_CORES: !code DRAKE_N_JOBS</code> in <code>02_norm_clustering.yaml</code>.</p>
     </div>
     <div class="section level2">
     <h2 id="evaluating-code-inside-yaml-files">Evaluating code inside YAML files<a class="anchor" aria-label="anchor" href="#evaluating-code-inside-yaml-files"></a></h2>
@@ -276,11 +275,11 @@ You have to keep an eye on the proper indentation :)</p>
 
 
     <footer><div class="copyright">
-  <p></p><p>Developed by Jiri Novotny, Jan Kubovciak.</p>
+  <p></p><p>Developed by Jiri Novotny, Jan Kubovciak, Michal Kolar.</p>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.7.9000.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
   <p class="preferably">Using <a href="https://preferably.amirmasoudabdol.name/?source=footer" class="external-link">preferably</a> template.</p>
 </div>
 
