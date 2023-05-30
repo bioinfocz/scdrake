@@ -48,11 +48,13 @@ drake::loadd(
 
 cfg <- config_int_clustering
 
-selected_markers_int_plots_files <- dplyr::filter(
-  selected_markers_int_plots_files,
-  name == cfg$INTEGRATION_FINAL_METHOD,
-  hvg_rm_cc_genes == cfg$INTEGRATION_FINAL_METHOD_RM_CC
-)
+if (!rlang::is_null(selected_markers_int_plots_files)) {
+  selected_markers_int_plots_files <- dplyr::filter(
+    selected_markers_int_plots_files,
+    name == cfg$INTEGRATION_FINAL_METHOD,
+    hvg_rm_cc_genes == cfg$INTEGRATION_FINAL_METHOD_RM_CC
+  )
+}
 
 report_html_file <- cfg$INT_CLUSTERING_REPORT_HTML_FILE
 

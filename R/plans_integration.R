@@ -239,11 +239,15 @@ get_int_clustering_subplan <- function(cfg, cfg_pipeline, cfg_main) {
     sce_int_clustering_final = sce_add_cell_data(sce_int_final, cell_data),
 
     ## -- Selected markers plots for the chosen integration method.
-    selected_markers_int_plots_final = dplyr::filter(
-      selected_markers_int_plots_files,
-      name == !!cfg$INTEGRATION_FINAL_METHOD,
-      hvg_rm_cc_genes == !!cfg$INTEGRATION_FINAL_METHOD_RM_CC
-    ),
+    selected_markers_int_plots_final = if (is_null(selected_markers_int_plots_files)) {
+      NULL
+    } else {
+      dplyr::filter(
+        selected_markers_int_plots_files,
+        name == !!cfg$INTEGRATION_FINAL_METHOD,
+        hvg_rm_cc_genes == !!cfg$INTEGRATION_FINAL_METHOD_RM_CC
+      )
+    },
 
     ## -- HTML report
     report_int_clustering = target(
