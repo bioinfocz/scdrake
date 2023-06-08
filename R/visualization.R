@@ -347,12 +347,37 @@ dimred_plots_clustering_fn <- function(sce_dimred,
       out_png_file <- out_pdf_file
       fs::path_ext(out_png_file) <- "png"
 
-      save_pdf(list(p), out_pdf_file)
-      ggplot2::ggsave(
-        filename = out_png_file,
-        plot = p,
-        device = "png",
-        dpi = 300
+      p <- tryCatch({
+        save_pdf(list(p), out_pdf_file, stop_on_error = TRUE)
+        ggplot2::ggsave(
+          filename = out_png_file,
+          plot = p,
+          device = "png",
+          dpi = 300
+        )
+        p
+        },
+
+        error = function(e) {
+          if (stringr::str_detect(e$message, "Viewport has zero dimension")) {
+            cli_alert_warning(str_space(
+              "Error catched: 'Viewport has zero dimension(s)'.",
+              "There are probably too many levels and the legend doesn't fit into the plot.",
+              "Removing the legend before saving the plot image."
+            ))
+            p <- p + theme(legend.position = "none")
+            save_pdf(list(p), out_pdf_file)
+            ggplot2::ggsave(
+              filename = out_png_file,
+              plot = p,
+              device = "png",
+              dpi = 150
+            )
+            p
+          } else {
+            cli_abort(e$message)
+          }
+        }
       )
     }
 
@@ -360,10 +385,10 @@ dimred_plots_clustering_fn <- function(sce_dimred,
     par$dimred_plot_out_pdf_file <- out_pdf_file
     par$dimred_plot_out_png_file <- out_png_file
 
-    return(par)
+    par
   })
 
-  return(res)
+  res
 }
 
 #' @title Put clustering dimred plots for different parameters (resolution, `k`) into a single PDF.

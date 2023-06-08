@@ -370,7 +370,8 @@ get_clustering_subplan <- function(cfg,
           out_dir = !!dimred_plots_out_dir
         ),
 
-        dynamic = map(clusters_all_df)
+        dynamic = map(clusters_all_df),
+        format = "qs"
       ),
       dimred_plots_clustering_files = dplyr::select(dimred_plots_clustering, -dimred_plot),
       dimred_plots_clustering_files_out = target(
