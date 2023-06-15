@@ -1,6 +1,7 @@
 #' @keywords internal
 #'
 #' @import patchwork
+#' @import clustree
 #'
 #' @importFrom methods as is
 #' @importFrom magrittr %>% set_rownames set_names

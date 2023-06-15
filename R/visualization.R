@@ -578,9 +578,6 @@ dimred_plots_from_params_df <- function(sce_dimred, dimred_plots_params_df) {
 #' @export
 plot_clustree <- function(cluster_list, params, prefix, title = deparse(substitute(cluster_list)), edge_arrow = FALSE, highlight_core = TRUE, ...) {
   assert_that_(length(cluster_list) == length(params))
-  ## -- To fix https://github.com/lazappi/clustree/issues/14
-  ## -- It isn't sufficient to import clustree in NAMESPACE
-  withr::local_package("clustree")
 
   clustree_list <- cluster_list %>%
     purrr::map(as.character) %>%
@@ -597,6 +594,12 @@ plot_clustree <- function(cluster_list, params, prefix, title = deparse(substitu
     ggplot2::ggtitle(title)
 }
 
+## To prevent "object 'guide_edge_colourbar' of mode 'function' was not found"
+## See https://github.com/thomasp85/ggraph/issues/75#issuecomment-304670773
+#' @importFrom ggraph guide_edge_colourbar
+#' @export
+ggraph::guide_edge_colourbar
+
 #' @title Save a clustree plot into PDF.
 #' @param p A `ggplot` object.
 #' @param out_file A character scalar: output PDF file.
@@ -606,6 +609,5 @@ plot_clustree <- function(cluster_list, params, prefix, title = deparse(substitu
 #' @concept sce_visualization
 #' @export
 save_clustree <- function(p, out_file, width = 14, height = 10, ...) {
-  withr::local_package("clustree")
   ggplot2::ggsave(out_file, p, width = width, height = height, ...)
 }
