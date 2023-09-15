@@ -624,7 +624,7 @@ More info about the structure of related targets is given in the [Targets](#cell
 
 Each reference dataset must have the following parameters:
 
-- `reference_type: "celldex"` (character scalar: `"celldex"` | `"file"`): type of the reference dataset.
+- `reference_type: "celldex"` (character scalar: `"celldex"` | `"file"` | `"null"`): type of the reference dataset.
 - `reference: "HumanPrimaryCellAtlasData"` (character scalar):
   - If `reference_type: "celldex"`: a name of function to call in the `{celldex}` package. This function must return a
     `SummarizedExperiment` object. See `{celldex}`'s
@@ -633,6 +633,7 @@ Each reference dataset must have the following parameters:
   - If `reference_type: "file"`: a path to Rds file with saved `SingleCellExperiment` or `SummarizedExperiment` object.
     The assay type specified `TRAIN_PARAMS/assay_type` must be present in `assayNames()` of the object.
     The `label_column` must be present in `colData()` of the object.
+  - If `reference_type: "null"`: it creates an empty list. 
 - `description: "..."` (character scalar): a description of the reference dataset, will appear in some plots.
 - `label_column: "label.main"` (character scalar): specifies which column from `colData()` of the reference dataset
   will be used for training. For datasets from the `{celldex}` package, those are `label.main`,
