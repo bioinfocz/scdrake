@@ -333,7 +333,7 @@ if (!is.null(cfg$NORM_CLUSTERING_REPORT_DIMRED_PLOTS_OTHER)) {
 ```
 
 ```{r, results = "asis"}
-if (!is.null(cfg$CELL_ANNOTATION_SOURCES)) {
+if (length(cfg$CELL_ANNOTATION_SOURCES) != 0) {
   cell_annotation_text <- str_space(
     "We used the [SingleR](https://bioconductor.org/packages/3.15/bioc/html/SingleR.html) package to predict cell types in the dataset.",
     "Given a reference dataset of samples (single-cell or bulk) with known labels, `SinglerR` assigns those labels to",
