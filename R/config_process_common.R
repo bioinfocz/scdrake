@@ -403,10 +403,6 @@ NULL
   cell_annotation_sources <- .get_dict_param(cell_annotation_sources, not_empty = FALSE, empty_to_null = TRUE)
   .check_duplicated_list_names(cell_annotation_sources, "norm_clustering", "CELL_ANNOTATION_SOURCES")
 
-  if (is_empty(cell_annotation_sources)) {
-    return(list())
-  }
-
   assert_that_(
     !is_empty(cell_annotation_default_params),
     msg = str_space(
