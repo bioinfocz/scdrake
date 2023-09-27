@@ -613,7 +613,7 @@ CELL_ANNOTATION_SOURCES:
       label_subsets: []
 ```
 
-**Type:** list of named lists
+**Type:** list of named lists or `null`
 
 Specifies reference dataset(s) to be used for cell type annotation. The method used in `{SingleR}` for training and
 classification is described [here](http://bioconductor.org/books/3.15/SingleRBook/introduction.html#method-description).
@@ -621,6 +621,7 @@ classification is described [here](http://bioconductor.org/books/3.15/SingleRBoo
 The names of named lists are used to name the reference datasets, e.g. as the prefixes in names of `colData()` columns
 containing per-cell labels.
 More info about the structure of related targets is given in the [Targets](#cell-type-annotation-1) section.
+To skip the cell annotation step, define `CELL_ANNOTATION_SOURCES` as `null`.
 
 Each reference dataset must have the following parameters:
 
