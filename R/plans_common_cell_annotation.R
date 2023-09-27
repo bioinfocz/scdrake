@@ -17,7 +17,7 @@ get_cell_annotation_subplan <- function(sce_target_name,
                                         report_dimred_names,
                                         dimred_plots_out_dir,
                                         do_heatmaps_) {
-  if (length(cell_annotation_sources) != 0) {
+  if (!is.null(cell_annotation_sources)) {
     plan_cell_annotation <- drake::drake_plan(
       cell_annotation_params = cell_annotation_params_fn(
         !!cell_annotation_sources
