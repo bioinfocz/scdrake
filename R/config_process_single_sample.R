@@ -70,9 +70,13 @@
     )
   }
 
-  cfg$CELL_ANNOTATION_SOURCES <- .prepare_cell_annotation_sources_params(
-    cfg$CELL_ANNOTATION_SOURCES, cfg$CELL_ANNOTATION_SOURCES_DEFAULTS
-  )
+  if (is_empty(cfg$CELL_ANNOTATION_SOURCES)) {
+    cfg <- add_item_to_list(cfg, "CELL_ANNOTATION_SOURCES")
+  } else {
+    cfg$CELL_ANNOTATION_SOURCES <- .prepare_cell_annotation_sources_params(
+      cfg$CELL_ANNOTATION_SOURCES, cfg$CELL_ANNOTATION_SOURCES_DEFAULTS
+    )
+  }
 
   input_files <- c("NORM_CLUSTERING_REPORT_RMD_FILE", "NORM_CLUSTERING_REPORT_SIMPLE_RMD_FILE")
   if (!is_null(cfg$SELECTED_MARKERS_FILE)) {
