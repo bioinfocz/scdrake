@@ -11,7 +11,7 @@ janitor::tabyl(sce_custom_filter_rowSums == 0) %>%
   scdrake::render_bootstrap_table(full_width = FALSE, position = "left")
 ```
 
-**Removing `r sum(!drake::readd(sce_qc_gene_filter, path = drake_cache_dir))` genes with UMI per cell less than
+**Removing `r sum(drake::readd(sce_qc_gene_filter, path = drake_cache_dir))` genes with UMI per cell less than
 `r cfg$MIN_UMI` and expressed in less than `r cfg$MIN_RATIO_CELLS * 100` % of all cells.**
 
 Info on custom filtered dataset:
