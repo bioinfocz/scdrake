@@ -96,10 +96,13 @@
 
   cfg$INT_CLUSTERING_REPORT_DIMRED_PLOTS_OTHER <- INT_CLUSTERING_REPORT_DIMRED_PLOTS_OTHER
 
-  cfg$CELL_ANNOTATION_SOURCES <- .prepare_cell_annotation_sources_params(
-    cfg$CELL_ANNOTATION_SOURCES,
-    cfg$CELL_ANNOTATION_SOURCES_DEFAULTS
-  )
+  if (is_empty(cfg$CELL_ANNOTATION_SOURCES)) {
+    cfg <- add_item_to_list(cfg, "CELL_ANNOTATION_SOURCES")
+  } else {
+    cfg$CELL_ANNOTATION_SOURCES <- .prepare_cell_annotation_sources_params(
+      cfg$CELL_ANNOTATION_SOURCES, cfg$CELL_ANNOTATION_SOURCES_DEFAULTS
+    )
+  }
 
   possible_integration_methods <- c("rescaling", "regression", "mnn", "harmony")
   assert_that_(
