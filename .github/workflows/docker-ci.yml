@@ -24,10 +24,13 @@ jobs:
           echo "github.ref_type -> ${{ github.ref_type }}"
           echo "github.ref_name -> ${{ github.ref_name }}"
           echo "github.event.release.tag_name -> ${{ github.event.release.tag_name }}"
+      - name: Get scdrake package version from DESCRIPTION
+        run: |
+          echo "pkg_version=$(grep -P '^Version: \d+\.\d+\.\d+$' DESCRIPTION | cut -d' ' -f2)" >> $GITHUB_ENV
+          echo "scdrake package version: $pkg_version"
       - name: Check that tag matches package version in DESCRIPTION
         if: github.event_name == 'release'
         run: |
-          pkg_version="$(grep -P '^Version: \d+\.\d+\.\d+$' DESCRIPTION | cut -d' ' -f2)"
           echo "pkg_version: $pkg_version"
           test -n "$pkg_version" || (echo "'Version:' not found in DESCRIPTION" && false)
           test "v$pkg_version" == "${{ github.event.release.tag_name }}" \
@@ -45,8 +48,12 @@ jobs:
         uses: docker/build-push-action@v5
         with:
           context: .
+          build-args: |
+            "SCDRAKE_VERSION=${{ env.pkg_version }}"
           load: true
           tags: ${{ env.IMAGE }}:${{ env.TEST_TAG }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
       - name: Run test image
         run: |
           docker run -d \
