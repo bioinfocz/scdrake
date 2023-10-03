@@ -26,7 +26,8 @@ jobs:
           echo "github.event.release.tag_name -> ${{ github.event.release.tag_name }}"
       - name: Get scdrake package version from DESCRIPTION
         run: |
-          echo "pkg_version=$(grep -P '^Version: \d+\.\d+\.\d+$' DESCRIPTION | cut -d' ' -f2)" >> $GITHUB_ENV
+          pkg_version=$(grep -P '^Version: \d+\.\d+\.\d+$' DESCRIPTION | cut -d' ' -f2)
+          echo "$pkg_version" >> $GITHUB_ENV
           echo "scdrake package version: $pkg_version"
       - name: Check that tag matches package version in DESCRIPTION
         if: github.event_name == 'release'
@@ -44,7 +45,7 @@ jobs:
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
-      - name: Build and export to Docker
+      - name: Build and export test image to Docker
         uses: docker/build-push-action@v5
         with:
           context: .
@@ -54,6 +55,8 @@ jobs:
           tags: ${{ env.IMAGE }}:${{ env.TEST_TAG }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
+      - name: Debug Docker
+        run: docker images
       - name: Run test image
         run: |
           docker run -d \
@@ -89,6 +92,8 @@ jobs:
           push: ${{ github.event_name != 'pull_request' }}
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
       - name: Rollback release
         if: github.event_name == 'release' && failure()
         uses: author/action-rollback@stable
