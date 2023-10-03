@@ -2,9 +2,9 @@ name: Docker Image CI
 
 on:
   push:
-    branches: [ 'dev' ]
+    branches: [ 'docker-ci-test' ]
   pull_request:
-    branches: [ 'dev' ]
+    branches: [ 'docker-ci-test' ]
   release:
     types: [published]
 
