@@ -27,7 +27,7 @@ jobs:
       - name: Get scdrake package version from DESCRIPTION
         run: |
           pkg_version=$(grep -P '^Version: \d+\.\d+\.\d+$' DESCRIPTION | cut -d' ' -f2)
-          echo "$pkg_version" >> $GITHUB_ENV
+          echo "pkg_version=$pkg_version" >> $GITHUB_ENV
           echo "scdrake package version: $pkg_version"
       - name: Check that tag matches package version in DESCRIPTION
         if: github.event_name == 'release'
