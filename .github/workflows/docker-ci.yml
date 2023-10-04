@@ -73,7 +73,7 @@ jobs:
             ${{ env.IMAGE }}:${{ env.TEST_TAG }}
       - name: Test image
         run: |
-          docker exec -u rstudio -w /home/rstudio/scdrake_source scdrake_test \
+          docker exec -w /home/rstudio/scdrake_source scdrake_test \
             r --interactive -L /usr/local/lib/R/site-library -t dev/run_tests.R \
             --no-test-pipeline \
             --output-dir /home/rstudio/scdrake_test
