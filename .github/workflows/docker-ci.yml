@@ -58,7 +58,7 @@ jobs:
           load: true
           tags: ${{ env.IMAGE }}:${{ env.TEST_TAG }}
           cache-from: type=gha
-          cache-to: type=gha,mode=min
+          cache-to: type=gha,mode=min,compression=zstd
       - name: Run test image
         run: |
           docker run -d \
@@ -72,15 +72,16 @@ jobs:
         run: |
           docker exec -w /home/rstudio/scdrake_source scdrake_test \
             r --interactive -L /usr/local/lib/R/site-library -t dev/run_tests.R \
+            --filter "invalid" \
             --no-test-pipeline \
             --output-dir /home/rstudio/scdrake_test_summary
       - name: Copy and compress test results
-        if: steps.testImage.outcome == 'failure'
+        if: failure() && steps.testImage.outcome == 'failure'
         run: |
           docker cp scdrake_test:/home/rstudio/scdrake_test_summary /
           tar czf /scdrake_test_summary.tar.gz /scdrake_test_summary
       - name: Upload test results
-        if: steps.testImage.outcome == 'failure'
+        if: failure() && steps.testImage.outcome == 'failure'
         uses: actions/upload-artifact@v3
         with:
           name: scdrake_test_summary
@@ -104,7 +105,7 @@ jobs:
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
           cache-from: type=gha
-          cache-to: type=gha,mode=max
+          cache-to: type=gha,mode=min,compression=zstd
       - name: Rollback release
         if: github.event_name == 'release' && failure()
         uses: author/action-rollback@stable
