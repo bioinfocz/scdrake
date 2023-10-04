@@ -91,20 +91,22 @@ jobs:
         run: |
           df -h
           du -sh /* | sort -h
+          du -sh /opt/* | sort -h
+          du -sh /usr/* | sort -h
           docker buildx du
           docker images
-      - name: Build and push
-        uses: docker/build-push-action@v5
-        with:
-          context: .
-          build-args: |
-            "SCDRAKE_VERSION=${{ env.pkg_version }}"
-          # platforms: linux/amd64,linux/arm64
-          push: ${{ github.event_name != 'pull_request' }}
-          tags: ${{ steps.meta.outputs.tags }}
-          labels: ${{ steps.meta.outputs.labels }}
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
+      # - name: Build and push
+      #   uses: docker/build-push-action@v5
+      #   with:
+      #     context: .
+      #     build-args: |
+      #       "SCDRAKE_VERSION=${{ env.pkg_version }}"
+      #     # platforms: linux/amd64,linux/arm64
+      #     push: ${{ github.event_name != 'pull_request' }}
+      #     tags: ${{ steps.meta.outputs.tags }}
+      #     labels: ${{ steps.meta.outputs.labels }}
+      #     cache-from: type=gha
+      #     cache-to: type=gha,mode=max
       - name: Rollback release
         if: github.event_name == 'release' && failure()
         uses: author/action-rollback@stable
