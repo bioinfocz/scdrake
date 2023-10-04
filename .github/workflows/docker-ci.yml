@@ -81,7 +81,7 @@ jobs:
         with:
           images: ${{ env.IMAGE }}
           tags: |
-            type=raw,value=latest,enable=${{ github.ref == format('refs/heads/{0}', 'dev') }}
+            type=raw,value=latest,enable=${{ github.ref == format('refs/heads/{0}', 'docker-ci-test') }}
             type=semver,pattern={{version}}
       - name: Build and push
         uses: docker/build-push-action@v5
