@@ -79,7 +79,10 @@ jobs:
             --output-dir /home/rstudio/scdrake_test
       - name: Remove test image
         run: |
+          docker ps -a
           docker stop scdrake_test
+          docker rm scdrake_test
+          docker ps -a
           docker rmi ${{ env.IMAGE }}:${{ env.TEST_TAG }}
       - name: Docker meta
         id: meta
