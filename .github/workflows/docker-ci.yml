@@ -77,13 +77,13 @@ jobs:
             r --interactive -L /usr/local/lib/R/site-library -t dev/run_tests.R \
             --no-test-pipeline \
             --output-dir /home/rstudio/scdrake_test
-      - name: Remove test image
-        run: |
-          docker ps -a
-          docker stop scdrake_test
-          docker rm scdrake_test
-          docker ps -a
-          docker rmi ${{ env.IMAGE }}:${{ env.TEST_TAG }}
+      # - name: Remove test image
+      #   run: |
+      #     docker ps -a
+      #     docker stop scdrake_test
+      #     docker rm scdrake_test
+      #     docker ps -a
+      #     docker rmi ${{ env.IMAGE }}:${{ env.TEST_TAG }}
       - name: Docker meta
         id: meta
         uses: docker/metadata-action@v5
@@ -96,6 +96,8 @@ jobs:
         uses: docker/build-push-action@v5
         with:
           context: .
+          build-args: |
+            "SCDRAKE_VERSION=${{ env.pkg_version }}"
           # platforms: linux/amd64,linux/arm64
           platforms: linux/amd64
           push: ${{ github.event_name != 'pull_request' }}
