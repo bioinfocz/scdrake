@@ -87,9 +87,24 @@ jobs:
           tags: |
             type=raw,value=latest,enable=${{ github.ref == format('refs/heads/{0}', 'docker-ci-test') }}
             type=semver,pattern={{version}}
+      - name: Free Disk Space (Ubuntu)
+        uses: jlumbroso/free-disk-space@main
+        with:
+          # this might remove tools that are actually needed,
+          # if set to "true" but frees about 6 GB
+          tool-cache: false
+          
+          # all of these default to true, but feel free to set to
+          # "false" if necessary for your workflow
+          android: true
+          dotnet: true
+          haskell: true
+          large-packages: true
+          docker-images: false
+          swap-storage: true
       - name: Debug2
         run: |
-          df -h
+          df -h 2>/dev/null
           du -sh /* | sort -h
           du -sh /opt/* | sort -h
           du -sh /usr/* | sort -h
