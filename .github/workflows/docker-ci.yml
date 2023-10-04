@@ -58,7 +58,7 @@ jobs:
           load: true
           tags: ${{ env.IMAGE }}:${{ env.TEST_TAG }}
           cache-from: type=gha
-          cache-to: type=gha,mode=max
+          cache-to: type=gha,mode=min
       - name: Run test image
         run: |
           docker run -d \
