@@ -9,7 +9,7 @@ on:
     types: [published]
 
 env:
-  IMAGE: jirinovo/scdrake-test
+  IMAGE: jirinovo/scdrake
   TEST_TAG: test
 
 jobs:
@@ -18,15 +18,6 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-      - name: Debug
-        run: |
-          git status
-          ls -al
-          ls -al tests/testthat/_snaps/project.md
-          echo "github.ref -> ${{ github.ref }}"
-          echo "github.ref_type -> ${{ github.ref_type }}"
-          echo "github.ref_name -> ${{ github.ref_name }}"
-          echo "github.event.release.tag_name -> ${{ github.event.release.tag_name }}"
       - name: Get scdrake package version from DESCRIPTION
         run: |
           pkg_version=$(grep -P '^Version: \d+\.\d+\.\d+$' DESCRIPTION | cut -d' ' -f2)
@@ -48,7 +39,17 @@ jobs:
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
-      - name: Build and export test image to Docker
+      - name: Free Disk Space (Ubuntu)
+        uses: jlumbroso/free-disk-space@main
+        with:
+          tool-cache: false
+          android: true
+          dotnet: true
+          haskell: true
+          large-packages: false
+          docker-images: false
+          swap-storage: true
+      - name: Build and export test image
         uses: docker/build-push-action@v5
         with:
           context: .
@@ -67,18 +68,23 @@ jobs:
             -e GROUPID=$(id -g) \
             ${{ env.IMAGE }}:${{ env.TEST_TAG }}
       - name: Test image
+        id: testImage
         run: |
           docker exec -w /home/rstudio/scdrake_source scdrake_test \
             r --interactive -L /usr/local/lib/R/site-library -t dev/run_tests.R \
             --no-test-pipeline \
-            --output-dir /home/rstudio/scdrake_test
-      # - name: Remove test image
-      #   run: |
-      #     docker ps -a
-      #     docker stop scdrake_test
-      #     docker rm scdrake_test
-      #     docker ps -a
-      #     docker rmi ${{ env.IMAGE }}:${{ env.TEST_TAG }}
+            --output-dir /home/rstudio/scdrake_test_summary
+      - name: Copy and compress test results
+        if: steps.testImage.outcome == 'failure'
+        run: |
+          docker cp scdrake_test:/home/rstudio/scdrake_test_summary /
+          tar czf /scdrake_test_summary.tar.gz /scdrake_test_summary
+      - name: Upload test results
+        if: steps.testImage.outcome == 'failure'
+        uses: actions/upload-artifact@v3
+        with:
+          name: scdrake_test_summary
+          path: /scdrake_test_summary.tar.gz
       - name: Docker meta
         id: meta
         uses: docker/metadata-action@v5
@@ -87,36 +93,13 @@ jobs:
           tags: |
             type=raw,value=latest,enable=${{ github.ref == format('refs/heads/{0}', 'docker-ci-test') }}
             type=semver,pattern={{version}}
-      - name: Free Disk Space (Ubuntu)
-        uses: jlumbroso/free-disk-space@main
-        with:
-          # this might remove tools that are actually needed,
-          # if set to "true" but frees about 6 GB
-          tool-cache: false
-          
-          # all of these default to true, but feel free to set to
-          # "false" if necessary for your workflow
-          android: true
-          dotnet: true
-          haskell: true
-          large-packages: true
-          docker-images: false
-          swap-storage: true
-      - name: Debug2
-        run: |
-          df -h 2>/dev/null
-          du -sh /* | sort -h
-          du -sh /opt/* | sort -h
-          du -sh /usr/* | sort -h
-          docker buildx du
-          docker images
-      - name: Build and push
+      - name: Build and push image to Docker Hub
         uses: docker/build-push-action@v5
         with:
           context: .
           build-args: |
             "SCDRAKE_VERSION=${{ env.pkg_version }}"
-          platforms: linux/amd64,linux/arm64
+          # platforms: linux/amd64,linux/arm64
           push: ${{ github.event_name != 'pull_request' }}
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
