@@ -78,8 +78,8 @@ jobs:
       - name: Copy and compress test results
         if: failure() && steps.testImage.outcome == 'failure'
         run: |
-          docker cp scdrake_test:/home/rstudio/scdrake_test_summary /
-          tar czf /scdrake_test_summary.tar.gz /scdrake_test_summary
+          sudo docker cp scdrake_test:/home/rstudio/scdrake_test_summary /
+          sudo tar czf /scdrake_test_summary.tar.gz /scdrake_test_summary
       - name: Upload test results
         if: failure() && steps.testImage.outcome == 'failure'
         uses: actions/upload-artifact@v3
