@@ -58,7 +58,7 @@ jobs:
           load: true
           tags: ${{ env.IMAGE }}:${{ env.TEST_TAG }}
           cache-from: type=gha
-          cache-to: type=gha,mode=min,compression=zstd
+          cache-to: type=gha,mode=min
       - name: Run test image
         run: |
           docker run -d \
@@ -105,7 +105,7 @@ jobs:
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
           cache-from: type=gha
-          cache-to: type=gha,mode=min,compression=zstd
+          cache-to: type=gha,mode=min
       - name: Rollback release
         if: github.event_name == 'release' && failure()
         uses: author/action-rollback@stable
