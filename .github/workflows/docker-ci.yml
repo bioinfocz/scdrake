@@ -66,12 +66,12 @@ jobs:
             -e USERID=$(id -u) \
             -e GROUPID=$(id -g) \
             ${{ env.IMAGE }}:${{ env.TEST_TAG }}
-      # - name: Test image
-      #   run: |
-      #     docker exec -w /home/rstudio/scdrake_source scdrake_test \
-      #       r --interactive -L /usr/local/lib/R/site-library -t dev/run_tests.R \
-      #       --no-test-pipeline \
-      #       --output-dir /home/rstudio/scdrake_test
+      - name: Test image
+        run: |
+          docker exec -w /home/rstudio/scdrake_source scdrake_test \
+            r --interactive -L /usr/local/lib/R/site-library -t dev/run_tests.R \
+            --no-test-pipeline \
+            --output-dir /home/rstudio/scdrake_test
       # - name: Remove test image
       #   run: |
       #     docker ps -a
@@ -110,18 +110,18 @@ jobs:
           du -sh /usr/* | sort -h
           docker buildx du
           docker images
-      # - name: Build and push
-      #   uses: docker/build-push-action@v5
-      #   with:
-      #     context: .
-      #     build-args: |
-      #       "SCDRAKE_VERSION=${{ env.pkg_version }}"
-      #     # platforms: linux/amd64,linux/arm64
-      #     push: ${{ github.event_name != 'pull_request' }}
-      #     tags: ${{ steps.meta.outputs.tags }}
-      #     labels: ${{ steps.meta.outputs.labels }}
-      #     cache-from: type=gha
-      #     cache-to: type=gha,mode=max
+      - name: Build and push
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          build-args: |
+            "SCDRAKE_VERSION=${{ env.pkg_version }}"
+          platforms: linux/amd64,linux/arm64
+          push: ${{ github.event_name != 'pull_request' }}
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
       - name: Rollback release
         if: github.event_name == 'release' && failure()
         uses: author/action-rollback@stable
