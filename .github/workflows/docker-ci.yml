@@ -39,6 +39,16 @@ jobs:
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
+      # - name: Free Disk Space (Ubuntu)
+      #   uses: jlumbroso/free-disk-space@main
+      #   with:
+      #     tool-cache: false
+      #     android: true
+      #     dotnet: true
+      #     haskell: true
+      #     large-packages: false
+      #     docker-images: false
+      #     swap-storage: true
       - name: Build and export test image
         uses: docker/build-push-action@v5
         with:
@@ -48,21 +58,26 @@ jobs:
           load: true
           tags: ${{ env.IMAGE }}:${{ env.TEST_TAG }}
           cache-from: type=gha
-          cache-to: type=gha,mode=max
+          cache-to: type=gha,mode=min
       - name: Run test image
         run: |
           docker run -d \
             --name scdrake_test \
             -v $(pwd):/home/rstudio/scdrake_source \
-            -e USERID=$(id -u) \
-            -e GROUPID=$(id -g) \
             ${{ env.IMAGE }}:${{ env.TEST_TAG }}
       - name: Test image
+        id: testImage
         run: |
           docker exec -w /home/rstudio/scdrake_source scdrake_test \
             r --interactive -L /usr/local/lib/R/site-library -t dev/run_tests.R \
             --no-test-pipeline \
-            --output-dir /home/rstudio/scdrake_test
+            --output-dir /home/rstudio/scdrake_test_summary
+      - name: Upload test results
+        if: failure() && steps.testImage.outcome == 'failure'
+        uses: actions/upload-artifact@v3
+        with:
+          name: scdrake_test_summary
+          path: /scdrake_test_summary.tar.gz
       - name: Docker meta
         id: meta
         uses: docker/metadata-action@v5
@@ -71,32 +86,18 @@ jobs:
           tags: |
             type=raw,value=latest,enable=${{ github.ref == format('refs/heads/{0}', 'main') }}
             type=semver,pattern={{version}}
-      - name: Free Disk Space (Ubuntu)
-        uses: jlumbroso/free-disk-space@main
-        with:
-          # this might remove tools that are actually needed,
-          # if set to "true" but frees about 6 GB
-          tool-cache: false
-          # all of these default to true, but feel free to set to
-          # "false" if necessary for your workflow
-          android: true
-          dotnet: true
-          haskell: true
-          large-packages: true
-          docker-images: false
-          swap-storage: true
       - name: Build and push image to Docker Hub
         uses: docker/build-push-action@v5
         with:
           context: .
           build-args: |
             "SCDRAKE_VERSION=${{ env.pkg_version }}"
-          platforms: linux/amd64,linux/arm64
+          platforms: linux/amd64
           push: ${{ github.event_name != 'pull_request' }}
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
           cache-from: type=gha
-          cache-to: type=gha,mode=max
+          cache-to: type=gha,mode=min
       - name: Rollback release
         if: github.event_name == 'release' && failure()
         uses: author/action-rollback@stable
