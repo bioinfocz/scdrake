@@ -68,19 +68,22 @@ jobs:
             -e GROUPID=$(id -g) \
             ${{ env.IMAGE }}:${{ env.TEST_TAG }}
       - name: Test image
-        id: testImage
         run: |
           docker exec -w /home/rstudio/scdrake_source scdrake_test \
             r --interactive -L /usr/local/lib/R/site-library -t dev/run_tests.R \
             --filter "invalid" \
             --no-test-pipeline \
             --output-dir /home/rstudio/scdrake_test_summary
+      - name: Copy test results
+        if: always()
+        run: |
+          sudo docker cp scdrake_test:/home/rstudio/scdrake_test_summary /
       - name: Upload test results
         if: always()
         uses: actions/upload-artifact@v3
         with:
           name: scdrake_test_summary
-          path: /home/rstudio/scdrake_test_summary/
+          path: /scdrake_test_summary/
       - name: Docker meta
         id: meta
         uses: docker/metadata-action@v5
