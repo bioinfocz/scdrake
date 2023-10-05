@@ -39,6 +39,12 @@ jobs:
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
+      - name: Free disk space
+        run: |
+          sudo rm -rf \
+            /usr/share/dotnet /usr/local/lib/android /opt/ghc \
+            /usr/local/share/powershell /usr/share/swift /usr/local/.ghcup \
+            /usr/lib/jvm || true
       # - name: Free Disk Space (Ubuntu)
       #   uses: jlumbroso/free-disk-space@main
       #   with:
@@ -64,20 +70,25 @@ jobs:
           docker run -d \
             --name scdrake_test \
             -v $(pwd):/home/rstudio/scdrake_source \
+            -e USERID=$(id -u) \
+            -e GROUPID=$(id -g) \
             ${{ env.IMAGE }}:${{ env.TEST_TAG }}
       - name: Test image
-        id: testImage
         run: |
           docker exec -w /home/rstudio/scdrake_source scdrake_test \
             r --interactive -L /usr/local/lib/R/site-library -t dev/run_tests.R \
             --no-test-pipeline \
             --output-dir /home/rstudio/scdrake_test_summary
+      - name: Copy test results
+        if: always()
+        run: |
+          sudo docker cp scdrake_test:/home/rstudio/scdrake_test_summary /
       - name: Upload test results
-        if: failure() && steps.testImage.outcome == 'failure'
+        if: always()
         uses: actions/upload-artifact@v3
         with:
           name: scdrake_test_summary
-          path: /scdrake_test_summary.tar.gz
+          path: /scdrake_test_summary/
       - name: Docker meta
         id: meta
         uses: docker/metadata-action@v5
