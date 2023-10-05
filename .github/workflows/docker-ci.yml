@@ -80,7 +80,7 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: scdrake_test_summary
-          path: /scdrake_test_summary.tar.gz
+          path: /home/rstudio/scdrake_test_summary
       - name: Docker meta
         id: meta
         uses: docker/metadata-action@v5
