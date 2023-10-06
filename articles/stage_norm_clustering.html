@@ -50,7 +50,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">scdrake</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.5.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.5.1</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -148,7 +148,7 @@
       <img src="" class="logo" alt=""><h1>Normalization and clustering stage (`02_norm_clustering`)</h1>
             
             <h4 data-toc-skip class="date"><sup>Document generated:
-2023-05-27 08:46:49 UTC+0000</sup></h4>
+2023-10-06 14:09:16 UTC+0000</sup></h4>
       
       <small class="dont-index">Source: <a href="https://github.com/bioinfocz/scdrake/blob/mastervignettes/stage_norm_clustering.Rmd" class="external-link"><code>vignettes/stage_norm_clustering.Rmd</code></a></small>
       <div class="d-none name"><code>stage_norm_clustering.Rmd</code></div>
@@ -815,7 +815,7 @@ computed after classification using the predicted cell labels.</li>
 <span id="cb35-13"><a href="#cb35-13" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">description</span><span class="kw">:</span><span class="at"> </span><span class="st">"This is the human immune reference that best covers all of the bases for a typical PBMC sample."</span></span>
 <span id="cb35-14"><a href="#cb35-14" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">label_column</span><span class="kw">:</span><span class="at"> </span><span class="st">"label.fine"</span></span>
 <span id="cb35-15"><a href="#cb35-15" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">label_subsets</span><span class="kw">:</span><span class="at"> </span><span class="kw">[]</span></span></code></pre></div>
-<p><strong>Type:</strong> list of named lists</p>
+<p><strong>Type:</strong> list of named lists or <code>null</code></p>
 <p>Specifies reference dataset(s) to be used for cell type annotation.
 The method used in <a href="https://github.com/LTLA/SingleR" class="external-link">SingleR</a> for training and
 classification is described <a href="http://bioconductor.org/books/3.15/SingleRBook/introduction.html#method-description" class="external-link">here</a>.</p>
@@ -823,7 +823,8 @@ classification is described <a href="http://bioconductor.org/books/3.15/SingleRB
 e.g. as the prefixes in names of <code>colData()</code> columns
 containing per-cell labels. More info about the structure of related
 targets is given in the <a href="#cell-type-annotation-1">Targets</a>
-section.</p>
+section. To skip the cell annotation step, define
+<code>CELL_ANNOTATION_SOURCES</code> as <code>null</code>.</p>
 <p>Each reference dataset must have the following parameters:</p>
 <ul>
 <li>
