@@ -123,6 +123,7 @@ Suggests:
     BiocStyle,
     clustermq (== 0.8.8),
     covr,
+    desc,
     emoji,
     future,
     future.callr,

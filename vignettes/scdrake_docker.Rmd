@@ -17,10 +17,7 @@ vignette: >
 
 ```{r docker_pull, include = FALSE}
 out_docker_pull_stable <- scdrake::format_shell_command(glue::glue("docker pull {DOCKER_IMAGE_STABLE}"))
-out_docker_pull_stable_arm64 <- scdrake::format_shell_command(glue::glue("docker pull {DOCKER_IMAGE_STABLE_ARM64}"))
 out_docker_pull_latest <- scdrake::format_shell_command(glue::glue("docker pull {DOCKER_IMAGE_LATEST}"))
-out_docker_pull_latest_arm64 <- scdrake::format_shell_command(glue::glue("docker pull {DOCKER_IMAGE_LATEST_ARM64}"))
-
 out_singularity_pull_stable <- scdrake::format_shell_command(glue::glue("singularity pull docker:{DOCKER_IMAGE_STABLE}"))
 ```
 
@@ -89,18 +86,6 @@ Latest development version:
 
 `r knitr::knit(text = out_docker_pull_latest)`
 
-### arm64 Mac (M1 chipsets)
-
-This is an experimental image based on `rocker/rstudio:latest-daily` image.
-
-Latest stable version:
-
-`r knitr::knit(text = out_docker_pull_stable_arm64)`
-
-Latest development version:
-
-`r knitr::knit(text = out_docker_pull_latest_arm64)`
-
 ## Create a shared directory
 
 ```bash
@@ -151,7 +136,7 @@ docker exec -it -u rstudio -w /home/rstudio/scdrake_projects <CONTAINER ID or NA
 # Obtaining the Docker image
 
 A Docker image based on the [official Bioconductor image](https://bioconductor.org/help/docker/)
-(version `r LATEST_STABLE_VERSION_DOCKER_BIOC`) is available. This is the most handy and reproducible way how to use
+(version `r BIOC_VERSION`) is available. This is the most handy and reproducible way how to use
 `{scdrake}` as all the dependencies are already installed and their version is fixed.
 In addition, the parent Bioconductor image comes bundled with RStudio Server.
 

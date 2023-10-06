@@ -69,7 +69,7 @@ methods and recommendations is `{scdrake}` largely based.
 ## Using a Docker image (recommended)
 
 A Docker image based on the [official Bioconductor image](https://bioconductor.org/help/docker/)
-(version `r LATEST_STABLE_VERSION_DOCKER_BIOC`) is available. This is the most handy and reproducible way how to use
+(version `r BIOC_VERSION`) is available. This is the most handy and reproducible way how to use
 `{scdrake}` as all the dependencies are already installed and their versions are fixed.
 In addition, the parent Bioconductor image comes bundled with RStudio Server.
 
@@ -107,18 +107,11 @@ out <- scdrake::wrap_code(c(
 
 `r paste(knitr::knit(text = out), collapse = "\n")`
 
-**Note for Mac users with M1 chipsets**: you can use the `arm64` version of the image:
+**Note for Mac users with M1/M2 chipsets**: until version 1.5.0 (inclusive), `arm64` images are available.
 
-```{r docker_latest, include = FALSE}
-out <- scdrake::wrap_code(c(
-  glue::glue("docker pull {DOCKER_IMAGE_STABLE_ARM64}"),
-  glue::glue("singularity pull docker:{DOCKER_IMAGE_STABLE_ARM64}"),
-  glue::glue("docker pull {DOCKER_IMAGE_LATEST_ARM64}"),
-  glue::glue("singularity pull docker:{DOCKER_IMAGE_LATEST_ARM64}")
-))
+```bash
+docker pull jirinovo/scdrake:1.5.0-bioc3.15-arm64
 ```
-
-`r paste(knitr::knit(text = out), collapse = "\n")`
 
 ### Running the container
 

@@ -98,8 +98,8 @@ You can pull the Docker image with the latest stable `{scdrake}` version
 using
 
 ``` bash
-docker pull jirinovo/scdrake:1.5.0-bioc3.15
-singularity pull docker:jirinovo/scdrake:1.5.0-bioc3.15
+docker pull jirinovo/scdrake:1.5.1
+singularity pull docker:jirinovo/scdrake:1.5.1
 ```
 
 or list available versions in [our Docker Hub
@@ -108,18 +108,15 @@ repository](https://hub.docker.com/r/jirinovo/scdrake/tags).
 For the latest development version use
 
 ``` bash
-docker pull jirinovo/scdrake:latest-bioc3.15
-singularity pull docker:jirinovo/scdrake:latest-bioc3.15
+docker pull jirinovo/scdrake:latest
+singularity pull docker:jirinovo/scdrake:latest
 ```
 
-**Note for Mac users with M1 chipsets**: you can use the `arm64` version
-of the image:
+**Note for Mac users with M1/M2 chipsets**: until version 1.5.0
+(inclusive), `arm64` images are available.
 
 ``` bash
 docker pull jirinovo/scdrake:1.5.0-bioc3.15-arm64
-singularity pull docker:jirinovo/scdrake:1.5.0-bioc3.15-arm64
-docker pull jirinovo/scdrake:latest-bioc3.15-arm64
-singularity pull docker:jirinovo/scdrake:latest-bioc3.15-arm64
 ```
 
 ### Running the container
@@ -144,7 +141,7 @@ docker run -d \
   -e USERID=$(id -u) \
   -e GROUPID=$(id -g) \
   -e PASSWORD=1234 \
-  jirinovo/scdrake:1.5.0-bioc3.15
+  jirinovo/scdrake:1.5.1
 ```
 
 For Singularity, also make shared directories and execute the container
@@ -227,7 +224,7 @@ for `{scdrake}` and you can use it to install all dependencies by
 
 ``` r
 ## -- This is a lockfile for the latest stable version of scdrake.
-download.file("https://raw.githubusercontent.com/bioinfocz/scdrake/1.5.0/renv.lock")
+download.file("https://raw.githubusercontent.com/bioinfocz/scdrake/1.5.1/renv.lock")
 ## -- You can increase the number of CPU cores to speed up the installation.
 options(Ncpus = 2)
 renv::restore(lockfile = "renv.lock", repos = BiocManager::repositories())
@@ -247,7 +244,7 @@ installed from the lockfile).
 
 ``` r
 remotes::install_github(
-  "bioinfocz/scdrake@1.5.0",
+  "bioinfocz/scdrake@1.5.1",
   dependencies = FALSE, upgrade = FALSE,
   keep_source = TRUE, build_vignettes = TRUE,
   repos = BiocManager::repositories()
