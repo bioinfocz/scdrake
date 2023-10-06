@@ -22,7 +22,7 @@ knitr::opts_chunk$set(
 [![Pipeline diagram](https://img.shields.io/badge/Pipeline%20diagram-Show-informational)](https://github.com/bioinfocz/scdrake/blob/main/diagrams/README.md)
 ![License](https://img.shields.io/github/license/bioinfocz/scdrake)
 [![Lifecycle: experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
-[![R-CMD-check-bioc](https://github.com/bioinfocz/scdrake/actions/workflows/check-bioc.yaml/badge.svg?branch=main)](https://github.com/bioinfocz/scdrake/actions/workflows/check-bioc.yaml)
+[![Docker Image CI](https://github.com/bioinfocz/scdrake/actions/workflows/docker-ci.yml/badge.svg?branch=main)](https://github.com/bioinfocz/scdrake/actions/workflows/docker-ci.yml)
 
 `{scdrake}` is a scalable and reproducible pipeline for secondary analysis of droplet-based single-cell RNA-seq data.
 `{scdrake}` is an R package built on top of the `{drake}` package, a [Make](https://www.gnu.org/software/make)-like pipeline
@@ -57,6 +57,12 @@ and reproducible manner.
 The pipeline structure along with [diagrams](https://github.com/bioinfocz/scdrake/blob/main/diagrams/README.md)
 and links to outputs is described in `vignette("pipeline_overview")`
 ([link](https://bioinfocz.github.io/scdrake/articles/pipeline_overview.html)).
+
+If you use `{scdrake}` in your research, please, consider citing
+
+> Kubovciak J, Kolar M, Novotny J (2023).
+“Scdrake: a reproducible and scalable pipeline for scRNA-seq data analysis.” *Bioinformatics Advances*, **3**(1).
+[doi:10.1093/bioadv/vbad089](https://doi.org/10.1093/bioadv/vbad089).
 
 Huge thanks go to the authors of the
 [Orchestrating Single-Cell Analysis with Bioconductor](https://bioconductor.org/books/3.15/OSCA) book on whose

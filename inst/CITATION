@@ -1,0 +1,11 @@
+bibentry(
+  "Article",
+  title = "Scdrake: a reproducible and scalable pipeline for scRNA-seq data analysis",
+  author = as.person(c("Jan Kubovciak", "Michal Kolar", "Jiri Novotny")),
+  editor = "Guoqiang Yu",
+  year = 2023,
+  journal = "Bioinformatics Advances",
+  volume = 3,
+  number = 1,
+  doi = "10.1093/bioadv/vbad089"
+)
