@@ -64,6 +64,13 @@ The pipeline structure along with
 and links to outputs is described in `vignette("pipeline_overview")`
 ([link](https://bioinfocz.github.io/scdrake/articles/pipeline_overview.html)).
 
+If you use `{scdrake}` in your research, please, consider citing
+
+> Kubovciak J, Kolar M, Novotny J (2023). “Scdrake: a reproducible and
+> scalable pipeline for scRNA-seq data analysis.” *Bioinformatics
+> Advances*, **3**(1).
+> [doi:10.1093/bioadv/vbad089](https://doi.org/10.1093/bioadv/vbad089).
+
 Huge thanks go to the authors of the [Orchestrating Single-Cell Analysis
 with Bioconductor](https://bioconductor.org/books/3.15/OSCA) book on
 whose methods and recommendations is `{scdrake}` largely based.
