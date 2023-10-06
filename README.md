@@ -12,7 +12,8 @@ diagram](https://img.shields.io/badge/Pipeline%20diagram-Show-informational)](ht
 ![License](https://img.shields.io/github/license/bioinfocz/scdrake)
 [![Lifecycle:
 experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
-[![R-CMD-check-bioc](https://github.com/bioinfocz/scdrake/actions/workflows/check-bioc.yaml/badge.svg?branch=main)](https://github.com/bioinfocz/scdrake/actions/workflows/check-bioc.yaml)
+[![Docker Image
+CI](https://github.com/bioinfocz/scdrake/actions/workflows/docker-ci.yml/badge.svg?branch=main)](https://github.com/bioinfocz/scdrake/actions/workflows/docker-ci.yml)
 
 `{scdrake}` is a scalable and reproducible pipeline for secondary
 analysis of droplet-based single-cell RNA-seq data. `{scdrake}` is an R
