@@ -109,6 +109,30 @@ jobs:
           labels: ${{ steps.meta.outputs.labels }}
           cache-from: type=gha
           cache-to: type=gha,mode=min
+      - name: Remove devel mode from _pkgdown.yml
+        if: github.event_name == 'release'
+        run: |
+          docker exec -w /home/rstudio/scdrake_source scdrake_test \
+            'sed -i "/development:/d" _pkgdown.yml; sed -i "/mode: devel/d" _pkgdown.yml'
+      - name: Build pkgdown site
+        if: github.event_name != 'pull_request'
+        run: |
+          docker exec -w /home/rstudio/scdrake_source scdrake_test \
+            'Rscript -e "rmarkdown::render('README.Rmd'); pkgdown::build_site_github_pages(new_process = FALSE, install = FALSE)"'
+      - name: Deploy to GitHub pages (stable docs)
+        if: github.event_name == 'release'
+        uses: JamesIves/github-pages-deploy-action@v4.4.1
+        with:
+          clean: false
+          branch: gh-pages
+          folder: docs
+      - name: Deploy to GitHub pages (devel docs)
+        if: github.event_name == 'push'
+        uses: JamesIves/github-pages-deploy-action@v4.4.1
+        with:
+          clean: false
+          branch: gh-pages
+          folder: docs/dev
       - name: Rollback release
         if: github.event_name == 'release' && failure()
         uses: author/action-rollback@stable

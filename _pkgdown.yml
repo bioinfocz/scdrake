@@ -1,3 +1,5 @@
+development:
+  mode: devel
 template:
   package: preferably
   bootstrap: 5

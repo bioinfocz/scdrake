@@ -17,7 +17,8 @@ knitr::opts_chunk$set(
 # scdrake
 
 [![NEWS: updates](https://img.shields.io/badge/NEWS-updates-informational)](NEWS.md)
-[![Documentation and vignettes](https://img.shields.io/badge/Documentation%20&%20vignettes-bioinfocz.github.io/scdrake-informational)](https://bioinfocz.github.io/scdrake)
+[![Documentation and vignettes (stable version)](https://img.shields.io/badge/Documentation%20&%20vignettes-bioinfocz.github.io/scdrake-informational)](https://bioinfocz.github.io/scdrake)
+[![Documentation and vignettes (devel version)](https://img.shields.io/badge/Documentation%20&%20vignettes-bioinfocz.github.io/scdrake-informational)](https://bioinfocz.github.io/scdrake/dev)
 [![Overview and outputs](https://img.shields.io/badge/Overview%20&%20outputs-vignette("pipeline_overview")-informational)](https://bioinfocz.github.io/scdrake/articles/pipeline_overview.html)
 [![Pipeline diagram](https://img.shields.io/badge/Pipeline%20diagram-Show-informational)](https://github.com/bioinfocz/scdrake/blob/main/diagrams/README.md)
 ![License](https://img.shields.io/github/license/bioinfocz/scdrake)
@@ -307,7 +308,10 @@ Then you can go through the [Get Started vignette](https://bioinfocz.github.io/s
 
 ## Vignettes and other readings
 
-See <https://bioinfocz.github.io/scdrake> for a documentation website where links to vignettes below become real :-)
+See <https://bioinfocz.github.io/scdrake> for a documentation website of the latest stable version
+(`r LATEST_STABLE_VERSION`) where links to vignettes below become real :-)
+
+See <https://bioinfocz.github.io/scdrake/dev> for a documentation website of the current development version.
 
 ```{r, child = "vignettes/_vignette_signpost.Rmd"}
 ```
