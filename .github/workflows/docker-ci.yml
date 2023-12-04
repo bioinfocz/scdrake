@@ -143,6 +143,7 @@ jobs:
           clean: false
           branch: gh-pages
           folder: docs/dev
+          target-folder: dev
       - name: Rollback release
         if: github.event_name == 'release' && failure()
         uses: author/action-rollback@stable
