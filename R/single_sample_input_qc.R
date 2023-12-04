@@ -263,3 +263,19 @@ sce_final_input_qc_fn <- function(sce_selected, gene_annotation) {
 
   return(sce_final_input_qc)
 }
+
+#' Return an informative message about the used operator to join cell QC filters
+#'
+#' @param operator A character scalar: used operator.
+#'
+#' @return A character scalar: the message
+#'
+#' @concept single_sample_input_qc_fn
+#' @export
+get_used_qc_filters_operator_desc <- function(operator = c("&", "|")) {
+  if (operator == "&") {
+    "Individual filters were considered jointly (using AND/& operator), i.e., a cell was removed only if violated all of the filters."
+  } else {
+    "Individual filters were considered individually (using OR/| operator), i.e., a cell was removed if violated at least one filter."
+  }
+}

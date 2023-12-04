@@ -30,6 +30,7 @@ SAVE_DATASET_SENSITIVE_FILTERING: True
 
 ### Dataset-sensitive cell filtering ##########################################
 MAD_THRESHOLD: 3
+DATASET_SENSITIVE_FILTERS_OPERATOR: "&"
 ###############################################################################
 
 ### Custom cell filtering #####################################################
@@ -37,6 +38,7 @@ MIN_UMI_CF: 1000
 MAX_UMI_CF: 50000
 MIN_FEATURES: 1000
 MAX_MITO_RATIO: 0.2
+CUSTOM_FILTERS_OPERATOR: "&"
 ###############################################################################
 
 ### Gene filtering ############################################################
