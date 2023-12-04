@@ -73,6 +73,13 @@ jobs:
             -e USERID=$(id -u) \
             -e GROUPID=$(id -g) \
             ${{ env.IMAGE }}:${{ env.TEST_TAG }}
+      - name: Render README.md
+        run: |
+          docker exec -w /home/rstudio/scdrake_source scdrake_test \
+            Rscript -e 'rmarkdown::render("README.Rmd")'
+          git diff --exit-code README.md
+          # If exit code is > 0, then there are changes and README.md was not commited
+          test $? -eq 0 || (echo "README.Rmd has changed, but an updated version of README.md was not included in this commit" && false)
       - name: Test image
         run: |
           docker exec -w /home/rstudio/scdrake_source scdrake_test \
@@ -113,12 +120,12 @@ jobs:
         if: github.event_name == 'release'
         run: |
           docker exec -w /home/rstudio/scdrake_source scdrake_test \
-            'sed -i "/development:/d" _pkgdown.yml; sed -i "/mode: devel/d" _pkgdown.yml'
+            bash -c 'sed -i "/development:/d" _pkgdown.yml; sed -i "/mode: devel/d" _pkgdown.yml'
       - name: Build pkgdown site
         if: github.event_name != 'pull_request'
         run: |
           docker exec -w /home/rstudio/scdrake_source scdrake_test \
-            'Rscript -e "rmarkdown::render('README.Rmd'); pkgdown::build_site_github_pages(new_process = FALSE, install = FALSE)"'
+            Rscript -e "pkgdown::build_site_github_pages(new_process = FALSE, install = FALSE)"
       - name: Deploy to GitHub pages (stable docs)
         if: github.event_name == 'release'
         uses: JamesIves/github-pages-deploy-action@v4.4.1
