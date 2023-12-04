@@ -125,7 +125,6 @@ jobs:
           docker exec -w /home/rstudio/scdrake_source scdrake_test \
             bash -c 'sed -i "/development:/d" _pkgdown.yml; sed -i "/mode: devel/d" _pkgdown.yml'
       - name: Build pkgdown site
-        if: github.event_name != 'pull_request'
         run: |
           docker exec -w /home/rstudio/scdrake_source scdrake_test \
             Rscript -e "pkgdown::build_site_github_pages(new_process = FALSE, install = FALSE)"
