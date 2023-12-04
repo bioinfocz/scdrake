@@ -3,8 +3,10 @@
 
 [![NEWS:
 updates](https://img.shields.io/badge/NEWS-updates-informational)](NEWS.md)
-[![Documentation and
-vignettes](https://img.shields.io/badge/Documentation%20&%20vignettes-bioinfocz.github.io/scdrake-informational)](https://bioinfocz.github.io/scdrake)
+[![Documentation and vignettes (stable
+version)](https://img.shields.io/badge/Documentation%20&%20vignettes-bioinfocz.github.io/scdrake-informational)](https://bioinfocz.github.io/scdrake)
+[![Documentation and vignettes (devel
+version)](https://img.shields.io/badge/Documentation%20&%20vignettes-bioinfocz.github.io/scdrake-informational)](https://bioinfocz.github.io/scdrake/dev)
 [![Overview and
 outputs](https://img.shields.io/badge/Overview%20&%20outputs-vignette(%22pipeline_overview%22)-informational)](https://bioinfocz.github.io/scdrake/articles/pipeline_overview.html)
 [![Pipeline
@@ -318,8 +320,12 @@ vignette](https://bioinfocz.github.io/scdrake/articles/scdrake.html)
 
 ## Vignettes and other readings
 
-See <https://bioinfocz.github.io/scdrake> for a documentation website
-where links to vignettes below become real :-)
+See <https://bioinfocz.github.io/scdrake> for a documentation website of
+the latest stable version (1.5.1) where links to vignettes below become
+real :-)
+
+See <https://bioinfocz.github.io/scdrake/dev> for a documentation
+website of the current development version.
 
 -   Guides:
     -   Using the Docker image:
