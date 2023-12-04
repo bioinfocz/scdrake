@@ -77,9 +77,12 @@ jobs:
         run: |
           docker exec -w /home/rstudio/scdrake_source scdrake_test \
             Rscript -e 'rmarkdown::render("README.Rmd")'
+          set +e
           git diff --exit-code README.md
+          exit_code=$?
+          set -e
           # If exit code is > 0, then there are changes and README.md was not commited
-          test $? -eq 0 || (echo "README.Rmd has changed, but an updated version of README.md was not included in this commit" && false)
+          test $exit_code -eq 0 || (echo "README.Rmd has changed, but an updated version of README.md was not included in this commit" && false)
       - name: Test image
         run: |
           docker exec -w /home/rstudio/scdrake_source scdrake_test \
