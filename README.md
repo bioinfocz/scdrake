@@ -108,8 +108,8 @@ You can pull the Docker image with the latest stable `{scdrake}` version
 using
 
 ``` bash
-docker pull jirinovo/scdrake:1.5.1
-singularity pull docker:jirinovo/scdrake:1.5.1
+docker pull jirinovo/scdrake:1.5.2
+singularity pull docker:jirinovo/scdrake:1.5.2
 ```
 
 or list available versions in [our Docker Hub
@@ -151,7 +151,7 @@ docker run -d \
   -e USERID=$(id -u) \
   -e GROUPID=$(id -g) \
   -e PASSWORD=1234 \
-  jirinovo/scdrake:1.5.1
+  jirinovo/scdrake:1.5.2
 ```
 
 For Singularity, also make shared directories and execute the container
@@ -234,7 +234,7 @@ for `{scdrake}` and you can use it to install all dependencies by
 
 ``` r
 ## -- This is a lockfile for the latest stable version of scdrake.
-download.file("https://raw.githubusercontent.com/bioinfocz/scdrake/1.5.1/renv.lock")
+download.file("https://raw.githubusercontent.com/bioinfocz/scdrake/1.5.2/renv.lock")
 ## -- You can increase the number of CPU cores to speed up the installation.
 options(Ncpus = 2)
 renv::restore(lockfile = "renv.lock", repos = BiocManager::repositories())
@@ -254,7 +254,7 @@ installed from the lockfile).
 
 ``` r
 remotes::install_github(
-  "bioinfocz/scdrake@1.5.1",
+  "bioinfocz/scdrake@1.5.2",
   dependencies = FALSE, upgrade = FALSE,
   keep_source = TRUE, build_vignettes = TRUE,
   repos = BiocManager::repositories()
@@ -321,7 +321,7 @@ vignette](https://bioinfocz.github.io/scdrake/articles/scdrake.html)
 ## Vignettes and other readings
 
 See <https://bioinfocz.github.io/scdrake> for a documentation website of
-the latest stable version (1.5.1) where links to vignettes below become
+the latest stable version (1.5.2) where links to vignettes below become
 real :-)
 
 See <https://bioinfocz.github.io/scdrake/dev> for a documentation
