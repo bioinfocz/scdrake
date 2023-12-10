@@ -29,6 +29,15 @@
     msg = "{.var input_data$type} must be {.vals possible_input_data_types}. Current value: {.val {cfg$INPUT_DATA$type}}"
   )
 
+  possible_filters_operators <- c("&", "|")
+  for (param_name in c("DATASET_SENSITIVE_FILTERS_OPERATOR", "CUSTOM_FILTERS_OPERATOR")) {
+    val <- cfg[[param_name]]
+    assert_that_(
+      val %in% possible_filters_operators,
+      msg = "{.field {param_name}} must be one of {.vals {possible_filters_operators}}. Current value: {.val {val}}"
+    )
+  }
+
   assert_that_(
     !is_null(cfg$INPUT_DATA$path),
     msg = "{.field INPUT_DATA$type} is not set, data cannot be loaded later."
