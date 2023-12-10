@@ -274,8 +274,8 @@ sce_final_input_qc_fn <- function(sce_selected, gene_annotation) {
 #' @export
 get_used_qc_filters_operator_desc <- function(operator = c("&", "|")) {
   if (operator == "&") {
-    "Individual filters were considered jointly (using AND/& operator), i.e., a cell was removed only if violated all of the filters."
+    "Individual filters were considered jointly (using *AND* operator), i.e., a cell was removed only if violated all of the filters."
   } else {
-    "Individual filters were considered individually (using OR/| operator), i.e., a cell was removed if violated at least one filter."
+    "Individual filters were considered individually (using *OR* operator), i.e., a cell was removed if violated at least one filter."
   }
 }

@@ -55,8 +55,8 @@ More information about scRNA-seq quality control can be found in
      For "number of UMI" metric, only a lower tail is used.
   - Custom filtering, based on fixed thresholds. For "number of UMI" metric, both upper and lower bounds are used
     ([theory](https://bioconductor.org/books/3.15/OSCA.basic/quality-control.html#fixed-qc).
-  - For both filtering types you can choose how to join the filters: either jointly (using the *AND*/`&` operator) or
-    individually (using the *OR*/`|` operator).
+  - For both filtering types you can choose how to join the filters: either jointly (using the *AND* operator) or
+    individually (using the *OR* operator).
 - Gene filtering (optional) based on a minimum number of UMI per cell and a minimum ratio of cells expressing a gene.
   - A gene is considered expressed when number of its UMI across all cells is greater than X and
     at the same time it is expressed in at least Y ratio of cells.
