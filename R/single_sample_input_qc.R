@@ -194,18 +194,31 @@ get_gene_filter <- function(sce, min_ratio_cells, min_umi) {
 #'
 #' @concept single_sample_input_qc_fn
 #' @export
-sce_history_fn <- function(sce_unfiltered, sce_qc_filter_genes, sce_custom_filter_genes) {
-  tibble::tribble(
-    stats::formula("~filtering_type"), stats::formula("~n_cells"), stats::formula("~n_genes"),
-    "no_filtering", ncol(sce_unfiltered), nrow(sce_unfiltered),
-    "qc", ncol(sce_qc_filter_genes), nrow(sce_qc_filter_genes),
-    "custom", ncol(sce_custom_filter_genes), nrow(sce_custom_filter_genes)
-  ) %>%
-    dplyr::mutate(
-      filtering_type = factor(.data$filtering_type, levels = c("no_filtering", "qc", "custom")),
-      n_cells = as.integer(.data$n_cells),
-      n_genes = as.integer(.data$n_genes)
-    )
+sce_history_fn <- function(sce_unfiltered, sce_qc_filter_genes, sce_custom_filter_genes, spatial=FALSE) {
+  if (!spatial) {
+    tibble::tribble(
+      stats::formula("~filtering_type"), stats::formula("~n_cells"), stats::formula("~n_genes"),
+      "no_filtering", ncol(sce_unfiltered), nrow(sce_unfiltered),
+      "qc", ncol(sce_qc_filter_genes), nrow(sce_qc_filter_genes),
+      "custom", ncol(sce_custom_filter_genes), nrow(sce_custom_filter_genes)
+    ) %>%
+      dplyr::mutate(
+        filtering_type = factor(.data$filtering_type, levels = c("no_filtering", "qc", "custom")),
+        n_cells = as.integer(.data$n_cells),
+        n_genes = as.integer(.data$n_genes)
+      )}
+  else if (spatial) {
+    tibble::tribble(
+      stats::formula("~filtering_type"), stats::formula("~n_spots"), stats::formula("~n_genes"),
+      "no_filtering", ncol(sce_unfiltered), nrow(sce_unfiltered),
+      "qc", ncol(sce_qc_filter_genes), nrow(sce_qc_filter_genes),
+      "custom", ncol(sce_custom_filter_genes), nrow(sce_custom_filter_genes)
+    ) %>%
+      dplyr::mutate(
+        filtering_type = factor(.data$filtering_type, levels = c("no_filtering", "qc", "custom")),
+        n_spots = as.integer(.data$n_spots),
+        n_genes = as.integer(.data$n_genes)
+      )}
 }
 
 #' @title Plot history of cell and gene filtering.
@@ -214,18 +227,31 @@ sce_history_fn <- function(sce_unfiltered, sce_qc_filter_genes, sce_custom_filte
 #'
 #' @concept single_sample_input_qc_fn
 #' @export
-sce_history_plot_fn <- function(sce_history) {
-  patchwork::wrap_plots(
-    ggplot(sce_history) +
-      ggplot2::geom_col(aes(x = .data$filtering_type, y = .data$n_cells, fill = .data$filtering_type)) +
-      ggplot2::theme_bw() +
-      ggtitle("Number of cells"),
-    ggplot(sce_history) +
-      ggplot2::geom_col(aes(x = .data$filtering_type, y = .data$n_genes, fill = .data$filtering_type)) +
-      ggplot2::theme_bw() +
-      ggtitle("Number of genes"),
-    guides = "collect"
-  )
+sce_history_plot_fn <- function(sce_history, spatial=FALSE) {
+  if (!spatial) {
+    patchwork::wrap_plots(
+      ggplot(sce_history) +
+        ggplot2::geom_col(aes(x = .data$filtering_type, y = .data$n_cells, fill = .data$filtering_type)) +
+        ggplot2::theme_bw() +
+        ggtitle("Number of cells"),
+      ggplot(sce_history) +
+        ggplot2::geom_col(aes(x = .data$filtering_type, y = .data$n_genes, fill = .data$filtering_type)) +
+        ggplot2::theme_bw() +
+        ggtitle("Number of genes"),
+      guides = "collect"
+    )}
+  else if (spatial) {
+    patchwork::wrap_plots(
+      ggplot(sce_history) +
+        ggplot2::geom_col(aes(x = .data$filtering_type, y = .data$n_spots, fill = .data$filtering_type)) +
+        ggplot2::theme_bw() +
+        ggtitle("Number of spots"),
+      ggplot(sce_history) +
+        ggplot2::geom_col(aes(x = .data$filtering_type, y = .data$n_genes, fill = .data$filtering_type)) +
+        ggplot2::theme_bw() +
+        ggtitle("Number of genes"),
+      guides = "collect"
+    )}
 }
 
 #' @title Select a `SingleCellExperiment` object which will proceed to the `02_norm_clustering` stage.
