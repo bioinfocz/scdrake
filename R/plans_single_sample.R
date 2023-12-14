@@ -21,7 +21,8 @@ get_input_qc_subplan <- function(cfg, cfg_pipeline, cfg_main) {
     config_input_qc = !!cfg,
 
     ## -- Read raw Cell Ranger files.
-    sce_raw = sce_raw_fn(!!cfg$INPUT_DATA, input_data_subset = !!cfg$INPUT_DATA_SUBSET),
+    sce_orig = sce_raw_fn(!!cfg$INPUT_DATA, input_data_subset = !!cfg$INPUT_DATA_SUBSET),
+    sce_raw = sce_add_spatial_colData(sce_orig,!!cfg$SPATIAL_LOCKS,!!cfg$SPATIAL),
     sce_raw_info = save_object_info(sce_raw),
 
     ## -- Calculate barcode ranks (for knee plot).
@@ -104,8 +105,8 @@ get_input_qc_subplan <- function(cfg, cfg_pipeline, cfg_main) {
     sce_custom_filter_genes_info = save_object_info(sce_custom_filter_genes),
 
     ## -- Create a history of cell and gene filtering.
-    sce_history = sce_history_fn(sce_unfiltered, sce_qc_filter_genes, sce_custom_filter_genes),
-    sce_history_plot = sce_history_plot_fn(sce_history),
+    sce_history = sce_history_fn.new(sce_unfiltered, sce_qc_filter_genes, sce_custom_filter_genes,!!cfg$SPATIAL),
+    sce_history_plot = sce_history_plot_fn.new(sce_history,!!cfg$SPATIAL),
 
     ## -- Create plots of filters.
     sce_qc_filter_genes_plotlist = list(
@@ -223,12 +224,14 @@ get_norm_clustering_subplan <- function(cfg, cfg_pipeline, cfg_main) {
     ## -- Find highly variable genes (HVGs) and assign them to SCE object.
     ## -- If specified, remove cell-cycle related genes prior to HVG selection.
     sce_norm_hvg = target(
-      sce_norm_hvg_fn(
+      sce_norm_hvg_fn.new(
         sce_norm,
         hvg_selection_value = !!cfg$HVG_SELECTION_VALUE,
         hvg_metric = !!cfg$HVG_METRIC,
         hvg_selection = !!cfg$HVG_SELECTION,
         hvg_rm_cc_genes = !!cfg$HVG_RM_CC_GENES,
+        spatial = !!cfg$SPATIAL,
+        tissue_positions = !!cfg$SPATIAL_LOCKS,
         hvg_cc_genes_var_expl_threshold = !!cfg$HVG_CC_GENES_VAR_EXPL_THRESHOLD,
         BPPARAM = ignore(BiocParallel::bpparam())
       ),
@@ -396,6 +399,102 @@ get_norm_clustering_subplan <- function(cfg, cfg_pipeline, cfg_main) {
       selected_markers_plots_files = NULL
     )
   }
+  if (cfg$MANUAL_ANNOTATION) {
+    plan_manual_annotation <- drake::drake_plan(
+      signature_matrix = create_signature_matrix_fn(!!cfg$ANNOTATION_MARKERS),
+      annotation_enrichment = run_page_man_annotation(signature_matrix,sce = sce_final_norm_clustering,scale = !!cfg$SCALE_ANNOTATION,
+                                                      overlap = !!cfg$OVERLAP,values="logcounts"),
+      annotation_metadata = calculate_metadata(sce = sce_final_norm_clustering,
+                                               enrichment = annotation_enrichment,clustering = !!cfg$ANNOTATION_CLUSTERING),
+      plot_annotation = meta_heatmap_ploting(annotation_metadata,clustering = !!cfg$ANNOTATION_CLUSTERING,
+                                             out_dir = !!cfg$NORM_CLUSTERING_OTHER_PLOTS_OUT_DIR,make_cell_plot = !!cfg$MAKE_CELL_PLOT)
+    )
+  } else {
+    plan_manual_annotation <- drake::drake_plan(
+      signature_matrix = NULL,
+      annotation_enrichment = NULL,
+      annotation_metadata = NULL,
+      plot_annotation = NULL
+    )
+  }
 
-  drake::bind_plans(plan, plan_clustering, plan_cell_annotation, plan_dimred_plots_other_vars, plan_selected_markers)
+  if (cfg$PROXIMITY) {
+    plan_proximity <- drake::drake_plan(
+      ##change to proximity
+      input_proximity_gobject = createGiotto_fn(sce_final_norm_clustering,
+                                                  annotation = !!cfg$ANNOTATED_INTERACTIONS,
+                                                  selected_clustering = !!cfg$INTERACTION_CLUSTERING ),
+
+      giotto_anot_net = target(Giotto::createSpatialNetwork(input_proximity_gobject,
+                                                    method = "Delaunay",delaunay_method = c("delaunayn_geometry"),
+                                                    name = 'spatial_network')),
+      cell_proximities = Giotto::cellProximityEnrichment(gobject = giotto_anot_net,
+                                                 cluster_column = !!cfg$INTERACTION_CLUSTERING,
+                                                 spatial_network_name = 'spatial_network',
+                                                 adjust_method = 'fdr',
+                                                 number_of_simulations = 1000),
+      # barplot
+      cell_proximity_barplot = cellProximityBarplot_fn(gobject = giotto_anot_net,
+                                                    CPscore = cell_proximities,
+                                                    out_dir = !!cfg$NORM_CLUSTERING_OTHER_PLOTS_OUT_DIR),
+
+      # heatmap
+      cell_proximity_heatmap = cellProximityHeatmap_fn(gobject = giotto_anot_net,
+                                                    CPscore = cell_proximities,
+                                                    out_dir = !!cfg$NORM_CLUSTERING_OTHER_PLOTS_OUT_DIR) )
+      } else {
+  plan_proximity <- drake::drake_plan(
+    input_interaction_gobject = NULL,
+    giotto_anot_net = NULL,
+    cell_proximities = NULL,
+    cell_proximity_barplot = NULL,
+    cell_proximity_heatmap = NULL)
+  }
+      ## -- RECEPTOR LIGAND ANALYSES
+      if (cfg$INTERACTIONS) {
+      plan_interactions <- drake::drake_plan(
+        input_interactions_gobject = createGiotto_fn(sce_final_norm_clustering,
+                                                    annotation = !!cfg$ANNOTATED_INTERACTIONS,
+                                                    selected_clustering = !!cfg$INTERACTION_CLUSTERING ),
+
+        giotto_anot_net_interactions = target(Giotto::createSpatialNetwork(input_interactions_gobject,
+                                                              method = "Delaunay",delaunay_method = c("delaunayn_geometry"),
+                                                              name = 'spatial_network')),
+      LR_input_data = target(data.table::fread(file_in(!!cfg$RECEPTOR_LIGAND_FILE))),
+      ## create table
+      LR_data_scores = LR_data_fn(LR_data = LR_input_data,
+                                  gobj = giotto_anot_net_interactions,selected_clustering = !!cfg$INTERACTION_CLUSTERING),
+
+      selected_spat = selected_spat_fn(LR_data_scores),
+      top_LR_ints_new = top_LR_ints_fn_new(selected_spat),
+      top_LR_cell_ints = top_LR_cell_ints_fn(selected_spat),
+      CCHeatmap_plot = plotCCcomHeatmap_fn(gobject = giotto_anot_net_interactions,
+                                        comScores = LR_data_scores,
+                                        selected_LR = top_LR_ints_new,
+                                        selected_cell_LR = top_LR_cell_ints,
+                                        out_dir = !!cfg$NORM_CLUSTERING_OTHER_PLOTS_OUT_DIR),
+
+      CCDot_plot = plotCCcomDotplot_fn(gobject = giotto_anot_net_interactions,
+                                    comScores = LR_data_scores,
+                                    selected_LR = top_LR_ints_new,
+                                    selected_cell_LR = top_LR_cell_ints,
+                                    out_dir = !!cfg$NORM_CLUSTERING_OTHER_PLOTS_OUT_DIR)
+    )
+
+  } else {
+    plan_interactions <- drake::drake_plan(
+      input_interactions_gobject = NULL,
+      giotto_anot_net_interactions = NULL,
+      LR_input_data = NULL,
+      LR_data_scores = NULL,
+      selected_spat = NULL,
+      top_LR_ints =NULL,
+      top_LR_cell_ints = NULL,
+      CCHeatmap_plot = NULL,
+      CCDot_plot = NULL
+    )
+  }
+
+  drake::bind_plans(plan, plan_clustering, plan_cell_annotation, plan_manual_annotation,
+                    plan_dimred_plots_other_vars, plan_selected_markers, plan_interactions,plan_proximity)
 }

@@ -264,24 +264,24 @@ sce_norm_hvg_fn <- function(sce_norm,
                             hvg_selection_value,
                             hvg_metric = c("gene_var", "gene_cv2", "sctransform"),
                             hvg_selection = c("top", "significance", "threshold"),
-                            hvg_rm_cc_genes = FALSE,
+                            hvg_rm_cc_genes = FALSE, spatial= TRUE,
                             hvg_cc_genes_var_expl_threshold = 5,
                             BSPARAM = BiocSingular::IrlbaParam(),
                             BPPARAM = BiocParallel::SerialParam()) {
-  hvg_metric <- arg_match(hvg_metric)
-  hvg_selection <- arg_match(hvg_selection)
+  hvg_metric <- rlang::arg_match(hvg_metric)
+  hvg_selection <- rlang::arg_match(hvg_selection)
 
   if (sce_norm@metadata$normalization_type == "scran") {
-    assert_that_(
+    scdrake::assert_that_(
       hvg_metric != "sctransform",
-      msg = str_space(
+      msg = scdrake::str_space(
         "{.field hvg_metric} {.val sctransform} can be used only if",
         "{.field {sce_norm@metadata$normalization_type} is {.val sctransform}"
       )
     )
   }
 
-  sce_norm <- sce_add_metadata(
+  sce_norm <- scdrake::sce_add_metadata(
     sce_norm,
     hvg_metric = hvg_metric, hvg_selection = hvg_selection, hvg_selection_value = hvg_selection_value,
     hvg_rm_cc_genes = hvg_rm_cc_genes
@@ -300,15 +300,31 @@ sce_norm_hvg_fn <- function(sce_norm,
   }
 
   assert_that(are_equal(rownames(sce_norm), rownames(hvg_metric_fit)))
-  sce_norm <- sce_add_metadata(sce_norm, hvg_metric_fit = hvg_metric_fit)
+  sce_norm <- scdrake::sce_add_metadata(sce_norm, hvg_metric_fit = hvg_metric_fit)
 
-  hvg_ids <- get_top_hvgs(
+  hvg_ids <- scdrake::get_top_hvgs(
     sce_norm = sce_norm,
     hvg_metric_fit = hvg_metric_fit,
     hvg_selection_value = hvg_selection_value,
     hvg_metric = hvg_metric,
     hvg_selection = hvg_selection
   )
+  ##########################add spatial posibility
+  if (spatial) {
+    
+    sce_norm_giotto <- createGiotto_fn(sce_norm,annotation = FALSE,selected_clustering = NULL)
+    sce_norm_giotto_network <- Giotto::createSpatialNetwork(gobject = sce_norm_giotto,method = "Delaunay",
+                                                    delaunay_method = c("delaunayn_geometry"),name="Delaunay_network")
+
+    rank_binspect <- Giotto::binSpect(gobject= sce_norm_giotto_network,bin_method = "rank",spatial_network_name = "Delaunay_network",
+                                    expression_values = "normalize",
+                                    implementation = "data.table",cores = 2)
+    svg_ids <- rank_binspect[1:1000,]$gene
+    hvg_ids <- unique(c(hvg_ids,svg_ids))
+  }
+
+
+
 
   if (length(hvg_ids) <= 100) {
     cli_alert_warning("Found a small number of HVGs ({length(hvg_ids)}). This may cause problems in downstream tasks, e.g. PCA.")
@@ -317,8 +333,8 @@ sce_norm_hvg_fn <- function(sce_norm,
   if (hvg_rm_cc_genes) {
     if (sce_norm@metadata$cc_phase_failed) {
       cli_alert_warning("Cannot remove cell cycle-related genes from HVGs: cell cycle phase could not have been estimated.")
-      sce_norm@metadata$hvg_rm_cc_genes <- FALSE
-      sce_norm <- sce_add_metadata(sce_norm, hvg_ids = hvg_ids)
+      sce_norm@metadata$hvg_rm_cc_genes <- F
+      sce_norm <- scdrake::sce_add_metadata(sce_norm, hvg_ids = hvg_ids)
     } else {
       sce_norm <- sce_remove_cc_genes(
         sce_norm,
@@ -336,7 +352,7 @@ sce_norm_hvg_fn <- function(sce_norm,
         )
     }
   } else {
-    sce_norm <- sce_add_metadata(sce_norm, hvg_ids = hvg_ids)
+    sce_norm <- scdrake::sce_add_metadata(sce_norm, hvg_ids = hvg_ids)
   }
 
   is_hvg <- rownames(sce_norm) %in% metadata(sce_norm)$hvg_ids
@@ -344,6 +360,7 @@ sce_norm_hvg_fn <- function(sce_norm,
 
   return(sce_norm)
 }
+
 
 #' @title Remove cell doublets from a `SingleCellExperiment` object.
 #' @param sce_norm_hvg (*input target*) A `SingleCellExperiment` object.

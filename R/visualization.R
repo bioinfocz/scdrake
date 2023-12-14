@@ -316,16 +316,18 @@ save_selected_markers_plots_files <- function(selected_markers_plots, selected_m
 #'
 #' @concept sce_visualization
 #' @export
-dimred_plots_clustering_fn <- function(sce_dimred,
+dimred_plots_clustering_fn.new <- function(sce_dimred,
                                        dimred_names,
-                                       cluster_df,
+                                       cluster_df,spatial=TRUE,
                                        out_dir = NULL) {
   cluster_df <- tidyr::crossing(cluster_df, dimred_name = dimred_names)
 
   res <- lapply_rows(cluster_df, FUN = function(par) {
     dimred_name <- par$dimred_name
     dimred_name_upper <- str_to_upper(dimred_name)
+
     cell_data <- tibble::tibble(x = par$cell_membership)
+    print(cell_data)
     colnames(cell_data) <- par$sce_column
 
     p <- plotReducedDim_mod(
@@ -338,7 +340,13 @@ dimred_plots_clustering_fn <- function(sce_dimred,
       use_default_ggplot_palette = TRUE,
       legend_title = "Cluster"
     )
+    if (spatial==TRUE) {
 
+      palete = c(scales::hue_pal()(par$n_clusters))
+      p_spat <- visualized_spots(sce_add_colData(sce_dimred, cell_data),cell_color=par$sce_column,color_as_factor = F,
+                                 point_shape =  "border",cell_color_code = palete,show_legend = F)
+      p <- cowplot::plot_grid(p, p_spat, ncol = 2, nrow = 1,rel_widths = c(1, 1.5))
+    }
     if (is_null(out_dir)) {
       out_pdf_file <- NA_character_
       out_png_file <- NA_character_
@@ -348,7 +356,7 @@ dimred_plots_clustering_fn <- function(sce_dimred,
       fs::path_ext(out_png_file) <- "png"
 
       p <- tryCatch({
-        save_pdf(list(p), out_pdf_file, stop_on_error = TRUE)
+        save_pdf(list(p), out_pdf_file, stop_on_error = TRUE,width=10)
         ggplot2::ggsave(
           filename = out_png_file,
           plot = p,
@@ -356,28 +364,28 @@ dimred_plots_clustering_fn <- function(sce_dimred,
           dpi = 300
         )
         p
-        },
+      },
 
-        error = function(e) {
-          if (stringr::str_detect(e$message, "Viewport has zero dimension")) {
-            cli_alert_warning(str_space(
-              "Error catched: 'Viewport has zero dimension(s)'.",
-              "There are probably too many levels and the legend doesn't fit into the plot.",
-              "Removing the legend before saving the plot image."
-            ))
-            p <- p + theme(legend.position = "none")
-            save_pdf(list(p), out_pdf_file)
-            ggplot2::ggsave(
-              filename = out_png_file,
-              plot = p,
-              device = "png",
-              dpi = 150
-            )
-            p
-          } else {
-            cli_abort(e$message)
-          }
+      error = function(e) {
+        if (stringr::str_detect(e$message, "Viewport has zero dimension")) {
+          cli_alert_warning(str_space(
+            "Error catched: 'Viewport has zero dimension(s)'.",
+            "There are probably too many levels and the legend doesn't fit into the plot.",
+            "Removing the legend before saving the plot image."
+          ))
+          p <- p + theme(legend.position = "none")
+          save_pdf(list(p), out_pdf_file)
+          ggplot2::ggsave(
+            filename = out_png_file,
+            plot = p,
+            device = "png",
+            dpi = 150
+          )
+          p
+        } else {
+          cli_abort(e$message)
         }
+      }
       )
     }
 
@@ -507,7 +515,7 @@ dimred_plots_cell_annotation_params_df_fn <- function(dimred_names, cell_annotat
 #'
 #' @concept sce_visualization
 #' @export
-dimred_plots_from_params_df <- function(sce_dimred, dimred_plots_params_df) {
+dimred_plots_from_params_df <- function(sce_dimred, dimred_plots_params_df,spatial=TRUE) {
   res <- lapply_rows(dimred_plots_params_df, FUN = function(par) {
     assert_that_(
       par$source_column %in% colnames(colData(sce_dimred)),
@@ -540,6 +548,22 @@ dimred_plots_from_params_df <- function(sce_dimred, dimred_plots_params_df) {
       text_by = show_cluster_labels
     )
 
+    if (spatial) {
+      if (par$source_column %in% c("phase")){
+        variant = length(unique(colData(sce_dimred)[[par$source_column]]))
+        palete = c(scales::hue_pal()(variant))
+        p_spat <- visualized_spots(sce_dimred,cell_color=par$source_column,color_as_factor = T,
+        point_shape =  "border",cell_color_code = palete)
+        p <- cowplot::plot_grid(p, p_spat, ncol = 2, nrow = 1)
+      }
+      else if (par$source_column %in% c("total","detected")) {
+
+      p_spat <- visualized_spots(sce_dimred,cell_color=par$source_column,color_as_factor = F,
+                                 point_shape =  "border")
+      p <- cowplot::plot_grid(p, p_spat, ncol = 2, nrow = 1)
+      }
+    }
+
     if (!is_na(par$out_pdf_file) && !is_na(par$out_png_file)) {
       res <- save_pdf(list(p), par$out_pdf_file)
       if (!res$success) {
@@ -565,6 +589,7 @@ dimred_plots_from_params_df <- function(sce_dimred, dimred_plots_params_df) {
   names(res$plot) <- glue("{res$source_column}_{res$dimred_name}")
   return(res)
 }
+
 
 #' @title Plot clustering tree.
 #' @description [clustree::clustree()] is used under the hood.
