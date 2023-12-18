@@ -60,7 +60,7 @@ get_input_qc_subplan <- function(cfg, cfg_pipeline, cfg_main) {
     ),
     qc_filters = purrr::map(qc_filters_raw, ~ as.logical(.) %>% tidyr::replace_na(replace = FALSE)),
     ## -- Join filters by OR operator.
-    qc_filter = Reduce("|", qc_filters),
+    qc_filter = Reduce(!!cfg$DATASET_SENSITIVE_FILTERS_OPERATOR, qc_filters),
 
     ## -- Custom filters.
     custom_filters_raw = list(
@@ -71,7 +71,7 @@ get_input_qc_subplan <- function(cfg, cfg_pipeline, cfg_main) {
       # low_ribo = cell_qc$subsets_ribo_percent <= !!cfg$MIN_RIBO_RATIO * 100
     ),
     custom_filters = purrr::map(custom_filters_raw, ~ as.logical(.) %>% tidyr::replace_na(replace = FALSE)),
-    custom_filter = Reduce("|", custom_filters),
+    custom_filter = Reduce(!!cfg$CUSTOM_FILTERS_OPERATOR, custom_filters),
 
     ## -- Add filters to sce and create Seurat object.
     sce_unfiltered = sce_add_colData(

@@ -55,8 +55,8 @@ More information about scRNA-seq quality control can be found in
      For "number of UMI" metric, only a lower tail is used.
   - Custom filtering, based on fixed thresholds. For "number of UMI" metric, both upper and lower bounds are used
     ([theory](https://bioconductor.org/books/3.15/OSCA.basic/quality-control.html#fixed-qc).
-  - In both filtering types, violation of only one metric threshold leads to removal of a cell.
-    More technically, metric filters are reduced by **or** operator.
+  - For both filtering types you can choose how to join the filters: either jointly (using the *AND* operator) or
+    individually (using the *OR* operator).
 - Gene filtering (optional) based on a minimum number of UMI per cell and a minimum ratio of cells expressing a gene.
   - A gene is considered expressed when number of its UMI across all cells is greater than X and
     at the same time it is expressed in at least Y ratio of cells.
@@ -245,6 +245,19 @@ Violation of only one metric threshold leads to removal of a cell.
 To disable the dataset-sensitive filtering, set `MAD_THRESHOLD: .inf`.
 That will force passing of each cell as every QC metric will be always lower than positive infinity MAD.
 
+***
+
+```yaml
+DATASET_SENSITIVE_FILTERS_OPERATOR: "&"
+```
+
+**Type:** a character scalar (`"&" | "|"`)
+
+How to join the QC filters:
+
+- Jointly (*AND*/`&` operator), i.e., remove only cells that violate **ALL** filters (permissive)
+- Individually (*OR*/`|` operator), i.e., remove cells that violate **AT LEAST ONE** filter (strict)
+
 ##### Custom cell filtering
 
 ```yaml
@@ -294,6 +307,19 @@ A threshold for maximum ratio of expressed mitochondrial genes per cell,
 i.e. cells with mitochondrial genes detected in more than (`MAX_MITO_RATIO` * 100)% of all genes will be removed.
 
 To disable this filter, set `MAX_MITO_RATIO: .inf`
+
+***
+
+```yaml
+CUSTOM_FILTERS_OPERATOR: "&"
+```
+
+**Type:** a character scalar (`"&" | "|"`)
+
+How to join the QC filters:
+
+- Jointly (*AND*/`&` operator), i.e., remove only cells that violate **ALL** filters (permissive)
+- Individually (*OR*/`|` operator), i.e., remove cells that violate **AT LEAST ONE** filter (strict)
 
 #### Gene filtering
 
