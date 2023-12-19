@@ -13,12 +13,6 @@
     <loc>https://bioinfocz.github.io/scdrake/LICENSE-text.html</loc>
   </url>
   <url>
-    <loc>https://bioinfocz.github.io/scdrake/TODO.html</loc>
-  </url>
-  <url>
-    <loc>https://bioinfocz.github.io/scdrake/TODO_revisions.html</loc>
-  </url>
-  <url>
     <loc>https://bioinfocz.github.io/scdrake/articles/config_main.html</loc>
   </url>
   <url>
@@ -332,6 +326,9 @@
   </url>
   <url>
     <loc>https://bioinfocz.github.io/scdrake/reference/get_top_hvgs.html</loc>
+  </url>
+  <url>
+    <loc>https://bioinfocz.github.io/scdrake/reference/get_used_qc_filters_operator_desc.html</loc>
   </url>
   <url>
     <loc>https://bioinfocz.github.io/scdrake/reference/get_yq_default_path.html</loc>
