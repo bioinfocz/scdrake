@@ -1,13 +1,15 @@
 ### Input files ###############################################################
 INPUT_DATA:
   type: "cellranger"
-  path: "/path/to/dir"
+  path: "input/"
   delimiter: ","
   target_name: "target_name"
-
 INPUT_QC_REPORT_RMD_FILE: "Rmd/single_sample/01_input_qc.Rmd"
+#INPUT_QC_REPORT_RMD_FILE: "Rmd/single_saple/01_input_qc_spatial.Rmd"
+SPATIAL: TRUE
 ###############################################################################
-
+### Spatial locks file
+SPATIAL_LOCKS: "input/tissue_positions_list.csv"
 ### Subset input data (if SingleCellExperiment object is imported) ############
 INPUT_DATA_SUBSET: null
 ## Example of simple subsetting by cluster numbers
@@ -18,7 +20,7 @@ INPUT_DATA_SUBSET: null
 ###############################################################################
 
 ### Removal of empty droplets #################################################
-EMPTY_DROPLETS_ENABLED: True
+EMPTY_DROPLETS_ENABLED: False
 EMPTY_DROPLETS_LOWER: 100
 EMPTY_DROPLETS_FDR_THRESHOLD: 0.01
 ###############################################################################
@@ -33,25 +35,22 @@ MAD_THRESHOLD: 3
 ###############################################################################
 
 ### Custom cell filtering #####################################################
-MIN_UMI_CF: 1000
+MIN_UMI_CF: 600
 MAX_UMI_CF: 50000
-MIN_FEATURES: 1000
+MIN_FEATURES: 600
 MAX_MITO_RATIO: 0.2
 ###############################################################################
 
 ### Gene filtering ############################################################
 ENABLE_GENE_FILTERING: True
-
-MITO_REGEX: "^MT-"
-RIBO_REGEX: "^RP[SL]"
-
+MITO_REGEX: "^mt-"
+RIBO_REGEX: "^Rp[sl]"
 MIN_UMI: 1
 MIN_RATIO_CELLS: 0.01
 ###############################################################################
 
 ### Output files ##############################################################
 INPUT_QC_BASE_OUT_DIR: "01_input_qc"
-
 INPUT_QC_REPORT_HTML_FILE: "01_input_qc.html"
 ###############################################################################
 
