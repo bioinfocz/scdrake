@@ -1,5 +1,13 @@
+## -- Functions related to spatial extension single-sample analysis /stage 02_norm_clustering.
 
-## -- create giotto object, add rotated spatial locs
+#' @title Create Giotto object
+#' @description This is a function to create Giotto experiment object from `SingleCellExperiment` with precalculated data
+#' @param sce A `SingleCellExperiment` object
+#' @param annotation A logical scalar, wheter to add additional information
+#' @param selected_clustering Name of selected clustering/if any, to add as additional information
+#' @return Return a `Giotto` object with data precalculated using a `SingleCellExperiment`
+#' @concept single_sample_norm_spatial
+#' @export
 createGiotto_fn = function(sce,annotation = FALSE, selected_clustering = NULL){
   raw_expr = assay(sce, "counts")
   colnames(raw_expr) <- colData(sce)[,"Barcode"]
@@ -23,6 +31,14 @@ createGiotto_fn = function(sce,annotation = FALSE, selected_clustering = NULL){
                             gene_metadata = gene_metadata)
   return(gobj)
 }
+
+#' @title Proximity Barplot
+#' @description A proximity barplot is a plot that describes closenest of selected clusters (inheritated information)
+#' @param gobject A `Giotto` object
+#' @param CPscore A precalculated score of closenest of selected clusters
+#' @param out_dir An output directory to place resulted barplot of closenest
+#' @concept single_sample_norm_spatial
+#' @export
 cellProximityBarplot_fn = function(gobject = gobject,
                                    CPscore = CPscore, out_dir = out_dir) {
   pl <- Giotto::cellProximityBarplot(gobject,
@@ -69,7 +85,13 @@ cellProximityBarplot_fn = function(gobject = gobject,
                 anot_plot_out_png_file = out_png_file)
 }
 
-# heatmap
+#' @title Proximity Heatmap
+#' @description A proximity heatmap is a plot that describe closenest of selected clusters using on color code 
+#' @param gobject A `Giotto` object
+#' @param CPscore A precalculated score of closenest of selected clusters
+#' @param out_dir An output directory to place resulted heatmap of closenest
+#' @concept single_sample_norm_spatial
+#' @export
 cellProximityHeatmap_fn = function(gobject = gobject,
                                    CPscore = CPscore, out_dir=out_dir){
 
@@ -91,7 +113,14 @@ cellProximityHeatmap_fn = function(gobject = gobject,
                 anot_plot_out_png_file = NULL)
 }
 
-## -- receptor ligand analyses
+#' @title Receptor ligand analyses.
+#' @description A calculation of ligand-receptor pairing probability
+#' @param LR_data Information about receptor and ligand pairng, inheritated from target from file contatining L-R pairing
+#' @param gobj A `Giotto` object
+#' @param selected_clustering A name of selected clustering for calculation
+#' @concept single_sample_norm_spatial
+#' @return `dataframe` containing probablities and other statistical information about L-R pairing 
+#' @export
 LR_data_fn = function(LR_data=LR_data,gobj=gobj,selected_clustering=selected_clustering){
 
   LR_data <- data.table::as.data.table(LR_data)
@@ -132,9 +161,10 @@ LR_data_fn = function(LR_data=LR_data,gobj=gobj,selected_clustering=selected_clu
   return(spatial_all_scores)
 }
 
-## get statistical significance of gene pair expression changes upon cell-cell interaction
-#Spatial Cell-Cell communication scores based on spatial expression of interacting cells
-
+#' @title select significant ligand-receptor pairings
+#' @description Select significant L-R pairing based on communication scores from expression of interacting cells
+#' @param spatial_all_scores Precalculated cell communication scores from LR_data_fn 
+#' @concept single_sample_norm_spatial
 
 selected_spat_fn = function(spatial_all_scores){
   spatial_all_scores <- data.table::as.data.table(spatial_all_scores)
@@ -143,16 +173,32 @@ selected_spat_fn = function(spatial_all_scores){
   return(selected_spat)
 }
 
+#' @title select top 33 significant L-R paring
+#' @description select top 33 significant L-R pairing based on expression
+#' @param selected_spat Precalculated significant L-R pairing from selected_spat_fn
+#' @concept single_sample_norm_spatial
 top_LR_ints_fn_new = function(selected_spat){
   top_LR_ints <- unique(selected_spat[order(-abs(PI))]$LR_comb)[1:33]
   return(top_LR_ints)
 }
 
+#' @title select top 33 significant combined L-R paring
+#' @description select top 33 significant L-R pairing based on combined L-R expression score across cells
+#' @param selected_spat precalculated significant L-R pairing from selected_spat_fn
+#' @concept single_sample_norm_spatial
 top_LR_cell_ints_fn = function(selected_spat){
   top_LR_cell_ints <- unique(selected_spat[order(-abs(PI))]$LR_cell_comb)[1:33]
   return(top_LR_cell_ints)
 }
-
+#' @title Heatmap visulization of selected L-R pairing
+#' @description Heatmap visualization of selected most significant L-R pairing, based on PI values
+#' @param gobject A `Giotto` object
+#' @param comScores Precalculated L-R pairing scores from LR_data_fn
+#' @param selected_LR Precalculated individual expression scores from top_LR_ints_fn_new
+#' @param selected_cell_LR Precalculated combined cell scores from top_LR_cell_ints_fn
+#' @param out_dir Name of output directory in fs file system from here pathway
+#' @concept single_sample_norm_spatial
+#' @export
 plotCCcomHeatmap_fn = function(gobject = gobject,
                                comScores = comScores,
                                selected_LR = selected_LR,
@@ -178,10 +224,20 @@ plotCCcomHeatmap_fn = function(gobject = gobject,
                 anot_plot_out_png_file = NULL)
 }
 
+#' @title DotPlot visualization of selected L-R pairing
+#' @description DotPlot visualization of selected most significant L-R pairing, based on LR expression
+#' @param gobject A `Giotto` object
+#' @param comScores Precalculated L-R pairing scores from LR_data_fn
+#' @param selected_LR Precalculated individual expression scores from top_LR_intr_fn_new
+#' @param selected_cell_LR Precalculated combined cell scores from top_LR_cell_ints_fn
+#' @param out_dir Name of output directory in fs file system from here pathway
+#' @concept single_sample_norm_spatial
+#' @export
 plotCCcomDotplot_fn = function(gobject = gobject,
                                 comScores = comScores,
                                 selected_LR = selected_LR,
-                                selected_cell_LR = selected_cell_LR, out_dir = out_dir){
+                                selected_cell_LR = selected_cell_LR, 
+                                out_dir = out_dir){
 
   pl <- Giotto::plotCCcomDotplot(gobject ,
                                           comScores ,
@@ -198,4 +254,3 @@ plotCCcomDotplot_fn = function(gobject = gobject,
   par <- tibble(title = "CCcomDotplot.pdf", anot_plot = list(pl), anot_plot_out_pdf_file = out_pdf_file,
                 anot_plot_out_png_file = out_png_file)
 }
-

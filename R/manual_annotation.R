@@ -1,6 +1,10 @@
+## -- Common functions used for manual annotation of spots/cells.
 
-###############################################################################
-## -- signature matrix
+#' @title Create signature matrix from signature list.
+#' @param sign_names.
+#' @param sign_list.
+#' @return Matrix: signature matrix based on markers in data
+#' @concept manual_annotation
 makeSignMatrixPAGE = function(sign_names,
                               sign_list) {
 
@@ -32,6 +36,10 @@ makeSignMatrixPAGE = function(sign_names,
 
 }
 
+#' @title Create signature matrix from provided file containing names with markers.
+#' @param markers_file A csv file containing list of annotation names with selected markers.
+#' @export
+#' @concept manual_annotation
 create_signature_matrix_fn <- function(markers_file){
   markers <- read.csv(markers_file)
   list_markers=as.list(markers)
@@ -42,8 +50,12 @@ create_signature_matrix_fn <- function(markers_file){
   return(signature_matrix)
 }
 
-###############################################################################
-## -- run page annotation
+#' @title Calculate and run PAGE annotation.
+#' @param sign_matrix precalculated signature matrix
+#' @param sce A `SingleCellExperiment` object
+#' @param values A expresion indicating which values use, logcounts as default
+#' @export
+#' @concept manual_annotation
 run_page_man_annotation <- function(sign_matrix,
                                     sce,
                                     values='logcounts',
@@ -131,11 +143,15 @@ run_page_man_annotation <- function(sign_matrix,
 
 
 return(enrichmentDT)
-######
+}
 
-
+#' @title Calculate metadata for manual cell/spot annotation for heatmap visualisation.
+#' @param sce A `SingleCellExperiment` object
+#' @param enrichment precalculated enrichment score for each cell/spot
+#' @clustering A vector of selected clustering used for annotation, inheritated from meta_heatmap plotting
+#' @concept manual_annotation
 calculate_metadata <- function(sce, enrichment, clustering) {
-  cell_types = colnames(enrichment) ##or selected names, prepsat aby tam zustaly jen platne nazvy
+  cell_types = colnames(enrichment) 
 
   cell_metadata = cbind(enrichment,sce[[clustering]])
   colnames(cell_metadata)[which(names(cell_metadata) == "V2")] <- clustering
@@ -144,7 +160,13 @@ calculate_metadata <- function(sce, enrichment, clustering) {
 }
 
 
-
+#' @title Manual annotation heatmap plotting
+#' @param sce A `SingleCellAnnotation` object
+#' @param clustering Selected clustering
+#' @param spatial Logical vector, if include spot images for each anotation
+#' @param make_cell_plot Logical vector, if include pseudotissue images, for spatial extension
+#' @concept manual_annotation
+#' @export
 meta_heatmap_ploting <- function(sce,clus_cor_method="pearson",clus_cluster_method = "complete",
                                  values_cor_method="pearson",values_cluster_method="complete",
                                  clustering,
@@ -301,11 +323,3 @@ meta_heatmap_ploting <- function(sce,clus_cor_method="pearson",clus_cluster_meth
   }
   par
 }
-
-
-
-
-
-
-
-

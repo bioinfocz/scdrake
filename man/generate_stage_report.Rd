@@ -82,8 +82,10 @@ This is a list of Rmd files currently bundled with the \code{scdrake} package:
 #>     |   +-- empty_droplets.Rmd
 #>     |   +-- gene_filtering_custom.Rmd
 #>     |   \\-- gene_filtering_qc.Rmd
+#>     +-- 01_input_qc_spatial.Rmd
 #>     +-- 02_norm_clustering.Rmd
-#>     \\-- 02_norm_clustering_simple.Rmd
+#>     +-- 02_norm_clustering_simple.Rmd
+#>     \\-- 02_norm_clustering_spatial.Rmd
 }\if{html}{\out{</div>}}
 
 A short description of these Rmd files:

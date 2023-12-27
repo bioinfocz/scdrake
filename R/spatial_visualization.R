@@ -1,5 +1,13 @@
 ## -- Common functions related to visualization in spatial space.
 
+#' @title Spot visualization
+#' @description Main function for visualization spots as pseudotissue plot  and subsequent information
+#' @param sce A `SingleCellExpression` object
+#' @param sdimx A label of x coordinates of spots
+#' @param sdimy A label of y coordinates of spots
+#' @param cell_color_gradient A vector of length three with color names
+#' @concept spatial_visualization
+#' @export
 visualized_spots = function(sce,
                             sdimx = 'Dims_x',
                             sdimy = 'Dims_y',
@@ -172,6 +180,11 @@ visualized_spots = function(sce,
 
 
 }
+
+#' @title Spatial ggplot point layer
+#' @description Rendering of the color layer over base ggplot spatial pseudotissue plot
+#' @param ggobject Inheritated from main functions
+#' @concept spatial_visualization
 plot_spat_point_layer_ggplot = function(ggobject,
                                         sdimx = NULL,
                                         sdimy = NULL,
@@ -359,7 +372,7 @@ plot_spat_point_layer_ggplot = function(ggobject,
         cell_color_code = getDistinctColors(n = number_colors)
         names(cell_color_code) = unique(factor_data)
         pl <- pl + ggplot2::scale_fill_manual(values = cell_color_code)
-        ####tahle cast me zajima####################################################################################################
+        
       } else if(color_as_factor == F){
 
         if(is.null(gradient_midpoint)) {
@@ -377,6 +390,12 @@ plot_spat_point_layer_ggplot = function(ggobject,
   pl <- pl + ggplot2::scale_y_reverse()
   return(pl)
 }
+
+#' @title Generating distinct colors 
+#' @description Generating distinct colors for rendering color layer for factor variable
+#' @param n Number of unique factors in data
+#' @concept spatial_visualization
+#' @export
 
 getDistinctColors <- function(n) {
   qual_col_pals <- RColorBrewer::brewer.pal.info[RColorBrewer::brewer.pal.info$category == 'qual',]
@@ -415,6 +434,9 @@ getDistinctColors <- function(n) {
   return(col_vector)
 }
 
+#' @title Control quality spatial plot
+#' @description Function for rendering of quality control plots of selected features
+#' @concept spatial_visualization
 plot_spat_visuals <- function(sce) {
   to_plot <- c("detected","sum","subsets_mito_percent","subsets_ribo_percent")
   plist <- list()
@@ -429,7 +451,16 @@ plot_spat_visuals <- function(sce) {
   return(plist)
 }
 
-
+#' @title Spatial gene plot
+#' @description Spatial visualization of selected genes within pseudotissue representaiton
+#' @param sce A `SingleCellExpression` object
+#' @param sdimx A label of x spot coordinates
+#' @param sdimy A label of y spot coordinates
+#' @param values A label of which values to use, counts of logcounts
+#' @param genes A vector of genes to visualization
+#' @param cell_color_gradient A vector of lenght three with color names to use as gradient
+#' @concept spatial_visualization
+#' @export
 spatGenePlot2Dsce <- function(sce,
 
                            sdimx = 'Dims_x',
