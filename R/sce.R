@@ -55,6 +55,8 @@ sce_add_colData <- function(sce, df, replace = TRUE) {
 
 #' @title Append new columns with spatial relevance to `colData` of a `SingleCellExperiment` object.
 #' @param sce A `SingleCellExperiment` object.
+#' @param spatial_locs A file contating spatial coordiantes
+#' @param spatial Logical vector If true, add spatial coordinates
 sce_add_spatial_colData <- function(sce, spatial_locs, spatial=FALSE) {
   if(spatial) {
 
@@ -67,7 +69,7 @@ sce_add_spatial_colData <- function(sce, spatial_locs, spatial=FALSE) {
     #   nrow(spatial_locs) == ncol(sce),
     #   msg = "Number of rows in {.var spatial_locs} must be same as number of columns in {.var sce}."
     # )
-    library(SingleCellExperiment)
+    #library(SingleCellExperiment)
     ###try if in tissue! spatial_locs <- spatial_locs[spatial_locs$in_tissue == '1',]
     ## [, c(1,3,4)] > 3,4 coordinate of the spot in the array
     ## [, c(1,5,6)] > 5,6 the PIXEL coordinate of the center, 5 in row, 6 in column

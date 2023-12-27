@@ -316,7 +316,7 @@ save_selected_markers_plots_files <- function(selected_markers_plots, selected_m
 #'
 #' @concept sce_visualization
 #' @export
-dimred_plots_clustering_fn.new <- function(sce_dimred,
+dimred_plots_clustering_fn <- function(sce_dimred,
                                        dimred_names,
                                        cluster_df,spatial=TRUE,
                                        out_dir = NULL) {

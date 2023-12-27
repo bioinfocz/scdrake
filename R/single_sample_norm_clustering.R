@@ -245,6 +245,7 @@ sctransform_normalization <- function(sce,
 #'   `hvg_cc_genes_var_expl_threshold` prior to HVG selection.
 #' @param hvg_cc_genes_var_expl_threshold A numeric scalar: threshold for variance explained.
 #'   Genes exceeding this threshold will be marked as CC-related.
+#' @param spatial A logical scalar: if `TRUE`, add spatially variable genes to calculation
 #' @inheritParams bsparam_param
 #' @inheritParams bpparam_param
 #' @return A modified `sce_norm` object with added HVG data in `metadata()`.

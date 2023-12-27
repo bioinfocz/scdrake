@@ -4,7 +4,7 @@
 \alias{sce_history_plot_fn}
 \title{Plot history of cell and gene filtering.}
 \usage{
-sce_history_plot_fn(sce_history)
+sce_history_plot_fn(sce_history, spatial = FALSE)
 }
 \arguments{
 \item{sce_history}{(\emph{input target}) A tibble.}
