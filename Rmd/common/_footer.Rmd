@@ -1,0 +1,44 @@
+<details>
+  <summary class="config">Show runtime info</summary>
+  <hr />
+  
+  <h4><code>drake</code> cache directory</h4>
+
+`r params$drake_cache_dir`
+
+  <h4>Traceback and warnings</h4>
+
+```{r traceback_warnings, message = TRUE, warning = TRUE}
+traceback()
+warnings()
+```
+
+  <h4>Bioconductor version</h4>
+
+`r BiocManager::version()`
+
+  <h4>External libs</h4>
+
+```{r external_libs}
+extSoftVersion()
+```
+
+  <h4>Session info (pretty)</h4>
+
+```{r sessioninfo_pretty}
+sessioninfo::session_info()
+```
+
+  <h4>Session info (base)</h4>
+
+```{r sessioninfo_base}
+utils::sessionInfo()
+```
+
+</details>
+
+***
+
+<p style="font-size: 11px; text-align: center;">
+  Page generated on `r Sys.time()`
+</p>

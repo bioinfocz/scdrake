@@ -1,25 +1,28 @@
-### Spatial ##################################################################
+### Spatial ###################################################################
 SPATIAL: FALSE
-##############################################################################
+#SPATIAL_LOCKS: "input/tissue_positions_list.csv"
+###############################################################################
 ### Normalization parameters ##################################################
 NORMALIZATION_TYPE: "scran"
+
 SCRAN_USE_QUICKCLUSTER: True
 SCRAN_QUICKCLUSTER_METHOD: "igraph"
+
 SCT_VARS_TO_REGRESS: null
 SCT_N_HVG: 3000
-SPATIAL_LOCKS: "input/tissue_positions_list.csv"
 ###############################################################################
 
 ### Highly variable genes (HVGs) selection ####################################
 HVG_METRIC: "gene_var"
 HVG_SELECTION: "top"
 HVG_SELECTION_VALUE: 1000
+
 HVG_RM_CC_GENES: False
 HVG_CC_GENES_VAR_EXPL_THRESHOLD: 5
 ###############################################################################
 
 ### Doublet detection and filtering ###########################################
-MAX_DOUBLET_SCORE: null
+MAX_DOUBLET_SCORE: 3.5
 ###############################################################################
 
 ### PCA #######################################################################
@@ -35,17 +38,21 @@ TSNE_MAX_ITER: 1000
 ### Graph-based clustering ####################################################
 CLUSTER_GRAPH_SNN_K: 10
 CLUSTER_GRAPH_SNN_TYPE: "rank"
+
 CLUSTER_GRAPH_LEIDEN_ENABLED: True
-CLUSTER_GRAPH_LEIDEN_RESOLUTIONS: [0.2, 0.4]
+CLUSTER_GRAPH_LEIDEN_RESOLUTIONS: [0.2, 0.4, 0.6, 0.8, 1.0]
+
 CLUSTER_GRAPH_LOUVAIN_ENABLED: False
 CLUSTER_GRAPH_LOUVAIN_RESOLUTIONS: [0.2, 0.4, 0.6, 0.8, 1.0]
+
 CLUSTER_GRAPH_WALKTRAP_ENABLED: False
 ###############################################################################
 
 ### k-means clustering ########################################################
-CLUSTER_KMEANS_K_ENABLED: True
+CLUSTER_KMEANS_K_ENABLED: False
 CLUSTER_KMEANS_K: !code 3:6
-CLUSTER_KMEANS_KBEST_ENABLED: True
+
+CLUSTER_KMEANS_KBEST_ENABLED: False
 ###############################################################################
 
 ### SC3 clustering ############################################################
@@ -56,14 +63,21 @@ CLUSTER_SC3_N_CORES: 1
 
 ### Cell type annotation ######################################################
 CELL_ANNOTATION_SOURCES:
-  - MouseRNAseqData:
+  - human_primary_cell_atlas_main:
       reference_type: "celldex"
-      reference: "MouseRNAseqData"
+      reference: "HumanPrimaryCellAtlasData"
       description: >
-        This dataset was contributed by the Benayoun Lab that identified, downloaded and processed data sets on GEO that corresponded to sorted cell types (Benayoun et al., 2019).
-
+        Microarray datasets derived from human primary cells (Mabbott et al. 2013).
+        Most of the labels refer to blood subpopulations but cell types from other tissues are also available.
       label_column: "label.main"
       label_subsets: []
+    monaco_immune_main:
+      reference_type: "celldex"
+      reference: "MonacoImmuneData"
+      description: "This is the human immune reference that best covers all of the bases for a typical PBMC sample."
+      label_column: "label.main"
+      label_subsets: []
+
 CELL_ANNOTATION_SOURCES_DEFAULTS:
   TRAIN_PARAMS:
     GENES: "de"
@@ -88,28 +102,34 @@ ADDITIONAL_CELL_DATA_FILE: null
 CELL_GROUPINGS: null
 ###############################################################################
 
+### Dimensionality reduction plots ############################################
+NORM_CLUSTERING_REPORT_DIMRED_NAMES: ["umap", "pca", "tsne"]
+NORM_CLUSTERING_REPORT_DIMRED_PLOTS_OTHER:
+  - "phase": "Cell cycle phases"
+    "doublet_score": "Doublet score"
+    "total": "Total number of UMI"
+    "detected": "Detected number of genes"
+###############################################################################
+
 ### Manual annotation #########################################################
-MANUAL_ANNOTATION: TRUE
+MANUAL_ANNOTATION: FALSE
 ANNOTATION_MARKERS: "datab_brain_mouse.csv"
 SCALE_ANNOTATION: NULL
 ANNOTATION_CLUSTERING: "cluster_kmeans_k6"
 OVERLAP: 4
-MAKE_CELL_PLOT: TRUE
+MAKE_CELL_PLOT: FALSE
 ###############################################################################
-### Proximity ################################################################
-PROXIMITY: TRUE
+
+### Proximity #################################################################
+PROXIMITY: FALSE
 ###############################################################################
-### Interaction ###############################################################
-INTERACTIONS: TRUE
-ANNOTATED_INTERACTIONS: TRUE
+
+### Interactions ###############################################################
+INTERACTIONS: FALSE
+ANNOTATED_INTERACTIONS: FALSE
 INTERACTION_CLUSTERING: "cluster_kmeans_k6"
 RECEPTOR_LIGAND_FILE: "mouse_lr_pair.csv"
 NORM_CLUSTERING_INTERACTION_OUT_DIR: "interactions"
-### Dimensionality reduction plots ############################################
-NORM_CLUSTERING_REPORT_DIMRED_NAMES: ["umap", "pca", "tsne"]
-NORM_CLUSTERING_REPORT_DIMRED_PLOTS_OTHER:
-  - "total": "Total number of UMI"
-    "detected": "Detected number of genes"
 ###############################################################################
 
 ### Input files ###############################################################
@@ -124,6 +144,7 @@ NORM_CLUSTERING_REPORT_SIMPLE_RMD_FILE: "Rmd/single_sample/02_norm_clustering_si
 
 ### Output files ##############################################################
 NORM_CLUSTERING_BASE_OUT_DIR: "02_norm_clustering"
+
 NORM_CLUSTERING_SELECTED_MARKERS_OUT_DIR: "selected_markers"
 NORM_CLUSTERING_DIMRED_PLOTS_OUT_DIR: "dimred_plots"
 NORM_CLUSTERING_CELL_ANNOTATION_OUT_DIR: "cell_annotation"

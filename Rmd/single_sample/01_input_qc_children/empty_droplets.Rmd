@@ -1,0 +1,24 @@
+## Detecting empty droplets
+
+`DropletUtils::emptyDrops()` computes Monte Carlo p-values based on a Dirichlet-multinomial model of sampling molecules into droplets. 
+`emptyDrops()` assumes that libraries with total UMI counts below a certain threshold (`r cfg$EMPTY_DROPLETS_LOWER` by default)
+correspond to empty droplets.
+These are used to estimate the ambient expression profile against which the remaining libraries are tested.
+Under this definition, these low-count libraries cannot be cell-containing droplets and are excluded from the hypothesis testing.
+
+**Number of non-empty cells: `r sce_valid_cells_info$dim[2]`**
+
+Droplets detected as cells should show up with large negative log-probabilities or very large total UMI counts (based on the knee point).
+
+```{r}
+is_cell <- empty_droplets$FDR <= cfg$EMPTY_DROPLETS_FDR_THRESHOLD
+plot(empty_droplets$Total, -empty_droplets$LogProb, col = ifelse(is_cell, "red", "black"), xlab = "Total UMI count", ylab = "-Log Probability")
+```
+
+Droplets with empty-droplet FDR > `r cfg$EMPTY_DROPLETS_FDR_THRESHOLD` have been removed. Filtered dataset summary:
+
+```{r}
+cat(sce_valid_cells_info$str)
+```
+
+`r scdrake::format_used_functions("DropletUtils::emptyDrops()")`

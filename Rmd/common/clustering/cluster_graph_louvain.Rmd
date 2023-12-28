@@ -1,0 +1,20 @@
+### Louvain algorithm {.tabset}
+
+[Louvain algorithm](https://iopscience.iop.org/article/10.1088/1742-5468/2008/10/P10008) is perhaps the most popular
+clustering method for scRNA-seq, and was popularized by `Seurat`.
+
+It can be parametrized with different resolutions that determine how large communities are detected in the SNN graph.
+Generally, lower resolutions result in coarse-grained clusters, while higher ones in more fine-grained structures.
+
+The relationships in cluster abundances under different resolutions are visualized in the `clustree` plot below.
+Stable clusters across different resolutions can be quickly find as straight or little branched vertical lines.
+
+`r scdrake::create_a_link(cluster_graph_louvain_clustree_file, "**PDF with clustree**", href_rel_start = fs::path_dir(report_html_file))`
+
+`r scdrake::format_used_functions(c("igraph::cluster_louvain()", "clustree::clustree()"))`
+
+```{r, results = "asis"}
+res <- scdrake::generate_dimred_plots_clustering_section(
+  dimred_plots_clustering_files, dimred_plots_clustering_united_files, "graph", "louvain", fs::path_dir(report_html_file), 4
+)
+```
