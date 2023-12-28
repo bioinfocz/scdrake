@@ -1,0 +1,315 @@
+---
+title: "01 - Data load and QC"
+author: "Made by the [scdrake pipeline](https://bioinfocz.github.io/scdrake) with spatial extension"
+institute: |
+  Laboratory of Genomics and Bioinformatics
+  Institute of Molecular Genetics of the ASCR
+  https://img.cas.cz
+date: "`r glue::glue('Document generated: {format(Sys.time(), \"%Y-%m-%d %H:%M:%S %Z%z\")}')`"
+output:
+  html_document:
+    toc: true
+    toc_depth: 4
+    toc_float: true
+    number_sections: false
+    theme: "flatly"
+    self_contained: true
+    code_download: true
+    df_print: "paged"
+params:
+  css_file: !expr here::here("Rmd/common/stylesheet.css")
+  drake_cache_dir: !expr here::here(".drake")
+css: "`r params$css_file`"
+---
+
+```{r, message = FALSE, warning = FALSE}
+suppressPackageStartupMessages(library(magrittr))
+if (rlang::is_true(getOption("knitr.in.progress"))) {
+  params_ <- scdrake::scdrake_list(params)
+}
+drake_cache_dir <- params_$drake_cache_dir
+
+drake::loadd(
+  config_main, config_input_qc, empty_droplets, sce_valid_cells_info, barcode_ranks,
+  qc_filter, custom_filter, sce_qc_filter_rowSums, sce_custom_filter_rowSums,
+  path = drake_cache_dir
+)
+
+cfg <- config_input_qc
+empty_droplets_enabled <- cfg$EMPTY_DROPLETS_ENABLED
+cell_filtering_enabled <- cfg$ENABLE_CELL_FILTERING
+gene_filtering_enabled <- cfg$ENABLE_GENE_FILTERING
+
+input_type <- cfg$INPUT_DATA$type
+filtering_type <- ifelse(cfg$SAVE_DATASET_SENSITIVE_FILTERING, "dataset-sensitive", "custom")
+```
+
+***
+
+```{r, child = here::here("Rmd/common/_header.Rmd")}
+```
+
+***
+
+```{r, results = "asis"}
+if (input_type == "cellranger") {
+  scdrake::md_header("Input data: 10x Genomics Space Ranger data", 1)
+  cat(scdrake::str_space(
+    "The feature-barcode matrix was imported from",
+    "[Space Ranger](https://support.10xgenomics.com/spatial-gene-expression/software/pipelines/latest/what-is-space-ranger)",
+    "output (the official quantification tool from 10x Genomics)."
+  ))
+} else if (input_type == "table") {
+  scdrake::md_header("Input data: delimited text (table)", 1)
+  cat("The feature-barcode matrix was imported from a delimited file.")
+} else if (input_type == "sce") {
+  scdrake::md_header("Input data: `SingleCellExperiment` object", 1)
+  cat("The object holding experimental data (feature-barcode matrix, gene annotation etc.) was imported from a Rds file.")
+}
+```
+
+Each row of feature-barcode matrix corresponds to a gene, while each column corresponds to a spot barcode.
+Summary of imported data:
+
+```{r}
+cat(drake::readd(sce_raw_info, path = drake_cache_dir)$str)
+```
+
+`r scdrake::format_used_functions("DropletUtils::read10xCounts()")`
+
+***
+
+# Empty droplets
+
+In droplet-based single cell RNA-seq, empty droplets often contain RNA from the ambient solution, resulting in non-zero counts after debarcoding. In spot-based spatial transcriptomics, a residual tissue can be accidentally placed on the spots, resulting in non-zero counts in such spot.  
+It is desired to discard such droplets/spots.
+
+## Barcode rank plot
+
+A useful diagnostic for both droplet- and spot- based data is the barcode rank plot, which shows the total UMI (log-)count for each
+barcode on the y-axis and the (log-)rank on the x-axis.
+This is effectively a transposed empirical cumulative density plot with log-transformed axes.
+It is useful as it allows examine the distribution of total UMI counts across barcodes, focusing on those with the largest counts.
+
+```{r, message = FALSE, warning = FALSE, results = "hold"}
+uniq <- !duplicated(barcode_ranks$rank)
+plot(barcode_ranks$rank[uniq], barcode_ranks$total[uniq], log = "xy", xlab = "Rank", ylab = "Total")
+o <- order(barcode_ranks$rank)
+lines(barcode_ranks$rank[o], barcode_ranks$fitted[o], col = "red")
+
+abline(h = metadata(barcode_ranks)$knee, col = "dodgerblue", lty = 2)
+abline(h = metadata(barcode_ranks)$inflection, col = "forestgreen", lty = 2)
+if (empty_droplets_enabled) {
+  abline(h = cfg$EMPTY_DROPLETS_LOWER, col = "firebrick", lty = 2)
+  legend(
+    "bottomleft",
+    lty = 2,
+    col = c("dodgerblue", "forestgreen", "firebrick"),
+    legend = c("knee", "inflection", "emptyDroplets lower bound")
+  )
+} else {
+  legend(
+    "bottomleft",
+    lty = 2,
+    col = c("dodgerblue", "forestgreen"),
+    legend = c("knee", "inflection")
+  )
+}
+```
+
+The knee and inflection points on the curve mark the transition between two components of the total UMI count distribution.
+This is assumed to represent the difference between empty droplets with little RNA and spots containing much more RNA.
+
+```{r, results = "asis"}
+if (empty_droplets_enabled) {
+  cat(
+    "The emptyDroplets lower bound specifies at or below which number of the total UMI count all barcodes",
+    "are assumed to correspond to empty droplets."
+  )
+} else {
+  cat("Removal of empty droplets was disabled. You can enable it by setting `EMPTY_DROPLETS_ENABLED` parameter to `TRUE`.")
+}
+```
+
+```{r, child = here::here("Rmd/single_sample/01_input_qc_children/empty_droplets_spat.Rmd"), eval = tryCatch(empty_droplets_enabled, error = function(e){})}
+```
+
+***
+
+# Gene + Spot quality filtering
+
+## Pre-filtering QC
+
+Given sets of mitochondrial and ribosomal genes in the data, the `scater` package automatically calculates
+several per-spot QC metrics:
+
+- Number of UMI.
+- Number of detected genes (non-zero UMI count).
+- Percentage of expressed mitochondrial (ribosomal) genes ($\frac {UMI_{mitochondrial}} {UMI_{sum}} * 100$).
+
+Then we can use two different methods to filter spots based on the metrics above:
+
+- **Custom filtering**: a standard approach is to filter spots with low amount of reads as well as genes that are
+  present in at least a certain amount of spots, using fixed thresholds. While simple, using fixed thresholds requires
+  knowledge of the experiment and of the experimental protocol.
+- **Dataset-sensitive filtering**: an alternative approach is to use adaptive, data-driven thresholds to identify
+  outlying spots, based on the set of QC metrics just calculated. We identify spots that are outliers for the various
+  QC metrics, based on the median absolute deviation (MAD) from the median value of each QC metric across all spots.
+  Specifically, a value is considered an outlier if it is more than `r cfg$MAD_THRESHOLD` MADs from the median in
+  the "problematic" direction.
+
+Doublets detection and/or removal is not recomended for spot-based spatial transcriptomics data. 
+
+Now we can plot some of the QC features. spots are colored by `discard_qc`, meaning if a spot would be discarded by
+MAD thresholding on a QC metric.
+
+```{r, fig.height = 10, fig.width = 8}
+cowplot::plot_grid(plotlist = drake::readd(sce_unfiltered_plotlist, path = drake_cache_dir), ncol = 2)
+```
+
+Visualisation of prefiltering (raw) QC metrics in spatial coordinates. 
+
+```{r, fig.height = 10, fig.width = 8}
+pl <- plot_spat_visuals(drake::readd(sce_unfiltered, path = drake_cache_dir))
+cowplot::plot_grid(plotlist = pl,ncol=2)
+```
+
+`r scdrake::format_used_functions("scuttle::perCellQCMetrics()")`
+
+## Filtering {.tabset}
+
+### Dataset-sensitive filters
+
+#### Spot filtering
+
+```{r, child = here::here("Rmd/single_sample/01_input_qc_children/cell_filtering_qc.Rmd"), eval = tryCatch(cell_filtering_enabled, error = function(e){})}
+```
+
+```{r, results = "asis", eval = tryCatch(!cell_filtering_enabled, error = function(e){})}
+cat("Spot filtering was disabled.")
+```
+
+#### Gene filtering
+
+```{r, child = here::here("Rmd/single_sample/01_input_qc_children/gene_filtering_qc.Rmd"), eval = tryCatch(gene_filtering_enabled, error = function(e){})}
+```
+
+```{r, results = "asis", eval = tryCatch(!gene_filtering_enabled, error = function(e){})}
+cat("Gene filtering was disabled.")
+```
+
+### Custom filters
+
+#### Spot filtering
+
+```{r, child = here::here("Rmd/single_sample/01_input_qc_children/cell_filtering_custom.Rmd"), eval = tryCatch(cell_filtering_enabled, error = function(e){})}
+```
+
+```{r, results = "asis", eval = tryCatch(!cell_filtering_enabled, error = function(e){})}
+cat("Spot filtering was disabled.")
+```
+
+#### Gene filtering
+
+```{r, child = here::here("Rmd/single_sample/01_input_qc_children/gene_filtering_custom.Rmd"), eval = tryCatch(gene_filtering_enabled, error = function(e){})}
+```
+
+```{r, results = "asis", eval = tryCatch(!gene_filtering_enabled, error = function(e){})}
+cat("Gene filtering was disabled.")
+```
+
+***
+
+## Post-filtering QC
+
+**Final filtering selection: using <span style='color: green;'>`r filtering_type`</span> filtering.**
+
+```{r}
+cat(drake::readd(sce_final_input_qc_info, path = drake_cache_dir)$str)
+```
+
+### Spot and gene number history
+
+```{r}
+scdrake::render_bootstrap_table(drake::readd(sce_history, path = drake_cache_dir), full_width = FALSE, position = "left")
+```
+
+```{r}
+print(drake::readd(sce_history_plot, path = drake_cache_dir))
+```
+
+### Dataset-sensitive filtering
+
+Plots of QC metrics after dataset-sensitive filtering.
+`discard_custom` means if given spot was discarded in **custom filtering**.
+
+```{r, fig.height = 10, fig.width = 8}
+cowplot::plot_grid(plotlist = drake::readd(sce_qc_filter_genes_plotlist, path = drake_cache_dir), ncol = 2)
+```
+
+Plots in spatial coordinates of QC metrics after dataset-sensitive filtering.
+
+```{r, fig.height = 10, fig.width = 8}
+ pl <- plot_spat_visuals(drake::readd(sce_qc_filter, path = drake_cache_dir))
+cowplot::plot_grid(plotlist = pl,ncol=2)
+```
+
+
+### Filtering based on custom filters
+
+Plots of QC metrics after custom filtering.
+`discard_qc` means if given spot was discarded in **dataset-sensitive filtering**.
+
+```{r, fig.height = 10, fig.width = 8}
+cowplot::plot_grid(plotlist = drake::readd(sce_custom_filter_genes_plotlist, path = drake_cache_dir), ncol = 2)
+```
+
+Plots in spatial coordinates of QC metrics after custom filtering.
+
+```{r, fig.height = 10, fig.width = 8}
+ pl <- plot_spat_visuals(drake::readd(sce_custom_filter, path = drake_cache_dir))
+cowplot::plot_grid(plotlist = pl,ncol=2)
+```
+
+
+***
+
+# Gene annotation
+
+- Used annotation package: `r config_main$ANNOTATION_PKG`
+  (v`r sessioninfo::package_info(config_main$ANNOTATION_PKG, dependencies = FALSE)$loadedversion`)
+- If a single ENSEMBL ID has multiple symbols, gene descriptions, or ENTREZ IDs, they are collapsed by comma (`,`).
+- ENSEMBL ID is used as a symbol for ENSEMBL IDs with unknown symbols.
+- ENSEMBL ID is appended to symbols having multiple ENSEMBL IDs (e.g. TBCE has both ENSG00000285053 and ENSG00000284770
+  ENSEMBL IDs assigned -> its symbol is changed to TBCE_ENSG00000285053 and TBCE_ENSG00000284770).
+
+```{r}
+drake::readd(gene_annotation, path = drake_cache_dir) %>%
+  head() %>%
+  scdrake::render_bootstrap_table()
+```
+
+#
+
+***
+
+<details>
+  <summary class="config">Show input parameters</summary>
+  <hr />
+  <h4>Main config</h4>
+
+```{r}
+print(config_main)
+```
+
+  <hr />
+  <h4>Input QC config</h4>
+
+```{r}
+print(cfg)
+```
+  <hr />
+</details>
+
+```{r, child = here::here("Rmd/common/_footer.Rmd")}
+```

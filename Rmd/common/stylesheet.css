@@ -1,0 +1,64 @@
+/* Increase the page width */
+.main-container {
+  max-width: 1366px !important;
+  margin-left: 10px !important;
+}
+
+/* Toggle buttons */
+button[data-toggle="collapse"] {
+  margin-bottom: 1em;
+}
+
+/* Collapsed <div> */
+div.collapse > div.well, div.collapsing > div.well {
+  background-color: white;
+}
+
+/* DT button group */
+div.dataTables_wrapper > div.dt-buttons {
+  display: inline;
+}
+
+summary.config {
+  width: fit-content;
+  border: 1px solid;
+  border-radius: 5px;
+  padding: 5px;
+  background-color: #0089CF;
+  color: white;
+  margin-bottom: 2em;
+}
+
+summary.config:hover {
+  cursor: pointer;
+}
+
+tbody.td {
+  padding: 1px !important;
+}
+
+/* https://equinusocio.dev/blog/details-element-the-native-html-trigger/ */
+.used-functions {
+  appearance: none;
+  display: inline-flex;
+  background-color: hsl(220deg 100% 50%);
+  padding: 0.5ch 1.4ch;
+  margin-bottom: 1em;
+  border-radius: 4px;
+  cursor: pointer;
+  color: #fff;
+}
+
+summary.used-functions::-webkit-details-marker {
+  display: none;
+}
+
+.used-functions-content {
+  margin-bottom: 1em;
+  border: 1px solid;
+  padding: 5px;
+  padding-bottom: 0;
+  border-radius: 4px;
+  border-color: hsl(220deg 100% 50%);
+  background-color: #d7d7d752;
+}
