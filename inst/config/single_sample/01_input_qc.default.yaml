@@ -9,8 +9,8 @@ INPUT_QC_REPORT_RMD_FILE: "Rmd/single_sample/01_input_qc.Rmd"
 #INPUT_QC_REPORT_RMD_FILE: "Rmd/single_sample/01_input_qc_spatial.Rmd"
 ###############################################################################
 ### Spatial ###################################################################
-SPATIAL: FALSE
-#SPATIAL_LOCKS: "input/tissue_positions_list.csv"
+SPATIAL: False
+SPATIAL_LOCKS: "example_data/pbmc1k/tissue_positions_list.csv"
 ###############################################################################
 ### Subset input data (if SingleCellExperiment object is imported) ############
 INPUT_DATA_SUBSET: null

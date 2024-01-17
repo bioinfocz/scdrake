@@ -364,36 +364,25 @@ if (!is.null(cfg$CELL_ANNOTATION_SOURCES)) {
 
 
 ```{r, results = "asis"}
-if (cfg$MANUAL_ANNOTATION) {
+if (isTRUE(cfg$MANUAL_ANNOTATION)) {
  scdrake::md_header("Manual cell annotation", 1, extra = "{.tabset}")
    scdrake::catn(
     glue::glue("**Annotation was done for {cfg$ANNOTATION_CLUSTERING}**"))
-   cat("\n\n")
    
-  cat("For manual annotation we modified an implemented function from the Giotto package. The enrichment Z score is calculated by using method (PAGE) from Kim SY et al., BMC bioinformatics, 2005 as",sep = "\n") 
-
-  cat("$Z = \frac{((Sm – mu)*m^\frac{1}{2})}{delta}$.",sep="\n")
- 
- cat("For each gene in each spot/cell, mu is the fold change values versus the mean expression
+  cat("For manual annotation we modified an implemented function from the Giotto package. The enrichment Z score is calculated by using method (PAGE) from Kim SY et al., BMC bioinformatics, 2005 as $$ Z = \frac{((Sm – mu)*m^\frac{1}{2})}{delta} $$.
+ For each gene in each spot/cell, mu is the fold change values versus the mean expression
  and delta is the standard deviation. Sm is the mean fold change value of a specific marker gene set
- and  m is the size of a given marker gene set.",sep="\n")
-cat("\n")
-   
-   if (cfg$MAKE_CELL_PLOT) {
-     
-  scdrake::create_a_link(href = drake::readd(plot_annotation)$anot_plot_out_pdf_file[2],text = glue("**Cell annotation plot**"), 
-                         href_rel_start = fs::path_dir(cfg$NORM_CLUSTERING_REPORT_HTML_FILE),do_cat = TRUE)  
-     }
-cat("\n\n")
-scdrake::create_img_link(drake::readd(plot_annotation)$anot_plot_out_pdf_file[1],img_src = drake::readd(plot_annotation)$anot_plot_out_png_file[1],img_width = "500px",href_rel_start = fs::path_dir(cfg$NORM_CLUSTERING_REPORT_HTML_FILE),do_cat = TRUE)
+ and  m is the size of a given marker gene set.")
+scdrake::create_a_link(href = drake::readd(plot_annotation)$anot_plot_out_pdf_file[2],text = "**Cell annotation plot**", href_rel_start = fs::path_dir(cfg$NORM_CLUSTERING_REPORT_HTML_FILE))  
 
-cat("\n***\n\n")
+scdrake::create_img_link(drake::readd(plot_annotation)$anot_plot_out_pdf_file[1],img_src = drake::readd(plot_annotation)$anot_plot_out_png_file[1],img_width = "500px",href_rel_start = fs::path_dir(cfg$NORM_CLUSTERING_REPORT_HTML_FILE))
+
+
 }
 ```
 
-
 ```{r, results = "asis"}
-if (cfg$PROXIMITY) {
+if (isTRUE(cfg$PROXIMITY)) {
   scdrake::md_header("Cell proximities", 1, extra = "{.tabset}")
   cat("Spatial proximity enrichment or depletion between pairs of cell types is calculated by calculating the observed over the expected frequency of cell-cell proximity interactions. The expected frequency is the average frequency calculated from a number of spatial network simulations. Each individual simulation is obtained by reshuffling the cell type labels of each node (cell) in the spatial network.",sep="\n\n")
   cat("\n")
@@ -404,7 +393,10 @@ if (cfg$PROXIMITY) {
 
 cat("\n\n#\n\n***\n\n")
 }
-if (cfg$INTERACTIONS) { 
+```
+
+```{r, results = "asis"}
+if (isTRUE(cfg$INTERACTIONS)) { 
 scdrake::md_header("Cell interactions", 1, extra = "{.tabset}")
  cat("Spatial Cell-Cell communication scores for gene pairs based on spatial interaction. Statistical framework to identify if pairs of genes (such as ligand-receptor combinations) are expressed at higher levels than expected based on a reshuffled null distribution of gene expression values in cells that are spatially in proximity to eachother. Important concepts are: 
 
@@ -422,8 +414,6 @@ PI: significanc score: log2fc * -log10(p.adj)",sep="\n\n")
 cat("\n\n#\n\n***\n\n")
 }
 ```
-
-
 
 <details>
   <summary class="config">Show input parameters</summary>
