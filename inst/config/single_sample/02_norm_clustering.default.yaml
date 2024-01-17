@@ -1,6 +1,6 @@
 ### Spatial ###################################################################
-SPATIAL: FALSE
-#SPATIAL_LOCKS: "input/tissue_positions_list.csv"
+SPATIAL: False
+SPATIAL_LOCKS: "path/to/tissue_positions_list.csv"
 ###############################################################################
 ### Normalization parameters ##################################################
 NORMALIZATION_TYPE: "scran"
@@ -112,21 +112,21 @@ NORM_CLUSTERING_REPORT_DIMRED_PLOTS_OTHER:
 ###############################################################################
 
 ### Manual annotation #########################################################
-MANUAL_ANNOTATION: FALSE
+MANUAL_ANNOTATION: False
 ANNOTATION_MARKERS: "datab_brain_mouse.csv"
-SCALE_ANNOTATION: NULL
+SCALE_ANNOTATION: null
 ANNOTATION_CLUSTERING: "cluster_kmeans_k6"
 OVERLAP: 4
-MAKE_CELL_PLOT: FALSE
+MAKE_CELL_PLOT: False
 ###############################################################################
 
 ### Proximity #################################################################
-PROXIMITY: FALSE
+PROXIMITY: False
 ###############################################################################
 
 ### Interactions ###############################################################
-INTERACTIONS: FALSE
-ANNOTATED_INTERACTIONS: FALSE
+INTERACTIONS: False
+ANNOTATED_INTERACTIONS: False
 INTERACTION_CLUSTERING: "cluster_kmeans_k6"
 RECEPTOR_LIGAND_FILE: "mouse_lr_pair.csv"
 NORM_CLUSTERING_INTERACTION_OUT_DIR: "interactions"

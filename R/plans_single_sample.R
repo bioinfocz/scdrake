@@ -105,8 +105,8 @@ get_input_qc_subplan <- function(cfg, cfg_pipeline, cfg_main) {
     sce_custom_filter_genes_info = save_object_info(sce_custom_filter_genes),
 
     ## -- Create a history of cell and gene filtering.
-    sce_history = sce_history_fn.new(sce_unfiltered, sce_qc_filter_genes, sce_custom_filter_genes,!!cfg$SPATIAL),
-    sce_history_plot = sce_history_plot_fn.new(sce_history,!!cfg$SPATIAL),
+    sce_history = sce_history_fn(sce_unfiltered, sce_qc_filter_genes, sce_custom_filter_genes,!!cfg$SPATIAL),
+    sce_history_plot = sce_history_plot_fn(sce_history,!!cfg$SPATIAL),
 
     ## -- Create plots of filters.
     sce_qc_filter_genes_plotlist = list(
@@ -224,14 +224,13 @@ get_norm_clustering_subplan <- function(cfg, cfg_pipeline, cfg_main) {
     ## -- Find highly variable genes (HVGs) and assign them to SCE object.
     ## -- If specified, remove cell-cycle related genes prior to HVG selection.
     sce_norm_hvg = target(
-      sce_norm_hvg_fn.new(
+      sce_norm_hvg_fn(
         sce_norm,
         hvg_selection_value = !!cfg$HVG_SELECTION_VALUE,
         hvg_metric = !!cfg$HVG_METRIC,
         hvg_selection = !!cfg$HVG_SELECTION,
         hvg_rm_cc_genes = !!cfg$HVG_RM_CC_GENES,
         spatial = !!cfg$SPATIAL,
-        tissue_positions = !!cfg$SPATIAL_LOCKS,
         hvg_cc_genes_var_expl_threshold = !!cfg$HVG_CC_GENES_VAR_EXPL_THRESHOLD,
         BPPARAM = ignore(BiocParallel::bpparam())
       ),

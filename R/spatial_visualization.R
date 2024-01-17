@@ -151,13 +151,13 @@ visualized_spots = function(sce,
 
 
   ## adjust theme settings
-  pl <- pl + ggplot2::theme(plot.title = element_text(hjust = 0.5),
-                            legend.title = element_blank(),
-                            legend.text = element_text(size = legend_text),
-                            axis.title = element_text(size = axis_title),
-                            axis.text = element_text(size = axis_text),
-                            panel.grid = element_blank(),
-                            panel.background = element_rect(fill = background_color))
+  pl <- pl + ggplot2::theme(plot.title = ggplot2::element_text(hjust = 0.5),
+                            legend.title = ggplot2::element_blank(),
+                            legend.text = ggplot2::element_text(size = legend_text),
+                            axis.title = ggplot2::element_text(size = axis_title),
+                            axis.text = ggplot2::element_text(size = axis_text),
+                            panel.grid = ggplot2::element_blank(),
+                            panel.background = ggplot2::element_rect(fill = background_color))
 
   ## change symbol size of legend
   if(color_as_factor == TRUE) {

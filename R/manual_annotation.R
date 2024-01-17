@@ -191,7 +191,7 @@ meta_heatmap_ploting <- function(sce,clus_cor_method="pearson",clus_cluster_meth
   cell_metadata_cols = colnames(cell_metadata)
 
   workdt = cell_metadata[, lapply(.SD, mean), by = clustering, .SDcols = cell_types]
-  workdt = as.data.table(workdt)
+  workdt = data.table::as.data.table(workdt)
   page_enrichment = data.table::melt.data.table(workdt, measure.vars = cell_types)
   #return(page_enrichment)
   ########################################
@@ -243,7 +243,7 @@ meta_heatmap_ploting <- function(sce,clus_cor_method="pearson",clus_cluster_meth
   metaDT[, variable := factor(get('variable'), levels = values_sort_names)]
   #print(head(metaDT))
   pl <- ggplot2::ggplot()
-  pl <- pl + ggplot2::geom_tile(data = metaDT, ggplot2::aes_string(x = 'factor_column', y = 'variable', fill = 'value'), color = 'black')
+  pl <- pl + ggplot2::geom_tile(data = metaDT, ggplot2::aes(x = factor_column, y = variable, fill = value), color = 'black')
   pl <- pl + ggplot2::scale_fill_gradient2(low = low, mid = mid, high = high, midpoint = gradient_midpoint)
   pl <- pl + ggplot2::theme_classic()
   pl <- pl + ggplot2::theme(axis.text.x = ggplot2::element_text(size = x_text_size, angle = x_text_angle, hjust = 1, vjust = 1),
