@@ -849,8 +849,10 @@ generate_markers_results_section <- function(df, group_var, dt_order_by, base_ou
 
   df_list <- dplyr::group_split(df) %>%
     set_names(dplyr::group_keys(df) %>% dplyr::pull(!!sym(group_var)))
-
-  df_list <- df_list[as.character(order(names(df_list)))]
+    
+  if (!any(names(df_list) %in% c("binom", "t", "wilcox"))) {
+    df_list <- df_list[as.character(order(names(df_list)))]
+  }
 
   z <- lapply(names(df_list), function(name) {
     md_header(name, 4)
