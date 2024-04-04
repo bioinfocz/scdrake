@@ -20,7 +20,7 @@ scran_normalization(
 sctransform_normalization(
   sce,
   vars_to_regress = NULL,
-  n_hvg = 3000L,
+  n_hvg = nrow(sce),
   method = "glmGamPoi",
   seed = 1L,
   verbose = TRUE,

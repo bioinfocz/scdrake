@@ -8,7 +8,7 @@ dimred_plots_clustering_fn(
   sce_dimred,
   dimred_names,
   cluster_df,
-  spatial = TRUE,
+  spatial = FALSE,
   out_dir = NULL
 )
 }

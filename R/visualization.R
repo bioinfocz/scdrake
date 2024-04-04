@@ -318,7 +318,7 @@ save_selected_markers_plots_files <- function(selected_markers_plots, selected_m
 #' @export
 dimred_plots_clustering_fn <- function(sce_dimred,
                                        dimred_names,
-                                       cluster_df,spatial=TRUE,
+                                       cluster_df,spatial=FALSE,
                                        out_dir = NULL) {
   cluster_df <- tidyr::crossing(cluster_df, dimred_name = dimred_names)
 
@@ -515,7 +515,7 @@ dimred_plots_cell_annotation_params_df_fn <- function(dimred_names, cell_annotat
 #'
 #' @concept sce_visualization
 #' @export
-dimred_plots_from_params_df <- function(sce_dimred, dimred_plots_params_df,spatial=TRUE) {
+dimred_plots_from_params_df <- function(sce_dimred, dimred_plots_params_df,spatial=FALSE) {
   res <- lapply_rows(dimred_plots_params_df, FUN = function(par) {
     assert_that_(
       par$source_column %in% colnames(colData(sce_dimred)),
@@ -548,7 +548,7 @@ dimred_plots_from_params_df <- function(sce_dimred, dimred_plots_params_df,spati
       text_by = show_cluster_labels
     )
 
-    if (spatial) {
+    if (spatial==TRUE) {
       if (par$source_column %in% c("phase")){
         variant = length(unique(colData(sce_dimred)[[par$source_column]]))
         palete = c(scales::hue_pal()(variant))

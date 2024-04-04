@@ -265,7 +265,7 @@ sce_norm_hvg_fn <- function(sce_norm,
                             hvg_selection_value,
                             hvg_metric = c("gene_var", "gene_cv2", "sctransform"),
                             hvg_selection = c("top", "significance", "threshold"),
-                            hvg_rm_cc_genes = FALSE, spatial= TRUE,
+                            hvg_rm_cc_genes = FALSE, spatial= FALSE,
                             hvg_cc_genes_var_expl_threshold = 5,
                             BSPARAM = BiocSingular::IrlbaParam(),
                             BPPARAM = BiocParallel::SerialParam()) {
@@ -311,7 +311,7 @@ sce_norm_hvg_fn <- function(sce_norm,
     hvg_selection = hvg_selection
   )
   ##########################add spatial posibility
-  if (spatial) {
+  if (spatial==TRUE) {
     
     sce_norm_giotto <- createGiotto_fn(sce_norm,annotation = FALSE,selected_clustering = NULL)
     sce_norm_giotto_network <- Giotto::createSpatialNetwork(gobject = sce_norm_giotto,method = "Delaunay",

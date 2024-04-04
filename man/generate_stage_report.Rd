@@ -80,6 +80,7 @@ This is a list of Rmd files currently bundled with the \code{scdrake} package:
 #>     |   +-- cell_filtering_custom.Rmd
 #>     |   +-- cell_filtering_qc.Rmd
 #>     |   +-- empty_droplets.Rmd
+#>     |   +-- empty_droplets_spat.Rmd
 #>     |   +-- gene_filtering_custom.Rmd
 #>     |   \\-- gene_filtering_qc.Rmd
 #>     +-- 01_input_qc_spatial.Rmd

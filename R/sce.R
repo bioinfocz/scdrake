@@ -58,7 +58,7 @@ sce_add_colData <- function(sce, df, replace = TRUE) {
 #' @param spatial_locs A file contating spatial coordiantes
 #' @param spatial Logical vector If true, add spatial coordinates
 sce_add_spatial_colData <- function(sce, spatial_locs, spatial=FALSE) {
-  if(spatial) {
+  if(spatial==TRUE) {
 
     if(!file.exists(spatial_locs)) stop('path to spatial locations does not exist')
     spatial_locs = readr::read_csv(file = spatial_locs)
@@ -78,7 +78,7 @@ sce_add_spatial_colData <- function(sce, spatial_locs, spatial=FALSE) {
 
     colData(sce) <- merge(colData(sce), spatial_locs, by = "Barcode",all.x=TRUE)
     sce <- sce[, !is.na(sce$Dims_x)]
-    print(sce)
+    #print(sce)
     sce <- scdrake::sce_add_metadata(sce,spatial_locs = colData(sce)[,c("Barcode","Dims_x","Dims_y")],
                                      replace=FALSE)
     #sce <- list(spatial_locs = colData(sce)[,c("Dims_x","Dims_y")])
@@ -87,6 +87,7 @@ sce_add_spatial_colData <- function(sce, spatial_locs, spatial=FALSE) {
     return(sce)
   }
   else {
+    sce <- sce
     return(sce)
   }
 }

@@ -10,7 +10,7 @@ sce_norm_hvg_fn(
   hvg_metric = c("gene_var", "gene_cv2", "sctransform"),
   hvg_selection = c("top", "significance", "threshold"),
   hvg_rm_cc_genes = FALSE,
-  spatial = TRUE,
+  spatial = FALSE,
   hvg_cc_genes_var_expl_threshold = 5,
   BSPARAM = BiocSingular::IrlbaParam(),
   BPPARAM = BiocParallel::SerialParam()
