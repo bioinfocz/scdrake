@@ -577,6 +577,9 @@ dimred_plots_from_params_df <- function(sce_dimred, dimred_plots_params_df) {
 #' @concept sce_visualization
 #' @export
 plot_clustree <- function(cluster_list, params, prefix, title = deparse(substitute(cluster_list)), edge_arrow = FALSE, highlight_core = TRUE, ...) {
+  cluster_list <- unique(cluster_list)
+  params <- unique(params)
+
   assert_that_(length(cluster_list) == length(params))
 
   clustree_list <- cluster_list %>%
