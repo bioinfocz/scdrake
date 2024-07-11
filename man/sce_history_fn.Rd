@@ -4,7 +4,12 @@
 \alias{sce_history_fn}
 \title{Create a tibble with history of cell and gene filtering.}
 \usage{
-sce_history_fn(sce_unfiltered, sce_qc_filter_genes, sce_custom_filter_genes)
+sce_history_fn(
+  sce_unfiltered,
+  sce_qc_filter_genes,
+  sce_custom_filter_genes,
+  spatial = FALSE
+)
 }
 \arguments{
 \item{sce_unfiltered}{(\emph{input target}) A \code{SingleCellExperiment} object.}
@@ -12,6 +17,8 @@ sce_history_fn(sce_unfiltered, sce_qc_filter_genes, sce_custom_filter_genes)
 \item{sce_qc_filter_genes}{(\emph{input target}) A \code{SingleCellExperiment} object.}
 
 \item{sce_custom_filter_genes}{(\emph{input target}) A \code{SingleCellExperiment} object.}
+
+\item{spatial}{A logical vector: \code{TRUE} for spatial transcriptomics dataset.}
 }
 \value{
 A tibble. \emph{Output target}: \code{sce_history}

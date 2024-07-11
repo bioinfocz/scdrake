@@ -13,6 +13,7 @@ get_clustering_subplan(
   dimred_plots_out_dir,
   other_plots_out_dir,
   is_integration,
+  spatial,
   seed = 1
 )
 }
@@ -28,6 +29,8 @@ get_clustering_subplan(
 \item{dimred_plots_out_dir, other_plots_out_dir}{A character scalar: path to output directory to save plots.}
 
 \item{is_integration}{A logical scalar: if \code{TRUE}, clustering results will be named with \verb{cluster_int_*} prefix.}
+
+\item{spatial}{A logical scalar: if \code{TRUE}, enabling pseudotissue spatial visualization for spatial transcriptomics datasets.}
 
 \item{seed}{An integer scalar: random seed for SC3.}
 }

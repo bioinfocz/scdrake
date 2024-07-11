@@ -6,6 +6,12 @@ INPUT_DATA:
   target_name: "target_name"
 
 INPUT_QC_REPORT_RMD_FILE: "Rmd/single_sample/01_input_qc.Rmd"
+#INPUT_QC_REPORT_RMD_FILE: "Rmd/single_saple/01_input_qc_spatial.Rmd"
+###############################################################################
+
+### Spatial experiment ########################################################
+SPATIAL: False
+SPATIAL_LOCKS: null
 ###############################################################################
 
 ### Subset input data (if SingleCellExperiment object is imported) ############

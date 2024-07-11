@@ -293,6 +293,7 @@ get_clustering_sc3_subplan <- function(sce_target_name, cluster_sc3_enabled, clu
 #' @param report_dimred_names A character vector: dimreds to use for plotting clustering results.
 #' @param dimred_plots_out_dir,other_plots_out_dir A character scalar: path to output directory to save plots.
 #' @param is_integration A logical scalar: if `TRUE`, clustering results will be named with `cluster_int_*` prefix.
+#' @param spatial A logical scalar: if `TRUE`, enabling pseudotissue spatial visualization for spatial transcriptomics datasets.
 #' @param seed An integer scalar: random seed for SC3.
 #' @return A combined [drake::drake_plan()] from:
 #'
@@ -310,13 +311,13 @@ get_clustering_subplan <- function(cfg,
                                    dimred_plots_out_dir,
                                    other_plots_out_dir,
                                    is_integration,
+                                   spatial,
                                    seed = 1) {
   any_clustering_enabled <- any(
     cfg$CLUSTER_GRAPH_LOUVAIN_ENABLED, cfg$CLUSTER_GRAPH_WALKTRAP_ENABLED, cfg$CLUSTER_GRAPH_LEIDEN_ENABLED,
     cfg$CLUSTER_KMEANS_K_ENABLED, cfg$CLUSTER_KMEANS_KBEST_ENABLED,
     cfg$CLUSTER_SC3_ENABLED
   )
-
   plan_clustering_graph <- get_clustering_graph_subplan(
     sce_target_name = sce_clustering_target_name,
     dimred = dimred,
@@ -367,6 +368,7 @@ get_clustering_subplan <- function(cfg,
           !!sym(sce_dimred_plots_target_name),
           dimred_names = !!report_dimred_names,
           cluster_df = dplyr::select(clusters_all_df, -data),
+          spatial = !!spatial,
           out_dir = !!dimred_plots_out_dir
         ),
 

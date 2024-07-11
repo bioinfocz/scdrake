@@ -245,6 +245,7 @@ sctransform_normalization <- function(sce,
 #'   `hvg_cc_genes_var_expl_threshold` prior to HVG selection.
 #' @param hvg_cc_genes_var_expl_threshold A numeric scalar: threshold for variance explained.
 #'   Genes exceeding this threshold will be marked as CC-related.
+#' @param spatial A logical scalar: if `TRUE`, add spatially variable genes extension 
 #' @inheritParams bsparam_param
 #' @inheritParams bpparam_param
 #' @return A modified `sce_norm` object with added HVG data in `metadata()`.
@@ -266,6 +267,7 @@ sce_norm_hvg_fn <- function(sce_norm,
                             hvg_selection = c("top", "significance", "threshold"),
                             hvg_rm_cc_genes = FALSE,
                             hvg_cc_genes_var_expl_threshold = 5,
+                            spatial = FALSE,
                             BSPARAM = BiocSingular::IrlbaParam(),
                             BPPARAM = BiocParallel::SerialParam()) {
   hvg_metric <- arg_match(hvg_metric)
@@ -309,7 +311,27 @@ sce_norm_hvg_fn <- function(sce_norm,
     hvg_metric = hvg_metric,
     hvg_selection = hvg_selection
   )
-
+  if (spatial) {
+    
+    seu_sce_norm <- create_seu_for_heatmaps(sce_norm)
+    coord <- seu_sce_norm@meta.data[,c("Dims_x","Dims_y")]
+    colnames(coord) <- c("imagerow","imagecol")
+    #sfs from cfg file or some dummy ones? dummy could work...
+    sfs <- Seurat::scalefactors(spot = 230.6399514627273, fiducial =372.5722292859441, hires = 0.058580592, lowres = 0.017574178)
+    seu_sce_norm@images$slice1 =  new(
+      Class = 'VisiumV1',
+      assay = "RNA",
+      key = "slice1_",
+      coordinates = coord,
+      scale.factors = sfs
+    )
+    seu_sce_norm <- Seurat::FindSpatiallyVariableFeatures(seu_sce_norm, assay = "RNA",
+                                                          selection.method = "moransi",nfeatures=hvg_selection_value)
+    svg_ids <- Seurat::SVFInfo(seu_sce_norm,selection.method = "moransi",)
+    svg_ids <- rownames(result[result$moransi.spatially.variable=="TRUE",])
+    
+    hvg_ids <- unique(c(hvg_ids,svg_ids))
+  }
   if (length(hvg_ids) <= 100) {
     cli_alert_warning("Found a small number of HVGs ({length(hvg_ids)}). This may cause problems in downstream tasks, e.g. PCA.")
   }

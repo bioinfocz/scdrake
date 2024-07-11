@@ -8,6 +8,7 @@ dimred_plots_clustering_fn(
   sce_dimred,
   dimred_names,
   cluster_df,
+  spatial = FALSE,
   out_dir = NULL
 )
 }
@@ -17,6 +18,8 @@ dimred_plots_clustering_fn(
 \item{dimred_names}{A character vector: dimred names to use for plotting.}
 
 \item{cluster_df}{A tibble.}
+
+\item{spatial}{A logical vector, TRUE for enable pseudotissue visualization for spatial transcriptomics datasets}
 
 \item{out_dir}{A character scalar: output directory in which PDF and PNG files will be saved.}
 }

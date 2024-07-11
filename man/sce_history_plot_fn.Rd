@@ -4,10 +4,12 @@
 \alias{sce_history_plot_fn}
 \title{Plot history of cell and gene filtering.}
 \usage{
-sce_history_plot_fn(sce_history)
+sce_history_plot_fn(sce_history, spatial = FALSE)
 }
 \arguments{
 \item{sce_history}{(\emph{input target}) A tibble.}
+
+\item{spatial}{A logical vector: \code{TRUE} for spatial transcriptomics dataset.}
 }
 \value{
 A \code{patchwork} object. \emph{Output target}: \code{sce_history_plot}

@@ -11,6 +11,7 @@ sce_norm_hvg_fn(
   hvg_selection = c("top", "significance", "threshold"),
   hvg_rm_cc_genes = FALSE,
   hvg_cc_genes_var_expl_threshold = 5,
+  spatial = FALSE,
   BSPARAM = BiocSingular::IrlbaParam(),
   BPPARAM = BiocParallel::SerialParam()
 )
@@ -25,6 +26,8 @@ sce_norm_hvg_fn(
 
 \item{hvg_cc_genes_var_expl_threshold}{A numeric scalar: threshold for variance explained.
 Genes exceeding this threshold will be marked as CC-related.}
+
+\item{spatial}{A logical scalar: if \code{TRUE}, add spatially variable genes extension}
 
 \item{BSPARAM}{A \link[BiocSingular:BiocSingularParam]{BiocSingular::BiocSingularParam} object.}
 

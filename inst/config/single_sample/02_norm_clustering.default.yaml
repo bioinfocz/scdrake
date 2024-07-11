@@ -8,6 +8,10 @@ SCT_VARS_TO_REGRESS: null
 SCT_N_HVG: 3000
 ###############################################################################
 
+### Spatial extension
+SPATIAL: False
+###############################################################################
+
 ### Highly variable genes (HVGs) selection ####################################
 HVG_METRIC: "gene_var"
 HVG_SELECTION: "top"
@@ -96,6 +100,16 @@ CELL_ANNOTATION_SOURCES_DEFAULTS:
 ### Cell grouping assignment ##################################################
 ADDITIONAL_CELL_DATA_FILE: null
 CELL_GROUPINGS: null
+###############################################################################
+
+### Manual cell annotation signatures #########################################
+MANUAL_ANNOTATION: False
+ANNOTATION_MARKERS: null
+SCALE_ANNOTATION: False
+OVERLAP: 5
+ANNOTATION_CLUSTERING: null
+SHOW_VALUE: "value"
+MAKE_CELL_PLOT: False
 ###############################################################################
 
 ### Dimensionality reduction plots ############################################
