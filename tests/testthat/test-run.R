@@ -14,9 +14,9 @@ withr::local_options(list(
 init_project(project_dir, use_rstudio = FALSE, ask = FALSE)
 
 test_that("single-sample pipeline is prepared for run", {
-  expect_true(run_single_sample(.dry = TRUE))
+  expect_true(run_single_sample_r(.dry = TRUE))
 })
 
 test_that("integration pipeline is prepared for run", {
-  expect_true(run_integration(.dry = TRUE))
+  expect_true(run_integration_r(.dry = TRUE))
 })
