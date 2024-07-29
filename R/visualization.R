@@ -587,12 +587,6 @@ plot_clustree <- function(cluster_list, params, prefix, title = deparse(substitu
     set_names(glue("{prefix}{params}")) %>%
     purrr::map(as.integer)
 
-  # if (length(params) == 1) {
-  #   title <- glue("{title} ({prefix} {params})")
-  # } else {
-  #   title <- glue("{title} ({prefix} {params[1]}-{params[length(params)]})")
-  # }
-
   clustree(tibble::as_tibble(clustree_list), prefix = prefix, edge_arrow = edge_arrow, highlight_core = highlight_core) +
     ggplot2::ggtitle(title)
 }
