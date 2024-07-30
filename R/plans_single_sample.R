@@ -402,12 +402,26 @@ get_norm_clustering_subplan <- function(cfg, cfg_pipeline, cfg_main) {
   if (cfg$MANUAL_ANNOTATION) {
     plan_manual_annotation <- drake::drake_plan(
       signature_matrix = create_signature_matrix_fn(!!cfg$ANNOTATION_MARKERS),
-      sce_annotation_enrichment = run_page_man_annotation(signature_matrix,sce = sce_final_norm_clustering,scale = !!cfg$SCALE_ANNOTATION,
-                                                      overlap = !!cfg$OVERLAP,values="logcounts"),
-      annotation_metadata = calculate_metadata(sce = sce_final_norm_clustering,
-                                               enrichment = sce_annotation_enrichment,clustering = !!cfg$ANNOTATION_CLUSTERING),
-      plot_annotation = meta_heatmap_ploting(annotation_metadata,clustering = !!cfg$ANNOTATION_CLUSTERING,show_value=!!cfg$SHOW_VALUE,
-                                             out_dir = !!cfg$NORM_CLUSTERING_OTHER_PLOTS_OUT_DIR,spatial=!!cfg$SPATIAL,make_cell_plot = !!cfg$MAKE_CELL_PLOT)
+      sce_annotation_enrichment = run_page_man_annotation(
+        signature_matrix,
+        sce = sce_final_norm_clustering,
+        scale = !!cfg$SCALE_ANNOTATION,
+        overlap = !!cfg$OVERLAP,
+        values = "logcounts"
+      ),
+      annotation_metadata = calculate_metadata(
+        sce = sce_final_norm_clustering,
+        enrichment = sce_annotation_enrichment,
+        clustering = !!cfg$ANNOTATION_CLUSTERING
+      ),
+      plot_annotation = meta_heatmap_ploting(
+        annotation_metadata,
+        clustering = !!cfg$ANNOTATION_CLUSTERING,
+        show_value = !!cfg$SHOW_VALUE,
+        out_dir = !!cfg$NORM_CLUSTERING_OTHER_PLOTS_OUT_DIR,
+        spatial = !!cfg$SPATIAL,
+        make_cell_plot = !!cfg$MAKE_CELL_PLOT
+      )
     )
   } else {
     plan_manual_annotation <- drake::drake_plan(

@@ -57,12 +57,18 @@ sce_add_colData <- function(sce, df, replace = TRUE) {
 #' @param sce A `SingleCellExperiment` object.
 #' @param spatial_locs A file contating spatial coordiantes
 #' @param spatial Logical vector If true, add spatial coordinates
-sce_add_spatial_colData <- function(sce, spatial_locs, spatial=FALSE) {
-  if(spatial) {
-    
-    if(!file.exists(spatial_locs)) stop("path to spatial locations does not exist")
+sce_add_spatial_colData <- function(sce, spatial_locs, spatial = FALSE) {
+  if (spatial) {
+    if (!file.exists(spatial_locs))
+      stop("path to spatial locations does not exist")
     spatial_locs <- readr::read_csv(file = spatial_locs)
-    colnames(spatial_locs) <- c("Barcode","in_tissue","array_row","array_col","pixel_row","pixel_col")
+    colnames(spatial_locs) <-
+      c("Barcode",
+        "in_tissue",
+        "array_row",
+        "array_col",
+        "pixel_row",
+        "pixel_col")
     spatial_locs <- dplyr::filter(spatial_locs,  in_tissue == 1)
     #rownames(spatial_locs) <- spatial_locs[,1]
     # assert_that(
@@ -73,14 +79,19 @@ sce_add_spatial_colData <- function(sce, spatial_locs, spatial=FALSE) {
     ###try if in tissue! spatial_locs <- spatial_locs[spatial_locs$in_tissue == '1',]
     ## [, c(1,3,4)] > 3,4 coordinate of the spot in the array
     ## [, c(1,5,6)] > 5,6 the PIXEL coordinate of the center, 5 in row, 6 in column
-    spatial_locs <- spatial_locs[, c(1,3,4)]
-    colnames(spatial_locs) <- c("Barcode","Dims_x","Dims_y")
+    spatial_locs <- spatial_locs[, c(1, 3, 4)]
+    colnames(spatial_locs) <- c("Barcode", "Dims_x", "Dims_y")
     
-    colData(sce) <- merge(colData(sce), spatial_locs, by = "Barcode",all.x=TRUE)
+    colData(sce) <-
+      merge(colData(sce),
+            spatial_locs,
+            by = "Barcode",
+            all.x = TRUE)
     sce <- sce[, !is.na(sce$Dims_x)]
     #print(sce)
-    sce <- scdrake::sce_add_metadata(sce,spatial_locs = colData(sce)[,c("Barcode","Dims_x","Dims_y")],
-                                     replace=FALSE)
+    sce <-
+      scdrake::sce_add_metadata(sce, spatial_locs = colData(sce)[, c("Barcode", "Dims_x", "Dims_y")],
+                                replace = FALSE)
     #sce <- list(spatial_locs = colData(sce)[,c("Dims_x","Dims_y")])
     #SingleCellExperiment::coldata(sce) <- cbind(SingleCellExperiment::coldata(sce),spatial_locs,)
     colnames(sce) <- colData(sce)$Barcode
