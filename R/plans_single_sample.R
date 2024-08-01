@@ -420,6 +420,7 @@ get_norm_clustering_subplan <- function(cfg, cfg_pipeline, cfg_main) {
         show_value = !!cfg$SHOW_VALUE,
         out_dir = !!cfg$NORM_CLUSTERING_OTHER_PLOTS_OUT_DIR,
         spatial = !!cfg$SPATIAL,
+        dimred = !!cfg$HEATMAP_DIMRED,
         make_cell_plot = !!cfg$MAKE_CELL_PLOT
       )
     )

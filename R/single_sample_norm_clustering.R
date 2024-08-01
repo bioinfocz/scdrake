@@ -331,7 +331,7 @@ sce_norm_hvg_fn <- function(sce_norm,
       nfeatures = hvg_selection_value
     )
     svg_ids <- Seurat::SVFInfo(seu_sce_norm, selection.method = "moransi", )
-    svg_ids <- rownames(result[result$moransi.spatially.variable == "TRUE", ])
+    svg_ids <- rownames(svg_ids[svg_ids$moransi.spatially.variable == "TRUE", ])
 
     hvg_ids <- unique(c(hvg_ids, svg_ids))
   }

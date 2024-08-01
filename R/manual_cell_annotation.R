@@ -165,6 +165,7 @@ meta_heatmap_ploting <-
            mid = "white",
            high = "red",
            spatial = FALSE,
+           dimred = dimred,
            make_cell_plot = FALSE,
            out_dir = NULL) {
     cell_metadata <- metadata(sce)[["clustering_enrichment"]]
@@ -204,12 +205,14 @@ meta_heatmap_ploting <-
     metaDT <- metaDT %>%
       dplyr::group_by(variable) %>%
       dplyr::mutate(zscores_rescaled_per_gene = c(scales::rescale(zscores, to = c(-1, 1))))
-    # print(head(metaDT))
-    # Calculate means
-    testmain <- metaDT %>%
-      dplyr::group_by(variable, !!!rlang::syms(main_factor)) %>%
-      dplyr::summarise(mean_value = mean(value))
 
+    # Calculate means
+    main_factor <- clustering
+
+    testmain <- metaDT %>%
+      dplyr::group_by(variable, !!!rlang::syms(clustering)) %>%
+      dplyr::summarise(mean_value = mean(!!!rlang::syms(show_value)))
+    
     # Step 2: Define the dfunction
     dfunction <- function(d, col_name1, col_name2, value.var) {
       d %>%
@@ -217,12 +220,13 @@ meta_heatmap_ploting <-
     }
 
     # Step 3: Apply dfunction to testmain
-    testmain_matrix <- dfunction(d = testmain, col_name1 = variable, col_name2 = main_factor, value.var = mean_value)
+    testmain_matrix <- dfunction(d = testmain, col_name1 = variable, col_name2 = clustering, value.var = mean_value)
 
     testmain_mat <- as.matrix(testmain_matrix[, -1])
+
     rownames(testmain_mat) <- testmain_matrix$variable
     # for clusters
-    ## this part is ridiculusely redundant...it is just sorting rows and column based on hierarchic clustering!!!!
+    #
     cormatrix <- stats::cor(x = testmain_mat, method = clus_cor_method)
     cordist <- stats::as.dist(1 - cormatrix, diag = T, upper = T)
     corclus <- stats::hclust(d = cordist, method = clus_cluster_method)
@@ -252,7 +256,6 @@ meta_heatmap_ploting <-
     metaDT <- metaDT %>%
       dplyr::mutate(variable = as.character(variable)) # , levels = values_sort_names))
     ##
-    # print(head(metaDT))
 
     pl <- ggplot2::ggplot()
     pl <- pl + ggplot2::geom_tile(
@@ -327,7 +330,61 @@ meta_heatmap_ploting <-
       anot_plot_out_pdf_file = out_pdf_file,
       anot_plot_out_png_file = out_png_file
     )
-
+    
+    p <- plotReducedDim_mod(
+      sce = sce,
+      dimred = dimred,
+      colour_by = glue::glue("manual_annotation_{clustering}"),
+      text_by = glue::glue("manual_annotation_{clustering}"),
+      title = glue::glue("manual_annotation_{clustering}_dimred.pdf"),
+      use_default_ggplot_palette = TRUE,
+      legend_title = "Cluster"
+    )
+    
+    out_pdf_file <-
+      fs::path(out_dir,
+               glue::glue("manual_annotation_{clustering}_dimred.pdf"))
+    out_png_file <- out_pdf_file
+    fs::path_ext(out_png_file) <- "png"
+    pl <- tryCatch({
+      scdrake::save_pdf(list(p), out_pdf_file, stop_on_error = TRUE)
+      ggplot2::ggsave(
+        filename = out_png_file,
+        plot = p,
+        device = "png",
+        dpi = 300
+      )
+      pl
+    },
+    error = function(e) {
+      if (stringr::str_detect(e$message, "Viewport has zero dimension")) {
+        cli_alert_warning(
+          str_space(
+            "Error catched: 'Viewport has zero dimension(s)'.",
+            "There are probably too many levels and the legend doesn't fit into the plot.",
+            "Removing the legend before saving the plot image."
+          )
+        )
+        p <- p + theme(legend.position = "none")
+        scdrake::save_pdf(list(p), out_pdf_file)
+        ggplot2::ggsave(
+          filename = out_png_file,
+          plot = p,
+          device = "png",
+          dpi = 150
+        )
+        p
+      }   else {
+        cli::cli_abort(e$message)
+      }
+    })
+    dimred_par <- tibble::tibble(
+      title = as.character(glue::glue("manual_annotation_{clustering}_dimred.pdf")),
+      anot_plot = list(p),
+      anot_plot_out_pdf_file = out_pdf_file,
+      anot_plot_out_png_file = out_png_file
+    )
+    par <- rbind(par, dimred_par)
     if (spatial) {
       man_anot_plot <- visualized_spots(sce,
         cell_color = glue::glue("manual_annotation_{clustering}"),

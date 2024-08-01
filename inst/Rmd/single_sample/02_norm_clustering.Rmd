@@ -374,15 +374,16 @@ if (isTRUE(cfg$MANUAL_ANNOTATION)) {
 }
   cat("\n\n")
 if (isTRUE(cfg$SPATIAL)) {
-scdrake::create_a_link(href = drake::readd(plot_annotation)$anot_plot_out_pdf_file[2],text = "**Cell annotation plot**", href_rel_start = fs::path_dir(cfg$NORM_CLUSTERING_REPORT_HTML_FILE),do_cat = TRUE)  
+scdrake::create_a_link(href = drake::readd(plot_annotation)$anot_plot_out_pdf_file[3],text = "**Cell annotation plot**", href_rel_start = fs::path_dir(cfg$NORM_CLUSTERING_REPORT_HTML_FILE),do_cat = TRUE)  
  cat("\n\n")
- scdrake::create_a_link(href = drake::readd(plot_annotation)$anot_plot_out_pdf_file[3],text = "**Enrichment cells plot**", href_rel_start = fs::path_dir(cfg$NORM_CLUSTERING_REPORT_HTML_FILE),do_cat = TRUE)  
+ scdrake::create_a_link(href = drake::readd(plot_annotation)$anot_plot_out_pdf_file[4],text = "**Enrichment cells plot**", href_rel_start = fs::path_dir(cfg$NORM_CLUSTERING_REPORT_HTML_FILE),do_cat = TRUE)  
  cat("\n\n")
- 
-scdrake::create_img_link(drake::readd(plot_annotation)$anot_plot_out_pdf_file[1],img_src = drake::readd(plot_annotation)$anot_plot_out_png_file[1],img_width = "500px",href_rel_start = fs::path_dir(cfg$NORM_CLUSTERING_REPORT_HTML_FILE))
+} 
+scdrake::create_img_link(drake::readd(plot_annotation)$anot_plot_out_pdf_file[1],img_src = drake::readd(plot_annotation)$anot_plot_out_png_file[1],img_width = "450px",href_rel_start = fs::path_dir(cfg$NORM_CLUSTERING_REPORT_HTML_FILE),do_cat = TRUE)
 
 
-}
+scdrake::create_img_link(drake::readd(plot_annotation)$anot_plot_out_pdf_file[2],img_src = drake::readd(plot_annotation)$anot_plot_out_png_file[2],img_width = "450px",href_rel_start = fs::path_dir(cfg$NORM_CLUSTERING_REPORT_HTML_FILE),do_cat = TRUE)
+
 ```
 
 

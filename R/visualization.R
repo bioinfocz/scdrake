@@ -346,7 +346,7 @@ dimred_plots_clustering_fn <- function(sce_dimred,
       palete <- c(scales::hue_pal()(par$n_clusters))
       p_spat <- visualized_spots(sce_add_colData(sce_dimred, cell_data),
         cell_color = par$sce_column, color_as_factor = F,
-        point_shape = border, cell_color_code = palete, show_legend = F
+        point_shape = "border", cell_color_code = palete, show_legend = F
       )
       p <- cowplot::plot_grid(p, p_spat, ncol = 2, nrow = 1, rel_widths = c(1, 1.5))
     }
