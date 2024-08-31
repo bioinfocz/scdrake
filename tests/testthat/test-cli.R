@@ -1,4 +1,4 @@
-cli::cli_h1("{.file tests/testthat/test-run_cli.R}")
+cli::cli_h1("{.file tests/testthat/test-cli.R}")
 
 cli_dir <- fs::path(get_tmp_dir(), glue("scdrake-cli-bin-test-{get_random_strings(1, 10)}")) %>% fs::path_abs()
 withr::local_envvar(PATH = str_c(cli_dir, Sys.getenv("PATH"), sep = ":"))

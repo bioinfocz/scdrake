@@ -577,18 +577,15 @@ dimred_plots_from_params_df <- function(sce_dimred, dimred_plots_params_df) {
 #' @concept sce_visualization
 #' @export
 plot_clustree <- function(cluster_list, params, prefix, title = deparse(substitute(cluster_list)), edge_arrow = FALSE, highlight_core = TRUE, ...) {
+  cluster_list <- unique(cluster_list)
+  params <- unique(params)
+
   assert_that_(length(cluster_list) == length(params))
 
   clustree_list <- cluster_list %>%
     purrr::map(as.character) %>%
     set_names(glue("{prefix}{params}")) %>%
     purrr::map(as.integer)
-
-  # if (length(params) == 1) {
-  #   title <- glue("{title} ({prefix} {params})")
-  # } else {
-  #   title <- glue("{title} ({prefix} {params[1]}-{params[length(params)]})")
-  # }
 
   clustree(tibble::as_tibble(clustree_list), prefix = prefix, edge_arrow = edge_arrow, highlight_core = highlight_core) +
     ggplot2::ggtitle(title)
