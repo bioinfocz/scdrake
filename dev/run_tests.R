@@ -168,6 +168,6 @@ if (output_dir != "-") {
   cli::cli_alert_success("Writing {.file {out_file}}")
 }
 
-status <- dplyr::if_else(all(c(res_summary$failed, res_summary$error == 0)), 0, 1)
+status <- dplyr::if_else(all(c(res_summary$failed, res_summary$error) == 0), 0, 1)
 cli::cli_alert_info("Exiting with status {.val {status}}")
 quit(save = "no", status = status)
