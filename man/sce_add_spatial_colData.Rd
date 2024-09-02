@@ -16,3 +16,4 @@ sce_add_spatial_colData(sce, spatial_locs, spatial = FALSE)
 \description{
 Append new columns with spatial relevance to \code{colData} of a \code{SingleCellExperiment} object.
 }
+\concept{spatial_sce}

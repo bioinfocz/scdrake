@@ -57,6 +57,7 @@ sce_add_colData <- function(sce, df, replace = TRUE) {
 #' @param sce A `SingleCellExperiment` object.
 #' @param spatial_locs A file contating spatial coordiantes
 #' @param spatial Logical vector If true, add spatial coordinates
+#' @concept spatial_sce
 sce_add_spatial_colData <- function(sce, spatial_locs, spatial = FALSE) {
   if (spatial) {
     if (!file.exists(spatial_locs))

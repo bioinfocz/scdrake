@@ -22,6 +22,7 @@ meta_heatmap_ploting(
   mid = "white",
   high = "red",
   spatial = FALSE,
+  dimred = dimred,
   make_cell_plot = FALSE,
   out_dir = NULL
 )
