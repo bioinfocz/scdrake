@@ -51,6 +51,48 @@ the team agrees that it's needed. If you've found a bug, please file an issue th
 - We use [testthat](https://cran.r-project.org/package=testthat) for unit tests.
   Contributions with test cases included are easier to accept.
 
+## Testing
+
+Important (but not all) parts of `scdrake` are covered by [testthat](https://testthat.r-lib.org/) unit tests.
+During the CI workflow, lighter of them are run automatically after the Docker image is built.
+
+Tests are heavily controlled by environment variables. Those are parsed in `tests/testthat/setup.R`
+and displayed on the beginning of testing. To ease the manipulation with envvars,
+there is a wrapper script `dev/run_tests.R`. It contains a CLI that transforms command line parameters
+to envvars used in tests. See `$ Rscript dev/run_tests.R` for the list of CLI parameters and
+at the same time, a list of envvars for tests.
+
+It's also possible to run tests from within your R session, using temporary envvars:
+
+```r
+devtools::load_all()
+withr::with_envvar(
+  c("SCDRAKE_TEST_RUN_PIPELINE_VIGNETTES = "TRUE""),
+  devtools::test(filter = "vignettes")
+)
+```
+
+### End-to-end (e2e) tests
+
+In case you make bigger changes, a fuller testing is very much recommended.
+This is covered by several end-to-end tests in `tests/testthat/test-run_pipeline.R` and
+`tests/testthat/test-run_pipeline_vignettes.R`.
+These tests are computationally demanding and cannot be run in the CI.
+
+The second thing is that even though e2e tests can succeed, there is no actual validation
+of their outputs. Thus, it's needed to manually inspect at least the produced reports.
+For this purpose, a persistent output directory can be set in `dev/run_tests.R`.
+
+You can use this short snippet to run e2e tests with preserved outputs:
+
+```bash
+docker exec -it -u rstudio -w /home/rstudio/scdrake <container_name> \
+  r --interactive -L /usr/local/lib/R/site-library -t dev/run_tests.R \
+  --no-test-single_sample-full-sct \
+  --output-dir /home/rstudio/shared/test_outputs \
+  --output-dir-pipeline-tests /home/rstudio/shared/test_outputs/pipeline_outputs
+```
+
 ## Code of Conduct
 
 Please note that the `{scdrake}` project is released with a
