@@ -127,12 +127,12 @@ visualized_spots <- function(sce,
 
   ## adjust theme settings
   pl <- pl + ggplot2::theme(
-    plot.title = element_text(hjust = 0.5),
-    legend.title = element_blank(),
-    legend.text = element_text(size = legend_text),
-    axis.title = element_text(size = axis_title),
-    axis.text = element_text(size = axis_text),
-    panel.grid = element_blank(),
+    plot.title = ggplot2::element_text(hjust = 0.5),
+    legend.title = ggplot2::element_blank(),
+    legend.text = ggplot2::element_text(size = legend_text),
+    axis.title = ggplot2::element_text(size = axis_title),
+    axis.text = ggplot2::element_text(size = axis_text),
+    panel.grid = ggplot2::element_blank(),
     panel.background = ggplot2::element_rect(fill = background_color)
   )
 
@@ -140,10 +140,10 @@ visualized_spots <- function(sce,
   if (color_as_factor == TRUE) {
     if (point_shape == "border") {
       pl <-
-        pl + guides(fill = ggplot2::guide_legend(override.aes = list(size = legend_symbol_size)))
+        pl + ggplot2::guides(fill = ggplot2::guide_legend(override.aes = list(size = legend_symbol_size)))
     } else if (point_shape == "no_border") {
       pl <-
-        pl + guides(color = ggplot2::guide_legend(override.aes = list(size = legend_symbol_size)))
+        pl + ggplot2::guides(color = ggplot2::guide_legend(override.aes = list(size = legend_symbol_size)))
     }
   }
 
@@ -650,7 +650,7 @@ spatGenePlot2Dsce <- function(sce,
           mid = cell_color_gradient[[2]],
           high = cell_color_gradient[[3]],
           midpoint = gradient_midpoint,
-          guide = guide_colorbar(title = "")
+          guide = ggplot2::guide_colorbar(title = "")
         )
       pl <-
         pl + ggplot2::labs(x = "coord x", y = "coord y", title = gene)
@@ -704,7 +704,7 @@ spatGenePlot2Dsce <- function(sce,
           mid = cell_color_gradient[[2]],
           high = cell_color_gradient[[3]],
           midpoint = gradient_midpoint,
-          guide = guide_colorbar(title = "")
+          guide = ggplot2::guide_colorbar(title = "")
         )
       pl <-
         pl + ggplot2::labs(x = "coord x", y = "coord y", title = gene)
@@ -713,13 +713,13 @@ spatGenePlot2Dsce <- function(sce,
     ## theme ##
     pl <-
       pl + ggplot2::theme(
-        plot.title = element_text(hjust = 0.5),
-        legend.title = element_blank(),
-        legend.text = element_text(size = legend_text),
-        axis.title = element_text(size = axis_title),
-        axis.text = element_text(size = axis_text),
-        panel.grid = element_blank(),
-        panel.background = element_rect(fill = background_color)
+        plot.title = ggplot2::element_text(hjust = 0.5),
+        legend.title = ggplot2::element_blank(),
+        legend.text = ggplot2::element_text(size = legend_text),
+        axis.title = ggplot2::element_text(size = axis_title),
+        axis.text = ggplot2::element_text(size = axis_text),
+        panel.grid = ggplot2::element_blank(),
+        panel.background = ggplot2::element_rect(fill = background_color)
       )
 
     savelist[[gene]] <- pl
