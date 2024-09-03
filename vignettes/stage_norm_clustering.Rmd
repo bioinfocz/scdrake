@@ -117,6 +117,21 @@ several `{scdrake}` functions.
 
 ***
 
+#### Spatial extention
+
+
+```yaml
+SPATIAL: False
+```
+
+**Type:** logical scalar
+
+If `True`, pipeline enables spatial extension.
+
+This option enables spatial extension as selection of spatially variable genes (SVGS), pseudo tissue visualization and other visualization options for manual annotation.
+
+***
+
 #### Normalization parameters
 
 ```yaml
@@ -211,6 +226,7 @@ A metric used to find HVGs. See <https://bioconductor.org/books/3.15/OSCA.basic/
 - `"sctransform"`: use HVGs selected by `SCTransform`.
   Only relevant when the `NORMALIZATION_TYPE` parameter is `"sctransform"`.
   You can adjust number of these HVGs by the `SCT_N_HVG` parameter.
+  When SPATIAL option is enabled, spatially variable genes (SVGs) are automaticaly calculated together with HVGs. That is done using Seurat::SVFInfo, selection method MoransI. A union of unique SVGs and HVGs is taking to further processing, see <https://www.biorxiv.org/content/10.1101/2021.08.27.457741v1> for more details. 
 
 ***
 
@@ -654,6 +670,97 @@ CELL_ANNOTATION_SOURCES:
 ```
 
 will override corresponding parameters in `TRAIN_PARAMS` in `CELL_ANNOTATION_SOURCES_DEFAULTS`.
+
+***
+
+***
+
+#### Manual cell annotation signatures
+
+```yaml
+MANUAL_ANNOTATION: False
+```
+
+**Type:** logical scalar
+
+Whether manual annotation is enabled. Manual annotation is based on expression profiles, markers are taken from user-defined file. Resulted annotation is stored in `annotation_metadata` target. Manual cell annotation implemented from Giotto package enrichment function, which is based on PAGE method from [Kim SY et al](https://bmcbioinformatics.biomedcentral.com/articles/10.1186/1471-2105-6-144).
+
+***
+
+```yaml
+ANNOTATION_MARKERS: Null
+```
+
+**Type:** logical scalar
+
+Path to user-define file contacting markers for each expected cell type. 
+Each column name is one cell type, in rows are gene markers. Example: 
+
+```
+Astrocytes,Endothelial,Neurons
+GFAP,PECAM1,SLC6A1
+SLC1A3,A2M,CHAT
+GLUL,,GAD2
+```
+
+***
+
+```yaml
+SCALE_ANNOTATION: False
+```
+
+**Type:** logical scalar
+
+Whether to scale gene profiles.
+
+***
+```yaml
+OVERLAP: 5
+```
+
+**Type:** numeric scalar
+
+Minimal overlap of genes in cell/cell in selected clusters, to assign cell type. 
+
+
+***
+```yaml
+ANNOTATION_CLUSTERING: "cluster_kmeans_k4"
+```
+
+**Type:** character scalar
+
+On which clustering (column of cell metadata) to perform annotation.
+
+***
+
+```yaml
+SHOW_VALUE: "value" (`"value"` | `"zscores"` | `"zscores_rescaled"`)
+```
+
+**Type:** character scalar
+
+Which value to show in resulting heatmap. 
+
+***
+
+```yaml
+MAKE_CELL_PLOT: False
+```
+
+**Type:** character scalar
+
+Only toghether with spatial option. Whether to show pseudo tissue cell plots with enrichment of annotation. 
+
+***
+
+```yaml
+HEATMAP_DIMRED: "umap"
+```
+
+**Type:** character scalar
+
+Which dimension reduction use to show result of manual annotation. 
 
 ***
 

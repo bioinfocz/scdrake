@@ -21,7 +21,8 @@ get_input_qc_subplan <- function(cfg, cfg_pipeline, cfg_main) {
     config_input_qc = !!cfg,
 
     ## -- Read raw Cell Ranger files.
-    sce_raw = sce_raw_fn(!!cfg$INPUT_DATA, input_data_subset = !!cfg$INPUT_DATA_SUBSET),
+    sce_orig = sce_raw_fn(!!cfg$INPUT_DATA, input_data_subset = !!cfg$INPUT_DATA_SUBSET),
+    sce_raw = sce_add_spatial_colData(sce_orig,!!cfg$SPATIAL_LOCKS,!!cfg$SPATIAL),
     sce_raw_info = save_object_info(sce_raw),
 
     ## -- Calculate barcode ranks (for knee plot).
@@ -104,8 +105,8 @@ get_input_qc_subplan <- function(cfg, cfg_pipeline, cfg_main) {
     sce_custom_filter_genes_info = save_object_info(sce_custom_filter_genes),
 
     ## -- Create a history of cell and gene filtering.
-    sce_history = sce_history_fn(sce_unfiltered, sce_qc_filter_genes, sce_custom_filter_genes),
-    sce_history_plot = sce_history_plot_fn(sce_history),
+    sce_history = sce_history_fn(sce_unfiltered, sce_qc_filter_genes, sce_custom_filter_genes,!!cfg$SPATIAL),
+    sce_history_plot = sce_history_plot_fn(sce_history,!!cfg$SPATIAL),
 
     ## -- Create plots of filters.
     sce_qc_filter_genes_plotlist = list(
@@ -230,6 +231,7 @@ get_norm_clustering_subplan <- function(cfg, cfg_pipeline, cfg_main) {
         hvg_selection = !!cfg$HVG_SELECTION,
         hvg_rm_cc_genes = !!cfg$HVG_RM_CC_GENES,
         hvg_cc_genes_var_expl_threshold = !!cfg$HVG_CC_GENES_VAR_EXPL_THRESHOLD,
+        spatial = !!cfg$SPATIAL,
         BPPARAM = ignore(BiocParallel::bpparam())
       ),
 
@@ -338,6 +340,7 @@ get_norm_clustering_subplan <- function(cfg, cfg_pipeline, cfg_main) {
     dimred_plots_out_dir = cfg$NORM_CLUSTERING_DIMRED_PLOTS_OUT_DIR,
     other_plots_out_dir = cfg$NORM_CLUSTERING_OTHER_PLOTS_OUT_DIR,
     is_integration = FALSE,
+    spatial = cfg$SPATIAL,
     seed = cfg_pipeline$SEED
   )
 
@@ -396,6 +399,39 @@ get_norm_clustering_subplan <- function(cfg, cfg_pipeline, cfg_main) {
       selected_markers_plots_files = NULL
     )
   }
+  if (cfg$MANUAL_ANNOTATION) {
+    plan_manual_annotation <- drake::drake_plan(
+      signature_matrix = create_signature_matrix_fn(!!cfg$ANNOTATION_MARKERS),
+      sce_annotation_enrichment = run_page_man_annotation(
+        signature_matrix,
+        sce = sce_final_norm_clustering,
+        scale = !!cfg$SCALE_ANNOTATION,
+        overlap = !!cfg$OVERLAP,
+        values = "logcounts"
+      ),
+      annotation_metadata = calculate_metadata(
+        sce = sce_final_norm_clustering,
+        enrichment = sce_annotation_enrichment,
+        clustering = !!cfg$ANNOTATION_CLUSTERING
+      ),
+      plot_annotation = meta_heatmap_ploting(
+        annotation_metadata,
+        clustering = !!cfg$ANNOTATION_CLUSTERING,
+        show_value = !!cfg$SHOW_VALUE,
+        out_dir = !!cfg$NORM_CLUSTERING_OTHER_PLOTS_OUT_DIR,
+        spatial = !!cfg$SPATIAL,
+        dimred = !!cfg$HEATMAP_DIMRED,
+        make_cell_plot = !!cfg$MAKE_CELL_PLOT
+      )
+    )
+  } else {
+    plan_manual_annotation <- drake::drake_plan(
+      signature_matrix = NULL,
+      annotation_enrichment = NULL,
+      annotation_metadata = NULL,
+      plot_annotation = NULL
+    )
+  }
 
-  drake::bind_plans(plan, plan_clustering, plan_cell_annotation, plan_dimred_plots_other_vars, plan_selected_markers)
+  drake::bind_plans(plan, plan_clustering, plan_cell_annotation, plan_dimred_plots_other_vars, plan_selected_markers,plan_manual_annotation)
 }

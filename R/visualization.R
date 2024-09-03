@@ -311,6 +311,7 @@ save_selected_markers_plots_files <- function(selected_markers_plots, selected_m
 #' @param sce_dimred A `SingleCellExperiment` object with computed dimreds specified in `dimred_names`.
 #' @param dimred_names A character vector: dimred names to use for plotting.
 #' @param cluster_df A tibble.
+#' @param spatial A logical vector, TRUE for enable pseudotissue visualization for spatial transcriptomics datasets
 #' @param out_dir A character scalar: output directory in which PDF and PNG files will be saved.
 #' @return A tibble. *Output target*: `dimred_plots_clustering`
 #'
@@ -319,15 +320,18 @@ save_selected_markers_plots_files <- function(selected_markers_plots, selected_m
 dimred_plots_clustering_fn <- function(sce_dimred,
                                        dimred_names,
                                        cluster_df,
+                                       spatial=FALSE,
                                        out_dir = NULL) {
   cluster_df <- tidyr::crossing(cluster_df, dimred_name = dimred_names)
-
+  
   res <- lapply_rows(cluster_df, FUN = function(par) {
     dimred_name <- par$dimred_name
     dimred_name_upper <- str_to_upper(dimred_name)
+    
     cell_data <- tibble::tibble(x = par$cell_membership)
+    print(cell_data)
     colnames(cell_data) <- par$sce_column
-
+    
     p <- plotReducedDim_mod(
       sce_add_colData(sce_dimred, cell_data),
       dimred = dimred_name,
@@ -338,7 +342,14 @@ dimred_plots_clustering_fn <- function(sce_dimred,
       use_default_ggplot_palette = TRUE,
       legend_title = "Cluster"
     )
-
+    if (spatial == TRUE) {
+      palete <- c(scales::hue_pal()(par$n_clusters))
+      p_spat <- visualized_spots(sce_add_colData(sce_dimred, cell_data),
+        cell_color = par$sce_column, color_as_factor = F,
+        point_shape = "border", cell_color_code = palete, show_legend = F
+      )
+      p <- cowplot::plot_grid(p, p_spat, ncol = 2, nrow = 1, rel_widths = c(1, 1.5))
+    }
     if (is_null(out_dir)) {
       out_pdf_file <- NA_character_
       out_png_file <- NA_character_
@@ -346,9 +357,9 @@ dimred_plots_clustering_fn <- function(sce_dimred,
       out_pdf_file <- fs::path(out_dir, glue("{par$sce_column}_{dimred_name}.pdf"))
       out_png_file <- out_pdf_file
       fs::path_ext(out_png_file) <- "png"
-
+      
       p <- tryCatch({
-        save_pdf(list(p), out_pdf_file, stop_on_error = TRUE)
+        save_pdf(list(p), out_pdf_file, stop_on_error = TRUE,width=10)
         ggplot2::ggsave(
           filename = out_png_file,
           plot = p,
@@ -356,38 +367,38 @@ dimred_plots_clustering_fn <- function(sce_dimred,
           dpi = 300
         )
         p
-        },
-
-        error = function(e) {
-          if (stringr::str_detect(e$message, "Viewport has zero dimension")) {
-            cli_alert_warning(str_space(
-              "Error catched: 'Viewport has zero dimension(s)'.",
-              "There are probably too many levels and the legend doesn't fit into the plot.",
-              "Removing the legend before saving the plot image."
-            ))
-            p <- p + theme(legend.position = "none")
-            save_pdf(list(p), out_pdf_file)
-            ggplot2::ggsave(
-              filename = out_png_file,
-              plot = p,
-              device = "png",
-              dpi = 150
-            )
-            p
-          } else {
-            cli_abort(e$message)
-          }
+      },
+      
+      error = function(e) {
+        if (stringr::str_detect(e$message, "Viewport has zero dimension")) {
+          cli_alert_warning(str_space(
+            "Error catched: 'Viewport has zero dimension(s)'.",
+            "There are probably too many levels and the legend doesn't fit into the plot.",
+            "Removing the legend before saving the plot image."
+          ))
+          p <- p + theme(legend.position = "none")
+          save_pdf(list(p), out_pdf_file)
+          ggplot2::ggsave(
+            filename = out_png_file,
+            plot = p,
+            device = "png",
+            dpi = 150
+          )
+          p
+        } else {
+          cli_abort(e$message)
         }
+      }
       )
     }
-
+    
     par$dimred_plot <- list(p)
     par$dimred_plot_out_pdf_file <- out_pdf_file
     par$dimred_plot_out_png_file <- out_png_file
-
+    
     par
   })
-
+  
   res
 }
 

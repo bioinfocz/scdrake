@@ -17,8 +17,13 @@ fs::dir_copy(
   system.file("config", package = "scdrake", mustWork = TRUE),
   fs::path(project_dir, "config")
 )
+fs::dir_copy(
+  system.file("Rmd", package = "scdrake", mustWork = TRUE),
+  fs::path(project_dir, "Rmd")
+)
 withr::local_dir(project_dir)
 update_configs()
+here::i_am("config/pipeline.yaml")
 
 test_that("single-sample plans can be generated", {
   cfg_pipeline <- load_pipeline_config()

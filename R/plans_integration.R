@@ -284,6 +284,7 @@ get_int_clustering_subplan <- function(cfg, cfg_pipeline, cfg_main) {
     dimred_plots_out_dir = cfg$INT_CLUSTERING_DIMRED_PLOTS_OUT_DIR,
     other_plots_out_dir = cfg$INT_CLUSTERING_OTHER_PLOTS_OUT_DIR,
     is_integration = TRUE,
+    spatial = FALSE,
     seed = cfg_pipeline$SEED
   )
 

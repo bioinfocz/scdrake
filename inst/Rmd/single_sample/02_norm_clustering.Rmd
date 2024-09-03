@@ -361,6 +361,32 @@ if (!is.null(cfg$CELL_ANNOTATION_SOURCES)) {
 }
 ```
 
+```{r, results = "asis"}
+if (isTRUE(cfg$MANUAL_ANNOTATION)) {
+ scdrake::md_header("Manual cell annotation", 1, extra = "{.tabset}")
+   scdrake::catn(
+    glue::glue("**Annotation was done for {cfg$ANNOTATION_CLUSTERING}**"))
+   cat("\n\n")
+  cat("For manual annotation we modified an implemented function from the Giotto package. The enrichment Z score is calculated by using method (PAGE) from Kim SY et al., BMC bioinformatics, 2005 as $$ Z = \frac{((Sm – mu)*m^\frac{1}{2})}{delta} $$. \n
+ For each gene in each spot/cell, mu is the fold change values versus the mean expression
+ and delta is the standard deviation. Sm is the mean fold change value of a specific marker gene set
+ and  m is the size of a given marker gene set.")
+}
+  cat("\n\n")
+if (isTRUE(cfg$SPATIAL)) {
+scdrake::create_a_link(href = drake::readd(plot_annotation)$anot_plot_out_pdf_file[3],text = "**Cell annotation plot**", href_rel_start = fs::path_dir(cfg$NORM_CLUSTERING_REPORT_HTML_FILE),do_cat = TRUE)  
+ cat("\n\n")
+ scdrake::create_a_link(href = drake::readd(plot_annotation)$anot_plot_out_pdf_file[4],text = "**Enrichment cells plot**", href_rel_start = fs::path_dir(cfg$NORM_CLUSTERING_REPORT_HTML_FILE),do_cat = TRUE)  
+ cat("\n\n")
+} 
+scdrake::create_img_link(drake::readd(plot_annotation)$anot_plot_out_pdf_file[1],img_src = drake::readd(plot_annotation)$anot_plot_out_png_file[1],img_width = "450px",href_rel_start = fs::path_dir(cfg$NORM_CLUSTERING_REPORT_HTML_FILE),do_cat = TRUE)
+
+
+scdrake::create_img_link(drake::readd(plot_annotation)$anot_plot_out_pdf_file[2],img_src = drake::readd(plot_annotation)$anot_plot_out_png_file[2],img_width = "450px",href_rel_start = fs::path_dir(cfg$NORM_CLUSTERING_REPORT_HTML_FILE),do_cat = TRUE)
+
+```
+
+
 <details>
   <summary class="config">Show input parameters</summary>
   <hr />

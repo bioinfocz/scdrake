@@ -120,7 +120,7 @@ INPUT_QC_REPORT_RMD_FILE: "Rmd/single_sample/01_input_qc.Rmd"
 
 **Type:** character scalar
 
-A path to RMarkdown file used for HTML report of this pipeline stage.
+A path to RMarkdown file used for HTML report of this pipeline stage. For spatial extention, the default RMarkdown file is `01_input_qc_spatial.Rmd`
 
 ***
 
@@ -140,6 +140,31 @@ INPUT_DATA_SUBSET:
 The imported data can be subsetted by a simple selection of values present in a column of cell metadata (`colData()`).
 In the example above, cells assigned to clusters `"3"` and `"4"` of the `cluster_kmeans_k6` columns will be kept.
 You can also negate the selection by specifying `negate: true`.
+
+***
+
+#### Spatial extention
+
+
+```yaml
+SPATIAL: False
+```
+
+**Type:** logical scalar
+
+If `True`, pipeline enables spatial extension.
+
+In the input_qc stage, the spatial extension consists only in enabling pseudo tissue visualization, and in adding coordinates (array_col and array_row from tissue_positions.csv) to the Cell Metadata. 
+
+***
+
+```yaml
+SPATIAL_LOCKS: Null
+```
+
+**Type:** Null or character scalar
+
+A path to tissue_position.csv from SpaceRanger spatial output folder used for adding coordinates (array_col and array_row) to Cell Metadata. Only void when SPATIAL is enabled.
 
 ***
 

@@ -19,7 +19,7 @@ repo:
     user: https://github.com/bioinfocz
 navbar:
   structure:
-    left:  [home, intro, scdrake_integration, pipeline_overview, faq, articles, reference, news]
+    left:  [home, intro, scdrake_integration, pipeline_overview, spatial, faq, articles, reference, news]
     right: [github]
   components:
     pipeline_overview:
@@ -28,6 +28,9 @@ navbar:
     scdrake_integration:
       text: Integration pipeline guide
       href: articles/scdrake_integration.html
+    spatial:
+      text: Spatial extention
+      href: articles/scdrake_spatial.html
     faq:
       text: FAQ & Howtos
       href: articles/scdrake_faq.html
@@ -49,6 +52,7 @@ articles:
     - scdrake_cli
     - scdrake_config
     - scdrake_envvars
+    - scdrake_spatial
 
   - title: General configs
     navbar: General configs
@@ -152,6 +156,9 @@ reference:
   - subtitle: Cell type annotation
   - contents:
     - has_concept("sc_cell_annotation")
+  - subtitle: Manual annotation
+  - contents:
+    - has_concept("manual_annotation")
   - subtitle: Cluster markers
   - contents:
     - has_concept("sc_cluster_markers")
@@ -171,10 +178,15 @@ reference:
   - subtitle: SingleCellExperiment object-related functions
   - contents:
     - has_concept("sc_sce")
+  - subtitle: SingleCellExperiment object-related spatial functions
+  - contents:
+    - has_concept("spatial_sce")
   - subtitle: Visualization
   - contents:
     - has_concept("sce_visualization")
-
+  - subtitle: Spatial visualization
+  - contents:
+    - has_concept("spatial_visualization")
   - title: Misc functions
   - subtitle: HTML
   - contents:
