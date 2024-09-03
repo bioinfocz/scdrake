@@ -46,6 +46,9 @@
   <a class="nav-link" href="../articles/pipeline_overview.html">Pipeline overview</a>
 </li>
 <li class="nav-item">
+  <a class="nav-link" href="../articles/scdrake_spatial.html">Spatial extention</a>
+</li>
+<li class="nav-item">
   <a class="nav-link" href="../articles/scdrake_faq.html">FAQ &amp; Howtos</a>
 </li>
 <li class="nav-item dropdown">
@@ -64,6 +67,7 @@
     <a class="dropdown-item" href="../articles/scdrake_cli.html">Command line interface</a>
     <a class="dropdown-item" href="../articles/scdrake_config.html">scdrake config internals</a>
     <a class="dropdown-item" href="../articles/scdrake_envvars.html">Environment variables</a>
+    <a class="dropdown-item" href="../articles/scdrake_spatial.html">Spatial extention</a>
     <div class="dropdown-divider"></div>
     <h6 class="dropdown-header" data-toc-skip>General configs</h6>
     <a class="dropdown-item" href="../articles/config_pipeline.html">Pipeline config</a>
@@ -129,6 +133,7 @@
 <span>  <span class="va">sce_dimred</span>,</span>
 <span>  <span class="va">dimred_names</span>,</span>
 <span>  <span class="va">cluster_df</span>,</span>
+<span>  spatial <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  out_dir <span class="op">=</span> <span class="cn">NULL</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
@@ -145,6 +150,10 @@
 
 <dt>cluster_df</dt>
 <dd><p>A tibble.</p></dd>
+
+
+<dt>spatial</dt>
+<dd><p>A logical vector, TRUE for enable pseudotissue visualization for spatial transcriptomics datasets</p></dd>
 
 
 <dt>out_dir</dt>

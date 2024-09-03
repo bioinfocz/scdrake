@@ -46,6 +46,9 @@
   <a class="nav-link" href="../articles/pipeline_overview.html">Pipeline overview</a>
 </li>
 <li class="nav-item">
+  <a class="nav-link" href="../articles/scdrake_spatial.html">Spatial extention</a>
+</li>
+<li class="nav-item">
   <a class="nav-link" href="../articles/scdrake_faq.html">FAQ &amp; Howtos</a>
 </li>
 <li class="nav-item dropdown">
@@ -64,6 +67,7 @@
     <a class="dropdown-item" href="../articles/scdrake_cli.html">Command line interface</a>
     <a class="dropdown-item" href="../articles/scdrake_config.html">scdrake config internals</a>
     <a class="dropdown-item" href="../articles/scdrake_envvars.html">Environment variables</a>
+    <a class="dropdown-item" href="../articles/scdrake_spatial.html">Spatial extention</a>
     <div class="dropdown-divider"></div>
     <h6 class="dropdown-header" data-toc-skip>General configs</h6>
     <a class="dropdown-item" href="../articles/config_pipeline.html">Pipeline config</a>
@@ -693,6 +697,37 @@ metadata (e.g. HVGs).</dd>
         <dd>Load a list of cell annotation references into a <code>tibble</code>.</dd>
       </dl></div><div class="section level2">
       
+      <h3 id="manual-annotation">Manual annotation<a class="anchor" aria-label="anchor" href="#manual-annotation"></a></h3>
+      
+
+      
+    </div><div id="" class="section level2">
+      
+      
+      
+
+      <dl><dt>
+          
+          <code><a href="calculate_metadata.html">calculate_metadata()</a></code> 
+        </dt>
+        <dd>Calculate metadata for manual cell/spot annotation for heatmap visualisation.</dd>
+      </dl><dl><dt>
+          
+          <code><a href="create_signature_matrix_fn.html">create_signature_matrix_fn()</a></code> 
+        </dt>
+        <dd>Create signature matrix from provided file containing names with markers.</dd>
+      </dl><dl><dt>
+          
+          <code><a href="meta_heatmap_ploting.html">meta_heatmap_ploting()</a></code> 
+        </dt>
+        <dd>Manual annotation heatmap plotting</dd>
+      </dl><dl><dt>
+          
+          <code><a href="run_page_man_annotation.html">run_page_man_annotation()</a></code> 
+        </dt>
+        <dd>Calculate and run PAGE annotation.</dd>
+      </dl></div><div class="section level2">
+      
       <h3 id="cluster-markers">Cluster markers<a class="anchor" aria-label="anchor" href="#cluster-markers"></a></h3>
       
 
@@ -1025,6 +1060,22 @@ or <code>CONTRASTS_SOURCES</code> (<code>contrasts.yaml</code> config).</dd>
         <dd>Get indices of genes whose annotation matches a regex.</dd>
       </dl></div><div class="section level2">
       
+      <h3 id="singlecellexperiment-object-related-spatial-functions">SingleCellExperiment object-related spatial functions<a class="anchor" aria-label="anchor" href="#singlecellexperiment-object-related-spatial-functions"></a></h3>
+      
+
+      
+    </div><div id="" class="section level2">
+      
+      
+      
+
+      <dl><dt>
+          
+          <code><a href="sce_add_spatial_colData.html">sce_add_spatial_colData()</a></code> 
+        </dt>
+        <dd>Append new columns with spatial relevance to <code>colData</code> of a <code>SingleCellExperiment</code> object.</dd>
+      </dl></div><div class="section level2">
+      
       <h3 id="visualization">Visualization<a class="anchor" aria-label="anchor" href="#visualization"></a></h3>
       
 
@@ -1099,6 +1150,42 @@ or <code>CONTRASTS_SOURCES</code> (<code>contrasts.yaml</code> config).</dd>
           <code><a href="selected_markers_dimplot.html">selected_markers_dimplot()</a></code> 
         </dt>
         <dd>Make a grid of feature plots for selected markers.</dd>
+      </dl></div><div class="section level2">
+      
+      <h3 id="spatial-visualization">Spatial visualization<a class="anchor" aria-label="anchor" href="#spatial-visualization"></a></h3>
+      
+
+      
+    </div><div id="" class="section level2">
+      
+      
+      
+
+      <dl><dt>
+          
+          <code><a href="getDistinctColors.html">getDistinctColors()</a></code> 
+        </dt>
+        <dd>A helper function for asigning colors in pseudotissue visualization</dd>
+      </dl><dl><dt>
+          
+          <code><a href="plot_spat_point_layer_ggplot.html">plot_spat_point_layer_ggplot()</a></code> 
+        </dt>
+        <dd>A function for pseudotissue visualization</dd>
+      </dl><dl><dt>
+          
+          <code><a href="plot_spat_visuals.html">plot_spat_visuals()</a></code> 
+        </dt>
+        <dd>A function for visualization selected qc matrices in pseudotissue visualization</dd>
+      </dl><dl><dt>
+          
+          <code><a href="spatGenePlot2Dsce.html">spatGenePlot2Dsce()</a></code> 
+        </dt>
+        <dd>A function for visualization selected genes in pseudotissue visualization</dd>
+      </dl><dl><dt>
+          
+          <code><a href="visualized_spots.html">visualized_spots()</a></code> 
+        </dt>
+        <dd>A basic function for pseudotissue visualization</dd>
       </dl></div><div class="section level2">
       <h2 id="misc-functions">Misc functions<a class="anchor" aria-label="anchor" href="#misc-functions"></a></h2>
       

@@ -46,6 +46,9 @@
   <a class="nav-link" href="../articles/pipeline_overview.html">Pipeline overview</a>
 </li>
 <li class="nav-item">
+  <a class="nav-link" href="../articles/scdrake_spatial.html">Spatial extention</a>
+</li>
+<li class="nav-item">
   <a class="nav-link" href="../articles/scdrake_faq.html">FAQ &amp; Howtos</a>
 </li>
 <li class="nav-item dropdown">
@@ -64,6 +67,7 @@
     <a class="dropdown-item" href="../articles/scdrake_cli.html">Command line interface</a>
     <a class="dropdown-item" href="../articles/scdrake_config.html">scdrake config internals</a>
     <a class="dropdown-item" href="../articles/scdrake_envvars.html">Environment variables</a>
+    <a class="dropdown-item" href="../articles/scdrake_spatial.html">Spatial extention</a>
     <div class="dropdown-divider"></div>
     <h6 class="dropdown-header" data-toc-skip>General configs</h6>
     <a class="dropdown-item" href="../articles/config_pipeline.html">Pipeline config</a>
@@ -222,8 +226,10 @@ which are not loaded (<code><a href="https://docs.ropensci.org/drake/reference/r
 <span><span class="co">#&gt;     |   +-- cell_filtering_custom.Rmd</span></span>
 <span><span class="co">#&gt;     |   +-- cell_filtering_qc.Rmd</span></span>
 <span><span class="co">#&gt;     |   +-- empty_droplets.Rmd</span></span>
+<span><span class="co">#&gt;     |   +-- empty_droplets_spat.Rmd</span></span>
 <span><span class="co">#&gt;     |   +-- gene_filtering_custom.Rmd</span></span>
 <span><span class="co">#&gt;     |   \-- gene_filtering_qc.Rmd</span></span>
+<span><span class="co">#&gt;     +-- 01_input_qc_spatial.Rmd</span></span>
 <span><span class="co">#&gt;     +-- 02_norm_clustering.Rmd</span></span>
 <span><span class="co">#&gt;     \-- 02_norm_clustering_simple.Rmd</span></span></code></pre><p></p></div>
 <p>A short description of these Rmd files:</p><ul><li><p>Common to single-sample and integration analyses:</p><ul><li><p>Cluster markers: <code>common/cluster_markers.Rmd</code> (signpost),

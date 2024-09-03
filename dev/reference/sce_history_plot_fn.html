@@ -46,6 +46,9 @@
   <a class="nav-link" href="../articles/pipeline_overview.html">Pipeline overview</a>
 </li>
 <li class="nav-item">
+  <a class="nav-link" href="../articles/scdrake_spatial.html">Spatial extention</a>
+</li>
+<li class="nav-item">
   <a class="nav-link" href="../articles/scdrake_faq.html">FAQ &amp; Howtos</a>
 </li>
 <li class="nav-item dropdown">
@@ -64,6 +67,7 @@
     <a class="dropdown-item" href="../articles/scdrake_cli.html">Command line interface</a>
     <a class="dropdown-item" href="../articles/scdrake_config.html">scdrake config internals</a>
     <a class="dropdown-item" href="../articles/scdrake_envvars.html">Environment variables</a>
+    <a class="dropdown-item" href="../articles/scdrake_spatial.html">Spatial extention</a>
     <div class="dropdown-divider"></div>
     <h6 class="dropdown-header" data-toc-skip>General configs</h6>
     <a class="dropdown-item" href="../articles/config_pipeline.html">Pipeline config</a>
@@ -125,13 +129,17 @@
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">sce_history_plot_fn</span><span class="op">(</span><span class="va">sce_history</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">sce_history_plot_fn</span><span class="op">(</span><span class="va">sce_history</span>, spatial <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
     <dl><dt>sce_history</dt>
 <dd><p>(<em>input target</em>) A tibble.</p></dd>
+
+
+<dt>spatial</dt>
+<dd><p>A logical vector: <code>TRUE</code> for spatial transcriptomics dataset.</p></dd>
 
 </dl></div>
     <div class="section level2">
