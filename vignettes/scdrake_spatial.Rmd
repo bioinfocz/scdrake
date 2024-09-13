@@ -1,5 +1,5 @@
 ---
-title: "Spatial extention"
+title: "Spatial extension"
 date: "`r glue::glue('<sup>Document generated: {format(Sys.time(), \"%Y-%m-%d %H:%M:%S %Z%z</sup>\")}')`"
 package: scdrake
 output:
@@ -7,7 +7,7 @@ output:
     toc: true
     toc_float: true
 vignette: >
-  %\VignetteIndexEntry{Spatial extention}
+  %\VignetteIndexEntry{Spatial extension}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}  
 ---
@@ -21,13 +21,13 @@ This vignette should serve as a supplement to other vignettes, as `vignette("sta
 
 ***
 
-## Spatial extention functions
+## Spatial exsention functions
 
 ***
 
 ### Spatial visualization
 
-For (`01_input_qc`) and (`02_norm_clustering`) of the single-sample pipeline we now offer visualization of tissue, as pseudo tissue spot visualization. Spatial extention will add spot coordinates (array_col and array_row) from SpaceRanger tissue_possitions.csv file, and will filter away all spots, that are by SpaceRanger labeled as not in tissue. Visualization function are implemented from the [Giotto package](https://drieslab.github.io/Giotto_website/). Visualization is automatically used for quality control and dimension reduction results.    
+For (`01_input_qc`) and (`02_norm_clustering`) of the single-sample pipeline we now offer visualization of tissue, as pseudo tissue spot visualization. Spatial extension will add spot coordinates (array_col and array_row) from SpaceRanger tissue_possitions.csv file, and will filter away all spots, that are by SpaceRanger labeled as not in tissue. Visualization function are implemented from the [Giotto package](https://drieslab.github.io/Giotto_website/). Visualization is automatically used for quality control and dimension reduction results.
 
 ***
 

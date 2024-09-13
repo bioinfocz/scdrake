@@ -120,7 +120,7 @@ INPUT_QC_REPORT_RMD_FILE: "Rmd/single_sample/01_input_qc.Rmd"
 
 **Type:** character scalar
 
-A path to RMarkdown file used for HTML report of this pipeline stage. For spatial extention, the default RMarkdown file is `01_input_qc_spatial.Rmd`
+A path to RMarkdown file used for HTML report of this pipeline stage. For spatial extension, the default RMarkdown file is `01_input_qc_spatial.Rmd`
 
 ***
 
@@ -143,7 +143,7 @@ You can also negate the selection by specifying `negate: true`.
 
 ***
 
-#### Spatial extention
+#### Spatial extension
 
 
 ```yaml

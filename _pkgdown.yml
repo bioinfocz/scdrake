@@ -29,7 +29,7 @@ navbar:
       text: Integration pipeline guide
       href: articles/scdrake_integration.html
     spatial:
-      text: Spatial extention
+      text: Spatial extension
       href: articles/scdrake_spatial.html
     faq:
       text: FAQ & Howtos

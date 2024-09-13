@@ -117,7 +117,7 @@ several `{scdrake}` functions.
 
 ***
 
-#### Spatial extention
+#### Spatial extension
 
 
 ```yaml
