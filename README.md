@@ -361,7 +361,11 @@ website of the current development version.
             control -\> `vignette("stage_input_qc")`
         -   Stage `02_norm_clustering`: normalization, HVG selection,
             SVG selection, dimensionality reduction, clustering,
+<<<<<<< HEAD
             (marker-based) cell type annotation -\>
+=======
+            (manual) cell type annotation -\>
+>>>>>>> origin/spatial_readme
             `vignette("stage_norm_clustering")`
     -   Integration pipeline:
         -   Stage `01_integration`: reading in data and integration -\>
