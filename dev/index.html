@@ -67,7 +67,7 @@
     
     <a class="navbar-brand me-2" href="index.html">scdrake</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.5.2</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.6.0</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -86,7 +86,7 @@
   <a class="nav-link" href="articles/pipeline_overview.html">Pipeline overview</a>
 </li>
 <li class="nav-item">
-  <a class="nav-link" href="articles/scdrake_spatial.html">Spatial extention</a>
+  <a class="nav-link" href="articles/scdrake_spatial.html">Spatial extension</a>
 </li>
 <li class="nav-item">
   <a class="nav-link" href="articles/scdrake_faq.html">FAQ &amp; Howtos</a>
@@ -107,7 +107,7 @@
     <a class="dropdown-item" href="articles/scdrake_cli.html">Command line interface</a>
     <a class="dropdown-item" href="articles/scdrake_config.html">scdrake config internals</a>
     <a class="dropdown-item" href="articles/scdrake_envvars.html">Environment variables</a>
-    <a class="dropdown-item" href="articles/scdrake_spatial.html">Spatial extention</a>
+    <a class="dropdown-item" href="articles/scdrake_spatial.html">Spatial extension</a>
     <div class="dropdown-divider"></div>
     <h6 class="dropdown-header" data-toc-skip>General configs</h6>
     <a class="dropdown-item" href="articles/config_pipeline.html">Pipeline config</a>
@@ -165,13 +165,15 @@
 <div class="page-header"><h1 id="scdrake">scdrake<a class="anchor" aria-label="anchor" href="#scdrake"></a>
 </h1></div>
 
-<p><a href="https://github.com/bioinfocz/scdrake" class="external-link">scdrake</a> is a scalable and reproducible pipeline for secondary analysis of droplet-based single-cell RNA-seq data. <a href="https://github.com/bioinfocz/scdrake" class="external-link">scdrake</a> is an R package built on top of the <a href="https://docs.ropensci.org/drake" class="external-link">drake</a> package, a <a href="https://www.gnu.org/software/make" class="external-link">Make</a>-like pipeline toolkit for <a href="https://www.r-project.org" class="external-link">R language</a>.</p>
+<p><a href="https://github.com/bioinfocz/scdrake" class="external-link">scdrake</a> is a scalable and reproducible pipeline for secondary analysis of droplet-based single-cell RNA-seq data (scRNA-seq) and spot-based spatial transcriptomics data (SRT). <a href="https://github.com/bioinfocz/scdrake" class="external-link">scdrake</a> is an R package built on top of the <a href="https://docs.ropensci.org/drake" class="external-link">drake</a> package, a <a href="https://www.gnu.org/software/make" class="external-link">Make</a>-like pipeline toolkit for <a href="https://www.r-project.org" class="external-link">R language</a>.</p>
 <p>The main features of the <a href="https://github.com/bioinfocz/scdrake" class="external-link">scdrake</a> pipeline are:</p>
 <ul>
 <li>Import of scRNA-seq data: <a href="https://support.10xgenomics.com/single-cell-gene-expression/software/pipelines/latest/what-is-cell-ranger" class="external-link">10x Genomics Cell Ranger</a> output, delimited table, or <code>SingleCellExperiment</code> object.</li>
-<li>Quality control and filtering of cells and genes, removal of empty droplets.</li>
+<li>Import of SRT data: <a href="https://www.10xgenomics.com/support/software/space-ranger/latest/getting-started/what-is-space-ranger" class="external-link">10x Genomics Space Ranger</a> output, delimited table, or <code>SingleCellExperiment</code> object, and tissue positions file as in Space ranger.</li>
+<li>Quality control and filtering of cells/spots and genes, removal of empty droplets.</li>
 <li>Higly variable genes detection, cell cycle scoring, normalization, clustering, and dimensionality reduction.</li>
-<li>Cell type annotation.</li>
+<li>Spatially variable genes detection (for SRT data)</li>
+<li>Cell type annotation using reference sets, cell type annotation using user-provided marker genes.</li>
 <li>Integration of multiple datasets.</li>
 <li>Computation of cluster markers and differentially expressed genes between clusters (denoted as “contrasts”).</li>
 <li>Rich graphical and HTML outputs based on customizable RMarkdown documents.
@@ -206,8 +208,8 @@
 <p>The complete guide to the usage of <a href="https://github.com/bioinfocz/scdrake" class="external-link">scdrake</a>’s Docker image can be found in the <a href="https://bioinfocz.github.io/scdrake/articles/scdrake_docker.html">Docker vignette</a>. <strong>We strongly recommend to go through even if you are an experienced Docker user.</strong> Below you can find just the basic command to download the image and to run a detached container with RStudio in Docker or to run <a href="https://github.com/bioinfocz/scdrake" class="external-link">scdrake</a> in Singularity.</p>
 <p>You can also run the image in <a href="https://docs.sylabs.io/guides/latest/user-guide/quick_start.html" class="external-link">SingularityCE</a> (without RStudio) - see the Singularity section in the Docker vignette above. If the image is already downloaded in the local Docker storage, you can use <code>singularity pull docker-daemon:&lt;image&gt;</code></p>
 <p>You can pull the Docker image with the latest stable <a href="https://github.com/bioinfocz/scdrake" class="external-link">scdrake</a> version using</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> pull jirinovo/scdrake:1.5.2</span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="ex">singularity</span> pull docker:jirinovo/scdrake:1.5.2</span></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> pull jirinovo/scdrake:1.6.0</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="ex">singularity</span> pull docker:jirinovo/scdrake:1.6.0</span></code></pre></div>
 <p>or list available versions in <a href="https://hub.docker.com/r/jirinovo/scdrake/tags" class="external-link">our Docker Hub repository</a>.</p>
 <p>For the latest development version use</p>
 <div class="sourceCode" id="cb2"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> pull jirinovo/scdrake:latest</span>
@@ -228,7 +230,7 @@
 <span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">-e</span> USERID=<span class="va">$(</span><span class="fu">id</span> <span class="at">-u</span><span class="va">)</span> <span class="dt">\</span></span>
 <span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">-e</span> GROUPID=<span class="va">$(</span><span class="fu">id</span> <span class="at">-g</span><span class="va">)</span> <span class="dt">\</span></span>
 <span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">-e</span> PASSWORD=1234 <span class="dt">\</span></span>
-<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>  jirinovo/scdrake:1.5.2</span></code></pre></div>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>  jirinovo/scdrake:1.6.0</span></code></pre></div>
 <p>For Singularity, also make shared directories and execute the container (“run and forget”):</p>
 <div class="sourceCode" id="cb6"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mkdir</span> <span class="at">-p</span> ~/scdrake_singularity</span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> ~/scdrake_singularity</span>
@@ -297,7 +299,7 @@ Click for details
 <p><a href="https://rstudio.github.io/renv/" class="external-link">renv</a> also allows to export the current installed versions of R packages (and other things) into a lockfile. Such lockfile is available for <a href="https://github.com/bioinfocz/scdrake" class="external-link">scdrake</a> and you can use it to install all dependencies by</p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## -- This is a lockfile for the latest stable version of scdrake.</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/utils/download.file.html" class="external-link">download.file</a></span><span class="op">(</span><span class="st">"https://raw.githubusercontent.com/bioinfocz/scdrake/1.5.2/renv.lock"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/download.file.html" class="external-link">download.file</a></span><span class="op">(</span><span class="st">"https://raw.githubusercontent.com/bioinfocz/scdrake/1.6.0/renv.lock"</span><span class="op">)</span></span>
 <span><span class="co">## -- You can increase the number of CPU cores to speed up the installation.</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">options</a></span><span class="op">(</span>Ncpus <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span>
 <span><span class="fu">renv</span><span class="fu">::</span><span class="fu"><a href="https://rstudio.github.io/renv/reference/restore.html" class="external-link">restore</a></span><span class="op">(</span>lockfile <span class="op">=</span> <span class="st">"renv.lock"</span>, repos <span class="op">=</span> <span class="fu">BiocManager</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/BiocManager/man/repositories.html" class="external-link">repositories</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
@@ -311,7 +313,7 @@ Click for details
 <p>Now we can finally install the <a href="https://github.com/bioinfocz/scdrake" class="external-link">scdrake</a> package, but using a non-standard approach - without its dependencies (which are already installed from the lockfile).</p>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">remotes</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html" class="external-link">install_github</a></span><span class="op">(</span></span>
-<span>  <span class="st">"bioinfocz/scdrake@1.5.2"</span>,</span>
+<span>  <span class="st">"bioinfocz/scdrake@1.6.0"</span>,</span>
 <span>  dependencies <span class="op">=</span> <span class="cn">FALSE</span>, upgrade <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  keep_source <span class="op">=</span> <span class="cn">TRUE</span>, build_vignettes <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  repos <span class="op">=</span> <span class="fu">BiocManager</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/BiocManager/man/repositories.html" class="external-link">repositories</a></span><span class="op">(</span><span class="op">)</span></span>
@@ -348,7 +350,7 @@ Show details
 <div class="section level2">
 <h2 id="vignettes-and-other-readings">Vignettes and other readings<a class="anchor" aria-label="anchor" href="#vignettes-and-other-readings"></a>
 </h2>
-<p>See <a href="https://bioinfocz.github.io/scdrake" class="uri">https://bioinfocz.github.io/scdrake</a> for a documentation website of the latest stable version (1.5.2) where links to vignettes below become real :-)</p>
+<p>See <a href="https://bioinfocz.github.io/scdrake" class="uri">https://bioinfocz.github.io/scdrake</a> for a documentation website of the latest stable version (1.6.0) where links to vignettes below become real :-)</p>
 <p>See <a href="https://bioinfocz.github.io/scdrake/dev" class="uri">https://bioinfocz.github.io/scdrake/dev</a> for a documentation website of the current development version.</p>
 <ul>
 <li>Guides:
@@ -377,6 +379,8 @@ Show details
 </li>
 <li>FAQ &amp; Howtos: <code><a href="articles/scdrake_faq.html">vignette("scdrake_faq")</a></code>
 </li>
+<li>Spatial extension: <code><a href="articles/scdrake_spatial.html">vignette("scdrake_spatial")</a></code>
+</li>
 <li>Command line interface (CLI): <code><a href="articles/scdrake_cli.html">vignette("scdrake_cli")</a></code>
 </li>
 <li>Config files (internals): <code><a href="articles/scdrake_config.html">vignette("scdrake_config")</a></code>
@@ -399,7 +403,7 @@ Show details
 <ul>
 <li>Stage <code>01_input_qc</code>: reading in data, filtering, quality control -&gt; <code><a href="articles/stage_input_qc.html">vignette("stage_input_qc")</a></code>
 </li>
-<li>Stage <code>02_norm_clustering</code>: normalization, HVG selection, dimensionality reduction, clustering, cell type annotation -&gt; <code><a href="articles/stage_norm_clustering.html">vignette("stage_norm_clustering")</a></code>
+<li>Stage <code>02_norm_clustering</code>: normalization, HVG selection, SVG selection, dimensionality reduction, clustering, (marker-based) cell type annotation -&gt; <code><a href="articles/stage_norm_clustering.html">vignette("stage_norm_clustering")</a></code>
 </li>
 </ul>
 </li>
@@ -469,7 +473,7 @@ Show details
 <div class="section level3">
 <h3 id="funding">Funding<a class="anchor" aria-label="anchor" href="#funding"></a>
 </h3>
-<p>This work was supported by <a href="https://www.elixir-czech.cz" class="external-link">ELIXIR CZ</a> research infrastructure project (MEYS Grant No: LM2018131) including access to computing and storage facilities.</p>
+<p>This work was supported by <a href="https://www.elixir-czech.cz" class="external-link">ELIXIR CZ</a> research infrastructure project (MEYS Grant No: LM2018131 and LM2023055) including access to computing and storage facilities.</p>
 </div>
 <div class="section level3">
 <h3 id="software-and-methods-used-by-scdrake">Software and methods used by <code>{scdrake}</code>
@@ -535,6 +539,7 @@ Show details
 <ul class="list-unstyled">
 <li>Jiri Novotny <br><small class="roles"> Author, maintainer </small> <a href="https://orcid.org/0000-0003-1338-638X" target="orcid.widget" aria-label="ORCID" class="external-link"><span class="fab fa-orcid orcid" aria-hidden="true"></span></a> </li>
 <li>Jan Kubovciak <br><small class="roles"> Author </small>  </li>
+<li>Lucie Pfeiferova <br><small class="roles"> Author </small>  </li>
 <li>Michal Kolar <br><small class="roles"> Funder </small>  </li>
 </ul>
 </div>
@@ -547,7 +552,7 @@ Show details
 <li><a href="https://bioinfocz.github.io/scdrake/dev"><img src="https://img.shields.io/badge/Documentation%20&amp;%20vignettes-bioinfocz.github.io/scdrake-informational" alt="Documentation and vignettes (devel version)"></a></li>
 <li><a href="https://bioinfocz.github.io/scdrake/articles/pipeline_overview.html"><img src="https://img.shields.io/badge/Overview%20&amp;%20outputs-vignette(%22pipeline_overview%22)-informational" alt="Overview and outputs"></a></li>
 <li><a href="https://github.com/bioinfocz/scdrake/blob/main/diagrams/README.md" class="external-link"><img src="https://img.shields.io/badge/Pipeline%20diagram-Show-informational" alt="Pipeline diagram"></a></li>
-<li><a href="https://lifecycle.r-lib.org/articles/stages.html#experimental" class="external-link"><img src="https://img.shields.io/badge/lifecycle-experimental-orange.svg" alt="Lifecycle: experimental"></a></li>
+<li><a href="https://lifecycle.r-lib.org/articles/stages.html#stable" class="external-link"><img src="https://img.shields.io/badge/lifecycle-stable-green.svg" alt="Lifecycle: experimental"></a></li>
 <li><a href="https://github.com/bioinfocz/scdrake/actions/workflows/docker-ci.yml" class="external-link"><img src="https://github.com/bioinfocz/scdrake/actions/workflows/docker-ci.yml/badge.svg?branch=main" alt="Docker Image CI"></a></li>
 </ul>
 </div>
@@ -558,7 +563,7 @@ Show details
 
     <footer><div class="copyright">
   <p></p>
-<p>Developed by Jiri Novotny, Jan Kubovciak, Michal Kolar.</p>
+<p>Developed by Jiri Novotny, Jan Kubovciak, Lucie Pfeiferova, Michal Kolar.</p>
 </div>
 
 <div class="pkgdown">

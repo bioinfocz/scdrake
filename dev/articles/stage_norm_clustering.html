@@ -51,7 +51,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">scdrake</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.5.2</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.6.0</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -70,7 +70,7 @@
   <a class="nav-link" href="../articles/pipeline_overview.html">Pipeline overview</a>
 </li>
 <li class="nav-item">
-  <a class="nav-link" href="../articles/scdrake_spatial.html">Spatial extention</a>
+  <a class="nav-link" href="../articles/scdrake_spatial.html">Spatial extension</a>
 </li>
 <li class="nav-item">
   <a class="nav-link" href="../articles/scdrake_faq.html">FAQ &amp; Howtos</a>
@@ -91,7 +91,7 @@
     <a class="dropdown-item" href="../articles/scdrake_cli.html">Command line interface</a>
     <a class="dropdown-item" href="../articles/scdrake_config.html">scdrake config internals</a>
     <a class="dropdown-item" href="../articles/scdrake_envvars.html">Environment variables</a>
-    <a class="dropdown-item" href="../articles/scdrake_spatial.html">Spatial extention</a>
+    <a class="dropdown-item" href="../articles/scdrake_spatial.html">Spatial extension</a>
     <div class="dropdown-divider"></div>
     <h6 class="dropdown-header" data-toc-skip>General configs</h6>
     <a class="dropdown-item" href="../articles/config_pipeline.html">Pipeline config</a>
@@ -153,7 +153,7 @@
       <img src="" class="logo" alt=""><h1>Normalization and clustering stage (`02_norm_clustering`)</h1>
             
             <h4 data-toc-skip class="date"><sup>Document generated:
-2024-09-03 19:08:24 UTC+0000</sup></h4>
+2024-09-14 14:02:02 UTC+0000</sup></h4>
       
       <small class="dont-index">Source: <a href="https://github.com/bioinfocz/scdrake/blob/mastervignettes/stage_norm_clustering.Rmd" class="external-link"><code>vignettes/stage_norm_clustering.Rmd</code></a></small>
       <div class="d-none name"><code>stage_norm_clustering.Rmd</code></div>
@@ -351,14 +351,14 @@ used as the default argument value in several <a href="https://github.com/bioinf
 functions.</p>
 <hr>
 <div class="section level4">
-<h4 id="spatial-extention">Spatial extention<a class="anchor" aria-label="anchor" href="#spatial-extention"></a>
+<h4 id="spatial-extension">Spatial extension<a class="anchor" aria-label="anchor" href="#spatial-extension"></a>
 </h4>
 <div class="sourceCode" id="cb1"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">SPATIAL</span><span class="kw">:</span><span class="at"> </span><span class="ch">False</span></span></code></pre></div>
 <p><strong>Type:</strong> logical scalar</p>
 <p>If <code>True</code>, pipeline enables spatial extension.</p>
 <p>This option enables spatial extension as selection of spatially
 variable genes (SVGS), pseudo tissue visualization and other
-visualization options for manual annotation.</p>
+visualization options for marker-based annotation.</p>
 <hr>
 </div>
 <div class="section level4">
@@ -899,15 +899,15 @@ in <code>CELL_ANNOTATION_SOURCES_DEFAULTS</code>.</p>
 <hr>
 </div>
 <div class="section level4">
-<h4 id="manual-cell-annotation-signatures">Manual cell annotation signatures<a class="anchor" aria-label="anchor" href="#manual-cell-annotation-signatures"></a>
+<h4 id="marker-based-cell-annotation-signatures">Marker-based cell annotation signatures<a class="anchor" aria-label="anchor" href="#marker-based-cell-annotation-signatures"></a>
 </h4>
 <div class="sourceCode" id="cb38"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="fu">MANUAL_ANNOTATION</span><span class="kw">:</span><span class="at"> </span><span class="ch">False</span></span></code></pre></div>
 <p><strong>Type:</strong> logical scalar</p>
-<p>Whether manual annotation is enabled. Manual annotation is based on
-expression profiles, markers are taken from user-defined file. Resulted
-annotation is stored in <code>annotation_metadata</code> target. Manual
-cell annotation implemented from Giotto package enrichment function,
-which is based on PAGE method from <a href="https://bmcbioinformatics.biomedcentral.com/articles/10.1186/1471-2105-6-144" class="external-link">Kim
+<p>Whether marker-based annotation is enabled. Marker-based annotation
+is based on expression profiles, markers are taken from user-defined
+file. Resulted annotation is stored in <code>annotation_metadata</code>
+target. Marker-based cell annotation implemented from Giotto package
+enrichment function, which is based on PAGE method from <a href="https://bmcbioinformatics.biomedcentral.com/articles/10.1186/1471-2105-6-144" class="external-link">Kim
 SY et al</a>.</p>
 <hr>
 <div class="sourceCode" id="cb39"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ANNOTATION_MARKERS</span><span class="kw">:</span><span class="at"> </span><span class="ch">Null</span></span></code></pre></div>
@@ -945,7 +945,7 @@ cell plots with enrichment of annotation.</p>
 <hr>
 <div class="sourceCode" id="cb46"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a><span class="fu">HEATMAP_DIMRED</span><span class="kw">:</span><span class="at"> </span><span class="st">"umap"</span></span></code></pre></div>
 <p><strong>Type:</strong> character scalar</p>
-<p>Which dimension reduction use to show result of manual
+<p>Which dimension reduction use to show result of marker-based
 annotation.</p>
 <hr>
 </div>
@@ -1467,7 +1467,7 @@ defined in the <code>CELL_GROUPINGS</code> parameter.</p>
 
     <footer><div class="copyright">
   <p></p>
-<p>Developed by Jiri Novotny, Jan Kubovciak, Michal Kolar.</p>
+<p>Developed by Jiri Novotny, Jan Kubovciak, Lucie Pfeiferova, Michal Kolar.</p>
 </div>
 
 <div class="pkgdown">
