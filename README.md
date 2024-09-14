@@ -1,3 +1,4 @@
+
 # scdrake
 
 [![NEWS:
@@ -113,21 +114,27 @@ you can use `singularity pull docker-daemon:<image>`
 You can pull the Docker image with the latest stable `{scdrake}` version
 using
 
-    docker pull jirinovo/scdrake:1.6.0
-    singularity pull docker:jirinovo/scdrake:1.6.0
+``` bash
+docker pull jirinovo/scdrake:1.6.0
+singularity pull docker:jirinovo/scdrake:1.6.0
+```
 
 or list available versions in [our Docker Hub
 repository](https://hub.docker.com/r/jirinovo/scdrake/tags).
 
 For the latest development version use
 
-    docker pull jirinovo/scdrake:latest
-    singularity pull docker:jirinovo/scdrake:latest
+``` bash
+docker pull jirinovo/scdrake:latest
+singularity pull docker:jirinovo/scdrake:latest
+```
 
 **Note for Mac users with M1/M2 chipsets**: until version 1.5.0
 (inclusive), `arm64` images are available.
 
-    docker pull jirinovo/scdrake:1.5.0-bioc3.15-arm64
+``` bash
+docker pull jirinovo/scdrake:1.5.0-bioc3.15-arm64
+```
 
 ### Running the container
 
@@ -136,33 +143,39 @@ and Windows or MacOS running Docker Desktop.
 
 First make a shared directory that will be mounted to the container:
 
-    mkdir ~/scdrake_projects
-    cd ~/scdrake_projects
+``` bash
+mkdir ~/scdrake_projects
+cd ~/scdrake_projects
+```
 
 And run the image that will expose RStudio Server on port 8787 on your
 host:
 
-    docker run -d \
-      -v $(pwd):/home/rstudio/scdrake_projects \
-      -p 8787:8787 \
-      -e USERID=$(id -u) \
-      -e GROUPID=$(id -g) \
-      -e PASSWORD=1234 \
-      jirinovo/scdrake:1.6.0
+``` bash
+docker run -d \
+  -v $(pwd):/home/rstudio/scdrake_projects \
+  -p 8787:8787 \
+  -e USERID=$(id -u) \
+  -e GROUPID=$(id -g) \
+  -e PASSWORD=1234 \
+  jirinovo/scdrake:1.6.0
+```
 
 For Singularity, also make shared directories and execute the container
 (“run and forget”):
 
-    mkdir -p ~/scdrake_singularity
-    cd ~/scdrake_singularity
-    mkdir -p home/${USER} scdrake_projects
-    singularity exec \
-        -e \
-        --no-home \
-        --bind "home/${USER}/:/home/${USER},scdrake_projects/:/home/${USER}/scdrake_projects" \
-        --pwd "/home/${USER}/scdrake_projects" \
-        path/to/scdrake_image.sif \
-        scdrake <args> <command>
+``` bash
+mkdir -p ~/scdrake_singularity
+cd ~/scdrake_singularity
+mkdir -p home/${USER} scdrake_projects
+singularity exec \
+    -e \
+    --no-home \
+    --bind "home/${USER}/:/home/${USER},scdrake_projects/:/home/${USER}/scdrake_projects" \
+    --pwd "/home/${USER}/scdrake_projects" \
+    path/to/scdrake_image.sif \
+    scdrake <args> <command>
+```
 
 ## Installing `{scdrake}` manually (not recommended)
 
@@ -178,7 +191,7 @@ Click for details
 -   For MacOS:
     `$ brew install libxml2 imagemagick@6 harfbuzz fribidi libgit2 geos pandoc`
 
-### Install R &gt;= 4.2
+### Install R \>= 4.2
 
 See <https://cloud.r-project.org/>
 
@@ -191,26 +204,34 @@ management of local R libraries. It is intended to be used on a
 per-project basis, i.e. each project should use its own library of R
 packages.
 
-    install.packages("renv")
+``` r
+install.packages("renv")
+```
 
 ### Initialize a new `{renv}` library
 
 Switch to directory where you will analyze data and initialize a new
 `{renv}` library:
 
-    renv::consent(TRUE)
-    renv::init()
+``` r
+renv::consent(TRUE)
+renv::init()
+```
 
 Now exit and run again R. You should see a message that renv library has
 been activated.
 
 ### Install BiocManager
 
-    renv::install("BiocManager")
+``` r
+renv::install("BiocManager")
+```
 
 ### Install Bioconductor 3.15
 
-    BiocManager::install(version = "3.15")
+``` r
+BiocManager::install(version = "3.15")
+```
 
 ### Restore `{scdrake}` dependencies from lockfile
 
@@ -218,15 +239,19 @@ been activated.
 packages (and other things) into a lockfile. Such lockfile is available
 for `{scdrake}` and you can use it to install all dependencies by
 
-    ## -- This is a lockfile for the latest stable version of scdrake.
-    download.file("https://raw.githubusercontent.com/bioinfocz/scdrake/1.6.0/renv.lock")
-    ## -- You can increase the number of CPU cores to speed up the installation.
-    options(Ncpus = 2)
-    renv::restore(lockfile = "renv.lock", repos = BiocManager::repositories())
+``` r
+## -- This is a lockfile for the latest stable version of scdrake.
+download.file("https://raw.githubusercontent.com/bioinfocz/scdrake/1.6.0/renv.lock")
+## -- You can increase the number of CPU cores to speed up the installation.
+options(Ncpus = 2)
+renv::restore(lockfile = "renv.lock", repos = BiocManager::repositories())
+```
 
 For the lockfile for the latest development version use
 
-    download.file("https://raw.githubusercontent.com/bioinfocz/scdrake/main/renv.lock")
+``` r
+download.file("https://raw.githubusercontent.com/bioinfocz/scdrake/main/renv.lock")
+```
 
 ### Install the `{scdrake}` package
 
@@ -234,12 +259,14 @@ Now we can finally install the `{scdrake}` package, but using a
 non-standard approach - without its dependencies (which are already
 installed from the lockfile).
 
-    remotes::install_github(
-      "bioinfocz/scdrake@1.6.0",
-      dependencies = FALSE, upgrade = FALSE,
-      keep_source = TRUE, build_vignettes = TRUE,
-      repos = BiocManager::repositories()
-    )
+``` r
+remotes::install_github(
+  "bioinfocz/scdrake@1.6.0",
+  dependencies = FALSE, upgrade = FALSE,
+  keep_source = TRUE, build_vignettes = TRUE,
+  repos = BiocManager::repositories()
+)
+```
 
 For the latest development version use `"bioinfocz/scdrake"`.
 
@@ -247,7 +274,9 @@ For the latest development version use `"bioinfocz/scdrake"`.
 
 Optionally, you can install `{scdrake}`’s CLI scripts with
 
-    scdrake::install_cli()
+``` r
+scdrake::install_cli()
+```
 
 CLI should be now accessible as a `scdrake` command. By default, the CLI
 is installed into `~/.local/bin`, which is usually present in the `PATH`
@@ -324,25 +353,25 @@ website of the current development version.
     -   Config files (internals): `vignette("scdrake_config")`
     -   Environment variables: `vignette("scdrake_envvars")`
 -   General configs:
-    -   Pipeline config -&gt; `vignette("config_pipeline")`
-    -   Main config -&gt; `vignette("config_main")`
+    -   Pipeline config -\> `vignette("config_pipeline")`
+    -   Main config -\> `vignette("config_main")`
 -   Pipelines and stages:
     -   Single-sample pipeline:
         -   Stage `01_input_qc`: reading in data, filtering, quality
-            control -&gt; `vignette("stage_input_qc")`
+            control -\> `vignette("stage_input_qc")`
         -   Stage `02_norm_clustering`: normalization, HVG selection,
             SVG selection, dimensionality reduction, clustering,
-            (manual) cell type annotation -&gt;
+            (marker-based) cell type annotation -\>
             `vignette("stage_norm_clustering")`
     -   Integration pipeline:
-        -   Stage `01_integration`: reading in data and integration
-            -&gt; `vignette("stage_integration")`
+        -   Stage `01_integration`: reading in data and integration -\>
+            `vignette("stage_integration")`
         -   Stage `02_int_clustering`: post-integration clustering and
-            cell annotation -&gt; `vignette("stage_int_clustering")`
+            cell annotation -\> `vignette("stage_int_clustering")`
     -   Common stages:
-        -   Stage `cluster_markers` -&gt;
+        -   Stage `cluster_markers` -\>
             `vignette("stage_cluster_markers")`
-        -   Stage `contrasts` (differential expression) -&gt;
+        -   Stage `contrasts` (differential expression) -\>
             `vignette("stage_contrasts")`
 
 We encourage all users to read
@@ -364,7 +393,9 @@ Below is the citation output from using `citation("scdrake")` in R.
 Please run this yourself to check for any updates on how to cite
 **scdrake**.
 
-    print(citation("scdrake"), bibtex = TRUE)
+``` r
+print(citation("scdrake"), bibtex = TRUE)
+```
 
     To cite package ‘scdrake’ in publications use:
 
@@ -400,7 +431,7 @@ but if you need e.g. a general help.
 
 If you want to contribute to `{scdrake}`, read the [contribution
 guide](.github/CONTRIBUTING.md), please. All pull requests are welcome!
-:slightly\_smiling\_face:
+:slightly_smiling_face:
 
 ## Code of Conduct
 

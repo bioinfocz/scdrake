@@ -20,7 +20,7 @@
 - Pipelines and stages:
   - Single-sample pipeline:
     - Stage `01_input_qc`: reading in data, filtering, quality control -> `vignette("stage_input_qc")`
-    - Stage `02_norm_clustering`: normalization, HVG selection, SVG selection, dimensionality reduction, clustering, (manual) cell type annotation
+    - Stage `02_norm_clustering`: normalization, HVG selection, SVG selection, dimensionality reduction, clustering, (marker-based) cell type annotation
       -> `vignette("stage_norm_clustering")`
   - Integration pipeline:
     - Stage `01_integration`: reading in data and integration -> `vignette("stage_integration")`

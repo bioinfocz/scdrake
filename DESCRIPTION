@@ -18,6 +18,12 @@ Authors@R:
         email = "jan.kubovciak@img.cas.cz"
       ),
       person(
+        given = "Lucie",
+        family = "Pfeiferova",
+        role = c("aut"),
+        email = "lucie.pfeiferova@img.cas.cz"
+      ),
+      person(
         given = "Michal",
         family = "Kolar",
         role = c("fnd"),

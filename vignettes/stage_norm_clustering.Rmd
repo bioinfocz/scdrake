@@ -128,7 +128,7 @@ SPATIAL: False
 
 If `True`, pipeline enables spatial extension.
 
-This option enables spatial extension as selection of spatially variable genes (SVGS), pseudo tissue visualization and other visualization options for manual annotation.
+This option enables spatial extension as selection of spatially variable genes (SVGS), pseudo tissue visualization and other visualization options for marker-based annotation.
 
 ***
 
@@ -675,7 +675,7 @@ will override corresponding parameters in `TRAIN_PARAMS` in `CELL_ANNOTATION_SOU
 
 ***
 
-#### Manual cell annotation signatures
+#### Marker-based cell annotation signatures
 
 ```yaml
 MANUAL_ANNOTATION: False
@@ -683,7 +683,7 @@ MANUAL_ANNOTATION: False
 
 **Type:** logical scalar
 
-Whether manual annotation is enabled. Manual annotation is based on expression profiles, markers are taken from user-defined file. Resulted annotation is stored in `annotation_metadata` target. Manual cell annotation implemented from Giotto package enrichment function, which is based on PAGE method from [Kim SY et al](https://bmcbioinformatics.biomedcentral.com/articles/10.1186/1471-2105-6-144).
+Whether marker-based annotation is enabled. Marker-based annotation is based on expression profiles, markers are taken from user-defined file. Resulted annotation is stored in `annotation_metadata` target. Marker-based cell annotation implemented from Giotto package enrichment function, which is based on PAGE method from [Kim SY et al](https://bmcbioinformatics.biomedcentral.com/articles/10.1186/1471-2105-6-144).
 
 ***
 
@@ -760,7 +760,7 @@ HEATMAP_DIMRED: "umap"
 
 **Type:** character scalar
 
-Which dimension reduction use to show result of manual annotation. 
+Which dimension reduction use to show result of marker-based annotation. 
 
 ***
 
