@@ -1,3 +1,9 @@
+# scdrake 1.6.0
+- `scdrake` now allows processing of spatial transcriptomics data from spot-based technologies (Visium).
+  - See `vignette("scdrake_spatial")`.
+- Added annotation using user-defined marker genes.
+- Updated `stage_input_qc` and `stage_norm_clustering` vignettes.
+
 # scdrake 1.5.0
 
 - Major refactoring:
