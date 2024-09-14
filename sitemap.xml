@@ -55,6 +55,9 @@
     <loc>https://bioinfocz.github.io/scdrake/articles/scdrake_integration.html</loc>
   </url>
   <url>
+    <loc>https://bioinfocz.github.io/scdrake/articles/scdrake_spatial.html</loc>
+  </url>
+  <url>
     <loc>https://bioinfocz.github.io/scdrake/articles/stage_cluster_markers.html</loc>
   </url>
   <url>
@@ -101,6 +104,9 @@
   </url>
   <url>
     <loc>https://bioinfocz.github.io/scdrake/reference/calc_sc3.html</loc>
+  </url>
+  <url>
+    <loc>https://bioinfocz.github.io/scdrake/reference/calculate_metadata.html</loc>
   </url>
   <url>
     <loc>https://bioinfocz.github.io/scdrake/reference/cc_genes_fn.html</loc>
@@ -196,6 +202,9 @@
     <loc>https://bioinfocz.github.io/scdrake/reference/create_seu_for_heatmaps.html</loc>
   </url>
   <url>
+    <loc>https://bioinfocz.github.io/scdrake/reference/create_signature_matrix_fn.html</loc>
+  </url>
+  <url>
     <loc>https://bioinfocz.github.io/scdrake/reference/dimred_plots_cell_annotation_params_df_fn.html</loc>
   </url>
   <url>
@@ -272,6 +281,9 @@
   </url>
   <url>
     <loc>https://bioinfocz.github.io/scdrake/reference/generate_stage_report.html</loc>
+  </url>
+  <url>
+    <loc>https://bioinfocz.github.io/scdrake/reference/getDistinctColors.html</loc>
   </url>
   <url>
     <loc>https://bioinfocz.github.io/scdrake/reference/get_cell_annotation_subplan.html</loc>
@@ -421,6 +433,9 @@
     <loc>https://bioinfocz.github.io/scdrake/reference/merge_sce_metadata.html</loc>
   </url>
   <url>
+    <loc>https://bioinfocz.github.io/scdrake/reference/meta_heatmap_ploting.html</loc>
+  </url>
+  <url>
     <loc>https://bioinfocz.github.io/scdrake/reference/na_empty.html</loc>
   </url>
   <url>
@@ -440,6 +455,12 @@
   </url>
   <url>
     <loc>https://bioinfocz.github.io/scdrake/reference/plot_hvg_fit.html</loc>
+  </url>
+  <url>
+    <loc>https://bioinfocz.github.io/scdrake/reference/plot_spat_point_layer_ggplot.html</loc>
+  </url>
+  <url>
+    <loc>https://bioinfocz.github.io/scdrake/reference/plot_spat_visuals.html</loc>
   </url>
   <url>
     <loc>https://bioinfocz.github.io/scdrake/reference/plot_vln.html</loc>
@@ -467,6 +488,9 @@
   </url>
   <url>
     <loc>https://bioinfocz.github.io/scdrake/reference/run_kmeans_clustering.html</loc>
+  </url>
+  <url>
+    <loc>https://bioinfocz.github.io/scdrake/reference/run_page_man_annotation.html</loc>
   </url>
   <url>
     <loc>https://bioinfocz.github.io/scdrake/reference/run_pipeline.html</loc>
@@ -503,6 +527,9 @@
   </url>
   <url>
     <loc>https://bioinfocz.github.io/scdrake/reference/sce_add_metadata.html</loc>
+  </url>
+  <url>
+    <loc>https://bioinfocz.github.io/scdrake/reference/sce_add_spatial_colData.html</loc>
   </url>
   <url>
     <loc>https://bioinfocz.github.io/scdrake/reference/sce_calc_pca.html</loc>
@@ -595,6 +622,9 @@
     <loc>https://bioinfocz.github.io/scdrake/reference/seu_add_metadata.html</loc>
   </url>
   <url>
+    <loc>https://bioinfocz.github.io/scdrake/reference/spatGenePlot2Dsce.html</loc>
+  </url>
+  <url>
     <loc>https://bioinfocz.github.io/scdrake/reference/text_utils_glue.html</loc>
   </url>
   <url>
@@ -608,6 +638,9 @@
   </url>
   <url>
     <loc>https://bioinfocz.github.io/scdrake/reference/update_project.html</loc>
+  </url>
+  <url>
+    <loc>https://bioinfocz.github.io/scdrake/reference/visualized_spots.html</loc>
   </url>
   <url>
     <loc>https://bioinfocz.github.io/scdrake/reference/which_genes_regex.html</loc>

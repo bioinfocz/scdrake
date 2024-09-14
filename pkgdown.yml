@@ -15,13 +15,14 @@ articles:
   scdrake_extend: scdrake_extend.html
   scdrake_faq: scdrake_faq.html
   scdrake_integration: scdrake_integration.html
+  scdrake_spatial: scdrake_spatial.html
   stage_cluster_markers: stage_cluster_markers.html
   stage_contrasts: stage_contrasts.html
   stage_input_qc: stage_input_qc.html
   stage_int_clustering: stage_int_clustering.html
   stage_integration: stage_integration.html
   stage_norm_clustering: stage_norm_clustering.html
-last_built: 2023-12-19T08:40Z
+last_built: 2024-09-14T13:57Z
 urls:
   reference: https://bioinfocz.github.io/scdrake/reference
   article: https://bioinfocz.github.io/scdrake/articles

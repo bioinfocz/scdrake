@@ -28,7 +28,7 @@
     
     <a class="navbar-brand me-2" href="index.html">scdrake</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.5.2</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.6.0</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -44,6 +44,9 @@
 </li>
 <li class="nav-item">
   <a class="nav-link" href="articles/pipeline_overview.html">Pipeline overview</a>
+</li>
+<li class="nav-item">
+  <a class="nav-link" href="articles/scdrake_spatial.html">Spatial extension</a>
 </li>
 <li class="nav-item">
   <a class="nav-link" href="articles/scdrake_faq.html">FAQ &amp; Howtos</a>
@@ -64,6 +67,7 @@
     <a class="dropdown-item" href="articles/scdrake_cli.html">Command line interface</a>
     <a class="dropdown-item" href="articles/scdrake_config.html">scdrake config internals</a>
     <a class="dropdown-item" href="articles/scdrake_envvars.html">Environment variables</a>
+    <a class="dropdown-item" href="articles/scdrake_spatial.html">Spatial extension</a>
     <div class="dropdown-divider"></div>
     <h6 class="dropdown-header" data-toc-skip>General configs</h6>
     <a class="dropdown-item" href="articles/config_pipeline.html">Pipeline config</a>
@@ -152,6 +156,28 @@
 </ul></div>
 </div>
 <div class="section level2">
+<h2 id="testing">Testing<a class="anchor" aria-label="anchor" href="#testing"></a></h2>
+<p>Important (but not all) parts of <code>scdrake</code> are covered by <a href="https://testthat.r-lib.org/" class="external-link">testthat</a> unit tests. During the CI workflow, lighter of them are run automatically after the Docker image is built.</p>
+<p>Tests are heavily controlled by environment variables. Those are parsed in <code>tests/testthat/setup.R</code> and displayed on the beginning of testing. To ease the manipulation with envvars, there is a wrapper script <code>dev/run_tests.R</code>. It contains a CLI that transforms command line parameters to envvars used in tests. See <code>$ Rscript dev/run_tests.R</code> for the list of CLI parameters and at the same time, a list of envvars for tests.</p>
+<p>It’s also possible to run tests from within your R session, using temporary envvars:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>devtools<span class="sc">::</span><span class="fu">load_all</span>()</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>withr<span class="sc">::</span><span class="fu">with_envvar</span>(</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">c</span>(<span class="st">"SCDRAKE_TEST_RUN_PIPELINE_VIGNETTES = "</span>TRUE<span class="st">""</span>),</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>  devtools<span class="sc">::</span><span class="fu">test</span>(<span class="at">filter =</span> <span class="st">"vignettes"</span>)</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div>
+<div class="section level3">
+<h3 id="end-to-end-e2e-tests">End-to-end (e2e) tests<a class="anchor" aria-label="anchor" href="#end-to-end-e2e-tests"></a></h3>
+<p>In case you make bigger changes, a fuller testing is very much recommended. This is covered by several end-to-end tests in <code>tests/testthat/test-run_pipeline.R</code> and <code>tests/testthat/test-run_pipeline_vignettes.R</code>. These tests are computationally demanding and cannot be run in the CI.</p>
+<p>The second thing is that even though e2e tests can succeed, there is no actual validation of their outputs. Thus, it’s needed to manually inspect at least the produced reports. For this purpose, a persistent output directory can be set in <code>dev/run_tests.R</code>.</p>
+<p>You can use this short snippet to run e2e tests with preserved outputs:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> exec <span class="at">-it</span> <span class="at">-u</span> rstudio <span class="at">-w</span> /home/rstudio/scdrake <span class="op">&lt;</span>container_name<span class="op">&gt;</span> <span class="dt">\</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>  r <span class="at">--interactive</span> <span class="at">-L</span> /usr/local/lib/R/site-library <span class="at">-t</span> dev/run_tests.R <span class="dt">\</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">--no-test-single_sample-full-sct</span> <span class="dt">\</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">--output-dir</span> /home/rstudio/shared/test_outputs <span class="dt">\</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">--output-dir-pipeline-tests</span> /home/rstudio/shared/test_outputs/pipeline_outputs</span></code></pre></div>
+</div>
+</div>
+<div class="section level2">
 <h2 id="code-of-conduct">Code of Conduct<a class="anchor" aria-label="anchor" href="#code-of-conduct"></a></h2>
 <p>Please note that the <a href="https://github.com/bioinfocz/scdrake" class="external-link">scdrake</a> project is released with a <a href="CODE_OF_CONDUCT.html">Contributor Code of Conduct</a>. By contributing to this project you agree to abide by its terms.</p>
 </div>
@@ -162,7 +188,7 @@
 
 
     <footer><div class="copyright">
-  <p></p><p>Developed by Jiri Novotny, Jan Kubovciak, Michal Kolar.</p>
+  <p></p><p>Developed by Jiri Novotny, Jan Kubovciak, Lucie Pfeiferova, Michal Kolar.</p>
 </div>
 
 <div class="pkgdown">

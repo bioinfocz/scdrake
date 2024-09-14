@@ -30,7 +30,7 @@ For more details see the HVG selection section in 02_norm_clustering.yaml config
     
     <a class="navbar-brand me-2" href="../index.html">scdrake</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.5.2</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.6.0</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -46,6 +46,9 @@ For more details see the HVG selection section in 02_norm_clustering.yaml config
 </li>
 <li class="nav-item">
   <a class="nav-link" href="../articles/pipeline_overview.html">Pipeline overview</a>
+</li>
+<li class="nav-item">
+  <a class="nav-link" href="../articles/scdrake_spatial.html">Spatial extension</a>
 </li>
 <li class="nav-item">
   <a class="nav-link" href="../articles/scdrake_faq.html">FAQ &amp; Howtos</a>
@@ -66,6 +69,7 @@ For more details see the HVG selection section in 02_norm_clustering.yaml config
     <a class="dropdown-item" href="../articles/scdrake_cli.html">Command line interface</a>
     <a class="dropdown-item" href="../articles/scdrake_config.html">scdrake config internals</a>
     <a class="dropdown-item" href="../articles/scdrake_envvars.html">Environment variables</a>
+    <a class="dropdown-item" href="../articles/scdrake_spatial.html">Spatial extension</a>
     <div class="dropdown-divider"></div>
     <h6 class="dropdown-header" data-toc-skip>General configs</h6>
     <a class="dropdown-item" href="../articles/config_pipeline.html">Pipeline config</a>
@@ -135,6 +139,7 @@ For more details see the HVG selection section in <code>02_norm_clustering.yaml<
 <span>  hvg_selection <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"top"</span>, <span class="st">"significance"</span>, <span class="st">"threshold"</span><span class="op">)</span>,</span>
 <span>  hvg_rm_cc_genes <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  hvg_cc_genes_var_expl_threshold <span class="op">=</span> <span class="fl">5</span>,</span>
+<span>  spatial <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  BSPARAM <span class="op">=</span> <span class="fu">BiocSingular</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/BiocSingular/man/BiocSingularParam.html" class="external-link">IrlbaParam</a></span><span class="op">(</span><span class="op">)</span>,</span>
 <span>  BPPARAM <span class="op">=</span> <span class="fu">BiocParallel</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/BiocParallel/man/SerialParam-class.html" class="external-link">SerialParam</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="op">)</span></span></code></pre></div>
@@ -158,6 +163,10 @@ For more details see the HVG selection section in <code>02_norm_clustering.yaml<
 <dt>hvg_cc_genes_var_expl_threshold</dt>
 <dd><p>A numeric scalar: threshold for variance explained.
 Genes exceeding this threshold will be marked as CC-related.</p></dd>
+
+
+<dt>spatial</dt>
+<dd><p>A logical scalar: if <code>TRUE</code>, add spatially variable genes extension</p></dd>
 
 
 <dt>BSPARAM</dt>
@@ -190,7 +199,7 @@ or <code>feature.attributes</code> dataframe returned from <code><a href="https:
 
 
     <footer><div class="copyright">
-  <p></p><p>Developed by Jiri Novotny, Jan Kubovciak, Michal Kolar.</p>
+  <p></p><p>Developed by Jiri Novotny, Jan Kubovciak, Lucie Pfeiferova, Michal Kolar.</p>
 </div>
 
 <div class="pkgdown">
