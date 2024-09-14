@@ -153,7 +153,9 @@ downstream methods. We want to select genes that contain useful information abou
 removing genes that contain random noise. This aims to preserve interesting biological structure without the variance
 that obscures that structure, and to reduce the size of the data to improve computational efficiency of later steps.
 
-More information in [OSCA](https://bioconductor.org/books/3.15/OSCA.basic/feature-selection.html)
+In STR, we can identify spatially variable genes (SVGs). We define SVGs as genes with spatially correlated patterns of expression across the tissue area. Based on paper from Li et al 2021 we decided to generate a combined set of HVGs and Spatialy variable genes (SVGs). 
+
+More information in [OSCA](https://bioconductor.org/books/3.15/OSCA.basic/feature-selection.html and [BestPracticesST](https://lmweber.org/BestPracticesST/))
 
 ```{r, results = "asis"}
 scdrake::catg0('**HVG metric: "{hvg_metric}"**\n\n')
@@ -363,11 +365,11 @@ if (!is.null(cfg$CELL_ANNOTATION_SOURCES)) {
 
 ```{r, results = "asis"}
 if (isTRUE(cfg$MANUAL_ANNOTATION)) {
- scdrake::md_header("Manual cell annotation", 1, extra = "{.tabset}")
+ scdrake::md_header("Marker-based cell annotation", 1, extra = "{.tabset}")
    scdrake::catn(
     glue::glue("**Annotation was done for {cfg$ANNOTATION_CLUSTERING}**"))
    cat("\n\n")
-  cat("For manual annotation we modified an implemented function from the Giotto package. The enrichment Z score is calculated by using method (PAGE) from Kim SY et al., BMC bioinformatics, 2005 as $$ Z = \frac{((Sm – mu)*m^\frac{1}{2})}{delta} $$. \n
+  cat("For marker-based annotation we modified an implemented function from the Giotto package. The enrichment Z score is calculated by using method (PAGE) from Kim SY et al., BMC bioinformatics, 2005 as $$ Z = \frac{((Sm – mu)*m^\frac{1}{2})}{delta} $$. \n
  For each gene in each spot/cell, mu is the fold change values versus the mean expression
  and delta is the standard deviation. Sm is the mean fold change value of a specific marker gene set
  and  m is the size of a given marker gene set.")

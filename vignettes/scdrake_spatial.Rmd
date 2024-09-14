@@ -1,5 +1,5 @@
 ---
-title: "Spatial extention"
+title: "Spatial extension"
 date: "`r glue::glue('<sup>Document generated: {format(Sys.time(), \"%Y-%m-%d %H:%M:%S %Z%z</sup>\")}')`"
 package: scdrake
 output:
@@ -7,27 +7,27 @@ output:
     toc: true
     toc_float: true
 vignette: >
-  %\VignetteIndexEntry{Spatial extention}
+  %\VignetteIndexEntry{Spatial extension}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}  
 ---
 
 ***
 
-`{scdrake}` now offer spatial extension for the first stage (`01_input_qc`) and the second stage (`02_norm_clustering`) of the single-sample pipeline. The spatial possibility is aimed on Visium technology, respectively on spot-based technologies. Scdrake provides comparable results with Seurat, Giotto (R), as well as scanpy (Python). However, we strongly discourage usage of scdrake for other technologies than Visium. For futher analyses of spatial dataset we recommend [CARD](https://github.com/YMa-lab/CARD) for deconvolution and [CellChat2](https://github.com/SiYangming/CellChat2) or [IGAN](https://github.com/Zhu-JC/IGAN) for cell-cell interaction.
+`{scdrake}` now offer spatial extension for the first stage (`01_input_qc`) and the second stage (`02_norm_clustering`) of the single-sample pipeline. The spatial possibility is aimed at Visium technology, respectively on spot-based technologies. Scdrake provides comparable results with Seurat, Giotto (R), as well as scanpy (Python), and correspond to [Best Practices for Spatial Transcriptomics](https://lmweber.org/BestPracticesST/). For now, we discourage usage of scdrake for other technologies than Visium. For futher analyses of the spatial dataset we recommend [CARD](https://github.com/YMa-lab/CARD) for deconvolution and [CellChat2](https://github.com/SiYangming/CellChat2) or [IGAN](https://github.com/Zhu-JC/IGAN) for cell-cell interaction.
 
 This vignette should serve as a supplement to other vignettes, as `vignette("stage_input_qc")` and `vignette("stage_norm_clustering")`). 
 
 
 ***
 
-## Spatial extention functions
+## Spatial exsention functions
 
 ***
 
 ### Spatial visualization
 
-For (`01_input_qc`) and (`02_norm_clustering`) of the single-sample pipeline we now offer visualization of tissue, as pseudo tissue spot visualization. Spatial extention will add spot coordinates (array_col and array_row) from SpaceRanger tissue_possitions.csv file, and will filter away all spots, that are by SpaceRanger labeled as not in tissue. Visualization function are implemented from the [Giotto package](https://drieslab.github.io/Giotto_website/). Visualization is automatically used for quality control and dimension reduction results.    
+For (`01_input_qc`) and (`02_norm_clustering`) of the single-sample pipeline we now offer visualization of tissue, as pseudo tissue spot visualization. Spatial extension will add spot coordinates (array_col and array_row) from SpaceRanger tissue_possitions.csv file, and will filter away all spots, that are by SpaceRanger labeled as not in tissue. Visualization function are implemented from the [Giotto package](https://drieslab.github.io/Giotto_website/). Visualization is automatically used for quality control and dimension reduction results.
 
 ***
 
@@ -37,8 +37,8 @@ For spatial analyses in stage 02_norm_clustering `vignette("stage_norm_clusterin
 
 ***
 
-### Manual annotation
+### Marker-based annotation
 
-Manual annotation was implemented for both single-cell and spatial datasets. In summary, expression profiles and statistical metrics are computed for each cell/spot, the result is visualized using a heatmap and dimension reduction plot. For spatial datasets is enabled to visualized results in tissue coordinates, both enrichment plots for each annotation label (individual enrichment plots) and for overall results for each spot. Manual annotation is implemented from the [Giotto package](https://drieslab.github.io/Giotto_website/), the function is based on [Kim SY et al](https://bmcbioinformatics.biomedcentral.com/articles/10.1186/1471-2105-6-144).  
+Marker-based annotation was implemented for both single-cell and spatial datasets. In summary, expression profiles and statistical metrics are computed for each cell/spot, the result is visualized using a heatmap and dimension reduction plot. For spatial datasets is enabled to visualized results in tissue coordinates, both enrichment plots for each annotation label (individual enrichment plots) and for overall results for each spot. Marker-based annotation is implemented from the [Giotto package](https://drieslab.github.io/Giotto_website/), the function is based on [Kim SY et al](https://bmcbioinformatics.biomedcentral.com/articles/10.1186/1471-2105-6-144).  
 
 ***

@@ -13,12 +13,13 @@ outputs](https://img.shields.io/badge/Overview%20&%20outputs-vignette(%22pipelin
 diagram](https://img.shields.io/badge/Pipeline%20diagram-Show-informational)](https://github.com/bioinfocz/scdrake/blob/main/diagrams/README.md)
 ![License](https://img.shields.io/github/license/bioinfocz/scdrake)
 [![Lifecycle:
-experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
+experimental](https://img.shields.io/badge/lifecycle-stable-green.svg)](https://lifecycle.r-lib.org/articles/stages.html#stable)
 [![Docker Image
 CI](https://github.com/bioinfocz/scdrake/actions/workflows/docker-ci.yml/badge.svg?branch=main)](https://github.com/bioinfocz/scdrake/actions/workflows/docker-ci.yml)
 
 `{scdrake}` is a scalable and reproducible pipeline for secondary
-analysis of droplet-based single-cell RNA-seq data. `{scdrake}` is an R
+analysis of droplet-based single-cell RNA-seq data (scRNA-seq) and
+spot-based spatial transcriptomics data (SRT). `{scdrake}` is an R
 package built on top of the `{drake}` package, a
 [Make](https://www.gnu.org/software/make)-like pipeline toolkit for [R
 language](https://www.r-project.org).
@@ -28,11 +29,17 @@ The main features of the `{scdrake}` pipeline are:
 -   Import of scRNA-seq data: [10x Genomics Cell
     Ranger](https://support.10xgenomics.com/single-cell-gene-expression/software/pipelines/latest/what-is-cell-ranger)
     output, delimited table, or `SingleCellExperiment` object.
--   Quality control and filtering of cells and genes, removal of empty
-    droplets.
+-   Import of SRT data: [10x Genomics Space
+    Ranger](https://www.10xgenomics.com/support/software/space-ranger/latest/getting-started/what-is-space-ranger)
+    output, delimited table, or `SingleCellExperiment` object, and
+    tissue positions file as in Space ranger.
+-   Quality control and filtering of cells/spots and genes, removal of
+    empty droplets.
 -   Higly variable genes detection, cell cycle scoring, normalization,
     clustering, and dimensionality reduction.
--   Cell type annotation.
+-   Spatially variable genes detection (for SRT data)
+-   Cell type annotation using reference sets, cell type annotation
+    using user-provided marker genes.
 -   Integration of multiple datasets.
 -   Computation of cluster markers and differentially expressed genes
     between clusters (denoted as “contrasts”).
@@ -108,8 +115,8 @@ You can pull the Docker image with the latest stable `{scdrake}` version
 using
 
 ``` bash
-docker pull jirinovo/scdrake:1.5.2
-singularity pull docker:jirinovo/scdrake:1.5.2
+docker pull jirinovo/scdrake:1.6.0
+singularity pull docker:jirinovo/scdrake:1.6.0
 ```
 
 or list available versions in [our Docker Hub
@@ -151,7 +158,7 @@ docker run -d \
   -e USERID=$(id -u) \
   -e GROUPID=$(id -g) \
   -e PASSWORD=1234 \
-  jirinovo/scdrake:1.5.2
+  jirinovo/scdrake:1.6.0
 ```
 
 For Singularity, also make shared directories and execute the container
@@ -234,7 +241,7 @@ for `{scdrake}` and you can use it to install all dependencies by
 
 ``` r
 ## -- This is a lockfile for the latest stable version of scdrake.
-download.file("https://raw.githubusercontent.com/bioinfocz/scdrake/1.5.2/renv.lock")
+download.file("https://raw.githubusercontent.com/bioinfocz/scdrake/1.6.0/renv.lock")
 ## -- You can increase the number of CPU cores to speed up the installation.
 options(Ncpus = 2)
 renv::restore(lockfile = "renv.lock", repos = BiocManager::repositories())
@@ -254,7 +261,7 @@ installed from the lockfile).
 
 ``` r
 remotes::install_github(
-  "bioinfocz/scdrake@1.5.2",
+  "bioinfocz/scdrake@1.6.0",
   dependencies = FALSE, upgrade = FALSE,
   keep_source = TRUE, build_vignettes = TRUE,
   repos = BiocManager::repositories()
@@ -321,7 +328,7 @@ vignette](https://bioinfocz.github.io/scdrake/articles/scdrake.html)
 ## Vignettes and other readings
 
 See <https://bioinfocz.github.io/scdrake> for a documentation website of
-the latest stable version (1.5.2) where links to vignettes below become
+the latest stable version (1.6.0) where links to vignettes below become
 real :-)
 
 See <https://bioinfocz.github.io/scdrake/dev> for a documentation
@@ -341,6 +348,7 @@ website of the current development version.
 -   General information:
     -   Pipeline overview: `vignette("pipeline_overview")`
     -   FAQ & Howtos: `vignette("scdrake_faq")`
+    -   Spatial extension: `vignette("scdrake_spatial")`
     -   Command line interface (CLI): `vignette("scdrake_cli")`
     -   Config files (internals): `vignette("scdrake_config")`
     -   Environment variables: `vignette("scdrake_envvars")`
@@ -352,8 +360,9 @@ website of the current development version.
         -   Stage `01_input_qc`: reading in data, filtering, quality
             control -\> `vignette("stage_input_qc")`
         -   Stage `02_norm_clustering`: normalization, HVG selection,
-            dimensionality reduction, clustering, cell type annotation
-            -\> `vignette("stage_norm_clustering")`
+            SVG selection, dimensionality reduction, clustering,
+            (marker-based) cell type annotation -\>
+            `vignette("stage_norm_clustering")`
     -   Integration pipeline:
         -   Stage `01_integration`: reading in data and integration -\>
             `vignette("stage_integration")`
@@ -436,8 +445,8 @@ contributing to this project, you agree to abide by its terms.
 ### Funding
 
 This work was supported by [ELIXIR CZ](https://www.elixir-czech.cz)
-research infrastructure project (MEYS Grant No: LM2018131) including
-access to computing and storage facilities.
+research infrastructure project (MEYS Grant No: LM2018131 and LM2023055)
+including access to computing and storage facilities.
 
 ### Software and methods used by `{scdrake}`
 
