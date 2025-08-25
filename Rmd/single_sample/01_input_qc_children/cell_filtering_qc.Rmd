@@ -1,9 +1,0 @@
-Filter cells based on QC metrics and MAD threshold (`r cfg$MAD_THRESHOLD`):
-
-- Low number of UMI (lower tail).
-- Low number of detected genes (lower tail).
-- High expression of mitochondrial genes (upper tail).
-
-`r get_used_qc_filters_operator_desc(cfg$CUSTOM_FILTERS_OPERATOR)`
-
-**Removing `r sum(qc_filter)` low quality cells based on MAD.**
