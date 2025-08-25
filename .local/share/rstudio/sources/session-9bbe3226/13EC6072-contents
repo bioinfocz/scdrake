@@ -86,7 +86,7 @@ jobs:
       - name: Test image
         run: |
           docker exec -w /home/rstudio/scdrake_source scdrake_test \
-  Rscript dev/run_tests.R --no-test-pipeline --output-dir /home/rstudio/scdrake_test_summary
+              Rscript dev/run_tests.R --no-test-pipeline --output-dir /home/rstudio/scdrake_test_summary
       - name: Copy test results
         if: always()
         run: |
