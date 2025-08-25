@@ -1,7 +1,11 @@
-~/dev/run_check.R
-~/dev/run_tests.R
+~/DESCRIPTION
+~/tests/testthat/test-run_pipeline.R
 ~/tests/testthat/setup.R
 ~/tests/testthat.R
+~/dev/run_tests.R
+~/renv.lock
+~/tests/testthat/test-run_pipeline_vignettes.R
+~/dev/run_check.R
 ~/.github/workflows/update-docs.yaml.disabled
 ~/tests/testthat/run_pipeline_config_patches/integration/01_integration.default.yaml
 ~/tests/testthat/run_pipeline_config_patches/single_sample_pbmc3k/01_input_qc.default.yaml
@@ -9,7 +13,3 @@
 ~/tests/testthat/run_pipeline_config_patches/single_sample_pbmc1k_full/02_norm_clustering.default.yaml
 ~/tests/testthat/run_pipeline_config_patches/single_sample_pbmc1k_full/01_input_qc.default.yaml
 ~/tests/testthat/run_pipeline_config_patches/single_sample_pbmc1k/01_input_qc.default.yaml
-~/.github/workflows/docker-ci.yml
-~/_pkgdown.yml
-~/tests/testthat/test-run_pipeline.R
-~/tests/testthat/test-plans.R

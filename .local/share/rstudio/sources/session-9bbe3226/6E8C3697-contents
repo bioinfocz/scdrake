@@ -5533,7 +5533,7 @@
       "LazyLoad": "Yes",
       "Author": "Thomas Lumley [aut, cre], Ken Knoblauch [ctb], Scott Waichler [ctb], Achim Zeileis [ctb]",
       "Maintainer": "Thomas Lumley <tlumley@u.washington.edu>",
-      "Repository": "https://packagemanager.rstudio.com/cran/__linux__/focal/latest",
+      "Repository": "RSPM",
       "NeedsCompilation": "no",
       "Encoding": "UTF-8"
     },
@@ -9015,8 +9015,7 @@
       "RemoteRepo": "littler",
       "RemoteUsername": "eddelbuettel",
       "RemoteRef": "0.3.19",
-      "RemoteSha": "82ef35807b1a57730d6f6d3dc24603b707b9dc41",
-      "NeedsCompilation": "yes"
+      "RemoteSha": "82ef35807b1a57730d6f6d3dc24603b707b9dc41"
     },
     "lmtest": {
       "Package": "lmtest",
@@ -9222,7 +9221,7 @@
       "NeedsCompilation": "yes",
       "Author": "Doug McIlroy [aut] (Original C code), Ray Brownrigg [trl, aut] (R packaging), Thomas P. Minka [trl, aut] (R packaging), Roger Bivand [ctb] (transition to Plan 9 code base), Alex Deckmyn [ctb, cre]",
       "Maintainer": "Alex Deckmyn <alex.deckmyn@meteo.be>",
-      "Repository": "https://packagemanager.rstudio.com/cran/__linux__/focal/latest",
+      "Repository": "RSPM",
       "Encoding": "UTF-8"
     },
     "maps": {
@@ -9655,7 +9654,7 @@
       "NeedsCompilation": "no",
       "Author": "Kevin Wright [aut, cre, cph] (<https://orcid.org/0000-0002-0617-8673>)",
       "Maintainer": "Kevin Wright <kw.stat@gmail.com>",
-      "Repository": "https://packagemanager.rstudio.com/cran/__linux__/focal/latest"
+      "Repository": "RSPM"
     },
     "parallelly": {
       "Package": "parallelly",

@@ -11,3 +11,8 @@
 1756137218223:yq_version <- system2(yq_binary, "-V", stdout = TRUE)
 1756137236043:scdrake::check_yq()
 1756139940929:scdrake::init_project(set_active_project = F,download_example_data = T)
+1756144128936:install.packages("scrapper")
+1756144163257:BiocManager::install("scrapper")
+1756144192448:renv::snapshot()
+1756144215558:renv::snapshot()
+1756145529754:testthat::snapshot_accept('project')
