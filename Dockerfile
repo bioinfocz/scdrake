@@ -103,7 +103,7 @@ RUN Rscript -e "\
   options(Ncpus = ${R_PKG_INSTALL_NCPUS});\
   devtools::install(\
     pkg = '/scdrake_source', dependencies = FALSE, upgrade = FALSE,\
-    keep_source = TRUE, build_vignettes = FALSE,\
+    keep_source = TRUE, build_vignettes = TRUE,\
     repos = BiocManager::repositories()\
   );\
   "
