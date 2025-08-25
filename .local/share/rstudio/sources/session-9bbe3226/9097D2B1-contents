@@ -1,0 +1,3 @@
+INPUT_DATA:
+  type: "cellranger"
+  path: "example_data/pbmc1k"

@@ -1,0 +1,115 @@
+## Adapted from https://github.com/r-lib/actions/blob/master/.github/workflows/render-readme.yaml
+## README.Rmd is re-rendered to README.md
+## Docs in gh-pages branch are updated except articles and reference
+## (those are triggered by changes in man/ and vignettes/, and treated by check-bioc.yaml workflow)
+
+name: update-docs
+on:
+  push:
+    branches:
+      - '**'
+    paths:
+      - '_pkgdown.yml'
+      - 'README.Rmd'
+      - '*.md'
+      - 'DESCRIPTION'
+      - 'LICENSE'
+      - 'NAMESPACE'
+      - '.github/**.md'
+      - '.github/workflows/update-docs.yaml'
+      - 'diagrams/**'
+  pull_request:
+    branches:
+      - '**'
+    paths:
+      - '_pkgdown.yml'
+      - 'README.Rmd'
+      - '*.md'
+      - 'DESCRIPTION'
+      - 'LICENSE'
+      - 'NAMESPACE'
+      - '.github/**.md'
+      - '.github/workflows/update-docs.yaml'
+      - 'diagrams/**'
+concurrency:
+  group: main
+
+env:
+  cache-version: 'cache-v3'
+
+jobs:
+  render:
+    name: update-docs
+    runs-on: ubuntu-latest
+    env:
+      GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
+    steps:
+      - uses: actions/checkout@v3
+      - run: git config --global user.name "$GITHUB_ACTOR"
+      - run: git config --global user.email "$GITHUB_ACTOR@users.noreply.github.com"
+      - uses: r-lib/actions/setup-r@v2
+        with:
+          use-public-rspm: true
+      - uses: r-lib/actions/setup-pandoc@v2
+
+      - name: Install shared libs
+        run: |
+          apt-get update && apt-get install -y --no-install-recommends \
+            build-essential libcurl4-openssl-dev libxml2-dev libssl-dev libharfbuzz-dev libfribidi-dev
+
+      - name: Query dependencies
+        run: |
+          install.packages("remotes")
+          deps <- remotes::package_deps(c("rmarkdown", "pkgdown", "dplyr"), dependencies = TRUE)
+          print(deps)
+          saveRDS(deps, ".github/update-docs-depends.Rds", version = 2)
+        shell: Rscript {0}
+
+      - name: Cache R packages
+        if: "!contains(github.event.head_commit.message, '/nocache')"
+        uses: pat-s/always-upload-cache@main
+        with:
+          path: /home/runner/work/_temp/Library
+          key: ${{ env.cache-version }}-biocversion-RELEASE_3_15-r-4.2-${{ hashFiles('.github/update-docs-depends.Rds') }}
+          restore-keys: ${{ env.cache-version }}-biocversion-RELEASE_3_15-r-4.2-
+
+      - name: Install R packages
+        run: |
+          remotes::install_cran("rmarkdown")
+          remotes::install_cran("pkgdown")
+          remotes::install_cran("preferably")
+          remotes::install_cran("dplyr")
+        shell: Rscript {0}
+
+      - name: Render README
+        run: Rscript -e 'rmarkdown::render("README.Rmd")'
+
+      - name: Render required_libs_linux.Rmd
+        run: Rscript -e 'rmarkdown::render("required_libs_linux.Rmd")'
+
+      - name: Commit README.md to main branch
+        run: |
+          git add README.md required_libs_linux.md
+          git commit -m "Re-build README.Rmd" || echo "No changes to commit"
+          git push origin || echo "No commits to push"
+
+      ## Adapted from https://rdrr.io/cran/pkgdown/src/R/deploy-site.R#sym-deploy_to_branch
+      - name: Run pkgdown and push to gh-pages branch
+        run: |
+          invisible(pkgdown:::git("status"))
+          dest_dir <- fs::dir_create(fs::file_temp())
+          pkg <- pkgdown::as_pkgdown(".", override = list(destination = dest_dir))
+          branch <- "gh-pages"
+          remote <- "origin"
+          commit_message <- pkgdown:::construct_commit_message(".")
+          pkgdown:::git("remote", "set-branches", remote, branch)
+          pkgdown:::git("fetch", remote, branch)
+          pkgdown:::github_worktree_add(dest_dir, remote, branch)
+          pkgdown::build_home(pkg, quiet = FALSE)
+          pkgdown::build_news(pkg)
+          pkgdown:::build_github_pages(pkg)
+          invisible(withr::with_dir(dest_dir, pkgdown:::git("status")))
+          pkgdown:::github_push(dest_dir, commit_message, remote, branch)
+          invisible(withr::with_dir(dest_dir, pkgdown:::git("status")))
+          invisible(withr::with_dir(dest_dir, pkgdown:::git("log")))
+        shell: Rscript {0}

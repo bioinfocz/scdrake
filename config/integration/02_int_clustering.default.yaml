@@ -1,0 +1,101 @@
+### Selection of final integration method #####################################
+INTEGRATION_FINAL_METHOD: "mnn"
+INTEGRATION_FINAL_METHOD_RM_CC: False
+###############################################################################
+
+### Graph-based clustering ####################################################
+CLUSTER_GRAPH_SNN_K: 10
+CLUSTER_GRAPH_SNN_TYPE: "rank"
+
+CLUSTER_GRAPH_LEIDEN_ENABLED: True
+CLUSTER_GRAPH_LEIDEN_RESOLUTIONS: [0.2, 0.4, 0.6, 0.8, 1.0]
+
+CLUSTER_GRAPH_LOUVAIN_ENABLED: False
+CLUSTER_GRAPH_LOUVAIN_RESOLUTIONS: [0.2, 0.4, 0.6, 0.8, 1.0]
+
+CLUSTER_GRAPH_WALKTRAP_ENABLED: False
+###############################################################################
+
+### k-means clustering ########################################################
+CLUSTER_KMEANS_K_ENABLED: False
+CLUSTER_KMEANS_K: !code 3:6
+
+CLUSTER_KMEANS_KBEST_ENABLED: False
+###############################################################################
+
+### SC3 clustering ############################################################
+CLUSTER_SC3_ENABLED: False
+CLUSTER_SC3_K: !code 5:6
+CLUSTER_SC3_N_CORES: 1
+###############################################################################
+
+### Cell type annotation ######################################################
+CELL_ANNOTATION_SOURCES:
+  - human_primary_cell_atlas_main:
+      reference_type: "celldex"
+      reference: "HumanPrimaryCellAtlasData"
+      description: >
+        Microarray datasets derived from human primary cells (Mabbott et al. 2013).
+        Most of the labels refer to blood subpopulations but cell types from other tissues are also available.
+      label_column: "label.main"
+      label_subsets: []
+    monaco_immune_main:
+      reference_type: "celldex"
+      reference: "MonacoImmuneData"
+      description: "This is the human immune reference that best covers all of the bases for a typical PBMC sample."
+      label_column: "label.main"
+      label_subsets: []
+
+CELL_ANNOTATION_SOURCES_DEFAULTS:
+  TRAIN_PARAMS:
+    GENES: "de"
+    SD_THRESH: 1
+    DE_METHOD: "classic"
+    DE_N: null
+    ASSAY_TYPE: "logcounts"
+  CLASSIFY_PARAMS:
+    QUANTILE: 0.8
+    TUNE_THRESH: 0.05
+    ASSAY_TYPE: "logcounts"
+  PRUNE_SCORE_PARAMS:
+    N_MADS: 3
+    MIN_DIFF_MED: -.inf
+    MIN_DIFF_NEXT: 0
+  DIAGNOSTICS_PARAMS:
+    HEATMAP_N_TOP_MARKERS: 20
+###############################################################################
+
+### Group assignment ##########################################################
+ADDITIONAL_CELL_DATA_FILE: null
+CELL_GROUPINGS: null
+###############################################################################
+
+### Plots #####################################################################
+INT_CLUSTERING_REPORT_DIMRED_NAMES: ["umap", "pca", "tsne"]
+INT_CLUSTERING_REPORT_DIMRED_PLOTS_OTHER:
+  - "phase": "Cell cycle phases"
+    "batch": "Batch of origin"
+    "doublet_score": "Doublet score"
+    "total": "Total number of UMI"
+    "detected": "Detected number of genes"
+    "cluster_quickcluster": "Graph-based clustering for integration diagnostics"
+###############################################################################
+
+### Input files ###############################################################
+INT_CLUSTERING_REPORT_RMD_FILE: "Rmd/integration/02_int_clustering.Rmd"
+###############################################################################
+
+### Output files ##############################################################
+INT_CLUSTERING_BASE_OUT_DIR: "02_int_clustering"
+
+INT_CLUSTERING_DIMRED_PLOTS_OUT_DIR: "dimred_plots"
+INT_CLUSTERING_CELL_ANNOTATION_OUT_DIR: "cell_annotation"
+INT_CLUSTERING_OTHER_PLOTS_OUT_DIR: "other_plots"
+INT_CLUSTERING_REPORT_HTML_FILE: "02_int_clustering.html"
+###############################################################################
+
+### HTML output parameters ####################################################
+INT_CLUSTERING_KNITR_MESSAGE: False
+INT_CLUSTERING_KNITR_WARNING: False
+INT_CLUSTERING_KNITR_ECHO: False
+###############################################################################

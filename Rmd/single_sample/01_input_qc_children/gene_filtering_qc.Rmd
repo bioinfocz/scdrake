@@ -1,0 +1,20 @@
+We excluded genes that are not expressed in our system and don't contribute any information to our experiment.
+Very lowly expressed genes may only contribute noise.
+
+Table of zero-expression genes count:
+
+```{r}
+janitor::tabyl(sce_qc_filter_rowSums == 0) %>%
+  dplyr::rename(zero_expression = `sce_qc_filter_rowSums == 0`) %>%
+  dplyr::mutate(percent = scales::percent(percent)) %>%
+  scdrake::render_bootstrap_table(full_width = FALSE, position = "left")
+```
+
+**Removing `r sum(drake::readd(sce_qc_gene_filter, path = drake_cache_dir))` genes with UMI per cell less than
+`r cfg$MIN_UMI` and expressed in less than `r cfg$MIN_RATIO_CELLS * 100` % of all cells.**
+
+Info on dataset-sensitive filtered dataset:
+
+```{r}
+cat(drake::readd(sce_qc_filter_genes_info, path = drake_cache_dir)$str)
+```

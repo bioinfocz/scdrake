@@ -1,0 +1,208 @@
+development:
+  mode: devel
+template:
+  package: preferably
+  bootstrap: 5
+  params:
+    ganalytics: "281550496"
+    toggle: manual
+    docsearch:
+      api_key: "937cedcd467c204b19fc155c5f35019b"
+      index_name: "scdrake"
+url: https://bioinfocz.github.io/scdrake
+repo:
+  branch: main
+  url:
+    home: https://github.com/bioinfocz/scdrake
+    source: https://github.com/bioinfocz/scdrake/blob/master
+    issue: https://github.com/bioinfocz/scdrake/issues
+    user: https://github.com/bioinfocz
+navbar:
+  structure:
+    left:  [home, intro, scdrake_integration, pipeline_overview, spatial, faq, articles, reference, news]
+    right: [github]
+  components:
+    pipeline_overview:
+      text: Pipeline overview
+      href: articles/pipeline_overview.html
+    scdrake_integration:
+      text: Integration pipeline guide
+      href: articles/scdrake_integration.html
+    spatial:
+      text: Spatial extension
+      href: articles/scdrake_spatial.html
+    faq:
+      text: FAQ & Howtos
+      href: articles/scdrake_faq.html
+articles:
+  - title: Guides
+    navbar: Guides
+    contents:
+    - scdrake_docker
+    - scdrake_integration
+    - scdrake_advanced
+    - interaction_analysis
+    - scdrake_extend
+    - scdrake_development
+    - drake_basics
+
+  - title: General information
+    navbar: General information
+    contents:
+    - pipeline_overview
+    - scdrake_faq
+    - scdrake_cli
+    - scdrake_config
+    - scdrake_envvars
+    - scdrake_spatial
+
+  - title: General configs
+    navbar: General configs
+    contents:
+    - config_pipeline
+    - config_main
+
+  - title: Single-sample pipeline stages
+    navbar: Single-sample pipeline stages
+    contents:
+    - stage_input_qc
+    - stage_norm_clustering
+
+  - title: Integration pipeline stages
+    navbar: Integration pipeline stages
+    contents:
+    - stage_integration
+    - stage_int_clustering
+
+  - title: Common stages
+    navbar: Common stages
+    contents:
+    - stage_cluster_markers
+    - stage_contrasts
+reference:
+  - title: Command line interface
+    desc: Install or check the command line interface.
+  - contents:
+    - has_concept("cli")
+
+  - title: Project
+    desc: Initialize or update a `scdrake` project.
+  - contents:
+    - init_project
+    - update_project
+
+  - title: Config
+  - subtitle: Load or update config files
+  - contents:
+    - has_concept("load_config")
+    - has_concept("update_config")
+    - scdrake_list
+  - subtitle: yq tool
+    desc: Functions related to the [yq](https://github.com/mikefarah/yq) tool.
+  - contents:
+    - has_concept("yq_tool")
+
+  - title: Run pipeline
+  - contents:
+    - has_concept("run_pipeline")
+    - has_concept("create_dirs")
+    - has_concept("scdrake_make")
+
+  - title: Check for scdrake dependencies
+  - contents:
+    - has_concept("checks")
+
+  - title: Get pipeline plans
+  - subtitle: Full plans of the single-sample and integration pipelines
+  - contents:
+    - get_plan
+  - subtitle: Subplans common to the single-sample and integration pipelines
+  - contents:
+    - has_concept("get_subplan_common")
+    - has_concept("get_subplan_clustering")
+    - has_concept("get_subplan_cell_annotation")
+  - subtitle: Single-sample pipeline subplans
+  - contents:
+    - has_concept("get_subplan_single_sample")
+  - subtitle: Integration pipeline subplans
+  - contents:
+    - has_concept("get_subplan_integration")
+  - subtitle: Custom plan
+  - contents:
+    - load_custom_plan
+
+  - title: Download example data
+  - contents:
+    - has_concept("download_example_data")
+
+  - title: Options used by scdrake
+  - contents:
+    - has_concept("scdrake_options")
+
+  - title: Target-related functions
+    desc: Those functions are mostly used for individual targets within pipeline plans. They are usually named as `<target_name>_fn()`.
+  - subtitle: Single-sample pipeline / stage 01_input_qc
+  - contents:
+    - has_concept("single_sample_input_qc_fn")
+  - subtitle: Single-sample pipeline / stage 02_norm_clustering
+  - contents:
+    - has_concept("single_sample_norm_clustering_fn")
+  - subtitle: Integration pipeline / stage 01_integration
+  - contents:
+    - has_concept("integration_integration_fn")
+
+  - title: Single-cell data-related functions
+  - subtitle: Annotation
+  - contents:
+    - has_concept("sc_annotation")
+  - subtitle: Cell type annotation
+  - contents:
+    - has_concept("sc_cell_annotation")
+  - subtitle: Manual annotation
+  - contents:
+    - has_concept("manual_annotation")
+  - subtitle: Cluster markers
+  - contents:
+    - has_concept("sc_cluster_markers")
+  - subtitle: Clustering
+  - contents:
+    - has_concept("sc_clustering")
+  - subtitle: Contrasts
+  - contents:
+    - has_concept("sc_contrasts")
+  - subtitle: Highly variable genes (HVGs)
+  - contents:
+    - has_concept("sc_hvg")
+  - subtitle: Markers
+    desc: These functions are used in both cluster markers and contrasts stages.
+  - contents:
+    - has_concept("sc_markers")
+  - subtitle: SingleCellExperiment object-related functions
+  - contents:
+    - has_concept("sc_sce")
+  - subtitle: SingleCellExperiment object-related spatial functions
+  - contents:
+    - has_concept("spatial_sce")
+  - subtitle: Visualization
+  - contents:
+    - has_concept("sce_visualization")
+  - subtitle: Spatial visualization
+  - contents:
+    - has_concept("spatial_visualization")
+  - subtitle: Spatial deconvolution
+  - contents:
+    - has_concept("deconvolution")
+  - title: Misc functions
+  - subtitle: HTML
+  - contents:
+    - has_concept("misc_html")
+  - subtitle: Text
+  - contents:
+    - has_concept("misc_text")
+  - subtitle: Utils
+  - contents:
+    - has_concept("misc_utils")
+
+  - title: internal
+  - contents:
+    - has_concept("internal")

@@ -1,0 +1,9 @@
+Filter cells based on custom (fixed) thresholds of QC metrics:
+
+- &lt;Min; Max&gt; UMI per cell: &lt;`r cfg$MIN_UMI_CF`; `r as.character(cfg$MAX_UMI_CF)`&gt;
+- Min. number of features (genes) detected: `r cfg$MIN_FEATURES`
+- Max. ratio of mitochondrial genes expression: `r cfg$MAX_MITO_RATIO`
+
+`r get_used_qc_filters_operator_desc(cfg$CUSTOM_FILTERS_OPERATOR)`
+
+**Removing `r sum(custom_filter)` low quality cells based on custom thresholds.**

@@ -1,0 +1,26 @@
+{
+    "id": "87C11937",
+    "path": "~/dev/run_tests.R",
+    "project_path": null,
+    "type": "r_source",
+    "hash": "0",
+    "contents": "",
+    "dirty": false,
+    "created": 1756141424449.0,
+    "source_on_save": false,
+    "relative_order": 4,
+    "properties": {
+        "source_window_id": "",
+        "Source": "Source",
+        "cursorPosition": "86,40",
+        "scrollLine": "73"
+    },
+    "folds": "",
+    "lastKnownWriteTime": 1756113179,
+    "encoding": "UTF-8",
+    "collab_server": "",
+    "source_window": "",
+    "last_content_update": 1756113179,
+    "read_only": false,
+    "read_only_alternatives": []
+}

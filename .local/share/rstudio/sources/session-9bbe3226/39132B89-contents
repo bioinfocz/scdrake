@@ -1,0 +1,10 @@
+VAR_1: 5
+VAR_2: !code VAR_1 + 5
+VAR_3: "apple"
+VAR_4:
+  VAR_4_1: !code toupper(VAR_3)
+VAR_5:
+  - VAR_5_1:
+      a: !code VAR_1 + 1
+    VAR_5_2:
+      b: !code 1:10

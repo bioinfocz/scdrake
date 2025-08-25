@@ -1,0 +1,67 @@
+### Cluster markers ###########################################################
+CLUSTER_MARKERS_SOURCES_DEFAULTS:
+  COMMON_PARAMS:
+    PLOT_DIMREDS: ["umap"]
+    BLOCK_COLUMN: null
+  PARAMS_T:
+    LFC_DIRECTION: "up"
+    LFC_TEST: 0
+    PVAL_TYPE: "any"
+    MIN_PROP: null
+    STD_LFC: False
+    TOP_N_HEATMAP: 10
+    TOP_N_WT_HEATMAP: "top"
+    TOP_N_PLOT: 5
+    TOP_N_WT_PLOT: "top"
+  PARAMS_WILCOX:
+    LFC_DIRECTION: "up"
+    LFC_TEST: 0
+    PVAL_TYPE: "any"
+    MIN_PROP: null
+    STD_LFC: null
+    TOP_N_HEATMAP: 10
+    TOP_N_WT_HEATMAP: "top"
+    TOP_N_PLOT: 5
+    TOP_N_WT_PLOT: "top"
+  PARAMS_BINOM:
+    LFC_DIRECTION: "up"
+    LFC_TEST: 0
+    PVAL_TYPE: "any"
+    MIN_PROP: null
+    STD_LFC: null
+    TOP_N_HEATMAP: 10
+    TOP_N_WT_HEATMAP: "top"
+    TOP_N_PLOT: 5
+    TOP_N_WT_PLOT: "top"
+
+CLUSTER_MARKERS_SOURCES:
+  - markers_cluster_graph_leiden_r0.4:
+      source_column: "cluster_graph_leiden_r0.4"
+      description: "Cluster markers for Leiden clustering (r = 0.4)"
+    markers_cluster_graph_leiden_r0.8:
+      source_column: "cluster_graph_leiden_r0.8"
+      description: "Cluster markers for Leiden clustering (r = 0.8)"
+
+MAKE_CLUSTER_MARKERS_PLOTS: True
+###############################################################################
+
+### Input files ###############################################################
+CLUSTER_MARKERS_TABLE_TEMPLATE_RMD_FILE: "Rmd/common/cluster_markers_table_template.Rmd"
+CLUSTER_MARKERS_REPORT_RMD_FILE: "Rmd/common/cluster_markers.Rmd"
+# CLUSTER_MARKERS_TABLE_TEMPLATE_RMD_FILE: "Rmd/common/cluster_markers_table_template_spatial.Rmd"
+# CLUSTER_MARKERS_REPORT_RMD_FILE: "Rmd/common/cluster_markers_spatial.Rmd"
+###############################################################################
+
+### Spatial ###################################################################
+SPATIAL: False
+###############################################################################
+
+### Output files ##############################################################
+CLUSTER_MARKERS_BASE_OUT_DIR: "cluster_markers"
+
+CLUSTER_MARKERS_REPORT_HTML_FILE: "cluster_markers.html"
+CLUSTER_MARKERS_HEATMAPS_OUT_DIR: "cluster_markers_heatmaps"
+CLUSTER_MARKERS_PLOTS_BASE_OUT_DIR: "cluster_markers_plots"
+CLUSTER_MARKERS_DIMRED_PLOTS_BASE_OUT_DIR: "cluster_markers_dimred_plots"
+CLUSTER_MARKERS_TABLES_OUT_DIR: "cluster_markers_tables"
+###############################################################################

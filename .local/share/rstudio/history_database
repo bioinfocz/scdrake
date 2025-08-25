@@ -10,3 +10,4 @@
 1756136484285:as.character(desc$get_version())
 1756137218223:yq_version <- system2(yq_binary, "-V", stdout = TRUE)
 1756137236043:scdrake::check_yq()
+1756139940929:scdrake::init_project(set_active_project = F,download_example_data = T)

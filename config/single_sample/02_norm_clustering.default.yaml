@@ -1,0 +1,159 @@
+### Normalization parameters ##################################################
+NORMALIZATION_TYPE: "scran"
+
+SCRAN_USE_QUICKCLUSTER: True
+SCRAN_QUICKCLUSTER_METHOD: "igraph"
+
+SCT_VARS_TO_REGRESS: null
+SCT_N_HVG: 3000
+###############################################################################
+CC_EVAL: True
+### Spatial extension
+SPATIAL: False
+###############################################################################
+
+### Highly variable genes (HVGs) selection ####################################
+HVG_METRIC: "gene_var"
+HVG_SELECTION: "top"
+HVG_SELECTION_VALUE: 1000
+
+HVG_RM_CC_GENES: False
+HVG_CC_GENES_VAR_EXPL_THRESHOLD: 5
+
+SVG: False
+###############################################################################
+
+### Doublet detection and filtering ###########################################
+MAX_DOUBLET_SCORE: 3.5
+###############################################################################
+
+### PCA #######################################################################
+PCA_SELECTION_METHOD: "forced"
+PCA_FORCED_PCS: 15
+###############################################################################
+
+### t-SNE #####################################################################
+TSNE_PERP: 20
+TSNE_MAX_ITER: 1000
+###############################################################################
+
+### Graph-based clustering ####################################################
+CLUSTER_GRAPH_SNN_K: 10
+CLUSTER_GRAPH_SNN_TYPE: "rank"
+
+CLUSTER_GRAPH_LEIDEN_ENABLED: True
+CLUSTER_GRAPH_LEIDEN_RESOLUTIONS: [0.2, 0.4, 0.6, 0.8, 1.0]
+
+CLUSTER_GRAPH_LOUVAIN_ENABLED: False
+CLUSTER_GRAPH_LOUVAIN_RESOLUTIONS: [0.2, 0.4, 0.6, 0.8, 1.0]
+
+CLUSTER_GRAPH_WALKTRAP_ENABLED: False
+###############################################################################
+
+### k-means clustering ########################################################
+CLUSTER_KMEANS_K_ENABLED: False
+CLUSTER_KMEANS_K: !code 3:6
+
+CLUSTER_KMEANS_KBEST_ENABLED: False
+###############################################################################
+
+### SC3 clustering ############################################################
+CLUSTER_SC3_ENABLED: False
+CLUSTER_SC3_K: !code 5:6
+CLUSTER_SC3_N_CORES: 1
+###############################################################################
+
+### Cell type annotation ######################################################
+CELL_ANNOTATION_SOURCES:
+  - human_primary_cell_atlas_main:
+      reference_type: "celldex"
+      reference: "HumanPrimaryCellAtlasData"
+      description: >
+        Microarray datasets derived from human primary cells (Mabbott et al. 2013).
+        Most of the labels refer to blood subpopulations but cell types from other tissues are also available.
+      label_column: "label.main"
+      label_subsets: []
+    monaco_immune_main:
+      reference_type: "celldex"
+      reference: "MonacoImmuneData"
+      description: "This is the human immune reference that best covers all of the bases for a typical PBMC sample."
+      label_column: "label.main"
+      label_subsets: []
+
+CELL_ANNOTATION_SOURCES_DEFAULTS:
+  TRAIN_PARAMS:
+    GENES: "de"
+    SD_THRESH: 1
+    DE_METHOD: "classic"
+    DE_N: null
+    ASSAY_TYPE: "logcounts"
+  CLASSIFY_PARAMS:
+    QUANTILE: 0.8
+    TUNE_THRESH: 0.05
+    ASSAY_TYPE: "logcounts"
+  PRUNE_SCORE_PARAMS:
+    N_MADS: 3
+    MIN_DIFF_MED: -.inf
+    MIN_DIFF_NEXT: 0
+  DIAGNOSTICS_PARAMS:
+    HEATMAP_N_TOP_MARKERS: 20
+###############################################################################
+
+### Cell grouping assignment ##################################################
+ADDITIONAL_CELL_DATA_FILE: null
+CELL_GROUPINGS: null
+###############################################################################
+
+### Manual cell annotation signatures #########################################
+MANUAL_ANNOTATION: False
+ANNOTATION_MARKERS: "input_data/brain_markers.csv"
+SCALE_ANNOTATION: False
+OVERLAP: 5
+ANNOTATION_CLUSTERING: "cluster_graph_leiden_r0.2"
+SHOW_VALUE: "value"
+MAKE_CELL_PLOT: True
+HEATMAP_DIMRED: "umap"
+###############################################################################
+
+### Spot deconvolution  #######################################################
+SPOT_DECONVOLUTION: False
+DECONV_METHOD: "CARD"
+REFERENCE_SC_DECONV: null
+REFERENCE_SC_LABEL: null
+###############################################################################
+
+### Dimensionality reduction plots ############################################
+NORM_CLUSTERING_REPORT_DIMRED_NAMES: ["umap", "pca", "tsne"]
+NORM_CLUSTERING_REPORT_DIMRED_PLOTS_OTHER:
+  - "phase": "Cell cycle phases"
+    "doublet_score": "Doublet score"
+    "total": "Total number of UMI"
+    "detected": "Detected number of genes"
+###############################################################################
+
+### Input files ###############################################################
+SELECTED_MARKERS_FILE: null
+## -- This is an example file bundled with scdrake and copied to project's root on its initialization
+# SELECTED_MARKERS_FILE: "selected_markers.csv"
+
+NORM_CLUSTERING_REPORT_RMD_FILE: "Rmd/single_sample/02_norm_clustering.Rmd"
+#NORM_CLUSTERING_REPORT_RMD_FILE: "Rmd/single_sample/02_norm_clustering_spatial.Rmd"
+NORM_CLUSTERING_REPORT_SIMPLE_RMD_FILE: "Rmd/single_sample/02_norm_clustering_simple.Rmd"
+###############################################################################
+
+### Output files ##############################################################
+NORM_CLUSTERING_BASE_OUT_DIR: "02_norm_clustering"
+
+NORM_CLUSTERING_SELECTED_MARKERS_OUT_DIR: "selected_markers"
+NORM_CLUSTERING_DIMRED_PLOTS_OUT_DIR: "dimred_plots"
+NORM_CLUSTERING_CELL_ANNOTATION_OUT_DIR: "cell_annotation"
+NORM_CLUSTERING_OTHER_PLOTS_OUT_DIR: "other_plots"
+NORM_CLUSTERING_REPORT_HTML_FILE: "02_norm_clustering.html"
+NORM_CLUSTERING_REPORT_SIMPLE_HTML_FILE: "02_norm_clustering_simple.html"
+###############################################################################
+
+### HTML output parameters ####################################################
+NORM_CLUSTERING_KNITR_MESSAGE: False
+NORM_CLUSTERING_KNITR_WARNING: False
+NORM_CLUSTERING_KNITR_ECHO: False
+###############################################################################

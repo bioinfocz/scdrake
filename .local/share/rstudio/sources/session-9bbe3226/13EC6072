@@ -1,0 +1,26 @@
+{
+    "id": "13EC6072",
+    "path": "~/.github/workflows/docker-ci.yml",
+    "project_path": null,
+    "type": "yaml",
+    "hash": "134060649",
+    "contents": "",
+    "dirty": false,
+    "created": 1756140831036.0,
+    "source_on_save": false,
+    "relative_order": 6,
+    "properties": {
+        "source_window_id": "",
+        "Source": "Source",
+        "cursorPosition": "163,51",
+        "scrollLine": "150"
+    },
+    "folds": "",
+    "lastKnownWriteTime": 1756141816,
+    "encoding": "UTF-8",
+    "collab_server": "",
+    "source_window": "",
+    "last_content_update": 1756141816308,
+    "read_only": false,
+    "read_only_alternatives": []
+}

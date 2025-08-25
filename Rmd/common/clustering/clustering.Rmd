@@ -1,0 +1,44 @@
+# Clustering {.tabset}
+
+```{r, results = "asis"}
+if (any(cfg$CLUSTER_GRAPH_LOUVAIN_ENABLED, cfg$CLUSTER_GRAPH_LEIDEN_ENABLED, cfg$CLUSTER_GRAPH_WALKTRAP_ENABLED)) {
+  scdrake::md_header("Graph-based", 2, extra = "{.tabset}")
+  cat("Graph-based clustering is commonly used for scRNA-seq, and often shows a good performance.\n\n")
+  cat(
+    glue::glue("First, we used `scran` to generate the shared nearest neighbor (SNN) graph using {cfg$CLUSTER_GRAPH_SNN_K} nearest neighbors (cells) and '{cfg$CLUSTER_GRAPH_SNN_TYPE}' weighting scheme."),
+    "The graph was then subjected to community detection using algorithms implemented in the `igraph` package.\n\n"
+  )
+}
+```
+
+`r scdrake::format_used_functions("scran::buildSNNGraph()")`
+
+```{r, results = "asis"}
+if (cfg$CLUSTER_GRAPH_LEIDEN_ENABLED) {
+  cat(knitr::knit_child(here::here("Rmd/common/clustering/cluster_graph_leiden.Rmd"), quiet = TRUE))
+}
+```
+
+```{r, results = "asis"}
+if (cfg$CLUSTER_GRAPH_LOUVAIN_ENABLED) {
+  cat(knitr::knit_child(here::here("Rmd/common/clustering/cluster_graph_louvain.Rmd"), quiet = TRUE))
+}
+```
+
+```{r, results = "asis"}
+if (cfg$CLUSTER_GRAPH_WALKTRAP_ENABLED) {
+  cat(knitr::knit_child(here::here("Rmd/common/clustering/cluster_graph_walktrap.Rmd"), quiet = TRUE))
+}
+```
+
+```{r, results = "asis"}
+if (cfg$CLUSTER_SC3_ENABLED) {
+  cat(knitr::knit_child(here::here("Rmd/common/clustering/cluster_sc3.Rmd"), quiet = TRUE))
+}
+```
+
+```{r, results = "asis"}
+if (cfg$CLUSTER_KMEANS_K_ENABLED || cfg$CLUSTER_KMEANS_KBEST_ENABLED) {
+  cat(knitr::knit_child(here::here("Rmd/common/clustering/cluster_kmeans.Rmd"), quiet = TRUE))
+}
+```
