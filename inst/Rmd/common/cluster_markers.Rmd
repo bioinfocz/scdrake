@@ -54,10 +54,18 @@ x <- lapply(names(group_list), function(group_name) {
 
   scdrake::md_header("Dimred plots", 3, extra = "{.tabset}")
   dimred_plots <- dplyr::distinct(df_group, name, .keep_all = TRUE)$dimred_plots[[1]]
-  y <- scdrake::lapply_rows(dimred_plots, FUN = function(par) {
-    scdrake::md_header(stringr::str_to_upper(par$plot_dimreds), 4)
-    print(par$plot)
-  })
+  for (i in seq_len(nrow(dimred_plots))) {
+    par <- dimred_plots[i, ]
+    
+    # Print Markdown header
+    scdrake::md_header(str_to_upper(par$plot_dimreds), 4)
+    
+    # Extract the ggplot object from the list-column
+    plot_obj <- par$plot[[1]]
+    
+    # Print or plot
+    print(plot_obj)
+  }
 
   scdrake::md_header("Results by levels", 3, extra = "{.tabset}")
   scdrake::generate_markers_results_section(

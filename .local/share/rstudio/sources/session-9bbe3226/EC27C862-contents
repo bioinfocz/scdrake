@@ -1,0 +1,18 @@
+Because `{drake}` knows the inner relationships between targets in your plan, it also knows which targets are
+independent of each other, and thus, can be run concurrently. This is called *implicit parallelism*, and to fully
+utilize this important feature, you just need to modify `config/pipeline.yaml` by setting `DRAKE_PARALLELISM` to either:
+
+- `"future"`: uses the `{future}` as the backend. This backend should work by simply installing the `{future}` package.
+  - Install by `BiocManager::install(c("future", "future.callr"))`
+- `"clustermq"`: uses the `{clustermq}` as the backend. This is faster than `"future"`, but besides the `{clustermq}`
+  package it also requires the [ZeroMQ](https://zeromq.org/) library to be [installed](https://zeromq.org/download/)
+  on your system.
+  - A specific version of the `{clustermq}` package is needed and can be installed with
+    `remotes::install_version("clustermq", version = "0.8.8")` (you might need `BiocManager::install("remotes")`).
+  - `{clustermq}` also supports HPC cluster schedulers, see
+    [here](https://books.ropensci.org/drake/hpc.html#the-template-argument-for-persistent-workers) for more details.
+
+If you have installed `{scdrake}` from the `renv.lock` file or you are using the Docker image, then these two
+packages above are always installed.
+
+For a general overview of `{drake}` parallelism see <https://books.ropensci.org/drake/hpc.html>

@@ -70,50 +70,65 @@ cc_genes_fn <- function(sce_final_input_qc, organism, annotation_db_file) {
 #'
 #' @concept single_sample_norm_clustering_fn
 #' @export
-sce_cc_fn <- function(sce_final_input_qc, cc_genes, data = NULL) {
-  seu <- Seurat::as.Seurat(sce_final_input_qc, data = data)
-  ## -- CellCycleScoring() can fail if there are no cell cycle genes.
-  seu_cc <- tryCatch(
-    Seurat::CellCycleScoring(
-      seu,
-      s.features = cc_genes[cc_genes$phase == "S", "ENSEMBL"],
-      g2m.features = cc_genes[cc_genes$phase == "G2M", "ENSEMBL"],
-      set.ident = TRUE
-    ),
-    error = function(e) {
-      cli_alert_warning(str_space(
-        "{.code Seurat::CellCycleScoring()} failed, setting {.field phase}, {.field s_score}, {.field g2m_score} and",
-        "{.field cc_difference} to {.val NA}."
-      ))
-      return(NULL)
-    }
-  )
-
-  if (is_null(seu_cc)) {
-    seu_cc <- seu
-    seu_cc$phase <- NA
-    seu_cc$s_score <- NA
-    seu_cc$g2m_score <- NA
+sce_cc_fn <- function(sce_final_input_qc, cc_genes, data = NULL, cc_eval = TRUE, spatial = TRUE) {
+  if (!cc_eval) {
+    sce_final_input_qc$phase <- NA
+    sce_final_input_qc$s_score <- NA
+    sce_final_input_qc$g2m_score <- NA
     ## -- NA minus NA is NA, but let's be explicit here.
-    seu_cc$cc_difference <- NA
+    sce_final_input_qc$cc_difference <- NA
     sce_final_input_qc@metadata$cc_phase_failed <- TRUE
-  } else {
-    seu_cc$phase <- factor(seu_cc$Phase, levels = c("G1", "G2M", "S"))
-    seu_cc$s_score <- seu_cc$S.Score
-    seu_cc$g2m_score <- seu_cc$G2M.Score
-    seu_cc$cc_difference <- seu_cc$s_score - seu_cc$g2m_score
-    sce_final_input_qc@metadata$cc_phase_failed <- FALSE
   }
-
-  assert_that(are_equal(rownames(seu_cc@meta.data), colnames(sce_final_input_qc)))
-
-  sce_final_input_qc <- sce_add_colData(
-    sce_final_input_qc,
-    df = seu_cc@meta.data[, c("phase", "s_score", "g2m_score", "cc_difference")]
-  )
-
-  assert_that(are_equal(rownames(seu_cc@meta.data), colnames(sce_final_input_qc)))
-
+  else {
+    if (spatial) {
+      sce_final_input_qc2 <- convertToSCE(sce_final_input_qc) 
+      seu <- Seurat::as.Seurat(sce_final_input_qc2, data = data)
+    } else {
+      seu <- Seurat::as.Seurat(sce_final_input_qc, data = data)
+    }
+    
+    ## -- CellCycleScoring() can fail if there are no cell cycle genes.
+    seu_cc <- tryCatch(
+      Seurat::CellCycleScoring(
+        seu,
+        s.features = cc_genes[cc_genes$phase == "S", "ENSEMBL"],
+        g2m.features = cc_genes[cc_genes$phase == "G2M", "ENSEMBL"],
+        set.ident = TRUE
+      ),
+      error = function(e) {
+        cli_alert_warning(str_space(
+          "{.code Seurat::CellCycleScoring()} failed, setting {.field phase}, {.field s_score}, {.field g2m_score} and",
+          "{.field cc_difference} to {.val NA}."
+        ))
+        return(NULL)
+      }
+    )
+    
+    if (is_null(seu_cc)) {
+      seu_cc <- seu
+      seu_cc$phase <- NA
+      seu_cc$s_score <- NA
+      seu_cc$g2m_score <- NA
+      ## -- NA minus NA is NA, but let's be explicit here.
+      seu_cc$cc_difference <- NA
+      sce_final_input_qc@metadata$cc_phase_failed <- TRUE
+    } else {
+      seu_cc$phase <- factor(seu_cc$Phase, levels = c("G1", "G2M", "S"))
+      seu_cc$s_score <- seu_cc$S.Score
+      seu_cc$g2m_score <- seu_cc$G2M.Score
+      seu_cc$cc_difference <- seu_cc$s_score - seu_cc$g2m_score
+      sce_final_input_qc@metadata$cc_phase_failed <- FALSE
+    }
+    
+    assert_that(are_equal(rownames(seu_cc@meta.data), colnames(sce_final_input_qc)))
+    
+    sce_final_input_qc <- sce_add_colData(
+      sce_final_input_qc,
+      df = seu_cc@meta.data[, c("phase", "s_score", "g2m_score", "cc_difference")]
+    )
+    
+    assert_that(are_equal(rownames(seu_cc@meta.data), colnames(sce_final_input_qc)))
+  }
   return(sce_final_input_qc)
 }
 
@@ -135,6 +150,8 @@ sce_cc_fn <- function(sce_final_input_qc, cc_genes, data = NULL) {
 sce_norm_fn <- function(sce_cc, norm_type = c("scran", "sctransform", "none"), ...) {
   norm_type <- arg_match(norm_type)
   cli_alert_info("Normalization type: {.val {norm_type}}")
+  sce_cc <- sce_cc[, Matrix::colSums(counts(sce_cc)) > 0]
+  
 
   if (norm_type == "scran") {
     scran_normalization(sce_cc, ...)
@@ -267,7 +284,7 @@ sce_norm_hvg_fn <- function(sce_norm,
                             hvg_selection = c("top", "significance", "threshold"),
                             hvg_rm_cc_genes = FALSE,
                             hvg_cc_genes_var_expl_threshold = 5,
-                            spatial = FALSE,
+                            svg = FALSE,
                             BSPARAM = BiocSingular::IrlbaParam(),
                             BPPARAM = BiocParallel::SerialParam()) {
   hvg_metric <- arg_match(hvg_metric)
@@ -311,28 +328,15 @@ sce_norm_hvg_fn <- function(sce_norm,
     hvg_metric = hvg_metric,
     hvg_selection = hvg_selection
   )
-  if (spatial) {
-    seu_sce_norm <- create_seu_for_heatmaps(sce_norm)
-    coord <- seu_sce_norm@meta.data[, c("Dims_x", "Dims_y")]
-    colnames(coord) <- c("imagerow", "imagecol")
-    # sfs from cfg file or some dummy ones? dummy could work...
-    sfs <- Seurat::scalefactors(spot = 230.6399514627273, fiducial = 372.5722292859441, hires = 0.058580592, lowres = 0.017574178)
-    seu_sce_norm@images$slice1 <- new(
-      Class = "VisiumV1",
-      assay = "RNA",
-      key = "slice1_",
-      coordinates = coord,
-      scale.factors = sfs
-    )
-    seu_sce_norm <- Seurat::FindSpatiallyVariableFeatures(
-      seu_sce_norm,
-      assay = "RNA",
-      selection.method = "moransi",
-      nfeatures = hvg_selection_value
-    )
-    svg_ids <- Seurat::SVFInfo(seu_sce_norm, selection.method = "moransi", )
-    svg_ids <- rownames(svg_ids[svg_ids$moransi.spatially.variable == "TRUE", ])
-
+  if (svg) {
+    var_genes <- rowVars(logcounts(sce_norm))
+    top_genes <- order(var_genes, decreasing = TRUE)[1:3000]
+    sce_norm_used <- sce_norm[top_genes, ]
+    sce_norm_used <- nnSVG::nnSVG(sce_norm_used)
+    res_nnSVG <- rowData(sce_norm_used)
+    res_nnSVG <- res_nnSVG[order(res_nnSVG$rank, decreasing = FALSE),]
+    svg_ids <- res_nnSVG$ENSEMBL[1:hvg_selection_value]
+    sce_norm <- sce_add_metadata(sce_norm, svg_result = res_nnSVG)
     hvg_ids <- unique(c(hvg_ids, svg_ids))
   }
   if (length(hvg_ids) <= 100) {

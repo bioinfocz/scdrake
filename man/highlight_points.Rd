@@ -4,7 +4,7 @@
 \alias{highlight_points}
 \title{Highlight points belonging to certain levels.}
 \usage{
-highlight_points(p, column_name, levels, alpha_val = 0.1)
+highlight_points(p, column_name, levels, alpha_val = 0.1, spatial = FALSE)
 }
 \arguments{
 \item{p}{A \code{ggplot2} object.}
@@ -17,11 +17,19 @@ highlight_points(p, column_name, levels, alpha_val = 0.1)
 }
 \value{
 A \code{ggplot2} object.
+
+A \code{ggplot2} object.
 }
 \description{
 Highlighting means that alpha value of other levels will be decreased.
 }
 \examples{
+p <- ggplot2::ggplot(
+  mtcars,
+  ggplot2::aes(x = cyl, y = mpg, color = factor(am))
+) +
+  ggplot2::geom_point()
+highlight_points(p, "am", "0", alpha_val = 0.25)
 p <- ggplot2::ggplot(
   mtcars,
   ggplot2::aes(x = cyl, y = mpg, color = factor(am))

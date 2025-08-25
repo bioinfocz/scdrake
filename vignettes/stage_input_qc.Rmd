@@ -36,7 +36,8 @@ More information about scRNA-seq quality control can be found in
 
 - Reading in feature-barcode matrix either from:
   - `cellranger` output
-  - `SingleCellExperiment` object as a Rds file or as a target from an existing `{drake}` cache (i.e. from a different
+  - `spaceranger` output
+  - `SingleCellExperiment` (SCE) object as a Rds file or as a target from an existing `{drake}` cache (i.e. from a different
     `{scdrake}` project)
   - Delimited table
 - Subsetting of the imported `SingleCellExperiment` object to cells of interest based on their metadata values,
@@ -61,6 +62,7 @@ More information about scRNA-seq quality control can be found in
   - A gene is considered expressed when number of its UMI across all cells is greater than X and
     at the same time it is expressed in at least Y ratio of cells.
 - Plots of QC metrics with visualization of differences between dataset-sensitive and custom filtering
+- Identification and labeling of tissue artifact spots
 - Preparation of gene annotation
 - Final selection of either dataset-sensitive or custom filtered dataset. This selection is upon the user.
 
@@ -92,6 +94,9 @@ This parameter is specifying input data type and path. There are four possible t
   that is, files of a raw feature-barcode matrix - `barcodes.tsv`, `features.tsv`, and `matrix.mtx`
   (can be also gzipped having a `.gz` extension). Internally, BC matrix is imported via `DropletUtils::read10xCounts()`
   - You can download example PBMC data from 10x Genomics using the `download_pbmc1k()` and `download_pbmc1k()` functions.
+- `type: "spaceranger"`: an output from [spaceranger](https://www.10xgenomics.com/support/software/space-ranger/latest), 
+  files of a raw feature-barcode matrix - `barcodes.tsv`, `features.tsv`, and `matrix.mtx` (can be also gzipped having a `.gz` extension), 
+  and directory spatial containing outputs that capture the spatiality of the data. This option result in creating SpatialExperiment object (SPE)
 - `type: "table"`: a delimited file (table) representing a feature-barcode matrix, with an additional column named
   `ENSEMBL` containing Ensembl IDs of features (rows).
 - `type: "sce"`: a saved `SingleCellExperiment` in Rds format (i.e. saved by the `saveRDS()` function).
@@ -104,6 +109,8 @@ This parameter is specifying input data type and path. There are four possible t
 - `path: "path/to/file/or/dir"`: a path to input file or directory (can be relative to project root directory).
   - For `type: "cellranger"`, this is a path to directory containing the `barcodes.tsv`, `features.tsv`, and `matrix.mtx`
   files (can be also gzipped having a `.gz` extension)
+  - For `type: "spaceranger"`, this is a path to directory containing the `barcodes.tsv`, `features.tsv`, and `matrix.mtx`
+  files (can be also gzipped having a `.gz` extension) and spatial directory with spaceranger spatial output (`tissue_lowres_image.png`, `tissue_positions_list.csv`)
   - For `type: "sce_drake_cache"`, a path to `drake` cache directory (usually named as `".drake"`)
   - For `type: "sce"` or `"table"`, a path to Rds or text file
 
@@ -143,7 +150,7 @@ You can also negate the selection by specifying `negate: true`.
 
 ***
 
-#### Spatial extension
+#### Spatial experiment
 
 
 ```yaml
@@ -154,17 +161,17 @@ SPATIAL: False
 
 If `True`, pipeline enables spatial extension.
 
-In the input_qc stage, the spatial extension consists only in enabling pseudo tissue visualization, and in adding coordinates (array_col and array_row from tissue_positions.csv) to the Cell Metadata. 
-
-***
+In the input_qc stage, the spatial extension generates spatial quality control reports and estimates the probability of tissue artifacts using  `SpotSweeper::findArtifacts()`.
 
 ```yaml
-SPATIAL_LOCKS: Null
+ARTIFACT: False
 ```
 
-**Type:** Null or character scalar
+**Type:** logical scalar
 
-A path to tissue_position.csv from SpaceRanger spatial output folder used for adding coordinates (array_col and array_row) to Cell Metadata. Only void when SPATIAL is enabled.
+If `True`, pipeline enables removal of detected artifact.
+
+We recommend running the pipeline once without artifact removal first, if no tissue artifact is detected, the function will randomly label half of the spots and remove them. 
 
 ***
 
@@ -451,17 +458,18 @@ Targets can be loaded from the `{drake}` cache (`.drake` directory by default) u
 
 HTML report target name: `report_input_qc`
 
-#### `SingleCellExperiment` objects
+#### `SingleCellExperiment` or `SpatialExperiment` objects
 
-`sce_raw`: an untouched SCE object as loaded from:
+`sce_raw`: an untouched SCE/SPE object as loaded from:
 
 - `DropletUtils::read10xCounts()` (`cellranger` input)
+- `SpatialExperiment::read10xVisium()` (`spaceranger` input)
 - `readr::read_delim()` (delimited table input)
 - `SingleCellExperiment` object (Rds file or `{drake}` cache)
 
 ***
 
-`sce_valid_cells`: a SCE object with empty droplets removed
+`sce_valid_cells`: a SCE/SPE object with empty droplets removed
 
 ***
 
@@ -473,10 +481,10 @@ HTML report target name: `report_input_qc`
 
 ***
 
-`sce_qc_filter`, `sce_qc_filter_genes`: a SCE object with cells filtered by dataset-sensitive filtering.
+`sce_qc_filter`, `sce_qc_filter_genes`: a SCE/SPE object with cells filtered by dataset-sensitive filtering.
 The latter with filtered genes.
 
-`sce_custom_filter`, `sce_custom_filter_genes`: a SCE object with cells filtered by custom filtering.
+`sce_custom_filter`, `sce_custom_filter_genes`: a SCE/SPE object with cells filtered by custom filtering.
 The latter with filtered genes.
 
 ***

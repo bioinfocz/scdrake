@@ -70,11 +70,12 @@ other_params <- scdrake::scdrake_list(params$other_params)
 ## Dimred plots {.tabset}
 
 ```{r, results = "asis"}
-x <- scdrake::lapply_rows(other_params$dimred_plots, FUN = function(par) {
-  scdrake::md_header(stringr::str_to_upper(par$plot_dimreds), 3)
-  p <- par$plot
-  scdrake::highlight_points(p, column_name = "colour_by", levels = c(other_params$target, other_params$reference)) %>% print()
-})
+par <- other_params$dimred_plots[1, ]
+
+for (i in seq_along(par$plot_highlighted)) {
+  scdrake::md_header(stringr::str_to_upper(par$plot_dimreds[i]), 3)
+  print(par$plot_highlighted[[i]])
+}
 ```
 
 ## Marker table

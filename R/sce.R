@@ -50,57 +50,55 @@ sce_add_colData <- function(sce, df, replace = TRUE) {
   }
 
   colData(sce) <- cbind(colData(sce), df)
+
   return(sce)
 }
 
-#' @title Append new columns with spatial relevance to `colData` of a `SingleCellExperiment` object.
+#' @title Append new columns to `colData` of a `SingleCellExperiment` or `SpatialExperiment` object.
 #' @param sce A `SingleCellExperiment` object.
-#' @param spatial_locs A file contating spatial coordiantes
-#' @param spatial Logical vector If true, add spatial coordinates
-#' @concept spatial_sce
-sce_add_spatial_colData <- function(sce, spatial_locs, spatial = FALSE) {
+#' @param df A dataframe which will be binded column-wise to `colData(sce)`.
+#' @param replace A logical scalar: if `TRUE` and columns to be added already exist, they will be first removed
+#'   from `colData(sce)`.
+#' @param spatial A logical scalar: if `TRUE` add spatial quality control results
+#' @return A modified `sce` object with added columns.
+#'
+#' @examples
+#' \dontrun{
+#' df <- data.frame(example = rownames(colnames))
+#' sce <- sce_add_colData(sce, df = df)
+#' }
+#'
+#' @concept sc_sce
+#' @export
+sce_add_spatial_colData <- function(sce, df, replace = TRUE, spatial) {
+  assert_that_(
+    !is_empty(df),
+    msg = "{.var df} cannot be empty."
+  )
+  
+  assert_that_(
+    nrow(df) == ncol(sce),
+    msg = "Number of rows in {.var df} must be same as number of columns in {.var sce}."
+  )
+  
+  if (replace) {
+    existing_columns <- intersect(colnames(colData(sce)), colnames(df))
+    colData(sce) <- colData(sce)[, !colnames(colData(sce)) %in% existing_columns]
+  }
+  
+  colData(sce) <- cbind(colData(sce), df)
+  ##only for inputqc section
   if (spatial) {
-    if (!file.exists(spatial_locs))
-      stop("path to spatial locations does not exist")
-    spatial_locs <- readr::read_csv(file = spatial_locs)
-    colnames(spatial_locs) <-
-      c("Barcode",
-        "in_tissue",
-        "array_row",
-        "array_col",
-        "pixel_row",
-        "pixel_col")
-    spatial_locs <- dplyr::filter(spatial_locs,  in_tissue == 1)
-    #rownames(spatial_locs) <- spatial_locs[,1]
-    # assert_that(
-    #   nrow(spatial_locs) == ncol(sce),
-    #   msg = "Number of rows in {.var spatial_locs} must be same as number of columns in {.var sce}."
-    # )
-    #library(SingleCellExperiment)
-    ###try if in tissue! spatial_locs <- spatial_locs[spatial_locs$in_tissue == '1',]
-    ## [, c(1,3,4)] > 3,4 coordinate of the spot in the array
-    ## [, c(1,5,6)] > 5,6 the PIXEL coordinate of the center, 5 in row, 6 in column
-    spatial_locs <- spatial_locs[, c(1, 3, 4)]
-    colnames(spatial_locs) <- c("Barcode", "Dims_x", "Dims_y")
-    
-    colData(sce) <-
-      merge(colData(sce),
-            spatial_locs,
-            by = "Barcode",
-            all.x = TRUE)
-    sce <- sce[, !is.na(sce$Dims_x)]
-    #print(sce)
-    sce <-
-      scdrake::sce_add_metadata(sce, spatial_locs = colData(sce)[, c("Barcode", "Dims_x", "Dims_y")],
-                                replace = FALSE)
-    #sce <- list(spatial_locs = colData(sce)[,c("Dims_x","Dims_y")])
-    #SingleCellExperiment::coldata(sce) <- cbind(SingleCellExperiment::coldata(sce),spatial_locs,)
-    colnames(sce) <- colData(sce)$Barcode
-    return(sce)
+    sce <- SpotSweeper::localVariance(sce, metric = "subsets_mito_percent", 
+                                      n_neighbors = 36, name = "local_mito_variance_k36")
+    sce <- SpotSweeper::findArtifacts(sce,
+                                      mito_percent = "subsets_mito_percent",
+                                      mito_sum = "subsets_mito_detected",
+                                      n_order = 10,log = FALSE,
+                                      name = "artifact"
+    )
   }
-  else {
-    return(sce)
-  }
+  return(sce)
 }
 
 #' @title Append data to `metadata()` list of a `SingleCellExperiment` object.
@@ -169,7 +167,7 @@ as_seurat <- function(sce, sce_assay = NULL, seurat_assay = "RNA", add_rowData =
 #'
 #' @concept sc_sce
 #' @export
-create_seu_for_heatmaps <- function(sce_dimred, calc_zscore = TRUE) {
+create_seu_for_heatmaps <- function(sce_dimred, calc_zscore = TRUE, spatial = FALSE) {
   if ("integrated" %in% assayNames(sce_dimred)) {
     data <- "integrated"
     assay(sce_dimred, data) <- as.matrix(assay(sce_dimred, data))
@@ -177,13 +175,31 @@ create_seu_for_heatmaps <- function(sce_dimred, calc_zscore = TRUE) {
   } else {
     data <- "logcounts"
   }
-
-  seu <- as_seurat(sce_dimred, data = data)
-
-  if (calc_zscore) {
-    seu@assays$RNA@scale.data <- t(scale(t(seu@assays$RNA@data)))
+  
+  # Convert to Seurat object
+  if (spatial) {
+    sce_dimred2 <- convertToSCE(sce_dimred) 
+    seu <- Seurat::as.Seurat(sce_dimred2, data = data)
+  } else {
+    seu <- as_seurat(sce_dimred, data = data)
   }
-
+  
+  available_assays <- Seurat::Assays(seu)
+  
+  # Decide which assay to use
+  if ("originalexp" %in% available_assays) {
+    assay_to_use <- "originalexp"
+  } else if ("RNA" %in% available_assays) {
+    assay_to_use <- "RNA"
+  } else {
+    stop("Neither 'originalexp' nor 'RNA' assay found in Seurat object.")
+  }
+  # In Seurat v5, scale.data is not always populated by default
+  if (calc_zscore) {
+    # Ensure all features are scaled
+    seu <- Seurat::ScaleData(seu, assay = assay_to_use, features = rownames(seu[[assay_to_use]]))
+  }
+  
   return(seu)
 }
 
@@ -336,6 +352,8 @@ cell_data_fn <- function(col_data,
                          clusters_all,
                          cell_annotation_labels,
                          cell_groupings,
+                         spot_deconvolution_labels,
+                         manual_annotation_labels,
                          additional_cell_data,
                          pipeline_type = c("single_sample", "integration")) {
   row_names <- rownames(col_data)
@@ -348,6 +366,13 @@ cell_data_fn <- function(col_data,
 
   if (!is_null(cell_annotation_labels)) {
     col_data <- dplyr::bind_cols(col_data, tibble::as_tibble(cell_annotation_labels))
+  }
+  if (!is_null(spot_deconvolution_labels)) {
+    col_data <- dplyr::left_join(col_data, spot_deconvolution_labels[, c("Barcode", "Deconvolution_annot")], by = "Barcode")
+  }
+  
+  if (!is_null(manual_annotation_labels)) {
+    col_data <- dplyr::bind_cols(col_data, tibble::as_tibble(manual_annotation_labels))
   }
 
   if (!is_null(additional_cell_data)) {
@@ -417,4 +442,39 @@ sce_add_cell_data <- function(sce_dimred, cell_data, overwrite_sce = TRUE) {
   metadata(sce_dimred)$cell_groupings <- metadata(cell_data)$cell_groupings
 
   return(sce_dimred)
+}
+
+#' @title Rewrite `SpatialExperiment` object to a `SingleCellExperiment` object.
+#' @param spe_object A `SpatialExperiment` object.
+#' @concept spatial_sce
+#' @return A `SingleCellExperiment` object
+#' @export
+convertToSCE <- function(spe_object) {
+  if (!inherits(spe_object, "SpatialExperiment")) {
+    stop("Input must be a SpatialExperiment object.")
+  }
+  
+  # Extract components
+  assays_list <- SummarizedExperiment::assays(spe_object)
+  col_data <- SummarizedExperiment::colData(spe_object)
+  row_data <- SummarizedExperiment::rowData(spe_object)
+  metadata_list <- S4Vectors::metadata(spe_object)
+  
+  # Coerce each assay to dgCMatrix if needed
+  assays_list <- lapply(assays_list, function(x) {
+    if (!inherits(x, "dgCMatrix")) {
+      x <- as(x, "dgCMatrix")
+    }
+    return(x)
+  })
+  
+  # Create SingleCellExperiment
+  sce <- SingleCellExperiment::SingleCellExperiment(
+    assays = assays_list,
+    colData = col_data,
+    rowData = row_data,
+    metadata = metadata_list
+  )
+  
+  return(sce)
 }

@@ -1,5 +1,5 @@
 ## -- This will:
-## -- - Install system deps for Ubuntu 20.04
+## -- - Install system deps for Ubuntu 24.04
 ## -- - Download the yq binary.
 ## -- - Install scdrake deps from renv lockfile into global R library.
 ## -- - Install the scdrake package.
@@ -7,9 +7,9 @@
 ## -- You can build the Dockerfile using
 ## docker-buildx build --progress plain --platform linux/amd64 \
 ## --build-arg R_PKG_INSTALL_NCPUS=8 --build-arg R_PKG_INSTALL_MAKE_NCPUS=4 --build-arg SCDRAKE_VERSION=<version> \
-## -t jirinovo/scdrake:<version>-bioc3.15 -f Dockerfile
+## -t pfeiferl/scdrake:<version>-bioc3.21 -f Dockerfile .
 
-ARG BIOCONDUCTOR_VERSION=3_15
+ARG BIOCONDUCTOR_VERSION=3_21
 FROM bioconductor/bioconductor_docker:RELEASE_$BIOCONDUCTOR_VERSION
 
 ARG SCDRAKE_VERSION
@@ -20,7 +20,7 @@ LABEL name="bioinfocz/scdrake" \
       version=$SCDRAKE_VERSION \
       bioconductor_version=$BIOCONDUCTOR_VERSION \
       url="https://github.com/bioinfocz/scdrake" \
-      maintainer="jiri.novotny@img.cas.cz" \
+      maintainer="lucie.pfeiferova@img.cas.cz" \
       description="Scdrake package wrapped in the Bioconductor docker image." \
       license="MIT"
 
@@ -63,7 +63,7 @@ RUN apt-get autoremove -y
 RUN apt-get autoclean -y
 RUN rm -rf /var/lib/apt/lists/*
 
-RUN curl -L --output /usr/local/bin/yq https://github.com/mikefarah/yq/releases/download/3.4.1/yq_linux_amd64
+RUN curl -L --output /usr/local/bin/yq https://github.com/mikefarah/yq/releases/download/v4.47.1/yq_linux_amd64
 RUN test -s "/usr/local/bin/yq" || (echo "yq binary is empty" && false)
 RUN chmod +x /usr/local/bin/yq
 RUN mkdir -p /root/.local/bin
@@ -72,8 +72,8 @@ RUN mkdir -p /home/rstudio/.local/bin
 RUN ln -s /usr/local/bin/yq /home/rstudio/.local/bin/yq
 RUN chown -R rstudio:rstudio /home/rstudio/.local
 
-ENV RENV_VERSION=0.16.0
-RUN R -e "BiocManager::install('rstudio/renv@${RENV_VERSION}')"
+ENV RENV_VERSION=1.1.5
+RUN R -e "remotes::install_version('renv', version = '${RENV_VERSION}', repos = 'https://cloud.r-project.org')"
 ARG R_PKG_INSTALL_NCPUS=1
 ARG R_PKG_INSTALL_MAKE_NCPUS=1
 ENV MAKEFLAGS="-j${R_PKG_INSTALL_MAKE_NCPUS}"
@@ -103,7 +103,7 @@ RUN Rscript -e "\
   options(Ncpus = ${R_PKG_INSTALL_NCPUS});\
   devtools::install(\
     pkg = '/scdrake_source', dependencies = FALSE, upgrade = FALSE,\
-    keep_source = TRUE, build_vignettes = TRUE,\
+    keep_source = TRUE, build_vignettes = FALSE,\
     repos = BiocManager::repositories()\
   );\
   "

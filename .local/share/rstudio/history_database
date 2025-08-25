@@ -1,0 +1,5 @@
+1756130466827:pkgdown::build_articles()
+1756130516216:remotes::install_github("amirmasoudabdol/preferably")
+1756130533324:pkgdown::build_articles()
+1756130616454:pkgdown::build_articles()
+1756130824250:pkgdown::build_site()

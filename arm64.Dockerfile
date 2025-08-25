@@ -1,7 +1,7 @@
 ## -- This will:
 ## -- - Install Bioconductor using the rocker/rstudio image for arm64 platform.
 ## --   - This is copypasted and edited from https://github.com/Bioconductor/bioconductor_docker/commit/aa83033e4f8f7909847cec24eadba8cd3335a615
-## -- - Install system deps for Ubuntu 20.04
+## -- - Install system deps for Ubuntu 24.04
 ## -- - Download the yq binary.
 ## -- - Install scdrake deps from renv lockfile into global R library.
 ## -- - Install the scdrake package.
@@ -10,7 +10,7 @@
 FROM --platform=linux/arm64 rocker/rstudio:latest-daily
 
 ## Set Dockerfile version number
-ARG BIOCONDUCTOR_VERSION=3.15
+ARG BIOCONDUCTOR_VERSION=3.21
 ENV BIOCONDUCTOR_DOCKER_VERSION=$BIOCONDUCTOR_DOCKER_VERSION
 ENV BIOCONDUCTOR_VERSION=$BIOCONDUCTOR_VERSION
 
@@ -24,11 +24,11 @@ ARG SCDRAKE_VERSION
 RUN test -n "$SCDRAKE_VERSION" || (echo "SCDRAKE_VERSION not set" && false)
 ENV SCDRAKE_VERSION=$SCDRAKE_VERSION
 
-LABEL name="jirinovo/scdrake" \
+LABEL name="pfeiferl/scdrake" \
     version=$SCDRAKE_VERSION \
     bioconductor_version=$BIOCONDUCTOR_VERSION \
     url="https://github.com/bioinfocz/scdrake" \
-    maintainer="jiri.novotny@img.cas.cz" \
+    maintainer="lucie.pfeiferova@img.cas.cz" \
     description="Scdrake package wrapped in arm64 Bioconductor docker image." \
     license="MIT"
 
@@ -260,7 +260,7 @@ RUN mkdir -p /home/rstudio/.local/bin
 RUN ln -s /usr/local/bin/yq /home/rstudio/.local/bin/yq
 RUN chown -R rstudio:rstudio /home/rstudio/.local
 
-ENV RENV_VERSION=0.16.0
+ENV RENV_VERSION=1.1.5
 RUN R -e "BiocManager::install('rstudio/renv@${RENV_VERSION}')"
 
 ARG R_PKG_INSTALL_NCPUS=1

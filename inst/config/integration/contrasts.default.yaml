@@ -48,7 +48,7 @@ MAKE_CONTRASTS_PLOTS: True
 CONTRASTS_TABLE_TEMPLATE_RMD_FILE: "Rmd/common/contrasts_table_template.Rmd"
 CONTRASTS_REPORT_RMD_FILE: "Rmd/common/contrasts.Rmd"
 ###############################################################################
-
+SPATIAL: False
 ### Output files ##############################################################
 CONTRASTS_BASE_OUT_DIR: "contrasts"
 

@@ -1,0 +1,137 @@
+{
+    "bookdown::mathquill": {
+        "name": "Input LaTeX Math",
+        "package": "bookdown",
+        "title": "",
+        "description": "Input math expressions via the MathQuill library.",
+        "interactive": true,
+        "binding": "mathquill",
+        "ordinal": 7
+    },
+    "bookdown::serve_book": {
+        "name": "Preview Book",
+        "package": "bookdown",
+        "title": "",
+        "description": "Run bookdown::serve_book() to live preview a book.",
+        "interactive": true,
+        "binding": "serve_book",
+        "ordinal": 6
+    },
+    "clipr::clipr_output": {
+        "name": "Output to clipboard",
+        "package": "clipr",
+        "title": "",
+        "description": "Copies the console output of a selected expression to the system clipboard",
+        "interactive": false,
+        "binding": "clipr_output",
+        "ordinal": 15
+    },
+    "clipr::clipr_result": {
+        "name": "Value to clipboard",
+        "package": "clipr",
+        "title": "",
+        "description": "Copies the results of a selected expression to the system clipboard",
+        "interactive": false,
+        "binding": "clipr_result",
+        "ordinal": 14
+    },
+    "devtools::document": {
+        "name": "Document a package",
+        "package": "devtools",
+        "title": "",
+        "description": "A wrapper for `roxygen`'s `roxygen2::roxygenize()`",
+        "interactive": true,
+        "binding": "document",
+        "ordinal": 11
+    },
+    "devtools::run_examples": {
+        "name": "Run examples",
+        "package": "devtools",
+        "title": "",
+        "description": "Runs R code in examples using `devtools::run_examples()`",
+        "interactive": true,
+        "binding": "run_examples",
+        "ordinal": 12
+    },
+    "devtools::test_active_file": {
+        "name": "Run a test file",
+        "package": "devtools",
+        "title": "",
+        "description": "Run the current test file, using `devtools::test_active_file()`.",
+        "interactive": true,
+        "binding": "test_active_file",
+        "ordinal": 8
+    },
+    "devtools::test_coverage": {
+        "name": "Report test coverage for a package",
+        "package": "devtools",
+        "title": "",
+        "description": "Calculate and report the test coverage for the current package, using `devtools::test_coverage()`.",
+        "interactive": true,
+        "binding": "test_coverage",
+        "ordinal": 10
+    },
+    "devtools::test_coverage_active_file": {
+        "name": "Report test coverage for a file",
+        "package": "devtools",
+        "title": "",
+        "description": "Calculate and report test coverage for the current test file, using `devtools::test_coverage_active_file()`.",
+        "interactive": true,
+        "binding": "test_coverage_active_file",
+        "ordinal": 9
+    },
+    "drake::rs_addin_loadd": {
+        "name": "loadd target at cursor",
+        "package": "drake",
+        "title": "",
+        "description": "Load the target identified by the symbol under the cursor position from the drake cache.",
+        "interactive": false,
+        "binding": "rs_addin_loadd",
+        "ordinal": 5
+    },
+    "drake::rs_addin_r_make": {
+        "name": "Run a drake workflow",
+        "package": "drake",
+        "title": "",
+        "description": "Calls r_make(). Requries a `_drake.R` script.",
+        "interactive": false,
+        "binding": "rs_addin_r_make",
+        "ordinal": 2
+    },
+    "drake::rs_addin_r_outdated": {
+        "name": "See outdated drake targets",
+        "package": "drake",
+        "title": "",
+        "description": "Calls r_outdated(). Requries a `_drake.R` script.",
+        "interactive": false,
+        "binding": "rs_addin_r_outdated",
+        "ordinal": 4
+    },
+    "drake::rs_addin_r_vis_drake_graph": {
+        "name": "Visualize a drake workflow",
+        "package": "drake",
+        "title": "",
+        "description": "Calls r_vis_drake_graph(). Requries a `_drake.R` script.",
+        "interactive": false,
+        "binding": "rs_addin_r_vis_drake_graph",
+        "ordinal": 3
+    },
+    "pkgdown::build_site": {
+        "name": "Build full site",
+        "package": "pkgdown",
+        "title": "",
+        "description": "Build website for current package",
+        "interactive": true,
+        "binding": "build_site",
+        "ordinal": 13
+    },
+    "renv::renv_addins_embed": {
+        "name": "Embed a Lockfile",
+        "package": "renv",
+        "title": "",
+        "description": "Embeds a lockfile in the document, via renv::use().",
+        "interactive": false,
+        "binding": "renv_addins_embed",
+        "ordinal": 1
+    }
+}

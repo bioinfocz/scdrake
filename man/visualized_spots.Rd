@@ -6,8 +6,8 @@
 \usage{
 visualized_spots(
   sce,
-  sdimx = "Dims_x",
-  sdimy = "Dims_y",
+  sdimx = "pxl_col_in_fullres",
+  sdimy = "pxl_row_in_fullres",
   spat_enr_names = NULL,
   cell_color = NULL,
   color_as_factor = F,

@@ -4,9 +4,11 @@
   - 01 Quick start (single-sample pipeline): `vignette("scdrake")`
   - 02 Integration pipeline guide: `vignette("scdrake_integration")`
   - Advanced topics: `vignette("scdrake_advanced")`
+  - Interaction analysis: `vignette("interaction_analysis")`
   - Extending the pipeline: `vignette("scdrake_extend")`
   - `{drake}` basics: `vignette("drake_basics")`
     - Or the official `{drake}` book: <https://books.ropensci.org/drake/>
+  - Developing scdrake: `vignette("scdrake_development")`
 - General information:
   - Pipeline overview: `vignette("pipeline_overview")`
   - FAQ & Howtos: `vignette("scdrake_faq")`
@@ -19,8 +21,8 @@
     - Main config -> `vignette("config_main")`
 - Pipelines and stages:
   - Single-sample pipeline:
-    - Stage `01_input_qc`: reading in data, filtering, quality control -> `vignette("stage_input_qc")`
-    - Stage `02_norm_clustering`: normalization, HVG selection, SVG selection, dimensionality reduction, clustering, (marker-based) cell type annotation
+    - Stage `01_input_qc`: reading in data, filtering, quality control, artifact detection -> `vignette("stage_input_qc")`
+    - Stage `02_norm_clustering`: normalization, HVG selection, SVG selection, dimensionality reduction, clustering, (marker-based) cell type annotation, spot deconvolution
       -> `vignette("stage_norm_clustering")`
   - Integration pipeline:
     - Stage `01_integration`: reading in data and integration -> `vignette("stage_integration")`

@@ -159,29 +159,39 @@ cluster_markers_processed_fn <- function(cluster_markers) {
       markers = purrr::pmap(
         list(.data$markers, .data$id, .data$test_type, .data$groups, .data$group_level),
         function(markers, id, test_type, groups, group_level) {
+          
           if (test_type == "wilcox") {
             stats_columns_metric_name <- ".AUC"
-            stats_columns <- str_c("auc_", setdiff(levels(groups), group_level))
+            stats_columns <- stringr::str_c("auc_", setdiff(levels(groups), group_level))
           } else {
             stats_columns_metric_name <- ".logFC"
-            stats_columns <- str_c("lfc_", setdiff(levels(groups), group_level))
+            stats_columns <- stringr::str_c("lfc_", setdiff(levels(groups), group_level))
           }
-
-          stats_df <- markers[, stats_columns] %>% as.data.frame()
-
+          
+          stats_df <- markers[, stats_columns, drop = FALSE] %>% as.data.frame()
+          
           if (length(levels(groups)) > 2) {
-            stats_columns_metric <- str_c(stats_columns, stats_columns_metric_name)
+            stats_columns_metric <- stringr::str_c(stats_columns, stats_columns_metric_name)
           } else {
             stats_columns_metric <- if (test_type == "wilcox") "AUC" else "logFC"
           }
-
-          markers[, stats_columns] <- stats_df[, stats_columns_metric]
-
+          
+          # Return NULL if all TOP values are NA, to remove later
+          #print(head(markers))
+          
+          if (!all(is.na(stats_df$Top))) {
+            markers[, stats_columns] <- stats_df[, stats_columns_metric]
+            
+          }
+          
+          
           return(markers)
         }
       )
-    )
-
+    ) %>%
+    # Remove rows where markers is NULL
+    dplyr::filter(!purrr::map_lgl(markers, ~ all(is.na(.x$Top))))
+  
   return(cluster_markers_processed)
 }
 

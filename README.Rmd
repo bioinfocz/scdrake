@@ -36,11 +36,13 @@ The main features of the `{scdrake}` pipeline are:
   output, delimited table, or `SingleCellExperiment` object.
 - Import of SRT data:
   [10x Genomics Space Ranger](https://www.10xgenomics.com/support/software/space-ranger/latest/getting-started/what-is-space-ranger)
-  output, delimited table, or `SingleCellExperiment` object, and tissue positions file as in Space ranger.
+  output, delimited table, or `SingleCellExperiment` object.
 - Quality control and filtering of cells/spots and genes, removal of empty droplets.
+- Spatial artifact detection for spot-based data.
 - Higly variable genes detection, cell cycle scoring, normalization, clustering, and dimensionality reduction.
 - Spatially variable genes detection (for SRT data)
 - Cell type annotation using reference sets, cell type annotation using user-provided marker genes.
+- Spot deconvolution using reference single-cell experiment. 
 - Integration of multiple datasets.
 - Computation of cluster markers and differentially expressed genes between clusters (denoted as "contrasts").
 - Rich graphical and HTML outputs based on customizable RMarkdown documents.
@@ -70,8 +72,10 @@ If you use `{scdrake}` in your research, please, consider citing
 [doi:10.1093/bioadv/vbad089](https://doi.org/10.1093/bioadv/vbad089).
 
 Huge thanks go to the authors of the
-[Orchestrating Single-Cell Analysis with Bioconductor](https://bioconductor.org/books/3.15/OSCA) book on whose
+[Orchestrating Single-Cell Analysis with Bioconductor](https://bioconductor.org/books/release/OSCA/) and [Orchestrating Spatial Transcriptomics Analysis with Bioconductor](https://lmweber.org/OSTA/) book on whose
 methods and recommendations is `{scdrake}` largely based.
+
+If you wish to contribute, please refer to and `.github/CONTRIBUTING.md` manual  and `vignette("scdrake_development")`.
 
 ***
 
@@ -121,7 +125,7 @@ out <- scdrake::wrap_code(c(
 **Note for Mac users with M1/M2 chipsets**: until version 1.5.0 (inclusive), `arm64` images are available.
 
 ```bash
-docker pull jirinovo/scdrake:1.5.0-bioc3.15-arm64
+docker pull pfeiferl/scdrake:1.7.0-bioc3.21-arm64
 ```
 
 ### Running the container
@@ -208,10 +212,10 @@ Now exit and run again R. You should see a message that renv library has been ac
 renv::install("BiocManager")
 ```
 
-### Install Bioconductor 3.15
+### Install Bioconductor 3.21
 
 ```r
-BiocManager::install(version = "3.15")
+BiocManager::install(version = "3.21")
 ```
 
 ### Restore `{scdrake}` dependencies from lockfile

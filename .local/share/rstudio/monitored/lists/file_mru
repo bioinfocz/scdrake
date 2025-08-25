@@ -1,0 +1,4 @@
+~/README.md
+~/renv.lock
+~/vignettes/scdrake_development.Rmd
+~/vignettes/_drake_parallelism.Rmd

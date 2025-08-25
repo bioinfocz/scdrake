@@ -275,11 +275,11 @@ lapply_rows <- function(df, as_scdrake_list = TRUE, return_tibble = TRUE, FUN, .
   FUN <- match.fun(FUN)
   df_rownames <- rownames(df)
   to_iter <- purrr::transpose(df)
-
+  
   if (as_scdrake_list) {
     to_iter <- lapply(to_iter, scdrake_list)
   }
-
+  
   res <- lapply(to_iter, FUN = FUN, ...) %>%
     purrr::map_depth(2, function(x) {
       if (length(x) != 1 || is(x, "scdrake_list")) {
@@ -289,15 +289,15 @@ lapply_rows <- function(df, as_scdrake_list = TRUE, return_tibble = TRUE, FUN, .
       }
     }) %>%
     unclass()
-
+  
   assert_that_(typeof(res) == "list", msg = "{.var FUN} must return a list.")
   res <- dplyr::bind_rows(res)
-
+  
   if (!return_tibble) {
     res <- as.data.frame(res)
     rownames(res) <- df_rownames
   }
-
+  
   return(res)
 }
 

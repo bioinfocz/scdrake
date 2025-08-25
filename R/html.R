@@ -544,16 +544,21 @@ generate_cell_annotation_plots_section <- function(dimred_plots_cell_annotation_
 #' @concept misc_html
 #' @export
 format_used_functions <- function(functions, do_cat = FALSE) {
-  function_links <- purrr::map_chr(functions, ~ gluec("- `{.}`") %>% downlit::downlit_md_string() %>% stringr::str_trim())
-  out <- str_line(
-    "\n<details>",
-    "  <summary class='used-functions'>Show used functions \u25be</summary>\n",
-    "  <div class='used-functions-content'>",
-    str_line(function_links),
-    "\n  </div>",
-    "</details>\n\n"
+  function_links <- purrr::map_chr(
+    functions,
+    ~ downlit::downlit_md_string(glue::glue("`{.}`")) %>% stringr::str_trim()
   )
-
+  
+  out <- stringr::str_c(
+    "\n<details>",
+    "<summary class='used-functions'>Show used functions ▾</summary>",
+    "<div class='used-functions-content'>",
+    stringr::str_c(function_links, collapse = "<br />"),
+    "</div>",
+    "</details>\n\n",
+    sep = "\n"
+  )
+  
   if (do_cat) {
     cat(out)
     return(invisible(out))

@@ -8,7 +8,7 @@ marker_heatmap(
   seu,
   markers,
   groups,
-  assay = "RNA",
+  assay = NULL,
   slot = "data",
   top_n = 5,
   top_n_wt = "fdr",

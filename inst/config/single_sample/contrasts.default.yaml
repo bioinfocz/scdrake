@@ -47,6 +47,8 @@ MAKE_CONTRASTS_PLOTS: True
 ### Input files ###############################################################
 CONTRASTS_TABLE_TEMPLATE_RMD_FILE: "Rmd/common/contrasts_table_template.Rmd"
 CONTRASTS_REPORT_RMD_FILE: "Rmd/common/contrasts.Rmd"
+# CONTRASTS_TABLE_TEMPLATE_RMD_FILE: "Rmd/common/contrasts_table_template_spatial.Rmd"
+# CONTRASTS_REPORT_RMD_FILE: "Rmd/common/contrasts_spatial.Rmd"
 ###############################################################################
 
 ### Output files ##############################################################
@@ -58,3 +60,4 @@ CONTRASTS_PLOTS_BASE_OUT_DIR: "contrasts_plots"
 CONTRASTS_DIMRED_PLOTS_BASE_OUT_DIR: "contrasts_dimred_plots"
 CONTRASTS_TABLES_OUT_DIR: "contrasts_tables"
 ###############################################################################
+SPATIAL: False
