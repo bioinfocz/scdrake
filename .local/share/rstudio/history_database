@@ -3,3 +3,10 @@
 1756130533324:pkgdown::build_articles()
 1756130616454:pkgdown::build_articles()
 1756130824250:pkgdown::build_site()
+1756136255962:scdrake::check_yq()
+1756136341331:scdrake::check_yq
+1756136471370:desc <- desc::description$new()
+1756136479715:s.character(desc$get_version())
+1756136484285:as.character(desc$get_version())
+1756137218223:yq_version <- system2(yq_binary, "-V", stdout = TRUE)
+1756137236043:scdrake::check_yq()

@@ -1,0 +1,7 @@
+```{r, include = FALSE}
+desc <- desc::description$new()
+LATEST_STABLE_VERSION <- as.character(desc$get_version())
+BIOC_VERSION <- "3.21"
+DOCKER_IMAGE_STABLE <- glue::glue("jirinovo/scdrake:{LATEST_STABLE_VERSION}")
+DOCKER_IMAGE_LATEST <- glue::glue("jirinovo/scdrake:latest")
+```

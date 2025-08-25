@@ -1,0 +1,26 @@
+{
+    "id": "6E8C3697",
+    "path": "~/renv.lock",
+    "project_path": null,
+    "type": "json",
+    "hash": "0",
+    "contents": "",
+    "dirty": false,
+    "created": 1756136265789.0,
+    "source_on_save": false,
+    "relative_order": 1,
+    "properties": {
+        "source_window_id": "",
+        "Source": "Source",
+        "cursorPosition": "12326,951",
+        "scrollLine": "12320"
+    },
+    "folds": "",
+    "lastKnownWriteTime": 1756107198,
+    "encoding": "UTF-8",
+    "collab_server": "",
+    "source_window": "",
+    "last_content_update": 1756107198,
+    "read_only": false,
+    "read_only_alternatives": []
+}
