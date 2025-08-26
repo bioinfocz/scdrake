@@ -1,3 +1,4 @@
+~/Dockerfile
 ~/.github/workflows/docker-ci.yml
 ~/DESCRIPTION
 ~/tests/testthat/test-run_pipeline.R
@@ -12,4 +13,3 @@
 ~/tests/testthat/run_pipeline_config_patches/single_sample_pbmc3k/01_input_qc.default.yaml
 ~/tests/testthat/run_pipeline_config_patches/single_sample_pbmc1k_full_sct/01_input_qc.default.yaml
 ~/tests/testthat/run_pipeline_config_patches/single_sample_pbmc1k_full/02_norm_clustering.default.yaml
-~/tests/testthat/run_pipeline_config_patches/single_sample_pbmc1k_full/01_input_qc.default.yaml

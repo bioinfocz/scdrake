@@ -55,6 +55,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
   libjpeg-dev \
   libtiff-dev \
   qpdf \
+  ca-certificates \
   curl
 
 ## clean up
