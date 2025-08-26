@@ -6,8 +6,8 @@
 \usage{
 spatGenePlot2Dsce(
   sce,
-  sdimx = "Dims_x",
-  sdimy = "Dims_y",
+  sdimx = "pxl_col_in_fullres",
+  sdimy = "pxl_row_in_fullres",
   expression_values = c("counts", "logcounts"),
   genes,
   cell_color_gradient = c("blue", "white", "red"),

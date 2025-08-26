@@ -75,8 +75,7 @@ test_that("run command works", {
 test_that("run command returns exit code 1", {
   withr::with_dir(project_dir, {
     cfg <- load_pipeline_config()
-    #sce_orig insted of sce_raw
-    cfg$DRAKE_TARGETS <- c("sce_orig")
+    cfg$DRAKE_TARGETS <- c("sce_raw")
     yaml::write_yaml(cfg, "config/pipeline.yaml")
     res <- .run_cli(args = c("--pipeline-type", "single_sample", "run"))
     expect_equal(res$status, 1)

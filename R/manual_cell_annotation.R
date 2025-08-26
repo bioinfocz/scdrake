@@ -386,13 +386,11 @@ meta_heatmap_ploting <-
     )
     par <- rbind(par, dimred_par)
     if (spatial) {
-      man_anot_plot <- visualized_spots(sce,
-        cell_color = glue::glue("manual_annotation_{clustering}"),
-        point_size = 5,
-        color_as_factor = T,
-        legend_symbol_size = 3,
-        legend_text = 16
-      )
+      colnames(SpatialExperiment::spatialCoords(sce)) <- c("x","y")
+      man_anot_plot <- ggspavis::plotSpots(
+        sce,
+        annotate = glue::glue("manual_annotation_{clustering}"), show_axes = FALSE,legend_position = "bottom") + ggplot2::theme_classic()
+      
       out_pdf_file <- fs::path(out_dir, "spatmananotplot.pdf")
       scdrake::save_pdf(list(man_anot_plot),
         out_pdf_file,
@@ -413,11 +411,10 @@ meta_heatmap_ploting <-
         savelist <- list()
 
         for (annot in cell_annotation_values) {
-          enrich_plot <- visualized_spots(
+          colnames(SpatialExperiment::spatialCoords(sce)) <- c("x","y")
+          enrich_plot <- ggspavis::plotSpots(
             scdrake::sce_add_colData(sce, cell_metadata),
-            cell_color = annot,
-            point_size = 1.5
-          )
+            annotate = annot, show_axes = FALSE,legend_position = "bottom") + ggplot2::theme_classic()
           savelist[[annot]] <- enrich_plot
         }
         combo_plot <- cowplot::plot_grid(plotlist = savelist)

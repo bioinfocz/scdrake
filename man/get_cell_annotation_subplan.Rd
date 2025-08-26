@@ -11,6 +11,7 @@ get_cell_annotation_subplan(
   cell_annotation_out_dir,
   report_dimred_names,
   dimred_plots_out_dir,
+  spatial,
   do_heatmaps_
 )
 }

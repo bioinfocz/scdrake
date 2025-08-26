@@ -15,7 +15,8 @@ marker_plot(
   cluster_plot_label = TRUE,
   cluster_plot_point_size = 1,
   feature_plot_point_size = 1,
-  vln_plot_legend_title = NULL
+  vln_plot_legend_title = NULL,
+  spatial = FALSE
 )
 }
 \arguments{
@@ -38,6 +39,8 @@ of cells (columns) in \code{sce}.
 \item{feature_plot_point_size}{A numeric scalar. Applied to the feature plot.}
 
 \item{vln_plot_legend_title}{A character scalar. Applied to the violin plot.}
+
+\item{spatial}{A logical scalar. If true, add spatial plots.}
 }
 \value{
 A \code{patchwork} object.

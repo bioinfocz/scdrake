@@ -232,6 +232,8 @@ get_int_clustering_subplan <- function(cfg, cfg_pipeline, cfg_main) {
       clusters_all = clusters_all,
       cell_annotation_labels = cell_annotation_labels,
       cell_groupings = !!cfg$CELL_GROUPINGS,
+      spot_deconvolution_labels = NULL, 
+      manual_annotation_labels = NULL,
       additional_cell_data = additional_cell_data,
       pipeline_type = "integration"
     ),
@@ -295,6 +297,7 @@ get_int_clustering_subplan <- function(cfg, cfg_pipeline, cfg_main) {
     cell_annotation_out_dir = cfg$INT_CLUSTERING_CELL_ANNOTATION_OUT_DIR,
     report_dimred_names = cfg$INT_CLUSTERING_REPORT_DIMRED_NAMES,
     dimred_plots_out_dir = cfg$INT_CLUSTERING_DIMRED_PLOTS_OUT_DIR,
+    spatial=FALSE,
     do_heatmaps_ = any_clustering_enabled
   )
 

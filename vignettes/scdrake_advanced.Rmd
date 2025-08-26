@@ -93,3 +93,9 @@ See <https://books.ropensci.org/drake/plans.html#special-data-formats-for-target
 See `vignette("scdrake_extend")`, please.
 
 ***
+
+## Ligand receptor interactions in Python
+
+See `vignette("interaction_analysis")`, please.
+
+***

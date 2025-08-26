@@ -6,8 +6,8 @@
 #' @return A `ggplot2` object.
 #' @concept spatial_visualization
 visualized_spots <- function(sce,
-                             sdimx = "Dims_x",
-                             sdimy = "Dims_y",
+                             sdimx = "pxl_col_in_fullres",
+                             sdimy = "pxl_row_in_fullres",
                              spat_enr_names = NULL,
                              cell_color = NULL,
                              color_as_factor = F,
@@ -40,11 +40,14 @@ visualized_spots <- function(sce,
     match.arg(point_shape, choices = c("border", "no_border"))
 
   ## get spatial cell locations
-  cell_locations <- metadata(sce)$spatial_locs
+  ##CHANGE, cell location in spatialCoords layer
+  cell_locations <- SpatialExperiment::spatialCoords(sce)
 
   ## get cell metadata
   cell_metadata <-
-    colData(sce)[, c("Barcode", cell_color, sdimx, sdimy)]
+    colData(sce)[, c("Barcode", cell_color)]
+  
+  cell_metadata <- cbind(cell_metadata,cell_locations)
   cell_metadata <- as.data.frame(cell_metadata)
   if (nrow(cell_metadata) == 0) {
     cell_locations_metadata <- cell_locations
@@ -193,8 +196,8 @@ plot_spat_point_layer_ggplot <- function(ggobject,
       "plot_method = ggplot, but spatial dimensions for sdimx and/or sdimy are not specified. \n
             It will default to the 'sdimx' and 'sdimy' "
     )
-    sdimx <- "Dims_x"
-    sdimy <- "Dims_y"
+    sdimx <- "pxl_col_in_fullres"
+    sdimy <- "pxl_row_in_fullres"
   }
 
   ## ggplot object
@@ -456,38 +459,80 @@ getDistinctColors <- function(n) {
   }
   return(col_vector)
 }
-#' @title A function for visualization selected qc matrices in pseudotissue visualization
-#' @description Adapted function from Giotto package [Dries et al, 2021], rewrite for use in scdrake package for a SingleCellExperiment object. Helper function for users, not in core scdrake package.
-#' @param sce A `SingleCellExperiment` object.
+#' @title A function for visualization selected qc matrices in image 
+#' @description Plot spots features with the H&E Visium low resolution image
+#' @param sce A `SpatialExperiment` object.
 #' @return A list of plots.
 #' @concept spatial_visualization
-plot_spat_visuals <- function(sce) {
+plot_spat_visuals <- function(spe) {
   to_plot <- c(
     "detected",
     "sum",
     "subsets_mito_percent",
     "subsets_ribo_percent"
   )
+  
   plist <- list()
   n <- 1
+  
   for (j in to_plot) {
     plist[[n]] <-
-      visualized_spots(
-        sce = sce,
-        sdimx = "Dims_x",
-        sdimy = "Dims_y",
-        cell_color = j,
-        point_size = 2,
-        point_shape = "border",
-        color_as_factor = F,
-        point_alpha = 1,
-        show_legend = T
-      )
+      ggspavis::plotVisium(
+        spe,
+        annotate = j,
+        image = TRUE,
+        facets = NULL,
+        legend_position = "bottom"
+      ) +
+      ggplot2::theme(
+        panel.background = ggplot2::element_rect(),
+        legend.text = ggplot2::element_text(angle = 45, hjust = 1)
+      ) +
+      ggplot2::ggtitle(j)
+    
     n <- n + 1
   }
-
   return(plist)
 }
+
+#' @title A function for visualization selected qc matrices in pseudotissue 
+#' @description Plot spots features as spots
+#' @param sce A `SpatialExperiment` object.
+#' @return A list of plots.
+#' @concept spatial_visualization
+plot_spat_visuals2 <- function(spe) {
+  to_plot <- c(
+    "detected",
+    "sum",
+    "subsets_mito_percent",
+    "subsets_ribo_percent"
+  )
+  
+  plist <- list()
+  n <- 1
+  
+  for (j in to_plot) {
+    plist[[n]] <-
+      ggspavis::plotVisium(
+        spe,
+        annotate = j,
+        image = FALSE,
+        facets = NULL,
+        legend_position = "bottom"
+      ) +
+      ggplot2::theme(
+        panel.background = ggplot2::element_rect(),
+        legend.text = ggplot2::element_text(angle = 45, hjust = 1)
+      ) +
+      ggplot2::ggtitle(j)
+    
+    n <- n + 1
+  }
+  return(plist)
+}
+
+
+
 
 #' @title A function for visualization selected genes in pseudotissue visualization
 #' @description Adapted function from Giotto package [Dries et al, 2021], rewrite for use in scdrake package for a SingleCellExperiment object
@@ -495,8 +540,8 @@ plot_spat_visuals <- function(sce) {
 #' @return A ggplot2 object.
 #' @concept spatial_visualization
 spatGenePlot2Dsce <- function(sce,
-                              sdimx = "Dims_x",
-                              sdimy = "Dims_y",
+                              sdimx = "pxl_col_in_fullres",
+                              sdimy = "pxl_row_in_fullres",
                               expression_values = c("counts", "logcounts"),
                               genes,
                               cell_color_gradient = c("blue", "white", "red"),
@@ -557,11 +602,12 @@ spatGenePlot2Dsce <- function(sce,
   }
 
   ## get spatial cell locations
-  cell_locations <- metadata(sce)$spatial_locs
-
+  cell_locations <- SpatialExperiment::spatialCoords(sce)
 
   ## get cell metadata
-  cell_metadata <- colData(sce)[, c("Barcode", sdimx, sdimy)]
+  cell_metadata <- colData(sce)[, c("Barcode")]
+  cell_metadata <- cbind(cell_metadata,cell_locations)
+  
   cell_metadata <- as.data.frame(cell_metadata)
   if (nrow(cell_metadata) == 0) {
     cell_locations_metadata <- cell_locations
@@ -734,3 +780,6 @@ spatGenePlot2Dsce <- function(sce,
     align = cow_align
   )
 }
+
+
+

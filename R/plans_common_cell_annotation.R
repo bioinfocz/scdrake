@@ -16,6 +16,7 @@ get_cell_annotation_subplan <- function(sce_target_name,
                                         cell_annotation_out_dir,
                                         report_dimred_names,
                                         dimred_plots_out_dir,
+                                        spatial,
                                         do_heatmaps_) {
   if (!is.null(cell_annotation_sources)) {
     plan_cell_annotation <- drake::drake_plan(
@@ -51,7 +52,8 @@ get_cell_annotation_subplan <- function(sce_target_name,
       dimred_plots_cell_annotation = target(
         dimred_plots_from_params_df(
           !!sym(sce_dimred_plots_target_name),
-          dimred_plots_params_df = dimred_plots_cell_annotation_params_df
+          dimred_plots_params_df = dimred_plots_cell_annotation_params_df,
+          spatial= !!spatial
         ),
 
         dynamic = map(dimred_plots_cell_annotation_params_df)

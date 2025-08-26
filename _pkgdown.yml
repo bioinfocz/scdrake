@@ -41,7 +41,9 @@ articles:
     - scdrake_docker
     - scdrake_integration
     - scdrake_advanced
+    - interaction_analysis
     - scdrake_extend
+    - scdrake_development
     - drake_basics
 
   - title: General information
@@ -187,6 +189,9 @@ reference:
   - subtitle: Spatial visualization
   - contents:
     - has_concept("spatial_visualization")
+  - subtitle: Spatial deconvolution
+  - contents:
+    - has_concept("deconvolution")
   - title: Misc functions
   - subtitle: HTML
   - contents:

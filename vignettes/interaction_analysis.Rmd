@@ -1,0 +1,90 @@
+---
+title: "Interaction analysis"
+date: "`r glue::glue('<sup>Document generated: {format(Sys.time(), \"%Y-%m-%d %H:%M:%S %Z%z</sup>\")}')`"
+package: scdrake
+output:
+  BiocStyle::html_document:
+    toc: true
+    toc_float: true
+vignette: >
+  %\VignetteIndexEntry{Interaction analysis}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+``` {r, echo = FALSE}
+knitr::opts_chunk$set(eval = FALSE)
+```
+
+## Overwiev
+
+For advanced spatial transcriptomics analysis, we recommend exploring intercellular pattern identification using the Python package LIANA+ in combination with MISTY.
+
+Below we show the easiest way to export count matrices, spatial coordinates, and associated metadata from R, so they can be loaded into Python for further analysis.
+
+```{r, eval = FALSE}
+library(SingleCellExperiment)
+sce <- drake::loadd(sce_final_norm_clustering)
+# Save count matrices
+counts_matrix <- counts(sce)
+writeMM(counts_matrix,file = "counts_matrix.mtx")
+
+logcounts_matrix <- logcounts(sce)
+writeMM(logcounts_matrix, file = "logcounts_matrix.mts")
+
+# Save gene names, preferebly gene symbols
+genes <- rownames(counts_matrix)
+write.table(genes,file="genes.tsv", quote = FALSE, sep = "\t", row.names = FALSE, col.names = FALSE)
+
+# Save cell barcodes
+barcodes <- colnames(counts_matrix)
+write.table(barcodes,"barcodes.tsv",quote = FALSE, sep = "\t", row.names = FALSE, col.names = FALSE)
+
+# Save metadata - make sure that spatial coordinates are in sce metadata
+write.csv(as.data.frame(colData(sce)), "metadata.csv", row.names = TRUE)
+```
+
+The following example shows how to load the exported data into an AnnData object. We recommend usage of Jupyter notebook.
+
+```{python, eval = FALSE}
+from scipy.io import mmread
+import anndata
+import numpy as np
+import pandas as pd
+
+X_raw = mmread("counts_matrix.mtx").T.tocsr()
+
+# Then: normalized data
+X_norm = mmread("logcounts_matrix.mtx").T.tocsr()
+
+# Load genes and barcodes again
+var_names = pd.read_csv("genes", header=None)[0].tolist()
+obs_names = pd.read_csv("barcodes", header=None)[0].tolist()
+
+# Create the base AnnData object with normalized data
+adata = anndata.AnnData(X=X_norm)
+adata.var_names = var_names
+adata.obs_names = obs_names
+
+# Add raw counts as a layer or raw slot
+adata.layers["counts"] = X_raw
+adata.raw = adata.copy()  # optional, depends if you want .raw as raw counts
+
+# Add metadata if available
+metadata = pd.read_csv("metadata.csv", index_col=0)
+adata.obs = metadata.loc[adata.obs_names]
+
+adata.layers["logcounts"] = adata.X
+
+#check spatial coord names, might differ
+spatial_coords = metadata.loc[adata.obs_names, ["sdimx", "sdimy"]].to_numpy()
+
+# Add to obsm
+adata.obsm["spatial"] = spatial_coords
+
+# Save created anndata object
+adata.write("adata.h5ad")
+```
+
+Once the data is prepared, you can proceed with the [LIANA tutorial](https://liana-py.readthedocs.io/en/latest/notebooks/bivariate.html#identify-intercellular-patterns)
+

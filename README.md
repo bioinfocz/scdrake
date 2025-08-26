@@ -26,37 +26,38 @@ language](https://www.r-project.org).
 
 The main features of the `{scdrake}` pipeline are:
 
--   Import of scRNA-seq data: [10x Genomics Cell
-    Ranger](https://support.10xgenomics.com/single-cell-gene-expression/software/pipelines/latest/what-is-cell-ranger)
-    output, delimited table, or `SingleCellExperiment` object.
--   Import of SRT data: [10x Genomics Space
-    Ranger](https://www.10xgenomics.com/support/software/space-ranger/latest/getting-started/what-is-space-ranger)
-    output, delimited table, or `SingleCellExperiment` object, and
-    tissue positions file as in Space ranger.
--   Quality control and filtering of cells/spots and genes, removal of
-    empty droplets.
--   Higly variable genes detection, cell cycle scoring, normalization,
-    clustering, and dimensionality reduction.
--   Spatially variable genes detection (for SRT data)
--   Cell type annotation using reference sets, cell type annotation
-    using user-provided marker genes.
--   Integration of multiple datasets.
--   Computation of cluster markers and differentially expressed genes
-    between clusters (denoted as “contrasts”).
--   Rich graphical and HTML outputs based on customizable RMarkdown
-    documents.
-    -   You can find links to example outputs
-        [here](https://bioinfocz.github.io/scdrake/articles/pipeline_overview.html).
--   Thanks to `{drake}`, the pipeline is highly efficient, scalable and
-    reproducible, and also extendable.
-    -   Want to change some parameter? No problem! Only parts of the
-        pipeline which changed will rerun, while up-to-date ones will be
-        skipped.
-    -   Want to reuse the intermediate results for your own analyses? No
-        problem! The pipeline has smartly defined checkpoints which can
-        be loaded from a `{drake}` cache.
-    -   Want to extend the pipeline? No problem! The pipeline definition
-        is just an R object which can be arbitrarily extended.
+- Import of scRNA-seq data: [10x Genomics Cell
+  Ranger](https://support.10xgenomics.com/single-cell-gene-expression/software/pipelines/latest/what-is-cell-ranger)
+  output, delimited table, or `SingleCellExperiment` object.
+- Import of SRT data: [10x Genomics Space
+  Ranger](https://www.10xgenomics.com/support/software/space-ranger/latest/getting-started/what-is-space-ranger)
+  output, delimited table, or `SingleCellExperiment` object.
+- Quality control and filtering of cells/spots and genes, removal of
+  empty droplets.
+- Spatial artifact detection for spot-based data.
+- Higly variable genes detection, cell cycle scoring, normalization,
+  clustering, and dimensionality reduction.
+- Spatially variable genes detection (for SRT data)
+- Cell type annotation using reference sets, cell type annotation using
+  user-provided marker genes.
+- Spot deconvolution using reference single-cell experiment.
+- Integration of multiple datasets.
+- Computation of cluster markers and differentially expressed genes
+  between clusters (denoted as “contrasts”).
+- Rich graphical and HTML outputs based on customizable RMarkdown
+  documents.
+  - You can find links to example outputs
+    [here](https://bioinfocz.github.io/scdrake/articles/pipeline_overview.html).
+- Thanks to `{drake}`, the pipeline is highly efficient, scalable and
+  reproducible, and also extendable.
+  - Want to change some parameter? No problem! Only parts of the
+    pipeline which changed will rerun, while up-to-date ones will be
+    skipped.
+  - Want to reuse the intermediate results for your own analyses? No
+    problem! The pipeline has smartly defined checkpoints which can be
+    loaded from a `{drake}` cache.
+  - Want to extend the pipeline? No problem! The pipeline definition is
+    just an R object which can be arbitrarily extended.
 
 For whom is `{scdrake}` purposed? It is primarily intended for
 tech-savvy users (bioinformaticians), who pass on the results (reports,
@@ -81,8 +82,13 @@ If you use `{scdrake}` in your research, please, consider citing
 > [doi:10.1093/bioadv/vbad089](https://doi.org/10.1093/bioadv/vbad089).
 
 Huge thanks go to the authors of the [Orchestrating Single-Cell Analysis
-with Bioconductor](https://bioconductor.org/books/3.15/OSCA) book on
-whose methods and recommendations is `{scdrake}` largely based.
+with Bioconductor](https://bioconductor.org/books/release/OSCA/) and
+[Orchestrating Spatial Transcriptomics Analysis with
+Bioconductor](https://lmweber.org/OSTA/) book on whose methods and
+recommendations is `{scdrake}` largely based.
+
+If you wish to contribute, please refer to and `.github/CONTRIBUTING.md`
+manual and `vignette("scdrake_development")`.
 
 ------------------------------------------------------------------------
 
@@ -91,7 +97,7 @@ whose methods and recommendations is `{scdrake}` largely based.
 ## Using a Docker image (recommended)
 
 A Docker image based on the [official Bioconductor
-image](https://bioconductor.org/help/docker/) (version 3.15) is
+image](https://bioconductor.org/help/docker/) (version 3.21) is
 available. This is the most handy and reproducible way how to use
 `{scdrake}` as all the dependencies are already installed and their
 versions are fixed. In addition, the parent Bioconductor image comes
@@ -115,8 +121,8 @@ You can pull the Docker image with the latest stable `{scdrake}` version
 using
 
 ``` bash
-docker pull jirinovo/scdrake:1.6.0
-singularity pull docker:jirinovo/scdrake:1.6.0
+docker pull jirinovo/scdrake:1.7.0
+singularity pull docker:jirinovo/scdrake:1.7.0
 ```
 
 or list available versions in [our Docker Hub
@@ -133,7 +139,7 @@ singularity pull docker:jirinovo/scdrake:latest
 (inclusive), `arm64` images are available.
 
 ``` bash
-docker pull jirinovo/scdrake:1.5.0-bioc3.15-arm64
+docker pull pfeiferl/scdrake:1.7.0-bioc3.21-arm64
 ```
 
 ### Running the container
@@ -158,7 +164,7 @@ docker run -d \
   -e USERID=$(id -u) \
   -e GROUPID=$(id -g) \
   -e PASSWORD=1234 \
-  jirinovo/scdrake:1.6.0
+  jirinovo/scdrake:1.7.0
 ```
 
 For Singularity, also make shared directories and execute the container
@@ -180,16 +186,18 @@ singularity exec \
 ## Installing `{scdrake}` manually (not recommended)
 
 <details>
+
 <summary>
+
 Click for details
 </summary>
 
 ### Install the required system packages
 
--   For Linux, follow the commands for your distribution
-    [here](required_libs_linux.md).
--   For MacOS:
-    `$ brew install libxml2 imagemagick@6 harfbuzz fribidi libgit2 geos pandoc`
+- For Linux, follow the commands for your distribution
+  [here](required_libs_linux.md).
+- For MacOS:
+  `$ brew install libxml2 imagemagick@6 harfbuzz fribidi libgit2 geos pandoc`
 
 ### Install R \>= 4.2
 
@@ -227,10 +235,10 @@ been activated.
 renv::install("BiocManager")
 ```
 
-### Install Bioconductor 3.15
+### Install Bioconductor 3.21
 
 ``` r
-BiocManager::install(version = "3.15")
+BiocManager::install(version = "3.21")
 ```
 
 ### Restore `{scdrake}` dependencies from lockfile
@@ -241,7 +249,7 @@ for `{scdrake}` and you can use it to install all dependencies by
 
 ``` r
 ## -- This is a lockfile for the latest stable version of scdrake.
-download.file("https://raw.githubusercontent.com/bioinfocz/scdrake/1.6.0/renv.lock")
+download.file("https://raw.githubusercontent.com/bioinfocz/scdrake/1.7.0/renv.lock")
 ## -- You can increase the number of CPU cores to speed up the installation.
 options(Ncpus = 2)
 renv::restore(lockfile = "renv.lock", repos = BiocManager::repositories())
@@ -261,7 +269,7 @@ installed from the lockfile).
 
 ``` r
 remotes::install_github(
-  "bioinfocz/scdrake@1.6.0",
+  "bioinfocz/scdrake@1.7.0",
   dependencies = FALSE, upgrade = FALSE,
   keep_source = TRUE, build_vignettes = TRUE,
   repos = BiocManager::repositories()
@@ -288,7 +296,9 @@ directory is inside an `{renv}` project.** You can read the reasons
 below.
 
 <details>
+
 <summary>
+
 Show details
 </summary>
 
@@ -328,51 +338,52 @@ vignette](https://bioinfocz.github.io/scdrake/articles/scdrake.html)
 ## Vignettes and other readings
 
 See <https://bioinfocz.github.io/scdrake> for a documentation website of
-the latest stable version (1.6.0) where links to vignettes below become
+the latest stable version (1.7.0) where links to vignettes below become
 real :-)
 
 See <https://bioinfocz.github.io/scdrake/dev> for a documentation
 website of the current development version.
 
--   Guides:
-    -   Using the Docker image:
-        <https://bioinfocz.github.io/scdrake/articles/scdrake_docker.html>
-        (or `vignette("scdrake_docker")`)
-    -   01 Quick start (single-sample pipeline): `vignette("scdrake")`
-    -   02 Integration pipeline guide: `vignette("scdrake_integration")`
-    -   Advanced topics: `vignette("scdrake_advanced")`
-    -   Extending the pipeline: `vignette("scdrake_extend")`
-    -   `{drake}` basics: `vignette("drake_basics")`
-        -   Or the official `{drake}` book:
-            <https://books.ropensci.org/drake/>
--   General information:
-    -   Pipeline overview: `vignette("pipeline_overview")`
-    -   FAQ & Howtos: `vignette("scdrake_faq")`
-    -   Spatial extension: `vignette("scdrake_spatial")`
-    -   Command line interface (CLI): `vignette("scdrake_cli")`
-    -   Config files (internals): `vignette("scdrake_config")`
-    -   Environment variables: `vignette("scdrake_envvars")`
--   General configs:
-    -   Pipeline config -\> `vignette("config_pipeline")`
-    -   Main config -\> `vignette("config_main")`
--   Pipelines and stages:
-    -   Single-sample pipeline:
-        -   Stage `01_input_qc`: reading in data, filtering, quality
-            control -\> `vignette("stage_input_qc")`
-        -   Stage `02_norm_clustering`: normalization, HVG selection,
-            SVG selection, dimensionality reduction, clustering,
-            (marker-based) cell type annotation -\>
-            `vignette("stage_norm_clustering")`
-    -   Integration pipeline:
-        -   Stage `01_integration`: reading in data and integration -\>
-            `vignette("stage_integration")`
-        -   Stage `02_int_clustering`: post-integration clustering and
-            cell annotation -\> `vignette("stage_int_clustering")`
-    -   Common stages:
-        -   Stage `cluster_markers` -\>
-            `vignette("stage_cluster_markers")`
-        -   Stage `contrasts` (differential expression) -\>
-            `vignette("stage_contrasts")`
+- Guides:
+  - Using the Docker image:
+    <https://bioinfocz.github.io/scdrake/articles/scdrake_docker.html>
+    (or `vignette("scdrake_docker")`)
+  - 01 Quick start (single-sample pipeline): `vignette("scdrake")`
+  - 02 Integration pipeline guide: `vignette("scdrake_integration")`
+  - Advanced topics: `vignette("scdrake_advanced")`
+  - Interaction analysis: `vignette("interaction_analysis")`
+  - Extending the pipeline: `vignette("scdrake_extend")`
+  - `{drake}` basics: `vignette("drake_basics")`
+    - Or the official `{drake}` book:
+      <https://books.ropensci.org/drake/>
+  - Developing scdrake: `vignette("scdrake_development")`
+- General information:
+  - Pipeline overview: `vignette("pipeline_overview")`
+  - FAQ & Howtos: `vignette("scdrake_faq")`
+  - Spatial extension: `vignette("scdrake_spatial")`
+  - Command line interface (CLI): `vignette("scdrake_cli")`
+  - Config files (internals): `vignette("scdrake_config")`
+  - Environment variables: `vignette("scdrake_envvars")`
+- General configs:
+  - Pipeline config -\> `vignette("config_pipeline")`
+  - Main config -\> `vignette("config_main")`
+- Pipelines and stages:
+  - Single-sample pipeline:
+    - Stage `01_input_qc`: reading in data, filtering, quality control,
+      artifact detection -\> `vignette("stage_input_qc")`
+    - Stage `02_norm_clustering`: normalization, HVG selection, SVG
+      selection, dimensionality reduction, clustering, (marker-based)
+      cell type annotation, spot deconvolution -\>
+      `vignette("stage_norm_clustering")`
+  - Integration pipeline:
+    - Stage `01_integration`: reading in data and integration -\>
+      `vignette("stage_integration")`
+    - Stage `02_int_clustering`: post-integration clustering and cell
+      annotation -\> `vignette("stage_int_clustering")`
+  - Common stages:
+    - Stage `cluster_markers` -\> `vignette("stage_cluster_markers")`
+    - Stage `contrasts` (differential expression) -\>
+      `vignette("stage_contrasts")`
 
 We encourage all users to read
 [basics](https://books.ropensci.org/drake) of the `{drake}` package.
@@ -453,29 +464,28 @@ including access to computing and storage facilities.
 Many things are used by `{scdrake}`, but these are really worth
 mentioning:
 
--   The [Bioconductor](https://www.bioconductor.org) ecosystem.
--   The [*Orchestrating Single-Cell Analysis with
-    Bioconductor*](https://bioconductor.org/books/3.15/OSCA) book.
--   The
-    [scran](https://bioconductor.org/packages/3.15/bioc/html/scran.html),
-    [scater](https://bioconductor.org/packages/3.15/bioc/html/scater.html),
-    and other great packages from [Aaron
-    Lun](https://orcid.org/0000-0002-3564-4813) et al.
--   The [drake](https://github.com/ropensci/drake) package.
--   The [rmarkdown](https://github.com/rstudio/rmarkdown) package, and
-    other ones from the [tidyverse](https://www.tidyverse.org)
-    ecosystem.
+- The [Bioconductor](https://www.bioconductor.org) ecosystem.
+- The [*Orchestrating Single-Cell Analysis with
+  Bioconductor*](https://bioconductor.org/books/3.15/OSCA) book.
+- The
+  [scran](https://bioconductor.org/packages/3.15/bioc/html/scran.html),
+  [scater](https://bioconductor.org/packages/3.15/bioc/html/scater.html),
+  and other great packages from [Aaron
+  Lun](https://orcid.org/0000-0002-3564-4813) et al.
+- The [drake](https://github.com/ropensci/drake) package.
+- The [rmarkdown](https://github.com/rstudio/rmarkdown) package, and
+  other ones from the [tidyverse](https://www.tidyverse.org) ecosystem.
 
 ### Development tools
 
--   Continuous code testing is possible thanks to [GitHub
-    Actions](https://github.com/features/actions) through `{usethis}`,
-    `{remotes}`, and `{rcmdcheck}`. Customized to use [Bioconductor’s
-    docker containers](https://www.bioconductor.org/help/docker).
--   The [documentation website](https://bioinfocz.github.io/scdrake) is
-    generated by `{pkgdown}`.
--   The code is styled automatically thanks to `{styler}`.
--   The documentation is formatted thanks to `{devtools}` and
-    `{roxygen2}`.
+- Continuous code testing is possible thanks to [GitHub
+  Actions](https://github.com/features/actions) through `{usethis}`,
+  `{remotes}`, and `{rcmdcheck}`. Customized to use [Bioconductor’s
+  docker containers](https://www.bioconductor.org/help/docker).
+- The [documentation website](https://bioinfocz.github.io/scdrake) is
+  generated by `{pkgdown}`.
+- The code is styled automatically thanks to `{styler}`.
+- The documentation is formatted thanks to `{devtools}` and
+  `{roxygen2}`.
 
 This package was developed using `{biocthis}`.

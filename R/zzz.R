@@ -53,7 +53,7 @@
 #' @export
 get_scdrake_default_options <- function(verbose = TRUE) {
   withr::local_options(scdrake_verbose = verbose)
-  scdrake_yq_binary <- Sys.which("yq")
+  scdrake_yq_binary <- "" #Sys.which("yq")
   scdrake_yq_binary <- dplyr::if_else(scdrake_yq_binary == "", get_yq_default_path(), scdrake_yq_binary)
 
   list(

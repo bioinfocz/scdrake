@@ -8,7 +8,8 @@ markers_table_files(
   markers_for_tables,
   rmd_template,
   marker_type = c("global", "contrast"),
-  drake_cache_dir = ".drake"
+  drake_cache_dir = ".drake",
+  spatial = FALSE
 )
 }
 \arguments{

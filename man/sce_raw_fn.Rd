@@ -12,6 +12,7 @@ sce_raw_fn(input_data, input_data_subset = NULL)
 \item \code{type}:
 \itemize{
 \item \code{"cellranger"}: a raw feature-barcode matrix from 10x Genomics \code{cellranger}
+\item \code{"spaceranger"}: a raw feature-barcode matrix from 10x Genomics \code{spaceranger}
 \item \code{"table"}: a delimited text file (table)
 \item \code{"sce"}: a \code{SingleCellExperiment} object (Rds file)
 \item \code{"sce_drake_cache"}: a \code{SingleCellExperiment} object loaded from a \code{drake} cache

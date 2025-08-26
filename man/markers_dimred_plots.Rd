@@ -5,7 +5,11 @@
 \title{Make dimred plots for each marker source defined in \code{CLUSTER_MARKERS_SOURCES} (\code{cluster_markers.yaml} config)
 or \code{CONTRASTS_SOURCES} (\code{contrasts.yaml} config).}
 \usage{
-markers_dimred_plots(sce_final_norm_clustering, markers_dimred_plots_params)
+markers_dimred_plots(
+  sce_final_norm_clustering,
+  markers_dimred_plots_params,
+  spatial = FALSE
+)
 }
 \arguments{
 \item{sce_final_norm_clustering}{A \code{SingleCellExperiment} object with computed dimreds and clusterings.}

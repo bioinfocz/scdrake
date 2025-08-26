@@ -55,7 +55,7 @@ If you are currently working within a \code{scdrake} project, you can review the
 This is a list of Rmd files currently bundled with the \code{scdrake} package:
 
 \if{html}{\out{<div class="sourceCode r">}}\preformatted{fs::dir_tree(system.file("Rmd", package = "scdrake"))
-#> /home/rstudio/scdrake_source/inst/Rmd
+#> /home/rstudio/inst/Rmd
 #> +-- common
 #> |   +-- _footer.Rmd
 #> |   +-- _header.Rmd
@@ -70,6 +70,7 @@ This is a list of Rmd files currently bundled with the \code{scdrake} package:
 #> |   |   \\-- clustering.Rmd
 #> |   +-- contrasts.Rmd
 #> |   +-- contrasts_table_template.Rmd
+#> |   +-- stylesheet (copy).css
 #> |   \\-- stylesheet.css
 #> +-- integration
 #> |   +-- 01_integration.Rmd
@@ -85,7 +86,8 @@ This is a list of Rmd files currently bundled with the \code{scdrake} package:
 #>     |   \\-- gene_filtering_qc.Rmd
 #>     +-- 01_input_qc_spatial.Rmd
 #>     +-- 02_norm_clustering.Rmd
-#>     \\-- 02_norm_clustering_simple.Rmd
+#>     +-- 02_norm_clustering_simple.Rmd
+#>     \\-- 02_norm_clustering_spatial.Rmd
 }\if{html}{\out{</div>}}
 
 A short description of these Rmd files:

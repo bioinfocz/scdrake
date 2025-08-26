@@ -21,8 +21,7 @@ get_input_qc_subplan <- function(cfg, cfg_pipeline, cfg_main) {
     config_input_qc = !!cfg,
 
     ## -- Read raw Cell Ranger files.
-    sce_orig = sce_raw_fn(!!cfg$INPUT_DATA, input_data_subset = !!cfg$INPUT_DATA_SUBSET),
-    sce_raw = sce_add_spatial_colData(sce_orig,!!cfg$SPATIAL_LOCKS,!!cfg$SPATIAL),
+    sce_raw = sce_raw_fn(!!cfg$INPUT_DATA, input_data_subset = !!cfg$INPUT_DATA_SUBSET),
     sce_raw_info = save_object_info(sce_raw),
 
     ## -- Calculate barcode ranks (for knee plot).
@@ -47,10 +46,8 @@ get_input_qc_subplan <- function(cfg, cfg_pipeline, cfg_main) {
     ribo_genes = which_genes_regex(sce = sce_valid_cells, regex = !!cfg$RIBO_REGEX, colname = "Symbol", ignore_case = TRUE),
 
     ## -- Calculate cell QC metrics and add it.
-    cell_qc = scater::perCellQCMetrics(
-      sce_valid_cells,
-      subsets = list(mito = mito_genes, ribo = ribo_genes), BPPARAM = ignore(BiocParallel::bpparam())
-    ),
+    cell_qc = cell_qc_fn(
+      sce_valid_cells,mito = mito_genes, ribo = ribo_genes),
 
     ## -- Dataset-sensitive filters.
     qc_filters_raw = list(
@@ -75,10 +72,11 @@ get_input_qc_subplan <- function(cfg, cfg_pipeline, cfg_main) {
     custom_filter = Reduce(!!cfg$CUSTOM_FILTERS_OPERATOR, custom_filters),
 
     ## -- Add filters to sce and create Seurat object.
-    sce_unfiltered = sce_add_colData(
+    sce_unfiltered = sce_add_spatial_colData(
       sce_valid_cells,
-      df = data.frame(cell_qc, discard_qc = qc_filter, discard_custom = custom_filter)
+      df = data.frame(cell_qc, discard_qc = qc_filter, discard_custom = custom_filter), spatial = !!cfg$SPATIAL
     ),
+    
     sce_unfiltered_info = save_object_info(sce_unfiltered),
     sce_unfiltered_plotlist = list(
       plot_colData(sce_unfiltered, y = "total", colour_by = "discard_qc", title = "Total UMI count", scale_y = ggplot2::scale_y_log10()),
@@ -92,14 +90,14 @@ get_input_qc_subplan <- function(cfg, cfg_pipeline, cfg_main) {
 
     ## -- sce filtered by dataset-sensitive filters
     sce_qc_filter = sce_unfiltered[, !sce_unfiltered$discard_qc],
-    sce_qc_filter_rowSums = counts(sce_qc_filter) %>% rowSums(),
+    sce_qc_filter_rowSums = counts(sce_qc_filter) %>% Matrix::rowSums(),
     sce_qc_gene_filter = get_gene_filter(sce_qc_filter, min_ratio_cells = !!cfg$MIN_RATIO_CELLS, min_umi = !!cfg$MIN_UMI),
     sce_qc_filter_genes = sce_qc_filter[!sce_qc_gene_filter, ],
     sce_qc_filter_genes_info = save_object_info(sce_qc_filter_genes),
 
     ## -- sce filtered by custom filters
     sce_custom_filter = sce_unfiltered[, !sce_unfiltered$discard_custom],
-    sce_custom_filter_rowSums = counts(sce_custom_filter) %>% rowSums(),
+    sce_custom_filter_rowSums = counts(sce_custom_filter) %>% Matrix::rowSums(),
     sce_custom_gene_filter = get_gene_filter(sce_custom_filter, min_ratio_cells = !!cfg$MIN_RATIO_CELLS, min_umi = !!cfg$MIN_UMI),
     sce_custom_filter_genes = sce_custom_filter[!sce_custom_gene_filter, ],
     sce_custom_filter_genes_info = save_object_info(sce_custom_filter_genes),
@@ -143,7 +141,7 @@ get_input_qc_subplan <- function(cfg, cfg_pipeline, cfg_main) {
     gene_annotation = make_gene_annotation(sce_selected, annotation_db_file = !!cfg_main$ANNOTATION_DB_FILE),
 
     ## -- Final object: cells and genes filtered, annotated genes.
-    sce_final_input_qc = sce_final_input_qc_fn(sce_selected, gene_annotation = gene_annotation),
+    sce_final_input_qc = sce_final_input_qc_fn(sce_selected, gene_annotation = gene_annotation,!!cfg$ARTIFACT),
     sce_final_input_qc_info = save_object_info(sce_final_input_qc),
 
     ## -- HTML report
@@ -199,7 +197,7 @@ get_norm_clustering_subplan <- function(cfg, cfg_pipeline, cfg_main) {
     ),
 
     ## -- Calculate cell cycle score.
-    sce_cc = sce_cc_fn(sce_final_input_qc, cc_genes = cc_genes, data = NULL),
+    sce_cc = sce_cc_fn(sce_final_input_qc, cc_genes = cc_genes, data = NULL, cc_eval = !!cfg$CC_EVAL, spatial = !!cfg$SPATIAL),
 
     ## -- Normalization will be dispatched according to NORMALIZATION_TYPE:
     ## -- "scran": scran_normalization()
@@ -231,7 +229,7 @@ get_norm_clustering_subplan <- function(cfg, cfg_pipeline, cfg_main) {
         hvg_selection = !!cfg$HVG_SELECTION,
         hvg_rm_cc_genes = !!cfg$HVG_RM_CC_GENES,
         hvg_cc_genes_var_expl_threshold = !!cfg$HVG_CC_GENES_VAR_EXPL_THRESHOLD,
-        spatial = !!cfg$SPATIAL,
+        svg = !!cfg$SVG,
         BPPARAM = ignore(BiocParallel::bpparam())
       ),
 
@@ -282,10 +280,14 @@ get_norm_clustering_subplan <- function(cfg, cfg_pipeline, cfg_main) {
     additional_cell_data = additional_cell_data_fn(file_in(!!cfg$ADDITIONAL_CELL_DATA_FILE)),
     ## -- Save colData. No new column is added between sce_rm_doublets and sce_dimred and so we can use
     ## -- this colData in cluster markers/contrasts stages without unnecessary dependencies.
+    ## -- add card deconvolution results
+    ## -- add manual annotation results
     cell_data = cell_data_fn(
       col_data = colData(sce_rm_doublets) %>% as.data.frame(),
       clusters_all = clusters_all,
       cell_annotation_labels = cell_annotation_labels,
+      spot_deconvolution_labels = spot_deconvolution_labels,
+      manual_annotation_labels = manual_annotation_labels,
       cell_groupings = !!cfg$CELL_GROUPINGS,
       additional_cell_data = additional_cell_data,
       pipeline_type = "single_sample"
@@ -351,6 +353,7 @@ get_norm_clustering_subplan <- function(cfg, cfg_pipeline, cfg_main) {
     cell_annotation_out_dir = cfg$NORM_CLUSTERING_CELL_ANNOTATION_OUT_DIR,
     report_dimred_names = cfg$NORM_CLUSTERING_REPORT_DIMRED_NAMES,
     dimred_plots_out_dir = cfg$NORM_CLUSTERING_DIMRED_PLOTS_OUT_DIR,
+    spatial = cfg$SPATIAL,
     do_heatmaps_ = any_clustering_enabled
   )
 
@@ -404,16 +407,17 @@ get_norm_clustering_subplan <- function(cfg, cfg_pipeline, cfg_main) {
       signature_matrix = create_signature_matrix_fn(!!cfg$ANNOTATION_MARKERS),
       sce_annotation_enrichment = run_page_man_annotation(
         signature_matrix,
-        sce = sce_final_norm_clustering,
+        sce = sce_dimred,
         scale = !!cfg$SCALE_ANNOTATION,
         overlap = !!cfg$OVERLAP,
         values = "logcounts"
       ),
       annotation_metadata = calculate_metadata(
-        sce = sce_final_norm_clustering,
+        sce = sce_dimred,
         enrichment = sce_annotation_enrichment,
         clustering = !!cfg$ANNOTATION_CLUSTERING
       ),
+      manual_annotation_labels = as.data.frame(colData(annotation_metadata)[,c("Barcode",!!cfg$ANNOTATION_CLUSTERING)]),
       plot_annotation = meta_heatmap_ploting(
         annotation_metadata,
         clustering = !!cfg$ANNOTATION_CLUSTERING,
@@ -429,9 +433,29 @@ get_norm_clustering_subplan <- function(cfg, cfg_pipeline, cfg_main) {
       signature_matrix = NULL,
       annotation_enrichment = NULL,
       annotation_metadata = NULL,
+      manual_annotation_labels = NULL,
       plot_annotation = NULL
     )
   }
+  if (cfg$SPOT_DECONVOLUTION) {
+    plan_spot_deconvolution <- drake::drake_plan(
+      spot_deconvolution_res = spot_deconvolution_fn(spe = sce_norm, 
+         sce_ref = !!cfg$REFERENCE_SC_DECONV,
+         deconv_method = !!cfg$DECONV_METHOD,
+         sce_ref_label = !!cfg$REFERENCE_SC_LABEL),
+      spot_deconvolution_labels = as.data.frame(colData(spot_deconvolution_res)[,c("Barcode", "Deconvolution_annot")]),
+      plot_deconv_results = plot_deconv_results_fn(
+        spot_deconvolution_res, outdir = !!cfg$NORM_CLUSTERING_CELL_ANNOTATION_OUT_DIR
+      )
+    )
+  } else {
+    plan_spot_deconvolution <- drake::drake_plan(
+      spot_deconvolution_res = NULL,
+      spot_deconvolution_labels = NULL,
+      plot_deconv_results = NULL
+    )
+  }
 
-  drake::bind_plans(plan, plan_clustering, plan_cell_annotation, plan_dimred_plots_other_vars, plan_selected_markers,plan_manual_annotation)
+  drake::bind_plans(plan, plan_clustering, plan_cell_annotation, plan_dimred_plots_other_vars, 
+                    plan_selected_markers,plan_manual_annotation,plan_spot_deconvolution)
 }

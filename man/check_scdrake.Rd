@@ -16,8 +16,8 @@ Invisibly \code{TRUE} if all checks return \code{TRUE}, \code{FALSE} otherwise.
 This function will check for:
 \itemize{
 \item Packages that might not be installed by default:
-\href{https://github.com/traversc/qs}{qs},
-\href{https://github.com/mschubert/clustermq}{clustermq},
+\href{https://github.com/qsbase/qs}{qs},
+\href{https://mschubert.github.io/clustermq/}{clustermq},
 \href{https://future.futureverse.org}{future},
 \href{https://future.callr.futureverse.org}{future.callr} (if the system doesn't support forking/multicore),
 \href{https://github.com/hemberg-lab/SC3}{SC3} (if it is not installed from <github.com/gorgitko/SC3>)

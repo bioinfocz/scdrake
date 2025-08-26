@@ -4,7 +4,7 @@
 \alias{sce_final_input_qc_fn}
 \title{Finalize a \code{SingleCellExperiment} object which will proceed to the \verb{02_norm_clustering} stage.}
 \usage{
-sce_final_input_qc_fn(sce_selected, gene_annotation)
+sce_final_input_qc_fn(sce_selected, gene_annotation, artifact = FALSE)
 }
 \arguments{
 \item{sce_selected}{(\emph{input target}) A \code{SingleCellExperiment} object.}

@@ -2,17 +2,17 @@
 % Please edit documentation in R/spatial_visualization.R
 \name{plot_spat_visuals}
 \alias{plot_spat_visuals}
-\title{A function for visualization selected qc matrices in pseudotissue visualization}
+\title{A function for visualization selected qc matrices in image}
 \usage{
-plot_spat_visuals(sce)
+plot_spat_visuals(spe)
 }
 \arguments{
-\item{sce}{A \code{SingleCellExperiment} object.}
+\item{sce}{A \code{SpatialExperiment} object.}
 }
 \value{
 A list of plots.
 }
 \description{
-Adapted function from Giotto package \link{Dries et al, 2021}, rewrite for use in scdrake package for a SingleCellExperiment object. Helper function for users, not in core scdrake package.
+Plot spots features with the H&E Visium low resolution image
 }
 \concept{spatial_visualization}

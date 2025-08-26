@@ -19,8 +19,8 @@ vignette: >
 
 ### Overview
 
-This stage build upon the `01_input_qc` stage and performs perhaps the most important steps in scRNA-seq data analysis:
-normalization, highly variable gene selection, dimensionality reduction, clustering, cell type annotation, and
+This stage build upon the `01_input_qc` stage and performs perhaps the most important steps in scRNA-seq and sequence-based SRT data analysis:
+normalization, highly and spatially variable gene selection, dimensionality reduction, clustering, deconvolution, cell type annotation, and
 visualization.
 
 `r emoji::emoji("gear")` Config file: `config/single_sample/02_norm_clustering.yaml`
@@ -63,6 +63,8 @@ visualization.
     `{scdrake}` is using a method based on the percentage of variance explained by the cell cycle phase
     in the expression profile for each gene
     ([details](https://bioconductor.org/books/3.15/OSCA.advanced/cell-cycle-assignment.html#removing-cell-cycle-related-genes))
+- Selection of [spatialy variable genes](https://lmweber.org/OSTA/pages/ind-feature-selection-testing.html) (SVGs):
+  - SVGs are combined with HVGs so that both spatial patterns and overall expression variability are leveraged in dimensionality reduction and clustering
 - Removal of [cell doublets](https://bioconductor.org/books/3.15/OSCA.advanced/doublet-detection.html)
   (`scDblFinder::computeDoubletDensity()`).
 - [Calculation of PCA](https://bioconductor.org/books/3.15/OSCA.basic/dimensionality-reduction.html#principal-components-analysis)
@@ -93,6 +95,7 @@ visualization.
     - Delta scores show poor-quality or ambiguous assignments based on the per-cell 'delta', i.e., the difference between,
       the score for the assigned label and the median across all labels for each cell.,
       See [OSCA](https://bioconductor.org/books/3.15/SingleRBook/annotation-diagnostics.html#based-on-the-deltas-across-cells) for more details
+- Manual cell type annotation based on signatures score of specified cell type markers
 - Assignment of cells to predefined groupings based on existing data. That means you can reuse an assignment of cells
   from e.g. clustering, and rename or merge its levels (cluster numbers).
   - Example: you identify a biological meaning of clusters computed by k-means with $k = 3$.
@@ -105,6 +108,9 @@ visualization.
   - [PCA](https://bioconductor.org/books/3.15/OSCA.basic/dimensionality-reduction.html#principal-components-analysis)
   - [t-SNE](https://bioconductor.org/books/3.15/OSCA.basic/dimensionality-reduction.html#t-stochastic-neighbor-embedding)
   - [UMAP](https://bioconductor.org/books/3.15/OSCA.basic/dimensionality-reduction.html#uniform-manifold-approximation-and-projection)
+- [Spot deconvolution](https://lmweber.org/OSTA/pages/seq-deconvolution.html):
+  - [CARD](https://github.com/YMa-lab/CARD)
+  - [RCTD](https://github.com/ggrajeda/spacexr)
 - Expression plots of selected groups of genes (markers) in reduced dimensions
 - A simplified report for non-technical audience which contains only dimred plots, selected markers and cell annotation results
 
@@ -128,7 +134,7 @@ SPATIAL: False
 
 If `True`, pipeline enables spatial extension.
 
-This option enables spatial extension as selection of spatially variable genes (SVGS), pseudo tissue visualization and other visualization options for marker-based annotation.
+This option enables pseudo tissue visualization and other visualization options for marker-based annotation.
 
 ***
 
@@ -226,7 +232,6 @@ A metric used to find HVGs. See <https://bioconductor.org/books/3.15/OSCA.basic/
 - `"sctransform"`: use HVGs selected by `SCTransform`.
   Only relevant when the `NORMALIZATION_TYPE` parameter is `"sctransform"`.
   You can adjust number of these HVGs by the `SCT_N_HVG` parameter.
-  When SPATIAL option is enabled, spatially variable genes (SVGs) are automaticaly calculated together with HVGs. That is done using Seurat::SVFInfo, selection method MoransI. A union of unique SVGs and HVGs is taking to further processing, see <https://www.biorxiv.org/content/10.1101/2021.08.27.457741v1> for more details. 
 
 ***
 
@@ -290,6 +295,22 @@ HVG_METRIC: "gene_cv2"
 HVG_SELECTION: "threshold"
 HVG_SELECTION_VALUE: 1
 ```
+
+***
+
+#### Spatialy variable genes (SVGs) selection 
+
+```yaml
+SVG: False
+```
+When the SVG option is enabled, spatially variable genes are automatically identified alongside HVGs.
+This is done using the nnSVG::nnSVG() function with the "MoransI" selection method. Moran’s I is a statistic that measures spatial autocorrelation—it detects whether expression values for a gene are more similar in nearby spots than would be expected by chance.
+
+The resulting union of unique SVGs and HVGs is carried forward for downstream analyses, ensuring that both spatial structure and overall variability are preserved in dimensionality reduction and clustering steps.
+
+For methodological details, see: <https://www.biorxiv.org/content/10.1101/2021.08.27.457741v1>.
+
+***
 
 #### Removal of cell cycle-related genes prior to HVG selection
 
@@ -691,7 +712,7 @@ Whether marker-based annotation is enabled. Marker-based annotation is based on 
 ANNOTATION_MARKERS: Null
 ```
 
-**Type:** logical scalar
+**Type:** character scalar or Null
 
 Path to user-define file contacting markers for each expected cell type. 
 Each column name is one cell type, in rows are gene markers. Example: 
@@ -725,7 +746,7 @@ Minimal overlap of genes in cell/cell in selected clusters, to assign cell type.
 
 ***
 ```yaml
-ANNOTATION_CLUSTERING: "cluster_kmeans_k4"
+ANNOTATION_CLUSTERING: "cluster_graph_leiden_r0.2"
 ```
 
 **Type:** character scalar
@@ -750,7 +771,7 @@ MAKE_CELL_PLOT: False
 
 **Type:** character scalar
 
-Only toghether with spatial option. Whether to show pseudo tissue cell plots with enrichment of annotation. 
+Only together with spatial option. Whether to show pseudo tissue cell plots with enrichment of annotation. 
 
 ***
 
@@ -761,6 +782,42 @@ HEATMAP_DIMRED: "umap"
 **Type:** character scalar
 
 Which dimension reduction use to show result of marker-based annotation. 
+
+***
+
+#### Spot deconvolution
+
+```yaml
+SPOT_DECONVOLUTION: False
+```
+
+**Type:** logical scalar
+
+Wether spot deconvolution for SRT data is enabled. Spot deconvolution is reference based, user must define reference scRNA-seq object and column in colData that contain information about cell types for each cell. Currently two main methods are available. 
+
+***
+```yaml
+DECONV_METHOD: "CARD" (`"CARD"` | `"RCTD"`)
+```
+**Type:** character scalar
+
+Which deconvolution method use. 
+***
+
+```yaml
+REFERENCE_SC_DECONV: Null
+```
+**Type:** character scalar
+
+Path to user-define reference `SingleCellExperiment` object in rds format used for spot deconvolution, containing expected cell types. 
+
+***
+```yaml
+REFERENCE_SC_LABEL: Null
+```
+**Type:** character scalar
+
+Column in colData in defined reference `SingleCellExperiment` object, that contains cell types labels/cell characteristics.
 
 ***
 
@@ -884,6 +941,7 @@ You can also view this file on GitHub [here](https://github.com/bioinfocz/scdrak
 
 ```yaml
 NORM_CLUSTERING_REPORT_RMD_FILE: "Rmd/single_sample/02_norm_clustering.Rmd"
+#NORM_CLUSTERING_REPORT_RMD_FILE: "Rmd/single_sample/02_norm_clustering_spatial.Rmd"
 NORM_CLUSTERING_REPORT_SIMPLE_RMD_FILE: "Rmd/single_sample/02_norm_clustering_simple.Rmd"
 ```
 
@@ -940,7 +998,7 @@ However, for a full overview, you have to inspect the
 
 HTML report target names: `report_norm_clustering`, `report_norm_clustering_simple` (only dimred plots)
 
-#### `SingleCellExperiment` objects
+#### `SingleCellExperiment` or `SpatialExperiment` objects
 
 `sce_cc`: a SCE object (the `sce_final_input_qc` target from the `input_qc` stage) with added cell cycle information
 to `colData()`: `phase` (`"G1"`, `"G2m"` or `"S"`), `s_score`, `g2m_score`, `cc_difference` (`s_score` - `g2m_score`).
@@ -1132,6 +1190,10 @@ as defined by the `NORM_CLUSTERING_REPORT_DIMRED_NAMES` and `NORM_CLUSTERING_REP
 
 `dimred_plots_other_vars_files_out`: make this target to export the plots
 
+***
+`plot_deconv_results`: a tibble holding plots of deconvolution results, barplots as sumarizes statistics and spatial pseudo-tissue plots
+***
+
 ##### Selected markers
 
 `selected_markers_plots`: a tibble holding selected marker plots (`{patchwork}` objects) for each dimensional
@@ -1169,5 +1231,5 @@ in the `00_main.yaml` config is `"mouse"`, then gene symbols are first converted
 ***
 
 `cell_data`: a DataFrame holding `colData()` of `sce_rm_doublets`, clusterings from the `clusters_all` target,
-cell annotation labels from the `cell_annotation_labels` target, and the new cell groupings defined in
+cell annotation labels from the `cell_annotation_labels` target, manual annotation labels from the `manual_annotation_labels` target, deconvolution labels from the `spot_deconvolution_labels` target,  and the new cell groupings defined in
 the `CELL_GROUPINGS` parameter.

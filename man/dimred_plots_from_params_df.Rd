@@ -4,7 +4,11 @@
 \alias{dimred_plots_from_params_df}
 \title{Make dimred plots of selected variables.}
 \usage{
-dimred_plots_from_params_df(sce_dimred, dimred_plots_params_df)
+dimred_plots_from_params_df(
+  sce_dimred,
+  dimred_plots_params_df,
+  spatial = FALSE
+)
 }
 \arguments{
 \item{sce_dimred}{(\emph{input target}) A \code{SingleCellExperiment} object. Input target in the integration plan is

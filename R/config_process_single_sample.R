@@ -23,7 +23,7 @@
     cfg$MIN_RATIO_CELLS <- 0
   }
 
-  possible_input_data_types <- c("cellranger", "table", "sce", "sce_drake_cache")
+  possible_input_data_types <- c("cellranger", "spaceranger", "table", "sce", "sce_drake_cache")
   assert_that_(
     !is_null(cfg$INPUT_DATA$type), cfg$INPUT_DATA$type %in% possible_input_data_types,
     msg = "{.var input_data$type} must be {.vals possible_input_data_types}. Current value: {.val {cfg$INPUT_DATA$type}}"

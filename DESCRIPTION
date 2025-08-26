@@ -1,7 +1,7 @@
 Package: scdrake
 Type: Package
 Title: A pipeline for droplet-based single-cell RNA-seq data secondary analysis implemented in the drake Make-like toolkit for R language
-Version: 1.6.0
+Version: 1.7.0
 Authors@R:
     c(
       person(
@@ -21,7 +21,8 @@ Authors@R:
         given = "Lucie",
         family = "Pfeiferova",
         role = c("aut"),
-        email = "lucie.pfeiferova@img.cas.cz"
+        email = "lucie.pfeiferova@img.cas.cz",
+        comment = c(ORCID = "0000-0003-1089-0329")
       ),
       person(
         given = "Michal",
@@ -32,8 +33,8 @@ Authors@R:
     )
 Description:
     This pipeline is implemented in the drake Make-like toolkit (https://github.com/ropensci/drake) and
-    provides the following steps of scRNA-seq secondary analysis: input quality control, filtering of cells/genes,
-    normalization, clustering, cell type annotation, cluster markers, differential expression analysis
+    provides the following steps of scRNA-seq and spot-based SRT secondary analysis: input quality control, filtering of spots/cells/genes,
+    normalization, clustering, cell type annotation, spot deconvolution cluster markers, differential expression analysis
     (constrasts -> cluster vs. cluster), integration of multiple samples.
     All main parts are accompanied by rich graphical outputs and HTML reports
     (RMarkdown). Thanks to the drake package, the pipeline is highly reproducible, scalable and efficient, provides easy
@@ -44,7 +45,7 @@ URL: https://github.com/bioinfocz/scdrake, https://bioinfocz.github.io/scdrake
 BugReports: https://github.com/bioinfocz/scdrake/issues
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.2.2
+RoxygenNote: 7.3.2
 VignetteBuilder: knitr
 biocViews:
     Transcription,
@@ -63,6 +64,7 @@ Imports:
     BiocParallel,
     BiocSingular,
     bluster,
+    CARDspa,
     celldex,
     cli,
     cluster,
@@ -80,6 +82,7 @@ Imports:
     fs,
     ggplot2,
     ggplotify,
+    ggspavis,
     glmGamPoi,
     glue,
     harmony,
@@ -94,6 +97,7 @@ Imports:
     Matrix,
     MatrixGenerics,
     methods,
+    nnSVG,
     parallelly,
     patchwork,
     PCAtools,
@@ -113,21 +117,22 @@ Imports:
     sessioninfo,
     SingleCellExperiment,
     SingleR,
+    spacexr,
+    SpatialExperiment,
+    SpotSweeper,
     stringi,
     stringr,
     SummarizedExperiment,
     tibble,
     tidyr,
-    tidyselect (== 1.1.2),
+    tidyselect (== 1.2.1),
     usethis,
     utils,
     withr,
     yaml
-Remotes:
-    gorgitko/SC3
 Suggests:
     BiocStyle,
-    clustermq (== 0.8.8),
+    clustermq (== 0.9.9),
     covr,
     desc,
     emoji,
@@ -138,6 +143,7 @@ Suggests:
     preferably,
     processx,
     qs,
+    scrapper,
     testthat (>= 3.0.0)
 Config/testthat/edition: 3
 Config/testthat/start-first: project

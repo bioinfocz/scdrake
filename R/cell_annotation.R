@@ -56,12 +56,9 @@ cell_annotation_params_fn <- function(cell_annotation_sources, biomart_dataset =
         msg = "{err_msg()}: Cannot find file {.file {reference}} in {.var reference}."
       )
       reference_se <- readRDS(reference)
-      if (is(reference_se, "SingleCellExperiment")) {
-        reference_se <- as(reference_se, "SummarizedExperiment")
-      }
-
+      
       assert_that_(
-        is(reference_se, "SummarizedExperiment"),
+        is(reference_se, "SummarizedExperiment"), #or the reference is SingleCellExperiment
         msg = "{err_msg()}: {.file {reference}} is not a {.var SummarizedExperiment} object."
       )
     } else {
@@ -160,8 +157,9 @@ cell_annotation_fn <- function(cell_annotation_params, sce_test, BPPARAM = BiocP
       de.n = row$train_params$de_n,
       quantile = row$classify_params$quantile,
       fine.tune = TRUE,
+      aggr.ref = TRUE, #possibly change config file
       tune.thresh = row$classify_params$tune_thresh,
-      prune = FALSE,
+      prune = TRUE,
       assay.type.test = row$classify_params$assay_type,
       assay.type.ref = row$train_params$assay_type,
       BPPARAM = BPPARAM
@@ -204,7 +202,7 @@ cell_annotation_fn <- function(cell_annotation_params, sce_test, BPPARAM = BiocP
 cell_annotation_labels_fn <- function(cell_annotation) {
   purrr::map2(cell_annotation$name, cell_annotation$cell_annotation, function(name, cell_annotation) {
     res <- list(
-      labels_raw = cell_annotation$first.labels,
+      #labels_raw = cell_annotation$first.labels,
       labels = cell_annotation$labels,
       labels_pruned = cell_annotation$pruned.labels
     ) %>% purrr::map(factor)

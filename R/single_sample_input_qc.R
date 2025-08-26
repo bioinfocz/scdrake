@@ -5,6 +5,7 @@
 #' @param input_data A named list of named lists containing character scalars:
 #'   - `type`:
 #'     - `"cellranger"`: a raw feature-barcode matrix from 10x Genomics `cellranger`
+#'     - `"spaceranger"`: a raw feature-barcode matrix from 10x Genomics `spaceranger`
 #'     - `"table"`: a delimited text file (table)
 #'     - `"sce"`: a `SingleCellExperiment` object (Rds file)
 #'     - `"sce_drake_cache"`: a `SingleCellExperiment` object loaded from a `drake` cache
@@ -37,7 +38,7 @@ sce_raw_fn <- function(input_data, input_data_subset = NULL) {
     )
   )
 
-  possible_input_data_types <- c("cellranger", "table", "sce", "sce_drake_cache")
+  possible_input_data_types <- c("cellranger", "spaceranger", "table", "sce", "sce_drake_cache")
   assert_that_(
     !is_null(input_data$type), input_data$type %in% possible_input_data_types,
     msg = "{.var input_data$type} must be {.vals possible_input_data_types}. Current value: {.val {input_data$type}}"
@@ -46,6 +47,11 @@ sce_raw_fn <- function(input_data, input_data_subset = NULL) {
   if (input_type == "cellranger") {
     sce_raw <- DropletUtils::read10xCounts(input_path)
     colnames(sce_raw) <- colData(sce_raw)$Barcode
+  } else if (input_type == "spaceranger") {
+    sce_raw <- SpatialExperiment::read10xVisium(input_path,data = "raw")
+    sce_raw <- sce_raw[, colData(sce_raw)$in_tissue == 1]
+    colData(sce_raw)$Barcode <- rownames(colData(sce_raw))
+    colnames(rowData(sce_raw))[1] <- "Symbol"
   } else if (input_type == "table") {
     delimiter <- input_data$delimiter
     assert_that_(!is_null(delimiter), msg = "{.field INPUT_DATA$delimiter} is not set, cannot load {.file {input_path}}")
@@ -182,7 +188,7 @@ get_gene_filter <- function(sce, min_ratio_cells, min_umi) {
   assert_that_(min_umi >= 0)
 
   num_cells <- min_ratio_cells * ncol(sce)
-  is_expressed <- rowSums(counts(sce) >= min_umi) >= num_cells
+  is_expressed <- Matrix::rowSums(counts(sce) >= min_umi) >= num_cells
   return(!is_expressed)
 }
 
@@ -280,7 +286,7 @@ sce_selected_fn <- function(sce_qc_filter_genes, sce_custom_filter_genes, save_d
 #'
 #' @concept single_sample_input_qc_fn
 #' @export
-sce_final_input_qc_fn <- function(sce_selected, gene_annotation) {
+sce_final_input_qc_fn <- function(sce_selected, gene_annotation, artifact=FALSE) {
   assert_that(are_equal(rownames(sce_selected), rownames(gene_annotation)))
 
   sce_final_input_qc <- sce_selected
@@ -288,6 +294,10 @@ sce_final_input_qc_fn <- function(sce_selected, gene_annotation) {
   rowData_orig$ID <- NULL
   rowData_orig$Symbol <- NULL
   rowData(sce_final_input_qc) <- cbind(rowData_orig, gene_annotation)
+  
+  if (artifact) {
+    sce_final_input_qc <- sce_final_input_qc[, !colData(sce_final_input_qc)$artifact]
+  }
 
   return(sce_final_input_qc)
 }
@@ -307,3 +317,24 @@ get_used_qc_filters_operator_desc <- function(operator = c("&", "|")) {
     "Individual filters were considered individually (using *OR* operator), i.e., a cell was removed if violated at least one filter."
   }
 }
+
+#' Return a SingleCellExperiment object with artifact spatial information
+#'
+#' @param sce_valid_cells (*input target*) A `SingleCellExperiment` object.
+#' @param mito_genes A index vector with position of mitochondrial genes 
+#' @param ribo_genes A index vector with position of ribosomal genes
+#'
+#' @return A `SingleCellExperiment` object. 
+#'
+#' @concept single_sample_input_qc_fn
+#' @export
+cell_qc_fn <- function(sce_valid_cells,mito,ribo) {
+  sce_valid_cells <- scater::perCellQCMetrics(
+    sce_valid_cells,
+    subsets = list(mito = mito, ribo = ribo), BPPARAM = ignore(BiocParallel::bpparam()))
+  
+  
+  return(sce_valid_cells)
+}
+
+

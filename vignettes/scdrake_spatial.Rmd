@@ -14,31 +14,56 @@ vignette: >
 
 ***
 
-`{scdrake}` now offer spatial extension for the first stage (`01_input_qc`) and the second stage (`02_norm_clustering`) of the single-sample pipeline. The spatial possibility is aimed at Visium technology, respectively on spot-based technologies. Scdrake provides comparable results with Seurat, Giotto (R), as well as scanpy (Python), and correspond to [Best Practices for Spatial Transcriptomics](https://lmweber.org/BestPracticesST/). For now, we discourage usage of scdrake for other technologies than Visium. For futher analyses of the spatial dataset we recommend [CARD](https://github.com/YMa-lab/CARD) for deconvolution and [CellChat2](https://github.com/SiYangming/CellChat2) or [IGAN](https://github.com/Zhu-JC/IGAN) for cell-cell interaction.
+The `{scdrake}` package now provides **spatial extensions** for both the first stage (`01_input_qc`) and the second stage (`02_norm_clustering`) of the single-sample pipeline.  
+These spatial workflows are currently optimized for **Visium** data and other **spot-based spatial transcriptomics technologies**.
 
-This vignette should serve as a supplement to other vignettes, as `vignette("stage_input_qc")` and `vignette("stage_norm_clustering")`). 
+The aim is to offer functionality comparable to **Seurat**, **Giotto** (R), and **scanpy** (Python), while following the principles of the [*Orchestrating Spatial Transcriptomics Analysis with Bioconductor*](https://lmweber.org/OSTA/) guide. 
+
+For advanced analysis of spatial datasets—particularly for cell–cell interaction and communication region identification we recommend:
+- [CellChat2](https://github.com/SiYangming/CellChat2) (R)
+- **[LIANA+](https://liana-py.readthedocs.io/en/latest/notebooks/bivariate.html)** (Python)
+
+The latter is accompanied by the vignette `vignette("interaction_analysis")`, which provides a step-by-step example of exporting count matrices and metadata from `SpatialExperiment` objects in R, and then importing them into Python to create an `AnnData` object.
+
+This vignette is a **supplement** to:
+- `vignette("stage_input_qc")`
+- `vignette("stage_norm_clustering")`
+
+---
 
 
 ***
 
-## Spatial exsention functions
+## Spatial extention functions
 
+***
+
+### Input data
+
+If the `spaceranger` option is selected in the the first stage (`01_input_qc`) for reading input data, the data are loaded as `SpatialExperiment.`
+ 
 ***
 
 ### Spatial visualization
 
-For (`01_input_qc`) and (`02_norm_clustering`) of the single-sample pipeline we now offer visualization of tissue, as pseudo tissue spot visualization. Spatial extension will add spot coordinates (array_col and array_row) from SpaceRanger tissue_possitions.csv file, and will filter away all spots, that are by SpaceRanger labeled as not in tissue. Visualization function are implemented from the [Giotto package](https://drieslab.github.io/Giotto_website/). Visualization is automatically used for quality control and dimension reduction results.
+For (`01_input_qc`) and (`02_norm_clustering`) of the single-sample pipeline we now offer visualization of tissue, as pseudo tissue spot visualization from `ggspavis`. For (`01_input_qc`) stage, quality control metrics can be overlaid directly onto the H&E-stained tissue image, enabling visual inspection of tissue quality and spatial artifacts. In other section only spots are visualized for greater clarity. For downstream sections, visualization defaults to pseudo-tissue spot plots (using `{ggspavis}`), where spots are displayed without the underlying image for greater clarity.
 
 ***
 
 ### Selection of spatially variable genes
 
-For spatial analyses in stage 02_norm_clustering `vignette("stage_norm_clustering")` when spatial option is enabled, spatially variable genes (SVGs) are automaticaly calculated together with HVGs. That is done using Seurat::SVFInfo, selection method MoransI. A straightforward union of SVGs and HVGs is taking to further processing, see <https://www.biorxiv.org/content/10.1101/2021.08.27.457741v1> for more details. 
+If the SVG option is enabled in stage `02_norm_clustering` (see `vignette("stage_norm_clustering")`), spatially variable genes are identified alongside highly variable genes (HVGs). That is done using nnSVG::nvSVG, with the selection method MoransI. A straightforward union of SVGs and HVGs is taking to further processing, see <https://www.biorxiv.org/content/10.1101/2021.08.27.457741v1> for more details. 
 
 ***
 
 ### Marker-based annotation
 
-Marker-based annotation was implemented for both single-cell and spatial datasets. In summary, expression profiles and statistical metrics are computed for each cell/spot, the result is visualized using a heatmap and dimension reduction plot. For spatial datasets is enabled to visualized results in tissue coordinates, both enrichment plots for each annotation label (individual enrichment plots) and for overall results for each spot. Marker-based annotation is implemented from the [Giotto package](https://drieslab.github.io/Giotto_website/), the function is based on [Kim SY et al](https://bmcbioinformatics.biomedcentral.com/articles/10.1186/1471-2105-6-144).  
+Marker-based annotation was implemented for both single-cell and spatial datasets. In summary, expression profiles and statistical metrics are computed for each cell/spot, the result is visualized using a heatmap and dimension reduction plot. For spatial datasets is enabled to visualized results in tissue coordinates, both enrichment plots for each annotation label (individual enrichment plots) and for overall results for each spot. This functionality is adapted from the [Giotto](https://drieslab.github.io/Giotto_website/) package, with methods based on [Kim et al., 2005](https://bmcbioinformatics.biomedcentral.com/articles/10.1186/1471-2105-6-144).
+
+***
+
+### Spot deconvolution
+[CARD](https://github.com/YMa-lab/CARD) and [RCTD](https://github.com/ggrajeda/spacexr) can be use for spot deconvolution. CARD uses a Bayesian hierarchical model that incorporates spatial correlation between spots, while RCTD applies a generalized linear model for a more direct, assumption-light fit.
+We include both methods to give users the choice between a spatially smoothed approach (CARD) and a faster, model-driven method (RCTD), depending on dataset characteristics and analysis goals.
 
 ***

@@ -4,7 +4,7 @@
 \alias{create_seu_for_heatmaps}
 \title{Create a \code{Seurat} object used for heatmap generation.}
 \usage{
-create_seu_for_heatmaps(sce_dimred, calc_zscore = TRUE)
+create_seu_for_heatmaps(sce_dimred, calc_zscore = TRUE, spatial = FALSE)
 }
 \arguments{
 \item{sce_dimred}{A \code{SingleCellExperiment} object with calculated dimreds.}

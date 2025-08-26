@@ -9,6 +9,8 @@ cell_data_fn(
   clusters_all,
   cell_annotation_labels,
   cell_groupings,
+  spot_deconvolution_labels,
+  manual_annotation_labels,
   additional_cell_data,
   pipeline_type = c("single_sample", "integration")
 )

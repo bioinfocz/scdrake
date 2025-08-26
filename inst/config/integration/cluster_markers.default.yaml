@@ -49,7 +49,7 @@ MAKE_CLUSTER_MARKERS_PLOTS: True
 CLUSTER_MARKERS_TABLE_TEMPLATE_RMD_FILE: "Rmd/common/cluster_markers_table_template.Rmd"
 CLUSTER_MARKERS_REPORT_RMD_FILE: "Rmd/common/cluster_markers.Rmd"
 ###############################################################################
-
+SPATIAL: False
 ### Output files ##############################################################
 CLUSTER_MARKERS_BASE_OUT_DIR: "cluster_markers"
 

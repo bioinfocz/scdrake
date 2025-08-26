@@ -394,13 +394,26 @@ hvg_int_list_fn <- function(sce_int_multibatchnorm,
 #' @export
 sce_int_df_fn <- function(sce_int_multibatchnorm, integration_methods_df, BPPARAM = BiocParallel::SerialParam()) {
   sce_int_df <- lapply_rows(integration_methods_df, FUN = function(par) {
+    print(par$name)
     if (par$name == "harmony") {
       sce_int <- do.call(cbind, sce_int_multibatchnorm)
       sce_int <- sce_calc_pca(sce_int, subset_row = par$hvg_int$hvg_ids, name = "PCA", ncomponents = par$integration_params$dims.use)
-      sce_int <- do.call(harmony::RunHarmony, args = c(list(sce_int, group.by.vars = "batch", reduction.save = "harmony"), par$integration_params))
+      harmony_mat <- do.call(
+        harmony::RunHarmony,
+        args = c(
+          list(
+            data_mat = reducedDim(sce_int, "PCA"),
+            meta_data = as.data.frame(colData(sce_int)),
+            vars_use = "batch",reduction.save = "harmony"
+          ),
+          par$integration_params
+        )
+      )
+      reducedDim(sce_int, "harmony") <- harmony_mat
       reducedDim(sce_int, "pca") <- reducedDim(sce_int, "PCA")
       reducedDim(sce_int, "pca_all") <- reducedDim(sce_int, "PCA")
       reducedDim(sce_int, "PCA") <- NULL
+
       int_param <- par$integration_params
     } else {
       integration_params_other <- list()

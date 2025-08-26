@@ -126,8 +126,14 @@ scran_markers <- function(sce, params, markers_type = c("global", "contrast")) {
 filter_markers <- function(markers, top_n, top_n_wt = c("top", "fdr", "lfc", "auc"), distinct_by = NULL) {
   top_n_wt <- arg_match(top_n_wt)
   markers <- as.data.frame(markers)
-
+  
   if (top_n_wt == "top") {
+    # if (!"Top" %in% colnames(markers)) {
+    #   warning("Column 'Top' not found in markers. No top markers selected.")
+    #   markers_top <- markers[0, , drop = FALSE]  # empty data.frame with same columns
+    # } else {
+    #   markers_top <- dplyr::filter(markers, .data$Top <= top_n)
+    # }
     markers_top <- dplyr::filter(markers, .data$Top <= top_n)
   } else if (top_n_wt == "fdr") {
     markers_top <- dplyr::slice_min(markers, order_by = .data$FDR, n = top_n)
@@ -142,11 +148,11 @@ filter_markers <- function(markers, top_n, top_n_wt = c("top", "fdr", "lfc", "au
   } else if (top_n_wt == "auc") {
     markers_top <- dplyr::slice_max(markers, order_by = .data$auc_summary, n = top_n)
   }
-
+  
   if (!is_null(distinct_by)) {
     markers_top <- dplyr::distinct(markers_top, !!sym(distinct_by), .keep_all = TRUE)
   }
-
+  
   return(markers_top)
 }
 
@@ -168,57 +174,71 @@ marker_heatmaps_wrapper <- function(seu,
                                     marker_type = c("global", "contrast"),
                                     save = TRUE,
                                     return_type = c("file", "tibble")) {
-  marker_type <- arg_match(marker_type)
-  return_type <- arg_match(return_type)
-
+  marker_type <- rlang::arg_match(marker_type)
+  return_type <- rlang::arg_match(return_type)
+  
+  # Decide which assay to use
+  available_assays <- Seurat::Assays(seu)
+  if ("originalexp" %in% available_assays) {
+    assay_to_use <- "originalexp"
+  } else if ("RNA" %in% available_assays) {
+    assay_to_use <- "RNA"
+  } else {
+    stop("Neither 'originalexp' nor 'RNA' assay found in Seurat object.")
+  }
+  
   params <- lapply_rows(params, FUN = function(par) {
-    subtitle <- glue("{par$test_label}")
-
+    
+    # Build subtitle
+    subtitle <- glue::glue("{par$test_label}")
     if (!is.na(par$block_column)) {
-      subtitle <- glue("{subtitle} (blocking on {par$block_column})")
+      subtitle <- glue::glue("{subtitle} (blocking on {par$block_column})")
     }
-
+    
     if (marker_type == "global") {
-      title <- glue("{par$description}\nMarkers of cluster {par$group_level}")
-
+      title <- glue::glue("{par$description}\nMarkers of cluster {par$group_level}")
       if (par$top_n_wt_heatmap == "top") {
-        subtitle <- glue("{subtitle}, top {par$top_n_heatmap} markers from each pairwise comparison")
+        subtitle <- glue::glue("{subtitle}, top {par$top_n_heatmap} markers from each pairwise comparison")
       } else {
-        subtitle <- glue("{subtitle}, top {par$top_n_heatmap} markers by {par$top_n_wt_heatmap}")
+        subtitle <- glue::glue("{subtitle}, top {par$top_n_heatmap} markers by {par$top_n_wt_heatmap}")
       }
     } else {
-      title <- glue("{par$description}\nContrast {par$contrast_name} (target: {par$target}, reference: {par$reference})")
-
+      title <- glue::glue("{par$description}\nContrast {par$contrast_name} (target: {par$target}, reference: {par$reference})")
       if (par$top_n_wt_heatmap == "top") {
-        cli_alert_warning("top_n_wt_heatmap 'top' is not possible for contrast heatmaps -> changing to 'fdr'")
+        cli::cli_alert_warning("top_n_wt_heatmap 'top' is not possible for contrast heatmaps -> changing to 'fdr'")
         par$top_n_wt_heatmap <- "fdr"
       }
-
-      subtitle <- glue("{subtitle}, top {par$top_n_heatmap} DEGs by {par$top_n_wt_heatmap}")
-
-      which_cells_contrast <- which(par$groups %in% c(par$target, par$reference))
-      par$groups <- par$groups[which_cells_contrast] %>% droplevels()
-      seu <- seu[, which_cells_contrast]
-      seu@assays$RNA@scale.data <- t(scale(t(seu@assays$RNA@data)))
+      subtitle <- glue::glue("{subtitle}, top {par$top_n_heatmap} DEGs by {par$top_n_wt_heatmap}")
+      
+      # Subset for contrast
+      cells_use <- names(par$groups)[par$groups %in% c(par$target, par$reference)]
+      seu <- subset(seu, cells = cells_use)
+      par$groups <- Seurat::Idents(seu)
+      
+      # Rescale data for z-score heatmap
+      seu <- Seurat::ScaleData(seu, assay = assay_to_use, features = rownames(seu))
+      
     }
 
+    # Standard heatmap
     p_heatmap <- marker_heatmap(
       seu = seu,
       markers = par$markers,
       groups = par$groups,
-      assay = "RNA",
+      assay = assay_to_use,
       slot = "data",
       top_n = par$top_n_heatmap,
       top_n_wt = par$top_n_wt_heatmap,
       title = title,
       subtitle = subtitle
     )
-
+    
+    # Z-score heatmap
     p_heatmap_zscore <- marker_heatmap(
       seu = seu,
       markers = par$markers,
       groups = par$groups,
-      assay = "RNA",
+      assay = assay_to_use,
       slot = "scale.data",
       top_n = par$top_n_heatmap,
       top_n_wt = par$top_n_wt_heatmap,
@@ -228,32 +248,32 @@ marker_heatmaps_wrapper <- function(seu,
         low = "#67a9cf", mid = "#f7f7f7", high = "#ef8a62", midpoint = 0, name = "z-score"
       )
     )
-
+    
     if (save) {
       out_dir <- fs::path_dir(par$out_file)
       fs::dir_create(out_dir, recurse = TRUE)
-
+      
       if (nrow(p_heatmap$markers_top) >= 50) {
         height <- (7 / 50) * nrow(p_heatmap$markers_top)
       } else {
         height <- NULL
       }
-
+      
       grDevices::pdf(par$out_file, useDingbats = FALSE, height = height)
       print(p_heatmap$p_heatmap)
       print(p_heatmap_zscore$p_heatmap)
       grDevices::dev.off()
     }
-
+    
     par$heatmaps <- list(p_heatmap = p_heatmap$p_heatmap, p_heatmap_zscore = p_heatmap_zscore$p_heatmap)
     par$markers_top <- p_heatmap$markers_top
     par$markers <- NULL
-
+    
     return(par)
   })
-
+  
   names(params$heatmaps) <- params$id
-
+  
   if (return_type == "file") {
     return(params$out_file)
   } else if (return_type == "tibble") {
@@ -281,7 +301,7 @@ marker_heatmaps_wrapper <- function(seu,
 marker_heatmap <- function(seu,
                            markers,
                            groups,
-                           assay = "RNA",
+                           assay = NULL,
                            slot = "data",
                            top_n = 5,
                            top_n_wt = "fdr",
@@ -291,20 +311,33 @@ marker_heatmap <- function(seu,
                            y_text_size = 8,
                            angle = 0,
                            ...) {
-  # if (inherits(assay(sce, assay), "ResidualMatrix")) {
-  #   assay(sce, "logcounts") <- assay(sce, "logcounts") %>% as.matrix()
-  # }
-
+  
+  # Decide which assay to use
+  available_assays <- Seurat::Assays(seu)
+  if (is.null(assay)) {
+    if ("originalexp" %in% available_assays) {
+      assay <- "originalexp"
+    } else if ("RNA" %in% available_assays) {
+      assay <- "RNA"
+    } else {
+      stop("Neither 'originalexp' nor 'RNA' assay found in Seurat object.")
+    }
+  }
+  
   gene_annotation <- seu@assays[[assay]]@meta.features
-  seu <- Seurat::SetIdent(seu, value = groups)
+  groups_vector <- groups[colnames(seu)]  # reorder to match Seurat cells
+  groups_vector <- unname(groups_vector)  # remove the names
+  groups_vector <- factor(groups_vector)  # optional, recommended
+  seu <- Seurat::SetIdent(seu, value = groups_vector)
+  
   rownames(seu@assays[[assay]]@counts) <- gene_annotation$SYMBOL
   rownames(seu@assays[[assay]]@data) <- gene_annotation$SYMBOL
-  rownames(seu@assays[[assay]]@meta.features) <- gene_annotation$SYMBOL
-
-  if (nrow(seu@assays[[assay]]@scale.data) > 0) {
+  if (!is.null(seu@assays[[assay]]@scale.data)) {
     rownames(seu@assays[[assay]]@scale.data) <- gene_annotation$SYMBOL
   }
-
+  rownames(seu@assays[[assay]]@meta.features) <- gene_annotation$SYMBOL
+  
+  # Handle top markers
   if (!is_null(top_n)) {
     assert_that_(dplyr::between(top_n, 1, Inf), msg = "{.var top_n} must be between 1 and Inf")
     markers_top <- filter_markers(markers = markers, top_n = top_n, top_n_wt = top_n_wt)
@@ -315,10 +348,13 @@ marker_heatmap <- function(seu,
       markers_top <- markers
     }
   }
+  # Convert marker SYMBOLs to ENSEMBL for heatmap plotting
 
+ 
   if (is_empty(markers_top$SYMBOL)) {
     p_heatmap <- create_dummy_plot(glue0("{title}\n{subtitle}\nNo top markers were found."))
   } else {
+    # Plot using ENSEMBL rownames
     p_heatmap <- suppressMessages(
       Seurat::DoHeatmap(seu, features = markers_top$SYMBOL, assay = assay, slot = slot, angle = angle, ...) +
         fill_scale +
@@ -329,8 +365,9 @@ marker_heatmap <- function(seu,
           plot.subtitle = element_text(size = 7)
         )
     )
+    
   }
-
+  
   return(list(p_heatmap = p_heatmap, markers_top = markers_top))
 }
 
@@ -397,6 +434,7 @@ markers_plots_top <- function(markers_processed, markers_plot_params, out_dir, m
 #' @param cluster_plot_point_size A numeric scalar.
 #' @param feature_plot_point_size A numeric scalar. Applied to the feature plot.
 #' @param vln_plot_legend_title A character scalar. Applied to the violin plot.
+#' @param spatial A logical scalar. If true, add spatial plots. 
 #' @return A `patchwork` object.
 #'
 #' @concept sc_markers
@@ -411,7 +449,8 @@ marker_plot <- function(sce,
                         cluster_plot_label = TRUE,
                         cluster_plot_point_size = 1,
                         feature_plot_point_size = 1,
-                        vln_plot_legend_title = NULL) {
+                        vln_plot_legend_title = NULL, 
+                        spatial = FALSE) {
   # if (inherits(assay(sce, "logcounts"), "ResidualMatrix")) {
   #   assay(sce, "logcounts") <- assay(sce, "logcounts") %>% as.matrix()
   # }
@@ -464,7 +503,26 @@ marker_plot <- function(sce,
     guides(color = ggplot2::guide_colorbar(barwidth = 5, title.vjust = 0.9)) +
     labs(color = "log2(expression)") +
     p_clusters$theme
-
+  
+ 
+  ## Spatial plot (optional)
+  if (spatial) {
+    
+    p_spat_clusters <- ggspavis::plotSpots(
+      sce, annotate = group_name
+    ) +
+      ggplot2::labs(title = cluster_plot_title) +
+      ggplot2::theme_classic() 
+    
+    p_spat_expression <- ggspavis::plotSpots(
+      sce, annotate = gene_ensembl_id
+    ) +
+      ggplot2::labs(title = paste("Spatial:", gene_symbol)) +
+      ggplot2::theme_classic() + 
+      ggplot2::guides(color = ggplot2::guide_colorbar(barwidth = 5, title.vjust = 0.9)) +
+      ggplot2::labs(color = "log2(expression)")
+  }
+  
   p_dot <- scater::plotDots(
     sce,
     features = gene_ensembl_id,
@@ -491,11 +549,17 @@ marker_plot <- function(sce,
     guides(color = "none") +
     p_clusters$theme
 
-  p <- (p_clusters | p_expression) / p_dot / p_vln
-  p <- p + patchwork::plot_layout(height = c(1, 0.25, 1))
-
+  if (spatial) {
+    p <- (p_spat_clusters | p_spat_expression ) / p_dot / p_vln
+    p <- p + patchwork::plot_layout(height = c(1, 0.25, 1))
+  } else {
+    p <- (p_clusters | p_expression) / p_dot / p_vln
+    p <- p + patchwork::plot_layout(height = c(1, 0.25, 1))
+  }
+  
   return(p)
 }
+
 
 #' @title Make plots of top markers.
 #' @param sce_dimred A `SingleCellExperiment` object with computed dimreds.
@@ -514,7 +578,7 @@ marker_plot <- function(sce,
 #'
 #' @concept sc_markers
 #' @export
-markers_plots_files <- function(sce_dimred, markers_plots_top, save = TRUE, dry = FALSE, return_type = c("file", "plot", "tibble")) {
+markers_plots_files <- function(sce_dimred, markers_plots_top, save = TRUE, dry = FALSE, spatial = FALSE, return_type = c("file", "plot", "tibble")) {
   return_type <- arg_match(return_type)
 
   markers_plots_top <- lapply_rows(markers_plots_top, FUN = function(par) {
@@ -529,6 +593,7 @@ markers_plots_files <- function(sce_dimred, markers_plots_top, save = TRUE, dry 
         cluster_plot_legend_title = "",
         # vln_plot_legend_title = source_column
         vln_plot_legend_title = "",
+        spatial = spatial
       ))
 
       par$marker_plot <- p
@@ -576,28 +641,51 @@ markers_plots_files <- function(sce_dimred, markers_plots_top, save = TRUE, dry 
 #'
 #' @concept sc_markers
 #' @export
-markers_dimred_plots <- function(sce_final_norm_clustering, markers_dimred_plots_params) {
-  markers_dimred_plots_params <- lapply_rows(markers_dimred_plots_params, FUN = function(par) {
-    p <- plotReducedDim_mod(
-      sce_final_norm_clustering,
-      dimred = par$plot_dimreds,
-      colour_by = par$source_column,
-      title = glue("{par$source_column} | {str_to_upper(par$plot_dimreds)}"),
-      use_default_ggplot_palette = TRUE,
-      legend_title = par$source_column,
-      text_by = par$source_column
-    ) + theme(legend.position = "bottom", legend.direction = "horizontal")
-
-    par$plot <- list(p)
+markers_dimred_plots <- function(sce_final_norm_clustering, markers_dimred_plots_params, spatial = FALSE) {
+  markers_dimred_plots_params <- scdrake::lapply_rows(markers_dimred_plots_params, FUN = function(par) {
+    
+    if (spatial) {
+      colnames(SpatialExperiment::spatialCoords(sce_final_norm_clustering)) <- c("x", "y")
+      
+      # Palette for spatial plot
+      palette <- scales::hue_pal()(length(unique(colData(sce_final_norm_clustering)[[par$source_column]])))
+      
+      p <- ggspavis::plotSpots(
+        sce_final_norm_clustering,
+        annotate = par$source_column,
+        pal = palette,
+        show_axes = FALSE,
+        legend_position = "bottom"
+      ) + ggplot2::theme_classic() +
+        ggplot2::ggtitle(glue("{par$source_column} | SPATIAL"))
+      p$data$colour_by <- p$data[[par$source_column]]
+      p$data$order_by <- p$data[[par$source_column]]
+    } else {
+      # Normal dimred plot
+      p <- plotReducedDim_mod(
+        sce_final_norm_clustering,
+        dimred = par$plot_dimreds,
+        colour_by = par$source_column,
+        title = glue("{par$source_column} | {str_to_upper(par$plot_dimreds)}"),
+        use_default_ggplot_palette = TRUE,
+        legend_title = par$source_column,
+        text_by = par$source_column
+      ) + ggplot2::theme(legend.position = "bottom", legend.direction = "horizontal")
+    }
+    
+    
+    par$plot <- p
     return(par)
   })
-
+  
   names(markers_dimred_plots_params$plot) <- glue(
     "{markers_dimred_plots_params$source_column}_{markers_dimred_plots_params$plot_dimreds}"
   )
-
+  
   return(markers_dimred_plots_params)
 }
+
+
 
 #' @title Save dimred plots.
 #' @param markers_dimred_plots A tibble. See `cluster_markers_dimred_plots` or `contrasts_dimred_plots` for details.
@@ -619,7 +707,7 @@ markers_dimred_plots_files <- function(markers_dimred_plots, markers_dimred_plot
     par$out_file <- out_file
     return(par)
   })
-
+  
   return(markers_dimred_plots)
 }
 
@@ -707,7 +795,7 @@ markers_for_tables <- function(markers_out, markers_heatmaps_df, markers_plots_t
                                ...) {
   markers_heatmaps_df <- markers_heatmaps_df %>%
     dplyr::select(.data$id, .data$description, .data$test_label, heatmap_file = .data$out_file)
-
+  
   markers_plots_top <- markers_plots_top %>%
     dplyr::select(.data$source_column, .data$plot_dimreds, .data$ENSEMBL, .data$out_file) %>%
     dplyr::group_by(.data$source_column, .data$ENSEMBL) %>%
@@ -721,12 +809,12 @@ markers_for_tables <- function(markers_out, markers_heatmaps_df, markers_plots_t
     dplyr::group_by(.data$source_column) %>%
     tidyr::nest(marker_plots = -.data$source_column) %>%
     dplyr::ungroup()
-
+  
   markers_dimred_plots_files <- markers_dimred_plots_files %>%
     dplyr::group_by(.data$source_column) %>%
     tidyr::nest(dimred_plots = c(.data$plot_dimreds, .data$plot, .data$out_file)) %>%
     dplyr::ungroup()
-
+  
   res <- dplyr::left_join(markers_out, markers_heatmaps_df, by = "id") %>%
     dplyr::left_join(markers_dimred_plots_files, by = "source_column") %>%
     dplyr::left_join(markers_plots_top, by = "source_column") %>%
@@ -736,9 +824,10 @@ markers_for_tables <- function(markers_out, markers_heatmaps_df, markers_plots_t
     ) %>%
     dplyr::mutate(markers = purrr::map(.data$markers, ~ add_marker_table_links(., ensembl_species = ensembl_species))) %>%
     dplyr::select(-dplyr::any_of(c("test_params_name", "groups", "blocks", "marker_plots")))
-
+  
   return(res)
 }
+
 
 #' @title Prepare a table with markers and render a HTML report from RMarkdown template.
 #' @param markers_for_tables A tibble. File paths in column `out_file` will be used to save rendered HTML files.
@@ -753,10 +842,12 @@ markers_for_tables <- function(markers_out, markers_heatmaps_df, markers_plots_t
 markers_table_files <- function(markers_for_tables,
                                 rmd_template,
                                 marker_type = c("global", "contrast"),
-                                drake_cache_dir = ".drake") {
+                                drake_cache_dir = ".drake", 
+                                spatial = FALSE) {
   marker_type <- arg_match(marker_type)
-
+  
   markers_for_tables <- lapply_rows(markers_for_tables, FUN = function(par) {
+    
     par$markers <- par$markers %>%
       dplyr::rowwise() %>%
       dplyr::mutate(
@@ -766,7 +857,11 @@ markers_table_files <- function(markers_for_tables,
             if (is.na(.x)) {
               ""
             } else {
-              create_a_link(.x, str_to_upper(.y), href_rel_start = fs::path_dir(par$out_file))
+              if (spatial) {
+                create_a_link(.x, "SPATIAL", href_rel_start = fs::path_dir(par$out_file))
+              } else {
+                create_a_link(.x, str_to_upper(.y), href_rel_start = fs::path_dir(par$out_file))
+              }
             }
           }
         ) %>%
@@ -776,12 +871,12 @@ markers_table_files <- function(markers_for_tables,
       ) %>%
       dplyr::ungroup() %>%
       dplyr::select(.data$ENSEMBL, .data$ENTREZID, .data$SYMBOL, .data$GENENAME, .data$plot, dplyr::everything())
-
+    
     par$heatmap_file_rel <- purrr::map2_chr(
       par$heatmap_file, par$out_file,
       ~ create_a_link(.x, "Heatmap", href_rel_start = fs::path_dir(.y), class = "btn btn-primary", role = "button")
     )
-
+    
     if (marker_type == "global") {
       title <- glue("Cluster markers for '{par$source_column}' (level: '{par$group_level}'), {par$test_label}")
     } else {
@@ -790,14 +885,43 @@ markers_table_files <- function(markers_for_tables,
         "target: '{par$target}', reference: '{par$reference}'), {par$test_label}"
       )
     }
-
+    
     if (!is_na(par$block_column)) {
       title <- glue("{title} (blocking on '{par$block_column}')")
     }
-
+  
+    highlight_dimred_plots <- function(par, spatial = FALSE) {
+      # choose levels depending on marker_type
+      if (marker_type == "global") {
+        levels_to_use <- par$group_level
+      } else {
+        levels_to_use <- c(par$target, par$reference)
+      }
+      
+      if (spatial) {
+        par$dimred_plots$plot_highlighted <- lapply(par$dimred_plots$plot, function(p) {
+          highlight_points(p, column_name = "colour_by", levels = levels_to_use, spatial = TRUE)
+        })
+      } else {
+        par$dimred_plots$plot_highlighted <- lapply(par$dimred_plots$plot, function(p) {
+          plot_data <- p$data
+          aes_vars <- unlist(lapply(p$mapping, as.character))
+          missing_cols <- setdiff(aes_vars, names(plot_data))
+          if (length(missing_cols) > 0) {
+            for (col in missing_cols) plot_data[[col]] <- NA
+            p$data <- plot_data
+          }
+          scdrake::highlight_points(p, column_name = "colour_by", levels = levels_to_use, spatial = FALSE)
+        })
+      }
+      return(par)
+    }
+    
+    par <- highlight_dimred_plots(par, spatial = spatial)
+    
     intermediates_dir <- fs::file_temp()
     fs::dir_create(intermediates_dir)
-
+   
     rmarkdown::render(
       rmd_template,
       output_dir = fs::path_dir(par$out_file),
@@ -811,12 +935,12 @@ markers_table_files <- function(markers_for_tables,
       envir = new.env(),
       quiet = TRUE
     )
-
+    
     fs::dir_delete(intermediates_dir)
-
+    
     return(par)
   })
-
+  
   return(markers_for_tables$out_file)
 }
 

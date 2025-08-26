@@ -9,6 +9,7 @@ markers_plots_files(
   markers_plots_top,
   save = TRUE,
   dry = FALSE,
+  spatial = FALSE,
   return_type = c("file", "plot", "tibble")
 )
 }

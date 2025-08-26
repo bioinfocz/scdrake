@@ -4,7 +4,13 @@
 \alias{sce_cc_fn}
 \title{Assign cell cycle phase to cells.}
 \usage{
-sce_cc_fn(sce_final_input_qc, cc_genes, data = NULL)
+sce_cc_fn(
+  sce_final_input_qc,
+  cc_genes,
+  data = NULL,
+  cc_eval = TRUE,
+  spatial = TRUE
+)
 }
 \arguments{
 \item{sce_final_input_qc}{(\emph{input target}) A \code{SingleCellExperiment} object.}

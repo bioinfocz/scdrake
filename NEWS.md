@@ -1,3 +1,23 @@
+# scdrake 1.7.0
+- Added a new **deconvolution module** for secondary analysis.
+  - Supports deconvolution of spatial transcriptomics data using single-cell references.
+  - See `vignette("scdrake_spatial")` for details.
+- Added **spatial artifact detection** for spot-based technologies.
+- Added [SpatialExperiment](https://www.bioconductor.org/packages/release/bioc/html/SpatialExperiment.html) for working with spatial data
+- Updated visualization:
+  - Switched from self-made functions to `{ggspavis}`-based plotting functions for more consistent and customizable outputs.
+  - Updated writing plots functions for dimension-reduction plots
+- Updated Spatially variable genes selections
+- Spatial part is now up-to-date with [Orchestrating Spatial Transcriptomics Analysis with Bioconductor](https://lmweber.org/OSTA/) suggestions
+- HTML reports:
+  - Improved layout and structure for better readability.
+  - Minor visualization enhancements in plots and tables.
+- Environment updates:
+  - **R 4.5.1** and **Bioconductor 3.21**.
+  - Official Docker image updated to match.
+- Fixes:
+  - Minor fixes in cell annotation workflows and html report generating functions
+  
 # scdrake 1.6.0
 - `scdrake` now allows processing of spatial transcriptomics data from spot-based technologies (Visium).
   - See `vignette("scdrake_spatial")`.

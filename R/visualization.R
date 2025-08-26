@@ -1,5 +1,56 @@
 ## -- Common functions related to visualization.
 
+#' @title Save a plot with a fallback for large legends
+#' @description
+#'  Attempts to save a plot to PDF and optionally PNG. If saving fails due to
+#' the "Viewport has zero dimension(s)" error (often caused by too many legend entries),
+#' the legend is removed and the plot is saved again.
+#'
+#' @param plot A ggplot object to save.
+#' @param pdf_file Path to the PDF output file.
+#' @param png_file Optional path to the PNG output file.
+#' @param width Plot width in inches.
+#' @param height Plot height in inches.
+#' @param dpi Resolution for PNG output.
+#' @return The saved plot (possibly modified with legend removed).
+#' @concept sce_visualization
+save_plot_with_fallback <- function(plot, pdf_file, png_file = NULL, width = NULL, height = NULL, dpi = 300) {
+  tryCatch({
+    scdrake::save_pdf(list(plot), pdf_file, stop_on_error = TRUE, width = width, height = height)
+    if (!is.null(png_file)) {
+      ggplot2::ggsave(filename = png_file, plot = plot, device = "png", dpi = dpi, width = width, height = height)
+    }
+    plot
+  }, error = function(e) {
+    if (stringr::str_detect(e$message, "Viewport has zero dimension")) {
+      cli::cli_alert_warning(
+        paste0(
+          "Error caught: 'Viewport has zero dimension(s)'. Likely too many legend levels.\n",
+          "Removing legend before saving."
+        )
+      )
+      plot <- plot + ggplot2::theme(legend.position = "none")
+      scdrake::save_pdf(list(plot), pdf_file, width = width, height = height)
+      if (!is.null(png_file)) {
+        ggplot2::ggsave(filename = png_file, plot = plot, device = "png", dpi = dpi, width = width, height = height)
+      }
+      plot
+    } else {
+      cli::cli_abort(e$message)
+    }
+  })
+}
+
+#' @title Extract legend from plot
+#' @description Extract legend and add it to the selected place of composite image
+#' @param `ggplot2` object as input parameter
+#' @concept sce_visualization
+get_legend_35 <- function(plot) {
+  legends <- cowplot::get_plot_component(plot, "guide-box", return_all = TRUE)
+  nonzero <- vapply(legends, \(x) !inherits(x, "zeroGrob"), TRUE)
+  if (any(nonzero)) legends[[which(nonzero)[1]]] else legends[[1]]
+}
+
 #' @title A wrapper for [scater::plotColData()].
 #' @description Can add title, scales and number of each logical level (`TRUE`, `FALSE`) used for coloring.
 #' @param ... Parameters passed to [scater::plotColData()].
@@ -82,7 +133,10 @@ plotReducedDim_mod <- function(sce,
                                legend_title = NULL,
                                add_cells_per_cluster = TRUE,
                                ...) {
-  assert_that_(is(sce, "SingleCellExperiment"), msg = "First parameter is not a {.var SingleCellExperiment} object.")
+  assert_that_(
+    is(sce, "SingleCellExperiment") || is(sce, "SpatialExperiment"),
+    msg = "First parameter is not a {.var SingleCellExperiment} or {.var SpatialExperiment} object."
+  )
   assert_that_(
     dimred %in% reducedDimNames(sce),
     msg = "{.val {dimred}} not found in {.code reducedDimNames({deparse(substitute(sce))})}"
@@ -195,21 +249,63 @@ plot_vln <- function(sce,
 #' highlight_points(p, "am", "0", alpha_val = 0.25)
 #' @concept sce_visualization
 #' @export
-highlight_points <- function(p, column_name, levels, alpha_val = 0.1) {
-  p$data <- dplyr::mutate(p$data, !!sym(column_name) := factor(!!sym(column_name))) %>%
-    dplyr::mutate(alpha_ = dplyr::if_else(!!sym(column_name) %in% !!levels, 1, alpha_val))
-  p$layers <- lapply(p$layers, function(layer) {
-    if (any(names(layer$mapping) %in% c("color", "colour"))) {
-      layer$aes_params$alpha <- NULL
+#' @param alpha_val A numeric scalar: alpha value to set for levels other than those in `levels`.
+#' @return A `ggplot2` object.
+#'
+#' @examples
+#' p <- ggplot2::ggplot(
+#'   mtcars,
+#'   ggplot2::aes(x = cyl, y = mpg, color = factor(am))
+#' ) +
+#'   ggplot2::geom_point()
+#' highlight_points(p, "am", "0", alpha_val = 0.25)
+#' @concept sce_visualization
+#' @export
+highlight_points <- function(p, column_name, levels, alpha_val = 0.1, spatial = FALSE) {
+  if (spatial) {
+    # --- ORIGINAL VERSION (for spatial plots) ---
+    p$data <- dplyr::mutate(p$data, !!sym(column_name) := factor(!!sym(column_name))) %>%
+      dplyr::mutate(alpha_ = dplyr::if_else(!!sym(column_name) %in% !!levels, 1, alpha_val))
+    
+    p$layers <- lapply(p$layers, function(layer) {
+      if (any(names(layer$mapping) %in% c("color", "colour"))) {
+        layer$aes_params$alpha <- NULL
+      }
+      return(layer)
+    })
+    
+    p <- p + aes(alpha = .data$alpha_) + ggplot2::scale_alpha_identity()
+    return(p)
+    
+  } else {
+    # --- SAFER VERSION (for dimred / non-spatial plots) ---
+    add_alpha <- function(df) {
+      if (!is.null(df) && is.data.frame(df)) {
+        if (!"alpha_" %in% names(df)) {
+          df[[column_name]] <- factor(df[[column_name]])
+          df$alpha_ <- ifelse(df[[column_name]] %in% levels, 1, alpha_val)
+        }
+      }
+      df
     }
-
-    return(layer)
-  })
-  p <- p + aes(alpha = .data$alpha_) + ggplot2::scale_alpha_identity()
-
-  return(p)
+    
+    # Add alpha_ to main data
+    p$data <- add_alpha(p$data)
+    
+    # Walk through layers, only affect point geoms
+    p$layers <- lapply(p$layers, function(layer) {
+      if (inherits(layer$geom, "GeomPoint")) {
+        layer$data <- add_alpha(layer$data)
+        layer$aes_params$alpha <- NULL
+        layer$mapping <- modifyList(layer$mapping, aes(alpha = .data$alpha_))
+      }
+      layer
+    })
+    
+    p <- p + ggplot2::scale_alpha_identity()
+    return(p)
+  }
 }
-
 #' @title Make a grid of feature plots for selected markers.
 #' @param sce A `SingleCellExperiment` object.
 #' @param dimred A character scalar: name of dimred to plot.
@@ -307,6 +403,7 @@ save_selected_markers_plots_files <- function(selected_markers_plots, selected_m
   })
 }
 
+
 #' @title Make a dimred plot for each clustering and dimred method.
 #' @param sce_dimred A `SingleCellExperiment` object with computed dimreds specified in `dimred_names`.
 #' @param dimred_names A character vector: dimred names to use for plotting.
@@ -320,21 +417,23 @@ save_selected_markers_plots_files <- function(selected_markers_plots, selected_m
 dimred_plots_clustering_fn <- function(sce_dimred,
                                        dimred_names,
                                        cluster_df,
-                                       spatial=FALSE,
+                                       spatial = FALSE,
                                        out_dir = NULL) {
+  
   cluster_df <- tidyr::crossing(cluster_df, dimred_name = dimred_names)
   
   res <- lapply_rows(cluster_df, FUN = function(par) {
-    dimred_name <- par$dimred_name
-    dimred_name_upper <- str_to_upper(dimred_name)
     
-    cell_data <- tibble::tibble(x = par$cell_membership)
-    print(cell_data)
-    colnames(cell_data) <- par$sce_column
+    dimred_name_upper <- stringr::str_to_upper(par$dimred_name)
     
+    # Prepare colData for plotting
+    cell_data <- tibble::tibble(!!par$sce_column := par$cell_membership)
+    sce_mod <- sce_add_colData(sce_dimred, cell_data)
+    
+    # Reduced dimension plot
     p <- plotReducedDim_mod(
-      sce_add_colData(sce_dimred, cell_data),
-      dimred = dimred_name,
+      sce_mod,
+      dimred = par$dimred_name,
       colour_by = par$sce_column,
       text_by = par$sce_column,
       title = glue("{par$title} | {dimred_name_upper}"),
@@ -342,54 +441,52 @@ dimred_plots_clustering_fn <- function(sce_dimred,
       use_default_ggplot_palette = TRUE,
       legend_title = "Cluster"
     )
-    if (spatial == TRUE) {
-      palete <- c(scales::hue_pal()(par$n_clusters))
-      p_spat <- visualized_spots(sce_add_colData(sce_dimred, cell_data),
-        cell_color = par$sce_column, color_as_factor = F,
-        point_shape = "border", cell_color_code = palete, show_legend = F
+    
+    # Optional spatial plot
+    if (spatial) {
+      colnames(SpatialExperiment::spatialCoords(sce_mod)) <- c("x", "y")
+      palette <- scales::hue_pal()(par$n_clusters)
+      
+      p_spat <- ggspavis::plotSpots(
+        sce_mod,
+        annotate = par$sce_column,
+        pal = palette,
+        show_axes = FALSE,
+        legend_position = "bottom"
+      ) + ggplot2::theme_classic()
+      
+      legend2 <- cowplot::get_legend(
+        p_spat +
+          ggplot2::guides(color = ggplot2::guide_legend(nrow = 1)) +
+          ggplot2::theme(legend.position = "bottom")
       )
-      p <- cowplot::plot_grid(p, p_spat, ncol = 2, nrow = 1, rel_widths = c(1, 1.5))
+      
+      # Combine plots
+      p <- cowplot::plot_grid(
+        p + theme(legend.position = "none"),
+        p_spat + theme(legend.position = "none"),
+        hjust = -1, align = "vh", nrow = 1,
+        labels = c("", "spatial")
+      )
+      p <- cowplot::plot_grid(p, legend2, ncol = 1, rel_heights = c(7, 1), greedy = TRUE)
     }
-    if (is_null(out_dir)) {
+    
+    # Output file paths
+    if (!is.null(out_dir)) {
+      out_pdf_file <- fs::path(out_dir, glue("{par$sce_column}_{par$dimred_name}.pdf"))
+      out_png_file <- fs::path_ext_set(out_pdf_file, "png")
+      
+      save_plot_with_fallback(
+        plot = p,
+        pdf_file = out_pdf_file,
+        png_file = out_png_file,
+        width = 10,
+        height = 8,
+        dpi = 300
+      )
+    } else {
       out_pdf_file <- NA_character_
       out_png_file <- NA_character_
-    } else {
-      out_pdf_file <- fs::path(out_dir, glue("{par$sce_column}_{dimred_name}.pdf"))
-      out_png_file <- out_pdf_file
-      fs::path_ext(out_png_file) <- "png"
-      
-      p <- tryCatch({
-        save_pdf(list(p), out_pdf_file, stop_on_error = TRUE,width=10)
-        ggplot2::ggsave(
-          filename = out_png_file,
-          plot = p,
-          device = "png",
-          dpi = 300
-        )
-        p
-      },
-      
-      error = function(e) {
-        if (stringr::str_detect(e$message, "Viewport has zero dimension")) {
-          cli_alert_warning(str_space(
-            "Error catched: 'Viewport has zero dimension(s)'.",
-            "There are probably too many levels and the legend doesn't fit into the plot.",
-            "Removing the legend before saving the plot image."
-          ))
-          p <- p + theme(legend.position = "none")
-          save_pdf(list(p), out_pdf_file)
-          ggplot2::ggsave(
-            filename = out_png_file,
-            plot = p,
-            device = "png",
-            dpi = 150
-          )
-          p
-        } else {
-          cli_abort(e$message)
-        }
-      }
-      )
     }
     
     par$dimred_plot <- list(p)
@@ -401,6 +498,9 @@ dimred_plots_clustering_fn <- function(sce_dimred,
   
   res
 }
+
+
+
 
 #' @title Put clustering dimred plots for different parameters (resolution, `k`) into a single PDF.
 #' @param dimred_plots_clustering (*input target*) A tibble.
@@ -518,7 +618,27 @@ dimred_plots_cell_annotation_params_df_fn <- function(dimred_names, cell_annotat
 #'
 #' @concept sce_visualization
 #' @export
-dimred_plots_from_params_df <- function(sce_dimred, dimred_plots_params_df) {
+dimred_plots_from_params_df <- function(sce_dimred, dimred_plots_params_df,spatial=FALSE) {
+  if (spatial) {
+    add_spatial_rows <- function(dimred_plots_params_df) {
+      spatial_rows <- dimred_plots_params_df %>%
+        dplyr::distinct(source_column, label, name, .keep_all = TRUE) %>%
+        dplyr::group_by(source_column, label, name) %>%
+        dplyr::slice(1) %>%  # just pick the first row per group (to extract dir)
+        dplyr::ungroup() %>%
+        dplyr::mutate(
+          dimred_name = "spatial",
+          output_dir = fs::path_dir(out_pdf_file),
+          out_pdf_file = fs::path(output_dir, glue::glue("{source_column}_spatial.pdf")),
+          out_png_file = fs::path(output_dir, glue::glue("{source_column}_spatial.png"))
+        ) %>%
+        dplyr::select(-output_dir)
+      
+      dplyr::bind_rows(dimred_plots_params_df, spatial_rows)
+    }
+    dimred_plots_params_df <- add_spatial_rows(dimred_plots_params_df)
+  }
+
   res <- lapply_rows(dimred_plots_params_df, FUN = function(par) {
     assert_that_(
       par$source_column %in% colnames(colData(sce_dimred)),
@@ -541,15 +661,26 @@ dimred_plots_from_params_df <- function(sce_dimred, dimred_plots_params_df) {
       par$source_column
     }
 
-    p <- plotReducedDim_mod(
-      sce_dimred,
-      dimred = par$dimred_name,
-      colour_by = par$source_column,
-      title = glue("{par$label} | {str_to_upper(par$dimred_name)}"),
-      use_default_ggplot_palette = TRUE,
-      legend_title = par$source_column,
-      text_by = show_cluster_labels
-    )
+    p <- if (par$dimred_name == "spatial") {
+      colnames(SpatialExperiment::spatialCoords(sce_dimred)) <- c("x","y")
+      
+      default_palette <- scales::hue_pal()(length(unique(colData(sce_dimred)[[par$source_column]])))
+      #names(default_palette) <- unique(colData(sce_dimred)[[par$source_column]])
+      ggspavis::plotSpots(
+        sce_dimred,
+        annotate = par$source_column, pal = default_palette) + ggplot2::theme_classic() +
+        ggplot2::ggtitle(glue("{par$label} | {str_to_upper(par$dimred_name)}"))
+    } else {
+      plotReducedDim_mod(
+        sce_dimred,
+        dimred = par$dimred_name,
+        colour_by = par$source_column,
+        title = glue("{par$label} | {str_to_upper(par$dimred_name)}"),
+        use_default_ggplot_palette = TRUE,
+        legend_title = par$source_column,
+        text_by = show_cluster_labels
+      )
+    }
 
     if (!is_na(par$out_pdf_file) && !is_na(par$out_png_file)) {
       res <- save_pdf(list(p), par$out_pdf_file)
@@ -574,6 +705,7 @@ dimred_plots_from_params_df <- function(sce_dimred, dimred_plots_params_df) {
   })
 
   names(res$plot) <- glue("{res$source_column}_{res$dimred_name}")
+  res <- unique(res)
   return(res)
 }
 

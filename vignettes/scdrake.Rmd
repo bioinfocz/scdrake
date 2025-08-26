@@ -5,6 +5,9 @@ author:
   - name: Jiri Novotny
     affiliation: Institute of Molecular Genetics of the Czech Academy of Sciences
     email: jiri.novotny@img.cas.cz
+  - name: Lucie Pfeiferova
+    affiliation: Institute of Molecular Genetics of the Czech Academy of Sciences
+    email: lucie.pfeiferova@img.cas.cz
   - name: Jan Kubovciak
     affiliation: Institute of Molecular Genetics of the Czech Academy of Sciences
     email: jan.kubovciak@img.cas.cz

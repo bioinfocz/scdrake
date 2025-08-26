@@ -110,12 +110,14 @@ of levels of cell groupings. Hence "contrasts", a term known from bulk RNA-seq w
     (or `vignette("scdrake_docker")`)
   - 01 Quick start (single-sample pipeline): `vignette("scdrake")`
   - 02 Integration pipeline guide: `vignette("scdrake_integration")`
-  - Advanced topics: `vignette("scdrake_advanced")`
+  - Advanced topics: `vignette("scdrake_advanced")` and `vignette("interaction_analysis")`
   - Extending the pipeline: `vignette("scdrake_extend")`
   - `{drake}` basics: `vignette("drake_basics")`
     - Or the official `{drake}` book: <https://books.ropensci.org/drake/>
+  - Developing scdrake: `vignette("scdrake_development")`
 - General information:
   - Pipeline overview: `vignette("pipeline_overview")`
+  - Spatial extension: `vignette("scdrake_spatial")`
   - FAQ & Howtos: `vignette("scdrake_faq")`
   - Command line interface (CLI): `vignette("scdrake_cli")`
   - Config files (internals): `vignette("scdrake_config")`

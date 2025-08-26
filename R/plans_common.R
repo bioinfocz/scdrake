@@ -111,7 +111,7 @@ get_cluster_markers_subplan <- function(cfg, cfg_pipeline, cfg_main) {
     cluster_markers_out = cluster_markers_out_fn(cluster_markers_processed),
 
     ## -- Row z-score in assays$RNA@scale.data
-    seu_for_cluster_markers_heatmaps = create_seu_for_heatmaps(sce_dimred_cluster_markers, calc_zscore = TRUE),
+    seu_for_cluster_markers_heatmaps = create_seu_for_heatmaps(sce_dimred_cluster_markers, calc_zscore = TRUE, spatial = !!cfg$SPATIAL),
 
     ## -- Cluster markers heatmaps.
     cluster_markers_heatmaps_df = cluster_markers_heatmaps_df_fn(
@@ -132,14 +132,14 @@ get_cluster_markers_subplan <- function(cfg, cfg_pipeline, cfg_main) {
       out_dir = !!cfg$CLUSTER_MARKERS_PLOTS_BASE_OUT_DIR
     ),
     cluster_markers_plots_files = target(
-      markers_plots_files(sce_dimred_cluster_markers, cluster_markers_plots_top, dry = !!(!cfg$MAKE_CLUSTER_MARKERS_PLOTS)),
+      markers_plots_files(sce_dimred_cluster_markers, cluster_markers_plots_top, spatial = !!cfg$SPATIAL, dry = !!(!cfg$MAKE_CLUSTER_MARKERS_PLOTS)),
       dynamic = map(cluster_markers_plots_top),
       format = "file"
     ),
 
     ## -- Dimred plots of source columns.
     cluster_markers_dimred_plots = target(
-      markers_dimred_plots(sce_final_cluster_markers, cluster_markers_dimred_plot_params),
+      markers_dimred_plots(sce_final_cluster_markers, cluster_markers_dimred_plot_params, spatial = !!cfg$SPATIAL),
       dynamic = map(cluster_markers_dimred_plot_params)
     ),
     cluster_markers_dimred_plots_files = target(
@@ -159,7 +159,7 @@ get_cluster_markers_subplan <- function(cfg, cfg_pipeline, cfg_main) {
         cluster_markers_for_tables,
         cluster_markers_table_template_file,
         marker_type = "global",
-        drake_cache_dir = !!cfg_pipeline$DRAKE_CACHE_DIR
+        drake_cache_dir = !!cfg_pipeline$DRAKE_CACHE_DIR, spatial = !!cfg$SPATIAL
       ),
       format = "file",
       dynamic = map(cluster_markers_for_tables)
@@ -209,7 +209,7 @@ get_contrasts_subplan <- function(cfg, cfg_pipeline, cfg_main) {
     contrasts_out = contrasts_out_fn(contrasts),
 
     ## -- Contrast heatmaps.
-    seu_for_contrasts_heatmaps = create_seu_for_heatmaps(sce_dimred_contrasts, calc_zscore = FALSE),
+    seu_for_contrasts_heatmaps = create_seu_for_heatmaps(sce_dimred_contrasts, calc_zscore = FALSE,spatial = !!cfg$SPATIAL),
     contrasts_heatmaps_df = contrasts_heatmaps_df_fn(contrasts, contrasts_heatmap_params, !!cfg$CONTRASTS_HEATMAPS_OUT_DIR),
     contrasts_heatmaps_files = target(
       marker_heatmaps_wrapper(
@@ -226,14 +226,14 @@ get_contrasts_subplan <- function(cfg, cfg_pipeline, cfg_main) {
       out_dir = !!cfg$CONTRASTS_PLOTS_BASE_OUT_DIR, marker_type = "contrast"
     ),
     contrasts_plots_files = target(
-      markers_plots_files(sce_dimred_contrasts, contrasts_plots_top, dry = !!(!cfg$MAKE_CONTRASTS_PLOTS)),
+      markers_plots_files(sce_dimred_contrasts, contrasts_plots_top, spatial = !!cfg$SPATIAL, dry = !!(!cfg$MAKE_CONTRASTS_PLOTS)),
       dynamic = map(contrasts_plots_top),
       format = "file"
     ),
 
     ## -- Dimred plots of source columns.
     contrasts_dimred_plots = target(
-      markers_dimred_plots(sce_final_contrasts, contrasts_dimred_plot_params),
+      markers_dimred_plots(sce_final_contrasts, contrasts_dimred_plot_params, spatial = !!cfg$SPATIAL),
       dynamic = map(contrasts_dimred_plot_params)
     ),
     contrasts_dimred_plots_files = target(
@@ -253,7 +253,8 @@ get_contrasts_subplan <- function(cfg, cfg_pipeline, cfg_main) {
         contrasts_for_tables,
         contrasts_table_template_file,
         marker_type = "contrast",
-        drake_cache_dir = !!cfg_pipeline$DRAKE_CACHE_DIR
+        drake_cache_dir = !!cfg_pipeline$DRAKE_CACHE_DIR,
+        spatial = !!cfg$SPATIAL
       ),
       format = "file",
       dynamic = map(contrasts_for_tables)

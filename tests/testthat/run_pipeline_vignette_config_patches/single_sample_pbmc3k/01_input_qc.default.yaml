@@ -1,4 +1,4 @@
 INPUT_DATA:
   type: "cellranger"
-  path: "../pbmc1k/example_data/pbmc3k"
+  path: "example_data/pbmc3k"
   delimiter: ","

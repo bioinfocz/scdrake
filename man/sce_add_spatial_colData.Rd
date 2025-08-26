@@ -2,18 +2,31 @@
 % Please edit documentation in R/sce.R
 \name{sce_add_spatial_colData}
 \alias{sce_add_spatial_colData}
-\title{Append new columns with spatial relevance to \code{colData} of a \code{SingleCellExperiment} object.}
+\title{Append new columns to \code{colData} of a \code{SingleCellExperiment} or \code{SpatialExperiment} object.}
 \usage{
-sce_add_spatial_colData(sce, spatial_locs, spatial = FALSE)
+sce_add_spatial_colData(sce, df, replace = TRUE, spatial)
 }
 \arguments{
 \item{sce}{A \code{SingleCellExperiment} object.}
 
-\item{spatial_locs}{A file contating spatial coordiantes}
+\item{df}{A dataframe which will be binded column-wise to \code{colData(sce)}.}
 
-\item{spatial}{Logical vector If true, add spatial coordinates}
+\item{replace}{A logical scalar: if \code{TRUE} and columns to be added already exist, they will be first removed
+from \code{colData(sce)}.}
+
+\item{spatial}{A logical scalar: if \code{TRUE} add spatial quality control results}
+}
+\value{
+A modified \code{sce} object with added columns.
 }
 \description{
-Append new columns with spatial relevance to \code{colData} of a \code{SingleCellExperiment} object.
+Append new columns to \code{colData} of a \code{SingleCellExperiment} or \code{SpatialExperiment} object.
 }
-\concept{spatial_sce}
+\examples{
+\dontrun{
+df <- data.frame(example = rownames(colnames))
+sce <- sce_add_colData(sce, df = df)
+}
+
+}
+\concept{sc_sce}
