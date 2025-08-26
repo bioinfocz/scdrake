@@ -1,26 +1,26 @@
 {
-    "id": "B411519A",
-    "path": "~/Dockerfile",
+    "id": "65FB6C54",
+    "path": "~/tests/testthat/_snaps/project.md",
     "project_path": null,
-    "type": "dockerfile",
-    "hash": "1238056111",
+    "type": "markdown",
+    "hash": "0",
     "contents": "",
     "dirty": false,
-    "created": 1756185420931.0,
+    "created": 1756188810282.0,
     "source_on_save": false,
-    "relative_order": 6,
+    "relative_order": 4,
     "properties": {
         "source_window_id": "",
         "Source": "Source",
-        "cursorPosition": "56,8",
-        "scrollLine": "45"
+        "cursorPosition": "27,49",
+        "scrollLine": "21"
     },
     "folds": "",
-    "lastKnownWriteTime": 1756185607,
+    "lastKnownWriteTime": 1756113179,
     "encoding": "UTF-8",
     "collab_server": "",
     "source_window": "",
-    "last_content_update": 1756185607843,
+    "last_content_update": 1756113179,
     "read_only": false,
     "read_only_alternatives": []
 }

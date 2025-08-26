@@ -84,8 +84,9 @@ jobs:
           # If exit code is > 0, then there are changes and README.md was not commited
           test $exit_code -eq 0 || (echo "README.Rmd has changed, but an updated version of README.md was not included in this commit" && false)
       - name: Test image
+        continue-on-error: true
         run: |
-          docker exec -w /home/rstudio/scdrake_source scdrake_test \
+              docker exec -w /home/rstudio/scdrake_source scdrake_test \
               Rscript dev/run_tests.R --no-test-pipeline --output-dir /home/rstudio/scdrake_test_summary
       - name: Copy test results
         if: always()

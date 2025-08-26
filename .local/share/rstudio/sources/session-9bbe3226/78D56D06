@@ -1,24 +1,24 @@
 {
-    "id": "A0A226EE",
-    "path": "~/tests/testthat.R",
+    "id": "78D56D06",
+    "path": "~/.gitignore",
     "project_path": null,
-    "type": "r_source",
-    "hash": "3084784857",
+    "type": "gitignore",
+    "hash": "1299402026",
     "contents": "",
     "dirty": false,
-    "created": 1756144764720.0,
+    "created": 1756185665052.0,
     "source_on_save": false,
-    "relative_order": 4,
+    "relative_order": 7,
     "properties": {
         "source_window_id": "",
         "Source": "Source"
     },
     "folds": "",
-    "lastKnownWriteTime": 1756113179,
+    "lastKnownWriteTime": 1756113178,
     "encoding": "UTF-8",
     "collab_server": "",
     "source_window": "",
-    "last_content_update": 1756113179,
+    "last_content_update": 1756113178,
     "read_only": false,
     "read_only_alternatives": []
 }
