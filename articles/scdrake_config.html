@@ -21,8 +21,10 @@
   }
 </script><title>scdrake config internals • scdrake</title>
 <script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<link href="../deps/bootstrap-5.1.3/bootstrap.min.css" rel="stylesheet">
-<script src="../deps/bootstrap-5.1.3/bootstrap.bundle.min.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
+<link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
+<script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
+<link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
+<script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
 <!-- bootstrap-toc --><script src="https://cdn.rawgit.com/afeld/bootstrap-toc/v1.0.1/dist/bootstrap-toc.min.js"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- search --><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="scdrake config internals">
 <meta property="og:description" content="How YAML config files are used in `scdrake`">
@@ -44,103 +46,83 @@
 </head>
 <body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
-    
+
 
     <nav class="navbar fixed-top navbar-dark navbar-expand-lg bg-primary"><div class="container">
-    
+
     <a class="navbar-brand me-2" href="../index.html">scdrake</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.6.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.7.0</small>
 
-    
+
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
 
     <div id="navbar" class="collapse navbar-collapse ms-2">
       <ul class="navbar-nav me-auto">
-<li class="nav-item">
-  <a class="nav-link" href="../articles/scdrake.html">Get started</a>
-</li>
-<li class="nav-item">
-  <a class="nav-link" href="../articles/scdrake_integration.html">Integration pipeline guide</a>
-</li>
-<li class="nav-item">
-  <a class="nav-link" href="../articles/pipeline_overview.html">Pipeline overview</a>
-</li>
-<li class="nav-item">
-  <a class="nav-link" href="../articles/scdrake_spatial.html">Spatial extension</a>
-</li>
-<li class="nav-item">
-  <a class="nav-link" href="../articles/scdrake_faq.html">FAQ &amp; Howtos</a>
-</li>
+<li class="nav-item"><a class="nav-link" href="../articles/scdrake.html">Get started</a></li>
+<li class="nav-item"><a class="nav-link" href="../articles/scdrake_integration.html">Integration pipeline guide</a></li>
+<li class="nav-item"><a class="nav-link" href="../articles/pipeline_overview.html">Pipeline overview</a></li>
+<li class="nav-item"><a class="nav-link" href="../articles/scdrake_spatial.html">Spatial extension</a></li>
+<li class="nav-item"><a class="nav-link" href="../articles/scdrake_faq.html">FAQ &amp; Howtos</a></li>
 <li class="active nav-item dropdown">
-  <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
-  <div class="dropdown-menu" aria-labelledby="dropdown-articles">
-    <h6 class="dropdown-header" data-toc-skip>Guides</h6>
-    <a class="dropdown-item" href="../articles/scdrake_docker.html">Using the Docker image</a>
-    <a class="dropdown-item" href="../articles/scdrake_integration.html">02 Integration pipeline guide</a>
-    <a class="dropdown-item" href="../articles/scdrake_advanced.html">Advanced topics</a>
-    <a class="dropdown-item" href="../articles/scdrake_extend.html">Extending the pipeline</a>
-    <a class="dropdown-item" href="../articles/drake_basics.html">drake basics</a>
-    <div class="dropdown-divider"></div>
-    <h6 class="dropdown-header" data-toc-skip>General information</h6>
-    <a class="dropdown-item" href="../articles/pipeline_overview.html">Pipeline overview</a>
-    <a class="dropdown-item" href="../articles/scdrake_faq.html">FAQ &amp; Howtos</a>
-    <a class="dropdown-item" href="../articles/scdrake_cli.html">Command line interface</a>
-    <a class="dropdown-item" href="../articles/scdrake_config.html">scdrake config internals</a>
-    <a class="dropdown-item" href="../articles/scdrake_envvars.html">Environment variables</a>
-    <a class="dropdown-item" href="../articles/scdrake_spatial.html">Spatial extension</a>
-    <div class="dropdown-divider"></div>
-    <h6 class="dropdown-header" data-toc-skip>General configs</h6>
-    <a class="dropdown-item" href="../articles/config_pipeline.html">Pipeline config</a>
-    <a class="dropdown-item" href="../articles/config_main.html">Main config</a>
-    <div class="dropdown-divider"></div>
-    <h6 class="dropdown-header" data-toc-skip>Single-sample pipeline stages</h6>
-    <a class="dropdown-item" href="../articles/stage_input_qc.html">Input and quality control stage (`01_input_qc`)</a>
-    <a class="dropdown-item" href="../articles/stage_norm_clustering.html">Normalization and clustering stage (`02_norm_clustering`)</a>
-    <div class="dropdown-divider"></div>
-    <h6 class="dropdown-header" data-toc-skip>Integration pipeline stages</h6>
-    <a class="dropdown-item" href="../articles/stage_integration.html">Integration stage (`01_integration`)</a>
-    <a class="dropdown-item" href="../articles/stage_int_clustering.html">Post-integration clustering stage (`02_int_clustering`)</a>
-    <div class="dropdown-divider"></div>
-    <h6 class="dropdown-header" data-toc-skip>Common stages</h6>
-    <a class="dropdown-item" href="../articles/stage_cluster_markers.html">Cluster markers stage (`cluster_markers`)</a>
-    <a class="dropdown-item" href="../articles/stage_contrasts.html">Contrasts stage (`contrasts`)</a>
-  </div>
+  <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
+  <ul class="dropdown-menu" aria-labelledby="dropdown-articles">
+<li><hr class="dropdown-divider"></li>
+    <li><h6 class="dropdown-header" data-toc-skip>Guides</h6></li>
+    <li><a class="dropdown-item" href="../articles/scdrake_docker.html">Using the Docker image</a></li>
+    <li><a class="dropdown-item" href="../articles/scdrake_integration.html">02 Integration pipeline guide</a></li>
+    <li><a class="dropdown-item" href="../articles/scdrake_advanced.html">Advanced topics</a></li>
+    <li><a class="dropdown-item" href="../articles/interaction_analysis.html">Interaction analysis</a></li>
+    <li><a class="dropdown-item" href="../articles/scdrake_extend.html">Extending the pipeline</a></li>
+    <li><a class="dropdown-item" href="../articles/scdrake_development.html">Developing scdrake</a></li>
+    <li><a class="dropdown-item" href="../articles/drake_basics.html">drake basics</a></li>
+    <li><hr class="dropdown-divider"></li>
+    <li><h6 class="dropdown-header" data-toc-skip>General information</h6></li>
+    <li><a class="dropdown-item" href="../articles/pipeline_overview.html">Pipeline overview</a></li>
+    <li><a class="dropdown-item" href="../articles/scdrake_faq.html">FAQ &amp; Howtos</a></li>
+    <li><a class="dropdown-item" href="../articles/scdrake_cli.html">Command line interface</a></li>
+    <li><a class="dropdown-item" href="../articles/scdrake_config.html">scdrake config internals</a></li>
+    <li><a class="dropdown-item" href="../articles/scdrake_envvars.html">Environment variables</a></li>
+    <li><a class="dropdown-item" href="../articles/scdrake_spatial.html">Spatial extension</a></li>
+    <li><hr class="dropdown-divider"></li>
+    <li><h6 class="dropdown-header" data-toc-skip>General configs</h6></li>
+    <li><a class="dropdown-item" href="../articles/config_pipeline.html">Pipeline config</a></li>
+    <li><a class="dropdown-item" href="../articles/config_main.html">Main config</a></li>
+    <li><hr class="dropdown-divider"></li>
+    <li><h6 class="dropdown-header" data-toc-skip>Single-sample pipeline stages</h6></li>
+    <li><a class="dropdown-item" href="../articles/stage_input_qc.html">Input and quality control stage (`01_input_qc`)</a></li>
+    <li><a class="dropdown-item" href="../articles/stage_norm_clustering.html">Normalization and clustering stage (`02_norm_clustering`)</a></li>
+    <li><hr class="dropdown-divider"></li>
+    <li><h6 class="dropdown-header" data-toc-skip>Integration pipeline stages</h6></li>
+    <li><a class="dropdown-item" href="../articles/stage_integration.html">Integration stage (`01_integration`)</a></li>
+    <li><a class="dropdown-item" href="../articles/stage_int_clustering.html">Post-integration clustering stage (`02_int_clustering`)</a></li>
+    <li><hr class="dropdown-divider"></li>
+    <li><h6 class="dropdown-header" data-toc-skip>Common stages</h6></li>
+    <li><a class="dropdown-item" href="../articles/stage_cluster_markers.html">Cluster markers stage (`cluster_markers`)</a></li>
+    <li><a class="dropdown-item" href="../articles/stage_contrasts.html">Contrasts stage (`contrasts`)</a></li>
+  </ul>
 </li>
-<li class="nav-item">
-  <a class="nav-link" href="../reference/index.html">Reference</a>
-</li>
-<li class="nav-item">
-  <a class="nav-link" href="../news/index.html">Changelog</a>
-</li>
+<li class="nav-item"><a class="nav-link" href="../reference/index.html">Reference</a></li>
+<li class="nav-item"><a class="nav-link" href="../news/index.html">Changelog</a></li>
       </ul>
-<form class="form-inline my-2 my-lg-0" role="search">
-        <input type="search" class="form-control me-sm-2" aria-label="Toggle navigation" name="search-input" data-search-index="../search.json" id="search-input" placeholder="Search for" autocomplete="off">
-</form>
+<ul class="navbar-nav">
+<li class="nav-item"><a class="external-link nav-link" href="https://github.com/bioinfocz/scdrake" aria-label="GitHub"><span class="fa fab fa-github fa-lg"></span></a></li>
 
-      <ul class="navbar-nav">
-<li class="nav-item">
-  <a class="external-link nav-link" href="https://github.com/bioinfocz/scdrake" aria-label="github">
-    <span class="fab fa fab fa-github fa-lg"></span>
-     
-  </a>
-</li>
 
-        
         <li>
           <a class="external-link nav-link" id="css-toggle-btn" aria-label="github">
             <span class="fas fa fas fa-adjust fa-lg"></span>
           </a>
         </li>
-        
-        
-        
+
+
+
       </ul>
 </div>
 
-    
+
   </div>
 </nav><div class="container template-article">
 
@@ -149,12 +131,13 @@
 
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
-      <img src="" class="logo" alt=""><h1>scdrake config internals</h1>
+
+      <h1>scdrake config internals</h1>
             
             <h4 data-toc-skip class="date"><sup>Document generated:
-2024-09-27 15:32:41 UTC+0000</sup></h4>
+2025-08-26 19:25:45 UTC+0000</sup></h4>
       
-      <small class="dont-index">Source: <a href="https://github.com/bioinfocz/scdrake/blob/mastervignettes/scdrake_config.Rmd" class="external-link"><code>vignettes/scdrake_config.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/bioinfocz/scdrake/blob/master/vignettes/scdrake_config.Rmd" class="external-link"><code>vignettes/scdrake_config.Rmd</code></a></small>
       <div class="d-none name"><code>scdrake_config.Rmd</code></div>
     </div>
 
@@ -198,33 +181,33 @@ with local one (and the order does matter).</p>
 <p>Configs are merged recursively by parameter names. It is necessary to
 realize that YAML format are nested dictionaries (or named lists in the
 context of R). That is, this YAML</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Default config.</span></span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">FOO</span><span class="kw">:</span><span class="at"> </span><span class="dv">1</span></span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">BAR</span><span class="kw">:</span><span class="at"> </span><span class="st">"baz"</span></span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">FOO_LIST</span><span class="kw">:</span><span class="at"> </span><span class="kw">[</span><span class="dv">1</span><span class="kw">,</span><span class="at"> </span><span class="st">"hello"</span><span class="kw">]</span></span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="fu">FOO_NAMED_LIST</span><span class="kw">:</span></span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">FOO_2</span><span class="kw">:</span><span class="at"> </span><span class="dv">2</span></span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">BAR_2</span><span class="kw">:</span><span class="at"> </span><span class="st">"zab"</span></span></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="co"># Default config.</span></span>
+<span id="cb1-2"><a href="#cb1-2" tabindex="-1"></a><span class="fu">FOO</span><span class="kw">:</span><span class="at"> </span><span class="dv">1</span></span>
+<span id="cb1-3"><a href="#cb1-3" tabindex="-1"></a><span class="fu">BAR</span><span class="kw">:</span><span class="at"> </span><span class="st">"baz"</span></span>
+<span id="cb1-4"><a href="#cb1-4" tabindex="-1"></a><span class="fu">FOO_LIST</span><span class="kw">:</span><span class="at"> </span><span class="kw">[</span><span class="dv">1</span><span class="kw">,</span><span class="at"> </span><span class="st">"hello"</span><span class="kw">]</span></span>
+<span id="cb1-5"><a href="#cb1-5" tabindex="-1"></a><span class="fu">FOO_NAMED_LIST</span><span class="kw">:</span></span>
+<span id="cb1-6"><a href="#cb1-6" tabindex="-1"></a><span class="at">  </span><span class="fu">FOO_2</span><span class="kw">:</span><span class="at"> </span><span class="dv">2</span></span>
+<span id="cb1-7"><a href="#cb1-7" tabindex="-1"></a><span class="at">  </span><span class="fu">BAR_2</span><span class="kw">:</span><span class="at"> </span><span class="st">"zab"</span></span></code></pre></div>
 <p>is in R parsed to the list:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>FOO <span class="op">=</span> <span class="fl">1L</span>, BAR <span class="op">=</span> <span class="st">"baz"</span>, FOO_LIST <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="fl">1L</span>, <span class="st">"hello"</span><span class="op">)</span>, FOO_NAMED_LIST <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>FOO_2 <span class="op">=</span> <span class="fl">2L</span>, BAR_2 <span class="op">=</span> <span class="st">"zab"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p>So, for example, given that the YAML above is our default config, we
 want to merge it with the local config</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Local config.</span></span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="fu">BAR</span><span class="kw">:</span><span class="at"> </span><span class="st">"zab"</span></span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="fu">FOO_LIST</span><span class="kw">:</span><span class="at"> </span><span class="kw">[</span><span class="dv">4</span><span class="kw">,</span><span class="at"> </span><span class="dv">5</span><span class="kw">,</span><span class="at"> </span><span class="dv">6</span><span class="kw">]</span></span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="fu">FOO_NAMED_LIST</span><span class="kw">:</span></span>
-<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">FOO_2</span><span class="kw">:</span><span class="at"> </span><span class="dv">3</span></span>
-<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">BAR_3</span><span class="kw">:</span><span class="at"> </span><span class="dv">5</span></span></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a><span class="co"># Local config.</span></span>
+<span id="cb3-2"><a href="#cb3-2" tabindex="-1"></a><span class="fu">BAR</span><span class="kw">:</span><span class="at"> </span><span class="st">"zab"</span></span>
+<span id="cb3-3"><a href="#cb3-3" tabindex="-1"></a><span class="fu">FOO_LIST</span><span class="kw">:</span><span class="at"> </span><span class="kw">[</span><span class="dv">4</span><span class="kw">,</span><span class="at"> </span><span class="dv">5</span><span class="kw">,</span><span class="at"> </span><span class="dv">6</span><span class="kw">]</span></span>
+<span id="cb3-4"><a href="#cb3-4" tabindex="-1"></a><span class="fu">FOO_NAMED_LIST</span><span class="kw">:</span></span>
+<span id="cb3-5"><a href="#cb3-5" tabindex="-1"></a><span class="at">  </span><span class="fu">FOO_2</span><span class="kw">:</span><span class="at"> </span><span class="dv">3</span></span>
+<span id="cb3-6"><a href="#cb3-6" tabindex="-1"></a><span class="at">  </span><span class="fu">BAR_3</span><span class="kw">:</span><span class="at"> </span><span class="dv">5</span></span></code></pre></div>
 <p>resulting in</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Updated local config.</span></span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="fu">FOO</span><span class="kw">:</span><span class="at"> </span><span class="dv">1</span></span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="fu">BAR</span><span class="kw">:</span><span class="at"> </span><span class="st">"zab"</span></span>
-<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="fu">FOO_LIST</span><span class="kw">:</span><span class="at"> </span><span class="kw">[</span><span class="dv">4</span><span class="kw">,</span><span class="at"> </span><span class="dv">5</span><span class="kw">,</span><span class="at"> </span><span class="dv">6</span><span class="kw">]</span></span>
-<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="fu">FOO_NAMED_LIST</span><span class="kw">:</span></span>
-<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">FOO_2</span><span class="kw">:</span><span class="at"> </span><span class="dv">3</span></span>
-<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">BAR_2</span><span class="kw">:</span><span class="at"> </span><span class="st">"zab"</span></span>
-<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">BAR_3</span><span class="kw">:</span><span class="at"> </span><span class="dv">5</span></span></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a><span class="co"># Updated local config.</span></span>
+<span id="cb4-2"><a href="#cb4-2" tabindex="-1"></a><span class="fu">FOO</span><span class="kw">:</span><span class="at"> </span><span class="dv">1</span></span>
+<span id="cb4-3"><a href="#cb4-3" tabindex="-1"></a><span class="fu">BAR</span><span class="kw">:</span><span class="at"> </span><span class="st">"zab"</span></span>
+<span id="cb4-4"><a href="#cb4-4" tabindex="-1"></a><span class="fu">FOO_LIST</span><span class="kw">:</span><span class="at"> </span><span class="kw">[</span><span class="dv">4</span><span class="kw">,</span><span class="at"> </span><span class="dv">5</span><span class="kw">,</span><span class="at"> </span><span class="dv">6</span><span class="kw">]</span></span>
+<span id="cb4-5"><a href="#cb4-5" tabindex="-1"></a><span class="fu">FOO_NAMED_LIST</span><span class="kw">:</span></span>
+<span id="cb4-6"><a href="#cb4-6" tabindex="-1"></a><span class="at">  </span><span class="fu">FOO_2</span><span class="kw">:</span><span class="at"> </span><span class="dv">3</span></span>
+<span id="cb4-7"><a href="#cb4-7" tabindex="-1"></a><span class="at">  </span><span class="fu">BAR_2</span><span class="kw">:</span><span class="at"> </span><span class="st">"zab"</span></span>
+<span id="cb4-8"><a href="#cb4-8" tabindex="-1"></a><span class="at">  </span><span class="fu">BAR_3</span><span class="kw">:</span><span class="at"> </span><span class="dv">5</span></span></code></pre></div>
 <ul>
 <li>
 <code>FOO</code> is not updated.</li>
@@ -242,18 +225,18 @@ although it is not defined in the local config!</li>
 <p>To overcome the problem with <code>FOO_NAMED_LIST</code>, parameters
 with such structure are specified as a named list wrapped by an unnamed
 list:</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">FOO_NAMED_LIST</span><span class="kw">:</span></span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="kw">-</span><span class="at"> </span><span class="fu">FOO_2</span><span class="kw">:</span><span class="at"> </span><span class="dv">2</span></span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">BAR_2</span><span class="kw">:</span><span class="at"> </span><span class="st">"zab"</span></span></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a><span class="fu">FOO_NAMED_LIST</span><span class="kw">:</span></span>
+<span id="cb5-2"><a href="#cb5-2" tabindex="-1"></a><span class="at">  </span><span class="kw">-</span><span class="at"> </span><span class="fu">FOO_2</span><span class="kw">:</span><span class="at"> </span><span class="dv">2</span></span>
+<span id="cb5-3"><a href="#cb5-3" tabindex="-1"></a><span class="at">    </span><span class="fu">BAR_2</span><span class="kw">:</span><span class="at"> </span><span class="st">"zab"</span></span></code></pre></div>
 <p><strong>Note the beginning <code>-</code> creating the unnamed list
 and indentation of values of the named list.</strong> This YAML is
 parsed in R to</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>FOO_NAMED_LIST <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>FOO_2 <span class="op">=</span> <span class="fl">2L</span>, BAR_2 <span class="op">=</span> <span class="st">"zab"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p>If we modify the example of local config above to</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">FOO_NAMED_LIST</span><span class="kw">:</span></span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="kw">-</span><span class="at"> </span><span class="fu">FOO_2</span><span class="kw">:</span><span class="at"> </span><span class="dv">3</span></span>
-<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">BAR_3</span><span class="kw">:</span><span class="at"> </span><span class="dv">5</span></span></code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb7-1"><a href="#cb7-1" tabindex="-1"></a><span class="fu">FOO_NAMED_LIST</span><span class="kw">:</span></span>
+<span id="cb7-2"><a href="#cb7-2" tabindex="-1"></a><span class="at">  </span><span class="kw">-</span><span class="at"> </span><span class="fu">FOO_2</span><span class="kw">:</span><span class="at"> </span><span class="dv">3</span></span>
+<span id="cb7-3"><a href="#cb7-3" tabindex="-1"></a><span class="at">    </span><span class="fu">BAR_3</span><span class="kw">:</span><span class="at"> </span><span class="dv">5</span></span></code></pre></div>
 <p>then the whole <code>FOO_NAMED_LIST</code> parameter will be replaced
 during a config merge, and that is the desired behaviour.</p>
 </div>
@@ -271,17 +254,17 @@ more details.</p>
 </h2>
 <p>A special type of parameter starting with <code>!code</code> can be
 used to evaluate a value as R code:</p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">EXAMPLE</span><span class="kw">:</span><span class="at"> !code 1:3</span></span></code></pre></div>
+<div class="sourceCode" id="cb8"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb8-1"><a href="#cb8-1" tabindex="-1"></a><span class="fu">EXAMPLE</span><span class="kw">:</span><span class="at"> !code 1:3</span></span></code></pre></div>
 <p>First, non-code parameters are loaded to a separate environment and
 then code parameters are evaluated in the context of this environment.
 This means you can use other config parameters as R variables inside
 code parameters:</p>
-<div class="sourceCode" id="cb9"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">FOO</span><span class="kw">:</span><span class="at"> </span><span class="dv">1</span></span>
-<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="fu">BAR</span><span class="kw">:</span><span class="at"> !code FOO + 1</span></span></code></pre></div>
+<div class="sourceCode" id="cb9"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb9-1"><a href="#cb9-1" tabindex="-1"></a><span class="fu">FOO</span><span class="kw">:</span><span class="at"> </span><span class="dv">1</span></span>
+<span id="cb9-2"><a href="#cb9-2" tabindex="-1"></a><span class="fu">BAR</span><span class="kw">:</span><span class="at"> !code FOO + 1</span></span></code></pre></div>
 <p>In addition, in stage configs (e.g. <code>02_norm_clustering</code>)
 you can also use parameters (variables) from <code>pipeline.yaml</code>
 and <code>00_main.yaml</code> configs:</p>
-<div class="sourceCode" id="cb10"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">EXAMPLE</span><span class="kw">:</span><span class="at"> !code glue("{PROJECT_NAME}_{INSTITUTE}")</span></span></code></pre></div>
+<div class="sourceCode" id="cb10"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb10-1"><a href="#cb10-1" tabindex="-1"></a><span class="fu">EXAMPLE</span><span class="kw">:</span><span class="at"> !code glue("{PROJECT_NAME}_{INSTITUTE}")</span></span></code></pre></div>
 <p>See <code><a href="../reference/load_config.html">?load_config</a></code> for more details.</p>
 </div>
 <div class="section level2">
@@ -317,20 +300,23 @@ results.</p>
 modified <code><a href="https://rdrr.io/r/base/list.html" class="external-link">list()</a></code> called <code><a href="../reference/scdrake_list.html">scdrake_list()</a></code> which is
 using strict extracting operators. It behaves like a normal list:</p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">cfg</span> <span class="op">&lt;-</span> <span class="fu">scdrake</span><span class="fu">::</span><span class="fu"><a href="../reference/scdrake_list.html">scdrake_list</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>var_1 <span class="op">=</span> <span class="fl">1</span>, var_2 <span class="op">=</span> <span class="fl">2</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="va">cfg</span><span class="op">$</span><span class="va">var_1</span></span></code></pre></div>
-<pre><code><span><span class="co">## [1] 1</span></span></code></pre>
+<code class="sourceCode R"><span><span class="va">cfg</span> <span class="op">&lt;-</span> <span class="fu">scdrake</span><span class="fu">::</span><span class="fu"><a href="../reference/scdrake_list.html">scdrake_list</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>var_1 <span class="op">=</span> <span class="fl">1</span>, var_2 <span class="op">=</span> <span class="fl">2</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">## Warning: replacing previous import 'S4Arrays::makeNindexFromArrayViewport' by</span></span>
+<span><span class="co">## 'DelayedArray::makeNindexFromArrayViewport' when loading 'SummarizedExperiment'</span></span></code></pre>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">cfg</span><span class="op">$</span><span class="va">var_1</span></span></code></pre></div>
+<pre><code><span><span class="co">## [1] 1</span></span></code></pre>
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">cfg</span><span class="op">[[</span><span class="st">"var_2"</span><span class="op">]</span><span class="op">]</span></span></code></pre></div>
 <pre><code><span><span class="co">## [1] 2</span></span></code></pre>
-<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">cfg</span><span class="op">[</span><span class="st">"var_1"</span><span class="op">]</span></span></code></pre></div>
 <pre><code><span><span class="co">## $var_1</span></span>
 <span><span class="co">## [1] 1</span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## attr(,"class")</span></span>
 <span><span class="co">## [1] "scdrake_list" "list"</span></span></code></pre>
-<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">cfg</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"var_1"</span>, <span class="st">"var_2"</span><span class="op">)</span><span class="op">]</span></span></code></pre></div>
 <pre><code><span><span class="co">## $var_1</span></span>
 <span><span class="co">## [1] 1</span></span>
@@ -341,21 +327,21 @@ using strict extracting operators. It behaves like a normal list:</p>
 <span><span class="co">## attr(,"class")</span></span>
 <span><span class="co">## [1] "scdrake_list" "list"</span></span></code></pre>
 <p>But extracting non-existing elements throws error:</p>
-<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">cfg</span><span class="op">$</span><span class="va">var_3</span></span></code></pre></div>
 <pre><code><span><span class="co">## Error: Variable <span style="color: #00BB00;">var_3</span> not found in `cfg`</span></span></code></pre>
-<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">cfg</span><span class="op">[[</span><span class="st">"var_3"</span><span class="op">]</span><span class="op">]</span></span></code></pre></div>
 <pre><code><span><span class="co">## Error: Variable <span style="color: #00BB00;">var_3</span> not found in `cfg`</span></span></code></pre>
-<div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">cfg</span><span class="op">[</span><span class="st">"var_3"</span><span class="op">]</span></span></code></pre></div>
 <pre><code><span><span class="co">## Error: Variable <span style="color: #00BB00;">var_3</span> not found in `cfg`</span></span></code></pre>
 <p>For <code>[</code> and <code>[[</code>, this control can be turned
 off by <code>check = FALSE</code> parameter:</p>
-<div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb27"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">cfg</span><span class="op">[[</span><span class="st">"var_3"</span>, check <span class="op">=</span> <span class="cn">FALSE</span><span class="op">]</span><span class="op">]</span></span></code></pre></div>
 <pre><code><span><span class="co">## NULL</span></span></code></pre>
-<div class="sourceCode" id="cb27"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb29"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">cfg</span><span class="op">[</span><span class="st">"var_3"</span>, check <span class="op">=</span> <span class="cn">FALSE</span><span class="op">]</span></span></code></pre></div>
 <pre><code><span><span class="co">## $var_3</span></span>
 <span><span class="co">## NULL</span></span>
@@ -366,7 +352,7 @@ off by <code>check = FALSE</code> parameter:</p>
 valid named list, unlike the normal list, which sets
 <code>NA_character_</code> as names of the non-existing elements.</p>
 </div>
-  </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
+  </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside>
 </div>
 
@@ -379,16 +365,16 @@ valid named list, unlike the normal list, which sets
 
 <div class="pkgdown">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.3.</p>
   <p class="preferably">Using <a href="https://preferably.amirmasoudabdol.name/?source=footer" class="external-link">preferably</a> template.</p>
 </div>
 
     </footer>
 </div>
 
-  
 
-  
+
+
 
   </body>
 </html>

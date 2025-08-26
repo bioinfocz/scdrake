@@ -21,8 +21,10 @@
   }
 </script><title>Input and quality control stage (`01_input_qc`) • scdrake</title>
 <script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<link href="../deps/bootstrap-5.1.3/bootstrap.min.css" rel="stylesheet">
-<script src="../deps/bootstrap-5.1.3/bootstrap.bundle.min.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
+<link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
+<script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
+<link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
+<script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
 <!-- bootstrap-toc --><script src="https://cdn.rawgit.com/afeld/bootstrap-toc/v1.0.1/dist/bootstrap-toc.min.js"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- search --><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Input and quality control stage (`01_input_qc`)">
 <meta property="og:description" content="01_input_qc stage of the single-sample pipeline.">
@@ -44,103 +46,83 @@
 </head>
 <body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
-    
+
 
     <nav class="navbar fixed-top navbar-dark navbar-expand-lg bg-primary"><div class="container">
-    
+
     <a class="navbar-brand me-2" href="../index.html">scdrake</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.6.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.7.0</small>
 
-    
+
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
 
     <div id="navbar" class="collapse navbar-collapse ms-2">
       <ul class="navbar-nav me-auto">
-<li class="nav-item">
-  <a class="nav-link" href="../articles/scdrake.html">Get started</a>
-</li>
-<li class="nav-item">
-  <a class="nav-link" href="../articles/scdrake_integration.html">Integration pipeline guide</a>
-</li>
-<li class="nav-item">
-  <a class="nav-link" href="../articles/pipeline_overview.html">Pipeline overview</a>
-</li>
-<li class="nav-item">
-  <a class="nav-link" href="../articles/scdrake_spatial.html">Spatial extension</a>
-</li>
-<li class="nav-item">
-  <a class="nav-link" href="../articles/scdrake_faq.html">FAQ &amp; Howtos</a>
-</li>
+<li class="nav-item"><a class="nav-link" href="../articles/scdrake.html">Get started</a></li>
+<li class="nav-item"><a class="nav-link" href="../articles/scdrake_integration.html">Integration pipeline guide</a></li>
+<li class="nav-item"><a class="nav-link" href="../articles/pipeline_overview.html">Pipeline overview</a></li>
+<li class="nav-item"><a class="nav-link" href="../articles/scdrake_spatial.html">Spatial extension</a></li>
+<li class="nav-item"><a class="nav-link" href="../articles/scdrake_faq.html">FAQ &amp; Howtos</a></li>
 <li class="active nav-item dropdown">
-  <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
-  <div class="dropdown-menu" aria-labelledby="dropdown-articles">
-    <h6 class="dropdown-header" data-toc-skip>Guides</h6>
-    <a class="dropdown-item" href="../articles/scdrake_docker.html">Using the Docker image</a>
-    <a class="dropdown-item" href="../articles/scdrake_integration.html">02 Integration pipeline guide</a>
-    <a class="dropdown-item" href="../articles/scdrake_advanced.html">Advanced topics</a>
-    <a class="dropdown-item" href="../articles/scdrake_extend.html">Extending the pipeline</a>
-    <a class="dropdown-item" href="../articles/drake_basics.html">drake basics</a>
-    <div class="dropdown-divider"></div>
-    <h6 class="dropdown-header" data-toc-skip>General information</h6>
-    <a class="dropdown-item" href="../articles/pipeline_overview.html">Pipeline overview</a>
-    <a class="dropdown-item" href="../articles/scdrake_faq.html">FAQ &amp; Howtos</a>
-    <a class="dropdown-item" href="../articles/scdrake_cli.html">Command line interface</a>
-    <a class="dropdown-item" href="../articles/scdrake_config.html">scdrake config internals</a>
-    <a class="dropdown-item" href="../articles/scdrake_envvars.html">Environment variables</a>
-    <a class="dropdown-item" href="../articles/scdrake_spatial.html">Spatial extension</a>
-    <div class="dropdown-divider"></div>
-    <h6 class="dropdown-header" data-toc-skip>General configs</h6>
-    <a class="dropdown-item" href="../articles/config_pipeline.html">Pipeline config</a>
-    <a class="dropdown-item" href="../articles/config_main.html">Main config</a>
-    <div class="dropdown-divider"></div>
-    <h6 class="dropdown-header" data-toc-skip>Single-sample pipeline stages</h6>
-    <a class="dropdown-item" href="../articles/stage_input_qc.html">Input and quality control stage (`01_input_qc`)</a>
-    <a class="dropdown-item" href="../articles/stage_norm_clustering.html">Normalization and clustering stage (`02_norm_clustering`)</a>
-    <div class="dropdown-divider"></div>
-    <h6 class="dropdown-header" data-toc-skip>Integration pipeline stages</h6>
-    <a class="dropdown-item" href="../articles/stage_integration.html">Integration stage (`01_integration`)</a>
-    <a class="dropdown-item" href="../articles/stage_int_clustering.html">Post-integration clustering stage (`02_int_clustering`)</a>
-    <div class="dropdown-divider"></div>
-    <h6 class="dropdown-header" data-toc-skip>Common stages</h6>
-    <a class="dropdown-item" href="../articles/stage_cluster_markers.html">Cluster markers stage (`cluster_markers`)</a>
-    <a class="dropdown-item" href="../articles/stage_contrasts.html">Contrasts stage (`contrasts`)</a>
-  </div>
+  <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
+  <ul class="dropdown-menu" aria-labelledby="dropdown-articles">
+<li><hr class="dropdown-divider"></li>
+    <li><h6 class="dropdown-header" data-toc-skip>Guides</h6></li>
+    <li><a class="dropdown-item" href="../articles/scdrake_docker.html">Using the Docker image</a></li>
+    <li><a class="dropdown-item" href="../articles/scdrake_integration.html">02 Integration pipeline guide</a></li>
+    <li><a class="dropdown-item" href="../articles/scdrake_advanced.html">Advanced topics</a></li>
+    <li><a class="dropdown-item" href="../articles/interaction_analysis.html">Interaction analysis</a></li>
+    <li><a class="dropdown-item" href="../articles/scdrake_extend.html">Extending the pipeline</a></li>
+    <li><a class="dropdown-item" href="../articles/scdrake_development.html">Developing scdrake</a></li>
+    <li><a class="dropdown-item" href="../articles/drake_basics.html">drake basics</a></li>
+    <li><hr class="dropdown-divider"></li>
+    <li><h6 class="dropdown-header" data-toc-skip>General information</h6></li>
+    <li><a class="dropdown-item" href="../articles/pipeline_overview.html">Pipeline overview</a></li>
+    <li><a class="dropdown-item" href="../articles/scdrake_faq.html">FAQ &amp; Howtos</a></li>
+    <li><a class="dropdown-item" href="../articles/scdrake_cli.html">Command line interface</a></li>
+    <li><a class="dropdown-item" href="../articles/scdrake_config.html">scdrake config internals</a></li>
+    <li><a class="dropdown-item" href="../articles/scdrake_envvars.html">Environment variables</a></li>
+    <li><a class="dropdown-item" href="../articles/scdrake_spatial.html">Spatial extension</a></li>
+    <li><hr class="dropdown-divider"></li>
+    <li><h6 class="dropdown-header" data-toc-skip>General configs</h6></li>
+    <li><a class="dropdown-item" href="../articles/config_pipeline.html">Pipeline config</a></li>
+    <li><a class="dropdown-item" href="../articles/config_main.html">Main config</a></li>
+    <li><hr class="dropdown-divider"></li>
+    <li><h6 class="dropdown-header" data-toc-skip>Single-sample pipeline stages</h6></li>
+    <li><a class="dropdown-item" href="../articles/stage_input_qc.html">Input and quality control stage (`01_input_qc`)</a></li>
+    <li><a class="dropdown-item" href="../articles/stage_norm_clustering.html">Normalization and clustering stage (`02_norm_clustering`)</a></li>
+    <li><hr class="dropdown-divider"></li>
+    <li><h6 class="dropdown-header" data-toc-skip>Integration pipeline stages</h6></li>
+    <li><a class="dropdown-item" href="../articles/stage_integration.html">Integration stage (`01_integration`)</a></li>
+    <li><a class="dropdown-item" href="../articles/stage_int_clustering.html">Post-integration clustering stage (`02_int_clustering`)</a></li>
+    <li><hr class="dropdown-divider"></li>
+    <li><h6 class="dropdown-header" data-toc-skip>Common stages</h6></li>
+    <li><a class="dropdown-item" href="../articles/stage_cluster_markers.html">Cluster markers stage (`cluster_markers`)</a></li>
+    <li><a class="dropdown-item" href="../articles/stage_contrasts.html">Contrasts stage (`contrasts`)</a></li>
+  </ul>
 </li>
-<li class="nav-item">
-  <a class="nav-link" href="../reference/index.html">Reference</a>
-</li>
-<li class="nav-item">
-  <a class="nav-link" href="../news/index.html">Changelog</a>
-</li>
+<li class="nav-item"><a class="nav-link" href="../reference/index.html">Reference</a></li>
+<li class="nav-item"><a class="nav-link" href="../news/index.html">Changelog</a></li>
       </ul>
-<form class="form-inline my-2 my-lg-0" role="search">
-        <input type="search" class="form-control me-sm-2" aria-label="Toggle navigation" name="search-input" data-search-index="../search.json" id="search-input" placeholder="Search for" autocomplete="off">
-</form>
+<ul class="navbar-nav">
+<li class="nav-item"><a class="external-link nav-link" href="https://github.com/bioinfocz/scdrake" aria-label="GitHub"><span class="fa fab fa-github fa-lg"></span></a></li>
 
-      <ul class="navbar-nav">
-<li class="nav-item">
-  <a class="external-link nav-link" href="https://github.com/bioinfocz/scdrake" aria-label="github">
-    <span class="fab fa fab fa-github fa-lg"></span>
-     
-  </a>
-</li>
 
-        
         <li>
           <a class="external-link nav-link" id="css-toggle-btn" aria-label="github">
             <span class="fas fa fas fa-adjust fa-lg"></span>
           </a>
         </li>
-        
-        
-        
+
+
+
       </ul>
 </div>
 
-    
+
   </div>
 </nav><div class="container template-article">
 
@@ -149,12 +131,13 @@
 
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
-      <img src="" class="logo" alt=""><h1>Input and quality control stage (`01_input_qc`)</h1>
+
+      <h1>Input and quality control stage (`01_input_qc`)</h1>
             
             <h4 data-toc-skip class="date"><sup>Document generated:
-2024-09-27 15:33:08 UTC+0000</sup></h4>
+2025-08-26 19:26:37 UTC+0000</sup></h4>
       
-      <small class="dont-index">Source: <a href="https://github.com/bioinfocz/scdrake/blob/mastervignettes/stage_input_qc.Rmd" class="external-link"><code>vignettes/stage_input_qc.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/bioinfocz/scdrake/blob/master/vignettes/stage_input_qc.Rmd" class="external-link"><code>vignettes/stage_input_qc.Rmd</code></a></small>
       <div class="d-none name"><code>stage_input_qc.Rmd</code></div>
     </div>
 
@@ -192,7 +175,9 @@ config</a>)</p>
 <li>
 <code>cellranger</code> output</li>
 <li>
-<code>SingleCellExperiment</code> object as a Rds file or as a
+<code>spaceranger</code> output</li>
+<li>
+<code>SingleCellExperiment</code> (SCE) object as a Rds file or as a
 target from an existing <a href="https://docs.ropensci.org/drake" class="external-link">drake</a> cache (i.e. from a
 different <a href="https://github.com/bioinfocz/scdrake" class="external-link">scdrake</a> project)</li>
 <li>Delimited table</li>
@@ -208,8 +193,8 @@ droplets</a> (<code><a href="https://rdrr.io/pkg/DropletUtils/man/emptyDrops.htm
 <ul>
 <li>Number of UMI</li>
 <li>Number of detected genes (non-zero UMI count)</li>
-<li>Percentage of expressed mitochondrial genes (<span class="math inline">\(\frac {UMI_{mitochondrial}} {UMI_{sum}} *
-100\)</span>)</li>
+<li>Percentage of expressed mitochondrial genes
+(<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mfrac><mrow><mi>U</mi><mi>M</mi><msub><mi>I</mi><mrow><mi>m</mi><mi>i</mi><mi>t</mi><mi>o</mi><mi>c</mi><mi>h</mi><mi>o</mi><mi>n</mi><mi>d</mi><mi>r</mi><mi>i</mi><mi>a</mi><mi>l</mi></mrow></msub></mrow><mrow><mi>U</mi><mi>M</mi><msub><mi>I</mi><mrow><mi>s</mi><mi>u</mi><mi>m</mi></mrow></msub></mrow></mfrac><mo>*</mo><mn>100</mn></mrow><annotation encoding="application/x-tex">\frac {UMI_{mitochondrial}} {UMI_{sum}} * 100</annotation></semantics></math>)</li>
 </ul>
 </li>
 <li>Two methods for cell filtering (optional):
@@ -234,6 +219,7 @@ Y ratio of cells.</li>
 </li>
 <li>Plots of QC metrics with visualization of differences between
 dataset-sensitive and custom filtering</li>
+<li>Identification and labeling of tissue artifact spots</li>
 <li>Preparation of gene annotation</li>
 <li>Final selection of either dataset-sensitive or custom filtered
 dataset. This selection is upon the user.</li>
@@ -252,11 +238,11 @@ option is used as the default argument value in several
 <div class="section level4">
 <h4 id="input-files">Input files<a class="anchor" aria-label="anchor" href="#input-files"></a>
 </h4>
-<div class="sourceCode" id="cb1"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">INPUT_DATA</span><span class="kw">:</span></span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">type</span><span class="kw">:</span><span class="at"> </span><span class="st">"cellranger"</span></span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">path</span><span class="kw">:</span><span class="at"> </span><span class="st">"/path/to/dir"</span></span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">delimiter</span><span class="kw">:</span><span class="at"> </span><span class="st">","</span></span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">target_name</span><span class="kw">:</span><span class="at"> </span><span class="st">"target_name"</span></span></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="fu">INPUT_DATA</span><span class="kw">:</span></span>
+<span id="cb1-2"><a href="#cb1-2" tabindex="-1"></a><span class="at">  </span><span class="fu">type</span><span class="kw">:</span><span class="at"> </span><span class="st">"cellranger"</span></span>
+<span id="cb1-3"><a href="#cb1-3" tabindex="-1"></a><span class="at">  </span><span class="fu">path</span><span class="kw">:</span><span class="at"> </span><span class="st">"/path/to/dir"</span></span>
+<span id="cb1-4"><a href="#cb1-4" tabindex="-1"></a><span class="at">  </span><span class="fu">delimiter</span><span class="kw">:</span><span class="at"> </span><span class="st">","</span></span>
+<span id="cb1-5"><a href="#cb1-5" tabindex="-1"></a><span class="at">  </span><span class="fu">target_name</span><span class="kw">:</span><span class="at"> </span><span class="st">"target_name"</span></span></code></pre></div>
 <p><strong>Type:</strong> list of named character scalars</p>
 <p>This parameter is specifying input data type and path. There are four
 possible types of input data:</p>
@@ -274,6 +260,12 @@ extension). Internally, BC matrix is imported via
 functions.</li>
 </ul>
 </li>
+<li><p><code>type: "spaceranger"</code>: an output from <a href="https://www.10xgenomics.com/support/software/space-ranger/latest" class="external-link">spaceranger</a>,
+files of a raw feature-barcode matrix - <code>barcodes.tsv</code>,
+<code>features.tsv</code>, and <code>matrix.mtx</code> (can be also
+gzipped having a <code>.gz</code> extension), and directory spatial
+containing outputs that capture the spatiality of the data. This option
+result in creating SpatialExperiment object (SPE)</p></li>
 <li><p><code>type: "table"</code>: a delimited file (table) representing
 a feature-barcode matrix, with an additional column named
 <code>ENSEMBL</code> containing Ensembl IDs of features (rows).</p></li>
@@ -286,7 +278,7 @@ slot of <code>assays</code> (such that this BC matrix can be retrieved
 by <code>counts(sce)</code>).</p>
 <ul>
 <li>Additionaly, you can include whatever you want in
-<code>colData()</code> and use it later (e.g. cell grouping/clusters to
+<code><a href="https://rdrr.io/pkg/SummarizedExperiment/man/SummarizedExperiment-class.html" class="external-link">colData()</a></code> and use it later (e.g. cell grouping/clusters to
 compute markers or to include batch effect during that).</li>
 </ul>
 </li>
@@ -301,6 +293,12 @@ directory (can be relative to project root directory).</p>
 containing the <code>barcodes.tsv</code>, <code>features.tsv</code>, and
 <code>matrix.mtx</code> files (can be also gzipped having a
 <code>.gz</code> extension)</li>
+<li>For <code>type: "spaceranger"</code>, this is a path to directory
+containing the <code>barcodes.tsv</code>, <code>features.tsv</code>, and
+<code>matrix.mtx</code> files (can be also gzipped having a
+<code>.gz</code> extension) and spatial directory with spaceranger
+spatial output (<code>tissue_lowres_image.png</code>,
+<code>tissue_positions_list.csv</code>)</li>
 <li>For <code>type: "sce_drake_cache"</code>, a path to
 <code>drake</code> cache directory (usually named as
 <code>".drake"</code>)</li>
@@ -317,7 +315,7 @@ table.</p></li>
 e.g. <code>"sce_final_input_qc"</code></p></li>
 </ul>
 <hr>
-<div class="sourceCode" id="cb2"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">INPUT_QC_REPORT_RMD_FILE</span><span class="kw">:</span><span class="at"> </span><span class="st">"Rmd/single_sample/01_input_qc.Rmd"</span></span></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a><span class="fu">INPUT_QC_REPORT_RMD_FILE</span><span class="kw">:</span><span class="at"> </span><span class="st">"Rmd/single_sample/01_input_qc.Rmd"</span></span></code></pre></div>
 <p><strong>Type:</strong> character scalar</p>
 <p>A path to RMarkdown file used for HTML report of this pipeline stage.
 For spatial extension, the default RMarkdown file is
@@ -327,15 +325,15 @@ For spatial extension, the default RMarkdown file is
 <div class="section level4">
 <h4 id="subsetting-of-imported-data">Subsetting of imported data<a class="anchor" aria-label="anchor" href="#subsetting-of-imported-data"></a>
 </h4>
-<div class="sourceCode" id="cb3"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">INPUT_DATA_SUBSET</span><span class="kw">:</span><span class="at"> </span><span class="ch">null</span></span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="co">## Example of simple subsetting by cluster numbers</span></span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="fu">INPUT_DATA_SUBSET</span><span class="kw">:</span></span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">subset_by</span><span class="kw">:</span><span class="at"> </span><span class="st">"cluster_kmeans_k6"</span></span>
-<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">values</span><span class="kw">:</span><span class="at"> </span><span class="kw">[</span><span class="st">"3"</span><span class="kw">,</span><span class="at"> </span><span class="st">"4"</span><span class="kw">]</span></span>
-<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">negate</span><span class="kw">:</span><span class="at"> </span><span class="ch">false</span></span></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a><span class="fu">INPUT_DATA_SUBSET</span><span class="kw">:</span><span class="at"> </span><span class="ch">null</span></span>
+<span id="cb3-2"><a href="#cb3-2" tabindex="-1"></a><span class="co">## Example of simple subsetting by cluster numbers</span></span>
+<span id="cb3-3"><a href="#cb3-3" tabindex="-1"></a><span class="fu">INPUT_DATA_SUBSET</span><span class="kw">:</span></span>
+<span id="cb3-4"><a href="#cb3-4" tabindex="-1"></a><span class="at">  </span><span class="fu">subset_by</span><span class="kw">:</span><span class="at"> </span><span class="st">"cluster_kmeans_k6"</span></span>
+<span id="cb3-5"><a href="#cb3-5" tabindex="-1"></a><span class="at">  </span><span class="fu">values</span><span class="kw">:</span><span class="at"> </span><span class="kw">[</span><span class="st">"3"</span><span class="kw">,</span><span class="at"> </span><span class="st">"4"</span><span class="kw">]</span></span>
+<span id="cb3-6"><a href="#cb3-6" tabindex="-1"></a><span class="at">  </span><span class="fu">negate</span><span class="kw">:</span><span class="at"> </span><span class="ch">false</span></span></code></pre></div>
 <p><strong>Type:</strong> <code>null</code> (default) or named list</p>
 <p>The imported data can be subsetted by a simple selection of values
-present in a column of cell metadata (<code>colData()</code>). In the
+present in a column of cell metadata (<code><a href="https://rdrr.io/pkg/SummarizedExperiment/man/SummarizedExperiment-class.html" class="external-link">colData()</a></code>). In the
 example above, cells assigned to clusters <code>"3"</code> and
 <code>"4"</code> of the <code>cluster_kmeans_k6</code> columns will be
 kept. You can also negate the selection by specifying
@@ -343,21 +341,21 @@ kept. You can also negate the selection by specifying
 <hr>
 </div>
 <div class="section level4">
-<h4 id="spatial-extension">Spatial extension<a class="anchor" aria-label="anchor" href="#spatial-extension"></a>
+<h4 id="spatial-experiment">Spatial experiment<a class="anchor" aria-label="anchor" href="#spatial-experiment"></a>
 </h4>
-<div class="sourceCode" id="cb4"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">SPATIAL</span><span class="kw">:</span><span class="at"> </span><span class="ch">False</span></span></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a><span class="fu">SPATIAL</span><span class="kw">:</span><span class="at"> </span><span class="ch">False</span></span></code></pre></div>
 <p><strong>Type:</strong> logical scalar</p>
 <p>If <code>True</code>, pipeline enables spatial extension.</p>
-<p>In the input_qc stage, the spatial extension consists only in
-enabling pseudo tissue visualization, and in adding coordinates
-(array_col and array_row from tissue_positions.csv) to the Cell
-Metadata.</p>
-<hr>
-<div class="sourceCode" id="cb5"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">SPATIAL_LOCKS</span><span class="kw">:</span><span class="at"> </span><span class="ch">Null</span></span></code></pre></div>
-<p><strong>Type:</strong> Null or character scalar</p>
-<p>A path to tissue_position.csv from SpaceRanger spatial output folder
-used for adding coordinates (array_col and array_row) to Cell Metadata.
-Only void when SPATIAL is enabled.</p>
+<p>In the input_qc stage, the spatial extension generates spatial
+quality control reports and estimates the probability of tissue
+artifacts using <code><a href="https://rdrr.io/pkg/SpotSweeper/man/findArtifacts.html" class="external-link">SpotSweeper::findArtifacts()</a></code>.</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a><span class="fu">ARTIFACT</span><span class="kw">:</span><span class="at"> </span><span class="ch">False</span></span></code></pre></div>
+<p><strong>Type:</strong> logical scalar</p>
+<p>If <code>True</code>, pipeline enables removal of detected
+artifact.</p>
+<p>We recommend running the pipeline once without artifact removal
+first, if no tissue artifact is detected, the function will randomly
+label half of the spots and remove them.</p>
 <hr>
 </div>
 <div class="section level4">
@@ -365,7 +363,7 @@ Only void when SPATIAL is enabled.</p>
 </h4>
 <p>See <code><a href="https://rdrr.io/pkg/DropletUtils/man/emptyDrops.html" class="external-link">?DropletUtils::emptyDrops</a></code> for more details.</p>
 <hr>
-<div class="sourceCode" id="cb6"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">EMPTY_DROPLETS_ENABLED</span><span class="kw">:</span><span class="at"> </span><span class="ch">True</span></span></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a><span class="fu">EMPTY_DROPLETS_ENABLED</span><span class="kw">:</span><span class="at"> </span><span class="ch">True</span></span></code></pre></div>
 <p><strong>Type:</strong> logical scalar</p>
 <p>If <code>False</code>, skip calculation and removal of empty
 droplets.</p>
@@ -376,12 +374,12 @@ Otherwise <code><a href="https://rdrr.io/pkg/DropletUtils/man/emptyDrops.html" c
 not enough empty droplets having the total UMI count &lt;
 <code>EMPTY_DROPLETS_LOWER</code> (100 by default).</p>
 <hr>
-<div class="sourceCode" id="cb7"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">EMPTY_DROPLETS_LOWER</span><span class="kw">:</span><span class="at"> </span><span class="dv">100</span></span></code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb7-1"><a href="#cb7-1" tabindex="-1"></a><span class="fu">EMPTY_DROPLETS_LOWER</span><span class="kw">:</span><span class="at"> </span><span class="dv">100</span></span></code></pre></div>
 <p><strong>Type:</strong> positive integer scalar</p>
 <p>A lower bound on the total UMI count at or below which all barcodes
 are assumed to correspond to empty droplets.</p>
 <hr>
-<div class="sourceCode" id="cb8"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">EMPTY_DROPLETS_FDR_THRESHOLD</span><span class="kw">:</span><span class="at"> </span><span class="fl">0.01</span></span></code></pre></div>
+<div class="sourceCode" id="cb8"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb8-1"><a href="#cb8-1" tabindex="-1"></a><span class="fu">EMPTY_DROPLETS_FDR_THRESHOLD</span><span class="kw">:</span><span class="at"> </span><span class="fl">0.01</span></span></code></pre></div>
 <p><strong>Type:</strong> numeric scalar &lt;0; 1&gt;</p>
 <p>A threshold for FDR adjusted p-values for null hypothesis that
 barcode comes from ambient environment. In other words, probability that
@@ -401,7 +399,7 @@ well for a low-quality or special dataset with rare cell types. The <a href="htt
 control</a> chapter in OSCA gives an excellent background to the QC of
 scRNA-seq data.</p>
 <hr>
-<div class="sourceCode" id="cb9"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ENABLE_CELL_FILTERING</span><span class="kw">:</span><span class="at"> </span><span class="ch">True</span></span></code></pre></div>
+<div class="sourceCode" id="cb9"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb9-1"><a href="#cb9-1" tabindex="-1"></a><span class="fu">ENABLE_CELL_FILTERING</span><span class="kw">:</span><span class="at"> </span><span class="ch">True</span></span></code></pre></div>
 <p><strong>Type:</strong> logical scalar</p>
 <p>If <code>False</code>, both types of cell filtering will be
 disabled.</p>
@@ -413,7 +411,7 @@ such that every cell will pass the filtering
 both filtered SCE targets will be identical. All QC metrics and plots
 will still be calculated and created.</p>
 <hr>
-<div class="sourceCode" id="cb10"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">SAVE_DATASET_SENSITIVE_FILTERING</span><span class="kw">:</span><span class="at"> </span><span class="ch">True</span></span></code></pre></div>
+<div class="sourceCode" id="cb10"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb10-1"><a href="#cb10-1" tabindex="-1"></a><span class="fu">SAVE_DATASET_SENSITIVE_FILTERING</span><span class="kw">:</span><span class="at"> </span><span class="ch">True</span></span></code></pre></div>
 <p><strong>Type:</strong> logical scalar</p>
 <p>If <code>True</code>, proceed to other stages with dataset filtered
 by dataset-sensitive filtering (target
@@ -424,15 +422,16 @@ that the selected SCE target will be referred to as
 <div class="section level5">
 <h5 id="dataset-sensitive-cell-filtering">Dataset-sensitive cell filtering<a class="anchor" aria-label="anchor" href="#dataset-sensitive-cell-filtering"></a>
 </h5>
-<div class="sourceCode" id="cb11"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">MAD_THRESHOLD</span><span class="kw">:</span><span class="at"> </span><span class="dv">3</span></span></code></pre></div>
+<div class="sourceCode" id="cb11"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb11-1"><a href="#cb11-1" tabindex="-1"></a><span class="fu">MAD_THRESHOLD</span><span class="kw">:</span><span class="at"> </span><span class="dv">3</span></span></code></pre></div>
 <p><strong>Type:</strong> positive numeric scalar</p>
 <p>A threshold for maximum MAD (median absolute deviation) for QC cell
 metrics:</p>
 <ul>
 <li>Number of UMI (lower tail).</li>
 <li>Number of detected genes = non-zero UMI count (lower tail).</li>
-<li>Percentage of expressed mitochondrial genes = <span class="math inline">\(\frac {UMI_{mitochondrial}} {UMI_{sum}} *
-100\)</span> (upper tail).</li>
+<li>Percentage of expressed mitochondrial genes =
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mfrac><mrow><mi>U</mi><mi>M</mi><msub><mi>I</mi><mrow><mi>m</mi><mi>i</mi><mi>t</mi><mi>o</mi><mi>c</mi><mi>h</mi><mi>o</mi><mi>n</mi><mi>d</mi><mi>r</mi><mi>i</mi><mi>a</mi><mi>l</mi></mrow></msub></mrow><mrow><mi>U</mi><mi>M</mi><msub><mi>I</mi><mrow><mi>s</mi><mi>u</mi><mi>m</mi></mrow></msub></mrow></mfrac><mo>*</mo><mn>100</mn></mrow><annotation encoding="application/x-tex">\frac {UMI_{mitochondrial}} {UMI_{sum}} * 100</annotation></semantics></math>
+(upper tail).</li>
 </ul>
 <p>MAD threshold of 3 will retain 99% of non-outlier values that follow
 a normal distribution.</p>
@@ -445,7 +444,7 @@ cell.</p>
 <code>MAD_THRESHOLD: .inf</code>. That will force passing of each cell
 as every QC metric will be always lower than positive infinity MAD.</p>
 <hr>
-<div class="sourceCode" id="cb12"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">DATASET_SENSITIVE_FILTERS_OPERATOR</span><span class="kw">:</span><span class="at"> </span><span class="st">"&amp;"</span></span></code></pre></div>
+<div class="sourceCode" id="cb12"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb12-1"><a href="#cb12-1" tabindex="-1"></a><span class="fu">DATASET_SENSITIVE_FILTERS_OPERATOR</span><span class="kw">:</span><span class="at"> </span><span class="st">"&amp;"</span></span></code></pre></div>
 <p><strong>Type:</strong> a character scalar
 (<code>"&amp;" | "|"</code>)</p>
 <p>How to join the QC filters:</p>
@@ -459,33 +458,33 @@ cells that violate <strong>AT LEAST ONE</strong> filter (strict)</li>
 <div class="section level5">
 <h5 id="custom-cell-filtering">Custom cell filtering<a class="anchor" aria-label="anchor" href="#custom-cell-filtering"></a>
 </h5>
-<div class="sourceCode" id="cb13"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">MIN_UMI_CF</span><span class="kw">:</span><span class="at"> </span><span class="dv">1000</span></span></code></pre></div>
+<div class="sourceCode" id="cb13"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb13-1"><a href="#cb13-1" tabindex="-1"></a><span class="fu">MIN_UMI_CF</span><span class="kw">:</span><span class="at"> </span><span class="dv">1000</span></span></code></pre></div>
 <p><strong>Type:</strong> positive integer scalar</p>
 <p>A threshold for minimum number of UMI per cell, i.e. cells with UMI
 less than <code>MIN_UMI_CF</code> will be removed.</p>
 <p>To disable this filter, set <code>MIN_UMI_CF: -.inf</code></p>
 <hr>
-<div class="sourceCode" id="cb14"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">MAX_UMI_CF</span><span class="kw">:</span><span class="at"> </span><span class="dv">50000</span></span></code></pre></div>
+<div class="sourceCode" id="cb14"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb14-1"><a href="#cb14-1" tabindex="-1"></a><span class="fu">MAX_UMI_CF</span><span class="kw">:</span><span class="at"> </span><span class="dv">50000</span></span></code></pre></div>
 <p><strong>Type:</strong> positive integer scalar</p>
 <p>A threshold for maximum number of UMI per cell, i.e. cells with UMI
 greater than <code>MAX_UMI_CF</code> will be removed.</p>
 <p>To disable this filter, set <code>MAX_UMI_CF: .inf</code></p>
 <hr>
-<div class="sourceCode" id="cb15"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="fu">MIN_FEATURES</span><span class="kw">:</span><span class="at"> </span><span class="dv">1000</span></span></code></pre></div>
+<div class="sourceCode" id="cb15"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb15-1"><a href="#cb15-1" tabindex="-1"></a><span class="fu">MIN_FEATURES</span><span class="kw">:</span><span class="at"> </span><span class="dv">1000</span></span></code></pre></div>
 <p><strong>Type:</strong> positive integer scalar</p>
 <p>A threshold for minimum number of features (genes) detected per cell,
 i.e. cells with detected features less than <code>MIN_FEATURES</code>
 will be removed.</p>
 <p>To disable this filter, set <code>MIN_FEATURES: -.inf</code></p>
 <hr>
-<div class="sourceCode" id="cb16"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="fu">MAX_MITO_RATIO</span><span class="kw">:</span><span class="at"> </span><span class="fl">0.2</span></span></code></pre></div>
+<div class="sourceCode" id="cb16"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb16-1"><a href="#cb16-1" tabindex="-1"></a><span class="fu">MAX_MITO_RATIO</span><span class="kw">:</span><span class="at"> </span><span class="fl">0.2</span></span></code></pre></div>
 <p><strong>Type:</strong> numeric scalar &lt;0; 1&gt;</p>
 <p>A threshold for maximum ratio of expressed mitochondrial genes per
 cell, i.e. cells with mitochondrial genes detected in more than
 (<code>MAX_MITO_RATIO</code> * 100)% of all genes will be removed.</p>
 <p>To disable this filter, set <code>MAX_MITO_RATIO: .inf</code></p>
 <hr>
-<div class="sourceCode" id="cb17"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="fu">CUSTOM_FILTERS_OPERATOR</span><span class="kw">:</span><span class="at"> </span><span class="st">"&amp;"</span></span></code></pre></div>
+<div class="sourceCode" id="cb17"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb17-1"><a href="#cb17-1" tabindex="-1"></a><span class="fu">CUSTOM_FILTERS_OPERATOR</span><span class="kw">:</span><span class="at"> </span><span class="st">"&amp;"</span></span></code></pre></div>
 <p><strong>Type:</strong> a character scalar
 (<code>"&amp;" | "|"</code>)</p>
 <p>How to join the QC filters:</p>
@@ -505,31 +504,31 @@ cells that violate <strong>AT LEAST ONE</strong> filter (strict)</li>
 <code><a href="../reference/get_gene_filter.html">get_gene_filter()</a></code> function as following:</p>
 <div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">num_cells</span> <span class="op">&lt;-</span> <span class="va">min_ratio_cells</span> <span class="op">*</span> <span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">ncol</a></span><span class="op">(</span><span class="va">sce</span><span class="op">)</span></span>
-<span><span class="va">is_expressed</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/colSums.html" class="external-link">rowSums</a></span><span class="op">(</span><span class="fu">counts</span><span class="op">(</span><span class="va">sce</span><span class="op">)</span> <span class="op">&gt;=</span> <span class="va">min_umi</span><span class="op">)</span> <span class="op">&gt;=</span> <span class="va">num_cells</span></span></code></pre></div>
+<span><span class="va">is_expressed</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/colSums.html" class="external-link">rowSums</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/BiocGenerics/man/dge.html" class="external-link">counts</a></span><span class="op">(</span><span class="va">sce</span><span class="op">)</span> <span class="op">&gt;=</span> <span class="va">min_umi</span><span class="op">)</span> <span class="op">&gt;=</span> <span class="va">num_cells</span></span></code></pre></div>
 <p>A gene is considered expressed when number of its UMIs across all
 cells is greater than <code>min_umi</code> and at the same time it is
 expressed in at least <code>min_ratio_cells</code> ratio of cells.</p>
 <hr>
-<div class="sourceCode" id="cb19"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ENABLE_GENE_FILTERING</span><span class="kw">:</span><span class="at"> </span><span class="ch">True</span></span></code></pre></div>
+<div class="sourceCode" id="cb19"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb19-1"><a href="#cb19-1" tabindex="-1"></a><span class="fu">ENABLE_GENE_FILTERING</span><span class="kw">:</span><span class="at"> </span><span class="ch">True</span></span></code></pre></div>
 <p><strong>Type:</strong> logical scalar</p>
 <p>If <code>False</code>, gene filtering will be disabled.</p>
 <p>The filtering thresholds will be overridden such that every gene will
 pass the filtering (<code>MIN_UMI: 0</code> and
 <code>MIN_RATIO_CELLS: 0</code>).</p>
 <hr>
-<div class="sourceCode" id="cb20"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="fu">MITO_REGEX</span><span class="kw">:</span><span class="at"> </span><span class="st">"^MT-"</span></span>
-<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a><span class="fu">RIBO_REGEX</span><span class="kw">:</span><span class="at"> </span><span class="st">"^RP[SL]"</span></span></code></pre></div>
+<div class="sourceCode" id="cb20"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb20-1"><a href="#cb20-1" tabindex="-1"></a><span class="fu">MITO_REGEX</span><span class="kw">:</span><span class="at"> </span><span class="st">"^MT-"</span></span>
+<span id="cb20-2"><a href="#cb20-2" tabindex="-1"></a><span class="fu">RIBO_REGEX</span><span class="kw">:</span><span class="at"> </span><span class="st">"^RP[SL]"</span></span></code></pre></div>
 <p><strong>Type:</strong> character scalar</p>
 <p>Regexes used to match and count occurences of mitochondrial and
 ribosomal features. The latter is currently not used for gene
 filtering.</p>
 <hr>
-<div class="sourceCode" id="cb21"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="fu">MIN_UMI</span><span class="kw">:</span><span class="at"> </span><span class="dv">1</span></span></code></pre></div>
+<div class="sourceCode" id="cb21"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb21-1"><a href="#cb21-1" tabindex="-1"></a><span class="fu">MIN_UMI</span><span class="kw">:</span><span class="at"> </span><span class="dv">1</span></span></code></pre></div>
 <p><strong>Type:</strong> zero or positive integer scalar</p>
 <p>A threshold for minimum number of UMI per cell, i.e. genes with UMI
 &lt; <code>MIN_UMI</code> will be removed.</p>
 <hr>
-<div class="sourceCode" id="cb22"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="fu">MIN_RATIO_CELLS</span><span class="kw">:</span><span class="at"> </span><span class="fl">0.01</span></span></code></pre></div>
+<div class="sourceCode" id="cb22"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb22-1"><a href="#cb22-1" tabindex="-1"></a><span class="fu">MIN_RATIO_CELLS</span><span class="kw">:</span><span class="at"> </span><span class="fl">0.01</span></span></code></pre></div>
 <p><strong>Type:</strong> numeric scalar &lt;0; 1&gt;</p>
 <p>A minimum ratio of cells expressing a gene, i.e. genes expressed in
 less than (<code>MIN_RATIO_CELLS</code> * 100)% of cells will be
@@ -539,13 +538,13 @@ removed.</p>
 <div class="section level4">
 <h4 id="output-files">Output files<a class="anchor" aria-label="anchor" href="#output-files"></a>
 </h4>
-<div class="sourceCode" id="cb23"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="fu">INPUT_QC_BASE_OUT_DIR</span><span class="kw">:</span><span class="at"> </span><span class="st">"01_input_qc"</span></span></code></pre></div>
+<div class="sourceCode" id="cb23"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb23-1"><a href="#cb23-1" tabindex="-1"></a><span class="fu">INPUT_QC_BASE_OUT_DIR</span><span class="kw">:</span><span class="at"> </span><span class="st">"01_input_qc"</span></span></code></pre></div>
 <p><strong>Type:</strong> character scalar</p>
 <p>A path to base output directory for this stage. It will be created
 under <code>BASE_OUT_DIR</code> specified in <code>00_main.yaml</code>
 config.</p>
 <hr>
-<div class="sourceCode" id="cb24"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="fu">INPUT_QC_REPORT_HTML_FILE</span><span class="kw">:</span><span class="at"> </span><span class="st">"01_input_qc.html"</span></span></code></pre></div>
+<div class="sourceCode" id="cb24"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb24-1"><a href="#cb24-1" tabindex="-1"></a><span class="fu">INPUT_QC_REPORT_HTML_FILE</span><span class="kw">:</span><span class="at"> </span><span class="st">"01_input_qc.html"</span></span></code></pre></div>
 <p><strong>Type:</strong> character scalar</p>
 <p>A name of HTML report file for this stage. Created in
 <code>INPUT_QC_BASE_OUT_DIR</code>. Subdirectories are not allowed.</p>
@@ -553,9 +552,9 @@ config.</p>
 <div class="section level4">
 <h4 id="html-output-parameters">HTML output parameters<a class="anchor" aria-label="anchor" href="#html-output-parameters"></a>
 </h4>
-<div class="sourceCode" id="cb25"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="fu">INPUT_QC_KNITR_MESSAGE</span><span class="kw">:</span><span class="at"> </span><span class="ch">False</span></span>
-<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a><span class="fu">INPUT_QC_KNITR_WARNING</span><span class="kw">:</span><span class="at"> </span><span class="ch">False</span></span>
-<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a><span class="fu">INPUT_QC_KNITR_ECHO</span><span class="kw">:</span><span class="at"> </span><span class="ch">False</span></span></code></pre></div>
+<div class="sourceCode" id="cb25"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb25-1"><a href="#cb25-1" tabindex="-1"></a><span class="fu">INPUT_QC_KNITR_MESSAGE</span><span class="kw">:</span><span class="at"> </span><span class="ch">False</span></span>
+<span id="cb25-2"><a href="#cb25-2" tabindex="-1"></a><span class="fu">INPUT_QC_KNITR_WARNING</span><span class="kw">:</span><span class="at"> </span><span class="ch">False</span></span>
+<span id="cb25-3"><a href="#cb25-3" tabindex="-1"></a><span class="fu">INPUT_QC_KNITR_ECHO</span><span class="kw">:</span><span class="at"> </span><span class="ch">False</span></span></code></pre></div>
 <p><strong>Type:</strong> logical scalar</p>
 <p>These are passed to <code><a href="https://rdrr.io/pkg/knitr/man/opts_chunk.html" class="external-link">knitr::opts_chunk()</a></code> and used for
 rendering of stage’s HTML report.</p>
@@ -572,14 +571,18 @@ code</a> of the <code><a href="../reference/get_subplan_single_sample.html">get_
 functions.</p>
 <p>HTML report target name: <code>report_input_qc</code></p>
 <div class="section level4">
-<h4 id="singlecellexperiment-objects">
-<code>SingleCellExperiment</code> objects<a class="anchor" aria-label="anchor" href="#singlecellexperiment-objects"></a>
+<h4 id="singlecellexperiment-or-spatialexperiment-objects">
+<code>SingleCellExperiment</code> or <code>SpatialExperiment</code>
+objects<a class="anchor" aria-label="anchor" href="#singlecellexperiment-or-spatialexperiment-objects"></a>
 </h4>
-<p><code>sce_raw</code>: an untouched SCE object as loaded from:</p>
+<p><code>sce_raw</code>: an untouched SCE/SPE object as loaded from:</p>
 <ul>
 <li>
 <code><a href="https://rdrr.io/pkg/DropletUtils/man/read10xCounts.html" class="external-link">DropletUtils::read10xCounts()</a></code> (<code>cellranger</code>
 input)</li>
+<li>
+<code><a href="https://rdrr.io/pkg/SpatialExperiment/man/read10xVisium.html" class="external-link">SpatialExperiment::read10xVisium()</a></code>
+(<code>spaceranger</code> input)</li>
 <li>
 <code><a href="https://readr.tidyverse.org/reference/read_delim.html" class="external-link">readr::read_delim()</a></code> (delimited table input)</li>
 <li>
@@ -587,7 +590,7 @@ input)</li>
 <a href="https://docs.ropensci.org/drake" class="external-link">drake</a> cache)</li>
 </ul>
 <hr>
-<p><code>sce_valid_cells</code>: a SCE object with empty droplets
+<p><code>sce_valid_cells</code>: a SCE/SPE object with empty droplets
 removed</p>
 <hr>
 <p><code>sce_unfiltered</code>: <code>sce_valid_cells</code> with added
@@ -601,12 +604,12 @@ with cell QC metrics</li>
 <code>discard_custom</code>: custom filter</li>
 </ul>
 <hr>
-<p><code>sce_qc_filter</code>, <code>sce_qc_filter_genes</code>: a SCE
-object with cells filtered by dataset-sensitive filtering. The latter
-with filtered genes.</p>
+<p><code>sce_qc_filter</code>, <code>sce_qc_filter_genes</code>: a
+SCE/SPE object with cells filtered by dataset-sensitive filtering. The
+latter with filtered genes.</p>
 <p><code>sce_custom_filter</code>, <code>sce_custom_filter_genes</code>:
-a SCE object with cells filtered by custom filtering. The latter with
-filtered genes.</p>
+a SCE/SPE object with cells filtered by custom filtering. The latter
+with filtered genes.</p>
 <hr>
 <p><code>sce_selected</code>: a SCE object selected from either
 <code>sce_qc_filter_genes</code> or <code>sce_custom_filter_genes</code>
@@ -614,7 +617,7 @@ filtered genes.</p>
 parameter</p>
 <p><code>sce_final_input_qc</code>: <code>sce_selected</code> with added
 gene annotation (<code>gene_annotation</code> target) to
-<code>rowData()</code>. This is the final SCE object which will be used
+<code><a href="https://rdrr.io/pkg/SummarizedExperiment/man/SummarizedExperiment-class.html" class="external-link">rowData()</a></code>. This is the final SCE object which will be used
 in the next stage <code>norm_clustering</code>.</p>
 </div>
 <div class="section level4">
@@ -736,7 +739,7 @@ TBCE_ENSG00000285053 and TBCE_ENSG00000284770.</li>
 </div>
 </div>
 </div>
-  </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
+  </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside>
 </div>
 
@@ -749,16 +752,16 @@ TBCE_ENSG00000285053 and TBCE_ENSG00000284770.</li>
 
 <div class="pkgdown">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.3.</p>
   <p class="preferably">Using <a href="https://preferably.amirmasoudabdol.name/?source=footer" class="external-link">preferably</a> template.</p>
 </div>
 
     </footer>
 </div>
 
-  
 
-  
+
+
 
   </body>
 </html>

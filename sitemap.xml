@@ -1,660 +1,231 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url>
-    <loc>https://bioinfocz.github.io/scdrake/404.html</loc>
-  </url>
-  <url>
-    <loc>https://bioinfocz.github.io/scdrake/CODE_OF_CONDUCT.html</loc>
-  </url>
-  <url>
-    <loc>https://bioinfocz.github.io/scdrake/CONTRIBUTING.html</loc>
-  </url>
-  <url>
-    <loc>https://bioinfocz.github.io/scdrake/LICENSE-text.html</loc>
-  </url>
-  <url>
-    <loc>https://bioinfocz.github.io/scdrake/articles/config_main.html</loc>
-  </url>
-  <url>
-    <loc>https://bioinfocz.github.io/scdrake/articles/config_pipeline.html</loc>
-  </url>
-  <url>
-    <loc>https://bioinfocz.github.io/scdrake/articles/drake_basics.html</loc>
-  </url>
-  <url>
-    <loc>https://bioinfocz.github.io/scdrake/articles/index.html</loc>
-  </url>
-  <url>
-    <loc>https://bioinfocz.github.io/scdrake/articles/pipeline_overview.html</loc>
-  </url>
-  <url>
-    <loc>https://bioinfocz.github.io/scdrake/articles/scdrake.html</loc>
-  </url>
-  <url>
-    <loc>https://bioinfocz.github.io/scdrake/articles/scdrake_advanced.html</loc>
-  </url>
-  <url>
-    <loc>https://bioinfocz.github.io/scdrake/articles/scdrake_cli.html</loc>
-  </url>
-  <url>
-    <loc>https://bioinfocz.github.io/scdrake/articles/scdrake_config.html</loc>
-  </url>
-  <url>
-    <loc>https://bioinfocz.github.io/scdrake/articles/scdrake_docker.html</loc>
-  </url>
-  <url>
-    <loc>https://bioinfocz.github.io/scdrake/articles/scdrake_envvars.html</loc>
-  </url>
-  <url>
-    <loc>https://bioinfocz.github.io/scdrake/articles/scdrake_extend.html</loc>
-  </url>
-  <url>
-    <loc>https://bioinfocz.github.io/scdrake/articles/scdrake_faq.html</loc>
-  </url>
-  <url>
-    <loc>https://bioinfocz.github.io/scdrake/articles/scdrake_integration.html</loc>
-  </url>
-  <url>
-    <loc>https://bioinfocz.github.io/scdrake/articles/scdrake_spatial.html</loc>
-  </url>
-  <url>
-    <loc>https://bioinfocz.github.io/scdrake/articles/stage_cluster_markers.html</loc>
-  </url>
-  <url>
-    <loc>https://bioinfocz.github.io/scdrake/articles/stage_contrasts.html</loc>
-  </url>
-  <url>
-    <loc>https://bioinfocz.github.io/scdrake/articles/stage_input_qc.html</loc>
-  </url>
-  <url>
-    <loc>https://bioinfocz.github.io/scdrake/articles/stage_int_clustering.html</loc>
-  </url>
-  <url>
-    <loc>https://bioinfocz.github.io/scdrake/articles/stage_integration.html</loc>
-  </url>
-  <url>
-    <loc>https://bioinfocz.github.io/scdrake/articles/stage_norm_clustering.html</loc>
-  </url>
-  <url>
-    <loc>https://bioinfocz.github.io/scdrake/authors.html</loc>
-  </url>
-  <url>
-    <loc>https://bioinfocz.github.io/scdrake/index.html</loc>
-  </url>
-  <url>
-    <loc>https://bioinfocz.github.io/scdrake/news/index.html</loc>
-  </url>
-  <url>
-    <loc>https://bioinfocz.github.io/scdrake/reference/SCDRAKE_CLI_VERSION.html</loc>
-  </url>
-  <url>
-    <loc>https://bioinfocz.github.io/scdrake/reference/add_item_to_list.html</loc>
-  </url>
-  <url>
-    <loc>https://bioinfocz.github.io/scdrake/reference/add_marker_table_links.html</loc>
-  </url>
-  <url>
-    <loc>https://bioinfocz.github.io/scdrake/reference/additional_cell_data_fn.html</loc>
-  </url>
-  <url>
-    <loc>https://bioinfocz.github.io/scdrake/reference/as_seurat.html</loc>
-  </url>
-  <url>
-    <loc>https://bioinfocz.github.io/scdrake/reference/assert_that_.html</loc>
-  </url>
-  <url>
-    <loc>https://bioinfocz.github.io/scdrake/reference/calc_sc3.html</loc>
-  </url>
-  <url>
-    <loc>https://bioinfocz.github.io/scdrake/reference/calculate_metadata.html</loc>
-  </url>
-  <url>
-    <loc>https://bioinfocz.github.io/scdrake/reference/cc_genes_fn.html</loc>
-  </url>
-  <url>
-    <loc>https://bioinfocz.github.io/scdrake/reference/cell_annotation_diagnostic_plots_files_fn.html</loc>
-  </url>
-  <url>
-    <loc>https://bioinfocz.github.io/scdrake/reference/cell_annotation_diagnostic_plots_fn.html</loc>
-  </url>
-  <url>
-    <loc>https://bioinfocz.github.io/scdrake/reference/cell_annotation_fn.html</loc>
-  </url>
-  <url>
-    <loc>https://bioinfocz.github.io/scdrake/reference/cell_annotation_labels_fn.html</loc>
-  </url>
-  <url>
-    <loc>https://bioinfocz.github.io/scdrake/reference/cell_annotation_params_fn.html</loc>
-  </url>
-  <url>
-    <loc>https://bioinfocz.github.io/scdrake/reference/cell_data.html</loc>
-  </url>
-  <url>
-    <loc>https://bioinfocz.github.io/scdrake/reference/cell_data_fn.html</loc>
-  </url>
-  <url>
-    <loc>https://bioinfocz.github.io/scdrake/reference/cells_per_cluster_table.html</loc>
-  </url>
-  <url>
-    <loc>https://bioinfocz.github.io/scdrake/reference/cells_per_cluster_table_collapsed_html.html</loc>
-  </url>
-  <url>
-    <loc>https://bioinfocz.github.io/scdrake/reference/check_pandoc.html</loc>
-  </url>
-  <url>
-    <loc>https://bioinfocz.github.io/scdrake/reference/check_pkg_installed.html</loc>
-  </url>
-  <url>
-    <loc>https://bioinfocz.github.io/scdrake/reference/check_scdrake.html</loc>
-  </url>
-  <url>
-    <loc>https://bioinfocz.github.io/scdrake/reference/check_yq.html</loc>
-  </url>
-  <url>
-    <loc>https://bioinfocz.github.io/scdrake/reference/cli.html</loc>
-  </url>
-  <url>
-    <loc>https://bioinfocz.github.io/scdrake/reference/cluster_markers_fn.html</loc>
-  </url>
-  <url>
-    <loc>https://bioinfocz.github.io/scdrake/reference/cluster_markers_heatmaps_df_fn.html</loc>
-  </url>
-  <url>
-    <loc>https://bioinfocz.github.io/scdrake/reference/cluster_markers_out_fn.html</loc>
-  </url>
-  <url>
-    <loc>https://bioinfocz.github.io/scdrake/reference/cluster_markers_params.html</loc>
-  </url>
-  <url>
-    <loc>https://bioinfocz.github.io/scdrake/reference/cluster_markers_params_fn.html</loc>
-  </url>
-  <url>
-    <loc>https://bioinfocz.github.io/scdrake/reference/cluster_markers_processed_fn.html</loc>
-  </url>
-  <url>
-    <loc>https://bioinfocz.github.io/scdrake/reference/cluster_sc3_cluster_stability_plots_file_fn.html</loc>
-  </url>
-  <url>
-    <loc>https://bioinfocz.github.io/scdrake/reference/cluster_sc3_df_fn.html</loc>
-  </url>
-  <url>
-    <loc>https://bioinfocz.github.io/scdrake/reference/collapse_ensembl_multivals.html</loc>
-  </url>
-  <url>
-    <loc>https://bioinfocz.github.io/scdrake/reference/contrasts_fn.html</loc>
-  </url>
-  <url>
-    <loc>https://bioinfocz.github.io/scdrake/reference/contrasts_heatmaps_df_fn.html</loc>
-  </url>
-  <url>
-    <loc>https://bioinfocz.github.io/scdrake/reference/contrasts_out_fn.html</loc>
-  </url>
-  <url>
-    <loc>https://bioinfocz.github.io/scdrake/reference/contrasts_params.html</loc>
-  </url>
-  <url>
-    <loc>https://bioinfocz.github.io/scdrake/reference/create_dirs.html</loc>
-  </url>
-  <url>
-    <loc>https://bioinfocz.github.io/scdrake/reference/create_dummy_plot.html</loc>
-  </url>
-  <url>
-    <loc>https://bioinfocz.github.io/scdrake/reference/create_seu_for_heatmaps.html</loc>
-  </url>
-  <url>
-    <loc>https://bioinfocz.github.io/scdrake/reference/create_signature_matrix_fn.html</loc>
-  </url>
-  <url>
-    <loc>https://bioinfocz.github.io/scdrake/reference/dimred_plots_cell_annotation_params_df_fn.html</loc>
-  </url>
-  <url>
-    <loc>https://bioinfocz.github.io/scdrake/reference/dimred_plots_clustering_fn.html</loc>
-  </url>
-  <url>
-    <loc>https://bioinfocz.github.io/scdrake/reference/dimred_plots_clustering_united_files_fn.html</loc>
-  </url>
-  <url>
-    <loc>https://bioinfocz.github.io/scdrake/reference/dimred_plots_from_params_df.html</loc>
-  </url>
-  <url>
-    <loc>https://bioinfocz.github.io/scdrake/reference/dimred_plots_other_vars_params_df_fn.html</loc>
-  </url>
-  <url>
-    <loc>https://bioinfocz.github.io/scdrake/reference/dot-apply_config_patches.html</loc>
-  </url>
-  <url>
-    <loc>https://bioinfocz.github.io/scdrake/reference/dot-check_integration_methods.html</loc>
-  </url>
-  <url>
-    <loc>https://bioinfocz.github.io/scdrake/reference/dot-check_marker_sources.html</loc>
-  </url>
-  <url>
-    <loc>https://bioinfocz.github.io/scdrake/reference/dot-get_dict_param.html</loc>
-  </url>
-  <url>
-    <loc>https://bioinfocz.github.io/scdrake/reference/dot-hereize_paths.html</loc>
-  </url>
-  <url>
-    <loc>https://bioinfocz.github.io/scdrake/reference/dot-load_config_group.html</loc>
-  </url>
-  <url>
-    <loc>https://bioinfocz.github.io/scdrake/reference/dot-load_configs.html</loc>
-  </url>
-  <url>
-    <loc>https://bioinfocz.github.io/scdrake/reference/dot-paths_to_base_dir.html</loc>
-  </url>
-  <url>
-    <loc>https://bioinfocz.github.io/scdrake/reference/dot-update_configs_recursive.html</loc>
-  </url>
-  <url>
-    <loc>https://bioinfocz.github.io/scdrake/reference/download_example_data.html</loc>
-  </url>
-  <url>
-    <loc>https://bioinfocz.github.io/scdrake/reference/download_yq.html</loc>
-  </url>
-  <url>
-    <loc>https://bioinfocz.github.io/scdrake/reference/empty_droplets_fn.html</loc>
-  </url>
-  <url>
-    <loc>https://bioinfocz.github.io/scdrake/reference/filter_markers.html</loc>
-  </url>
-  <url>
-    <loc>https://bioinfocz.github.io/scdrake/reference/filter_nulls.html</loc>
-  </url>
-  <url>
-    <loc>https://bioinfocz.github.io/scdrake/reference/format_shell_command.html</loc>
-  </url>
-  <url>
-    <loc>https://bioinfocz.github.io/scdrake/reference/format_used_functions.html</loc>
-  </url>
-  <url>
-    <loc>https://bioinfocz.github.io/scdrake/reference/generate_cell_annotation_plots_section.html</loc>
-  </url>
-  <url>
-    <loc>https://bioinfocz.github.io/scdrake/reference/generate_dimred_plots_clustering_section.html</loc>
-  </url>
-  <url>
-    <loc>https://bioinfocz.github.io/scdrake/reference/generate_dimred_plots_section.html</loc>
-  </url>
-  <url>
-    <loc>https://bioinfocz.github.io/scdrake/reference/generate_markers_results_section.html</loc>
-  </url>
-  <url>
-    <loc>https://bioinfocz.github.io/scdrake/reference/generate_stage_report.html</loc>
-  </url>
-  <url>
-    <loc>https://bioinfocz.github.io/scdrake/reference/getDistinctColors.html</loc>
-  </url>
-  <url>
-    <loc>https://bioinfocz.github.io/scdrake/reference/get_cell_annotation_subplan.html</loc>
-  </url>
-  <url>
-    <loc>https://bioinfocz.github.io/scdrake/reference/get_clustering_graph_subplan.html</loc>
-  </url>
-  <url>
-    <loc>https://bioinfocz.github.io/scdrake/reference/get_clustering_kmeans_subplan.html</loc>
-  </url>
-  <url>
-    <loc>https://bioinfocz.github.io/scdrake/reference/get_clustering_sc3_subplan.html</loc>
-  </url>
-  <url>
-    <loc>https://bioinfocz.github.io/scdrake/reference/get_clustering_subplan.html</loc>
-  </url>
-  <url>
-    <loc>https://bioinfocz.github.io/scdrake/reference/get_dimred_plots_other_vars_subplan.html</loc>
-  </url>
-  <url>
-    <loc>https://bioinfocz.github.io/scdrake/reference/get_gene_filter.html</loc>
-  </url>
-  <url>
-    <loc>https://bioinfocz.github.io/scdrake/reference/get_int_method_description.html</loc>
-  </url>
-  <url>
-    <loc>https://bioinfocz.github.io/scdrake/reference/get_pca_gene_var_pcs.html</loc>
-  </url>
-  <url>
-    <loc>https://bioinfocz.github.io/scdrake/reference/get_pca_selected_pcs.html</loc>
-  </url>
-  <url>
-    <loc>https://bioinfocz.github.io/scdrake/reference/get_plan.html</loc>
-  </url>
-  <url>
-    <loc>https://bioinfocz.github.io/scdrake/reference/get_random_strings.html</loc>
-  </url>
-  <url>
-    <loc>https://bioinfocz.github.io/scdrake/reference/get_subplan_common.html</loc>
-  </url>
-  <url>
-    <loc>https://bioinfocz.github.io/scdrake/reference/get_subplan_integration.html</loc>
-  </url>
-  <url>
-    <loc>https://bioinfocz.github.io/scdrake/reference/get_subplan_single_sample.html</loc>
-  </url>
-  <url>
-    <loc>https://bioinfocz.github.io/scdrake/reference/get_sys_env.html</loc>
-  </url>
-  <url>
-    <loc>https://bioinfocz.github.io/scdrake/reference/get_tmp_dir.html</loc>
-  </url>
-  <url>
-    <loc>https://bioinfocz.github.io/scdrake/reference/get_top_hvgs.html</loc>
-  </url>
-  <url>
-    <loc>https://bioinfocz.github.io/scdrake/reference/get_used_qc_filters_operator_desc.html</loc>
-  </url>
-  <url>
-    <loc>https://bioinfocz.github.io/scdrake/reference/get_yq_default_path.html</loc>
-  </url>
-  <url>
-    <loc>https://bioinfocz.github.io/scdrake/reference/grapes-and-and-grapes.html</loc>
-  </url>
-  <url>
-    <loc>https://bioinfocz.github.io/scdrake/reference/graph_snn_fn.html</loc>
-  </url>
-  <url>
-    <loc>https://bioinfocz.github.io/scdrake/reference/highlight_points.html</loc>
-  </url>
-  <url>
-    <loc>https://bioinfocz.github.io/scdrake/reference/html_links.html</loc>
-  </url>
-  <url>
-    <loc>https://bioinfocz.github.io/scdrake/reference/hvg_int_list_fn.html</loc>
-  </url>
-  <url>
-    <loc>https://bioinfocz.github.io/scdrake/reference/hvg_plot_int_fn.html</loc>
-  </url>
-  <url>
-    <loc>https://bioinfocz.github.io/scdrake/reference/index.html</loc>
-  </url>
-  <url>
-    <loc>https://bioinfocz.github.io/scdrake/reference/init_project.html</loc>
-  </url>
-  <url>
-    <loc>https://bioinfocz.github.io/scdrake/reference/int_diagnostics_df_fn.html</loc>
-  </url>
-  <url>
-    <loc>https://bioinfocz.github.io/scdrake/reference/integration_methods_df_fn.html</loc>
-  </url>
-  <url>
-    <loc>https://bioinfocz.github.io/scdrake/reference/lapply_rows.html</loc>
-  </url>
-  <url>
-    <loc>https://bioinfocz.github.io/scdrake/reference/list_names_to_values.html</loc>
-  </url>
-  <url>
-    <loc>https://bioinfocz.github.io/scdrake/reference/lists_to_tibble.html</loc>
-  </url>
-  <url>
-    <loc>https://bioinfocz.github.io/scdrake/reference/load_config.html</loc>
-  </url>
-  <url>
-    <loc>https://bioinfocz.github.io/scdrake/reference/load_custom_plan.html</loc>
-  </url>
-  <url>
-    <loc>https://bioinfocz.github.io/scdrake/reference/make_gene_annotation.html</loc>
-  </url>
-  <url>
-    <loc>https://bioinfocz.github.io/scdrake/reference/make_kmeans_gaps_plot.html</loc>
-  </url>
-  <url>
-    <loc>https://bioinfocz.github.io/scdrake/reference/make_pca_selected_pcs_plot.html</loc>
-  </url>
-  <url>
-    <loc>https://bioinfocz.github.io/scdrake/reference/marker_heatmap.html</loc>
-  </url>
-  <url>
-    <loc>https://bioinfocz.github.io/scdrake/reference/marker_heatmaps_wrapper.html</loc>
-  </url>
-  <url>
-    <loc>https://bioinfocz.github.io/scdrake/reference/marker_plot.html</loc>
-  </url>
-  <url>
-    <loc>https://bioinfocz.github.io/scdrake/reference/markers_dimred_plots.html</loc>
-  </url>
-  <url>
-    <loc>https://bioinfocz.github.io/scdrake/reference/markers_dimred_plots_files.html</loc>
-  </url>
-  <url>
-    <loc>https://bioinfocz.github.io/scdrake/reference/markers_for_tables.html</loc>
-  </url>
-  <url>
-    <loc>https://bioinfocz.github.io/scdrake/reference/markers_plots_files.html</loc>
-  </url>
-  <url>
-    <loc>https://bioinfocz.github.io/scdrake/reference/markers_plots_top.html</loc>
-  </url>
-  <url>
-    <loc>https://bioinfocz.github.io/scdrake/reference/markers_table_files.html</loc>
-  </url>
-  <url>
-    <loc>https://bioinfocz.github.io/scdrake/reference/md_header.html</loc>
-  </url>
-  <url>
-    <loc>https://bioinfocz.github.io/scdrake/reference/merge_sce_metadata.html</loc>
-  </url>
-  <url>
-    <loc>https://bioinfocz.github.io/scdrake/reference/meta_heatmap_ploting.html</loc>
-  </url>
-  <url>
-    <loc>https://bioinfocz.github.io/scdrake/reference/na_empty.html</loc>
-  </url>
-  <url>
-    <loc>https://bioinfocz.github.io/scdrake/reference/pca_phase_plots_fn.html</loc>
-  </url>
-  <url>
-    <loc>https://bioinfocz.github.io/scdrake/reference/plotReducedDim_mod.html</loc>
-  </url>
-  <url>
-    <loc>https://bioinfocz.github.io/scdrake/reference/plot_clustree.html</loc>
-  </url>
-  <url>
-    <loc>https://bioinfocz.github.io/scdrake/reference/plot_colData.html</loc>
-  </url>
-  <url>
-    <loc>https://bioinfocz.github.io/scdrake/reference/plot_hvg.html</loc>
-  </url>
-  <url>
-    <loc>https://bioinfocz.github.io/scdrake/reference/plot_hvg_fit.html</loc>
-  </url>
-  <url>
-    <loc>https://bioinfocz.github.io/scdrake/reference/plot_spat_point_layer_ggplot.html</loc>
-  </url>
-  <url>
-    <loc>https://bioinfocz.github.io/scdrake/reference/plot_spat_visuals.html</loc>
-  </url>
-  <url>
-    <loc>https://bioinfocz.github.io/scdrake/reference/plot_vln.html</loc>
-  </url>
-  <url>
-    <loc>https://bioinfocz.github.io/scdrake/reference/prepare_marker_source_params.html</loc>
-  </url>
-  <url>
-    <loc>https://bioinfocz.github.io/scdrake/reference/process_config.html</loc>
-  </url>
-  <url>
-    <loc>https://bioinfocz.github.io/scdrake/reference/reexports.html</loc>
-  </url>
-  <url>
-    <loc>https://bioinfocz.github.io/scdrake/reference/render_bootstrap_table.html</loc>
-  </url>
-  <url>
-    <loc>https://bioinfocz.github.io/scdrake/reference/replace_list_nas_with_nulls.html</loc>
-  </url>
-  <url>
-    <loc>https://bioinfocz.github.io/scdrake/reference/replace_list_nulls.html</loc>
-  </url>
-  <url>
-    <loc>https://bioinfocz.github.io/scdrake/reference/run_graph_based_clustering.html</loc>
-  </url>
-  <url>
-    <loc>https://bioinfocz.github.io/scdrake/reference/run_kmeans_clustering.html</loc>
-  </url>
-  <url>
-    <loc>https://bioinfocz.github.io/scdrake/reference/run_page_man_annotation.html</loc>
-  </url>
-  <url>
-    <loc>https://bioinfocz.github.io/scdrake/reference/run_pipeline.html</loc>
-  </url>
-  <url>
-    <loc>https://bioinfocz.github.io/scdrake/reference/save_clustree.html</loc>
-  </url>
-  <url>
-    <loc>https://bioinfocz.github.io/scdrake/reference/save_pdf.html</loc>
-  </url>
-  <url>
-    <loc>https://bioinfocz.github.io/scdrake/reference/save_print.html</loc>
-  </url>
-  <url>
-    <loc>https://bioinfocz.github.io/scdrake/reference/save_selected_markers_plots_files.html</loc>
-  </url>
-  <url>
-    <loc>https://bioinfocz.github.io/scdrake/reference/scdrake-package.html</loc>
-  </url>
-  <url>
-    <loc>https://bioinfocz.github.io/scdrake/reference/scdrake_list.html</loc>
-  </url>
-  <url>
-    <loc>https://bioinfocz.github.io/scdrake/reference/scdrake_make.html</loc>
-  </url>
-  <url>
-    <loc>https://bioinfocz.github.io/scdrake/reference/scdrake_options.html</loc>
-  </url>
-  <url>
-    <loc>https://bioinfocz.github.io/scdrake/reference/sce_add_cell_data.html</loc>
-  </url>
-  <url>
-    <loc>https://bioinfocz.github.io/scdrake/reference/sce_add_colData.html</loc>
-  </url>
-  <url>
-    <loc>https://bioinfocz.github.io/scdrake/reference/sce_add_metadata.html</loc>
-  </url>
-  <url>
-    <loc>https://bioinfocz.github.io/scdrake/reference/sce_add_spatial_colData.html</loc>
-  </url>
-  <url>
-    <loc>https://bioinfocz.github.io/scdrake/reference/sce_calc_pca.html</loc>
-  </url>
-  <url>
-    <loc>https://bioinfocz.github.io/scdrake/reference/sce_cc_fn.html</loc>
-  </url>
-  <url>
-    <loc>https://bioinfocz.github.io/scdrake/reference/sce_compute_dimreds.html</loc>
-  </url>
-  <url>
-    <loc>https://bioinfocz.github.io/scdrake/reference/sce_final_input_qc_fn.html</loc>
-  </url>
-  <url>
-    <loc>https://bioinfocz.github.io/scdrake/reference/sce_get_cc_genes.html</loc>
-  </url>
-  <url>
-    <loc>https://bioinfocz.github.io/scdrake/reference/sce_history_fn.html</loc>
-  </url>
-  <url>
-    <loc>https://bioinfocz.github.io/scdrake/reference/sce_history_plot_fn.html</loc>
-  </url>
-  <url>
-    <loc>https://bioinfocz.github.io/scdrake/reference/sce_int_clustering_df_fn.html</loc>
-  </url>
-  <url>
-    <loc>https://bioinfocz.github.io/scdrake/reference/sce_int_combine_hvgs.html</loc>
-  </url>
-  <url>
-    <loc>https://bioinfocz.github.io/scdrake/reference/sce_int_df_fn.html</loc>
-  </url>
-  <url>
-    <loc>https://bioinfocz.github.io/scdrake/reference/sce_int_dimred_df_fn.html</loc>
-  </url>
-  <url>
-    <loc>https://bioinfocz.github.io/scdrake/reference/sce_int_dimred_plots_df_fn.html</loc>
-  </url>
-  <url>
-    <loc>https://bioinfocz.github.io/scdrake/reference/sce_int_import_fn.html</loc>
-  </url>
-  <url>
-    <loc>https://bioinfocz.github.io/scdrake/reference/sce_int_pca_df_fn.html</loc>
-  </url>
-  <url>
-    <loc>https://bioinfocz.github.io/scdrake/reference/sce_int_processed_fn.html</loc>
-  </url>
-  <url>
-    <loc>https://bioinfocz.github.io/scdrake/reference/sce_int_raw_snn_clustering_fn.html</loc>
-  </url>
-  <url>
-    <loc>https://bioinfocz.github.io/scdrake/reference/sce_norm.html</loc>
-  </url>
-  <url>
-    <loc>https://bioinfocz.github.io/scdrake/reference/sce_norm_hvg_fn.html</loc>
-  </url>
-  <url>
-    <loc>https://bioinfocz.github.io/scdrake/reference/sce_raw_fn.html</loc>
-  </url>
-  <url>
-    <loc>https://bioinfocz.github.io/scdrake/reference/sce_remove_cc_genes.html</loc>
-  </url>
-  <url>
-    <loc>https://bioinfocz.github.io/scdrake/reference/sce_rm_doublets_fn.html</loc>
-  </url>
-  <url>
-    <loc>https://bioinfocz.github.io/scdrake/reference/sce_selected_fn.html</loc>
-  </url>
-  <url>
-    <loc>https://bioinfocz.github.io/scdrake/reference/sce_valid_cells_fn.html</loc>
-  </url>
-  <url>
-    <loc>https://bioinfocz.github.io/scdrake/reference/scran_markers.html</loc>
-  </url>
-  <url>
-    <loc>https://bioinfocz.github.io/scdrake/reference/selected_markers_dimplot.html</loc>
-  </url>
-  <url>
-    <loc>https://bioinfocz.github.io/scdrake/reference/selected_markers_int_df_fn.html</loc>
-  </url>
-  <url>
-    <loc>https://bioinfocz.github.io/scdrake/reference/selected_markers_int_plots_df_fn.html</loc>
-  </url>
-  <url>
-    <loc>https://bioinfocz.github.io/scdrake/reference/selected_markers_plots_fn.html</loc>
-  </url>
-  <url>
-    <loc>https://bioinfocz.github.io/scdrake/reference/set_rstudio_drake_cache.html</loc>
-  </url>
-  <url>
-    <loc>https://bioinfocz.github.io/scdrake/reference/seu_add_metadata.html</loc>
-  </url>
-  <url>
-    <loc>https://bioinfocz.github.io/scdrake/reference/spatGenePlot2Dsce.html</loc>
-  </url>
-  <url>
-    <loc>https://bioinfocz.github.io/scdrake/reference/text_utils_glue.html</loc>
-  </url>
-  <url>
-    <loc>https://bioinfocz.github.io/scdrake/reference/text_utils_joining.html</loc>
-  </url>
-  <url>
-    <loc>https://bioinfocz.github.io/scdrake/reference/update_config.html</loc>
-  </url>
-  <url>
-    <loc>https://bioinfocz.github.io/scdrake/reference/update_config_group.html</loc>
-  </url>
-  <url>
-    <loc>https://bioinfocz.github.io/scdrake/reference/update_project.html</loc>
-  </url>
-  <url>
-    <loc>https://bioinfocz.github.io/scdrake/reference/visualized_spots.html</loc>
-  </url>
-  <url>
-    <loc>https://bioinfocz.github.io/scdrake/reference/which_genes_regex.html</loc>
-  </url>
-  <url>
-    <loc>https://bioinfocz.github.io/scdrake/reference/with_dbi.html</loc>
-  </url>
-  <url>
-    <loc>https://bioinfocz.github.io/scdrake/reference/with_plan.html</loc>
-  </url>
-  <url>
-    <loc>https://bioinfocz.github.io/scdrake/reference/yq_merge_cmd.html</loc>
-  </url>
-  <url>
-    <loc>https://bioinfocz.github.io/scdrake/required_libs_linux.html</loc>
-  </url>
+<urlset xmlns = 'http://www.sitemaps.org/schemas/sitemap/0.9'>
+<url><loc>https://bioinfocz.github.io/scdrake/404.html</loc></url>
+<url><loc>https://bioinfocz.github.io/scdrake/CODE_OF_CONDUCT.html</loc></url>
+<url><loc>https://bioinfocz.github.io/scdrake/CONTRIBUTING.html</loc></url>
+<url><loc>https://bioinfocz.github.io/scdrake/LICENSE-text.html</loc></url>
+<url><loc>https://bioinfocz.github.io/scdrake/articles/config_main.html</loc></url>
+<url><loc>https://bioinfocz.github.io/scdrake/articles/config_pipeline.html</loc></url>
+<url><loc>https://bioinfocz.github.io/scdrake/articles/drake_basics.html</loc></url>
+<url><loc>https://bioinfocz.github.io/scdrake/articles/index.html</loc></url>
+<url><loc>https://bioinfocz.github.io/scdrake/articles/interaction_analysis.html</loc></url>
+<url><loc>https://bioinfocz.github.io/scdrake/articles/pipeline_overview.html</loc></url>
+<url><loc>https://bioinfocz.github.io/scdrake/articles/scdrake.html</loc></url>
+<url><loc>https://bioinfocz.github.io/scdrake/articles/scdrake_advanced.html</loc></url>
+<url><loc>https://bioinfocz.github.io/scdrake/articles/scdrake_cli.html</loc></url>
+<url><loc>https://bioinfocz.github.io/scdrake/articles/scdrake_config.html</loc></url>
+<url><loc>https://bioinfocz.github.io/scdrake/articles/scdrake_development.html</loc></url>
+<url><loc>https://bioinfocz.github.io/scdrake/articles/scdrake_docker.html</loc></url>
+<url><loc>https://bioinfocz.github.io/scdrake/articles/scdrake_envvars.html</loc></url>
+<url><loc>https://bioinfocz.github.io/scdrake/articles/scdrake_extend.html</loc></url>
+<url><loc>https://bioinfocz.github.io/scdrake/articles/scdrake_faq.html</loc></url>
+<url><loc>https://bioinfocz.github.io/scdrake/articles/scdrake_integration.html</loc></url>
+<url><loc>https://bioinfocz.github.io/scdrake/articles/scdrake_spatial.html</loc></url>
+<url><loc>https://bioinfocz.github.io/scdrake/articles/stage_cluster_markers.html</loc></url>
+<url><loc>https://bioinfocz.github.io/scdrake/articles/stage_contrasts.html</loc></url>
+<url><loc>https://bioinfocz.github.io/scdrake/articles/stage_input_qc.html</loc></url>
+<url><loc>https://bioinfocz.github.io/scdrake/articles/stage_int_clustering.html</loc></url>
+<url><loc>https://bioinfocz.github.io/scdrake/articles/stage_integration.html</loc></url>
+<url><loc>https://bioinfocz.github.io/scdrake/articles/stage_norm_clustering.html</loc></url>
+<url><loc>https://bioinfocz.github.io/scdrake/authors.html</loc></url>
+<url><loc>https://bioinfocz.github.io/scdrake/index.html</loc></url>
+<url><loc>https://bioinfocz.github.io/scdrake/news/index.html</loc></url>
+<url><loc>https://bioinfocz.github.io/scdrake/reference/SCDRAKE_CLI_VERSION.html</loc></url>
+<url><loc>https://bioinfocz.github.io/scdrake/reference/add_item_to_list.html</loc></url>
+<url><loc>https://bioinfocz.github.io/scdrake/reference/add_marker_table_links.html</loc></url>
+<url><loc>https://bioinfocz.github.io/scdrake/reference/additional_cell_data_fn.html</loc></url>
+<url><loc>https://bioinfocz.github.io/scdrake/reference/as_seurat.html</loc></url>
+<url><loc>https://bioinfocz.github.io/scdrake/reference/assert_that_.html</loc></url>
+<url><loc>https://bioinfocz.github.io/scdrake/reference/calc_sc3.html</loc></url>
+<url><loc>https://bioinfocz.github.io/scdrake/reference/calculate_metadata.html</loc></url>
+<url><loc>https://bioinfocz.github.io/scdrake/reference/cc_genes_fn.html</loc></url>
+<url><loc>https://bioinfocz.github.io/scdrake/reference/cell_annotation_diagnostic_plots_files_fn.html</loc></url>
+<url><loc>https://bioinfocz.github.io/scdrake/reference/cell_annotation_diagnostic_plots_fn.html</loc></url>
+<url><loc>https://bioinfocz.github.io/scdrake/reference/cell_annotation_fn.html</loc></url>
+<url><loc>https://bioinfocz.github.io/scdrake/reference/cell_annotation_labels_fn.html</loc></url>
+<url><loc>https://bioinfocz.github.io/scdrake/reference/cell_annotation_params_fn.html</loc></url>
+<url><loc>https://bioinfocz.github.io/scdrake/reference/cell_data.html</loc></url>
+<url><loc>https://bioinfocz.github.io/scdrake/reference/cell_data_fn.html</loc></url>
+<url><loc>https://bioinfocz.github.io/scdrake/reference/cell_qc_fn.html</loc></url>
+<url><loc>https://bioinfocz.github.io/scdrake/reference/cells_per_cluster_table.html</loc></url>
+<url><loc>https://bioinfocz.github.io/scdrake/reference/cells_per_cluster_table_collapsed_html.html</loc></url>
+<url><loc>https://bioinfocz.github.io/scdrake/reference/check_pandoc.html</loc></url>
+<url><loc>https://bioinfocz.github.io/scdrake/reference/check_pkg_installed.html</loc></url>
+<url><loc>https://bioinfocz.github.io/scdrake/reference/check_scdrake.html</loc></url>
+<url><loc>https://bioinfocz.github.io/scdrake/reference/check_yq.html</loc></url>
+<url><loc>https://bioinfocz.github.io/scdrake/reference/cli.html</loc></url>
+<url><loc>https://bioinfocz.github.io/scdrake/reference/cluster_markers_fn.html</loc></url>
+<url><loc>https://bioinfocz.github.io/scdrake/reference/cluster_markers_heatmaps_df_fn.html</loc></url>
+<url><loc>https://bioinfocz.github.io/scdrake/reference/cluster_markers_out_fn.html</loc></url>
+<url><loc>https://bioinfocz.github.io/scdrake/reference/cluster_markers_params.html</loc></url>
+<url><loc>https://bioinfocz.github.io/scdrake/reference/cluster_markers_params_fn.html</loc></url>
+<url><loc>https://bioinfocz.github.io/scdrake/reference/cluster_markers_processed_fn.html</loc></url>
+<url><loc>https://bioinfocz.github.io/scdrake/reference/cluster_sc3_cluster_stability_plots_file_fn.html</loc></url>
+<url><loc>https://bioinfocz.github.io/scdrake/reference/cluster_sc3_df_fn.html</loc></url>
+<url><loc>https://bioinfocz.github.io/scdrake/reference/collapse_ensembl_multivals.html</loc></url>
+<url><loc>https://bioinfocz.github.io/scdrake/reference/contrasts_fn.html</loc></url>
+<url><loc>https://bioinfocz.github.io/scdrake/reference/contrasts_heatmaps_df_fn.html</loc></url>
+<url><loc>https://bioinfocz.github.io/scdrake/reference/contrasts_out_fn.html</loc></url>
+<url><loc>https://bioinfocz.github.io/scdrake/reference/contrasts_params.html</loc></url>
+<url><loc>https://bioinfocz.github.io/scdrake/reference/convertToSCE.html</loc></url>
+<url><loc>https://bioinfocz.github.io/scdrake/reference/create_dirs.html</loc></url>
+<url><loc>https://bioinfocz.github.io/scdrake/reference/create_dummy_plot.html</loc></url>
+<url><loc>https://bioinfocz.github.io/scdrake/reference/create_seu_for_heatmaps.html</loc></url>
+<url><loc>https://bioinfocz.github.io/scdrake/reference/create_signature_matrix_fn.html</loc></url>
+<url><loc>https://bioinfocz.github.io/scdrake/reference/dimred_plots_cell_annotation_params_df_fn.html</loc></url>
+<url><loc>https://bioinfocz.github.io/scdrake/reference/dimred_plots_clustering_fn.html</loc></url>
+<url><loc>https://bioinfocz.github.io/scdrake/reference/dimred_plots_clustering_united_files_fn.html</loc></url>
+<url><loc>https://bioinfocz.github.io/scdrake/reference/dimred_plots_from_params_df.html</loc></url>
+<url><loc>https://bioinfocz.github.io/scdrake/reference/dimred_plots_other_vars_params_df_fn.html</loc></url>
+<url><loc>https://bioinfocz.github.io/scdrake/reference/dot-apply_config_patches.html</loc></url>
+<url><loc>https://bioinfocz.github.io/scdrake/reference/dot-check_integration_methods.html</loc></url>
+<url><loc>https://bioinfocz.github.io/scdrake/reference/dot-check_marker_sources.html</loc></url>
+<url><loc>https://bioinfocz.github.io/scdrake/reference/dot-get_dict_param.html</loc></url>
+<url><loc>https://bioinfocz.github.io/scdrake/reference/dot-hereize_paths.html</loc></url>
+<url><loc>https://bioinfocz.github.io/scdrake/reference/dot-load_config_group.html</loc></url>
+<url><loc>https://bioinfocz.github.io/scdrake/reference/dot-load_configs.html</loc></url>
+<url><loc>https://bioinfocz.github.io/scdrake/reference/dot-paths_to_base_dir.html</loc></url>
+<url><loc>https://bioinfocz.github.io/scdrake/reference/dot-update_configs_recursive.html</loc></url>
+<url><loc>https://bioinfocz.github.io/scdrake/reference/download_example_data.html</loc></url>
+<url><loc>https://bioinfocz.github.io/scdrake/reference/download_yq.html</loc></url>
+<url><loc>https://bioinfocz.github.io/scdrake/reference/empty_droplets_fn.html</loc></url>
+<url><loc>https://bioinfocz.github.io/scdrake/reference/filter_markers.html</loc></url>
+<url><loc>https://bioinfocz.github.io/scdrake/reference/filter_nulls.html</loc></url>
+<url><loc>https://bioinfocz.github.io/scdrake/reference/format_shell_command.html</loc></url>
+<url><loc>https://bioinfocz.github.io/scdrake/reference/format_used_functions.html</loc></url>
+<url><loc>https://bioinfocz.github.io/scdrake/reference/generate_cell_annotation_plots_section.html</loc></url>
+<url><loc>https://bioinfocz.github.io/scdrake/reference/generate_dimred_plots_clustering_section.html</loc></url>
+<url><loc>https://bioinfocz.github.io/scdrake/reference/generate_dimred_plots_section.html</loc></url>
+<url><loc>https://bioinfocz.github.io/scdrake/reference/generate_markers_results_section.html</loc></url>
+<url><loc>https://bioinfocz.github.io/scdrake/reference/generate_stage_report.html</loc></url>
+<url><loc>https://bioinfocz.github.io/scdrake/reference/getDistinctColors.html</loc></url>
+<url><loc>https://bioinfocz.github.io/scdrake/reference/get_cell_annotation_subplan.html</loc></url>
+<url><loc>https://bioinfocz.github.io/scdrake/reference/get_clustering_graph_subplan.html</loc></url>
+<url><loc>https://bioinfocz.github.io/scdrake/reference/get_clustering_kmeans_subplan.html</loc></url>
+<url><loc>https://bioinfocz.github.io/scdrake/reference/get_clustering_sc3_subplan.html</loc></url>
+<url><loc>https://bioinfocz.github.io/scdrake/reference/get_clustering_subplan.html</loc></url>
+<url><loc>https://bioinfocz.github.io/scdrake/reference/get_dimred_plots_other_vars_subplan.html</loc></url>
+<url><loc>https://bioinfocz.github.io/scdrake/reference/get_gene_filter.html</loc></url>
+<url><loc>https://bioinfocz.github.io/scdrake/reference/get_int_method_description.html</loc></url>
+<url><loc>https://bioinfocz.github.io/scdrake/reference/get_legend_35.html</loc></url>
+<url><loc>https://bioinfocz.github.io/scdrake/reference/get_pca_gene_var_pcs.html</loc></url>
+<url><loc>https://bioinfocz.github.io/scdrake/reference/get_pca_selected_pcs.html</loc></url>
+<url><loc>https://bioinfocz.github.io/scdrake/reference/get_plan.html</loc></url>
+<url><loc>https://bioinfocz.github.io/scdrake/reference/get_random_strings.html</loc></url>
+<url><loc>https://bioinfocz.github.io/scdrake/reference/get_subplan_common.html</loc></url>
+<url><loc>https://bioinfocz.github.io/scdrake/reference/get_subplan_integration.html</loc></url>
+<url><loc>https://bioinfocz.github.io/scdrake/reference/get_subplan_single_sample.html</loc></url>
+<url><loc>https://bioinfocz.github.io/scdrake/reference/get_sys_env.html</loc></url>
+<url><loc>https://bioinfocz.github.io/scdrake/reference/get_tmp_dir.html</loc></url>
+<url><loc>https://bioinfocz.github.io/scdrake/reference/get_top_hvgs.html</loc></url>
+<url><loc>https://bioinfocz.github.io/scdrake/reference/get_used_qc_filters_operator_desc.html</loc></url>
+<url><loc>https://bioinfocz.github.io/scdrake/reference/get_yq_default_path.html</loc></url>
+<url><loc>https://bioinfocz.github.io/scdrake/reference/grapes-and-and-grapes.html</loc></url>
+<url><loc>https://bioinfocz.github.io/scdrake/reference/graph_snn_fn.html</loc></url>
+<url><loc>https://bioinfocz.github.io/scdrake/reference/highlight_points.html</loc></url>
+<url><loc>https://bioinfocz.github.io/scdrake/reference/html_links.html</loc></url>
+<url><loc>https://bioinfocz.github.io/scdrake/reference/hvg_int_list_fn.html</loc></url>
+<url><loc>https://bioinfocz.github.io/scdrake/reference/hvg_plot_int_fn.html</loc></url>
+<url><loc>https://bioinfocz.github.io/scdrake/reference/index.html</loc></url>
+<url><loc>https://bioinfocz.github.io/scdrake/reference/init_project.html</loc></url>
+<url><loc>https://bioinfocz.github.io/scdrake/reference/int_diagnostics_df_fn.html</loc></url>
+<url><loc>https://bioinfocz.github.io/scdrake/reference/integration_methods_df_fn.html</loc></url>
+<url><loc>https://bioinfocz.github.io/scdrake/reference/lapply_rows.html</loc></url>
+<url><loc>https://bioinfocz.github.io/scdrake/reference/list_names_to_values.html</loc></url>
+<url><loc>https://bioinfocz.github.io/scdrake/reference/lists_to_tibble.html</loc></url>
+<url><loc>https://bioinfocz.github.io/scdrake/reference/load_config.html</loc></url>
+<url><loc>https://bioinfocz.github.io/scdrake/reference/load_custom_plan.html</loc></url>
+<url><loc>https://bioinfocz.github.io/scdrake/reference/make_gene_annotation.html</loc></url>
+<url><loc>https://bioinfocz.github.io/scdrake/reference/make_kmeans_gaps_plot.html</loc></url>
+<url><loc>https://bioinfocz.github.io/scdrake/reference/make_pca_selected_pcs_plot.html</loc></url>
+<url><loc>https://bioinfocz.github.io/scdrake/reference/marker_heatmap.html</loc></url>
+<url><loc>https://bioinfocz.github.io/scdrake/reference/marker_heatmaps_wrapper.html</loc></url>
+<url><loc>https://bioinfocz.github.io/scdrake/reference/marker_plot.html</loc></url>
+<url><loc>https://bioinfocz.github.io/scdrake/reference/markers_dimred_plots.html</loc></url>
+<url><loc>https://bioinfocz.github.io/scdrake/reference/markers_dimred_plots_files.html</loc></url>
+<url><loc>https://bioinfocz.github.io/scdrake/reference/markers_for_tables.html</loc></url>
+<url><loc>https://bioinfocz.github.io/scdrake/reference/markers_plots_files.html</loc></url>
+<url><loc>https://bioinfocz.github.io/scdrake/reference/markers_plots_top.html</loc></url>
+<url><loc>https://bioinfocz.github.io/scdrake/reference/markers_table_files.html</loc></url>
+<url><loc>https://bioinfocz.github.io/scdrake/reference/md_header.html</loc></url>
+<url><loc>https://bioinfocz.github.io/scdrake/reference/merge_sce_metadata.html</loc></url>
+<url><loc>https://bioinfocz.github.io/scdrake/reference/meta_heatmap_ploting.html</loc></url>
+<url><loc>https://bioinfocz.github.io/scdrake/reference/na_empty.html</loc></url>
+<url><loc>https://bioinfocz.github.io/scdrake/reference/pca_phase_plots_fn.html</loc></url>
+<url><loc>https://bioinfocz.github.io/scdrake/reference/plotReducedDim_mod.html</loc></url>
+<url><loc>https://bioinfocz.github.io/scdrake/reference/plot_clustree.html</loc></url>
+<url><loc>https://bioinfocz.github.io/scdrake/reference/plot_colData.html</loc></url>
+<url><loc>https://bioinfocz.github.io/scdrake/reference/plot_deconv_results_fn.html</loc></url>
+<url><loc>https://bioinfocz.github.io/scdrake/reference/plot_hvg.html</loc></url>
+<url><loc>https://bioinfocz.github.io/scdrake/reference/plot_hvg_fit.html</loc></url>
+<url><loc>https://bioinfocz.github.io/scdrake/reference/plot_spat_point_layer_ggplot.html</loc></url>
+<url><loc>https://bioinfocz.github.io/scdrake/reference/plot_spat_visuals.html</loc></url>
+<url><loc>https://bioinfocz.github.io/scdrake/reference/plot_spat_visuals2.html</loc></url>
+<url><loc>https://bioinfocz.github.io/scdrake/reference/plot_vln.html</loc></url>
+<url><loc>https://bioinfocz.github.io/scdrake/reference/prepare_marker_source_params.html</loc></url>
+<url><loc>https://bioinfocz.github.io/scdrake/reference/process_config.html</loc></url>
+<url><loc>https://bioinfocz.github.io/scdrake/reference/reexports.html</loc></url>
+<url><loc>https://bioinfocz.github.io/scdrake/reference/render_bootstrap_table.html</loc></url>
+<url><loc>https://bioinfocz.github.io/scdrake/reference/replace_list_nas_with_nulls.html</loc></url>
+<url><loc>https://bioinfocz.github.io/scdrake/reference/replace_list_nulls.html</loc></url>
+<url><loc>https://bioinfocz.github.io/scdrake/reference/run_graph_based_clustering.html</loc></url>
+<url><loc>https://bioinfocz.github.io/scdrake/reference/run_kmeans_clustering.html</loc></url>
+<url><loc>https://bioinfocz.github.io/scdrake/reference/run_page_man_annotation.html</loc></url>
+<url><loc>https://bioinfocz.github.io/scdrake/reference/run_pipeline.html</loc></url>
+<url><loc>https://bioinfocz.github.io/scdrake/reference/save_clustree.html</loc></url>
+<url><loc>https://bioinfocz.github.io/scdrake/reference/save_pdf.html</loc></url>
+<url><loc>https://bioinfocz.github.io/scdrake/reference/save_plot_with_fallback.html</loc></url>
+<url><loc>https://bioinfocz.github.io/scdrake/reference/save_print.html</loc></url>
+<url><loc>https://bioinfocz.github.io/scdrake/reference/save_selected_markers_plots_files.html</loc></url>
+<url><loc>https://bioinfocz.github.io/scdrake/reference/scdrake-package.html</loc></url>
+<url><loc>https://bioinfocz.github.io/scdrake/reference/scdrake_list.html</loc></url>
+<url><loc>https://bioinfocz.github.io/scdrake/reference/scdrake_make.html</loc></url>
+<url><loc>https://bioinfocz.github.io/scdrake/reference/scdrake_options.html</loc></url>
+<url><loc>https://bioinfocz.github.io/scdrake/reference/sce_add_cell_data.html</loc></url>
+<url><loc>https://bioinfocz.github.io/scdrake/reference/sce_add_colData.html</loc></url>
+<url><loc>https://bioinfocz.github.io/scdrake/reference/sce_add_metadata.html</loc></url>
+<url><loc>https://bioinfocz.github.io/scdrake/reference/sce_add_spatial_colData.html</loc></url>
+<url><loc>https://bioinfocz.github.io/scdrake/reference/sce_calc_pca.html</loc></url>
+<url><loc>https://bioinfocz.github.io/scdrake/reference/sce_cc_fn.html</loc></url>
+<url><loc>https://bioinfocz.github.io/scdrake/reference/sce_compute_dimreds.html</loc></url>
+<url><loc>https://bioinfocz.github.io/scdrake/reference/sce_final_input_qc_fn.html</loc></url>
+<url><loc>https://bioinfocz.github.io/scdrake/reference/sce_get_cc_genes.html</loc></url>
+<url><loc>https://bioinfocz.github.io/scdrake/reference/sce_history_fn.html</loc></url>
+<url><loc>https://bioinfocz.github.io/scdrake/reference/sce_history_plot_fn.html</loc></url>
+<url><loc>https://bioinfocz.github.io/scdrake/reference/sce_int_clustering_df_fn.html</loc></url>
+<url><loc>https://bioinfocz.github.io/scdrake/reference/sce_int_combine_hvgs.html</loc></url>
+<url><loc>https://bioinfocz.github.io/scdrake/reference/sce_int_df_fn.html</loc></url>
+<url><loc>https://bioinfocz.github.io/scdrake/reference/sce_int_dimred_df_fn.html</loc></url>
+<url><loc>https://bioinfocz.github.io/scdrake/reference/sce_int_dimred_plots_df_fn.html</loc></url>
+<url><loc>https://bioinfocz.github.io/scdrake/reference/sce_int_import_fn.html</loc></url>
+<url><loc>https://bioinfocz.github.io/scdrake/reference/sce_int_pca_df_fn.html</loc></url>
+<url><loc>https://bioinfocz.github.io/scdrake/reference/sce_int_processed_fn.html</loc></url>
+<url><loc>https://bioinfocz.github.io/scdrake/reference/sce_int_raw_snn_clustering_fn.html</loc></url>
+<url><loc>https://bioinfocz.github.io/scdrake/reference/sce_norm.html</loc></url>
+<url><loc>https://bioinfocz.github.io/scdrake/reference/sce_norm_hvg_fn.html</loc></url>
+<url><loc>https://bioinfocz.github.io/scdrake/reference/sce_raw_fn.html</loc></url>
+<url><loc>https://bioinfocz.github.io/scdrake/reference/sce_remove_cc_genes.html</loc></url>
+<url><loc>https://bioinfocz.github.io/scdrake/reference/sce_rm_doublets_fn.html</loc></url>
+<url><loc>https://bioinfocz.github.io/scdrake/reference/sce_selected_fn.html</loc></url>
+<url><loc>https://bioinfocz.github.io/scdrake/reference/sce_valid_cells_fn.html</loc></url>
+<url><loc>https://bioinfocz.github.io/scdrake/reference/scran_markers.html</loc></url>
+<url><loc>https://bioinfocz.github.io/scdrake/reference/selected_markers_dimplot.html</loc></url>
+<url><loc>https://bioinfocz.github.io/scdrake/reference/selected_markers_int_df_fn.html</loc></url>
+<url><loc>https://bioinfocz.github.io/scdrake/reference/selected_markers_int_plots_df_fn.html</loc></url>
+<url><loc>https://bioinfocz.github.io/scdrake/reference/selected_markers_plots_fn.html</loc></url>
+<url><loc>https://bioinfocz.github.io/scdrake/reference/set_rstudio_drake_cache.html</loc></url>
+<url><loc>https://bioinfocz.github.io/scdrake/reference/seu_add_metadata.html</loc></url>
+<url><loc>https://bioinfocz.github.io/scdrake/reference/spatGenePlot2Dsce.html</loc></url>
+<url><loc>https://bioinfocz.github.io/scdrake/reference/spot_deconvolution_fn.html</loc></url>
+<url><loc>https://bioinfocz.github.io/scdrake/reference/text_utils_glue.html</loc></url>
+<url><loc>https://bioinfocz.github.io/scdrake/reference/text_utils_joining.html</loc></url>
+<url><loc>https://bioinfocz.github.io/scdrake/reference/update_config.html</loc></url>
+<url><loc>https://bioinfocz.github.io/scdrake/reference/update_config_group.html</loc></url>
+<url><loc>https://bioinfocz.github.io/scdrake/reference/update_project.html</loc></url>
+<url><loc>https://bioinfocz.github.io/scdrake/reference/visualized_spots.html</loc></url>
+<url><loc>https://bioinfocz.github.io/scdrake/reference/which_genes_regex.html</loc></url>
+<url><loc>https://bioinfocz.github.io/scdrake/reference/with_dbi.html</loc></url>
+<url><loc>https://bioinfocz.github.io/scdrake/reference/with_plan.html</loc></url>
+<url><loc>https://bioinfocz.github.io/scdrake/reference/yq_merge_cmd.html</loc></url>
+<url><loc>https://bioinfocz.github.io/scdrake/required_libs_linux.html</loc></url>
 </urlset>
+
