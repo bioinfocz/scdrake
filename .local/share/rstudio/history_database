@@ -22,3 +22,4 @@
 1756188891784:testthat::snapshot_accept("project")
 1756188994044:testthat::snapshot_review('project')
 1756188998992:devtools::test(filter = "project")
+1756190338008:renv::snapshot()

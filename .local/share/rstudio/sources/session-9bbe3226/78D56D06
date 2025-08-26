@@ -3,7 +3,7 @@
     "path": "~/.gitignore",
     "project_path": null,
     "type": "gitignore",
-    "hash": "1299402026",
+    "hash": "0",
     "contents": "",
     "dirty": false,
     "created": 1756185665052.0,
@@ -11,14 +11,16 @@
     "relative_order": 7,
     "properties": {
         "source_window_id": "",
-        "Source": "Source"
+        "Source": "Source",
+        "cursorPosition": "17,7",
+        "scrollLine": "2"
     },
     "folds": "",
-    "lastKnownWriteTime": 1756113178,
+    "lastKnownWriteTime": 1756190568,
     "encoding": "UTF-8",
     "collab_server": "",
     "source_window": "",
-    "last_content_update": 1756113178,
+    "last_content_update": 1756190568261,
     "read_only": false,
     "read_only_alternatives": []
 }

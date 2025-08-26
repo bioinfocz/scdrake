@@ -91,6 +91,8 @@ RUN Rscript -e "\
   renv::consent(TRUE);\
   renv::restore(lockfile = 'renv.lock', prompt = FALSE);\
   "
+RUN Rscript -e "if (!requireNamespace('remotes', quietly = TRUE)) install.packages('remotes')"
+RUN Rscript -e "remotes::install_github('amirmasoudabdol/preferably')" 
 
 RUN mkdir /scdrake_source
 COPY DESCRIPTION /scdrake_source/DESCRIPTION

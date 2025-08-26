@@ -1,3 +1,6 @@
+~/.gitignore
+~/Dockerfile
+~/renv.lock
 ~/tests/testthat/_snaps/project.md
 ~/tests/testthat/test-project.R
 ~/tests/testthat/setup.R
@@ -10,6 +13,3 @@
 ~/tests/testthat/config_test_files/config_test_2.yaml
 ~/tests/testthat/config_test_files/config_test_1.yaml
 ~/tests/testthat/test-plans.R
-~/tests/testthat/test-generics.R
-~/tests/testthat/_snaps/yq.md
-~/.gitignore
