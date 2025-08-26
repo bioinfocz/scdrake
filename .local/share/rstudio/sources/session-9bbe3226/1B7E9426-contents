@@ -1,3 +1,0 @@
-DRAKE_TARGETS: ["sce_final_norm_clustering"]
-DRAKE_PARALLELISM: "clustermq"
-DRAKE_FORMAT: "qs"

@@ -1,5 +1,0 @@
-DRAKE_CACHE_DIR: ".drake"
-DRAKE_TARGETS: ["sce_final_norm_clustering"]
-DRAKE_PARALLELISM: "clustermq"
-DRAKE_N_JOBS: 24
-DRAKE_FORMAT: "qs"

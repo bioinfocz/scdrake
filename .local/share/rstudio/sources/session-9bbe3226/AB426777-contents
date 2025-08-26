@@ -1,3 +1,0 @@
-DRAKE_TARGETS: ["report_norm_clustering", "report_norm_clustering_simple"]
-DRAKE_PARALLELISM: "clustermq"
-DRAKE_FORMAT: "qs"

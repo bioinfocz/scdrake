@@ -1,9 +1,0 @@
-INPUT_DATA:
-  type: "cellranger"
-  path: "example_data/pbmc1k"
-  delimiter: ","
-  target_name: "target_name"
-
-MAD_THRESHOLD: 2
-
-INPUT_QC_BASE_OUT_DIR: "01_input_qc_strict"

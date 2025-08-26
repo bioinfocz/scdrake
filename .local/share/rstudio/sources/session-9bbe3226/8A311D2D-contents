@@ -1,3 +1,0 @@
-PROJECT_NAME: "PBMC 1k"
-PROJECT_DESCRIPTION: "1000 peripheral blood mononuclear cells by 10x Genomics"
-BASE_OUT_DIR: "output"

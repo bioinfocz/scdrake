@@ -15,5 +15,5 @@ tests/testthat/run_pipeline_vignette_config_patches/*/*.yaml*
 /doc/
 /Meta/
 README.html
-.cache/
-.local/
+.cache/*
+.local/*

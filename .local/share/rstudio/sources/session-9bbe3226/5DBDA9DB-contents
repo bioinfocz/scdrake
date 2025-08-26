@@ -1,3 +1,0 @@
-DRAKE_TARGETS: ["report_integration", "report_int_clustering"]
-DRAKE_PARALLELISM: "clustermq"
-DRAKE_FORMAT: "qs"
