@@ -51,7 +51,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">scdrake</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.7.0</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.7.1</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -134,7 +134,7 @@
       <h1>Developing scdrake</h1>
             
             <h4 data-toc-skip class="date"><sup>Document generated:
-2025-08-26 18:31:25 UTC+0000</sup></h4>
+2025-08-27 15:06:23 UTC+0000</sup></h4>
       
       <small class="dont-index">Source: <a href="https://github.com/bioinfocz/scdrake/blob/master/vignettes/scdrake_development.Rmd" class="external-link"><code>vignettes/scdrake_development.Rmd</code></a></small>
       <div class="d-none name"><code>scdrake_development.Rmd</code></div>
@@ -272,12 +272,17 @@ The whole documentation site is made by
 created, firstly incorporate the vignette into
 <code>vignettes/_vignette_signpost.Rmd</code>.</p>
 <p>Use <code><a href="https://rstudio.github.io/renv/reference/snapshot.html" class="external-link">renv::snapshot()</a></code> to create new lock.file.</p>
-<p>If major changes were done, change the version in
-<code>DESCRIPTION</code>. Also if new major packages were added, write
-them into <code>DESCRIPTION</code> too.</p>
+<p>Change the version in <code>DESCRIPTION</code>. Also if new major
+packages were added, write them into <code>DESCRIPTION</code> too.</p>
 <p>Then write changes into README.Rmd and render into README.md
-<code>rmarkdown::render("README.Rmd)</code></p>
+<code>rmarkdown::render("README.Rmd")</code></p>
 <p>Write news into <code>NEWS.md</code></p>
+<p>If there was changes in creating new Rmd files or config files, its
+important to update files in in /tests/_snaps. Here is an illustration
+how to do it for one test:</p>
+<pre><code><span><span class="fu">testthat</span><span class="fu">::</span><span class="fu"><a href="https://testthat.r-lib.org/reference/test_file.html" class="external-link">test_file</a></span><span class="op">(</span><span class="st">"tests/testthat/test-project.R"</span><span class="op">)</span></span>
+<span><span class="fu">testthat</span><span class="fu">::</span><span class="fu"><a href="https://testthat.r-lib.org/reference/snapshot_accept.html" class="external-link">snapshot_review</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="fu">testthat</span><span class="fu">::</span><span class="fu"><a href="https://testthat.r-lib.org/reference/snapshot_accept.html" class="external-link">snapshot_accept</a></span><span class="op">(</span><span class="op">)</span></span></code></pre>
 <p>With all this, create issue on Github and link the branch there.
 Upload changes in branch into Github.</p>
 <pre><code>git add.
@@ -286,6 +291,13 @@ git push -u origin your_branch</code></pre>
 <p>Assign people from scdrake development/author team for checking the
 changes.</p>
 <p>If all went well, you are prepared for PR of the branch!</p>
+<p>Merging of version is allowed when all the checks and test will
+pass.</p>
+<p>After passing wait for approval. Then you can merge. The vignettes
+will be automatically prepared in gh-pages/dev. To apply the changes in
+vignettes for pages, you must prepare release and release tag. Release
+and release tags are done manually. Fill the information and apply, then
+Github pages will be updated too.</p>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside>
