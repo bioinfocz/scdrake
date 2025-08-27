@@ -122,10 +122,10 @@ out <- scdrake::wrap_code(c(
 
 `r paste(knitr::knit(text = out), collapse = "\n")`
 
-**Note for Mac users with M1/M2 chipsets**: until version 1.5.0 (inclusive), `arm64` images are available.
+**Note for Mac users with M1/M2 chipsets**: until version 1.5.0 (inclusive), `arm64` images are available. For spatial extention, Docker can be found at:
 
 ```bash
-docker pull pfeiferl/scdrake:1.7.0-bioc3.21-arm64
+docker pull pfeiferl/scdrake:1.7.1-bioc3.21-arm64
 ```
 
 ### Running the container

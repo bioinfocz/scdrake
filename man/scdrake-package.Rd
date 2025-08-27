@@ -4,9 +4,9 @@
 \name{scdrake-package}
 \alias{scdrake}
 \alias{scdrake-package}
-\title{scdrake: A pipeline for droplet-based single-cell RNA-seq data secondary analysis implemented in the drake Make-like toolkit for R language}
+\title{scdrake: A pipeline for droplet-based single-cell RNA-seq and spot-based spatial transcriptomics data secondary analysis implemented in the drake Make-like toolkit for R language}
 \description{
-This pipeline is implemented in the drake Make-like toolkit (https://github.com/ropensci/drake) and provides the following steps of scRNA-seq secondary analysis: input quality control, filtering of cells/genes, normalization, clustering, cell type annotation, cluster markers, differential expression analysis (constrasts -> cluster vs. cluster), integration of multiple samples. All main parts are accompanied by rich graphical outputs and HTML reports (RMarkdown). Thanks to the drake package, the pipeline is highly reproducible, scalable and efficient, provides easy access to all intermediate results, and can be arbitrarily extended as pipeline definitions are abstracted as R objects. A command line interface is available to perform the most important actions directly in shell terminal.
+This pipeline is implemented in the drake Make-like toolkit (https://github.com/ropensci/drake) and provides the following steps of scRNA-seq and spot-based SRT secondary analysis: input quality control, filtering of spots/cells/genes, normalization, clustering, cell type annotation, spot deconvolution cluster markers, differential expression analysis (constrasts -> cluster vs. cluster), integration of multiple samples. All main parts are accompanied by rich graphical outputs and HTML reports (RMarkdown). Thanks to the drake package, the pipeline is highly reproducible, scalable and efficient, provides easy access to all intermediate results, and can be arbitrarily extended as pipeline definitions are abstracted as R objects. A command line interface is available to perform the most important actions directly in shell terminal.
 }
 \section{Package options}{
  See \code{\link[=get_scdrake_default_options]{get_scdrake_default_options()}}.
@@ -36,10 +36,11 @@ Useful links:
 
 }
 \author{
-\strong{Maintainer}: Jiri Novotny \email{jiri.novotny@img.cas.cz} (\href{https://orcid.org/0000-0003-1338-638X}{ORCID})
+\strong{Maintainer}: Lucie Pfeiferova \email{lucie.pfeiferova@img.cas.cz} (\href{https://orcid.org/0000-0003-1089-0329}{ORCID})
 
 Authors:
 \itemize{
+  \item Jiri Novotny \email{jiri.novotny@img.cas.cz} (\href{https://orcid.org/0000-0003-1338-638X}{ORCID})
   \item Jan Kubovciak \email{jan.kubovciak@img.cas.cz}
 }
 

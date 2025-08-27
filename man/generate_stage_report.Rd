@@ -60,7 +60,9 @@ This is a list of Rmd files currently bundled with the \code{scdrake} package:
 #> |   +-- _footer.Rmd
 #> |   +-- _header.Rmd
 #> |   +-- cluster_markers.Rmd
+#> |   +-- cluster_markers_spatial.Rmd
 #> |   +-- cluster_markers_table_template.Rmd
+#> |   +-- cluster_markers_table_template_spatial.Rmd
 #> |   +-- clustering
 #> |   |   +-- cluster_graph_leiden.Rmd
 #> |   |   +-- cluster_graph_louvain.Rmd
@@ -69,8 +71,9 @@ This is a list of Rmd files currently bundled with the \code{scdrake} package:
 #> |   |   +-- cluster_sc3.Rmd
 #> |   |   \\-- clustering.Rmd
 #> |   +-- contrasts.Rmd
+#> |   +-- contrasts_spatial.Rmd
 #> |   +-- contrasts_table_template.Rmd
-#> |   +-- stylesheet (copy).css
+#> |   +-- contrasts_table_template_spatial.Rmd
 #> |   \\-- stylesheet.css
 #> +-- integration
 #> |   +-- 01_integration.Rmd

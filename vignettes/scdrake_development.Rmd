@@ -120,11 +120,20 @@ All changes, even typos and minor bugs, need to be documented. As the first step
 
 Use `renv::snapshot()` to create new lock.file. 
 
-If major changes were done, change the version in `DESCRIPTION`. Also if new major packages were added, write them into `DESCRIPTION` too. 
+Change the version in `DESCRIPTION`. Also if new major packages were added, write them into `DESCRIPTION` too. 
 
-Then write changes into README.Rmd and render into README.md `rmarkdown::render("README.Rmd)`
+Then write changes into README.Rmd and render into README.md `rmarkdown::render("README.Rmd")`
 
 Write news into `NEWS.md`
+
+If there was changes in creating new Rmd files or config files, its important to update files in in /tests/_snaps. Here is an illustration how to do it for one test:
+
+```
+testthat::test_file("tests/testthat/test-project.R")
+testthat::snapshot_review()
+testthat::snapshot_accept()
+```
+
 
 With all this, create issue on Github and link the branch there. Upload changes in branch into Github. 
 
@@ -138,3 +147,6 @@ Assign people from scdrake development/author team for checking the changes.
 
 If all went well, you are prepared for PR of the branch!
 
+Merging of version is allowed when all the checks and test will pass. 
+
+After passing wait for approval. Then you can merge. The vignettes will be automatically prepared in gh-pages/dev. To apply the changes in vignettes for pages, you must prepare release and release tag. Release and release tags are done manually. Fill the information and apply, then Github pages will be updated too. 

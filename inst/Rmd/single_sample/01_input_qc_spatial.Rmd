@@ -39,6 +39,7 @@ cfg <- config_input_qc
 empty_droplets_enabled <- cfg$EMPTY_DROPLETS_ENABLED
 cell_filtering_enabled <- cfg$ENABLE_CELL_FILTERING
 gene_filtering_enabled <- cfg$ENABLE_GENE_FILTERING
+artifact_filtering <- cfg$ARTIFACT
 
 input_type <- cfg$INPUT_DATA$type
 filtering_type <- ifelse(cfg$SAVE_DATASET_SENSITIVE_FILTERING, "dataset-sensitive", "custom")
@@ -53,7 +54,13 @@ filtering_type <- ifelse(cfg$SAVE_DATASET_SENSITIVE_FILTERING, "dataset-sensitiv
 
 ```{r, results = "asis"}
 if (input_type == "cellranger") {
-  scdrake::md_header("Input data: 10x Genomics Space Ranger data", 1)
+  scdrake::md_header("Input data: 10x Genomics Cell Ranger data", 1)
+  cat(scdrake::str_space(
+    "The feature-barcode matrix was imported from",
+    "[Cell Ranger](https://support.10xgenomics.com/single-cell-gene-expression/software/pipelines/latest/what-is-cell-ranger)",
+    "output (the official quantification tool from 10x Genomics)."
+  ))
+} else if (input_type == "spaceranger") {
   cat(scdrake::str_space(
     "The feature-barcode matrix was imported from",
     "[Space Ranger](https://support.10xgenomics.com/spatial-gene-expression/software/pipelines/latest/what-is-space-ranger)",
@@ -138,7 +145,9 @@ if (empty_droplets_enabled) {
 
 # Gene + Spot quality filtering
 
-## Pre-filtering QC
+## Pre-filtering QC {.tabset}
+
+### Pre-filtering QC
 
 Given sets of mitochondrial and ribosomal genes in the data, the `scater` package automatically calculates
 several per-spot QC metrics:
@@ -167,12 +176,28 @@ MAD thresholding on a QC metric.
 cowplot::plot_grid(plotlist = drake::readd(sce_unfiltered_plotlist, path = drake_cache_dir), ncol = 2)
 ```
 
+### Spatial QC
+
 Visualisation of prefiltering (raw) QC metrics in spatial coordinates. 
 
 ```{r, fig.height = 10, fig.width = 8}
+#plot_spat_visuals2 for HE image
 pl <- plot_spat_visuals(drake::readd(sce_unfiltered, path = drake_cache_dir))
 cowplot::plot_grid(plotlist = pl,ncol=2)
 ```
+
+### Spatial Artifact
+
+SpotSweeper is an R/Bioconductor software designed for spatially-aware quality control of spatial transcriptomics (10x Visium) data. It identifies both local outlier spots and regional artifacts by comparing each spot's QC metrics—such as library size, gene count, and mitochondrial percentage, to those of its neighboring spot.
+- localVariance(): Calculates the variance of a QC metric (e.g., library size, gene count) within each spot’s local neighborhood, helping identify spots with anomalous variation compared to their neighbors. Here, we are plotting distribution of the local variance in mitochondrial percentage. Samples affected by artifact ocurance often exhibit a long-tailed or bimodal distribution towards lower variance, reflecting regions with abnormal mitochondrial signal variation. If such distribution is present, we advise to re-run the scdrake with ARTIFACT: True option, to filter the spots affected by artefacts. Beware: if there is no indication of artifact in spots, the program will label half of the spots as artifact and remove them.
+
+```{r, fig.height = 8, fig.width = 6}
+pl <- ggplot2::ggplot(data.frame(colData(drake::readd(sce_unfiltered, path = drake_cache_dir))), aes(x = local_mito_variance_k36)) + 
+  ggplot2::geom_density(fill = "gray", alpha = 0.5) 
+pl
+```
+
+## {-}
 
 `r scdrake::format_used_functions("scuttle::perCellQCMetrics()")`
 
@@ -218,9 +243,11 @@ cat("Spot filtering was disabled.")
 cat("Gene filtering was disabled.")
 ```
 
+## {-}
+
 ***
 
-## Post-filtering QC
+## Post-filtering QC {.tabset}
 
 **Final filtering selection: using <span style='color: green;'>`r filtering_type`</span> filtering.**
 
@@ -247,11 +274,11 @@ Plots of QC metrics after dataset-sensitive filtering.
 cowplot::plot_grid(plotlist = drake::readd(sce_qc_filter_genes_plotlist, path = drake_cache_dir), ncol = 2)
 ```
 
-Plots in spatial coordinates of QC metrics after dataset-sensitive filtering.
+Plots removed spots after dataset-sensitive filtering.
 
 ```{r, fig.height = 10, fig.width = 8}
- pl <- plot_spat_visuals(drake::readd(sce_qc_filter, path = drake_cache_dir))
-cowplot::plot_grid(plotlist = pl,ncol=2)
+pl <- ggspavis::plotObsQC(drake::readd(sce_unfiltered, path = drake_cache_dir), plot_type = "spot", annotate = "discard_qc")
+pl
 ```
 
 
@@ -264,13 +291,27 @@ Plots of QC metrics after custom filtering.
 cowplot::plot_grid(plotlist = drake::readd(sce_custom_filter_genes_plotlist, path = drake_cache_dir), ncol = 2)
 ```
 
-Plots in spatial coordinates of QC metrics after custom filtering.
+Plots removed spots after custom filtering.
 
 ```{r, fig.height = 10, fig.width = 8}
- pl <- plot_spat_visuals(drake::readd(sce_custom_filter, path = drake_cache_dir))
-cowplot::plot_grid(plotlist = pl,ncol=2)
+pl <- ggspavis::plotObsQC(drake::readd(sce_unfiltered, path = drake_cache_dir), plot_type = "spot", annotate = "discard_custom")
+pl
 ```
 
+### Artifact
+
+Ploting of possible artifact occurence in spots. If there is NO artifact in data, the program will label half of the spots as artifact. It is normal expected behaviour, in that case do not remove the spots. Check distribution of mitochondrial variance for artifact detection before spot removal. We do not advise to automatically removed spots before quality checks.  
+
+```{r, results = "asis"}
+if (drake::readd("config_input_qc",path = drake_cache_dir)$ARTIFACT) {
+  pl <- ggspavis::plotObsQC(drake::readd(sce_unfiltered, path = drake_cache_dir), plot_type = "spot", annotate = "artifact")
+  pl
+} else {
+  cat("Artifact was not detected or removed.")
+}
+```
+
+## {-}
 
 ***
 

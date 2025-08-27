@@ -121,8 +121,8 @@ You can pull the Docker image with the latest stable `{scdrake}` version
 using
 
 ``` bash
-docker pull jirinovo/scdrake:1.7.0
-singularity pull docker:jirinovo/scdrake:1.7.0
+docker pull jirinovo/scdrake:1.7.1
+singularity pull docker:jirinovo/scdrake:1.7.1
 ```
 
 or list available versions in [our Docker Hub
@@ -136,10 +136,11 @@ singularity pull docker:jirinovo/scdrake:latest
 ```
 
 **Note for Mac users with M1/M2 chipsets**: until version 1.5.0
-(inclusive), `arm64` images are available.
+(inclusive), `arm64` images are available. For spatial extention, Docker
+can be found at:
 
 ``` bash
-docker pull pfeiferl/scdrake:1.7.0-bioc3.21-arm64
+docker pull pfeiferl/scdrake:1.7.1-bioc3.21-arm64
 ```
 
 ### Running the container
@@ -164,7 +165,7 @@ docker run -d \
   -e USERID=$(id -u) \
   -e GROUPID=$(id -g) \
   -e PASSWORD=1234 \
-  jirinovo/scdrake:1.7.0
+  jirinovo/scdrake:1.7.1
 ```
 
 For Singularity, also make shared directories and execute the container
@@ -249,7 +250,7 @@ for `{scdrake}` and you can use it to install all dependencies by
 
 ``` r
 ## -- This is a lockfile for the latest stable version of scdrake.
-download.file("https://raw.githubusercontent.com/bioinfocz/scdrake/1.7.0/renv.lock")
+download.file("https://raw.githubusercontent.com/bioinfocz/scdrake/1.7.1/renv.lock")
 ## -- You can increase the number of CPU cores to speed up the installation.
 options(Ncpus = 2)
 renv::restore(lockfile = "renv.lock", repos = BiocManager::repositories())
@@ -269,7 +270,7 @@ installed from the lockfile).
 
 ``` r
 remotes::install_github(
-  "bioinfocz/scdrake@1.7.0",
+  "bioinfocz/scdrake@1.7.1",
   dependencies = FALSE, upgrade = FALSE,
   keep_source = TRUE, build_vignettes = TRUE,
   repos = BiocManager::repositories()
@@ -338,7 +339,7 @@ vignette](https://bioinfocz.github.io/scdrake/articles/scdrake.html)
 ## Vignettes and other readings
 
 See <https://bioinfocz.github.io/scdrake> for a documentation website of
-the latest stable version (1.7.0) where links to vignettes below become
+the latest stable version (1.7.1) where links to vignettes below become
 real :-)
 
 See <https://bioinfocz.github.io/scdrake/dev> for a documentation

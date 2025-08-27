@@ -1,9 +1,9 @@
 {
     "rightpanesize": {
-        "panelwidth": 1424,
-        "windowwidth": 1440,
+        "panelwidth": 1904,
+        "windowwidth": 1920,
         "splitterpos": [
-            646
+            864
         ]
     }
 }
