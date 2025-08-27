@@ -731,7 +731,7 @@ plot_clustree <- function(cluster_list, params, prefix, title = deparse(substitu
     purrr::map(as.integer)
 
   clustree(tibble::as_tibble(clustree_list), prefix = prefix, edge_arrow = edge_arrow, highlight_core = highlight_core) +
-    ggplot2::ggtitle(title) + ggraph::guide_edge_colourbar()
+    ggplot2::ggtitle(title) + ggplot2::guides(edge_colour = "none")
 }
 
 ## To prevent "object 'guide_edge_colourbar' of mode 'function' was not found"
