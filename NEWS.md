@@ -1,3 +1,6 @@
+# scdrake 1.7.1
+- updated Rmd files
+- updated clustree
 # scdrake 1.7.0
 - Added a new **deconvolution module** for secondary analysis.
   - Supports deconvolution of spatial transcriptomics data using single-cell references.

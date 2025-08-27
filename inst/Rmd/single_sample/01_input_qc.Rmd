@@ -59,6 +59,12 @@ if (input_type == "cellranger") {
     "[Cell Ranger](https://support.10xgenomics.com/single-cell-gene-expression/software/pipelines/latest/what-is-cell-ranger)",
     "output (the official quantification tool from 10x Genomics)."
   ))
+} else if (input_type == "spaceranger") {
+  cat(scdrake::str_space(
+    "The feature-barcode matrix was imported from",
+    "[Space Ranger](https://support.10xgenomics.com/spatial-gene-expression/software/pipelines/latest/what-is-space-ranger)",
+    "output (the official quantification tool from 10x Genomics)."
+  ))
 } else if (input_type == "table") {
   scdrake::md_header("Input data: delimited text (table)", 1)
   cat("The feature-barcode matrix was imported from a delimited file.")
@@ -138,7 +144,9 @@ if (empty_droplets_enabled) {
 
 # Gene + Cell quality filtering
 
-## Pre-filtering QC
+## Pre-filtering QC {.tabset}
+
+### Pre-filtering QC
 
 Given sets of mitochondrial and ribosomal genes in the data, the `scater` package automatically calculates
 several per-cell QC metrics:
@@ -168,6 +176,8 @@ MAD thresholding on a QC metric.
 ```{r, fig.height = 10, fig.width = 8}
 cowplot::plot_grid(plotlist = drake::readd(sce_unfiltered_plotlist, path = drake_cache_dir), ncol = 2)
 ```
+
+## {-}
 
 `r scdrake::format_used_functions("scuttle::perCellQCMetrics()")`
 
@@ -213,9 +223,11 @@ cat("Cell filtering was disabled.")
 cat("Gene filtering was disabled.")
 ```
 
+## {-}
+
 ***
 
-## Post-filtering QC
+## Post-filtering QC {.tabset}
 
 **Final filtering selection: using <span style='color: green;'>`r filtering_type`</span> filtering.**
 
@@ -250,6 +262,8 @@ Plots of QC metrics after custom filtering.
 ```{r, fig.height = 10, fig.width = 8}
 cowplot::plot_grid(plotlist = drake::readd(sce_custom_filter_genes_plotlist, path = drake_cache_dir), ncol = 2)
 ```
+
+## {-}
 
 ***
 

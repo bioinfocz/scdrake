@@ -5,7 +5,7 @@
 ## -- - Install the scdrake package.
 ## -- - Install the CLI scripts.
 ## -- You can build the Dockerfile using
-## docker-buildx build --progress plain --platform linux/amd64 \
+## docker buildx build --progress plain --platform linux/amd64 \
 ## --build-arg R_PKG_INSTALL_NCPUS=8 --build-arg R_PKG_INSTALL_MAKE_NCPUS=4 --build-arg SCDRAKE_VERSION=<version> \
 ## -t pfeiferl/scdrake:<version>-bioc3.21 -f Dockerfile .
 
