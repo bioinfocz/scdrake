@@ -50,7 +50,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">scdrake</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.7.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.7.1</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -133,7 +133,7 @@
       <h1>Using the Docker image</h1>
             
             <h4 data-toc-skip class="date"><sup>Document generated:
-2025-08-26 19:26:02 UTC+0000</sup></h4>
+2025-08-27 15:59:25 UTC+0000</sup></h4>
       
       <small class="dont-index">Source: <a href="https://github.com/bioinfocz/scdrake/blob/master/vignettes/scdrake_docker.Rmd" class="external-link"><code>vignettes/scdrake_docker.Rmd</code></a></small>
       <div class="d-none name"><code>scdrake_docker.Rmd</code></div>
@@ -222,7 +222,7 @@ Click to show the cheatsheet
 <h4 id="linux-windows-and-amd64-mac">Linux, Windows, and amd64 Mac<a class="anchor" aria-label="anchor" href="#linux-windows-and-amd64-mac"></a>
 </h4>
 <p>Latest stable version:</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="ex">docker</span> pull jirinovo/scdrake:1.7.0</span></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="ex">docker</span> pull jirinovo/scdrake:1.7.1</span></code></pre></div>
 <p>Latest development version:</p>
 <div class="sourceCode" id="cb2"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a><span class="ex">docker</span> pull jirinovo/scdrake:latest</span></code></pre></div>
 </div>
@@ -243,7 +243,7 @@ Click to show the cheatsheet
 <span id="cb4-4"><a href="#cb4-4" tabindex="-1"></a>  <span class="at">-e</span> USERID=<span class="va">$(</span><span class="fu">id</span> <span class="at">-u</span><span class="va">)</span> <span class="dt">\</span></span>
 <span id="cb4-5"><a href="#cb4-5" tabindex="-1"></a>  <span class="at">-e</span> GROUPID=<span class="va">$(</span><span class="fu">id</span> <span class="at">-g</span><span class="va">)</span> <span class="dt">\</span></span>
 <span id="cb4-6"><a href="#cb4-6" tabindex="-1"></a>  <span class="at">-e</span> PASSWORD=1234 <span class="dt">\</span></span>
-<span id="cb4-7"><a href="#cb4-7" tabindex="-1"></a>  jirinovo/scdrake:1.7.0</span></code></pre></div>
+<span id="cb4-7"><a href="#cb4-7" tabindex="-1"></a>  jirinovo/scdrake:1.7.1</span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="find-the-id-or-name-of-the-running-container">Find the ID or name of the running container<a class="anchor" aria-label="anchor" href="#find-the-id-or-name-of-the-running-container"></a>
@@ -273,7 +273,7 @@ addition, the parent Bioconductor image comes bundled with RStudio
 Server.</p>
 <p>You can pull the Docker image with the latest stable
 <a href="https://github.com/bioinfocz/scdrake" class="external-link">scdrake</a> version using</p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1" tabindex="-1"></a><span class="ex">docker</span> pull jirinovo/scdrake:1.7.0</span></code></pre></div>
+<div class="sourceCode" id="cb8"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1" tabindex="-1"></a><span class="ex">docker</span> pull jirinovo/scdrake:1.7.1</span></code></pre></div>
 <p>or list available versions in <a href="https://hub.docker.com/r/jirinovo/scdrake/tags" class="external-link">our Docker Hub
 repository</a>.</p>
 <p>For the latest development version use</p>
@@ -308,7 +308,7 @@ an RStudio instance using:</p>
 <span id="cb11-4"><a href="#cb11-4" tabindex="-1"></a>  <span class="at">-e</span> USERID=<span class="va">$(</span><span class="fu">id</span> <span class="at">-u</span><span class="va">)</span> <span class="dt">\</span></span>
 <span id="cb11-5"><a href="#cb11-5" tabindex="-1"></a>  <span class="at">-e</span> GROUPID=<span class="va">$(</span><span class="fu">id</span> <span class="at">-g</span><span class="va">)</span> <span class="dt">\</span></span>
 <span id="cb11-6"><a href="#cb11-6" tabindex="-1"></a>  <span class="at">-e</span> PASSWORD=1234 <span class="dt">\</span></span>
-<span id="cb11-7"><a href="#cb11-7" tabindex="-1"></a>  jirinovo/scdrake:1.7.0</span></code></pre></div>
+<span id="cb11-7"><a href="#cb11-7" tabindex="-1"></a>  jirinovo/scdrake:1.7.1</span></code></pre></div>
 <p>Let’s decompose the command above:</p>
 <ul>
 <li>
@@ -370,7 +370,7 @@ use</p>
 <div class="sourceCode" id="cb15"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb15-1"><a href="#cb15-1" tabindex="-1"></a><span class="ex">docker</span> run <span class="at">-d</span> <span class="dt">\</span></span>
 <span id="cb15-2"><a href="#cb15-2" tabindex="-1"></a>  <span class="at">-u</span> rstudio <span class="dt">\</span></span>
 <span id="cb15-3"><a href="#cb15-3" tabindex="-1"></a>  <span class="at">-v</span> <span class="va">$(</span><span class="bu">pwd</span><span class="va">)</span>:/home/rstudio/scdrake_projects <span class="dt">\</span></span>
-<span id="cb15-4"><a href="#cb15-4" tabindex="-1"></a>  jirinovo/scdrake:1.7.0 <span class="dt">\</span></span>
+<span id="cb15-4"><a href="#cb15-4" tabindex="-1"></a>  jirinovo/scdrake:1.7.1 <span class="dt">\</span></span>
 <span id="cb15-5"><a href="#cb15-5" tabindex="-1"></a>  sleep infinity</span></code></pre></div>
 <p>Note for Docker Desktop on a Linux host: omit the
 <code>-u rstudio</code> (or use <code>-u root</code>) to run the image
@@ -388,7 +388,7 @@ and forget” mode where a container is started, <a href="https://github.com/bio
 run, and finally the container is stopped and removed.</p>
 <div class="sourceCode" id="cb16"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb16-1"><a href="#cb16-1" tabindex="-1"></a><span class="ex">docker</span> run <span class="at">-it</span> <span class="at">--rm</span> <span class="dt">\</span></span>
 <span id="cb16-2"><a href="#cb16-2" tabindex="-1"></a>  <span class="at">-v</span> <span class="va">$(</span><span class="bu">pwd</span><span class="va">)</span>:/home/rstudio/scdrake_projects <span class="dt">\</span></span>
-<span id="cb16-3"><a href="#cb16-3" tabindex="-1"></a>  jirinovo/scdrake:1.7.0 <span class="dt">\</span></span>
+<span id="cb16-3"><a href="#cb16-3" tabindex="-1"></a>  jirinovo/scdrake:1.7.1 <span class="dt">\</span></span>
 <span id="cb16-4"><a href="#cb16-4" tabindex="-1"></a>  scdrake ...</span></code></pre></div>
 <p>Note for Linux hosts using Docker Engine: the active user in the
 container will be root and created files will belong to him. If your
@@ -522,7 +522,7 @@ execute the command in a working directory.</p>
 described above:</p>
 <div class="sourceCode" id="cb25"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb25-1"><a href="#cb25-1" tabindex="-1"></a><span class="bu">alias</span> scdrake_docker=docker run <span class="at">-it</span> <span class="at">--rm</span> <span class="dt">\</span></span>
 <span id="cb25-2"><a href="#cb25-2" tabindex="-1"></a>  <span class="at">-v</span> <span class="va">$(</span><span class="fu">realpath</span> ~/scdrake_projects<span class="va">)</span>:/home/rstudio/scdrake_projects <span class="dt">\</span></span>
-<span id="cb25-3"><a href="#cb25-3" tabindex="-1"></a>  jirinovo/scdrake:1.7.0 <span class="dt">\</span></span>
+<span id="cb25-3"><a href="#cb25-3" tabindex="-1"></a>  jirinovo/scdrake:1.7.1 <span class="dt">\</span></span>
 <span id="cb25-4"><a href="#cb25-4" tabindex="-1"></a>  scdrake</span></code></pre></div>
 </div>
 <div class="section level2">
@@ -537,7 +537,7 @@ environment/package manager as the <a href="https://anaconda.org/conda-forge/sin
 package</a>.</p>
 <p>Docker images can be simply pulled from the Docker Hub similar to
 <code>docker pull</code>:</p>
-<div class="sourceCode" id="cb26"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb26-1"><a href="#cb26-1" tabindex="-1"></a><span class="ex">singularity</span> pull docker:jirinovo/scdrake:1.7.0</span></code></pre></div>
+<div class="sourceCode" id="cb26"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb26-1"><a href="#cb26-1" tabindex="-1"></a><span class="ex">singularity</span> pull docker:jirinovo/scdrake:1.7.1</span></code></pre></div>
 <p>The only difference is the usage of <code>docker:</code> prefix so
 Singularity knows where to look for the image. If the image is already
 present in the local Docker storage, you can use
